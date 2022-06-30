@@ -1,0 +1,84 @@
+//no borrar
+//SHA1:  90:3F:45:0A:17:48:B8:5C:AA:01:5A:00:9B:95:C6:03:D5:22:0C:C0
+
+import 'package:flutter_html/flutter_html.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:emart/src/notificaciones/message_notification.dart';
+import 'package:emart/src/preferences/preferencias.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+final prefs = new Preferencias();
+
+class PushNotificationServer {
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
+  static String? token;
+
+  static Future<void> _backgroundHandler(RemoteMessage message) async {}
+
+  static Future _onMessageHandler(RemoteMessage message) async {
+    var title = message.notification?.title;
+    var body = message.notification?.body;
+
+    showOverlayNotification((context) {
+      Widget notificacion = Html(data: """${body!}""");
+      Widget titleNotificacion = Html(data: """${title!}""");
+      return MessageNotification(
+          key: Key("1"),
+          message: notificacion,
+          title: titleNotificacion,
+          onReplay: () {
+            OverlaySupportEntry.of(context)
+                ?.dismiss(); //use OverlaySupportEntry to dismiss overlay
+            toast('Notificación cerrada');
+          });
+    }, duration: Duration(seconds: 10));
+  }
+
+  static Future _onMessageOpenApp(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    await requesPermission();
+    Widget notificacion = Html(data: """${message.notification!.body}""");
+    showSimpleNotification(notificacion);
+  }
+
+  static Future initializeApp() async {
+    try {
+      await Firebase.initializeApp();
+      FirebaseMessaging _messaging = FirebaseMessaging.instance;
+      await requesPermission();
+
+      token = await _messaging.getToken();
+      print('token $token');
+
+      //handlers
+      FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+      FirebaseMessaging.onMessage.listen(_onMessageHandler);
+      FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  //apple // web permisos de notificacion
+  static requesPermission() async {
+    NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('hola User granted permission');
+    } else {
+      print('hola User declined or has not accepted permission');
+    }
+  }
+}

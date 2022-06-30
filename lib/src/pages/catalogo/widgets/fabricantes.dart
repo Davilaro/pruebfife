@@ -1,0 +1,207 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/dounser.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:fuzzy/fuzzy.dart';
+import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+
+class Fabricantes extends StatefulWidget {
+  @override
+  State<Fabricantes> createState() => _FabricantesState();
+}
+
+class _FabricantesState extends State<Fabricantes> {
+  RxList<dynamic> listaFabricante = <dynamic>[].obs;
+  List<dynamic> listaAllFabricantes = [];
+  final TextEditingController controllerSearch = TextEditingController();
+
+  late DatosListas? providerDatos;
+
+  final prefs = new Preferencias();
+
+  final Debouncer onSearchDebouncer =
+      new Debouncer(delay: new Duration(milliseconds: 500));
+
+  @override
+  void initState() {
+    super.initState();
+    controllerSearch.addListener(_runFilter);
+    cargarLista();
+    validarVersionActual(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //UXCAM: Se define el nombre de la pantalla
+    FlutterUxcam.tagScreenName('ProvidersPage');
+    final provider = Provider.of<CarroModelo>(context);
+    providerDatos = Provider.of<DatosListas>(context);
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      backgroundColor: ConstantesColores.color_fondo_gris,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+        child: Column(
+          children: [
+            _campoTexto(context),
+            Flexible(
+              flex: 2,
+              child: Obx(
+                () => Container(
+                    height: size.height * 0.7,
+                    margin: EdgeInsets.only(top: 10),
+                    child: GridView.count(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 1.0, // Espaciado vertical
+                        mainAxisSpacing: 1.0,
+                        children: _cargarFabricantes(
+                                listaFabricante, context, provider)
+                            .toList())),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _cargarFabricantes(
+      List<dynamic> result, BuildContext context, CarroModelo provider) {
+    final List<Widget> opciones = [];
+
+    for (var element in result) {
+      final widgetTemp = GestureDetector(
+        onTap: () => {
+          //FIREBASE: Llamamos el evento select_content
+          TagueoFirebase().sendAnalityticSelectContent(
+              "Proveedores",
+              element.nombrecomercial,
+              element.nombrecomercial,
+              "",
+              element.codIndirecto,
+              'ViewProviders'),
+          _onClickCatalogo(element.empresa, context, provider,
+              element.nombrecomercial, element.icono),
+        },
+        child: Column(
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    alignment: Alignment.center,
+                    child: CachedNetworkImage(
+                        imageUrl: '${element.icono}',
+                        placeholder: (context, url) =>
+                            Image.asset('assets/jar-loading.gif'),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/logo_login.png'),
+                        fit: BoxFit.fill),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+      opciones.add(widgetTemp);
+    }
+    return opciones;
+  }
+
+  _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
+      String nombre, String icono) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CustomBuscardorFuzzy(
+                  codCategoria: codigo,
+                  numEmpresa: 'nutresa',
+                  tipoCategoria: 4,
+                  nombreCategoria: nombre,
+                  img: icono,
+                )));
+  }
+
+  _campoTexto(BuildContext context) {
+    return Container(
+        height: 50,
+        width: Get.width * 0.86,
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        decoration: BoxDecoration(
+          color: HexColor("#E4E3EC"),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: TextField(
+          controller: controllerSearch,
+          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
+          decoration: InputDecoration(
+            fillColor: HexColor("#41398D"),
+            hintText: 'Encuentra lo que necesitas',
+            hintStyle: TextStyle(
+              color: HexColor("#41398D"),
+            ),
+            suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.search,
+                    color: HexColor("#41398D"),
+                  ),
+                )),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
+          ),
+        ));
+  }
+
+  void cargarLista() async {
+    listaAllFabricantes =
+        await DBProvider.db.consultarFricante(controllerSearch.text);
+    listaFabricante.value = listaAllFabricantes;
+  }
+
+  void _runFilter() {
+    if (controllerSearch.text.isEmpty) {
+      listaFabricante.value = listaAllFabricantes;
+    } else {
+      if (controllerSearch.text.length > 2) {
+        //FIREBASE: Llamamos el evento search
+        TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
+        List listaAux = [];
+        listaAllFabricantes.forEach((element) {
+          listaAux.add(element.nombrecomercial);
+        });
+        final fuse = Fuzzy(listaAux);
+        final result = fuse.search(controllerSearch.text);
+        listaFabricante.value = [];
+        result
+            .map((r) => listaFabricante.add(listaAllFabricantes
+                .firstWhere((element) => element.nombrecomercial == r.item)))
+            .forEach(print);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    controllerSearch.dispose();
+    super.dispose();
+  }
+}

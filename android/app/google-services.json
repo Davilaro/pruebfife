@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "725805336428",
+    "project_id": "plataformapideky",
+    "storage_bucket": "plataformapideky.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725805336428:android:78f43d569ce00235c31549",
+        "android_client_info": {
+          "package_name": "com.celuweb.pidekyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725805336428-6vt3vfu3vkb4cip4e0pblp89vk3597pn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.celuweb.pidekyapp",
+            "certificate_hash": "903f450a1748b85caa015a009b95c603d5220cc0"
+          }
+        },
+        {
+          "client_id": "725805336428-kjg44qss0ldfljndcdsfhskor5bk4mkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANLXuD43O4jO94Z1NZv6GhlMm1GINCu0w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725805336428-kjg44qss0ldfljndcdsfhskor5bk4mkr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "725805336428-a9g6mv6gkls6ja90ia9j6e4ndotq0dsr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.celuweb.pidekyapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
