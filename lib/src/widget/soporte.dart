@@ -1,16 +1,11 @@
-import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/utils/util.dart';
-import 'package:emart/src/widget/simple_card_call.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final prefs = new Preferencias();
 NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
@@ -24,28 +19,24 @@ class Soporte extends StatefulWidget {
 }
 
 class _SoporteState extends State<Soporte> {
-  String version = '1.2.4';
+  // var contactoWhatsap = '3235639715';
+  // var contactoCel = '01 8000 52 11 55';
+  // var soportEmail = 'servicioalcliente@pideky.com';
 
   @override
   void initState() {
     super.initState();
-    _validarVersion();
-  }
-
-  void _validarVersion() async {
-    version = await cargarVersion();
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('HelpPage');
-    final provider = Provider.of<OpcionesBard>(context);
+
     final size = MediaQuery.of(context).size;
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
+
     return Scaffold(
+        backgroundColor: ConstantesColores.color_fondo_gris,
         appBar: AppBar(
           title: Text('Soporte',
               style: TextStyle(
@@ -56,135 +47,255 @@ class _SoporteState extends State<Soporte> {
           ),
           elevation: 0,
         ),
-        body: Center(
-          child: Column(children: [
-            Container(
-              padding: const EdgeInsets.all(14.0),
-              width: size.width * 0.9,
-              height: size.height * 0.8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              margin: EdgeInsets.only(top: 14),
-              child: Center(
-                child: Container(
-                  width: size.width * 0.9,
-                  child: ListView(
-                    children: [
-                      FutureBuilder(
-                        future: DBProviderHelper.db.consultarDatosCliente(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<dynamic>> snapshot) {
-                          if (snapshot.hasData) {
-                            var data = snapshot.data;
-                            return Column(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(children: [
+              FutureBuilder(
+                future: DBProviderHelper.db.cargarTelefotosSoporte(3),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<dynamic>> snapshot) {
+                  if (snapshot.hasData) {
+                    var contactoWhatsap = snapshot.data![1].telefono;
+                    var contactoCel = snapshot.data![0].telefono;
+                    var soportEmail = snapshot.data![1].correo;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 14.0),
+                      width: size.width * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: ConstantesColores.color_fondo_gris,
+                      ),
+                      margin: EdgeInsets.only(top: 14),
+                      child: Center(
+                        child: Container(
+                            width: size.width * 0.9,
+                            child: Column(
                               children: [
-                                for (int i = 0; i < data!.length; i++)
-                                  Column(
+                                Text(
+                                  "¿Necesitas ayuda?",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  "Si requiere ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: ConstantesColores.gris_textos,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        "Soporte aplicativo",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                      Container(
+                                        width: size.width * 0.45,
+                                        margin: EdgeInsets.only(right: 10),
+                                        child: Text(
+                                          "Contáctanos en WhatsApp",
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
-                                      SizedBox(
-                                        height: 20,
+                                      GestureDetector(
+                                          onTap: () => launch(
+                                              'https://api.whatsapp.com/send?phone=+57$contactoWhatsap'),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: 50,
+                                                margin:
+                                                    EdgeInsets.only(left: 15),
+                                                child: Image.asset(
+                                                  'assets/icon/whatsapp_logo.png',
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 10),
+                                                child: Text(
+                                                  "Empezar el chat",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 1,
+                                  color: Colors.grey,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: size.width * 0.45,
+                                        child: Text(
+                                          "Llámanos a nuestra línea",
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
-                                      FutureBuilder(
-                                          future: DBProviderHelper.db
-                                              .cargarTelefotosSoporte(1),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<List<dynamic>>
-                                                  snapshot) {
-                                            if (snapshot.hasData) {
-                                              var datos = snapshot.data;
-                                              return Column(children: [
-                                                for (int i = 0;
-                                                    i < datos!.length;
-                                                    i++)
-                                                  SimpleCardCall(
-                                                    texto: datos[i].descripcion,
-                                                    telefono: datos[i].telefono,
+                                      GestureDetector(
+                                        onTap: () =>
+                                            launch("tel://$contactoCel"),
+                                        child: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 50,
+                                                  margin:
+                                                      EdgeInsets.only(left: 30),
+                                                  child: Image.asset(
+                                                    'assets/icon/cell_logo.png',
+                                                    fit: BoxFit.contain,
                                                   ),
-                                              ]);
-                                            } else {
-                                              return CircularProgressIndicator();
-                                            }
-                                          }),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        "Soporte de pedidos de fabricantes",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      FutureBuilder(
-                                          future: DBProviderHelper.db
-                                              .cargarTelefotosSoporte(2),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<List<dynamic>>
-                                                  snapshot) {
-                                            if (snapshot.hasData) {
-                                              var datos = snapshot.data;
-                                              return Column(children: [
-                                                for (int i = 0;
-                                                    i < datos!.length;
-                                                    i++)
-                                                  SimpleCardCall(
-                                                    texto: datos[i].descripcion,
-                                                    telefono: datos[i].telefono,
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 10),
+                                                  width: size.width * 0.4,
+                                                  child: Text(
+                                                    "Llamar $contactoCel",
+                                                    maxLines: 3,
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantesColores
+                                                            .gris_textos,
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
-                                              ]);
-                                            } else {
-                                              return CircularProgressIndicator();
-                                            }
-                                          }),
-                                      SizedBox(
-                                        height: Get.height * 0.08,
+                                                ),
+                                              ],
+                                            )),
                                       ),
                                     ],
-                                  )
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 1,
+                                  color: Colors.grey,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: size.width * 0.45,
+                                        margin: EdgeInsets.only(right: 10),
+                                        child: Text(
+                                          "Escríbenos al correo",
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () => launch(
+                                              "mailto:$soportEmail?subject=&body="),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 70,
+                                                margin:
+                                                    EdgeInsets.only(left: 15),
+                                                child: Image.asset(
+                                                  'assets/icon/email_logo.png',
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  "Escribir ahora",
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 3,
+                                                  style: TextStyle(
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: size.width * 0.4,
+                                                child: Text(
+                                                  "$soportEmail",
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 3,
+                                                  style: TextStyle(
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  thickness: 1,
+                                  color: Colors.grey,
+                                ),
                               ],
-                            );
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ]),
+                            )),
+                      ),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              )
+            ]),
+          ),
         ));
-  }
-
-  showLoaderDialog(BuildContext context, size, Widget widget, double altura) {
-    AlertDialog alert = AlertDialog(
-        content: Container(
-            height: altura,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: Colors.white,
-            ),
-            child: widget));
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }

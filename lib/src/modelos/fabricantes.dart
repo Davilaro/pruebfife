@@ -15,7 +15,8 @@ class Fabricantes {
       this.nombrecomercial,
       this.estado,
       this.topeMinimo,
-      this.nitCliente});
+      this.nitCliente,
+      this.razonSocial});
 
   String? empresa;
   String? icono;
@@ -26,6 +27,7 @@ class Fabricantes {
   String? estado;
   double? topeMinimo;
   String? nitCliente;
+  String? razonSocial;
 
   factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
         empresa: json["empresa"],
@@ -37,6 +39,7 @@ class Fabricantes {
         estado: json["Estado"],
         topeMinimo: json["topeMinimo"],
         nitCliente: json["NitCliente"],
+        razonSocial: json["RazonSocial"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,6 +51,7 @@ class Fabricantes {
         "nombrecomercial": nombrecomercial,
         "Estado": estado,
         "topeMinimo": topeMinimo,
-        "NitCliente": nitCliente
+        "NitCliente": nitCliente,
+        "RazonSocial": razonSocial
       };
 }

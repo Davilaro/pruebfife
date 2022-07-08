@@ -38,7 +38,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
 
-    return _controllesBannes.cargoDatos.value == false
+    return Obx(() => _controllesBannes.cargoDatos.value == false
         ? Container(
             child: Center(
               child: Image.asset('assets/jar-loading.gif'),
@@ -117,7 +117,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
                 }).toList(),
               ),
             ],
-          );
+          ));
   }
 
   void cargarBanners() async {

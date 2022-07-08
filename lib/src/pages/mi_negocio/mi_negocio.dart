@@ -36,6 +36,8 @@ class MiNegocio extends StatefulWidget {
 }
 
 class _MiNegocioState extends State<MiNegocio> {
+  var politicasDatosPdf;
+  var terminosDatosPdf;
   String version = '';
   RxString validarInputNumero = ''.obs;
   TextEditingController controllerInput = TextEditingController();
@@ -49,6 +51,7 @@ class _MiNegocioState extends State<MiNegocio> {
       //UXCAM: Se define el nombre de la pantalla
       FlutterUxcam.tagScreenName('MyBusinessPage');
     }
+    cargarArchivos();
     validarVersionActual(context);
     _validarVersion();
     //FIREBASE: Llamamos el evento select_content
@@ -208,16 +211,16 @@ class _MiNegocioState extends State<MiNegocio> {
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              MisProveedores())),
-                                  child: Container(
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MisProveedores())),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -239,13 +242,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 30,
-                                  color: ConstantesColores.agua_marina,
-                                )
-                              ],
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 30,
+                                    color: ConstantesColores.agua_marina,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Divider(
@@ -254,24 +257,27 @@ class _MiNegocioState extends State<MiNegocio> {
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              MisVendedores())),
-                                  child: Container(
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MisVendedores())),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        Image.asset(
-                                          'assets/icon/mis_vendedores_img.png',
-                                          alignment: Alignment.center,
-                                          width: 30,
+                                        Container(
+                                          margin: EdgeInsets.only(right: 7),
+                                          child: Image.asset(
+                                            'assets/icon/mis_vendedores_img.png',
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                          ),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(left: 10),
@@ -285,13 +291,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 30,
-                                  color: ConstantesColores.agua_marina,
-                                )
-                              ],
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 30,
+                                    color: ConstantesColores.agua_marina,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Divider(
@@ -315,42 +321,47 @@ class _MiNegocioState extends State<MiNegocio> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
-                            width: Get.width * 1,
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: GestureDetector(
+                              onTap: () => verPoliticasCondiciones(
+                                  context, politicasDatosPdf),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Image.asset(
-                                    'assets/icon/politicas.png',
-                                    alignment: Alignment.center,
-                                    width: 12,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () =>
-                                        verPoliticasCondiciones(context),
+                                  Container(
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.only(left: 4),
+                                          margin: EdgeInsets.only(right: 7),
+                                          child: Image.asset(
+                                            'assets/icon/politicas.png',
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Get.width * 0.52,
+                                          margin: EdgeInsets.only(left: 10),
                                           child: Text(
                                             'Política y tratamiento de datos',
                                             maxLines: 2,
                                             style: TextStyle(
-                                                fontSize: 6,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 12,
-                                          color: ConstantesColores.agua_marina,
-                                        )
                                       ],
                                     ),
                                   ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 30,
+                                    color: ConstantesColores.agua_marina,
+                                  )
                                 ],
                               ),
                             ),
@@ -362,20 +373,25 @@ class _MiNegocioState extends State<MiNegocio> {
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
                             width: Get.width * 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => verTerminosCondiciones(context),
-                                  child: Container(
+                            child: GestureDetector(
+                              onTap: () => verTerminosCondiciones(
+                                  context, terminosDatosPdf),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        Image.asset(
-                                          'assets/icon/termino_y_condiciones_img.png',
-                                          alignment: Alignment.center,
-                                          width: 35,
+                                        Container(
+                                          margin: EdgeInsets.only(right: 4),
+                                          child: Image.asset(
+                                            'assets/icon/termino_y_condiciones_img.png',
+                                            alignment: Alignment.center,
+                                            width: 35,
+                                          ),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(left: 10),
@@ -389,13 +405,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 30,
-                                  color: ConstantesColores.agua_marina,
-                                )
-                              ],
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 30,
+                                    color: ConstantesColores.agua_marina,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Divider(
@@ -497,7 +513,7 @@ class _MiNegocioState extends State<MiNegocio> {
           '+57 ${telefono[telefono.length > 1 ? 1 : 0]}');
       if (res == 200) {
         await DBProvider.db.editarTelefonoWhatsapp(
-            '+57 ${telefono[telefono.length > 1 ? 1 : 0]}');
+            '+57${telefono[telefono.length > 1 ? 1 : 0]}');
         Navigator.pop(context);
         alert.mostrarAlert(
             context,
@@ -514,6 +530,15 @@ class _MiNegocioState extends State<MiNegocio> {
     } else {
       validarInputNumero.value =
           'La cantidad de caracteres debe ser igual a 10, sin contar el +57';
+    }
+  }
+
+  cargarArchivos() async {
+    try {
+      politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
+      terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+    } catch (e) {
+      print('se genero error $e');
     }
   }
 

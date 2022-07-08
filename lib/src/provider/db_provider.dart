@@ -486,7 +486,7 @@ class DBProvider {
 
     try {
       final sql = await db.rawQuery('''
-	    SELECT empresa, ico, tipofabricante, codIndirecto, Estado, nombrecomercial, pedidominimo, NitCliente  
+	    SELECT empresa, ico, tipofabricante, codIndirecto, Estado, nombrecomercial, pedidominimo, NitCliente, RazonSocial 
       FROM ProveedoresActivos ORDER by Estado ASC
     ''');
 
@@ -666,12 +666,12 @@ class DBProvider {
       List<Encuesta> lista = [];
 
       final sql = await db.rawQuery('''
-      SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta, 
-      par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre 
-      INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id 
-      left join EncuestasRealizadas e on e.encuestaId = pre.encuestaId
-      WHERE pre.orden = 1 and e.encuestaid is null
-    ''');
+        SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta,
+        par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre
+        INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id
+        left join EncuestasRealizadas e on e.encuestaId = pre.encuestaId
+        WHERE pre.orden = 1 and e.encuestaid is null
+      ''');
 
       if (sql.length > 1) {
         List<dynamic> parametros =
@@ -727,7 +727,7 @@ class DBProvider {
     final db = await baseAbierta;
     try {
       await db.rawUpdate(''' 
-          UPDATE Sucursales SET telefonowhatsapp = "$telefono" WHERE codigo = "${prefs.codCliente}" 
+          UPDATE Sucursales SET telefonowhatsapp = "$telefono" 
           ''');
     } catch (e) {
       print('ERROR CONSULTA $e');
