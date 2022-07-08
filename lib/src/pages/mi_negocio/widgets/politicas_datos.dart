@@ -1,14 +1,16 @@
-import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-void verPoliticasCondiciones(BuildContext context) {
+void verPoliticasCondiciones(BuildContext context, politicasDatosPdf) {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   void _aceptarPoliticas() {
     Navigator.pop(context);
   }
+
+  print('hola res $politicasDatosPdf');
 
   showDialog(
       context: context,
@@ -24,9 +26,8 @@ void verPoliticasCondiciones(BuildContext context) {
               Container(
                 height: Get.height * 0.8,
                 width: Get.height * 0.8,
-                child: SfPdfViewer.network(
-                  Constantes().urlBaseGenerico +
-                      'PoliticaDeTratamientoyDatosPersonales.pdf',
+                child: PDFView(
+                  pdfData: politicasDatosPdf,
                   key: _pdfViewerKey,
                 ),
               ),
@@ -44,7 +45,6 @@ void verPoliticasCondiciones(BuildContext context) {
                   ),
                   decoration: BoxDecoration(
                     color: HexColor("#30C3A3"),
-                    //border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   height: 45,

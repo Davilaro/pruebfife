@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -148,31 +149,49 @@ class DBProviderHelper {
       String filtro, String fechaInicio, String fechaFin) async {
     var fechaInicioFor = fechaInicio;
     var fechaFinFor = fechaFin;
+    var ishola = false;
+
     if (fechaInicio != '-1' && fechaFin != '-1') {
       var fechaInicioF = DateTime.parse(fechaInicio);
       var fechaFinF = DateTime.parse(fechaFin);
 
-      fechaInicioFor = fechaInicioF.day.toString() +
-          '/' +
-          fechaInicioF.month.toString() +
-          '/' +
-          fechaInicioF.year.toString();
-      fechaFinFor = fechaFinF.day.toString() +
-          '/' +
-          fechaFinF.month.toString() +
-          '/' +
-          fechaFinF.year.toString();
+      fechaInicioFor =
+          '${fechaInicioF.day.toString().length > 1 ? fechaInicioF.day : '0${fechaInicioF.day}'}/${fechaInicioF.month.toString().length > 1 ? fechaInicioF.month : '0${fechaInicioF.month}'}/${fechaInicioF.year}';
+
+      fechaFinFor =
+          '${fechaFinF.day.toString().length > 1 ? fechaFinF.day : '0${fechaFinF.day}'}/${fechaFinF.month.toString().length > 1 ? fechaFinF.month : '0${fechaFinF.month}'}/${fechaFinF.year}';
+      ishola = true;
+    } else {
+      ishola = false;
     }
 
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
-      SELECT DISTINCT NumeroDoc,MAX(fechatrans)fechatrans,MAX(fabricante)fabricante,MAX(ordencompra)ordencompra FROM Historico WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END 
-      AND Cast( fechatrans as DATE )>=Cast( CASE WHEN '$fechaInicioFor'='-1' THEN fechatrans ELSE '$fechaInicioFor' END  as DATE ) AND  Cast( fechatrans as DATE )<=Cast( CASE WHEN '$fechaFinFor'='-1' THEN fechatrans ELSE '$fechaFinFor' END as DATE )
-      GROUP BY NumeroDoc
-      ORDER BY fechatrans DESC
-    ''');
+      //   final sql = await db.rawQuery('''
+      //   SELECT DISTINCT NumeroDoc,MAX((substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 7, 4))) fechatrans,
+      //   MAX(fabricante)fabricante,MAX(ordencompra)ordencompra FROM Historico WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
+      //   AND Cast( fechatrans as DATE )>=Cast( CASE WHEN '$fechaInicioFor'='-1' THEN fechatrans ELSE '$fechaInicioFor' END  as DATE ) AND  Cast( fechatrans as DATE )<=Cast( CASE WHEN '$fechaFinFor'='-1' THEN fechatrans ELSE '$fechaFinFor' END as DATE )
+      //   GROUP BY NumeroDoc
+      //   ORDER BY fechatrans DESC
+      // ''');
+
+      final sql = await db.rawQuery(
+          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante, 
+	   MAX(ordencompra)ordencompra FROM Historico 
+	  WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END 
+	  AND 
+	  substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
+	  >= CASE WHEN ${ishola == true ? ''' substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) ''' : "'-1'"} ='-1' 
+	  THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
+	  ELSE substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) END 
+	  AND 
+	  substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
+	  <= CASE WHEN ${ishola == true ? ''' substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) ''' : "'-1'"} ='-1' 
+	  THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
+	  ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END 
+	  GROUP BY NumeroDoc 
+	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {

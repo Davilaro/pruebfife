@@ -5,6 +5,7 @@ import 'package:emart/src/widget/grupo_detalle.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 
 import 'animated_container_card.dart';
 
@@ -59,6 +60,7 @@ class _ExpansionCardState extends State<ExpansionCard> {
 
   Widget _body(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Column(children: [
       Container(
         decoration: BoxDecoration(

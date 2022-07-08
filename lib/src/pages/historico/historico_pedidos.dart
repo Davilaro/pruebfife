@@ -29,7 +29,7 @@ class HistoricoPedidos extends StatefulWidget {
 }
 
 class _HistoricoPedidosState extends State<HistoricoPedidos> {
-  ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
+  // ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
   @override
   void initState() {
     //FIREBASE: Llamamos el evento select_content
@@ -39,9 +39,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
     super.initState();
   }
 
-  // String _filtro = "-1";
-  // String fechaInicial = "-1";
-  // String fechaFinal = "-1";
+  String _filtro = "-1";
+  String fechaInicial = "-1";
+  String fechaFinal = "-1";
   @override
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
@@ -82,10 +82,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
               children: [
                 _buscador(size),
                 FutureBuilder<List<dynamic>>(
-                    future: DBProviderHelper.db.consultarHistoricos(
-                        catalogSearchViewModel.filtro.value,
-                        catalogSearchViewModel.fechaInicial.value,
-                        catalogSearchViewModel.fechaFinal.value),
+                    future: DBProviderHelper.db
+                        .consultarHistoricos(_filtro, fechaInicial, fechaFinal),
                     builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                       if (snapshot.hasData) {
                         var cantidad = snapshot.data?.length;
@@ -93,7 +91,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
                           var historicos = snapshot.data;
                           return Column(
                             children: [
-                              for (int i = 0; i < historicos!.length; i++)
+                              for (int i = historicos!.length - 1; i >= 0; i--)
                                 Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -145,10 +143,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             child: TextField(
               onChanged: (valor) {
                 setState(() {
-                  catalogSearchViewModel.filtro.value =
-                      _controladorFiltro.text == ""
-                          ? "-1"
-                          : _controladorFiltro.text;
+                  _filtro = _controladorFiltro.text == ""
+                      ? "-1"
+                      : _controladorFiltro.text;
                 });
               },
               controller: _controladorFiltro,
@@ -166,9 +163,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            // onTap: () => {pickDateRange(context)},
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FiltroHistorico())),
+            onTap: () => {pickDateRange(context)},
+            // onTap: () => Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(
@@ -182,23 +179,25 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
     );
   }
 
-  // Future pickDateRange(BuildContext context) async {
-  //   DateTime now = new DateTime.now();
-  //   DateTimeRange dateRange;
-  //   final newDateRange = await showDateRangePicker(
-  //     locale: const Locale("es", ""),
-  //     context: context,
-  //     firstDate: DateTime(2021, 1, 1),
-  //     currentDate: DateTime(now.year, now.month, now.day),
-  //     lastDate: DateTime(now.year, now.month, now.day),
-  //   );
-  //   if (newDateRange == null) return;
-  //   dateRange = newDateRange;
-  //   setState(() {
-  //     fechaInicial = dateRange.start.toString();
-  //     fechaFinal = dateRange.end.toString();
-  //   });
-  // }
+  Future pickDateRange(BuildContext context) async {
+    DateTime now = new DateTime.now();
+    DateTimeRange dateRange;
+    final newDateRange = await showDateRangePicker(
+      locale: const Locale("es", ""),
+      context: context,
+      firstDate: DateTime(2021, 1, 1),
+      currentDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(now.year, now.month, now.day),
+    );
+    if (newDateRange == null) return;
+    dateRange = newDateRange;
+    // catalogSearchViewModel.setFechaInicial(dateRange.start.toString());
+    // catalogSearchViewModel.setFechaFinal(dateRange.end.toString());
+    setState(() {
+      fechaInicial = dateRange.start.toString();
+      fechaFinal = dateRange.end.toString();
+    });
+  }
 }
 
 showLoaderDialog(BuildContext context, Widget widget, double altura) {

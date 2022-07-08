@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
@@ -632,6 +633,38 @@ class Servicies {
       }
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<dynamic> cargarArchivoPoliticas() async {
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlBaseGenerico +
+          'PoliticaDeTratamientoyDatosPersonales.pdf');
+      final response = await http.get(url);
+      print('hola 2 res $url');
+      Uint8List file = response.bodyBytes;
+
+      return file;
+    } catch (e) {
+      print('problemaa al descargar politicas $e');
+    }
+  }
+
+  Future<dynamic> cargarArchivoTerminos() async {
+    try {
+      final url;
+
+      url =
+          Uri.parse(Constantes().urlBaseGenerico + 'TerminosYCondiciones.pdf');
+      final response = await http.get(url);
+
+      Uint8List file = response.bodyBytes;
+
+      return file;
+    } catch (e) {
+      print('problemaa al descargar terminos  $e');
     }
   }
 }

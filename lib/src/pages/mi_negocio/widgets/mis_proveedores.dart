@@ -75,9 +75,10 @@ class MisProveedores extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Text(
-                                          'Razón social agente o directa',
+                                          proveedores[i].razonSocial,
                                           style: TextStyle(
                                               fontSize: 13,
+                                              fontWeight: FontWeight.bold,
                                               color: ConstantesColores
                                                   .gris_textos),
                                         ),

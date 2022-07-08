@@ -16,18 +16,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BannnerControllers extends GetxController {
-  var cargoDatos = false.obs;
+  RxBool cargoDatos = false.obs;
   RxInt inicialControllerSubCategoria = 0.obs;
+  RxBool isVisitBanner = false.obs;
 
   List<dynamic> listaBanners = [].obs;
 
   void cambiarSubCategoria(int value) {
+    print('hola res de aca $value');
     inicialControllerSubCategoria.value = value;
+  }
+
+  void setIsVisitBanner(bool value) {
+    isVisitBanner.value = value;
   }
 
   void cargarDatosBanner(dynamic banners) {
     if (banners.length > 0) {
-      this.cargoDatos.value = true;
+      cargoDatos.value = true;
     }
     listaBanners = banners;
   }
@@ -82,6 +88,7 @@ class BannnerControllers extends GetxController {
   _direccionarCategoria(BuildContext context, CarroModelo provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
+      setIsVisitBanner(true);
       cambiarSubCategoria(resSubBusqueda.indexWhere((element) =>
           element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
     }

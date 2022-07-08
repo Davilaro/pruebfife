@@ -4,11 +4,9 @@ import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/modelos/multimedia.dart';
-import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
-import 'package:emart/src/provider/controlador_lista_datos.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -304,13 +302,14 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     if (snapshot.data.length == 0) {
                       return Container();
                     } else {
-                      double size = 100.0 * snapshot.data[0].parametro.length;
+                      double size = 90.0 * snapshot.data[0].parametro.length;
+                      print('valor $size');
                       return Obx(() => Visibility(
                             visible: controllerEncuesta.isVisibleEncuesta.value,
                             child: Container(
                                 constraints: BoxConstraints(
-                                    minHeight: 200,
-                                    maxHeight: size < 200 ? 200 : size),
+                                    minHeight: 220,
+                                    maxHeight: size < 220 ? 220 : size),
                                 margin: EdgeInsets.only(
                                     left: 10, right: 10, top: 15, bottom: 5),
                                 decoration: BoxDecoration(

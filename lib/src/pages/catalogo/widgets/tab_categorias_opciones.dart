@@ -32,6 +32,10 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
 
   @override
   void initState() {
+    if (controllerBanner.isVisitBanner.value) {
+      valorSeleccionado.value =
+          controllerBanner.inicialControllerSubCategoria.value;
+    }
     _tabController = new TabController(
       length: this.widget.listaCategorias.length,
       vsync: this,
@@ -162,5 +166,12 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controllerBanner.setIsVisitBanner(false);
+    controllerBanner.inicialControllerSubCategoria(0);
+    super.dispose();
   }
 }
