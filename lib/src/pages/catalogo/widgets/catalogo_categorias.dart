@@ -57,10 +57,12 @@ class CatalogoPoductosCategorias extends StatelessWidget {
 
     for (var element in data) {
       Productos productos = element;
+      bool isProductoPromo = false;
 
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: numEmpresa,
+        isCategoriaPromos: false,
       );
 
       opciones.add(widgetTemp);

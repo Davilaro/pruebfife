@@ -117,10 +117,15 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       TagueoFirebase().sendAnalityticViewItemList(data, nameCategory);
     }
     for (var element in data) {
+      bool isProductoPromo = false;
+      if (widget.tipoCategoria != 2) {
+        isProductoPromo = true;
+      }
       Productos productos = element;
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: prefs.numEmpresa,
+        isCategoriaPromos: isProductoPromo,
       );
 
       opciones.add(widgetTemp);

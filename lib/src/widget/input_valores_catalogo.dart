@@ -24,9 +24,13 @@ final prefs = new Preferencias();
 class InputValoresCatalogo extends StatefulWidget {
   final Productos element;
   final String numEmpresa;
+  final bool isCategoriaPromos;
 
   InputValoresCatalogo(
-      {Key? key, required this.element, required this.numEmpresa})
+      {Key? key,
+      required this.element,
+      required this.numEmpresa,
+      required this.isCategoriaPromos})
       : super(key: key);
 
   @override
@@ -64,20 +68,43 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
           detalleProducto(productos, cartProvider);
         },
         child: Container(
+          margin: EdgeInsets.only(left: 2, right: 2),
           child: Column(
             children: [
               Column(children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Visibility(
-                    visible: element.descuento != 0,
-                    child: Container(
-                      child: Image.asset(
-                        'assets/promo.png',
-                        fit: BoxFit.cover,
+                OverflowBar(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Visibility(
+                        visible: element.descuento != 0 ||
+                            widget.isCategoriaPromos == true,
+                        child: Container(
+                          //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
+                          child: Image.asset(
+                            'assets/promo_abel.png',
+                            height: Get.height * 0.06,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Container(
+                      padding: EdgeInsets.only(top: 5),
+                      //aqui debo validar que sea producto nuevo
+                      child: Visibility(
+                        visible: element.descuento != 0,
+                        child: Container(
+                          child: Image.asset(
+                            'assets/nuevos_label.png',
+                            // width: Get.width * 0.3,
+                            height: Get.height * 0.06,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   height: Get.width * 0.24,
@@ -104,29 +131,22 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${element.nombre}',
-                            maxLines: element.descuento == 0 ? 3 : 2,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ConstantesColores.verde),
-                          ),
-                          Text(
-                            'SKU: ${element.codigo}',
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: HexColor("#a2a2a2")),
-                          ),
-                        ],
-                      ),
+                    Text(
+                      '${element.nombre}',
+                      maxLines: element.descuento == 0 ? 3 : 2,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: ConstantesColores.verde),
+                    ),
+                    Text(
+                      'SKU: ${element.codigo}',
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: HexColor("#a2a2a2")),
                     ),
                   ],
                 ),

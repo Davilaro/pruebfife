@@ -91,13 +91,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           body: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: 5,
+                ),
                 Container(
                     height: size.height * 0.1,
                     width: size.width * 1,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buscador(context, onSearchDebouncer),
+                          Expanded(
+                            child: _buscador(context, onSearchDebouncer),
+                          ),
                           GestureDetector(
                             onTap: () => {_irFiltro()},
                             child: Container(
@@ -145,6 +150,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
+        isCategoriaPromos: false,
       );
 
       opciones.add(widgetTemp);
