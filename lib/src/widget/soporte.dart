@@ -28,6 +28,7 @@ class _SoporteState extends State<Soporte> {
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('HelpPage');
+    var colorLetter = HexColor('#4f4f4f');
 
     final size = MediaQuery.of(context).size;
 
@@ -65,78 +66,80 @@ class _SoporteState extends State<Soporte> {
                       child: Center(
                         child: Container(
                             width: size.width * 0.9,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.white,
+                            ),
                             child: Column(
                               children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
                                 Text(
                                   "¿Necesitas ayuda?",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: colorLetter,
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  "Si requiere ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontSize: 13,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 40,
                                 ),
+                                Text(
+                                  "Si requieres ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: colorLetter,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                // Contacto Whatsapp
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  margin: EdgeInsets.symmetric(vertical: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
-                                        width: size.width * 0.45,
-                                        margin: EdgeInsets.only(right: 10),
+                                        width: size.width * 0.42,
                                         child: Text(
                                           "Contáctanos en WhatsApp",
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color: colorLetter,
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      GestureDetector(
-                                          onTap: () => launch(
-                                              'https://api.whatsapp.com/send?phone=+57$contactoWhatsap'),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                width: 50,
-                                                margin:
-                                                    EdgeInsets.only(left: 15),
-                                                child: Image.asset(
-                                                  'assets/icon/whatsapp_logo.png',
-                                                  fit: BoxFit.contain,
+                                      Expanded(
+                                        flex: 2,
+                                        child: GestureDetector(
+                                            onTap: () => launch(
+                                                'https://api.whatsapp.com/send?phone=+57$contactoWhatsap'),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  child: Image.asset(
+                                                    'assets/icon/botones_soporte/whatsapp_img.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
                                                 ),
-                                              ),
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(top: 10),
-                                                child: Text(
+                                                Text(
                                                   "Empezar el chat",
-                                                  textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                       color: ConstantesColores
                                                           .gris_textos,
-                                                      fontSize: 13,
+                                                      fontSize: 11,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
+                                              ],
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -144,59 +147,51 @@ class _SoporteState extends State<Soporte> {
                                   thickness: 1,
                                   color: Colors.grey,
                                 ),
+                                // Contacto Telefono
                                 Container(
                                   margin: EdgeInsets.symmetric(vertical: 15),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
-                                        width: size.width * 0.45,
+                                        width: size.width * 0.42,
                                         child: Text(
                                           "Llámanos a nuestra línea",
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color: colorLetter,
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      GestureDetector(
-                                        onTap: () =>
-                                            launch("tel://$contactoCel"),
-                                        child: Container(
-                                            padding: EdgeInsets.only(left: 10),
+                                      Expanded(
+                                        flex: 2,
+                                        child: GestureDetector(
+                                            onTap: () =>
+                                                launch("tel://$contactoCel"),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  width: 50,
-                                                  margin:
-                                                      EdgeInsets.only(left: 30),
                                                   child: Image.asset(
-                                                    'assets/icon/cell_logo.png',
+                                                    'assets/icon/botones_soporte/telefono_img.png',
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin:
-                                                      EdgeInsets.only(top: 10),
-                                                  width: size.width * 0.4,
                                                   child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Text(
                                                         "Llamar ",
                                                         maxLines: 3,
-                                                        textAlign:
-                                                            TextAlign.left,
                                                         style: TextStyle(
                                                             color:
                                                                 ConstantesColores
                                                                     .gris_textos,
-                                                            fontSize: 13,
+                                                            fontSize: 11,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
@@ -204,13 +199,11 @@ class _SoporteState extends State<Soporte> {
                                                       Text(
                                                         "$contactoCel",
                                                         maxLines: 3,
-                                                        textAlign:
-                                                            TextAlign.left,
                                                         style: TextStyle(
                                                             color:
                                                                 ConstantesColores
                                                                     .gris_textos,
-                                                            fontSize: 13),
+                                                            fontSize: 11),
                                                       ),
                                                     ],
                                                   ),
@@ -225,80 +218,73 @@ class _SoporteState extends State<Soporte> {
                                   thickness: 1,
                                   color: Colors.grey,
                                 ),
+                                // Contacto Correo
                                 Container(
                                   margin: EdgeInsets.symmetric(vertical: 15),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
-                                        width: size.width * 0.45,
-                                        margin: EdgeInsets.only(right: 10),
+                                        width: size.width * 0.42,
                                         child: Text(
                                           "Escríbenos al correo",
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color: colorLetter,
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      GestureDetector(
-                                          onTap: () => launch(
-                                              "mailto:$soportEmail?subject=&body="),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: 70,
-                                                margin:
-                                                    EdgeInsets.only(left: 15),
-                                                child: Image.asset(
-                                                  'assets/icon/email_logo.png',
-                                                  fit: BoxFit.contain,
+                                      Expanded(
+                                        flex: 2,
+                                        child: GestureDetector(
+                                            onTap: () => launch(
+                                                "mailto:$soportEmail?subject=&body="),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 5),
+                                                  child: Image.asset(
+                                                    'assets/icon/botones_soporte/correo.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
                                                 ),
-                                              ),
-                                              Container(
-                                                child: Text(
+                                                Text(
                                                   "Escribir ahora",
-                                                  textAlign: TextAlign.left,
                                                   maxLines: 3,
                                                   style: TextStyle(
                                                       color: ConstantesColores
                                                           .gris_textos,
-                                                      fontSize: 13,
+                                                      fontSize: 11,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                              ),
-                                              Container(
-                                                width: size.width * 0.4,
-                                                child: Text(
+                                                Text(
                                                   "$soportEmail",
-                                                  textAlign: TextAlign.left,
                                                   maxLines: 3,
                                                   style: TextStyle(
                                                       color:
                                                           HexColor('#5cbb96'),
-                                                      fontSize: 13,
+                                                      fontSize: 11,
                                                       decoration: TextDecoration
                                                           .underline,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
+                                              ],
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 ),
                                 Divider(
                                   thickness: 1,
                                   color: Colors.grey,
+                                ),
+                                SizedBox(
+                                  height: 50,
                                 ),
                               ],
                             )),
