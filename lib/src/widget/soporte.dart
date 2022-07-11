@@ -19,10 +19,6 @@ class Soporte extends StatefulWidget {
 }
 
 class _SoporteState extends State<Soporte> {
-  // var contactoWhatsap = '3235639715';
-  // var contactoCel = '01 8000 52 11 55';
-  // var soportEmail = 'servicioalcliente@pideky.com';
-
   @override
   void initState() {
     super.initState();
@@ -85,7 +81,6 @@ class _SoporteState extends State<Soporte> {
                                   "Si requiere ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                      color: ConstantesColores.gris_textos,
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -190,16 +185,34 @@ class _SoporteState extends State<Soporte> {
                                                   margin:
                                                       EdgeInsets.only(top: 10),
                                                   width: size.width * 0.4,
-                                                  child: Text(
-                                                    "Llamar $contactoCel",
-                                                    maxLines: 3,
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        color: ConstantesColores
-                                                            .gris_textos,
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Llamar ",
+                                                        maxLines: 3,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                            color:
+                                                                ConstantesColores
+                                                                    .gris_textos,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                        "$contactoCel",
+                                                        maxLines: 3,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                            color:
+                                                                ConstantesColores
+                                                                    .gris_textos,
+                                                            fontSize: 13),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -269,9 +282,11 @@ class _SoporteState extends State<Soporte> {
                                                   textAlign: TextAlign.left,
                                                   maxLines: 3,
                                                   style: TextStyle(
-                                                      color: ConstantesColores
-                                                          .gris_textos,
+                                                      color:
+                                                          HexColor('#5cbb96'),
                                                       fontSize: 13,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
