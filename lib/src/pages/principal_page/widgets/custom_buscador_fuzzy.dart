@@ -25,6 +25,7 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final bool isActiveBanner;
   final bool isVisibilityAppBar;
   final String locasionBanner;
+  final int? claseProducto;
 
   const CustomBuscardorFuzzy(
       {Key? key,
@@ -32,6 +33,7 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       required this.numEmpresa,
       required this.tipoCategoria,
       required this.nombreCategoria,
+      this.claseProducto,
       this.img,
       this.isActiveBanner = true,
       this.isVisibilityAppBar = true,
@@ -78,7 +80,11 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   leading: new IconButton(
                       icon: new Icon(Icons.arrow_back_ios,
                           color: HexColor("#30C3A3")),
-                      onPressed: () => Navigator.of(context).pop()),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        catalogSearchViewModel.setPrecioMinimo(0);
+                        catalogSearchViewModel.setPrecioMaximo(100000);
+                      }),
                   title: Text(
                     '${widget.nombreCategoria}',
                     style: TextStyle(color: HexColor("#41398D")),
@@ -199,13 +205,38 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductos(
-        widget.codCategoria,
-        widget.tipoCategoria,
-        '',
-        catalogSearchViewModel.precioMinimo.value,
-        catalogSearchViewModel.precioMaximo.value);
-    listaProducto.value = listaAllProducts;
+    print(catalogSearchViewModel.precioMaximo.value);
+    print(catalogSearchViewModel.precioMinimo.value);
+    print(widget.claseProducto);
+    if (widget.claseProducto != null) {
+      if (widget.claseProducto == 1) {
+        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+            1,
+            "",
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            0);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 2) {
+        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+            2,
+            "",
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            0);
+        listaProducto.value = listaAllProducts;
+      }
+    } else {
+      listaAllProducts = await DBProvider.db.cargarProductos(
+          widget.codCategoria,
+          widget.tipoCategoria,
+          '',
+          catalogSearchViewModel.precioMinimo.value,
+          catalogSearchViewModel.precioMaximo.value);
+      listaProducto.value = listaAllProducts;
+    }
+    print(listaProducto.toString());
   }
 
   void runFilter(String enteredKeyword) {
@@ -237,6 +268,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       MaterialPageRoute(
           builder: (context) => FiltroProveedor(
                 codCategoria: widget.codCategoria,
+                nombreCategoria: widget.nombreCategoria,
+                urlImagen: widget.img,
               )),
     );
   }

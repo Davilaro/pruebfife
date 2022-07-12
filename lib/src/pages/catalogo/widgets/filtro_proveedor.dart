@@ -1,12 +1,11 @@
-import 'dart:convert';
-
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/categorias.dart';
+import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -17,8 +16,15 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 var providerDatos = new DatosListas();
 
 class FiltroProveedor extends StatefulWidget {
-  String codCategoria;
-  FiltroProveedor({Key? key, required this.codCategoria}) : super(key: key);
+  final String codCategoria;
+  final String nombreCategoria;
+  final String? urlImagen;
+  FiltroProveedor(
+      {Key? key,
+      required this.codCategoria,
+      required this.nombreCategoria,
+      required this.urlImagen})
+      : super(key: key);
 
   @override
   _FiltroProveedorState createState() => _FiltroProveedorState();
@@ -26,17 +32,22 @@ class FiltroProveedor extends StatefulWidget {
 
 class _FiltroProveedorState extends State<FiltroProveedor> {
   ControllerProductos catalogSearchViewModel = Get.find();
-  RangeValues values = RangeValues(0, 1000000);
+  RangeValues values = RangeValues(0, 500000);
   int valorRound = 3;
   String? dropdownValueCategoria;
-  RxList<String> listCategorias = ['Todos'].obs;
-  RxList<String> listSubCategorias = ['Todos'].obs;
-  RxList<String> listMarcas = ['Todos'].obs;
-
+  String? dropdownValueSubCategoria;
+  String? dropdownValueMarca;
+  RxList<String> listCategorias = ['Todas'].obs;
+  RxList<String> listSubCategorias = ['Todas'].obs;
+  RxList<String> listMarcas = ['Todas'].obs;
   @override
   void initState() {
+    print(widget.codCategoria);
+    print(widget.nombreCategoria);
     // TODO: implement initState
     cargarCategorias();
+    cargarSubCategorias();
+    cargarMarca();
     super.initState();
   }
 
@@ -60,6 +71,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
         ],
       ),
       body: Container(
+        margin: EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: Colors.white,
@@ -93,9 +105,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                               color: HexColor("#41398D")),
                           textAlign: TextAlign.left),
                     ),
-                    Expanded(
-                      child: Container(),
-                    ),
+                    Spacer(),
                     iconLimpiarFiltro()
                   ],
                 ),
@@ -103,17 +113,43 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                   height: 40,
                 ),
                 Container(
-                  child: Column(
+                  child: OverflowBar(
                     children: [
                       // Filtro de categorias
                       Obx(() => _dropDown(
                           titulo: 'Categoría',
-                          hin: 'Todos',
-                          listaItems: listCategorias.value,
+                          hin: 'Todas',
+                          listaItems: listCategorias,
                           value: dropdownValueCategoria,
                           onChange: (String? value) {
                             setState(() {
                               dropdownValueCategoria = value!;
+                            });
+                          })),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Obx(() => _dropDown(
+                          titulo: 'Subcategoría',
+                          hin: 'Todas',
+                          listaItems: listSubCategorias,
+                          value: dropdownValueSubCategoria,
+                          onChange: (String? value) {
+                            setState(() {
+                              dropdownValueSubCategoria = value!;
+                            });
+                          })),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Obx(() => _dropDown(
+                          titulo: 'Marcas',
+                          hin: 'Todas',
+                          listaItems: listMarcas,
+                          value: dropdownValueMarca,
+                          onChange: (String? value) {
+                            setState(() {
+                              dropdownValueMarca = value!;
                             });
                           })),
                     ],
@@ -212,10 +248,10 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           TextStyle(color: Colors.white, letterSpacing: 2.0)),
                   child: RangeSlider(
                     values: values,
-                    min: 0,
-                    max: 1000000,
-                    divisions: 2000,
-                    activeColor: ConstantesColores.agua_marina,
+                    min: 0.0,
+                    max: 500000.0,
+                    divisions: 500000,
+                    activeColor: ConstantesColores.azul_precio,
                     inactiveColor: ConstantesColores.gris_textos,
                     labels: RangeLabels(
                       values.start.round().toString(),
@@ -277,23 +313,43 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
       required String? hin,
       required Function(String?)? onChange,
       String? value}) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
+    return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(titulo),
-          CustomDropdownButton2(
-            hint: hin!,
-            iconEnabledColor: ConstantesColores.azul_precio,
-            dropdownItems: listaItems,
+          Text(
+            titulo,
+            style: TextStyle(color: HexColor("#41398D")),
+          ),
+          DropdownButton2(
+            buttonWidth: 200,
+            iconDisabledColor: Colors.white,
+            iconEnabledColor: Colors.white,
+            hint: Text(
+              '    $hin',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+            isExpanded: true,
+            underline: Text(''),
+            items: listaItems
+                .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ))
+                .toList(),
             value: value,
-            iconSize: 25,
-            icon: Icon(Icons.arrow_drop_down_outlined),
-            buttonWidth: Get.width * 0.5,
-            dropdownWidth: Get.width * 0.5,
             buttonDecoration: BoxDecoration(
-                color: HexColor('#ecebf3'),
+                color: HexColor("#43398E"),
                 borderRadius: BorderRadius.circular(30)),
             dropdownDecoration: BoxDecoration(color: HexColor('#ecebf3')),
             onChanged: onChange,
@@ -311,26 +367,27 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     }
   }
 
-  cargarMarca(String categoria) async {
+  cargarMarca() async {
     var resQuery = await DBProvider.db.consultarMarcas('');
     for (var i = 0; i < resQuery.length; i++) {
       listMarcas.add(resQuery[i].titulo);
     }
   }
 
-  cargarSubCategorias(String categoria) async {
-    var resQuery = await DBProvider.db
-        .consultarCategoriasSubCategorias(widget.codCategoria);
+  cargarSubCategorias() async {
+    var resQuery = await DBProvider.db.consultarCategoriasSubCategorias("8");
     for (var i = 0; i < resQuery.length; i++) {
       listSubCategorias.add(resQuery[i].descripcion);
     }
   }
 
   limpiarFiltro() {
-    dropdownValueCategoria = "Todos";
     valorRound = 3;
-    values = RangeValues(0, 1000000);
-
+    dropdownValueCategoria = "Todas";
+    dropdownValueSubCategoria = "Todas";
+    dropdownValueMarca = "Todas";
+    values = RangeValues(0, 500000);
+    //dropdownValueCategoria = "Todas";
     // catalogSearchViewModel.setFechaFinal('-1');
     // catalogSearchViewModel.setFechaInicial('-1');
     // _selectedDate = null;
@@ -347,14 +404,29 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
       },
       child: Row(
         children: [
-          Icon(
-            Icons.cleaning_services_outlined,
-            size: 30,
-            color: HexColor("#43398E"),
+          Image.asset(
+            'assets/limpiar_filtro_img.png',
+            width: Get.width * 0.07,
           ),
-          Text(
-            'Limpiar Filtro',
-            maxLines: 2,
+          SizedBox(
+            width: 2,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Limpiar',
+                style: TextStyle(
+                  color: HexColor("#43398E"),
+                ),
+              ),
+              Text(
+                'Filtro',
+                style: TextStyle(
+                  color: HexColor("#43398E"),
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -365,8 +437,90 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     catalogSearchViewModel.setPrecioMinimo(values.start);
     catalogSearchViewModel.setPrecioMaximo(values.end);
     catalogSearchViewModel.setIsFilter(true);
-    // providerDatos.guardarPrecioMinimo(values.start);
-    // providerDatos.guardarPrecioMaximo(values.end);
-    Navigator.pop(context);
+    providerDatos.guardarPrecioMinimo(values.start);
+    if (valorRound == 2) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    // debo evaluar el tipo de categoria
+                    tipoCategoria: 2,
+                    nombreCategoria: widget.nombreCategoria,
+                    img: widget.urlImagen,
+                    claseProducto: 2,
+                  )));
+    }
+    if (valorRound == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    // debo evaluar el tipo de categoria
+                    tipoCategoria: 4,
+                    nombreCategoria: widget.nombreCategoria,
+                    img: widget.urlImagen,
+                    claseProducto: 1,
+                  )));
+    } else if (valorRound == 3 || valorRound == null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    // debo evaluar el tipo de categoria
+                    tipoCategoria: 4,
+                    nombreCategoria: widget.nombreCategoria,
+                    img: widget.urlImagen,
+                  )));
+    }
+
+    // if (valorRound == 2) {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => CustomBuscardorFuzzy(
+    //                 codCategoria: widget.codCategoria,
+    //                 numEmpresa: 'nutresa',
+    //                 // debo evaluar el tipo de categoria
+    //                 tipoCategoria: 2,
+    //                 nombreCategoria: widget.nombreCategoria,
+    //                 img: widget.urlImagen,
+    //               )));
+    // }
+    // if (valorRound == 1) {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => CustomBuscardorFuzzy(
+    //                 codCategoria: widget.codCategoria,
+    //                 numEmpresa: 'nutresa',
+    //                 // debo evaluar el tipo de categoria
+    //                 tipoCategoria: 1,
+    //                 nombreCategoria: widget.nombreCategoria,
+    //                 img: widget.urlImagen,
+    //               )));
+    // } else {
+    //   // catalogSearchViewModel.setPrecioMinimo(values.start);
+    //   // catalogSearchViewModel.setPrecioMaximo(values.end);
+    //   // catalogSearchViewModel.setIsFilter(true);
+    //   // providerDatos.guardarPrecioMinimo(values.start);
+    //   print(widget.codCategoria);
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => CustomBuscardorFuzzy(
+    //                 codCategoria: widget.codCategoria,
+    //                 numEmpresa: 'nutresa',
+    //                 // debo evaluar el tipo de categoria
+    //                 tipoCategoria: 1,
+    //                 nombreCategoria: widget.nombreCategoria,
+    //                 img: widget.urlImagen,
+    //               )));
+    // }
   }
 }

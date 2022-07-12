@@ -142,6 +142,8 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
       MaterialPageRoute(
           builder: (context) => FiltroProveedor(
                 codCategoria: widget.codCategoria,
+                nombreCategoria: widget.nombreCategoria,
+                urlImagen: '',
               )),
     );
   }
