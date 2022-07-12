@@ -1,5 +1,6 @@
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -233,7 +234,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   _irFiltro() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FiltroPrecios()),
+      MaterialPageRoute(
+          builder: (context) => FiltroProveedor(
+                codCategoria: widget.codCategoria,
+              )),
     );
   }
 

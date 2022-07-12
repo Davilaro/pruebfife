@@ -214,7 +214,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     values: values,
                     min: 0,
                     max: 1000000,
-                    divisions: 4000,
+                    divisions: 2000,
                     activeColor: ConstantesColores.agua_marina,
                     inactiveColor: ConstantesColores.gris_textos,
                     labels: RangeLabels(
@@ -327,11 +327,16 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   }
 
   limpiarFiltro() {
+    dropdownValueCategoria = "Todos";
+    valorRound = 3;
+    values = RangeValues(0, 1000000);
+
     // catalogSearchViewModel.setFechaFinal('-1');
     // catalogSearchViewModel.setFechaInicial('-1');
     // _selectedDate = null;
     // _selectedDate2 = null;
   }
+
   Widget iconLimpiarFiltro() {
     return OutlineButton(
       borderSide: BorderSide(style: BorderStyle.none),
@@ -348,7 +353,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
             color: HexColor("#43398E"),
           ),
           Text(
-            'Lipiar Filtro',
+            'Limpiar Filtro',
             maxLines: 2,
           )
         ],

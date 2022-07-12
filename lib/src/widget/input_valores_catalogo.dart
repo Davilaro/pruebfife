@@ -131,7 +131,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '${element.nombre}',
@@ -152,7 +152,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 ),
               ),
               Container(
-                height: Get.height * 0.07,
+                height: Get.height * 0.05,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
