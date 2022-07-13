@@ -6,7 +6,6 @@ import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/dounser.dart';
-import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
@@ -17,27 +16,33 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CustomBuscardorFuzzy extends StatefulWidget {
-  final String codCategoria;
+  final String? codCategoria;
   final String numEmpresa;
   final int tipoCategoria;
-  final String nombreCategoria;
+  final String? nombreCategoria;
   final String? img;
   final bool isActiveBanner;
   final bool isVisibilityAppBar;
   final String locasionBanner;
   final int? claseProducto;
+  final String? codigoMarca;
+  final String? codigoSubCategoria;
+  final String? codigoCategoria;
 
   const CustomBuscardorFuzzy(
       {Key? key,
-      required this.codCategoria,
+      this.codCategoria,
       required this.numEmpresa,
       required this.tipoCategoria,
-      required this.nombreCategoria,
+      this.nombreCategoria,
       this.claseProducto,
       this.img,
       this.isActiveBanner = true,
       this.isVisibilityAppBar = true,
-      this.locasionBanner = ''})
+      this.locasionBanner = '',
+      this.codigoMarca,
+      this.codigoSubCategoria,
+      this.codigoCategoria})
       : super(key: key);
 
   @override
@@ -129,7 +134,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       height: size.height * 0.2,
                       width: double.infinity,
                       child: OfertasInterna(
-                          nombreFabricante: widget.codCategoria)),
+                          nombreFabricante: widget.codCategoria!)),
                 ),
                 Container(
                   height: Get.height * 0.8,
@@ -207,6 +212,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   void cargarProductos() async {
     print(catalogSearchViewModel.precioMaximo.value);
     print(catalogSearchViewModel.precioMinimo.value);
+    print(widget.codCategoria);
+    print(widget.nombreCategoria);
     print(widget.claseProducto);
     if (widget.claseProducto != null) {
       if (widget.claseProducto == 1) {
@@ -227,9 +234,46 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             0);
         listaProducto.value = listaAllProducts;
       }
+      if (widget.claseProducto == 4) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoMarca!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 3) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoSubCategoria!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 5) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoCategoria!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 6) {
+        listaAllProducts = await DBProvider.db.cargarProductosFiltroProveedores(
+            widget.codigoCategoria,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoSubCategoria);
+        listaProducto.value = listaAllProducts;
+      }
     } else {
       listaAllProducts = await DBProvider.db.cargarProductos(
-          widget.codCategoria,
+          widget.codCategoria!,
           widget.tipoCategoria,
           '',
           catalogSearchViewModel.precioMinimo.value,
@@ -267,8 +311,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       context,
       MaterialPageRoute(
           builder: (context) => FiltroProveedor(
-                codCategoria: widget.codCategoria,
-                nombreCategoria: widget.nombreCategoria,
+                codCategoria: widget.codCategoria!,
+                nombreCategoria: widget.nombreCategoria!,
                 urlImagen: widget.img,
               )),
     );

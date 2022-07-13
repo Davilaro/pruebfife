@@ -139,12 +139,7 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
   _irFiltro() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => FiltroProveedor(
-                codCategoria: widget.codCategoria,
-                nombreCategoria: widget.nombreCategoria,
-                urlImagen: '',
-              )),
+      MaterialPageRoute(builder: (context) => FiltroPrecios()),
     );
   }
 }
