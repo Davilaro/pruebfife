@@ -1,19 +1,15 @@
 import 'package:emart/src/controllers/controller_product.dart';
+import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
+import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
-import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
-import 'package:dropdown_button2/dropdown_button2.dart';
-
-var providerDatos = new DatosListas();
 
 class FiltroProveedor extends StatefulWidget {
   final String codCategoria;
@@ -42,7 +38,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   RxList<String> listMarcas = ['Todas'].obs;
   @override
   void initState() {
-    print(widget.codCategoria);
     cargarCategorias();
     cargarMarca();
     super.initState();
@@ -113,10 +108,10 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                   child: OverflowBar(
                     children: [
                       // Filtro de categorias
-                      Obx(() => _dropDown(
-                          titulo: 'Categoría',
-                          hin: 'Todas',
-                          listaItems: listCategorias,
+                      Obx(() => DropDownFiltroProveedores(
+                          hin: "Todas",
+                          titulo: "Categoría",
+                          listaItems: listCategorias.value,
                           value: dropdownValueCategoria,
                           onChange: (String? value) async {
                             setState(() {
@@ -134,25 +129,24 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                       SizedBox(
                         height: 5,
                       ),
-                      Obx(() => _dropDown(
-                          titulo: 'Subcategoría',
-                          hin: 'Todas',
-                          listaItems: listSubCategorias,
-                          value: dropdownValueSubCategoria,
+                      Obx(() => DropDownFiltroProveedores(
+                          titulo: "Subcategoría",
+                          listaItems: listSubCategorias.value,
+                          hin: "Todas",
                           onChange: (String? value) {
                             setState(() {
                               dropdownValueMarca = "Todas";
                               dropdownValueSubCategoria = value!;
                             });
-                          })),
+                          },
+                          value: dropdownValueSubCategoria)),
                       SizedBox(
                         height: 5,
                       ),
-                      Obx(() => _dropDown(
-                          titulo: 'Marcas',
-                          hin: 'Todas',
-                          listaItems: listMarcas,
-                          value: dropdownValueMarca,
+                      Obx(() => DropDownFiltroProveedores(
+                          titulo: "Marcas",
+                          listaItems: listMarcas.value,
+                          hin: "Todas",
                           onChange: (String? value) {
                             setState(() {
                               dropdownValueCategoria = "Todas";
@@ -161,7 +155,8 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                               dropdownValueMarca = value!;
                               valorRound = 3;
                             });
-                          })),
+                          },
+                          value: dropdownValueMarca))
                     ],
                   ),
                 ),
@@ -247,33 +242,9 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                 SizedBox(
                   height: 20,
                 ),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: Colors.white,
-                      thumbShape:
-                          RoundSliderThumbShape(enabledThumbRadius: 15.0),
-                      overlayShape:
-                          RoundSliderOverlayShape(overlayRadius: 30.0),
-                      thumbColor: Colors.red,
-                      valueIndicatorColor: ConstantesColores.agua_marina,
-                      activeTickMarkColor: Colors.yellow,
-                      overlayColor: Colors.yellow,
-                      valueIndicatorTextStyle:
-                          TextStyle(color: Colors.white, letterSpacing: 2.0)),
-                  child: RangeSlider(
-                    values: values,
-                    min: 0.0,
-                    max: 500000.0,
-                    divisions: 500000,
-                    activeColor: ConstantesColores.azul_precio,
-                    inactiveColor: ConstantesColores.gris_textos,
-                    labels: RangeLabels(
-                      values.start.round().toString(),
-                      values.end.round().toString(),
-                    ),
-                    onChanged: (values) =>
-                        setState(() => {this.values = values}),
-                  ),
+                SliderPrecios(
+                  values: values,
+                  onChange: (() => {this.values = values}),
                 ),
                 SizedBox(
                   height: 10,
@@ -319,60 +290,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     setState(() {
       valorRound = i;
     });
-  }
-
-  _dropDown(
-      {required String titulo,
-      required List<String> listaItems,
-      required String? hin,
-      required Function(String?)? onChange,
-      String? value}) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            titulo,
-            style: TextStyle(color: HexColor("#41398D")),
-          ),
-          DropdownButton2(
-            buttonWidth: 200,
-            iconDisabledColor: Colors.white,
-            iconEnabledColor: Colors.white,
-            hint: Text(
-              '    $hin',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-            isExpanded: true,
-            underline: Text(''),
-            items: listaItems
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ))
-                .toList(),
-            value: value,
-            buttonDecoration: BoxDecoration(
-                color: ConstantesColores.azul_precio,
-                borderRadius: BorderRadius.circular(30)),
-            dropdownDecoration: BoxDecoration(
-                color: ConstantesColores.agua_marina,
-                borderRadius: BorderRadius.circular(20)),
-            onChanged: onChange,
-          ),
-        ],
-      ),
-    );
   }
 
   cargarCategorias() async {
@@ -454,10 +371,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   }
 
   _cargarPrecios(RangeValues values, providerDatos) async {
-    catalogSearchViewModel.setPrecioMinimo(values.start);
-    catalogSearchViewModel.setPrecioMaximo(values.end);
-    catalogSearchViewModel.setIsFilter(true);
-    providerDatos.guardarPrecioMinimo(values.start);
     if (valorRound == 2 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
