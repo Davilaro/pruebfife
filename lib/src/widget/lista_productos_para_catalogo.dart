@@ -58,6 +58,7 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
+        isCategoriaPromos: false,
       );
 
       opciones.add(widgetTemp);

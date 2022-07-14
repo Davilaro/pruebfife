@@ -1,3 +1,4 @@
+import 'package:emart/src/pages/catalogo/widgets/filtro_proveedor.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
