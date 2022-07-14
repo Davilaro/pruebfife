@@ -127,6 +127,19 @@ class _ProductsCardState extends State<ProductsCard> {
                     ),
                   ),
                 ),
+                //aqui se debe validar si es produto nuevo
+                Visibility(
+                  visible: element.descuento != 0,
+                  child: Container(
+                    height: 35,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Image.asset(
+                      'assets/nuevos_label.png',
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+
                 Container(
                   padding: EdgeInsets.only(top: 5.0),
                   margin: element.descuento == 0
