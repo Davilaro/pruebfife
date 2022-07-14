@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
@@ -118,8 +120,8 @@ class _SoporteState extends State<Soporte> {
                                       Expanded(
                                         flex: 2,
                                         child: GestureDetector(
-                                            onTap: () => launch(
-                                                'https://api.whatsapp.com/send?phone=+57$contactoWhatsap'),
+                                            onTap: () => lanzarWhatssap(
+                                                '$contactoWhatsap'),
                                             child: Column(
                                               children: [
                                                 Container(
@@ -169,7 +171,7 @@ class _SoporteState extends State<Soporte> {
                                         flex: 2,
                                         child: GestureDetector(
                                             onTap: () =>
-                                                launch("tel://$contactoCel"),
+                                                lanzarLlamada("$contactoCel"),
                                             child: Column(
                                               children: [
                                                 Container(
@@ -298,5 +300,47 @@ class _SoporteState extends State<Soporte> {
             ]),
           ),
         ));
+  }
+
+  Future<void> lanzarLlamada(String command) async {
+    command = command.replaceAll(' ', '');
+    String url = Platform.isIOS ? 'tel://$command' : 'tel://$command';
+
+    try {
+      if (Platform.isIOS) {
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: new Text("No se puede llamar ahora")));
+          throw 'Could not launch $url';
+        }
+      } else {
+        await launch("tel://$command");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> lanzarWhatssap(String command) async {
+    var whatappURL_ios = "https://wa.me/+57$command?text=${Uri.parse("Hola")}";
+
+    try {
+      if (Platform.isIOS) {
+        // for iOS phone only
+        if (await canLaunch(whatappURL_ios)) {
+          await launch(whatappURL_ios, forceSafariVC: false);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: new Text("whatsapp no instalado")));
+        }
+      } else {
+        // android , web
+        await launch('https://api.whatsapp.com/send?phone=+57$command');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
