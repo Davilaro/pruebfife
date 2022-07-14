@@ -1,5 +1,6 @@
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -55,9 +56,12 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                 fontWeight: FontWeight.bold)),
         elevation: 0,
         leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-          onPressed: () => Navigator.pop(context),
-        ),
+            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+            onPressed: () {
+              Navigator.pop(context);
+              catalogSearchViewModel.setPrecioMinimo(0);
+              catalogSearchViewModel.setPrecioMaximo(1000000000);
+            }),
         actions: <Widget>[
           AccionesBartCarrito(esCarrito: true),
         ],
@@ -98,7 +102,11 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           textAlign: TextAlign.left),
                     ),
                     Spacer(),
-                    iconLimpiarFiltro()
+                    IconoLimpiarFiltro().iconLimpiarFiltro((() {
+                      setState(() {
+                        limpiarFiltro();
+                      });
+                    }))
                   ],
                 ),
                 SizedBox(
@@ -250,8 +258,8 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    _cargarPrecios(values, providerDatos);
+                  onTap: () async {
+                    await _cargarPrecios(values, providerDatos);
                   },
                   child: Container(
                     width: size.width * 0.9,
@@ -331,45 +339,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     values = RangeValues(0, 500000);
   }
 
-  Widget iconLimpiarFiltro() {
-    return OutlineButton(
-      borderSide: BorderSide(style: BorderStyle.none),
-      onPressed: () {
-        setState(() {
-          limpiarFiltro();
-        });
-      },
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/limpiar_filtro_img.png',
-            width: Get.width * 0.07,
-          ),
-          SizedBox(
-            width: 2,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Limpiar',
-                style: TextStyle(
-                  color: HexColor("#43398E"),
-                ),
-              ),
-              Text(
-                'Filtro',
-                style: TextStyle(
-                  color: HexColor("#43398E"),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
   _cargarPrecios(RangeValues values, providerDatos) async {
     if (valorRound == 2 &&
         ((dropdownValueCategoria != "Todas" &&
@@ -395,6 +364,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codCategoria: codigo,
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if (valorRound == 1 &&
@@ -421,6 +391,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codCategoria: codigo,
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
+                    locacionFiltro: "proveedor",
                   )));
     }
 
@@ -441,6 +412,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     img: widget.urlImagen,
                     claseProducto: 3,
                     codigoSubCategoria: codigo,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
@@ -458,6 +430,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 4,
                     codigoMarca: codigo,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
@@ -476,6 +449,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 6,
                     codigoMarca: codigo,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
@@ -494,6 +468,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 6,
                     codigoMarca: codigo,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((valorRound == 3 || valorRound == null) &&
@@ -501,17 +476,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
         (dropdownValueSubCategoria == "Todas" ||
             dropdownValueSubCategoria == null) &&
         (dropdownValueCategoria == "Todas" || dropdownValueCategoria == null)) {
-      print(widget.urlImagen);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: widget.codCategoria,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: widget.nombreCategoria,
-                    img: widget.urlImagen,
-                  )));
+      Navigator.pop(context);
     }
     if ((dropdownValueCategoria != "Todas" &&
             dropdownValueCategoria != null &&
@@ -531,40 +496,43 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 5,
                     codigoCategoria: codigo,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((valorRound == 1) &&
         ((dropdownValueCategoria == "Todas" ||
-                dropdownValueCategoria == "null") &&
-            (dropdownValueMarca == "Todas" || dropdownValueMarca == "null"))) {
+                dropdownValueCategoria == null) &&
+            (dropdownValueMarca == "Todas" || dropdownValueMarca == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     codCategoria: widget.codCategoria,
                     numEmpresa: 'nutresa',
-                    nombreCategoria: widget.nombreCategoria,
+                    nombreCategoria: "Promociones",
                     tipoCategoria: 1,
                     img: widget.urlImagen,
                     claseProducto: 1,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((valorRound == 2) &&
         ((dropdownValueCategoria == "Todas" ||
-                dropdownValueCategoria == "null") &&
-            (dropdownValueMarca == "Todas" || dropdownValueMarca == "null"))) {
+                dropdownValueCategoria == null) &&
+            (dropdownValueMarca == "Todas" || dropdownValueMarca == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     codCategoria: widget.codCategoria,
                     numEmpresa: 'nutresa',
-                    nombreCategoria: widget.nombreCategoria,
+                    nombreCategoria: "Imperdibles",
                     tipoCategoria: 2,
                     img: widget.urlImagen,
                     claseProducto: 2,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
   }

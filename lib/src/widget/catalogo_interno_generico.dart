@@ -1,4 +1,4 @@
-import 'package:emart/src/pages/catalogo/widgets/filtro_proveedor.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -139,7 +139,11 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
   _irFiltro() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FiltroPrecios()),
+      MaterialPageRoute(
+          builder: (context) => FiltroProveedor(
+              codCategoria: widget.codCategoria,
+              nombreCategoria: widget.nombreCategoria,
+              urlImagen: "")),
     );
   }
 }
