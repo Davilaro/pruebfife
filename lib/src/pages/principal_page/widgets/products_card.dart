@@ -30,6 +30,8 @@ class ProductsCard extends StatefulWidget {
 }
 
 class _ProductsCardState extends State<ProductsCard> {
+  String? codigo;
+
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
   bool isAgotado = false;
@@ -40,8 +42,6 @@ class _ProductsCardState extends State<ProductsCard> {
 
   @override
   void dispose() {
-    // cargoConfirmar.dispose();
-    // constrollerProductos.dispose();
     super.dispose();
   }
 
@@ -116,30 +116,21 @@ class _ProductsCardState extends State<ProductsCard> {
             //mensaje de precio especial y imagen producto
             Column(
               children: [
-                Visibility(
-                  visible: element.descuento != 0,
-                  child: Container(
-                    height: 35,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Image.asset(
-                      'assets/promo.png',
-                      fit: BoxFit.fill,
+                Container(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Visibility(
+                    visible:
+                        element.descuento != 0 || widget.tipoCategoria == 1,
+                    child: Container(
+                      //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
+                      child: Image.asset(
+                        'assets/promo_abel.png',
+                        height: 30,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                //aqui se debe validar si es produto nuevo
-                Visibility(
-                  visible: element.descuento != 0,
-                  child: Container(
-                    height: 35,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Image.asset(
-                      'assets/nuevos_label.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-
                 Container(
                   padding: EdgeInsets.only(top: 5.0),
                   margin: element.descuento == 0
