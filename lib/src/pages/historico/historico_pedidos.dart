@@ -29,7 +29,7 @@ class HistoricoPedidos extends StatefulWidget {
 }
 
 class _HistoricoPedidosState extends State<HistoricoPedidos> {
-  // ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
+  ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
   @override
   void initState() {
     //FIREBASE: Llamamos el evento select_content
@@ -163,9 +163,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            onTap: () => {pickDateRange(context)},
-            // onTap: () => Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => FiltroHistorico())),
+            // onTap: () => {pickDateRange(context)},
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
@@ -25,6 +26,10 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   TextEditingController mesFinController = TextEditingController();
   TextEditingController anoFinController = TextEditingController();
 
+  TextEditingController hola = TextEditingController();
+
+  List<DropdownMenuItem<String>> listDias = [];
+
   final meses = {
     1: 'Enero',
     2: 'Febrero',
@@ -44,6 +49,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   void initState() {
     // TODO: implement initState
     validarInicio();
+    dropdownItemsDia();
     super.initState();
   }
 
@@ -58,7 +64,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           elevation: 0,
-          actions: [IconLimpiarFiltro()],
+          actions: [iconLimpiarFiltro()],
         ),
         body: SingleChildScrollView(
           child: Stack(
@@ -110,14 +116,17 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         // Dia Inicio
-                                        inputFecha('Día', diaInicioController,
-                                            () => cargarFechaInicio()),
+                                        // inputFecha('Día', diaInicioController,
+                                        //     () => cargarFechaInicio()),
+                                        _dropFecha('dia', listDias),
                                         // Mes inicio
-                                        inputFecha('Mes', mesInicioController,
-                                            () => cargarFechaInicio()),
+                                        _dropFecha('mes', dropdownItemsMes),
+                                        // inputFecha('Mes', mesInicioController,
+                                        //     () => cargarFechaInicio()),
                                         // Año inicio
-                                        inputFecha('Año', anoInicioController,
-                                            () => cargarFechaInicio()),
+                                        _dropFecha('ano', dropdownItemsAno)
+                                        // inputFecha('Año', anoInicioController,
+                                        //     () => cargarFechaInicio()),
                                       ],
                                     ),
                                   ),
@@ -221,6 +230,62 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                 ),
               ),
             ],
+          ),
+        ));
+  }
+
+  Widget _dropFecha(String fecha, List<DropdownMenuItem<String>> itemsDia) {
+    return Obx(() => ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            margin: EdgeInsets.only(top: 10),
+            width: Get.width * 0.26,
+            height: 50,
+            decoration: BoxDecoration(
+              color: HexColor("#E4E3EC"),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                      dropdownMaxHeight: Get.width,
+                      dropdownWidth: fecha == 'mes'
+                          ? MediaQuery.of(context).size.width * 0.3
+                          : MediaQuery.of(context).size.width * 0.2,
+                      dropdownDecoration: BoxDecoration(
+                        color: HexColor("#E4E3EC"),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      dropdownElevation: 8,
+                      isExpanded: true,
+                      value: fecha == 'dia'
+                          ? controlerHistorico.dia.value
+                          : fecha == 'mes'
+                              ? controlerHistorico.mes.value
+                              : controlerHistorico.ano.value,
+                      icon: const Icon(Icons.arrow_drop_down_rounded),
+                      style: const TextStyle(color: Colors.black),
+                      // underline: Container(
+                      //   height: 2,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   color: Colors.transparent,
+                      // ),
+                      onChanged: (String? newValue) async {
+                        if (fecha == 'dia') {
+                          controlerHistorico.dia.value = newValue.toString();
+                        } else if (fecha == 'mes') {
+                          controlerHistorico.dia.value = '1';
+                          controlerHistorico.mes.value = newValue.toString();
+                          dropdownItemsDia();
+                        } else {
+                          controlerHistorico.dia.value = '1';
+                          controlerHistorico.ano.value = newValue.toString();
+                          dropdownItemsDia();
+                        }
+                      },
+                      items: itemsDia)),
+            ),
           ),
         ));
   }
@@ -379,7 +444,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     });
   }
 
-  Widget IconLimpiarFiltro() {
+  Widget iconLimpiarFiltro() {
     return OutlineButton(
       borderSide: BorderSide(style: BorderStyle.none),
       onPressed: () {
@@ -425,6 +490,241 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       mesFinController.text = _fechaFinal.month.toString();
       anoFinController.text = _fechaFinal.year.toString();
     }
+  }
+
+  ///CARGAR ITEMS DORPDOWN
+  void dropdownItemsDia() {
+    List<DropdownMenuItem<String>> menuItems = [];
+
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Dia            ',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '-1'));
+
+    // menuItems.add(DropdownMenuItem(
+    //     child: TextField(
+    //       controller: hola,
+    //       onChanged: (value) {
+    //         controlerHistorico.dia.value = hola.text;
+    //       },
+    //       keyboardType: TextInputType.number,
+    //       style: TextStyle(
+    //           color: ConstantesColores.azul_precio,
+    //           fontWeight: FontWeight.bold),
+    //       decoration: InputDecoration(
+    //         // floatingLabelAlignment: FloatingLabelAlignment.center,
+    //         // alignLabelWithHint: true,
+    //         hintText: '...',
+    //         hintStyle: TextStyle(
+    //             color: ConstantesColores.azul_precio,
+    //             fontWeight: FontWeight.bold),
+    //       ),
+    //     ),
+    //     value: '-1'));
+
+    if (controlerHistorico.mes.value == '2' &&
+            controlerHistorico.ano.value == '2024' ||
+        controlerHistorico.ano.value == '2028' ||
+        controlerHistorico.ano.value == '2032' ||
+        controlerHistorico.ano.value == '2036' ||
+        controlerHistorico.ano.value == '2040' ||
+        controlerHistorico.ano.value == '2044' ||
+        controlerHistorico.ano.value == '2048') {
+      for (int i = 1; i <= 29; i++) {
+        menuItems.add(DropdownMenuItem(
+            child: Text(
+              '$i',
+              style: TextStyle(
+                  color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold),
+            ),
+            value: '$i'));
+      }
+    } else if (controlerHistorico.mes.value == '2') {
+      for (int i = 1; i <= 28; i++) {
+        menuItems.add(DropdownMenuItem(
+            child: Text(
+              '$i',
+              style: TextStyle(
+                  color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold),
+            ),
+            value: '$i'));
+      }
+    } else if (controlerHistorico.mes.value == '4' ||
+        controlerHistorico.mes.value == '6' ||
+        controlerHistorico.mes.value == '9' ||
+        controlerHistorico.mes.value == '11') {
+      for (int i = 1; i <= 30; i++) {
+        menuItems.add(DropdownMenuItem(
+            child: Text(
+              '$i',
+              style: TextStyle(
+                  color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold),
+            ),
+            value: '$i'));
+      }
+    } else {
+      for (int i = 1; i <= 31; i++) {
+        menuItems.add(DropdownMenuItem(
+            child: Text(
+              '$i',
+              style: TextStyle(
+                  color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold),
+            ),
+            value: '$i'));
+      }
+    }
+    setState(() {
+      listDias = menuItems;
+    });
+
+    // return menuItems;
+  }
+
+  ///CARGAR ITEMS DORPDOWN
+  List<DropdownMenuItem<String>> get dropdownItemsMes {
+    List<DropdownMenuItem<String>> menuItems = [];
+
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Mes            ',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '-1'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Enero',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '1'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Febrero',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '2'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Marzo',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '3'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Abril',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '4'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Mayo',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '5'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Junio',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '6'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Julio',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '7'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Agosto',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '8'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Septiembre',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '9'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Octubre',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '10'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Noviembre',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '11'));
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Diciembre',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '12'));
+
+    return menuItems;
+  }
+
+  ///CARGAR ITEMS DORPDOWN
+  List<DropdownMenuItem<String>> get dropdownItemsAno {
+    List<DropdownMenuItem<String>> menuItems = [];
+
+    menuItems.add(DropdownMenuItem(
+        child: Text(
+          'Año            ',
+          style: TextStyle(
+              color: ConstantesColores.azul_precio,
+              fontWeight: FontWeight.bold),
+        ),
+        value: '-1'));
+
+    for (int i = 2022; i <= 2050; i++) {
+      menuItems.add(DropdownMenuItem(
+          child: Text(
+            '$i',
+            style: TextStyle(
+                color: ConstantesColores.azul_precio,
+                fontWeight: FontWeight.bold),
+          ),
+          value: '$i'));
+    }
+
+    return menuItems;
   }
 
   @override
