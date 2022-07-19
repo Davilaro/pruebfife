@@ -140,7 +140,8 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         '',
         catalogSearchViewModel.precioMinimo.value,
         catalogSearchViewModel.precioMaximo.value,
-        0);
+        0,
+        "");
     listaProducto.value = listaAllProducts;
   }
 

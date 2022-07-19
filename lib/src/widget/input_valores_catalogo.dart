@@ -42,15 +42,22 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
   RxBool isProductoEnOferta = false.obs;
+  RxBool isProductoNuevo = false.obs;
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       print(widget.element.codigo);
-      dynamic response = await DBProvider.db
+      dynamic responseOferta = await DBProvider.db
           .consultarProductoEnOfertaPorCodigo(widget.element.codigo);
-      if (response == widget.element.codigo) {
+      if (responseOferta == widget.element.codigo) {
         isProductoEnOferta.value = true;
       }
+      // dynamic responseNuevo = await DBProvider.db
+      //     .consultarProductoEnOfertaPorCodigo(widget.element.codigo);
+      // //tambien se debe validar la fecha del producto nuevo que traiga la base de datos
+      // if (responseNuevo == widget.element.codigo) {
+      //   isProductoNuevo.value = true;
+      // }
     });
     super.initState();
   }
@@ -98,9 +105,24 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                               visible: element.descuento != 0 ||
                                   isProductoEnOferta.value == true,
                               child: Container(
-                                //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
                                 child: Image.asset(
                                   'assets/promo_abel.png',
+                                  height: Get.height * 0.035,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => Container(
+                            padding: EdgeInsets.only(top: 5),
+                            child: Visibility(
+                              visible: element.descuento != 0 ||
+                                  isProductoNuevo.value == true,
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/nuevos_label.png',
                                   height: Get.height * 0.035,
                                   fit: BoxFit.cover,
                                 ),
@@ -157,93 +179,102 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   ],
                 ),
               ),
-              Container(
-                height: Get.height * 0.05,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Visibility(
-                        visible: element.descuento != 0,
+              Expanded(
+                child: Container(
+                  height: Get.height * 0.05,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Visibility(
+                          visible: element.descuento != 0 ||
+                              isProductoEnOferta.value == true,
+                          child: Container(
+                            height: Get.width * 0.07,
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              '${format.currencySymbol}' +
+                                  formatNumber
+                                      .format(element.precio)
+                                      .replaceAll(',00', ''),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.red),
+                            ),
+                          )),
+                      Expanded(
                         child: Container(
-                          height: Get.width * 0.07,
+                          height: (element.descuento != 0 ||
+                                  isProductoEnOferta.value == true)
+                              ? Get.width * 0.05
+                              : Get.width * 0.07,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           alignment: Alignment.topLeft,
                           child: Text(
                             '${format.currencySymbol}' +
                                 formatNumber
-                                    .format(element.precio)
+                                    .format((element.descuento != 0)
+                                        ? element.precioinicial
+                                        : element.precio)
                                     .replaceAll(',00', ''),
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.red),
+                            style: (element.descuento != 0 ||
+                                    isProductoEnOferta.value == true)
+                                ? TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    decoration: TextDecoration.lineThrough)
+                                : TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
                           ),
-                        )),
-                    Container(
-                      height: element.descuento != 0
-                          ? Get.width * 0.05
-                          : Get.width * 0.07,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        '${format.currencySymbol}' +
-                            formatNumber
-                                .format(element.descuento != 0
-                                    ? element.precioinicial
-                                    : element.precio)
-                                .replaceAll(',00', ''),
-                        textAlign: TextAlign.left,
-                        style: element.descuento != 0
-                            ? TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                                decoration: TextDecoration.lineThrough)
-                            : TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                        ),
                       ),
-                    ),
-                    Visibility(
-                        visible: isAgotado,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: EdgeInsets.only(left: 10, bottom: 3),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.red[100],
+                      Visibility(
+                          visible: isAgotado,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 10, bottom: 3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.red[100],
+                              ),
+                              height: Get.width * 0.06,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: Text(
+                                'Agotado',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.red),
+                              ),
                             ),
-                            height: Get.width * 0.06,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Text(
-                              'Agotado',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.red),
-                            ),
-                          ),
-                        )),
-                  ],
+                          )),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
                 visible: !isAgotado,
-                child: Container(
-                    height: Get.width * 0.1,
-                    width: 150,
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                        child: Image.asset("assets/agregar_btn.png"),
-                        onTap: () => {
-                              //FIREBASE: Llamamos el evento select_item
-                              TagueoFirebase()
-                                  .sendAnalityticSelectItem(productos, 1),
-                              detalleProducto(productos, cartProvider)
-                            })),
+                child: Expanded(
+                  child: Container(
+                      height: Get.width * 0.1,
+                      width: 150,
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                          child: Image.asset("assets/agregar_btn.png"),
+                          onTap: () => {
+                                //FIREBASE: Llamamos el evento select_item
+                                TagueoFirebase()
+                                    .sendAnalityticSelectItem(productos, 1),
+                                detalleProducto(productos, cartProvider)
+                              })),
+                ),
               ),
             ],
           ),

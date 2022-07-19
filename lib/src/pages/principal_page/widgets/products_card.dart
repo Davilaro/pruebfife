@@ -30,7 +30,7 @@ class ProductsCard extends StatefulWidget {
 }
 
 class _ProductsCardState extends State<ProductsCard> {
-  String? codigo;
+  RxString codigo = "".obs;
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
@@ -39,6 +39,7 @@ class _ProductsCardState extends State<ProductsCard> {
   final constrollerProductos = Get.find<ControllerProductos>();
   late final String nameCategory =
       widget.tipoCategoria == 1 ? 'Promos' : 'Imperdibles';
+  RxBool isProductoEnOferta = false.obs;
 
   @override
   void dispose() {
@@ -52,8 +53,8 @@ class _ProductsCardState extends State<ProductsCard> {
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
 
     return FutureBuilder(
-        future: DBProvider.db
-            .cargarProductosInterno(widget.tipoCategoria, '', 0, 1000000, 8),
+        future: DBProvider.db.cargarProductosInterno(
+            widget.tipoCategoria, '', 0, 1000000, 8, ""),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -72,7 +73,6 @@ class _ProductsCardState extends State<ProductsCard> {
   List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaProductos,
       cartProvider, format) {
     final List<Widget> opciones = [];
-
     if (listaProductos.length == 0) {
       return opciones..add(Text('No hay informacion para mostrar'));
     }
@@ -84,8 +84,19 @@ class _ProductsCardState extends State<ProductsCard> {
             shape: RoundedRectangleBorder(
                 side: new BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(8.0)),
-            child:
-                _cargarDisenoInterno(element, context, cartProvider, format)),
+            child: FutureBuilder(
+                future: DBProvider.db
+                    .consultarProductoEnOfertaPorCodigo(element.codigo),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.data == element.codigo) {
+                    return _cargarDisenoInterno(
+                        element, context, cartProvider, format, true);
+                  } else {
+                    return _cargarDisenoInterno(
+                        element, context, cartProvider, format, false);
+                  }
+                })),
       ));
 
       opciones.add(template);
@@ -102,7 +113,7 @@ class _ProductsCardState extends State<ProductsCard> {
   }
 
   _cargarDisenoInterno(Productos element, BuildContext context,
-      CarroModelo cartProvider, NumberFormat format) {
+      CarroModelo cartProvider, NumberFormat format, bool isProductoEnOferta) {
     isAgotado = constrollerProductos.validarAgotado(element);
     return GestureDetector(
         onTap: () {
@@ -120,9 +131,9 @@ class _ProductsCardState extends State<ProductsCard> {
                   padding: EdgeInsets.only(top: 5),
                   child: Visibility(
                     visible:
-                        element.descuento != 0 || widget.tipoCategoria == 1,
+                        (element.descuento != 0 || widget.tipoCategoria == 1) ||
+                            isProductoEnOferta,
                     child: Container(
-                      //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
                       child: Image.asset(
                         'assets/promo_abel.png',
                         height: 30,
@@ -193,7 +204,7 @@ class _ProductsCardState extends State<ProductsCard> {
                       child: Column(
                         children: [
                           Visibility(
-                              visible: element.descuento != 0,
+                              visible: (element.descuento != 0),
                               child: Container(
                                 height: 25,
                                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -211,7 +222,8 @@ class _ProductsCardState extends State<ProductsCard> {
                                 ),
                               )),
                           Container(
-                            height: element.descuento != 0
+                            height: (element.descuento != 0 ||
+                                    widget.tipoCategoria == 1)
                                 ? Get.width * 0.05
                                 : Get.width * 0.07,
                             padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -219,12 +231,12 @@ class _ProductsCardState extends State<ProductsCard> {
                             child: Text(
                               '${format.currencySymbol}' +
                                   formatNumber
-                                      .format(element.descuento != 0
+                                      .format((element.descuento != 0)
                                           ? element.precioinicial
                                           : element.precio)
                                       .replaceAll(',00', ''),
                               textAlign: TextAlign.left,
-                              style: element.descuento != 0
+                              style: (element.descuento != 0)
                                   ? TextStyle(
                                       color: ConstantesColores.azul_precio,
                                       fontWeight: FontWeight.bold,

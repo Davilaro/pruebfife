@@ -8,7 +8,9 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imagebutton/imagebutton.dart';
@@ -29,7 +31,21 @@ class CarritoDisenoListaR extends StatefulWidget {
 }
 
 class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
+  final prefs = new Preferencias();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  RxBool isProductoEnOferta = false.obs;
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      print(widget.productos.codigo);
+      dynamic responseOferta = await DBProvider.db
+          .consultarProductoEnOfertaPorCodigo(widget.productos.codigo);
+      if (responseOferta == widget.productos.codigo) {
+        isProductoEnOferta.value = true;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +75,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
           Column(
             children: [
               Visibility(
-                visible: element.descuento != 0,
+                visible: element.descuento != 0 || isProductoEnOferta.value,
                 child: Container(
                   height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),

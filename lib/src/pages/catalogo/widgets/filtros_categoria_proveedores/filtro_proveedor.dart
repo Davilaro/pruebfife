@@ -124,7 +124,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           onChange: (String? value) async {
                             setState(() {
                               dropdownValueMarca = "Todas";
-
                               listSubCategorias.value = ['Todas'];
                               dropdownValueSubCategoria = "Todas";
                               dropdownValueCategoria = value!;
@@ -132,6 +131,9 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                             if (dropdownValueCategoria != null &&
                                 dropdownValueCategoria != "Todas") {
                               await cargarSubCategorias();
+                              await cargarMarcasPorCategoria(1);
+                            } else {
+                              cargarMarca();
                             }
                           })),
                       SizedBox(
@@ -141,11 +143,19 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           titulo: "Subcategoría",
                           listaItems: listSubCategorias.value,
                           hin: "Todas",
-                          onChange: (String? value) {
+                          onChange: (String? value) async {
                             setState(() {
                               dropdownValueMarca = "Todas";
                               dropdownValueSubCategoria = value!;
                             });
+                            if ((dropdownValueSubCategoria == "Todas" ||
+                                        dropdownValueSubCategoria == null) &&
+                                    dropdownValueCategoria == "Todas" ||
+                                dropdownValueCategoria == null) {
+                              await cargarMarca();
+                            } else {
+                              await cargarMarcasPorCategoria(2);
+                            }
                           },
                           value: dropdownValueSubCategoria)),
                       SizedBox(
@@ -157,11 +167,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           hin: "Todas",
                           onChange: (String? value) {
                             setState(() {
-                              dropdownValueCategoria = "Todas";
-                              dropdownValueSubCategoria = "Todas";
-                              listSubCategorias.value = ["Todas"];
                               dropdownValueMarca = value!;
-                              valorRound = 3;
                             });
                           },
                           value: dropdownValueMarca))
@@ -330,6 +336,28 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     }
   }
 
+  cargarMarcasPorCategoria(int tipo) async {
+    String? codigoCategoria = await DBProvider.db
+        .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
+    listMarcas.value = ['Todas'];
+
+    if (tipo == 1) {
+      var resQuery =
+          await DBProvider.db.consultarMarcasFiltro(codigoCategoria, "", 1);
+      for (var i = 0; i < resQuery.length; i++) {
+        listMarcas.add(resQuery[i].nombreMarca);
+      }
+    } else {
+      String? codigoSubCategoria = await DBProvider.db
+          .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
+      var resQuery = await DBProvider.db
+          .consultarMarcasFiltro(codigoCategoria, codigoSubCategoria, 2);
+      for (var i = 0; i < resQuery.length; i++) {
+        listMarcas.add(resQuery[i].nombreMarca);
+      }
+    }
+  }
+
   limpiarFiltro() {
     valorRound = 3;
     dropdownValueCategoria = "Todas";
@@ -340,6 +368,8 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   }
 
   _cargarPrecios(RangeValues values, providerDatos) async {
+    String? codigoMarca =
+        await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
     if (valorRound == 2 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
@@ -365,6 +395,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
     if (valorRound == 1 &&
@@ -392,6 +423,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
 
@@ -413,12 +445,15 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 3,
                     codigoSubCategoria: codigo,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 3) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+        valorRound == 3 &&
+        ((dropdownValueCategoria == "Todas" ||
+                dropdownValueCategoria == null) &&
+            (dropdownValueSubCategoria == "Todas" ||
+                dropdownValueSubCategoria == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -428,45 +463,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     tipoCategoria: 3,
                     nombreCategoria: dropdownValueMarca,
                     claseProducto: 4,
-                    codigoMarca: codigo,
-                    isActiveBanner: false,
-                    locacionFiltro: "proveedor",
-                  )));
-    }
-    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 1) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: dropdownValueMarca,
-                    claseProducto: 6,
-                    codigoMarca: codigo,
-                    isActiveBanner: false,
-                    locacionFiltro: "proveedor",
-                  )));
-    }
-    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 2) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 3,
-                    nombreCategoria: dropdownValueMarca,
-                    claseProducto: 6,
-                    codigoMarca: codigo,
+                    codigoMarca: codigoMarca,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
                   )));
@@ -497,6 +494,53 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoCategoria: codigo,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
+                  )));
+    }
+    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
+        valorRound == 1 &&
+        ((dropdownValueCategoria == null ||
+                dropdownValueCategoria == "Todas") &&
+            (dropdownValueSubCategoria == null ||
+                dropdownValueSubCategoria == "Todas"))) {
+      String? codigo =
+          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: codigo,
+                    codigoCategoria: codigo,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 4,
+                    nombreCategoria: dropdownValueMarca,
+                    claseProducto: 6,
+                    codigoMarca: codigo,
+                    isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                  )));
+    }
+    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
+        valorRound == 2 &&
+        ((dropdownValueCategoria == null ||
+                dropdownValueCategoria == "Todas") &&
+            (dropdownValueSubCategoria == null ||
+                dropdownValueSubCategoria == "Todas"))) {
+      String? codigo =
+          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: codigo,
+                    codigoCategoria: codigo,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 3,
+                    nombreCategoria: dropdownValueMarca,
+                    claseProducto: 6,
+                    codigoMarca: codigo,
+                    isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
     if ((valorRound == 1) &&
@@ -515,6 +559,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 1,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
     if ((valorRound == 2) &&
@@ -533,6 +578,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 2,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
   }

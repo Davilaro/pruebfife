@@ -5,6 +5,7 @@ import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/marcaFiltro.dart';
 import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/modelos/productos.dart';
@@ -236,11 +237,22 @@ class DBProvider {
     }
   }
 
-  Future<List<dynamic>> cargarProductos(String codigo, int tipo,
-      String buscador, double precioMinimo, double precioMaximo) async {
+  Future<List<dynamic>> cargarProductos(
+      String? codigo,
+      int tipo,
+      String buscador,
+      double precioMinimo,
+      double precioMaximo,
+      String? codigoMarca) async {
     final db = await baseAbierta;
     try {
       final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
 
       if (tipo == 2) {
         sql = await db.rawQuery('''
@@ -262,6 +274,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY p.orden ASC
         
     ''');
@@ -281,10 +294,11 @@ class DBProvider {
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.marcacodigopideki LIKE '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        WHERE p.marcacodigopideki LIKE '%$codigo%'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
         ORDER BY p.orden ASC
          
        ''');
@@ -308,6 +322,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY p.orden ASC
          
       ''');
@@ -331,6 +346,33 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
+        ORDER BY p.orden ASC
+         
+      ''');
+      } else if (tipo == 7) {
+        //tipo para productos mas vendidos
+        sql = await db.rawQuery('''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE p.marcacodigopideki LIKE '%$codigo%'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
+        and p.codigo in (select distinct codigoref from Historico  )
         ORDER BY p.orden ASC
          
       ''');
@@ -354,6 +396,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY p.orden ASC
          
         ''');
@@ -372,13 +415,20 @@ class DBProvider {
       String buscador,
       double precioMinimo,
       double precioMaximo,
-      int limit) async {
+      int limit,
+      String? codigoMarca) async {
     final db = await baseAbierta;
 
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
       final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
 
       if (tipoProducto == 2) {
         sql = await db.rawQuery('''
@@ -401,6 +451,7 @@ class DBProvider {
           and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY pn.orden_imperdible ASC $isLimit 
          
     ''');
@@ -426,6 +477,7 @@ class DBProvider {
       and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+      $consulta
       UNION 
       SELECT p.codigo , p.nombre , 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
@@ -445,6 +497,7 @@ class DBProvider {
       and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+      
       ORDER BY pn.orden_oferta ASC
          
      ''');
@@ -857,10 +910,18 @@ class DBProvider {
       String buscador,
       double precioMinimo,
       double precioMaximo,
-      String? codigoSubCategoria) async {
+      String? codigoSubCategoria,
+      String? codigoMarca) async {
     final db = await baseAbierta;
     try {
       final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
+      print(codigoMarca);
       if (tipo == 1) {
         //tipo 1 para imperdibles
         sql = await db.rawQuery('''
@@ -883,6 +944,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY p.orden ASC
         
     ''');
@@ -912,7 +974,38 @@ class DBProvider {
         WHERE p.marcacodigopideki = '$codigo' AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta 
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+      if (tipo == 6) {
+        //tipo 6 para productos del dia
+        String date = DateTime.now().toString();
+        sql = await db.rawQuery('''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE p.marcacodigopideki LIKE '%$codigo%'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+         and p.fechatrans >= '$date'
         ORDER BY p.orden ASC
          
        ''');
@@ -942,6 +1035,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
         ORDER BY p.orden ASC
          
        ''');
@@ -969,6 +1063,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         
     ''');
         return sql.isNotEmpty
@@ -994,6 +1089,35 @@ class DBProvider {
       }
     } catch (e) {
       return "";
+    }
+  }
+
+  Future<dynamic> consultarMarcasFiltro(
+    String? codigoCategoria,
+    String? codigoSubcateegoria,
+    int tipo,
+  ) async {
+    final db = await baseAbierta;
+    //tipo 1 para filtrar por marca  y categoria
+    // tipo 2 para filtrar por catergoria subcategoria y marca
+    try {
+      dynamic sql;
+      if (tipo == 1) {
+        sql = await db.rawQuery('''
+   select distinct marcapideki  as nombreMarca   from Producto where categoriacodigopideki=$codigoCategoria
+      
+    ''');
+      } else {
+        sql = await db.rawQuery('''
+   select distinct marcapideki  as nombreMarca  from Producto where categoriacodigopideki=$codigoCategoria and subcategoriacodigopideki=$codigoSubcateegoria
+      
+    ''');
+      }
+      return sql.isNotEmpty
+          ? sql.map((e) => MarcaFiltro.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
     }
   }
 }

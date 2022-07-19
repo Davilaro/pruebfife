@@ -35,6 +35,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   void initState() {
     super.initState();
     cargarMarca();
+    print(widget.nombreCategoria);
   }
 
   @override
@@ -320,6 +321,8 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   }
 
   _cargarPrecios(RangeValues values) async {
+    String? codigoMarca =
+        await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
     if (valorRound == 1 &&
         (dropdownValueMarca == "Todas" || dropdownValueMarca == null)) {
       Navigator.push(
@@ -392,8 +395,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
     }
     if ((dropdownValueMarca != null && dropdownValueMarca != "Todas") &&
         valorRound == 3) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -403,13 +404,29 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                   tipoCategoria: 3,
                   nombreCategoria: dropdownValueMarca,
                   claseProducto: 4,
-                  codigoMarca: codigo,
+                  codigoMarca: codigoMarca,
                   isActiveBanner: false,
                   locacionFiltro: "categoria")));
     }
     if ((dropdownValueMarca == null || dropdownValueMarca == "Todas") &&
-        (valorRound == 3 || valorRound == 4)) {
+        valorRound == 3) {
       Navigator.pop(context);
+    }
+    if (valorRound == 4) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codigoCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    nombreCategoria: "Productos más vendidos",
+                    tipoCategoria: 7,
+                    img: widget.urlImagen,
+                    claseProducto: 7,
+                    isActiveBanner: false,
+                    locacionFiltro: "categoria",
+                    codigoMarca: codigoMarca,
+                  )));
     }
   }
 }
