@@ -7,6 +7,51 @@ class OpcionesBard extends ChangeNotifier {
   int _cambiarOpcioCatalogo = 0;
   int _opcionSubCategoria = 0;
   int _isLocal = 0;
+  int _numeroClickCarrito = 0;
+  int _numeroClickVerImpedibles = 0;
+  int _numeroClickVerPromos = 0;
+
+  int get getNumeroClickVerImpedibles {
+    return _numeroClickVerImpedibles;
+  }
+
+  set agregarNumeroClickVerImpedibles(int valor) {
+    _numeroClickVerImpedibles += valor;
+    notifyListeners();
+  }
+
+  set setNumeroClickVerImpedibles(int valor) {
+    _numeroClickVerImpedibles = valor;
+    notifyListeners();
+  }
+
+  int get getNumeroClickVerPromos {
+    return _numeroClickVerPromos;
+  }
+
+  set agregarNumeroClickVerPromos(int valor) {
+    _numeroClickVerPromos += valor;
+    notifyListeners();
+  }
+
+  set setNumeroClickVerPromos(int valor) {
+    _numeroClickVerPromos = valor;
+    notifyListeners();
+  }
+
+  int get getNumeroClickCarrito {
+    return _numeroClickCarrito;
+  }
+
+  set agregarNumeroClickCarrito(int valor) {
+    _numeroClickCarrito += valor;
+    notifyListeners();
+  }
+
+  set setNumeroClickCarrito(int valor) {
+    _numeroClickCarrito = valor;
+    notifyListeners();
+  }
 
   int get getIisLocal {
     return _isLocal;

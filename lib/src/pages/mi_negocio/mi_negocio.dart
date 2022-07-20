@@ -15,6 +15,7 @@ import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -57,6 +58,8 @@ class _MiNegocioState extends State<MiNegocio> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Mi Negocio", "", "", "Mi Negocio", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Mi Negocio');
     super.initState();
   }
 

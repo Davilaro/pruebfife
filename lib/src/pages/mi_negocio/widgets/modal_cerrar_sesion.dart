@@ -5,6 +5,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,6 +57,9 @@ modalCerrarSesion(context, size, provider) {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
           provider.selectOptionMenu = 0;
+          provider.setNumeroClickCarrito = 0;
+          provider.setNumeroClickVerImpedibles = 0;
+          provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
           Navigator.pop(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -90,10 +94,8 @@ modalCerrarSesion(context, size, provider) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     mainAxisSize: MainAxisSize.min,
-    // mainAxisAlignment: MainAxisAlignment.start,
     children: [
       Container(
-          // width: Get.width * 0.9,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             color: Colors.white,
@@ -102,7 +104,6 @@ modalCerrarSesion(context, size, provider) {
             children: [
               Column(
                 children: [
-                  //TODO: Falta solictar el icono y remplazarlo
                   Icon(
                     Icons.warning_amber_rounded,
                     size: 70,

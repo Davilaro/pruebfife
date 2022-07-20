@@ -5,6 +5,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
               element.descripcion,
               element.codigo,
               'ViewCategoris');
+          //UXCam: Llamamos el evento seeCategory
+          UxcamTagueo().seeCategory(element.descripcion);
           _onClickCatalogo(
               element.codigo, context, provider, element.descripcion);
         },
@@ -195,6 +198,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
       if (controllerSearch.text.length > 2) {
         //FIREBASE: Llamamos el evento search
         TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
+        //UXCam: Llamamos el evento search
+        UxcamTagueo().search(controllerSearch.text);
         List listaAux = [];
         listaAllCategorias.forEach((element) {
           listaAux.add(element.descripcion);

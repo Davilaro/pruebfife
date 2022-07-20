@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,6 +11,8 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
@@ -259,37 +263,10 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     );
   }
 
-  _campoTexto(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      padding: EdgeInsets.fromLTRB(20, 10, 5, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: _controllerBuscarProductoMarca,
-        style: TextStyle(color: HexColor("#41398D"), fontSize: 11.5),
-        decoration: InputDecoration(
-            fillColor: HexColor("#41398D"),
-            hintText: 'Buscar tus productos de esta marca',
-            hintStyle: TextStyle(
-              color: HexColor("#41398D"),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Icon(
-                Icons.search,
-                color: HexColor("#41398D"),
-              ),
-            ),
-            border: InputBorder.none),
-      ),
-    );
-  }
-
-  //SE CREA UNA RESPUESTA PARA DEVOLVER
   Future<void> pasarCarrito() async {
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    //UXCam: Llamamos el evento clickCarrito
+    UxcamTagueo().clickCarrito(provider, 'Inferior');
     var resul = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(

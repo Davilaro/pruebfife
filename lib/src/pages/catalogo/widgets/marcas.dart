@@ -5,6 +5,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -77,6 +78,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
           //Firebase: Llamamos el evento select_content
           TagueoFirebase().sendAnalityticSelectContent("Marcas", element.titulo,
               element.titulo, element.titulo, element.codigo, 'ViewMarcs'),
+          //UXCam: Llamamos el evento seeBrand
+          UxcamTagueo().seeBrand(element.titulo),
           _onClickCatalogo(element.codigo, context, provider, element.titulo)
         },
         child: Card(
@@ -158,6 +161,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
       if (controllerSearch.text.length > 2) {
         //FIREBASE: Llamamos el evento search
         TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
+        //UXCam: Llamamos el evento search
+        UxcamTagueo().search(controllerSearch.text);
         List listaAux = [];
         listaAllMarcas.forEach((element) {
           listaAux.add(element.titulo);

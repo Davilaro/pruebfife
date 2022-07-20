@@ -5,6 +5,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -56,6 +57,8 @@ class CategoriasCard extends StatelessWidget {
                   element.descripcion,
                   element.codigo,
                   'ViewCategoris'),
+              //UXCam: Llamamos el evento seeDetailProduct
+              UxcamTagueo().seeCategory(element.descripcion),
               _onClickCatalogo(
                   element.codigo, context, provider, element.descripcion)
             },

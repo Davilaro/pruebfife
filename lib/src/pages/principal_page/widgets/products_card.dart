@@ -12,6 +12,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -76,7 +77,7 @@ class _ProductsCardState extends State<ProductsCard> {
     if (listaProductos.length == 0) {
       return opciones..add(Text('No hay informacion para mostrar'));
     }
-    listaProductos.forEach((element) {
+    for (var i = 0; i < listaProductos.length; i++) {
       final template = Container(
           child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -84,12 +85,26 @@ class _ProductsCardState extends State<ProductsCard> {
             shape: RoundedRectangleBorder(
                 side: new BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(8.0)),
-            child:
-                _cargarDisenoInterno(element, context, cartProvider, format)),
+            child: _cargarDisenoInterno(
+                listaProductos[i], context, cartProvider, format, i)),
       ));
 
       opciones.add(template);
-    });
+    }
+    // listaProductos.forEach((element) {
+    //   final template = Container(
+    //       child: FittedBox(
+    //     fit: BoxFit.scaleDown,
+    //     child: Card(
+    //         shape: RoundedRectangleBorder(
+    //             side: new BorderSide(color: Colors.white),
+    //             borderRadius: BorderRadius.circular(8.0)),
+    //         child:
+    //             _cargarDisenoInterno(element, context, cartProvider, format)),
+    //   ));
+
+    //   opciones.add(template);
+    // });
 
     if (listaProductos.length > 0 && contador < 1) {
       //FIREBASE: Llamamos el evento view_item_list
@@ -102,12 +117,14 @@ class _ProductsCardState extends State<ProductsCard> {
   }
 
   _cargarDisenoInterno(Productos element, BuildContext context,
-      CarroModelo cartProvider, NumberFormat format) {
+      CarroModelo cartProvider, NumberFormat format, int index) {
     isAgotado = constrollerProductos.validarAgotado(element);
     return GestureDetector(
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
           TagueoFirebase().sendAnalityticSelectItem(element, 1);
+          //UXCam: Llamamos el evento seeDetailProduct
+          UxcamTagueo().seeDetailProduct(element, index, nameCategory);
           detalleProducto(element, cartProvider);
         },
         child: Column(
@@ -288,6 +305,9 @@ class _ProductsCardState extends State<ProductsCard> {
                     onTap: () {
                       //FIREBASE: Llamamos el evento select_item
                       TagueoFirebase().sendAnalityticSelectItem(element, 1);
+                      //UXCam: Llamamos el evento seeDetailProduct
+                      UxcamTagueo()
+                          .seeDetailProduct(element, index, nameCategory);
                       detalleProducto(element, cartProvider);
                     },
                   )),

@@ -10,6 +10,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -353,6 +354,8 @@ class _SearchPageState extends State<SearchPage> {
             searchInput.value = value;
             //FIREBASE: Llamamos el evento search
             TagueoFirebase().sendAnalityticsSearch(value);
+            //UXCam: Llamamos el evento search
+            UxcamTagueo().search(value);
             runFilter(value);
           },
         ));

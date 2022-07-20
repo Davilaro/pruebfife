@@ -9,6 +9,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
@@ -41,6 +42,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "PedidoRapido", "", "", "PedidoRapido", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Pedido Rápido');
   }
 
   int seleccion = 1;

@@ -6,6 +6,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:flutter/material.dart';
@@ -116,20 +117,37 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       //FIREBASE: Llamamos el evento view_item_list
       TagueoFirebase().sendAnalityticViewItemList(data, nameCategory);
     }
-    for (var element in data) {
+
+    for (var i = 0; i < data.length; i++) {
       bool isProductoPromo = false;
       if (widget.tipoCategoria != 2) {
         isProductoPromo = true;
       }
-      Productos productos = element;
+      Productos productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: prefs.numEmpresa,
         isCategoriaPromos: isProductoPromo,
+        index: i,
       );
 
       opciones.add(widgetTemp);
     }
+
+    // for (var element in data) {
+    //   bool isProductoPromo = false;
+    //   if (widget.tipoCategoria != 2) {
+    //     isProductoPromo = true;
+    //   }
+    //   Productos productos = element;
+    //   final widgetTemp = InputValoresCatalogo(
+    //     element: productos,
+    //     numEmpresa: prefs.numEmpresa,
+    //     isCategoriaPromos: isProductoPromo,
+    //   );
+
+    //   opciones.add(widgetTemp);
+    // }
 
     return opciones;
   }
@@ -150,6 +168,8 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
     } else {
       //FIREBASE: Llamamos el evento search
       TagueoFirebase().sendAnalityticsSearch(_controllerSearch.text);
+      //UXCam: Llamamos el evento search
+      UxcamTagueo().search(_controllerSearch.text);
       List listaAux = [];
       listaProducto.value = [];
       listaAllProducts.forEach((element) {

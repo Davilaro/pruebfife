@@ -118,15 +118,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               colorSeleccion = true;
               seleccion = element.codigo;
             }),
-            _mostrarCategorias(
-                context,
-                element.codigo,
-                provider,
-                element.fabricantes,
-                element.codigonutresa,
-                element.codigozenu,
-                element.codigomeals,
-                element.razonsocial)
+            _mostrarCategorias(context, element, provider)
           },
           title: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
@@ -205,26 +197,22 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   _mostrarCategorias(
-      BuildContext context,
-      String codigo,
-      DatosListas provider,
-      final List<dynamic> listaFabricantes,
-      String codigonutresa,
-      String codigozenu,
-      String codigomeals,
-      String razonSocial) async {
-    prefs.usuarioRazonSocial = razonSocial;
-    prefs.codCliente = codigo;
+      BuildContext context, dynamic elemento, DatosListas provider) async {
+    prefs.usuarioRazonSocial = elemento.razonsocial;
+    prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
-    prefs.codigonutresa = codigonutresa;
-    prefs.codigozenu = codigozenu;
-    prefs.codigomeals = codigomeals;
+    prefs.codigonutresa = elemento.codigonutresa;
+    prefs.codigozenu = elemento.codigozenu;
+    prefs.codigomeals = elemento.codigomeals;
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-
+    var userUxCam = (elemento.nit + elemento.nombre).replaceAll(' ', '');
+    print('user UXCam $userUxCam');
+    //UXCam: se asigna el nombre de usuario
+    // FlutterUxcam.setUserIdentity('$userUxCam');
     await pr.show();
     await cargarInformacion(provider);
     await pr.hide();

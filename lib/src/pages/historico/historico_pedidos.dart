@@ -4,6 +4,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/expansion_card.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
@@ -35,6 +36,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Historico", "", "", "Historico", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Histórico');
     validarVersionActual(context);
     super.initState();
   }

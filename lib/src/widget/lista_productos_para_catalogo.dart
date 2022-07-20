@@ -53,16 +53,28 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
   _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
 
-    for (var element in data) {
-      Productos productos = element;
+    for (var i = 0; i < data.length; i++) {
+      Productos productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
         isCategoriaPromos: false,
+        index: i,
       );
 
       opciones.add(widgetTemp);
     }
+
+    // for (var element in data) {
+    //   Productos productos = element;
+    //   final widgetTemp = InputValoresCatalogo(
+    //     element: productos,
+    //     numEmpresa: widget.numEmpresa,
+    //     isCategoriaPromos: false,
+    //   );
+
+    //   opciones.add(widgetTemp);
+    // }
 
     return opciones;
   }
