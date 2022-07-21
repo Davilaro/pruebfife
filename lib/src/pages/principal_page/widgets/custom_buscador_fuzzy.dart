@@ -354,6 +354,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   codCategoria: widget.codigoCategoria,
                   nombreCategoria: widget.nombreCategoria,
                   urlImagen: widget.img,
+                  codSubCategoria: widget.codigoSubCategoria,
                 )),
       );
     }

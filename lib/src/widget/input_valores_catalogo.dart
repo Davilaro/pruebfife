@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -41,39 +43,32 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
-  RxBool isProductoEnOferta = false.obs;
+  bool isProductoEnOferta = false;
   RxBool isProductoNuevo = false.obs;
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      print(widget.element.codigo);
-      dynamic responseOferta = await DBProvider.db
-          .consultarProductoEnOfertaPorCodigo(widget.element.codigo);
-      if (responseOferta == widget.element.codigo) {
-        isProductoEnOferta.value = true;
-      }
-      // dynamic responseNuevo = await DBProvider.db
-      //     .consultarProductoEnOfertaPorCodigo(widget.element.codigo);
-      // //tambien se debe validar la fecha del producto nuevo que traiga la base de datos
-      // if (responseNuevo == widget.element.codigo) {
-      //   isProductoNuevo.value = true;
-      // }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    print(isProductoEnOferta);
     final cartProvider = Provider.of<CarroModelo>(context);
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
-
-    return Card(
-      shape: RoundedRectangleBorder(
-          side: new BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(8.0)),
-      child:
-          _cargarDisenoInterno(widget.element, context, cartProvider, format),
+    return FutureBuilder(
+      future: DBProvider.db
+          .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.data == widget.element.codigo) {
+          isProductoEnOferta = true;
+        } else {
+          isProductoEnOferta = false;
+        }
+        return Card(
+          shape: RoundedRectangleBorder(
+              side: new BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(8.0)),
+          child: _cargarDisenoInterno(
+              widget.element, context, cartProvider, format),
+        );
+      },
     );
   }
 
@@ -81,7 +76,6 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
       element, BuildContext context, CarroModelo cartProvider, format) {
     Productos productos = element;
     bool isAgotado = constrollerProductos.validarAgotado(productos);
-
     return GestureDetector(
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
@@ -98,38 +92,38 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Obx(
-                          () => Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Visibility(
-                              visible: element.descuento != 0 ||
-                                  isProductoEnOferta.value == true,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/promo_abel.png',
-                                  height: Get.height * 0.035,
-                                  fit: BoxFit.cover,
-                                ),
+                        Container(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Visibility(
+                            visible: (element.descuento != 0 ||
+                                    isProductoEnOferta == true) ||
+                                widget.isCategoriaPromos,
+                            child: Container(
+                              child: Image.asset(
+                                'assets/promo_abel.png',
+                                height: Get.height * 0.035,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
                         ),
-                        Obx(
-                          () => Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Visibility(
-                              visible: element.descuento != 0 ||
-                                  isProductoNuevo.value == true,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/nuevos_label.png',
-                                  height: Get.height * 0.035,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Obx(
+                        //   () => Container(
+                        //     padding: EdgeInsets.only(top: 5),
+                        //     child: Visibility(
+                        //       visible: (element.descuento != 0 ||
+                        //               isProductoNuevo.value == true) ||
+                        //           widget.isCategoriaPromos,
+                        //       child: Container(
+                        //         child: Image.asset(
+                        //           'assets/nuevos_label.png',
+                        //           height: Get.height * 0.035,
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        //),
                       ],
                     ),
                   ],
@@ -155,15 +149,21 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               ]),
               Container(
                 height:
-                    element.descuento == 0 ? Get.width * 0.2 : Get.width * 0.15,
+                    (element.descuento == 0.0 && isProductoEnOferta == false) &&
+                            (widget.isCategoriaPromos == false)
+                        ? Get.width * 0.2
+                        : Get.width * 0.15,
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Wrap(
                   children: [
                     Text(
                       '${element.nombre}',
-                      maxLines: element.descuento == 0 ? 3 : 2,
+                      maxLines: (element.descuento == 0.0 &&
+                                  isProductoEnOferta == false) &&
+                              widget.isCategoriaPromos == false
+                          ? 3
+                          : 2,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: ConstantesColores.verde),
@@ -186,8 +186,9 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Visibility(
-                          visible: element.descuento != 0 ||
-                              isProductoEnOferta.value == true,
+                          visible: (element.descuento != 0 ||
+                                  isProductoEnOferta == true) ||
+                              widget.isCategoriaPromos,
                           child: Container(
                             height: Get.width * 0.07,
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -207,7 +208,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                       Expanded(
                         child: Container(
                           height: (element.descuento != 0 ||
-                                  isProductoEnOferta.value == true)
+                                      isProductoEnOferta == true) ||
+                                  widget.isCategoriaPromos
                               ? Get.width * 0.05
                               : Get.width * 0.07,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -215,13 +217,16 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                           child: Text(
                             '${format.currencySymbol}' +
                                 formatNumber
-                                    .format((element.descuento != 0)
+                                    .format((element.descuento != 0 ||
+                                                isProductoEnOferta == true) ||
+                                            widget.isCategoriaPromos
                                         ? element.precioinicial
                                         : element.precio)
                                     .replaceAll(',00', ''),
                             textAlign: TextAlign.left,
-                            style: (element.descuento != 0 ||
-                                    isProductoEnOferta.value == true)
+                            style: ((element.descuento != 0 ||
+                                        isProductoEnOferta == true) ||
+                                    widget.isCategoriaPromos
                                 ? TextStyle(
                                     color: ConstantesColores.azul_precio,
                                     fontWeight: FontWeight.bold,
@@ -230,7 +235,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                                 : TextStyle(
                                     color: ConstantesColores.azul_precio,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                    fontSize: 18)),
                           ),
                         ),
                       ),

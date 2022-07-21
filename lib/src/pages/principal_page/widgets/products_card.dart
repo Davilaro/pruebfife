@@ -132,7 +132,7 @@ class _ProductsCardState extends State<ProductsCard> {
                   child: Visibility(
                     visible:
                         (element.descuento != 0 || widget.tipoCategoria == 1) ||
-                            isProductoEnOferta,
+                            isProductoEnOferta == true,
                     child: Container(
                       child: Image.asset(
                         'assets/promo_abel.png',
@@ -144,9 +144,11 @@ class _ProductsCardState extends State<ProductsCard> {
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 5.0),
-                  margin: element.descuento == 0
-                      ? EdgeInsets.only(top: 15)
-                      : EdgeInsets.zero,
+                  margin:
+                      (element.descuento == 0 && widget.tipoCategoria != 1) &&
+                              isProductoEnOferta == false
+                          ? EdgeInsets.only(top: 15)
+                          : EdgeInsets.zero,
                   // height: element.descuento == 0 ? 120 : 100,
                   height: 100,
                   width: Get.width * 0.22,
@@ -204,7 +206,9 @@ class _ProductsCardState extends State<ProductsCard> {
                       child: Column(
                         children: [
                           Visibility(
-                              visible: (element.descuento != 0),
+                              visible: (element.descuento != 0 ||
+                                      widget.tipoCategoria == 1) ||
+                                  isProductoEnOferta == true,
                               child: Container(
                                 height: 25,
                                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -231,12 +235,16 @@ class _ProductsCardState extends State<ProductsCard> {
                             child: Text(
                               '${format.currencySymbol}' +
                                   formatNumber
-                                      .format((element.descuento != 0)
+                                      .format((element.descuento != 0 ||
+                                                  widget.tipoCategoria == 1) ||
+                                              isProductoEnOferta == true
                                           ? element.precioinicial
                                           : element.precio)
                                       .replaceAll(',00', ''),
                               textAlign: TextAlign.left,
-                              style: (element.descuento != 0)
+                              style: ((element.descuento != 0 ||
+                                          widget.tipoCategoria == 1) ||
+                                      isProductoEnOferta == true)
                                   ? TextStyle(
                                       color: ConstantesColores.azul_precio,
                                       fontWeight: FontWeight.bold,

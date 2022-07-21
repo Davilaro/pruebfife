@@ -87,7 +87,10 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 10.0),
-                height: element.descuento == 0 ? 140 : 100,
+                height: (element.descuento == 0 &&
+                        isProductoEnOferta.value == false)
+                    ? 140
+                    : 100,
                 width: Get.width * 0.3,
                 alignment: Alignment.center,
                 child: ClipRRect(

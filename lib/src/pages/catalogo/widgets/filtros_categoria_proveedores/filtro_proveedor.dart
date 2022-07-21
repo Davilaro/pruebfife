@@ -370,6 +370,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   _cargarPrecios(RangeValues values, providerDatos) async {
     String? codigoMarca =
         await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+    //para imperdibles, categoira y subcate
     if (valorRound == 2 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
@@ -398,6 +399,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                   )));
     }
+    //para promo, categoria y subcategoria
     if (valorRound == 1 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
@@ -426,7 +428,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                   )));
     }
-
+    //para subcategoria y categoria
     if ((dropdownValueSubCategoria != "Todas" &&
             dropdownValueSubCategoria != null) &&
         (valorRound == 3)) {
@@ -448,6 +450,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                   )));
     }
+    //para marca
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
         valorRound == 3 &&
         ((dropdownValueCategoria == "Todas" ||
@@ -468,13 +471,15 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     locacionFiltro: "proveedor",
                   )));
     }
-    if ((valorRound == 3 || valorRound == null) &&
+    //para de todo tipo
+    if ((valorRound == 3) &&
         (dropdownValueMarca == "Todas" || dropdownValueMarca == null) &&
         (dropdownValueSubCategoria == "Todas" ||
             dropdownValueSubCategoria == null) &&
         (dropdownValueCategoria == "Todas" || dropdownValueCategoria == null)) {
       Navigator.pop(context);
     }
+    //para categoria sola
     if ((dropdownValueCategoria != "Todas" &&
             dropdownValueCategoria != null &&
             (dropdownValueSubCategoria == "Todas" ||
@@ -497,6 +502,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                   )));
     }
+    //para marca y promo
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
         valorRound == 1 &&
         ((dropdownValueCategoria == null ||
@@ -520,6 +526,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     locacionFiltro: "proveedor",
                   )));
     }
+    //para marca e imperdible
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
         valorRound == 2 &&
         ((dropdownValueCategoria == null ||
@@ -543,6 +550,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     locacionFiltro: "proveedor",
                   )));
     }
+    //para promo sola
     if ((valorRound == 1) &&
         ((dropdownValueCategoria == "Todas" ||
                 dropdownValueCategoria == null) &&
@@ -562,6 +570,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                   )));
     }
+    //para imperdible sola
     if ((valorRound == 2) &&
         ((dropdownValueCategoria == "Todas" ||
                 dropdownValueCategoria == null) &&

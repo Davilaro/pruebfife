@@ -15,11 +15,13 @@ class FiltroCategoria extends StatefulWidget {
   final String? codCategoria;
   final String? nombreCategoria;
   final String? urlImagen;
+  final String? codSubCategoria;
   FiltroCategoria(
       {Key? key,
       required this.codCategoria,
       required this.nombreCategoria,
-      required this.urlImagen})
+      required this.urlImagen,
+      required this.codSubCategoria})
       : super(key: key);
   @override
   State<FiltroCategoria> createState() => _FiltroCategoriaState();
@@ -35,7 +37,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   void initState() {
     super.initState();
     cargarMarca();
-    print(widget.nombreCategoria);
   }
 
   @override
@@ -308,9 +309,13 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   }
 
   cargarMarca() async {
-    var resQuery = await DBProvider.db.consultarMarcasPorFabricante("");
+    String? codigoSubCategoria = await DBProvider.db
+        .consultarCodigoSubCategoriaPorNombre(widget.nombreCategoria);
+    print(codigoSubCategoria);
+    var resQuery =
+        await DBProvider.db.consultarMarcasFiltro("", codigoSubCategoria, 3);
     for (var i = 0; i < resQuery.length; i++) {
-      listMarcas.add(resQuery[i].titulo);
+      listMarcas.add(resQuery[i].nombreMarca);
     }
   }
 
