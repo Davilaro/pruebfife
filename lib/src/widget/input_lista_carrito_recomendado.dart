@@ -61,10 +61,10 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
               Visibility(
                 visible: element.descuento != 0,
                 child: Container(
-                  height: 40,
+                  height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Image.asset(
-                    'assets/promo.png',
+                    'assets/promo_abel.png',
                     fit: BoxFit.fill,
                   ),
                 ),

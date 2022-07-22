@@ -1,5 +1,10 @@
 import 'package:emart/src/controllers/controller_product.dart';
+import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
+import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -8,7 +13,15 @@ import 'package:provider/provider.dart';
 var providerDatos = new DatosListas();
 
 class FiltroPrecios extends StatefulWidget {
-  FiltroPrecios({Key? key}) : super(key: key);
+  final String? codMarca;
+  final String? nombreMarca;
+  final String? urlImagen;
+  FiltroPrecios(
+      {Key? key,
+      required this.codMarca,
+      required this.nombreMarca,
+      required this.urlImagen})
+      : super(key: key);
 
   @override
   _FiltroPreciosState createState() => _FiltroPreciosState();
@@ -16,7 +29,7 @@ class FiltroPrecios extends StatefulWidget {
 
 class _FiltroPreciosState extends State<FiltroPrecios> {
   ControllerProductos catalogSearchViewModel = Get.find();
-  RangeValues values = RangeValues(0, 1000000);
+  RangeValues values = RangeValues(0, 500000);
   int valorRound = 3;
 
   @override
@@ -25,12 +38,21 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
     final providerDatos = Provider.of<DatosListas>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('', style: TextStyle(color: HexColor("#41398D"))),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        title: Text('Producto',
+            style: TextStyle(
+                color: ConstantesColores.azul_precio,
+                fontWeight: FontWeight.bold)),
         elevation: 0,
+        leading: new IconButton(
+            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+            onPressed: () {
+              Navigator.pop(context);
+              catalogSearchViewModel.setPrecioMinimo(0);
+              catalogSearchViewModel.setPrecioMaximo(1000000000);
+            }),
+        actions: <Widget>[
+          AccionesBartCarrito(esCarrito: true),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -52,7 +74,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
             borderRadius: BorderRadius.circular(15),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(25.0),
           width: double.infinity,
           child: Column(
             children: <Widget>[
@@ -75,8 +97,9 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     child: Container(
                       alignment: Alignment.centerRight,
                       child: Icon(
-                        Icons.close,
-                        color: HexColor("#30C3A3"),
+                        Icons.cancel_outlined,
+                        color: ConstantesColores.agua_marina,
+                        size: Get.height * 0.05,
                       ),
                     ),
                   )
@@ -122,32 +145,32 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                 ],
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
-              // Row(
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () => {_cambiarValor(2)},
-              //       child: valorRound == 1
-              //           ? Icon(
-              //               Icons.brightness_1_outlined,
-              //               color: HexColor("#41398D"),
-              //             )
-              //           : valorRound == 3
-              //               ? Icon(Icons.brightness_1_outlined,
-              //                   color: HexColor("#41398D"))
-              //               : Icon(
-              //                   Icons.task_alt_outlined,
-              //                   color: HexColor("#30C3A3"),
-              //                 ),
-              //     ),
-              //     SizedBox(width: 10),
-              //     Text("Producto más vendido",
-              //         style: TextStyle(color: HexColor("#41398D")))
-              //   ],
-              // ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => {_cambiarValor(2)},
+                    child: valorRound == 1
+                        ? Icon(
+                            Icons.brightness_1_outlined,
+                            color: HexColor("#41398D"),
+                          )
+                        : valorRound == 3
+                            ? Icon(Icons.brightness_1_outlined,
+                                color: HexColor("#41398D"))
+                            : Icon(
+                                Icons.task_alt_outlined,
+                                color: HexColor("#30C3A3"),
+                              ),
+                  ),
+                  SizedBox(width: 10),
+                  Text("Producto más vendido",
+                      style: TextStyle(color: HexColor("#41398D")))
+                ],
+              ),
               SizedBox(
-                height: 10,
+                height: 30,
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -160,39 +183,18 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     textAlign: TextAlign.left),
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: Colors.white,
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15.0),
-                    overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0),
-                    thumbColor: Colors.red,
-                    valueIndicatorColor: HexColor("#43398E"),
-                    activeTickMarkColor: Colors.yellow,
-                    overlayColor: Colors.yellow,
-                    valueIndicatorTextStyle:
-                        TextStyle(color: Colors.white, letterSpacing: 2.0)),
-                child: RangeSlider(
-                  values: values,
-                  min: 0,
-                  max: 1000000,
-                  divisions: 4000,
-                  activeColor: HexColor("#30C3A3"),
-                  inactiveColor: HexColor("#9F9F9F"),
-                  labels: RangeLabels(
-                    values.start.round().toString(),
-                    values.end.round().toString(),
-                  ),
-                  onChanged: (values) => setState(() => {this.values = values}),
-                ),
+              SliderPrecios(
+                values: values,
+                onChange: (() => {this.values = values}),
               ),
               SizedBox(
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {
-                  _cargarPrecios(values, providerDatos);
+                onTap: () async {
+                  await _cargarPrecios(values, providerDatos);
                 },
                 child: Container(
                   width: size.width * 0.9,
@@ -203,7 +205,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     bottom: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: HexColor("#30C3A3"),
+                    color: ConstantesColores.agua_marina,
                     //border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -233,12 +235,20 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
     });
   }
 
-  _cargarPrecios(RangeValues values, providerDatos) {
-    catalogSearchViewModel.setPrecioMinimo(values.start);
-    catalogSearchViewModel.setPrecioMaximo(values.end);
-    catalogSearchViewModel.setIsFilter(true);
-    // providerDatos.guardarPrecioMinimo(values.start);
-    // providerDatos.guardarPrecioMaximo(values.end);
-    Navigator.pop(context);
+  _cargarPrecios(RangeValues values, providerDatos) async {
+    String? codigo =
+        await DBProvider.db.consultarCodigoMarcaPorNombre(widget.nombreMarca);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CustomBuscardorFuzzy(
+                codCategoria: widget.codMarca,
+                numEmpresa: 'nutresa',
+                tipoCategoria: 3,
+                nombreCategoria: widget.nombreMarca,
+                claseProducto: 4,
+                codigoMarca: codigo,
+                isActiveBanner: false,
+                locacionFiltro: "proveedor")));
   }
 }

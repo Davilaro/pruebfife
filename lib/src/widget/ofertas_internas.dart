@@ -12,7 +12,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 class OfertasInterna extends StatefulWidget {
-  final String nombreFabricante;
+  final String? nombreFabricante;
 
   const OfertasInterna({Key? key, required this.nombreFabricante})
       : super(key: key);

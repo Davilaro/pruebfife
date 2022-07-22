@@ -293,7 +293,7 @@ class DBProvider {
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.marcacodigopideki = '$codigo' AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        WHERE p.marcacodigopideki LIKE '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
@@ -572,7 +572,7 @@ class DBProvider {
     }
   }
 
-  Future<List<dynamic>> cargarBannersSql(String tipo) async {
+  Future<List<dynamic>> cargarBannersSql(String? tipo) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -828,7 +828,7 @@ class DBProvider {
    SELECT m.codigo, m.descripcion, m.ico  
       FROM Marca m
       INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
-      WHERE m.fabricante='$fabricante'
+      WHERE m.fabricante like '%$fabricante%'
       GROUP BY p.marcacodigopideki 
       ORDER BY m.orden ASC 
        
@@ -989,6 +989,23 @@ class DBProvider {
       }
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<String?> consultarProductoEnOfertaPorCodigo(String? codigo) async {
+    final db = await baseAbierta;
+    try {
+      List<Map> list = await db.rawQuery('''
+         SELECT codigo FROM Ofertas where codigo='$codigo'
+    ''');
+
+      if (list.isNotEmpty) {
+        return list[0]['codigo'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return "";
     }
   }
 }

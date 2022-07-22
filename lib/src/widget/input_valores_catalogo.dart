@@ -10,6 +10,7 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,19 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
+  RxBool isProductoEnOferta = false.obs;
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      print(widget.element.codigo);
+      dynamic response = await DBProvider.db
+          .consultarProductoEnOfertaPorCodigo(widget.element.codigo);
+      if (response == widget.element.codigo) {
+        isProductoEnOferta.value = true;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,35 +93,27 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               Column(children: [
                 OverflowBar(
                   children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 5),
-                      child: Visibility(
-                        visible: element.descuento != 0 ||
-                            widget.isCategoriaPromos == true,
-                        child: Container(
-                          //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
-                          child: Image.asset(
-                            'assets/promo_abel.png',
-                            height: Get.height * 0.06,
-                            fit: BoxFit.cover,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Obx(
+                          () => Container(
+                            padding: EdgeInsets.only(top: 5),
+                            child: Visibility(
+                              visible: element.descuento != 0 ||
+                                  isProductoEnOferta.value == true,
+                              child: Container(
+                                //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
+                                child: Image.asset(
+                                  'assets/promo_abel.png',
+                                  height: Get.height * 0.035,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 5),
-                      //aqui debo validar que sea producto nuevo
-                      child: Visibility(
-                        visible: element.descuento != 0,
-                        child: Container(
-                          child: Image.asset(
-                            'assets/nuevos_label.png',
-                            // width: Get.width * 0.3,
-                            height: Get.height * 0.06,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
                   ],
                 ),

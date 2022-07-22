@@ -155,6 +155,7 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                               widget.listaCategorias[index].descripcion,
                           isActiveBanner: false,
                           isVisibilityAppBar: false,
+                          locacionFiltro: "categoria",
                         ),
                       );
                     }),

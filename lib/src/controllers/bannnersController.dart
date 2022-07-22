@@ -86,6 +86,7 @@ class BannnerControllers extends GetxController {
                     nombreCategoria: banner.nombrecomercial!,
                     img: banner.link,
                     locasionBanner: locasionBanner,
+                    locacionFiltro: "proveedor",
                   )));
     }
   }
@@ -118,6 +119,7 @@ class BannnerControllers extends GetxController {
                   tipoCategoria: 3,
                   nombreCategoria: marca.titulo,
                   isActiveBanner: false,
+                  locacionFiltro: "marca",
                 )));
   }
 
@@ -134,6 +136,7 @@ class BannnerControllers extends GetxController {
                   tipoCategoria: 4,
                   nombreCategoria: proveedor.nombrecomercial!,
                   img: proveedor.icono,
+                  locacionFiltro: "proveedor",
                 )));
   }
 
