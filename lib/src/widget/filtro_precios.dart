@@ -44,7 +44,10 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                 fontWeight: FontWeight.bold)),
         elevation: 0,
         leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+            icon: new Icon(
+              Icons.arrow_back_ios,
+              color: HexColor("#30C3A3"),
+            ),
             onPressed: () {
               Navigator.pop(context);
               catalogSearchViewModel.setPrecioMinimo(0);
@@ -99,7 +102,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                       child: Icon(
                         Icons.cancel_outlined,
                         color: ConstantesColores.agua_marina,
-                        size: Get.height * 0.05,
+                        size: Get.height * 0.04,
                       ),
                     ),
                   )
@@ -140,7 +143,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                                   color: HexColor("#30C3A3"),
                                 )),
                   SizedBox(width: 10),
-                  Text("Producto del día",
+                  Text("Productos del día",
                       style: TextStyle(color: HexColor("#41398D")))
                 ],
               ),
@@ -165,7 +168,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                               ),
                   ),
                   SizedBox(width: 10),
-                  Text("Producto más vendido",
+                  Text("Productos más vendidos",
                       style: TextStyle(color: HexColor("#41398D")))
                 ],
               ),
@@ -236,19 +239,52 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
   }
 
   _cargarPrecios(RangeValues values, providerDatos) async {
-    String? codigo =
+    String? codigoMarca =
         await DBProvider.db.consultarCodigoMarcaPorNombre(widget.nombreMarca);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CustomBuscardorFuzzy(
-                codCategoria: widget.codMarca,
-                numEmpresa: 'nutresa',
-                tipoCategoria: 3,
-                nombreCategoria: widget.nombreMarca,
-                claseProducto: 4,
-                codigoMarca: codigo,
-                isActiveBanner: false,
-                locacionFiltro: "proveedor")));
+    if (valorRound == 2) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    numEmpresa: 'nutresa',
+                    nombreCategoria: "Productos más vendidos",
+                    tipoCategoria: 7,
+                    img: widget.urlImagen,
+                    claseProducto: 7,
+                    isActiveBanner: false,
+                    codigoMarca: codigoMarca,
+                    locacionFiltro: "categoria",
+                  )));
+    }
+    if (valorRound == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    numEmpresa: 'nutresa',
+                    nombreCategoria: "Productos del día",
+                    tipoCategoria: 6,
+                    img: widget.urlImagen,
+                    claseProducto: 6,
+                    isActiveBanner: false,
+                    locacionFiltro: "categoria",
+                    codigoMarca: codigoMarca,
+                  )));
+    } else if (valorRound == 3) {
+      String? codigo =
+          await DBProvider.db.consultarCodigoMarcaPorNombre(widget.nombreMarca);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                  codCategoria: widget.codMarca,
+                  numEmpresa: 'nutresa',
+                  tipoCategoria: 3,
+                  nombreCategoria: widget.nombreMarca,
+                  claseProducto: 4,
+                  codigoMarca: codigo,
+                  isActiveBanner: false,
+                  locacionFiltro: "proveedor")));
+    }
   }
 }
