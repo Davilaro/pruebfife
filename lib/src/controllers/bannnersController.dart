@@ -31,9 +31,14 @@ class BannnerControllers extends GetxController {
     isVisitBanner.value = value;
   }
 
+  setCargoDatos(bool value) {
+    cargoDatos.value = value;
+  }
+
   void cargarDatosBanner(dynamic banners) {
+    setCargoDatos(false);
     if (banners.length > 0) {
-      cargoDatos.value = true;
+      setCargoDatos(true);
     }
     listaBanners = banners;
   }

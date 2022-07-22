@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emart/src/classes/producto_cambiante.dart';
+import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
@@ -40,6 +41,8 @@ class _TabOpcionesState extends State<TabOpciones>
   final cargoControllerBase = Get.put(ControlBaseDatos());
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+
+  final bannerPut = Get.put(BannnerControllers());
 
   @override
   void initState() {

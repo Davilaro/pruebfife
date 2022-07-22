@@ -41,7 +41,7 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
-  final bannerPut = Get.put(BannnerControllers());
+
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
