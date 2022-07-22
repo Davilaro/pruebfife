@@ -1065,7 +1065,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
-        and CAST(p.fechatrans AS date) = CAST(''$date' AS date)
+        and CAST(p.fechatrans AS date) = CAST('$date' AS date)
         ORDER BY p.orden ASC
          
        ''');

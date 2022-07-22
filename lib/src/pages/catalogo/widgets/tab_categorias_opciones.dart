@@ -2,6 +2,7 @@ import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -68,6 +69,7 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
           ),
           elevation: 0,
           actions: <Widget>[
+            BotonActualizar(),
             AccionNotificacion(),
             AccionesBartCarrito(esCarrito: false),
           ],

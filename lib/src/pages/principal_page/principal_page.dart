@@ -7,6 +7,7 @@ import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -89,6 +90,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionNotificacion(),
           AccionesBartCarrito(esCarrito: false),
         ],

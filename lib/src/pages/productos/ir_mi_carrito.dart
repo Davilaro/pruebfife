@@ -10,6 +10,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionNotificacion(),
           AccionesBartCarrito(esCarrito: false),
         ],

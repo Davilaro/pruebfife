@@ -16,6 +16,7 @@ import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
@@ -89,6 +90,7 @@ class _MiNegocioState extends State<MiNegocio> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionNotificacion(),
           AccionesBartCarrito(esCarrito: false),
         ],
