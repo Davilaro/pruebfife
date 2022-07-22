@@ -236,7 +236,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             "",
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            0);
+            0,
+            widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 2) {
@@ -245,7 +246,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             "",
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            0);
+            0,
+            widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
@@ -254,7 +256,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             widget.tipoCategoria,
             '',
             catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value);
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 3) {
@@ -263,7 +266,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             widget.tipoCategoria,
             '',
             catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value);
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
@@ -272,7 +276,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             widget.tipoCategoria,
             '',
             catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value);
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 6) {
@@ -282,7 +287,19 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            widget.codigoSubCategoria);
+            widget.codigoSubCategoria,
+            widget.codigoMarca);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 7) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoMarca,
+            7,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca);
+        print(listaAllProducts.toString());
         listaProducto.value = listaAllProducts;
       }
     } else {
@@ -291,7 +308,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           widget.tipoCategoria,
           '',
           catalogSearchViewModel.precioMinimo.value,
-          catalogSearchViewModel.precioMaximo.value);
+          catalogSearchViewModel.precioMaximo.value,
+          widget.codigoMarca);
       listaProducto.value = listaAllProducts;
     }
     print(listaProducto.toString());
@@ -351,6 +369,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   codCategoria: widget.codigoCategoria,
                   nombreCategoria: widget.nombreCategoria,
                   urlImagen: widget.img,
+                  codSubCategoria: widget.codigoSubCategoria,
                 )),
       );
     }

@@ -108,7 +108,7 @@ class _TabOpcionesState extends State<TabOpciones>
         await DBProvider.db.consultarFricanteGeneral();
 
     var listaProductos =
-        await DBProvider.db.cargarProductos('', 10, '', 0.0, 1000000000.0);
+        await DBProvider.db.cargarProductos('', 10, '', 0.0, 1000000000.0, "");
     for (var i = 0; i < listaProductos.length; i++) {
       PedidoEmart.listaProductos!
           .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);

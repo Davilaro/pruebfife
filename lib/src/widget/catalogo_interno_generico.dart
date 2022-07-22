@@ -78,7 +78,8 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                     widget.tipoCategoria,
                     _controllerUser.text,
                     providerDatos.getPrecioMinimo,
-                    providerDatos.getPrecioMaximo),
+                    providerDatos.getPrecioMaximo,
+                    ""),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (!snapshot.hasData) {

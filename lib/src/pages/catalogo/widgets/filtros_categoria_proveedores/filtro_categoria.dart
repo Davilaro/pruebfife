@@ -15,11 +15,13 @@ class FiltroCategoria extends StatefulWidget {
   final String? codCategoria;
   final String? nombreCategoria;
   final String? urlImagen;
+  final String? codSubCategoria;
   FiltroCategoria(
       {Key? key,
       required this.codCategoria,
       required this.nombreCategoria,
-      required this.urlImagen})
+      required this.urlImagen,
+      required this.codSubCategoria})
       : super(key: key);
   @override
   State<FiltroCategoria> createState() => _FiltroCategoriaState();
@@ -307,9 +309,13 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   }
 
   cargarMarca() async {
-    var resQuery = await DBProvider.db.consultarMarcasPorFabricante("");
+    String? codigoSubCategoria = await DBProvider.db
+        .consultarCodigoSubCategoriaPorNombre(widget.nombreCategoria);
+    print(codigoSubCategoria);
+    var resQuery =
+        await DBProvider.db.consultarMarcasFiltro("", codigoSubCategoria, 3);
     for (var i = 0; i < resQuery.length; i++) {
-      listMarcas.add(resQuery[i].titulo);
+      listMarcas.add(resQuery[i].nombreMarca);
     }
   }
 
@@ -320,6 +326,8 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   }
 
   _cargarPrecios(RangeValues values) async {
+    String? codigoMarca =
+        await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
     if (valorRound == 1 &&
         (dropdownValueMarca == "Todas" || dropdownValueMarca == null)) {
       Navigator.push(
@@ -392,8 +400,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
     }
     if ((dropdownValueMarca != null && dropdownValueMarca != "Todas") &&
         valorRound == 3) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -403,13 +409,29 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                   tipoCategoria: 3,
                   nombreCategoria: dropdownValueMarca,
                   claseProducto: 4,
-                  codigoMarca: codigo,
+                  codigoMarca: codigoMarca,
                   isActiveBanner: false,
                   locacionFiltro: "categoria")));
     }
     if ((dropdownValueMarca == null || dropdownValueMarca == "Todas") &&
-        (valorRound == 3 || valorRound == 4)) {
+        valorRound == 3) {
       Navigator.pop(context);
+    }
+    if (valorRound == 4) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codigoCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    nombreCategoria: "Productos más vendidos",
+                    tipoCategoria: 7,
+                    img: widget.urlImagen,
+                    claseProducto: 7,
+                    isActiveBanner: false,
+                    locacionFiltro: "categoria",
+                    codigoMarca: codigoMarca,
+                  )));
     }
   }
 }

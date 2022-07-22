@@ -31,7 +31,7 @@ class ProductsCard extends StatefulWidget {
 }
 
 class _ProductsCardState extends State<ProductsCard> {
-  String? codigo;
+  RxString codigo = "".obs;
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
@@ -53,8 +53,8 @@ class _ProductsCardState extends State<ProductsCard> {
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
 
     return FutureBuilder(
-        future: DBProvider.db
-            .cargarProductosInterno(widget.tipoCategoria, '', 0, 1000000, 8),
+        future: DBProvider.db.cargarProductosInterno(
+            widget.tipoCategoria, '', 0, 1000000, 8, ""),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -73,7 +73,6 @@ class _ProductsCardState extends State<ProductsCard> {
   List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaProductos,
       cartProvider, format) {
     final List<Widget> opciones = [];
-
     if (listaProductos.length == 0) {
       return opciones..add(Text('No hay informacion para mostrar'));
     }
@@ -129,28 +128,56 @@ class _ProductsCardState extends State<ProductsCard> {
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             //mensaje de precio especial y imagen producto
             Column(
               children: [
-                Container(
-                  padding: EdgeInsets.only(top: 5),
-                  child: Visibility(
-                    visible:
-                        element.descuento != 0 || widget.tipoCategoria == 1,
-                    child: Container(
-                      //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
-                      child: Image.asset(
-                        'assets/promo_abel.png',
-                        height: 30,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+                (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
+                    ? Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(top: 5, right: 10),
+                        child: Visibility(
+                          visible: element.activopromocion == 1 &&
+                              ((DateTime.parse(element.fechafinpromocion_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
+                          child: Container(
+                            child: Image.asset(
+                              'assets/promo_abel.png',
+                              height: 30,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
+                    ? Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(top: 5, right: 10),
+                        child: Visibility(
+                          visible: element.activoprodnuevo == 1 &&
+                              ((DateTime.parse(element.fechafinnuevo_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
+                          child: Container(
+                            child: Image.asset(
+                              'assets/nuevos_label.png',
+                              height: 30,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 Container(
                   padding: EdgeInsets.only(top: 5.0),
-                  margin: element.descuento == 0
+                  margin: (element.activopromocion == 1 &&
+                              ((DateTime.parse(element.fechafinpromocion_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0)) ==
+                          false
                       ? EdgeInsets.only(top: 15)
                       : EdgeInsets.zero,
                   // height: element.descuento == 0 ? 120 : 100,
@@ -210,7 +237,11 @@ class _ProductsCardState extends State<ProductsCard> {
                       child: Column(
                         children: [
                           Visibility(
-                              visible: element.descuento != 0,
+                              visible: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
                               child: Container(
                                 height: 25,
                                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -228,7 +259,11 @@ class _ProductsCardState extends State<ProductsCard> {
                                 ),
                               )),
                           Container(
-                            height: element.descuento != 0
+                            height: element.activopromocion == 1 &&
+                                    ((DateTime.parse(
+                                                element.fechafinpromocion_1!))
+                                            .compareTo(DateTime.now()) >=
+                                        0)
                                 ? Get.width * 0.05
                                 : Get.width * 0.07,
                             padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -236,12 +271,21 @@ class _ProductsCardState extends State<ProductsCard> {
                             child: Text(
                               '${format.currencySymbol}' +
                                   formatNumber
-                                      .format(element.descuento != 0
+                                      .format(element.activopromocion == 1 &&
+                                              ((DateTime.parse(element
+                                                          .fechafinpromocion_1!))
+                                                      .compareTo(
+                                                          DateTime.now()) >=
+                                                  0)
                                           ? element.precioinicial
                                           : element.precio)
                                       .replaceAll(',00', ''),
                               textAlign: TextAlign.left,
-                              style: element.descuento != 0
+                              style: element.activopromocion == 1 &&
+                                      ((DateTime.parse(
+                                                  element.fechafinpromocion_1!))
+                                              .compareTo(DateTime.now()) >=
+                                          0)
                                   ? TextStyle(
                                       color: ConstantesColores.azul_precio,
                                       fontWeight: FontWeight.bold,
