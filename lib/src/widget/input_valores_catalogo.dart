@@ -93,7 +93,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
                         ? Container(
                             alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(top: 5),
+                            padding: EdgeInsets.only(top: 5, right: 10),
                             child: Visibility(
                               visible: element.activopromocion == 1 &&
                                   ((DateTime.parse(
@@ -113,7 +113,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
                         ? Container(
                             alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(top: 5),
+                            padding: EdgeInsets.only(top: 5, right: 10),
                             child: Visibility(
                               visible: element.activoprodnuevo == 1 &&
                                   ((DateTime.parse(element.fechafinnuevo_1!))
@@ -160,7 +160,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     : Get.width * 0.15,
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
-                child: Wrap(
+                child: Column(
                   children: [
                     Text(
                       '${element.nombre}',

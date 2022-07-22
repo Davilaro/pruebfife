@@ -115,6 +115,7 @@ class _ProductsCardState extends State<ProductsCard> {
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             //mensaje de precio especial y imagen producto
             Column(
@@ -122,7 +123,7 @@ class _ProductsCardState extends State<ProductsCard> {
                 (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
                     ? Container(
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.only(top: 5, right: 10),
                         child: Visibility(
                           visible: element.activopromocion == 1 &&
                               ((DateTime.parse(element.fechafinpromocion_1!))
@@ -141,7 +142,7 @@ class _ProductsCardState extends State<ProductsCard> {
                 (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
                     ? Container(
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.only(top: 5, right: 10),
                         child: Visibility(
                           visible: element.activoprodnuevo == 1 &&
                               ((DateTime.parse(element.fechafinnuevo_1!))
