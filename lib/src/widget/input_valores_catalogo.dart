@@ -76,6 +76,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
       element, BuildContext context, CarroModelo cartProvider, format) {
     Productos productos = element;
     bool isAgotado = constrollerProductos.validarAgotado(productos);
+
     return GestureDetector(
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
@@ -89,43 +90,45 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               Column(children: [
                 OverflowBar(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Visibility(
-                            visible: (element.descuento != 0 ||
-                                    isProductoEnOferta == true) ||
-                                widget.isCategoriaPromos,
-                            child: Container(
-                              child: Image.asset(
-                                'assets/promo_abel.png',
-                                height: Get.height * 0.035,
-                                fit: BoxFit.cover,
+                    (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
+                        ? Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.only(top: 5),
+                            child: Visibility(
+                              visible: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/promo_abel.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        // Obx(
-                        //   () => Container(
-                        //     padding: EdgeInsets.only(top: 5),
-                        //     child: Visibility(
-                        //       visible: (element.descuento != 0 ||
-                        //               isProductoNuevo.value == true) ||
-                        //           widget.isCategoriaPromos,
-                        //       child: Container(
-                        //         child: Image.asset(
-                        //           'assets/nuevos_label.png',
-                        //           height: Get.height * 0.035,
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //),
-                      ],
-                    ),
+                          )
+                        : Container(),
+                    (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
+                        ? Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.only(top: 5),
+                            child: Visibility(
+                              visible: element.activoprodnuevo == 1 &&
+                                  ((DateTime.parse(element.fechafinnuevo_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/nuevos_label.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
                 Container(
@@ -148,20 +151,25 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 ),
               ]),
               Container(
-                height:
-                    (element.descuento == 0.0 && isProductoEnOferta == false) &&
-                            (widget.isCategoriaPromos == false)
-                        ? Get.width * 0.2
-                        : Get.width * 0.15,
+                height: (element.activopromocion == 1 &&
+                            ((DateTime.parse(element.fechafinpromocion_1!))
+                                    .compareTo(DateTime.now()) >=
+                                0)) ==
+                        false
+                    ? Get.width * 0.2
+                    : Get.width * 0.15,
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
                 child: Wrap(
                   children: [
                     Text(
                       '${element.nombre}',
-                      maxLines: (element.descuento == 0.0 &&
-                                  isProductoEnOferta == false) &&
-                              widget.isCategoriaPromos == false
+                      maxLines: (element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)) ==
+                              false
                           ? 3
                           : 2,
                       style: TextStyle(
@@ -186,9 +194,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Visibility(
-                          visible: (element.descuento != 0 ||
-                                  isProductoEnOferta == true) ||
-                              widget.isCategoriaPromos,
+                          visible: element.activopromocion == 1 &&
+                              ((DateTime.parse(element.fechafinpromocion_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
                           child: Container(
                             height: Get.width * 0.07,
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -207,9 +216,11 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                           )),
                       Expanded(
                         child: Container(
-                          height: (element.descuento != 0 ||
-                                      isProductoEnOferta == true) ||
-                                  widget.isCategoriaPromos
+                          height: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)
                               ? Get.width * 0.05
                               : Get.width * 0.07,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -217,16 +228,21 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                           child: Text(
                             '${format.currencySymbol}' +
                                 formatNumber
-                                    .format((element.descuento != 0 ||
-                                                isProductoEnOferta == true) ||
-                                            widget.isCategoriaPromos
+                                    .format(element.activopromocion == 1 &&
+                                            ((DateTime.parse(element
+                                                        .fechafinpromocion_1!))
+                                                    .compareTo(
+                                                        DateTime.now()) >=
+                                                0)
                                         ? element.precioinicial
                                         : element.precio)
                                     .replaceAll(',00', ''),
                             textAlign: TextAlign.left,
-                            style: ((element.descuento != 0 ||
-                                        isProductoEnOferta == true) ||
-                                    widget.isCategoriaPromos
+                            style: (element.activopromocion == 1 &&
+                                    ((DateTime.parse(
+                                                element.fechafinpromocion_1!))
+                                            .compareTo(DateTime.now()) >=
+                                        0)
                                 ? TextStyle(
                                     color: ConstantesColores.azul_precio,
                                     fontWeight: FontWeight.bold,

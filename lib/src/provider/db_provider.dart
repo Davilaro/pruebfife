@@ -140,7 +140,7 @@ class DBProvider {
       SELECT c.codigo, c.descripcion, c.ico2 as ico
       FROM CategoriaDestacada c
       INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
-      WHERE c.codigo = $buscar OR c.descripcion LIKE '%$buscar%'
+      WHERE c.codigo LIKE '%$buscar%' OR c.descripcion LIKE '%$buscar%'
       GROUP BY p.categoriacodigopideki
       ORDER BY c.orden ASC $isLimit 
       
@@ -219,6 +219,9 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
         0.0 as preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
         FROM Producto p
         inner join Ofertas pn ON p.codigo = pn.codigo
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
@@ -267,7 +270,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -291,7 +298,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -315,7 +326,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -339,7 +354,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -364,7 +383,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+          ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -389,7 +412,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -442,6 +469,9 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_imperdible as orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
         FROM Producto p
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
@@ -468,6 +498,9 @@ class DBProvider {
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+      , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+       ,activopromocion, activoprodnuevo
       FROM Producto p
       left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
@@ -490,6 +523,9 @@ class DBProvider {
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+, substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
       FROM Producto p left join Ofertas pn ON p.codigo = pn.codigo left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
       from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
@@ -686,6 +722,9 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
         FROM Producto p
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
@@ -942,7 +981,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -974,7 +1017,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -1006,7 +1053,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+          ,activopromocion, activoprodnuevo
+         FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -1014,7 +1065,7 @@ class DBProvider {
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
-         and p.fechatrans >= '$date'
+        and CAST(p.fechatrans AS date) = CAST(''$date' AS date)
         ORDER BY p.orden ASC
          
        ''');
@@ -1035,7 +1086,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -1063,7 +1118,11 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo

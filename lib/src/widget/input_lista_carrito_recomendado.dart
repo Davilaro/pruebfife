@@ -75,7 +75,10 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
           Column(
             children: [
               Visibility(
-                visible: element.descuento != 0 || isProductoEnOferta.value,
+                visible: element.activopromocion == 1 &&
+                    ((DateTime.parse(element.fechafinpromocion_1!))
+                            .compareTo(DateTime.now()) >=
+                        0),
                 child: Container(
                   height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -85,10 +88,27 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: element.activoprodnuevo == 1 &&
+                    ((DateTime.parse(element.fechafinnuevo_1!))
+                            .compareTo(DateTime.now()) >=
+                        0),
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Image.asset(
+                    'assets/nuevos_label.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
               Container(
                 padding: EdgeInsets.only(top: 10.0),
-                height: (element.descuento == 0 &&
-                        isProductoEnOferta.value == false)
+                height: (element.activopromocion == 1 &&
+                            ((DateTime.parse(element.fechafinpromocion_1!))
+                                    .compareTo(DateTime.now()) >=
+                                0)) ==
+                        false
                     ? 140
                     : 100,
                 width: Get.width * 0.3,
