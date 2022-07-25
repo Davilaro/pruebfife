@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/crear_file.dart';
+import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class BotonActualizar extends StatefulWidget {
@@ -13,52 +14,47 @@ class BotonActualizar extends StatefulWidget {
 }
 
 class _BotonActualizarState extends State<BotonActualizar> {
+  RxBool isActualizando = false.obs;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
       child: IconButton(
           onPressed: () async {
+            isActualizando.value = true;
+            if (isActualizando.value) {
+              AlertaActualizar().mostrarAlertaActualizar(context, true);
+            }
             var cargo = await AppUtil.appUtil.downloadZip(
-                usuariLogin!,
+                prefs.usurioLoginCedula,
                 prefs.codCliente,
                 prefs.codigonutresa,
                 prefs.codigozenu,
                 prefs.codigomeals,
                 false);
             await AppUtil.appUtil.abrirBases();
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
-                //para mostrar el circular de ios o de andropid
+            isActualizando.value = false;
+            if (isActualizando.value == false) {
+              Navigator.pop(context);
+              AlertaActualizar().mostrarAlertaActualizar(context, false);
+              await new Future.delayed(new Duration(seconds: 1), () {
+                Navigator.pop(context);
+                //pop dialog
+              });
+              //setState(() {});
 
-                return Dialog(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15, bottom: 15),
-                    child: new Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        plataforma == 'Android'
-                            ? CircularProgressIndicator()
-                            : CupertinoActivityIndicator(),
-                        Text("Actualizando..."),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-            new Future.delayed(new Duration(seconds: 5), () {
-              Navigator.pop(context); //pop dialog
-            });
+              Navigator.pushReplacementNamed(
+                context,
+                'tab_opciones',
+              );
+              // Add Your Code here.
+
+            }
           },
           icon: Icon(
-            Icons.replay_circle_filled_sharp,
+            Icons.refresh_sharp,
             color: ConstantesColores.azul_precio,
-            size: Get.height * 0.05,
+            size: Get.height * 0.04,
           )),
     );
   }

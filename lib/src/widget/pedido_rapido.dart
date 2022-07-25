@@ -9,6 +9,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
@@ -79,6 +80,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           ),
           elevation: 0,
           actions: <Widget>[
+            BotonActualizar(),
             AccionesBartCarrito(esCarrito: false),
           ],
         ),

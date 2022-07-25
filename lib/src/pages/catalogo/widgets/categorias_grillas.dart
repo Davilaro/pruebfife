@@ -94,8 +94,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Column(
                 children: [

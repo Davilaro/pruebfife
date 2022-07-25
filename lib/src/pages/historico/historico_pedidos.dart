@@ -4,6 +4,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/expansion_card.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
@@ -72,6 +73,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionesBartCarrito(esCarrito: false),
         ],
       ),

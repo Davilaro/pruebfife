@@ -7,6 +7,7 @@ import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -99,229 +100,244 @@ class _PrincipalPageState extends State<PrincipalPage> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              //BUSCADOR
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                child: _buscadorPrincipal(context),
-              ),
-              //OPCIONES DINAMICAS
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: BtnOpciones(size: size, provider: provider),
-              ),
-              //OFERTAS QUE MUESTRA LOS BANNERS
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                height: Get.height * 0.22,
-                width: double.infinity,
-                child: OfertasBanner(),
-              ),
-              //IMPERDIBLES
-              Container(
-                  margin: EdgeInsets.only(top: 10),
-                  height: Get.height * 0.4,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            var cargo = await AppUtil.appUtil.downloadZip(
+                prefs.usurioLoginCedula,
+                prefs.codCliente,
+                prefs.codigonutresa,
+                prefs.codigozenu,
+                prefs.codigomeals,
+                false);
+            await AppUtil.appUtil.abrirBases();
+            setState(() {});
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                //BUSCADOR
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: _buscadorPrincipal(context),
+                ),
+                //OPCIONES DINAMICAS
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: BtnOpciones(size: size, provider: provider),
+                ),
+                //OFERTAS QUE MUESTRA LOS BANNERS
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  height: Get.height * 0.22,
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: FutureBuilder(
-                              initialData: [],
-                              future: DBProvider.db.consultarSucursal(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                var tituloImperdible = prefs.usurioLogin == -1
-                                    ? 'tí'
-                                    : snapshot.data;
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: Get.width * 0.73,
-                                      child: Text(
-                                        'Imperdibles para $tituloImperdible',
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: HexColor("#41398D"),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    TextButton(
-                                        onPressed: () {
-                                          onClickVerMas(
-                                              'Imperdibles', provider);
-                                        },
+                  child: OfertasBanner(),
+                ),
+                //IMPERDIBLES
+                Container(
+                    margin: EdgeInsets.only(top: 10),
+                    height: Get.height * 0.4,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: FutureBuilder(
+                                initialData: [],
+                                future: DBProvider.db.consultarSucursal(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  var tituloImperdible = prefs.usurioLogin == -1
+                                      ? 'tí'
+                                      : snapshot.data;
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Container(
+                                        width: Get.width * 0.73,
                                         child: Text(
-                                          'Ver más',
+                                          'Imperdibles para $tituloImperdible',
+                                          maxLines: 2,
                                           style: TextStyle(
-                                              color:
-                                                  ConstantesColores.agua_marina,
                                               fontSize: 14.0,
-                                              fontWeight: FontWeight.bold,
-                                              decoration:
-                                                  TextDecoration.underline),
-                                        ))
-                                  ],
-                                );
-                              })),
-                      Expanded(child: ProductsCard(2))
-                    ],
-                  )),
-              //PROMOS
-              Container(
-                  height: Get.height * 0.44,
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Promo de la semana',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HexColor("#41398D"),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  onClickVerMas('Promos', provider);
-                                },
-                                child: Text(
-                                  'Ver más',
-                                  style: TextStyle(
-                                      color: ConstantesColores.agua_marina,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Expanded(child: ProductsCard(1))
-                    ],
-                  )),
-              //MULTIMEDIA
-              FutureBuilder(
-                  initialData: [],
-                  future: DBProvider.db.consultarMultimedia(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.data == null || snapshot.data.length == 0) {
-                      return Container();
-                    } else {
-                      Multimedia multimedia = snapshot.data[0];
-                      // cargoConfirmar.setUrlMultimedia(multimedia.link);
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        margin: EdgeInsets.only(top: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 15, left: 3),
-                              child: Text(
-                                'Lo más visto por clientes vecinos',
+                                              color: HexColor("#41398D"),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            onClickVerMas(
+                                                'Imperdibles', provider);
+                                          },
+                                          child: Text(
+                                            'Ver más',
+                                            style: TextStyle(
+                                                color: ConstantesColores
+                                                    .agua_marina,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ))
+                                    ],
+                                  );
+                                })),
+                        Expanded(child: ProductsCard(2))
+                      ],
+                    )),
+                //PROMOS
+                Container(
+                    height: Get.height * 0.44,
+                    width: double.infinity,
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Promo de la semana',
                                 style: TextStyle(
                                     fontSize: 14.0,
                                     color: HexColor("#41398D"),
                                     fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 5),
-                              height: Get.height * 0.25,
-                              padding: EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: ReproductVideo(multimedia),
-                            ),
-                          ],
+                              TextButton(
+                                  onPressed: () {
+                                    onClickVerMas('Promos', provider);
+                                  },
+                                  child: Text(
+                                    'Ver más',
+                                    style: TextStyle(
+                                        color: ConstantesColores.agua_marina,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline),
+                                  ))
+                            ],
+                          ),
                         ),
-                      );
-                    }
-                  }),
-              //CATEGORIAS DESTACAS
-              Container(
-                  // height: Get.height * 0.3,
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Categorías destacadas para ti ',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HexColor("#41398D"),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  onClickVerMas('Categorías', provider);
-                                },
+                        Expanded(child: ProductsCard(1))
+                      ],
+                    )),
+                //MULTIMEDIA
+                FutureBuilder(
+                    initialData: [],
+                    future: DBProvider.db.consultarMultimedia(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.data == null || snapshot.data.length == 0) {
+                        return Container();
+                      } else {
+                        Multimedia multimedia = snapshot.data[0];
+                        // cargoConfirmar.setUrlMultimedia(multimedia.link);
+                        return Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          margin: EdgeInsets.only(top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 15, left: 3),
                                 child: Text(
-                                  'Ver más',
+                                  'Lo más visto por clientes vecinos',
                                   style: TextStyle(
-                                      color: ConstantesColores.agua_marina,
                                       fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Container(
-                          height: Get.height * 0.2, child: CategoriasCard()),
-                    ],
-                  )),
-              //ENCUESTA
-              FutureBuilder(
-                  initialData: [],
-                  future: DBProvider.db.consultarEncuesta(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.data.length == 0) {
-                      return Container();
-                    } else {
-                      double size = 90.0 * snapshot.data[0].parametro.length;
-                      print('valor $size');
-                      return Obx(() => Visibility(
-                            visible: controllerEncuesta.isVisibleEncuesta.value,
-                            child: Container(
-                                constraints: BoxConstraints(
-                                    minHeight: 220,
-                                    maxHeight: size < 220 ? 220 : size),
-                                margin: EdgeInsets.only(
-                                    left: 10, right: 10, top: 15, bottom: 5),
+                                      color: HexColor("#41398D"),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 5),
+                                height: Get.height * 0.25,
+                                padding: EdgeInsets.symmetric(horizontal: 3),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
-                                child: EncuestaForm(snapshot.data[0])),
-                          ));
-                    }
-                  })
-            ],
+                                child: ReproductVideo(multimedia),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }),
+                //CATEGORIAS DESTACAS
+                Container(
+                    // height: Get.height * 0.3,
+                    width: double.infinity,
+                    margin: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Categorías destacadas para ti ',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: HexColor("#41398D"),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    onClickVerMas('Categorías', provider);
+                                  },
+                                  child: Text(
+                                    'Ver más',
+                                    style: TextStyle(
+                                        color: ConstantesColores.agua_marina,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline),
+                                  ))
+                            ],
+                          ),
+                        ),
+                        Container(
+                            height: Get.height * 0.2, child: CategoriasCard()),
+                      ],
+                    )),
+                //ENCUESTA
+                FutureBuilder(
+                    initialData: [],
+                    future: DBProvider.db.consultarEncuesta(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.data.length == 0) {
+                        return Container();
+                      } else {
+                        double size = 90.0 * snapshot.data[0].parametro.length;
+                        print('valor $size');
+                        return Obx(() => Visibility(
+                              visible:
+                                  controllerEncuesta.isVisibleEncuesta.value,
+                              child: Container(
+                                  constraints: BoxConstraints(
+                                      minHeight: 220,
+                                      maxHeight: size < 220 ? 220 : size),
+                                  margin: EdgeInsets.only(
+                                      left: 10, right: 10, top: 15, bottom: 5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: EncuestaForm(snapshot.data[0])),
+                            ));
+                      }
+                    })
+              ],
+            ),
           ),
         ),
       ),
@@ -393,5 +409,9 @@ class _PrincipalPageState extends State<PrincipalPage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  onrefresh() {
+    print('hola mor');
   }
 }

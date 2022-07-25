@@ -28,6 +28,7 @@ class DBProvider {
     if (_database != null) {
       print('cerre provider');
       await _database!.close();
+      _database = null;
     }
   }
 
