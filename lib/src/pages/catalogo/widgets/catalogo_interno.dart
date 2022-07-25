@@ -3,11 +3,13 @@ import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -72,15 +74,25 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                           UIUtills().getProportionalHeight(height: 0.7),
                       width: Get.width * 1,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5.0, // Espaciado vertical
-                          mainAxisSpacing:
-                              4.0, // espaciado entre ejes principales (horizontal)
-                          childAspectRatio: 1 / 1.7,
-                          children:
-                              _cargarProductosLista(listaProducto, context)
-                                  .toList()))))
+                      child: RefreshIndicator(
+                        color: ConstantesColores.azul_precio,
+                        onRefresh: () async {
+                          await LogicaActualizar().actualizarDB();
+
+                          setState(() {});
+                          return Future<void>.delayed(
+                              const Duration(seconds: 3));
+                        },
+                        child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5.0, // Espaciado vertical
+                            mainAxisSpacing:
+                                4.0, // espaciado entre ejes principales (horizontal)
+                            childAspectRatio: 1 / 1.7,
+                            children:
+                                _cargarProductosLista(listaProducto, context)
+                                    .toList()),
+                      ))))
             ])));
   }
 

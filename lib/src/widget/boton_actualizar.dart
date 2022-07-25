@@ -3,6 +3,7 @@ import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -25,13 +26,7 @@ class _BotonActualizarState extends State<BotonActualizar> {
             if (isActualizando.value) {
               AlertaActualizar().mostrarAlertaActualizar(context, true);
             }
-            var cargo = await AppUtil.appUtil.downloadZip(
-                prefs.usurioLoginCedula,
-                prefs.codCliente,
-                prefs.codigonutresa,
-                prefs.codigozenu,
-                prefs.codigomeals,
-                false);
+            LogicaActualizar().actualizarDB();
             await AppUtil.appUtil.abrirBases();
             isActualizando.value = false;
             if (isActualizando.value == false) {

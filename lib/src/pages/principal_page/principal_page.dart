@@ -9,6 +9,7 @@ import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -101,15 +102,10 @@ class _PrincipalPageState extends State<PrincipalPage> {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
           onRefresh: () async {
-            var cargo = await AppUtil.appUtil.downloadZip(
-                prefs.usurioLoginCedula,
-                prefs.codCliente,
-                prefs.codigonutresa,
-                prefs.codigozenu,
-                prefs.codigomeals,
-                false);
-            await AppUtil.appUtil.abrirBases();
+            await LogicaActualizar().actualizarDB();
+
             setState(() {});
             return Future<void>.delayed(const Duration(seconds: 3));
           },
@@ -409,9 +405,5 @@ class _PrincipalPageState extends State<PrincipalPage> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  onrefresh() {
-    print('hola mor');
   }
 }

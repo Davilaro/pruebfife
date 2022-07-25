@@ -3,6 +3,7 @@ import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -10,6 +11,7 @@ import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -106,55 +108,65 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   ],
                 )
               : null,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                    height: size.height * 0.1,
-                    width: size.width * 1,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: _buscador(context, onSearchDebouncer),
-                          ),
-                          GestureDetector(
-                            onTap: () => {_irFiltro()},
-                            child: Container(
-                              margin: EdgeInsets.only(right: 30, bottom: 10),
-                              child: GestureDetector(
-                                child:
-                                    SvgPicture.asset('assets/filtro_btn.svg'),
-                              ),
+          body: RefreshIndicator(
+            color: ConstantesColores.azul_precio,
+            onRefresh: () async {
+              await LogicaActualizar().actualizarDB();
+
+              setState(() {});
+              return Future<void>.delayed(const Duration(seconds: 3));
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      height: size.height * 0.1,
+                      width: size.width * 1,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: _buscador(context, onSearchDebouncer),
                             ),
-                          )
-                        ])),
-                //Banner
-                Visibility(
-                  visible: widget.isActiveBanner,
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      height: size.height * 0.2,
-                      width: double.infinity,
-                      child: OfertasInterna(
-                          nombreFabricante: widget.codCategoria)),
-                ),
-                Container(
-                  height: Get.height * 0.8,
-                  width: size.width * 1,
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
-                  child: GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing:
-                          4.0, // espaciado entre ejes principales (horizontal)
-                      childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                      children: _cargarProductosLista(listaProducto, context)),
-                ),
-              ],
+                            GestureDetector(
+                              onTap: () => {_irFiltro()},
+                              child: Container(
+                                margin: EdgeInsets.only(right: 30, bottom: 10),
+                                child: GestureDetector(
+                                  child:
+                                      SvgPicture.asset('assets/filtro_btn.svg'),
+                                ),
+                              ),
+                            )
+                          ])),
+                  //Banner
+                  Visibility(
+                    visible: widget.isActiveBanner,
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        height: size.height * 0.2,
+                        width: double.infinity,
+                        child: OfertasInterna(
+                            nombreFabricante: widget.codCategoria)),
+                  ),
+                  Container(
+                    height: Get.height * 0.8,
+                    width: size.width * 1,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+                    child: GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing:
+                            4.0, // espaciado entre ejes principales (horizontal)
+                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                        children:
+                            _cargarProductosLista(listaProducto, context)),
+                  ),
+                ],
+              ),
             ),
           ),
         ));
