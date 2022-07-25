@@ -6,6 +6,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/expansion_card.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
@@ -78,50 +79,66 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                _buscador(size),
-                FutureBuilder<List<dynamic>>(
-                    future: DBProviderHelper.db
-                        .consultarHistoricos(_filtro, fechaInicial, fechaFinal),
-                    builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-                      if (snapshot.hasData) {
-                        var cantidad = snapshot.data?.length;
-                        if (cantidad! > 0) {
-                          var historicos = snapshot.data;
-                          return Column(
-                            children: [
-                              for (int i = historicos!.length - 1; i >= 0; i--)
-                                Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    width: size.width * 0.9,
-                                    margin: EdgeInsets.only(bottom: 14),
-                                    child: ExpansionCard(
-                                        historico: historicos[i])),
-                            ],
-                          );
+        child: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
+          onRefresh: () async {
+            await LogicaActualizar().actualizarDB();
+
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            ).timeout(Duration(seconds: 3));
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  _buscador(size),
+                  FutureBuilder<List<dynamic>>(
+                      future: DBProviderHelper.db.consultarHistoricos(
+                          _filtro, fechaInicial, fechaFinal),
+                      builder:
+                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                        if (snapshot.hasData) {
+                          var cantidad = snapshot.data?.length;
+                          if (cantidad! > 0) {
+                            var historicos = snapshot.data;
+                            return Column(
+                              children: [
+                                for (int i = historicos!.length - 1;
+                                    i >= 0;
+                                    i--)
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      width: size.width * 0.9,
+                                      margin: EdgeInsets.only(bottom: 14),
+                                      child: ExpansionCard(
+                                          historico: historicos[i])),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                                children: [Text("No hay registros!")]);
+                          }
                         } else {
                           return Column(children: [Text("No hay registros!")]);
                         }
-                      } else {
-                        return Column(children: [Text("No hay registros!")]);
-                      }
-                    }),
-              ],
+                      }),
+                ],
+              ),
             ),
           ),
         ),

@@ -11,6 +11,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
@@ -84,11 +85,23 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             AccionesBartCarrito(esCarrito: false),
           ],
         ),
-        body: SingleChildScrollView(
-            //child: (seleccion == 1
-            //    ? _ordenSugerida(size, cartProvider, providerDatos)
-            //   : _ultimaOrden(size, cartProvider)))
-            child: _ultimaOrden(size, cartProvider)));
+        body: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
+          onRefresh: () async {
+            await LogicaActualizar().actualizarDB();
+
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            ).timeout(Duration(seconds: 3));
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+              //child: (seleccion == 1
+              //    ? _ordenSugerida(size, cartProvider, providerDatos)
+              //   : _ultimaOrden(size, cartProvider)))
+              child: _ultimaOrden(size, cartProvider)),
+        ));
   }
 
   Widget _tabs(size) {

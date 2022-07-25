@@ -18,6 +18,7 @@ import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
@@ -95,380 +96,397 @@ class _MiNegocioState extends State<MiNegocio> {
           AccionesBartCarrito(esCarrito: false),
         ],
       ),
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: FutureBuilder(
-              initialData: [],
-              future: DBProviderHelper.db.consultarDatosCliente(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<dynamic>> snapshot) {
-                if (snapshot.data!.length != 0) {
-                  DatosCliente sucursal = snapshot.data![0];
-                  var capturar =
-                      sucursal.telefonoWhatsapp.toString().split('+57');
-                  String telefono = capturar.length > 1
-                      ? capturar[1]
-                      : sucursal.telefonoWhatsapp != null
-                          ? ' ${sucursal.telefonoWhatsapp.toString()}'
-                          : '';
-                  return Column(
-                    children: [
-                      cardStyle(
-                          bodyContainer: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                      Image.asset(
-                                        'assets/icon/perfil_img.png',
-                                        width: 70,
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        color: ConstantesColores.azul_precio,
+        onRefresh: () async {
+          await LogicaActualizar().actualizarDB();
+
+          Navigator.pushReplacementNamed(
+            context,
+            'tab_opciones',
+          ).timeout(Duration(seconds: 3));
+          return Future<void>.delayed(const Duration(seconds: 3));
+        },
+        child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: FutureBuilder(
+                initialData: [],
+                future: DBProviderHelper.db.consultarDatosCliente(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<dynamic>> snapshot) {
+                  if (snapshot.data!.length != 0) {
+                    DatosCliente sucursal = snapshot.data![0];
+                    var capturar =
+                        sucursal.telefonoWhatsapp.toString().split('+57');
+                    String telefono = capturar.length > 1
+                        ? capturar[1]
+                        : sucursal.telefonoWhatsapp != null
+                            ? ' ${sucursal.telefonoWhatsapp.toString()}'
+                            : '';
+                    return Column(
+                      children: [
+                        cardStyle(
+                            bodyContainer: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.contain,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5),
-                                              child: Text(
-                                                'Mi negocio',
+                                        Image.asset(
+                                          'assets/icon/perfil_img.png',
+                                          width: 70,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 20),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(bottom: 5),
+                                                child: Text(
+                                                  'Mi negocio',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              Text(
+                                                sucursal.razonsocial.toString(),
                                                 style: TextStyle(
                                                     fontSize: 15,
+                                                    color: ConstantesColores
+                                                        .azul_precio,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                'Dirección: ${sucursal.direccion.toString()}',
+                                                style: TextStyle(
+                                                    fontSize: 11,
                                                     color: ConstantesColores
                                                         .gris_textos,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                            ),
-                                            Text(
-                                              sucursal.razonsocial.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: ConstantesColores
-                                                      .azul_precio,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              'Dirección: ${sucursal.direccion.toString()}',
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: ConstantesColores
-                                                      .gris_textos,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              'Número WhatsApp:$telefono',
-                                              maxLines: 4,
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: ConstantesColores
-                                                      .gris_textos,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ])),
-                                GestureDetector(
-                                  onTap: () => editarNumero(
-                                      context,
-                                      controllerInput,
-                                      validarInputNumero,
-                                      validarNumero),
-                                  child: Container(
-                                      margin:
-                                          EdgeInsets.only(bottom: 1, left: 18),
-                                      child: Image.asset(
-                                        'assets/icon/editar_perfil_img.png',
-                                        width: 20,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: HexColor('#EAE8F5'),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 10, bottom: 20),
-                            child: Text(
-                              'Mi cuenta',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: ConstantesColores.gris_textos,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
-                            child: GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MisProveedores())),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Image.asset(
-                                          'assets/icon/mis_proveedores_img.png',
-                                          alignment: Alignment.center,
-                                          width: 35,
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Mis proveedores',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
+                                              Text(
+                                                'Número WhatsApp:$telefono',
+                                                maxLines: 4,
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: ConstantesColores
+                                                        .gris_textos,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ])),
+                                  GestureDetector(
+                                    onTap: () => editarNumero(
+                                        context,
+                                        controllerInput,
+                                        validarInputNumero,
+                                        validarNumero),
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: 1, left: 18),
+                                        child: Image.asset(
+                                          'assets/icon/editar_perfil_img.png',
+                                          width: 20,
+                                        )),
                                   ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 30,
-                                    color: ConstantesColores.agua_marina,
-                                  )
                                 ],
                               ),
                             ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: HexColor('#EAE8F5'),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            child: GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MisVendedores())),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 7),
-                                          child: Image.asset(
-                                            'assets/icon/mis_vendedores_img.png',
-                                            alignment: Alignment.center,
-                                            width: 30,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Mis vendedores',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 30,
-                                    color: ConstantesColores.agua_marina,
-                                  )
-                                ],
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 10, bottom: 20),
+                              child: Text(
+                                'Mi cuenta',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: ConstantesColores.gris_textos,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: HexColor('#EAE8F5'),
-                          )
-                        ],
-                      )),
-                      cardStyle(
-                          bodyContainer: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 5, bottom: 20),
-                            child: Text(
-                              'Términos y condiciones',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: ConstantesColores.gris_textos,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            child: GestureDetector(
-                              onTap: () => verPoliticasCondiciones(
-                                  context, politicasDatosPdf),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 7),
-                                          child: Image.asset(
-                                            'assets/icon/politicas.png',
-                                            alignment: Alignment.center,
-                                            width: 30,
-                                          ),
-                                        ),
-                                        Container(
-                                          width: Get.width * 0.52,
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Política y tratamiento de datos',
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 30,
-                                    color: ConstantesColores.agua_marina,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: HexColor('#EAE8F5'),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            width: Get.width * 1,
-                            child: GestureDetector(
-                              onTap: () => verTerminosCondiciones(
-                                  context, terminosDatosPdf),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 4),
-                                          child: Image.asset(
-                                            'assets/icon/termino_y_condiciones_img.png',
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MisProveedores())),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Image.asset(
+                                            'assets/icon/mis_proveedores_img.png',
                                             alignment: Alignment.center,
                                             width: 35,
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Términos y condiciones',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Mis proveedores',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 30,
-                                    color: ConstantesColores.agua_marina,
-                                  )
-                                ],
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 30,
+                                      color: ConstantesColores.agua_marina,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: HexColor('#EAE8F5'),
-                          )
-                        ],
-                      )),
-                      Container(
-                        margin: EdgeInsets.only(top: 30, left: 29),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/icon/logout_img.png',
-                              alignment: Alignment.center,
-                              width: 30,
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => {
-                                      _iniciarModalCerrarSesion(size, provider)
-                                    },
-                                    child: Text(
-                                      "Cerrar sesión.",
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 15,
-                                          decoration: TextDecoration.none,
-                                          fontWeight: FontWeight.bold),
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MisVendedores())),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 7),
+                                            child: Image.asset(
+                                              'assets/icon/mis_vendedores_img.png',
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Mis vendedores',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    Constantes().titulo == 'QA'
-                                        ? 'Versión QA $version'
-                                        : 'Versión $version',
-                                    style: TextStyle(
-                                        color: ConstantesColores.gris_textos,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 30,
+                                      color: ConstantesColores.agua_marina,
+                                    )
+                                  ],
+                                ),
                               ),
+                            ),
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
                             )
                           ],
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return CircularProgressIndicator();
-              })),
+                        )),
+                        cardStyle(
+                            bodyContainer: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 5, bottom: 20),
+                              child: Text(
+                                'Términos y condiciones',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: ConstantesColores.gris_textos,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: GestureDetector(
+                                onTap: () => verPoliticasCondiciones(
+                                    context, politicasDatosPdf),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 7),
+                                            child: Image.asset(
+                                              'assets/icon/politicas.png',
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: Get.width * 0.52,
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Política y tratamiento de datos',
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 30,
+                                      color: ConstantesColores.agua_marina,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: Get.width * 1,
+                              child: GestureDetector(
+                                onTap: () => verTerminosCondiciones(
+                                    context, terminosDatosPdf),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 4),
+                                            child: Image.asset(
+                                              'assets/icon/termino_y_condiciones_img.png',
+                                              alignment: Alignment.center,
+                                              width: 35,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Términos y condiciones',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 30,
+                                      color: ConstantesColores.agua_marina,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
+                            )
+                          ],
+                        )),
+                        Container(
+                          margin: EdgeInsets.only(top: 30, left: 29),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icon/logout_img.png',
+                                alignment: Alignment.center,
+                                width: 30,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => {
+                                        _iniciarModalCerrarSesion(
+                                            size, provider)
+                                      },
+                                      child: Text(
+                                        "Cerrar sesión.",
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 15,
+                                            decoration: TextDecoration.none,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Text(
+                                      Constantes().titulo == 'QA'
+                                          ? 'Versión QA $version'
+                                          : 'Versión $version',
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_textos,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  return CircularProgressIndicator();
+                })),
+      ),
     );
   }
 

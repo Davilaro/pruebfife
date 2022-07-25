@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
@@ -26,8 +27,8 @@ class _BotonActualizarState extends State<BotonActualizar> {
             if (isActualizando.value) {
               AlertaActualizar().mostrarAlertaActualizar(context, true);
             }
-            LogicaActualizar().actualizarDB();
-            await AppUtil.appUtil.abrirBases();
+            await LogicaActualizar().actualizarDB();
+            // await AppUtil.appUtil.abrirBases();
             isActualizando.value = false;
             if (isActualizando.value == false) {
               Navigator.pop(context);
@@ -36,12 +37,11 @@ class _BotonActualizarState extends State<BotonActualizar> {
                 Navigator.pop(context);
                 //pop dialog
               });
-              //setState(() {});
 
               Navigator.pushReplacementNamed(
                 context,
                 'tab_opciones',
-              );
+              ).timeout(Duration(seconds: 3));
               // Add Your Code here.
 
             }

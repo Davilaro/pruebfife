@@ -65,7 +65,10 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
 
-                          setState(() {});
+                          Navigator.pushReplacementNamed(
+                            context,
+                            'tab_opciones',
+                          ).timeout(Duration(seconds: 3));
                           return Future<void>.delayed(
                               const Duration(seconds: 3));
                         },
