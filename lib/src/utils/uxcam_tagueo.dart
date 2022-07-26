@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -31,30 +34,38 @@ class UxcamTagueo {
   }
 
   void seeMore(String name, provider) {
-    if (name == 'Imperdibles') {
-      provider.agregarNumeroClickVerImpedibles = 1;
-    } else if (name == 'Promos') {
-      provider.agregarNumeroClickVerPromos = 1;
-    }
+    try {
+      if (name == 'Imperdibles') {
+        provider.agregarNumeroClickVerImpedibles = 1;
+      } else if (name == 'Promos') {
+        provider.agregarNumeroClickVerPromos = 1;
+      }
 
-    FlutterUxcam.logEventWithProperties("clickSeeMore", {
-      "name": name,
-      "times": provider.getNumeroClickCarrito,
-    });
+      FlutterUxcam.logEventWithProperties("clickSeeMore", {
+        "name": name,
+        "times": provider.getNumeroClickCarrito,
+      });
+    } catch (e) {
+      print('Error tagueo clickCarrito $e');
+    }
   }
 
   void seeDetailProduct(Productos element, int index, String? nameSeccion) {
-    var descuento = nameSeccion == 'Promos'
-        ? (element.descuento! * 100) / element.precio
-        : 0;
+    try {
+      var descuento = nameSeccion == 'Promos'
+          ? (element.descuento! * 100) / element.precio
+          : 0;
 
-    FlutterUxcam.logEventWithProperties("seeDetailProduct", {
-      "name": element.nombrecomercial,
-      "category": element.marca,
-      "price": element.precio,
-      "discount": "$descuento%",
-      "position": index
-    });
+      FlutterUxcam.logEventWithProperties("seeDetailProduct", {
+        "name": element.nombrecomercial,
+        "category": element.marca,
+        "price": element.precio,
+        "discount": "$descuento%",
+        "position": index
+      });
+    } catch (e) {
+      print('Error tagueo seeDetailProduct $e');
+    }
   }
 
   void seeCategory(String name) {
@@ -82,13 +93,126 @@ class UxcamTagueo {
   }
 
   void addToCart(Productos element, int cantidad) {
-    final total = element.precio * cantidad;
-    FlutterUxcam.logEventWithProperties("addToCart", {
-      "name": element.nombrecomercial,
-      "category": element.marca,
-      "provider": element.fabricante,
-      "price": total,
-      "quantity": cantidad,
+    try {
+      // final total = element.precio * cantidad;
+      FlutterUxcam.logEventWithProperties("addToCart", {
+        "name": element.nombrecomercial,
+        "category": element.marca,
+        "provider": element.fabricante,
+        "price": element.precio,
+        "quantity": cantidad,
+      });
+    } catch (e) {
+      print('Error tagueo addToCart $e');
+    }
+  }
+
+  void removeToCart(
+      Productos element, int cantidad, CarroModelo cartProvider, precioMinimo) {
+    try {
+      var isSufficientAmount = 'Si';
+      var valorPedido = cartProvider.getListaFabricante[element.fabricante]
+              ["precioFinal"] -
+          element.precio;
+      if (element.fabricante.toString().toUpperCase() != "MEALS") {
+        if (valorPedido < precioMinimo) {
+          isSufficientAmount = 'No';
+        } else {
+          isSufficientAmount = 'Si';
+        }
+      }
+
+      FlutterUxcam.logEventWithProperties("removeToCart", {
+        "name": element.nombrecomercial,
+        "category": element.marca,
+        "provider": element.fabricante,
+        "price": element.precio,
+        "quantity": cantidad,
+        "sufficient_amount": isSufficientAmount
+      });
+    } catch (e) {
+      print('Error tagueo removeToCart $e');
+    }
+  }
+
+  void emptyToCart(String fabricante, CarroModelo cartProvider,
+      List<dynamic> listProductos, precioMinimo) {
+    try {
+      List<Object> productos = [];
+      listProductos.forEach((product) {
+        var isSufficientAmount = 'Si';
+        var valorPedido =
+            cartProvider.getListaFabricante[fabricante]["precioFinal"];
+        if (product.fabricante == fabricante && product.cantidad! > 0) {
+          if (product.fabricante.toString().toUpperCase() != "MEALS") {
+            if (valorPedido < precioMinimo) {
+              isSufficientAmount = 'No';
+            } else {
+              isSufficientAmount = 'Si';
+            }
+          }
+          productos.add({
+            "name": product.nombre,
+            "provider": fabricante,
+            "price": product.precio,
+            "quantity": product.cantidad,
+            "sufficient_amount": isSufficientAmount
+          });
+        }
+      });
+      print('se me ejecute $productos');
+      FlutterUxcam.logEventWithProperties(
+          "emptyToCart", {"products": productos});
+    } catch (e) {
+      print('Error tagueo emptyToCart $e');
+    }
+  }
+
+  void clickAction(String accion, fabricantes) {
+    try {
+      // final total = element.precio * cantidad;
+      FlutterUxcam.logEventWithProperties("clickAction", {
+        "action": accion,
+        "providers": fabricantes,
+      });
+    } catch (e) {
+      print('Error tagueo clickAction $e');
+    }
+  }
+
+  void confirmOrder(
+      List<Pedido> listaProductosPedidos, CarroModelo cartProvider) {
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var subTotal =
+            cartProvider.getListaFabricante[producto.fabricante]["precioFinal"];
+        return {
+          "Subtotal": subTotal,
+          "description": producto.nombreProducto,
+          "provider": producto.fabricante,
+          "quantity": producto.cantidad,
+          "price": producto.precio,
+        };
+      }).toList();
+      print(
+          'resultado final ${cartProvider.getTotal} - ${listProductos.toList()}');
+      FlutterUxcam.logEventWithProperties("confirmOrder", {
+        "screen": "Check out 2",
+        "products": [...listProductos],
+        "total": cartProvider.getTotal
+      });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
+  void clickSoport() {
+    FlutterUxcam.logEvent("clickSoport");
+  }
+
+  void selectSoport(String tipo) {
+    FlutterUxcam.logEventWithProperties("selectSoport", {
+      "type": tipo,
     });
   }
 
@@ -98,24 +222,28 @@ class UxcamTagueo {
     List<Productos> listProducts,
   ) {
     List<Object> productos = [];
-    if (cartProvider.getCantidadItems != 0) {
-      listProducts.forEach((product) {
-        dynamic cantidad = PedidoEmart.obtenerValor(product).toString();
+    try {
+      if (cartProvider.getCantidadItems != 0) {
+        listProducts.forEach((product) {
+          dynamic cantidad = PedidoEmart.obtenerValor(product).toString();
 
-        int quantity = int.parse(cantidad);
-        var subTotal = product.precio * quantity;
+          int quantity = int.parse(cantidad);
+          var subTotal = product.precio * quantity;
 
-        productos.add({
-          "Subtotal": subTotal,
-          "description": product.nombrecomercial,
-          "quantity": quantity,
-          "price": product.precio,
+          productos.add({
+            "Subtotal": subTotal,
+            "description": product.nombrecomercial,
+            "quantity": quantity,
+            "price": product.precio,
+          });
         });
-      });
-      FlutterUxcam.logEventWithProperties("addToCart", {
-        "Pantalla": 'Check out 1',
-        "items": productos,
-      });
+        FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
+          "screen": 'Check out 1',
+          "items": productos,
+        });
+      }
+    } catch (e) {
+      print('Error tagueo clickPlaceOrder $e');
     }
   }
 }

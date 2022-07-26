@@ -14,6 +14,7 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/pages/carrito/configurar_pedido.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/custom_expansion_panel_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -298,8 +299,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                     width: double.infinity,
                                     child: Column(
                                       children: this
-                                          .gridItem(value["items"], fabricante,
-                                              context, cartProvider, format)
+                                          .gridItem(
+                                              value["items"],
+                                              fabricante,
+                                              context,
+                                              cartProvider,
+                                              format,
+                                              value["preciominimo"])
                                           .toList(),
                                     ),
                                   ),
@@ -324,7 +330,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
-      BuildContext context, CarroModelo cartProvider, format) {
+      BuildContext context, CarroModelo cartProvider, format, precioMinimo) {
     List<Widget> result = [];
     List<Productos> listTag = [];
 
@@ -372,8 +378,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           child: IconButton(
                             icon: Image.asset('assets/menos.png'),
                             onPressed: () => {
-                              menos(
-                                  product.productos, cartProvider, fabricante),
+                              menos(product.productos, cartProvider, fabricante,
+                                  precioMinimo),
                             },
                           ),
                         ),
@@ -485,7 +491,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          dialogVaciarCarrito(fabricante);
+          dialogVaciarCarrito(fabricante, cartProvider, value, precioMinimo);
         },
         child: Row(
           children: [
@@ -566,7 +572,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                 )));
   }
 
-  void dialogVaciarCarrito(String fabricante) {
+  void dialogVaciarCarrito(String fabricante, CarroModelo cartProvider,
+      List<dynamic> listProductos, precioMinimo) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -586,6 +593,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    //UXCam: Llamamos el evento emptyToCart
+                    UxcamTagueo().emptyToCart(
+                        fabricante, cartProvider, listProductos, precioMinimo);
                     //FIREBASE: Llamamos el evento delete_cart
                     TagueoFirebase().sendAnalityticDeleteCart("2", "Delete");
                     setState(() {
@@ -629,7 +639,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
     }
   }
 
-  menos(Productos producto, CarroModelo cartProvider, String fabricante) {
+  menos(Productos producto, CarroModelo cartProvider, String fabricante,
+      precioMinimo) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -648,6 +659,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
               "$valorResta";
           PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
         });
+        //UXCam: Llamamos el evento removeToCart
+        UxcamTagueo()
+            .removeToCart(producto, valorResta, cartProvider, precioMinimo);
       }
     }
     //FIREBASE: Llamamos el evento remove_from_cart
@@ -685,8 +699,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
             Get.height * 0.25);
       }
     } catch (error) {
-      print("CARRITO ERROR!");
-      print(error);
+      print("CARRITO ERROR! $error");
     }
   }
 
@@ -769,7 +782,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 ),
                               ),
                             ),
-                            _botonSeguirComprando(size),
+                            _botonSeguirComprando(size, fabricantes),
                             _botonAceptar(size, fabricantes),
                           ],
                         )
@@ -811,9 +824,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  Widget _botonSeguirComprando(size) {
+  Widget _botonSeguirComprando(size, fabricantes) {
     return GestureDetector(
-      onTap: () => {Navigator.pop(context)},
+      onTap: () => {
+        Navigator.pop(context),
+        //UXCam: Llamamos el evento clickAction
+        UxcamTagueo().clickAction('Cancelar', fabricantes)
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,
@@ -847,7 +864,11 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
   Widget _botonAceptar(size, fabricantes) {
     return GestureDetector(
-      onTap: () => _cancelarPedidosSinPedidoMinimo(fabricantes),
+      onTap: () {
+        _cancelarPedidosSinPedidoMinimo(
+            fabricantes); //UXCam: Llamamos el evento clickAction
+        UxcamTagueo().clickAction('Aceptar', fabricantes);
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,

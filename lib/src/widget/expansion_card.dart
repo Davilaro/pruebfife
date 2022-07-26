@@ -1,6 +1,7 @@
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/grupo_detalle.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
@@ -246,6 +247,8 @@ class _ExpansionCardState extends State<ExpansionCard> {
   }
 
   void _soporte() {
+    //UXCam: Llamamos el evento clickSoport
+    UxcamTagueo().clickSoport();
     Navigator.push(
         context,
         MaterialPageRoute(

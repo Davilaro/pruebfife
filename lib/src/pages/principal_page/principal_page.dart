@@ -79,6 +79,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -388,6 +390,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         provider.selectOptionMenu = 1;
         provider.setIsLocal = 0;
         cargoConfirmar.tabController.index = i;
+        print('se ejecuto $i');
         cargoConfirmar.cargoBaseDatos(i);
         break;
       }

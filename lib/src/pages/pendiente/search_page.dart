@@ -100,6 +100,8 @@ class _SearchPageState extends State<SearchPage> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
