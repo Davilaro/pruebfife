@@ -163,14 +163,6 @@ class _HomePageBody extends StatelessWidget {
             UxcamTagueo().selectFooter('Catalogo');
             onClickVerMas('Categorías', provider);
           }
-          // provider.getIisLocal == 0
-          //     ? ''
-          //     : TagueoFirebase().sendAnalityticSelectContent(
-          //         "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
-          // provider.getIisLocal == 0
-          //     ? ''
-          //     : onClickVerMas('Categorías', provider);
-
           return TabCategoriaMarca();
         }
 

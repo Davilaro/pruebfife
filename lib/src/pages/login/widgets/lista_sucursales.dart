@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -215,10 +217,9 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     print('user UXCam $userUxCam');
     //UXCam: se asigna el nombre de usuario
     // FlutterUxcam.setUserIdentity('$userUxCam');
-    // FlutterUxcam.setUserProperty("role", "your-role");
-    // _validarTipoUsario();
     await pr.show();
     await cargarInformacion(provider);
+    await _validarTipoUsario(userUxCam);
     await pr.hide();
 
     setState(() {});
@@ -245,7 +246,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     await AppUtil.appUtil.abrirBases();
   }
 
-  _validarTipoUsario() async {
+  _validarTipoUsario(userUxCam) async {
     DateTime now = DateTime.now();
     print('hola res usuario hola $now');
     String fechaInicial =
@@ -254,9 +255,13 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
     // String fechaPedido = DateFormat('yyyy-MM-dd').format(now);
     //TODO: falta logica para validar fechas para evento de uxcam
-    var resQuery = await DBProviderHelper.db
+    dynamic resQuery = await DBProviderHelper.db
         .consultarHistoricos("-1", fechaInicial, fechaFinal);
-
-    print('hola res usuario $resQuery');
+    if (resQuery.length == 0) {
+      //UXCam: se asigna el nombre de usuario
+      FlutterUxcam.setUserIdentity('$userUxCam');
+      // FlutterUxcam.setUserProperty("subscription_type", value: "premium")
+      print('hola res usuario ${resQuery.length}');
+    }
   }
 }

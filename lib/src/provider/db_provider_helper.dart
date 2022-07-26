@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -164,8 +165,6 @@ class DBProviderHelper {
     } else {
       isFormat = false;
     }
-    //TODO: falta logica para validar fechas para evento de uxcam
-    print('hola hasta aca $fechaInicioFor ------ $fechaFinFor');
 
     final db = await baseAbierta;
 
@@ -178,7 +177,7 @@ class DBProviderHelper {
       //   ORDER BY fechatrans DESC
       // ''');
 
-      final sql = await db.rawQuery(
+      String query =
           '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante, 
 	   MAX(ordencompra)ordencompra FROM Historico 
 	  WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END 
@@ -193,11 +192,11 @@ class DBProviderHelper {
 	  THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
 	  ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END 
 	  GROUP BY NumeroDoc 
-	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''');
-      print('hola otra ${jsonEncode(sql)}');
+	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''';
+
+      final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
-      print('Error consultarHistoricos $e');
       return [];
     }
   }
