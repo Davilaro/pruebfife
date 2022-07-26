@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -224,7 +226,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   _dialogPedidoRegistrado(listaProductosPedidos, size) async {
     DateTime now = DateTime.now();
     String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
+    var numeroAleatorio = Random();
     String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
+    numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
 
     ValidarPedido validar = await Servicies().enviarPedido(
         listaProductosPedidos, prefs.codClienteLogueado, fechaPedido, numDoc);
