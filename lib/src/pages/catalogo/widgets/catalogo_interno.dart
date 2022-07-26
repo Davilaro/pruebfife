@@ -80,8 +80,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
                           setState(() {
-                            initState();
-                            (context as Element).reassemble();
+                            cargarProductos();
                           });
 
                           return Future<void>.delayed(

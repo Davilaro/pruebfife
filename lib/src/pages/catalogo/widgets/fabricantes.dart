@@ -70,8 +70,7 @@ class _FabricantesState extends State<Fabricantes> {
                         await LogicaActualizar().actualizarDB();
 
                         setState(() {
-                          initState();
-                          (context as Element).reassemble();
+                          cargarLista();
                         });
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },

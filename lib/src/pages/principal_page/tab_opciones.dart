@@ -54,9 +54,9 @@ class _TabOpcionesState extends State<TabOpciones>
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
-    setState(() {});
   }
 
+  @override
   dispose() {
     subscription.cancel();
     super.dispose();

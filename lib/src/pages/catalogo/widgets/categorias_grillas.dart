@@ -38,7 +38,6 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     FlutterUxcam.tagScreenName('CategoriesPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
-
     super.initState();
   }
 
@@ -66,8 +65,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                       onRefresh: () async {
                         await LogicaActualizar().actualizarDB();
                         setState(() {
-                          initState();
-                          (context as Element).reassemble();
+                          cargarLista();
                         });
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },

@@ -5,6 +5,7 @@ import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/f
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
@@ -71,6 +72,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
   @override
   Widget build(BuildContext context) {
+    super.didUpdateWidget(super.widget);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
@@ -113,10 +115,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             backgroundColor: ConstantesColores.agua_marina,
             onRefresh: () async {
               await LogicaActualizar().actualizarDB();
-
               setState(() {
-                initState();
-                (context as Element).reassemble();
+                cargarProductos();
               });
               return Future<void>.delayed(const Duration(seconds: 3));
             },
@@ -171,6 +171,15 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   ),
                 ],
               ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: CustonNavigatorBar(),
             ),
           ),
         ));
