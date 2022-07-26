@@ -67,7 +67,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final provider = Provider.of<OpcionesBard>(context);
-
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(

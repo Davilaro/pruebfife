@@ -55,7 +55,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
               catalogSearchViewModel.setPrecioMaximo(1000000000);
             }),
         actions: <Widget>[
-          BotonActualizar(),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),
