@@ -219,7 +219,9 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     // FlutterUxcam.setUserIdentity('$userUxCam');
     await pr.show();
     await cargarInformacion(provider);
-    await _validarTipoUsario(userUxCam);
+    if (prefs.usurioLogin == 1) {
+      await _validarTipoUsario(userUxCam);
+    }
     await pr.hide();
 
     setState(() {});
@@ -248,20 +250,23 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   _validarTipoUsario(userUxCam) async {
     DateTime now = DateTime.now();
-    print('hola res usuario hola $now');
+    String typeUser = 'Begginer';
+
     String fechaInicial =
         '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
     String fechaFinal =
         '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
-    // String fechaPedido = DateFormat('yyyy-MM-dd').format(now);
-    //TODO: falta logica para validar fechas para evento de uxcam
+
     dynamic resQuery = await DBProviderHelper.db
         .consultarHistoricos("-1", fechaInicial, fechaFinal);
-    if (resQuery.length == 0) {
-      //UXCam: se asigna el nombre de usuario
-      FlutterUxcam.setUserIdentity('$userUxCam');
-      // FlutterUxcam.setUserProperty("subscription_type", value: "premium")
-      print('hola res usuario ${resQuery.length}');
+
+    if (resQuery.length > 3) {
+      typeUser = "Digitalizados";
+    } else if (resQuery.length > 1 && resQuery.length <= 3) {
+      typeUser = "En progreso";
     }
+    //UXCam: se asigna el nombre de usuario
+    FlutterUxcam.setUserIdentity('$userUxCam');
+    FlutterUxcam.setUserProperty("subscription_type", typeUser);
   }
 }
