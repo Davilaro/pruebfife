@@ -1,5 +1,3 @@
-import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -11,7 +9,6 @@ import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';

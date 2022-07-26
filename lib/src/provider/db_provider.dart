@@ -556,6 +556,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
           ? sql.map((e) => Productos.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error consulta cargarProductosInterno $e');
       return [];
     }
   }

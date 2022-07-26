@@ -5,11 +5,13 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -213,9 +215,12 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     print('user UXCam $userUxCam');
     //UXCam: se asigna el nombre de usuario
     // FlutterUxcam.setUserIdentity('$userUxCam');
+    // FlutterUxcam.setUserProperty("role", "your-role");
+    // _validarTipoUsario();
     await pr.show();
     await cargarInformacion(provider);
     await pr.hide();
+
     setState(() {});
     Navigator.pushReplacementNamed(context, 'tab_opciones');
   }
@@ -238,5 +243,20 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         prefs.codigomeals,
         false);
     await AppUtil.appUtil.abrirBases();
+  }
+
+  _validarTipoUsario() async {
+    DateTime now = DateTime.now();
+    print('hola res usuario hola $now');
+    String fechaInicial =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
+    String fechaFinal =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
+    // String fechaPedido = DateFormat('yyyy-MM-dd').format(now);
+    //TODO: falta logica para validar fechas para evento de uxcam
+    var resQuery = await DBProviderHelper.db
+        .consultarHistoricos("-1", fechaInicial, fechaFinal);
+
+    print('hola res usuario $resQuery');
   }
 }
