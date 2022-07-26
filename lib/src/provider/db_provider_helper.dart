@@ -29,9 +29,11 @@ class DBProviderHelper {
     if (_database != null) {
       print('cerre helper');
       await _database!.close();
+      _database = null;
     }
     if (_temp != null) {
       await _temp!.close();
+      _temp = null;
     }
   }
 
@@ -119,13 +121,12 @@ class DBProviderHelper {
         WHERE tbl_name <> 'android_metadata'
     ''');
 
-    List<dynamic>? listaTablas;
+    List<dynamic> listaTablas = [];
 
     if (res.isNotEmpty) {
       listaTablas = res.map((e) => BorrarTablas.fromJson(e)).toList();
     }
-
-    listaTablas!.forEach((element) async {
+    listaTablas.forEach((element) async {
       final res2 = await temp.delete('${element.tblName}');
       print(res2);
     });

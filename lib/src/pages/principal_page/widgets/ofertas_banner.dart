@@ -28,10 +28,12 @@ class _OfertasBannerState extends State<OfertasBanner> {
   @override
   void initState() {
     super.initState();
-    _controllesBannes.cargoDatos.value = false;
-    if (_controllesBannes.cargoDatos.value == false) {
-      cargarBanners();
-    }
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _controllesBannes.cargoDatos.value = false;
+      if (_controllesBannes.cargoDatos.value == false) {
+        cargarBanners();
+      }
+    });
   }
 
   @override

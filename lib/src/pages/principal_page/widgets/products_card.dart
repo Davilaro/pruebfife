@@ -115,77 +115,77 @@ class _ProductsCardState extends State<ProductsCard> {
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          // crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             //mensaje de precio especial y imagen producto
-            Column(
-              children: [
-                (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
-                    ? Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(top: 5, right: 10),
-                        child: Visibility(
-                          visible: element.activopromocion == 1 &&
-                              ((DateTime.parse(element.fechafinpromocion_1!))
-                                      .compareTo(DateTime.now()) >=
-                                  0),
-                          child: Container(
+            Container(
+              width: Get.width * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
+                      ? Container(
+                          padding: EdgeInsets.only(top: 5, right: 10),
+                          child: Visibility(
+                            visible: element.activopromocion == 1 &&
+                                ((DateTime.parse(element.fechafinpromocion_1!))
+                                        .compareTo(DateTime.now()) >=
+                                    0),
                             child: Image.asset(
                               'assets/promo_abel.png',
                               height: 30,
                               fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                      )
-                    : Container(),
-                (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
-                    ? Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(top: 5, right: 10),
-                        child: Visibility(
-                          visible: element.activoprodnuevo == 1 &&
-                              ((DateTime.parse(element.fechafinnuevo_1!))
-                                      .compareTo(DateTime.now()) >=
-                                  0),
-                          child: Container(
+                        )
+                      : Container(),
+                  (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
+                      ? Container(
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(top: 5, right: 10),
+                          child: Visibility(
+                            visible: element.activoprodnuevo == 1 &&
+                                ((DateTime.parse(element.fechafinnuevo_1!))
+                                        .compareTo(DateTime.now()) >=
+                                    0),
                             child: Image.asset(
                               'assets/nuevos_label.png',
                               height: 30,
                               fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                      )
-                    : Container(),
-                Container(
-                  padding: EdgeInsets.only(top: 5.0),
-                  margin: (element.activopromocion == 1 &&
-                              ((DateTime.parse(element.fechafinpromocion_1!))
-                                      .compareTo(DateTime.now()) >=
-                                  0)) ==
-                          false
-                      ? EdgeInsets.only(top: 15)
-                      : EdgeInsets.zero,
-                  // height: element.descuento == 0 ? 120 : 100,
-                  height: 100,
-                  width: Get.width * 0.22,
-                  alignment: Alignment.center,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      imageUrl: Constantes().urlImgProductos +
-                          '${element.codigo}.png',
-                      placeholder: (context, url) =>
-                          Image.asset('assets/jar-loading.gif'),
-                      errorWidget: (context, url, error) =>
-                          Image.asset('assets/logo_login.png'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ],
+                        )
+                      : Container(),
+                ],
+              ),
             ),
+            Container(
+              padding: EdgeInsets.only(top: 5.0),
+              margin: (element.activopromocion == 1 &&
+                          ((DateTime.parse(element.fechafinpromocion_1!))
+                                  .compareTo(DateTime.now()) >=
+                              0)) ==
+                      false
+                  ? EdgeInsets.only(top: 15)
+                  : EdgeInsets.zero,
+              // height: element.descuento == 0 ? 120 : 100,
+              height: 100,
+              width: Get.width * 0.22,
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      Constantes().urlImgProductos + '${element.codigo}.png',
+                  placeholder: (context, url) =>
+                      Image.asset('assets/jar-loading.gif'),
+                  errorWidget: (context, url, error) =>
+                      Image.asset('assets/logo_login.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+
             //cuerpo de la targeta
             Container(
               width: Get.width * 0.4,

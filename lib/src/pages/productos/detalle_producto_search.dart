@@ -10,6 +10,7 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_card.dart';
 import 'package:emart/src/widget/dialog_details_image.dart';
 import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
@@ -89,6 +90,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
+          BotonActualizar(),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),

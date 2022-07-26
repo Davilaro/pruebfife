@@ -3,8 +3,10 @@ import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dar
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -36,6 +38,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
     FlutterUxcam.tagScreenName('BrandsPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
+
     super.initState();
   }
 
@@ -57,13 +60,28 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                       height: Get.height * 1,
                       width: Get.width * 1,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                      child: GridView.count(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1.0,
-                          crossAxisSpacing: 1.0,
-                          mainAxisSpacing: 3,
-                          children: _cargarMarcas(listaMarca, context, provider)
-                              .toList()))))
+                      child: RefreshIndicator(
+                        color: ConstantesColores.azul_precio,
+                        backgroundColor: ConstantesColores.agua_marina,
+                        onRefresh: () async {
+                          await LogicaActualizar().actualizarDB();
+
+                          setState(() {
+                            initState();
+                            (context as Element).reassemble();
+                          });
+                          return Future<void>.delayed(
+                              const Duration(seconds: 3));
+                        },
+                        child: GridView.count(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1.0,
+                            crossAxisSpacing: 1.0,
+                            mainAxisSpacing: 3,
+                            children:
+                                _cargarMarcas(listaMarca, context, provider)
+                                    .toList()),
+                      ))))
             ])));
   }
 

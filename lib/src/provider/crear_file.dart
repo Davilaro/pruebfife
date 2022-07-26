@@ -179,10 +179,9 @@ class AppUtil {
     // }
     try {
       await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
-      await DBProvider.db.cerrarBases();
-      await DBProviderHelper.db.cerrarBases();
+      // await DBProvider.db.cerrarBases();
+      // await DBProviderHelper.db.cerrarBases();
       var androidInfo = await DeviceInfoPlugin().androidInfo;
-
       var release = androidInfo.version.release;
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
 

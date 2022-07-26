@@ -3,10 +3,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -36,6 +38,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     FlutterUxcam.tagScreenName('CategoriesPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
+
     super.initState();
   }
 
@@ -57,14 +60,26 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                     height: Get.height * 1,
                     width: Get.width * 1,
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                    child: GridView.count(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1.0,
-                        crossAxisSpacing: 9.0,
-                        mainAxisSpacing: 9.0,
-                        children:
-                            _cargarCategorias(listaCategoria, context, provider)
-                                .toList()))))
+                    child: RefreshIndicator(
+                      backgroundColor: ConstantesColores.agua_marina,
+                      color: ConstantesColores.azul_precio,
+                      onRefresh: () async {
+                        await LogicaActualizar().actualizarDB();
+                        setState(() {
+                          initState();
+                          (context as Element).reassemble();
+                        });
+                        return Future<void>.delayed(const Duration(seconds: 3));
+                      },
+                      child: GridView.count(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1.0,
+                          crossAxisSpacing: 9.0,
+                          mainAxisSpacing: 9.0,
+                          children: _cargarCategorias(
+                                  listaCategoria, context, provider)
+                              .toList()),
+                    ))))
           ]),
         ));
   }
@@ -94,8 +109,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Column(
                 children: [

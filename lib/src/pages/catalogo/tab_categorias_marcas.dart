@@ -6,6 +6,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
 import 'package:emart/src/pages/catalogo/widgets/fabricantes.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/pages/catalogo/widgets/marcas.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -71,6 +72,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
               ),
               elevation: 0,
               actions: <Widget>[
+                BotonActualizar(),
                 AccionNotificacion(),
                 AccionesBartCarrito(esCarrito: false),
               ],
