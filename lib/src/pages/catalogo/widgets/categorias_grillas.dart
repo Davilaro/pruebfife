@@ -65,11 +65,10 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                       color: ConstantesColores.azul_precio,
                       onRefresh: () async {
                         await LogicaActualizar().actualizarDB();
-
-                        Navigator.pushReplacementNamed(
-                          context,
-                          'tab_opciones',
-                        ).timeout(Duration(seconds: 3));
+                        setState(() {
+                          initState();
+                          (context as Element).reassemble();
+                        });
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },
                       child: GridView.count(

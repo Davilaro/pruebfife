@@ -110,13 +110,14 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
               : null,
           body: RefreshIndicator(
             color: ConstantesColores.azul_precio,
+            backgroundColor: ConstantesColores.agua_marina,
             onRefresh: () async {
               await LogicaActualizar().actualizarDB();
 
-              Navigator.pushReplacementNamed(
-                context,
-                'tab_opciones',
-              ).timeout(Duration(seconds: 3));
+              setState(() {
+                initState();
+                (context as Element).reassemble();
+              });
               return Future<void>.delayed(const Duration(seconds: 3));
             },
             child: SingleChildScrollView(

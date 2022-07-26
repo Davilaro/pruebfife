@@ -79,11 +79,11 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                         color: ConstantesColores.azul_precio,
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
+                          setState(() {
+                            initState();
+                            (context as Element).reassemble();
+                          });
 
-                          Navigator.pushReplacementNamed(
-                            context,
-                            'tab_opciones',
-                          ).timeout(Duration(seconds: 3));
                           return Future<void>.delayed(
                               const Duration(seconds: 3));
                         },

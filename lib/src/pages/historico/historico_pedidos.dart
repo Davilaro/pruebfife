@@ -81,6 +81,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
       body: Container(
         child: RefreshIndicator(
           color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina,
           onRefresh: () async {
             await LogicaActualizar().actualizarDB();
 

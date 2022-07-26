@@ -98,6 +98,7 @@ class _MiNegocioState extends State<MiNegocio> {
       ),
       body: RefreshIndicator(
         color: ConstantesColores.azul_precio,
+        backgroundColor: ConstantesColores.agua_marina,
         onRefresh: () async {
           await LogicaActualizar().actualizarDB();
 

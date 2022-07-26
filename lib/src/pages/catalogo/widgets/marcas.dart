@@ -62,13 +62,14 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                       child: RefreshIndicator(
                         color: ConstantesColores.azul_precio,
+                        backgroundColor: ConstantesColores.agua_marina,
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
 
-                          Navigator.pushReplacementNamed(
-                            context,
-                            'tab_opciones',
-                          ).timeout(Duration(seconds: 3));
+                          setState(() {
+                            initState();
+                            (context as Element).reassemble();
+                          });
                           return Future<void>.delayed(
                               const Duration(seconds: 3));
                         },

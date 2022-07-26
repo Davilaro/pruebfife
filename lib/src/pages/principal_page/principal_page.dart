@@ -103,6 +103,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         },
         child: RefreshIndicator(
           color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina,
           onRefresh: () async {
             await LogicaActualizar().actualizarDB();
 

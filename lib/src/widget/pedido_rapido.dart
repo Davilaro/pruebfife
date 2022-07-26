@@ -87,6 +87,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         ),
         body: RefreshIndicator(
           color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina,
           onRefresh: () async {
             await LogicaActualizar().actualizarDB();
 
