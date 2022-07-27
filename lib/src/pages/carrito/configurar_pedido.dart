@@ -227,7 +227,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     DateTime now = DateTime.now();
     String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
     var numeroAleatorio = Random();
-    String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
+    String numDoc = DateFormat('yyyyMMddHHmmssSSS').format(now);
     numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
 
     ValidarPedido validar = await Servicies().enviarPedido(
