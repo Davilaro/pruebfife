@@ -49,7 +49,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductosFiltro('');
+    listaAllProducts = await DBProvider.db.cargarProductosFiltro('', "");
   }
 
   void runFilter(String enteredKeyword) {

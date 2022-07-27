@@ -48,8 +48,8 @@ class BannnerControllers extends GetxController {
     var resBusqueda;
     if (banner.tipoSeccion == 'Detalle Producto') {
       // Listo
-      resBusqueda =
-          await DBProvider.db.cargarProductosFiltro(banner.seccion.toString());
+      resBusqueda = await DBProvider.db
+          .cargarProductosFiltro(banner.seccion.toString(), "");
       _detalleProducto(
           resBusqueda[0], provider, context, cargoConfirmar, prefs);
     } else if (banner.tipoSeccion == 'Categoria') {
@@ -82,6 +82,7 @@ class BannnerControllers extends GetxController {
                     img: banner.link,
                     locasionBanner: locasionBanner,
                     locacionFiltro: "proveedor",
+                    codigoProveedor: "",
                   )));
     }
   }
@@ -93,11 +94,13 @@ class BannnerControllers extends GetxController {
       cambiarSubCategoria(resSubBusqueda.indexWhere((element) =>
           element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
     }
+
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TabOpcionesCategorias(
                   listaCategorias: resSubBusqueda,
+                  nombreCategoria: subCategoria,
                 )));
   }
 
@@ -115,6 +118,7 @@ class BannnerControllers extends GetxController {
                   nombreCategoria: marca.titulo,
                   isActiveBanner: false,
                   locacionFiltro: "marca",
+                  codigoProveedor: "",
                 )));
   }
 
@@ -132,6 +136,7 @@ class BannnerControllers extends GetxController {
                   nombreCategoria: proveedor.nombrecomercial!,
                   img: proveedor.icono,
                   locacionFiltro: "proveedor",
+                  codigoProveedor: "",
                 )));
   }
 

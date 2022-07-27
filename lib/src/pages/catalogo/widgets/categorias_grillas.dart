@@ -166,8 +166,10 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                TabOpcionesCategorias(listaCategorias: listaSubCategorias)));
+            builder: (context) => TabOpcionesCategorias(
+                  listaCategorias: listaSubCategorias,
+                  nombreCategoria: nombre,
+                )));
   }
 
   _campoTexto(BuildContext context, Debouncer onSearchDebouncer) {

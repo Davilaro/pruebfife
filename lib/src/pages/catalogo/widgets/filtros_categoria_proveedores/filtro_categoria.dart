@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
@@ -43,7 +44,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    final controlador = Get.find<ControlBaseDatos>();
     return Scaffold(
         appBar: AppBar(
           title: Text('Categoría',
@@ -54,6 +55,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
           leading: new IconButton(
               icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
               onPressed: () {
+                controlador.isDisponibleFiltro.value = true;
                 Navigator.pop(context);
                 catalogSearchViewModel.setPrecioMinimo(0);
                 catalogSearchViewModel.setPrecioMaximo(1000000000);
@@ -271,6 +273,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          controlador.isDisponibleFiltro.value = false;
                           await _cargarPrecios(values);
                         },
                         child: Container(
@@ -310,11 +313,8 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   }
 
   cargarMarca() async {
-    String? codigoSubCategoria = await DBProvider.db
-        .consultarCodigoSubCategoriaPorNombre(widget.nombreCategoria);
-    print(codigoSubCategoria);
-    var resQuery =
-        await DBProvider.db.consultarMarcasFiltro("", codigoSubCategoria, 3);
+    var resQuery = await DBProvider.db
+        .consultarMarcasFiltro("", widget.codSubCategoria, 3);
     for (var i = 0; i < resQuery.length; i++) {
       listMarcas.add(resQuery[i].nombreMarca);
     }
@@ -329,20 +329,25 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   _cargarPrecios(RangeValues values) async {
     String? codigoMarca =
         await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+    String? codigoCategoria = await DBProvider.db
+        .consultarCodigoCategoriaaPorNombre(widget.nombreCategoria);
+
     if (valorRound == 1 &&
         (dropdownValueMarca == "Todas" || dropdownValueMarca == null)) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                    codigoCategoria: widget.codCategoria,
+                    codCategoria: codigoCategoria,
                     numEmpresa: 'nutresa',
-                    tipoCategoria: 1,
+                    tipoCategoria: 2,
                     nombreCategoria: "Promociones",
                     img: widget.urlImagen,
-                    claseProducto: 1,
+                    codigoSubCategoria: widget.codSubCategoria,
+                    claseProducto: 6,
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
+                    codigoProveedor: "",
                   )));
     }
     if (valorRound == 2 &&
@@ -355,29 +360,34 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     numEmpresa: 'nutresa',
                     tipoCategoria: 1,
                     nombreCategoria: "Imperdibles",
+                    codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
-                    claseProducto: 2,
+                    claseProducto: 6,
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
+                    codigoProveedor: "",
                   )));
     }
     if (valorRound == 1 &&
         (dropdownValueMarca != null && dropdownValueMarca != "Todas")) {
       String? codigo =
           await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+      print("CODIGO $codigo");
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
+                    codCategoria: codigoCategoria,
+                    codigoCategoria: codigoCategoria,
                     numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
+                    tipoCategoria: 2,
                     nombreCategoria: dropdownValueMarca,
+                    codigoSubCategoria: widget.codSubCategoria,
                     claseProducto: 6,
                     codigoMarca: codigo,
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
+                    codigoProveedor: "",
                   )));
     }
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
@@ -388,15 +398,17 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
+                    codCategoria: codigoCategoria,
+                    codigoCategoria: codigoCategoria,
                     numEmpresa: 'nutresa',
                     tipoCategoria: 3,
                     nombreCategoria: dropdownValueMarca,
-                    claseProducto: 6,
+                    codigoSubCategoria: widget.codSubCategoria,
+                    claseProducto: 8,
                     codigoMarca: codigo,
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
+                    codigoProveedor: "",
                   )));
     }
     if ((dropdownValueMarca != null && dropdownValueMarca != "Todas") &&
@@ -405,33 +417,55 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                  codCategoria: dropdownValueMarca,
-                  numEmpresa: 'nutresa',
-                  tipoCategoria: 3,
-                  nombreCategoria: dropdownValueMarca,
-                  claseProducto: 4,
-                  codigoMarca: codigoMarca,
-                  isActiveBanner: false,
-                  locacionFiltro: "categoria")));
+                    codCategoria: codigoCategoria,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 1,
+                    nombreCategoria: widget.nombreCategoria,
+                    claseProducto: 8,
+                    codigoMarca: codigoMarca,
+                    codigoCategoria: codigoCategoria,
+                    codigoSubCategoria: widget.codSubCategoria,
+                    isActiveBanner: false,
+                    locacionFiltro: "categoria",
+                    codigoProveedor: "",
+                  )));
     }
     if ((dropdownValueMarca == null || dropdownValueMarca == "Todas") &&
         valorRound == 3) {
-      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codigoCategoria: codigoCategoria,
+                    numEmpresa: 'nutresa',
+                    nombreCategoria: widget.nombreCategoria,
+                    tipoCategoria: 5,
+                    codigoSubCategoria: widget.codSubCategoria,
+                    img: widget.urlImagen,
+                    claseProducto: 6,
+                    isActiveBanner: false,
+                    locacionFiltro: "categoria",
+                    codigoMarca: codigoMarca,
+                    codigoProveedor: "",
+                    codCategoria: codigoCategoria,
+                  )));
     }
     if (valorRound == 4) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                    codigoCategoria: widget.codCategoria,
+                    codigoCategoria: codigoCategoria,
                     numEmpresa: 'nutresa',
                     nombreCategoria: "Productos más vendidos",
-                    tipoCategoria: 7,
+                    tipoCategoria: 2,
+                    codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
-                    claseProducto: 7,
+                    claseProducto: 8,
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: "",
                   )));
     }
   }

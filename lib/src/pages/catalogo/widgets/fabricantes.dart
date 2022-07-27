@@ -150,6 +150,7 @@ class _FabricantesState extends State<Fabricantes> {
                   nombreCategoria: nombre,
                   img: icono,
                   locacionFiltro: "proveedor",
+                  codigoProveedor: codigo,
                 )));
   }
 

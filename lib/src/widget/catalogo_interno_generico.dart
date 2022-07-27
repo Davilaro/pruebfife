@@ -78,6 +78,7 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                     _controllerUser.text,
                     providerDatos.getPrecioMinimo,
                     providerDatos.getPrecioMaximo,
+                    "",
                     ""),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -142,9 +143,11 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
       context,
       MaterialPageRoute(
           builder: (context) => FiltroProveedor(
-              codCategoria: widget.codCategoria,
-              nombreCategoria: widget.nombreCategoria,
-              urlImagen: "")),
+                codCategoria: widget.codCategoria,
+                nombreCategoria: widget.nombreCategoria,
+                urlImagen: "",
+                codigoProveedor: widget.nombreCategoria,
+              )),
     );
   }
 }

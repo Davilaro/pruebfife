@@ -53,7 +53,7 @@ class _ProductsCardState extends State<ProductsCard> {
 
     return FutureBuilder(
         future: DBProvider.db.cargarProductosInterno(
-            widget.tipoCategoria, '', 0, 1000000, 8, ""),
+            widget.tipoCategoria, '', 0, 1000000, 8, "", ""),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
             return Center(
