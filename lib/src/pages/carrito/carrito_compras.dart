@@ -57,10 +57,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
-    // _context2 = context;
-    cartProvider = Provider.of<CarroModelo>(context, listen: false);
-    //MetodosLLenarValores().calcularValorTotal(cartProvider);
-
+    _context2 = context;
+    cartProvider = Provider.of<CarroModelo>(context);
+    MetodosLLenarValores().calcularValorTotal(cartProvider);
     final size = MediaQuery.of(context).size;
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());

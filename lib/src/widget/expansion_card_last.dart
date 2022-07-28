@@ -1,3 +1,5 @@
+import 'package:emart/src/classes/producto_cambiante.dart';
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
@@ -39,6 +41,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   bool _cargando = false;
   RxBool estado = true.obs;
   final controladorPedidos = Get.find<PedidoEmart>();
+  final cargoConfirmar = Get.find<CambioEstadoProductos>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -284,6 +287,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       await cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
+
       // pasarCarrito(providerDatos, ordenCompra, estado);
     } else {
       List<Historico> datosDetalle =
@@ -322,8 +326,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           });
         }
       }
-      cartProvider = Provider.of<CarroModelo>(context, listen: false);
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      // cartProvider = Provider.of<CarroModelo>(context);
+      MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
     }
   }
 
@@ -347,6 +351,12 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
             nuevaCantidad;
         PedidoEmart.registrarValoresPedido(producto, nuevaCantidad, true);
+        MetodosLLenarValores().calcularValorTotal(cartProvider);
+
+        cargoConfirmar.cargarProductoNuevo(
+            ProductoCambiante.m(producto.nombre, producto.codigo), 2);
+        cartProvider.guardarCambiodevista = 2;
+        PedidoEmart.cambioVista.value = 2;
       });
       //}
       cartProvider = Provider.of<CarroModelo>(context, listen: false);
