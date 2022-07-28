@@ -155,7 +155,7 @@ class _HomePageBody extends StatelessWidget {
 
       case 1:
         {
-          if (provider.getIisLocal == 0) {
+          if (provider.getIisLocal != 0) {
             //FIREBASE: Llamamos el evento select_content
             TagueoFirebase().sendAnalityticSelectContent(
                 "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');

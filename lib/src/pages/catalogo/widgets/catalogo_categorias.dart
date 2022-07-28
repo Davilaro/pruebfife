@@ -55,32 +55,19 @@ class CatalogoPoductosCategorias extends StatelessWidget {
   List<Widget> _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
 
-    for (var i = 0; i < data.length; i++) {
-      Productos productos = data[i];
+    for (var element in data) {
+      Productos productos = element;
       bool isProductoPromo = false;
 
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: numEmpresa,
         isCategoriaPromos: false,
-        index: i,
+        index: data.indexOf(element),
       );
 
       opciones.add(widgetTemp);
     }
-
-    // for (var element in data) {
-    //   Productos productos = element;
-    //   bool isProductoPromo = false;
-
-    //   final widgetTemp = InputValoresCatalogo(
-    //     element: productos,
-    //     numEmpresa: numEmpresa,
-    //     isCategoriaPromos: false,
-    //   );
-
-    //   opciones.add(widgetTemp);
-    // }
 
     return opciones;
   }
