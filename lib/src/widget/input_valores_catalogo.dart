@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -10,7 +12,9 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -25,12 +29,14 @@ class InputValoresCatalogo extends StatefulWidget {
   final Productos element;
   final String numEmpresa;
   final bool isCategoriaPromos;
+  final int index;
 
   InputValoresCatalogo(
       {Key? key,
       required this.element,
       required this.numEmpresa,
-      required this.isCategoriaPromos})
+      required this.isCategoriaPromos,
+      required this.index})
       : super(key: key);
 
   @override
@@ -40,24 +46,37 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
+  bool isProductoEnOferta = false;
+  RxBool isProductoNuevo = false.obs;
 
   @override
   Widget build(BuildContext context) {
+    print(isProductoEnOferta);
     final cartProvider = Provider.of<CarroModelo>(context);
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
-
-    return Card(
-      shape: RoundedRectangleBorder(
-          side: new BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(8.0)),
-      child:
-          _cargarDisenoInterno(widget.element, context, cartProvider, format),
+    return FutureBuilder(
+      future: DBProvider.db
+          .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.data == widget.element.codigo) {
+          isProductoEnOferta = true;
+        } else {
+          isProductoEnOferta = false;
+        }
+        return Card(
+          shape: RoundedRectangleBorder(
+              side: new BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(8.0)),
+          child: _cargarDisenoInterno(
+              widget.element, context, cartProvider, format, widget.index),
+        );
+      },
     );
   }
 
-  _cargarDisenoInterno(
-      element, BuildContext context, CarroModelo cartProvider, format) {
+  _cargarDisenoInterno(element, BuildContext context, CarroModelo cartProvider,
+      format, int index) {
     Productos productos = element;
     bool isAgotado = constrollerProductos.validarAgotado(productos);
 
@@ -65,6 +84,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
           TagueoFirebase().sendAnalityticSelectItem(productos, 1);
+          //UXCam: Llamamos el evento seeDetailProduct
+          UxcamTagueo().seeDetailProduct(element, index, '');
           detalleProducto(productos, cartProvider);
         },
         child: Container(
@@ -74,36 +95,45 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               Column(children: [
                 OverflowBar(
                   children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 5),
-                      child: Visibility(
-                        visible: element.descuento != 0 ||
-                            widget.isCategoriaPromos == true,
-                        child: Container(
-                          //aqui debo cambiar el logo de precios especiales por promo e imp0lementar productos nuevos
-                          child: Image.asset(
-                            'assets/promo_abel.png',
-                            height: Get.height * 0.06,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 5),
-                      //aqui debo validar que sea producto nuevo
-                      child: Visibility(
-                        visible: element.descuento != 0,
-                        child: Container(
-                          child: Image.asset(
-                            'assets/nuevos_label.png',
-                            // width: Get.width * 0.3,
-                            height: Get.height * 0.06,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+                    (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
+                        ? Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.only(top: 5, right: 10),
+                            child: Visibility(
+                              visible: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/promo_abel.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
+                        ? Container(
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.only(top: 5, right: 10),
+                            child: Visibility(
+                              visible: element.activoprodnuevo == 1 &&
+                                  ((DateTime.parse(element.fechafinnuevo_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/nuevos_label.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
                 Container(
@@ -126,16 +156,27 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 ),
               ]),
               Container(
-                height:
-                    element.descuento == 0 ? Get.width * 0.2 : Get.width * 0.15,
+                height: (element.activopromocion == 1 &&
+                            ((DateTime.parse(element.fechafinpromocion_1!))
+                                    .compareTo(DateTime.now()) >=
+                                0)) ==
+                        false
+                    ? Get.width * 0.2
+                    : Get.width * 0.15,
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Wrap(
                   children: [
                     Text(
                       '${element.nombre}',
-                      maxLines: element.descuento == 0 ? 3 : 2,
+                      maxLines: (element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)) ==
+                              false
+                          ? 3
+                          : 2,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: ConstantesColores.verde),
@@ -151,93 +192,115 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   ],
                 ),
               ),
-              Container(
-                height: Get.height * 0.05,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Visibility(
-                        visible: element.descuento != 0,
+              Expanded(
+                child: Container(
+                  height: Get.height * 0.05,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Visibility(
+                          visible: element.activopromocion == 1 &&
+                              ((DateTime.parse(element.fechafinpromocion_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
+                          child: Container(
+                            height: Get.width * 0.07,
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              '${format.currencySymbol}' +
+                                  formatNumber
+                                      .format(element.precio)
+                                      .replaceAll(',00', ''),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.red),
+                            ),
+                          )),
+                      Expanded(
                         child: Container(
-                          height: Get.width * 0.07,
+                          height: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)
+                              ? Get.width * 0.05
+                              : Get.width * 0.07,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           alignment: Alignment.topLeft,
                           child: Text(
                             '${format.currencySymbol}' +
                                 formatNumber
-                                    .format(element.precio)
+                                    .format(element.activopromocion == 1 &&
+                                            ((DateTime.parse(element
+                                                        .fechafinpromocion_1!))
+                                                    .compareTo(
+                                                        DateTime.now()) >=
+                                                0)
+                                        ? element.precioinicial
+                                        : element.precio)
                                     .replaceAll(',00', ''),
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.red),
+                            style: (element.activopromocion == 1 &&
+                                    ((DateTime.parse(
+                                                element.fechafinpromocion_1!))
+                                            .compareTo(DateTime.now()) >=
+                                        0)
+                                ? TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    decoration: TextDecoration.lineThrough)
+                                : TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18)),
                           ),
-                        )),
-                    Container(
-                      height: element.descuento != 0
-                          ? Get.width * 0.05
-                          : Get.width * 0.07,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        '${format.currencySymbol}' +
-                            formatNumber
-                                .format(element.descuento != 0
-                                    ? element.precioinicial
-                                    : element.precio)
-                                .replaceAll(',00', ''),
-                        textAlign: TextAlign.left,
-                        style: element.descuento != 0
-                            ? TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                                decoration: TextDecoration.lineThrough)
-                            : TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                        ),
                       ),
-                    ),
-                    Visibility(
-                        visible: isAgotado,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: EdgeInsets.only(left: 10, bottom: 3),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.red[100],
+                      Visibility(
+                          visible: isAgotado,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 10, bottom: 3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.red[100],
+                              ),
+                              height: Get.width * 0.06,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: Text(
+                                'Agotado',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.red),
+                              ),
                             ),
-                            height: Get.width * 0.06,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Text(
-                              'Agotado',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.red),
-                            ),
-                          ),
-                        )),
-                  ],
+                          )),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
                 visible: !isAgotado,
-                child: Container(
-                    height: Get.width * 0.1,
-                    width: 150,
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                        child: Image.asset("assets/agregar_btn.png"),
-                        onTap: () => {
-                              //FIREBASE: Llamamos el evento select_item
-                              TagueoFirebase()
-                                  .sendAnalityticSelectItem(productos, 1),
-                              detalleProducto(productos, cartProvider)
-                            })),
+                child: Expanded(
+                  child: Container(
+                      height: Get.width * 0.1,
+                      width: 150,
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                          child: Image.asset("assets/agregar_btn.png"),
+                          onTap: () => {
+                                //FIREBASE: Llamamos el evento select_item
+                                TagueoFirebase()
+                                    .sendAnalityticSelectItem(productos, 1),
+                                detalleProducto(productos, cartProvider)
+                              })),
+                ),
               ),
             ],
           ),

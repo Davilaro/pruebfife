@@ -72,7 +72,7 @@ class AppUtil {
         return true;
       }
     } catch (ex) {
-      print(ex.toString());
+      print('Error en downloadZip ${ex.toString()}');
       return false;
     }
 
@@ -103,7 +103,7 @@ class AppUtil {
       req = await http.Client().get(Uri.parse(url));
       file = File('$dir$fileName');
     } catch (e) {
-      print(e);
+      print('error al descargar la base datos $e');
     }
     return await file.writeAsBytes(
       req.bodyBytes,
@@ -166,30 +166,18 @@ class AppUtil {
   }
 
   Future<void> eliminarCarpeta() async {
-    // var release;
-    // if (Platform.isAndroid) {
-    //   var androidInfo = await DeviceInfoPlugin().androidInfo;
-
-    //   release = androidInfo.version.release;
-    // }
-    // Directory appDocDirectory = await getApplicationDocumentsDirectory();
-
-    // if (Platform.isAndroid) {
-    //   await appDocDirectory.delete(recursive: true);
-    // }
     try {
       await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
-      await DBProvider.db.cerrarBases();
-      await DBProviderHelper.db.cerrarBases();
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      // await DBProviderHelper.db.cerrarBases();
+      // await DBProvider.db.cerrarBases();
 
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
       var release = androidInfo.version.release;
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
       await appDocDirectory.delete(recursive: true);
-      print('elimine carpeta');
     } catch (e) {
-      print('Problema al cerrar las bases de datos $e');
+      print('error al cerrar las bases de datos $e');
     }
   }
 }

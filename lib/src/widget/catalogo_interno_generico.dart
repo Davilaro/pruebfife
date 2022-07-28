@@ -1,8 +1,9 @@
-import 'package:emart/src/pages/catalogo/widgets/filtro_proveedor.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/lista_productos_para_catalogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -77,7 +78,8 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                     widget.tipoCategoria,
                     _controllerUser.text,
                     providerDatos.getPrecioMinimo,
-                    providerDatos.getPrecioMaximo),
+                    providerDatos.getPrecioMaximo,
+                    ""),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (!snapshot.hasData) {
@@ -130,6 +132,8 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                 if (val.length > 3) {
                   //FIREBASE: Llamamos el evento search
                   TagueoFirebase().sendAnalityticsSearch(val);
+                  //UXCam: Llamamos el evento search
+                  UxcamTagueo().search(val);
                 }
                 setState(() {});
               })),
@@ -139,7 +143,11 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
   _irFiltro() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FiltroPrecios()),
+      MaterialPageRoute(
+          builder: (context) => FiltroProveedor(
+              codCategoria: widget.codCategoria,
+              nombreCategoria: widget.nombreCategoria,
+              urlImagen: "")),
     );
   }
 }

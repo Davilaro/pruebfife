@@ -1,16 +1,16 @@
-import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/expansion_card.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';
@@ -35,6 +35,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Historico", "", "", "Historico", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Histórico');
     validarVersionActual(context);
     super.initState();
   }
@@ -59,6 +61,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -72,54 +76,72 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionesBartCarrito(esCarrito: false),
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                _buscador(size),
-                FutureBuilder<List<dynamic>>(
-                    future: DBProviderHelper.db
-                        .consultarHistoricos(_filtro, fechaInicial, fechaFinal),
-                    builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-                      if (snapshot.hasData) {
-                        var cantidad = snapshot.data?.length;
-                        if (cantidad! > 0) {
-                          var historicos = snapshot.data;
-                          return Column(
-                            children: [
-                              for (int i = historicos!.length - 1; i >= 0; i--)
-                                Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    width: size.width * 0.9,
-                                    margin: EdgeInsets.only(bottom: 14),
-                                    child: ExpansionCard(
-                                        historico: historicos[i])),
-                            ],
-                          );
+        child: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina,
+          onRefresh: () async {
+            await LogicaActualizar().actualizarDB();
+
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            ).timeout(Duration(seconds: 3));
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  _buscador(size),
+                  FutureBuilder<List<dynamic>>(
+                      future: DBProviderHelper.db.consultarHistoricos(
+                          _filtro, fechaInicial, fechaFinal),
+                      builder:
+                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                        if (snapshot.hasData) {
+                          var cantidad = snapshot.data?.length;
+                          if (cantidad! > 0) {
+                            var historicos = snapshot.data;
+                            return Column(
+                              children: [
+                                for (int i = historicos!.length - 1;
+                                    i >= 0;
+                                    i--)
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      width: size.width * 0.9,
+                                      margin: EdgeInsets.only(bottom: 14),
+                                      child: ExpansionCard(
+                                          historico: historicos[i])),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                                children: [Text("No hay registros!")]);
+                          }
                         } else {
                           return Column(children: [Text("No hay registros!")]);
                         }
-                      } else {
-                        return Column(children: [Text("No hay registros!")]);
-                      }
-                    }),
-              ],
+                      }),
+                ],
+              ),
             ),
           ),
         ),

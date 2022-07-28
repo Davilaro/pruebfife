@@ -10,8 +10,6 @@ void verPoliticasCondiciones(BuildContext context, politicasDatosPdf) {
     Navigator.pop(context);
   }
 
-  print('hola res $politicasDatosPdf');
-
   showDialog(
       context: context,
       barrierDismissible: false,

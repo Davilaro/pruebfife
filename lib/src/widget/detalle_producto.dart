@@ -9,6 +9,8 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dialog_details_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -78,6 +80,15 @@ class _DetalleProductoState extends State<DetalleProducto> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
+          GestureDetector(
+            child: BotonActualizar(),
+            onTap: () {
+              setState(() {
+                initState();
+                (context as Element).reassemble();
+              });
+            },
+          ),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),
@@ -410,6 +421,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
       //FIREBASE: Llamamos el evento add_to_cart
       TagueoFirebase().sendAnalityticAddToCart(
           producto, int.parse(_controllerCantidadProducto.text));
+      //UXCam: Llamamos el evento addToCart
+      UxcamTagueo()
+          .addToCart(producto, int.parse(_controllerCantidadProducto.text));
       setState(() {});
     }
   }

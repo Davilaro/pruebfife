@@ -643,7 +643,6 @@ class Servicies {
       url = Uri.parse(Constantes().urlBaseGenerico +
           'PoliticaDeTratamientoyDatosPersonales.pdf');
       final response = await http.get(url);
-      print('hola 2 res $url');
       Uint8List file = response.bodyBytes;
 
       return file;

@@ -8,7 +8,9 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imagebutton/imagebutton.dart';
@@ -29,7 +31,21 @@ class CarritoDisenoListaR extends StatefulWidget {
 }
 
 class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
+  final prefs = new Preferencias();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  RxBool isProductoEnOferta = false.obs;
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      print(widget.productos.codigo);
+      dynamic responseOferta = await DBProvider.db
+          .consultarProductoEnOfertaPorCodigo(widget.productos.codigo);
+      if (responseOferta == widget.productos.codigo) {
+        isProductoEnOferta.value = true;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +75,42 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
           Column(
             children: [
               Visibility(
-                visible: element.descuento != 0,
+                visible: element.activopromocion == 1 &&
+                    ((DateTime.parse(element.fechafinpromocion_1!))
+                            .compareTo(DateTime.now()) >=
+                        0),
                 child: Container(
-                  height: 40,
+                  height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Image.asset(
-                    'assets/promo.png',
+                    'assets/promo_abel.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: element.activoprodnuevo == 1 &&
+                    ((DateTime.parse(element.fechafinnuevo_1!))
+                            .compareTo(DateTime.now()) >=
+                        0),
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Image.asset(
+                    'assets/nuevos_label.png',
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 10.0),
-                height: element.descuento == 0 ? 140 : 100,
+                height: (element.activopromocion == 1 &&
+                            ((DateTime.parse(element.fechafinpromocion_1!))
+                                    .compareTo(DateTime.now()) >=
+                                0)) ==
+                        false
+                    ? 140
+                    : 100,
                 width: Get.width * 0.3,
                 alignment: Alignment.center,
                 child: ClipRRect(

@@ -10,6 +10,7 @@ import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/politicas.dart';
 import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
@@ -493,9 +494,13 @@ class _BienvenidoState extends State<Bienvenido> {
 
       if (estado.estado == 'OK') {
         await prEnviarCorreo.hide().then((value) => {});
-
+        //UXCam: Llamamos el evento sendActivationCode
+        UxcamTagueo()
+            .sendActivationCode(val == 1 ? 'sms' : 'correo', 'Exitoso');
         _mostrarDilogActivarCuenta(context2);
       } else {
+        //UXCam: Llamamos el evento sendActivationCode
+        UxcamTagueo().sendActivationCode(val == 1 ? 'sms' : 'correo', 'Error');
         await prEnviarCorreo.hide();
         mostrarAlert(
             context2,

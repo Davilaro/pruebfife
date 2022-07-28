@@ -2,6 +2,7 @@ import 'package:emart/src/pages/login/widgets/activacion_manual_novedad.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -176,6 +177,8 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
         await Servicies().varificarCodigoMaestro(_controllerCorreo.text);
 
     if (respuesta[0].respuesta == 'OK') {
+      //UXCam: Llamamos el evento sendActivationCode
+      UxcamTagueo().manualActivation(_controllerCorreo.text, 'satisfactorio');
       prEnviarCorreo.hide();
       _controllerCorreo.text = '';
       Navigator.push(
@@ -186,6 +189,8 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
                 )),
       );
     } else {
+      //UXCam: Llamamos el evento sendActivationCode
+      UxcamTagueo().manualActivation(_controllerCorreo.text, 'erróneo');
       prEnviarCorreo.hide();
       mostrarAlert(contex_dos, 'Error obteniendo código', null);
     }

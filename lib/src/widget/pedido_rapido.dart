@@ -9,7 +9,10 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +44,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "PedidoRapido", "", "", "PedidoRapido", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Pedido Rápido');
   }
 
   int seleccion = 1;
@@ -66,6 +71,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
               child: new IconButton(
                 icon: SvgPicture.asset('assets/boton_soporte.svg'),
                 onPressed: () => {
+                  //UXCam: Llamamos el evento clickSoport
+                  UxcamTagueo().clickSoport(),
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -79,14 +86,28 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           ),
           elevation: 0,
           actions: <Widget>[
+            BotonActualizar(),
             AccionesBartCarrito(esCarrito: false),
           ],
         ),
-        body: SingleChildScrollView(
-            //child: (seleccion == 1
-            //    ? _ordenSugerida(size, cartProvider, providerDatos)
-            //   : _ultimaOrden(size, cartProvider)))
-            child: _ultimaOrden(size, cartProvider)));
+        body: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina,
+          onRefresh: () async {
+            await LogicaActualizar().actualizarDB();
+
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            ).timeout(Duration(seconds: 3));
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+              //child: (seleccion == 1
+              //    ? _ordenSugerida(size, cartProvider, providerDatos)
+              //   : _ultimaOrden(size, cartProvider)))
+              child: _ultimaOrden(size, cartProvider)),
+        ));
   }
 
   Widget _tabs(size) {

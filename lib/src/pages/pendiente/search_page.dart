@@ -10,7 +10,9 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +101,8 @@ class _SearchPageState extends State<SearchPage> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -112,6 +116,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionNotificacion(),
           AccionesBartCarrito(esCarrito: false),
         ],
@@ -353,6 +358,8 @@ class _SearchPageState extends State<SearchPage> {
             searchInput.value = value;
             //FIREBASE: Llamamos el evento search
             TagueoFirebase().sendAnalityticsSearch(value);
+            //UXCam: Llamamos el evento search
+            UxcamTagueo().search(value);
             runFilter(value);
           },
         ));

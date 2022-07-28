@@ -1,11 +1,13 @@
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -55,9 +57,12 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                 fontWeight: FontWeight.bold)),
         elevation: 0,
         leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-          onPressed: () => Navigator.pop(context),
-        ),
+            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+            onPressed: () {
+              Navigator.pop(context);
+              catalogSearchViewModel.setPrecioMinimo(0);
+              catalogSearchViewModel.setPrecioMaximo(1000000000);
+            }),
         actions: <Widget>[
           AccionesBartCarrito(esCarrito: true),
         ],
@@ -98,7 +103,11 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           textAlign: TextAlign.left),
                     ),
                     Spacer(),
-                    iconLimpiarFiltro()
+                    IconoLimpiarFiltro().iconLimpiarFiltro((() {
+                      setState(() {
+                        limpiarFiltro();
+                      });
+                    }))
                   ],
                 ),
                 SizedBox(
@@ -116,7 +125,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           onChange: (String? value) async {
                             setState(() {
                               dropdownValueMarca = "Todas";
-
                               listSubCategorias.value = ['Todas'];
                               dropdownValueSubCategoria = "Todas";
                               dropdownValueCategoria = value!;
@@ -124,6 +132,9 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                             if (dropdownValueCategoria != null &&
                                 dropdownValueCategoria != "Todas") {
                               await cargarSubCategorias();
+                              await cargarMarcasPorCategoria(1);
+                            } else {
+                              cargarMarca();
                             }
                           })),
                       SizedBox(
@@ -133,11 +144,19 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           titulo: "Subcategoría",
                           listaItems: listSubCategorias.value,
                           hin: "Todas",
-                          onChange: (String? value) {
+                          onChange: (String? value) async {
                             setState(() {
                               dropdownValueMarca = "Todas";
                               dropdownValueSubCategoria = value!;
                             });
+                            if ((dropdownValueSubCategoria == "Todas" ||
+                                        dropdownValueSubCategoria == null) &&
+                                    dropdownValueCategoria == "Todas" ||
+                                dropdownValueCategoria == null) {
+                              await cargarMarca();
+                            } else {
+                              await cargarMarcasPorCategoria(2);
+                            }
                           },
                           value: dropdownValueSubCategoria)),
                       SizedBox(
@@ -149,11 +168,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           hin: "Todas",
                           onChange: (String? value) {
                             setState(() {
-                              dropdownValueCategoria = "Todas";
-                              dropdownValueSubCategoria = "Todas";
-                              listSubCategorias.value = ["Todas"];
                               dropdownValueMarca = value!;
-                              valorRound = 3;
                             });
                           },
                           value: dropdownValueMarca))
@@ -250,8 +265,8 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    _cargarPrecios(values, providerDatos);
+                  onTap: () async {
+                    await _cargarPrecios(values, providerDatos);
                   },
                   child: Container(
                     width: size.width * 0.9,
@@ -313,12 +328,32 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     listSubCategorias.value = ['Todas'];
     String? codigoCategoria = await DBProvider.db
         .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
-    print(codigoCategoria);
-    print(dropdownValueCategoria);
     var resQuery =
         await DBProvider.db.consultarCategoriasSubCategorias(codigoCategoria);
     for (var i = 0; i < resQuery.length; i++) {
       listSubCategorias.add(resQuery[i].descripcion);
+    }
+  }
+
+  cargarMarcasPorCategoria(int tipo) async {
+    String? codigoCategoria = await DBProvider.db
+        .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
+    listMarcas.value = ['Todas'];
+
+    if (tipo == 1) {
+      var resQuery =
+          await DBProvider.db.consultarMarcasFiltro(codigoCategoria, "", 1);
+      for (var i = 0; i < resQuery.length; i++) {
+        listMarcas.add(resQuery[i].nombreMarca);
+      }
+    } else {
+      String? codigoSubCategoria = await DBProvider.db
+          .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
+      var resQuery = await DBProvider.db
+          .consultarMarcasFiltro(codigoCategoria, codigoSubCategoria, 2);
+      for (var i = 0; i < resQuery.length; i++) {
+        listMarcas.add(resQuery[i].nombreMarca);
+      }
     }
   }
 
@@ -331,46 +366,10 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     values = RangeValues(0, 500000);
   }
 
-  Widget iconLimpiarFiltro() {
-    return OutlineButton(
-      borderSide: BorderSide(style: BorderStyle.none),
-      onPressed: () {
-        setState(() {
-          limpiarFiltro();
-        });
-      },
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/limpiar_filtro_img.png',
-            width: Get.width * 0.07,
-          ),
-          SizedBox(
-            width: 2,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Limpiar',
-                style: TextStyle(
-                  color: HexColor("#43398E"),
-                ),
-              ),
-              Text(
-                'Filtro',
-                style: TextStyle(
-                  color: HexColor("#43398E"),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
   _cargarPrecios(RangeValues values, providerDatos) async {
+    String? codigoMarca =
+        await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+    //para imperdibles, categoira y subcate
     if (valorRound == 2 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
@@ -380,7 +379,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
           .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
       String? codigoSubCategoria = await DBProvider.db
           .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
-      print(codigoSubCategoria);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -395,8 +393,11 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codCategoria: codigo,
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
+    //para promo, categoria y subcategoria
     if (valorRound == 1 &&
         ((dropdownValueCategoria != "Todas" &&
                 dropdownValueCategoria != null) ||
@@ -406,7 +407,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
           .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
       String? codigoSubCategoria = await DBProvider.db
           .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
-      print(codigo);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -421,9 +421,11 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codCategoria: codigo,
                     isActiveBanner: false,
                     codigoSubCategoria: codigoSubCategoria,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
-
+    //para subcategoria y categoria
     if ((dropdownValueSubCategoria != "Todas" &&
             dropdownValueSubCategoria != null) &&
         (valorRound == 3)) {
@@ -441,12 +443,17 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     img: widget.urlImagen,
                     claseProducto: 3,
                     codigoSubCategoria: codigo,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
+    //para marca
     if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 3) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+        valorRound == 3 &&
+        ((dropdownValueCategoria == "Todas" ||
+                dropdownValueCategoria == null) &&
+            (dropdownValueSubCategoria == "Todas" ||
+                dropdownValueSubCategoria == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -456,63 +463,20 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     tipoCategoria: 3,
                     nombreCategoria: dropdownValueMarca,
                     claseProducto: 4,
-                    codigoMarca: codigo,
+                    codigoMarca: codigoMarca,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
                   )));
     }
-    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 1) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: dropdownValueMarca,
-                    claseProducto: 6,
-                    codigoMarca: codigo,
-                    isActiveBanner: false,
-                  )));
-    }
-    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
-        valorRound == 2) {
-      String? codigo =
-          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: codigo,
-                    codigoCategoria: codigo,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 3,
-                    nombreCategoria: dropdownValueMarca,
-                    claseProducto: 6,
-                    codigoMarca: codigo,
-                    isActiveBanner: false,
-                  )));
-    }
-    if ((valorRound == 3 || valorRound == null) &&
+    //para de todo tipo
+    if ((valorRound == 3) &&
         (dropdownValueMarca == "Todas" || dropdownValueMarca == null) &&
         (dropdownValueSubCategoria == "Todas" ||
             dropdownValueSubCategoria == null) &&
         (dropdownValueCategoria == "Todas" || dropdownValueCategoria == null)) {
-      print(widget.urlImagen);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: widget.codCategoria,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: widget.nombreCategoria,
-                    img: widget.urlImagen,
-                  )));
+      Navigator.pop(context);
     }
+    //para categoria sola
     if ((dropdownValueCategoria != "Todas" &&
             dropdownValueCategoria != null &&
             (dropdownValueSubCategoria == "Todas" ||
@@ -531,40 +495,96 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     claseProducto: 5,
                     codigoCategoria: codigo,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
+    //para marca y promo
+    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
+        valorRound == 1 &&
+        ((dropdownValueCategoria == null ||
+                dropdownValueCategoria == "Todas") &&
+            (dropdownValueSubCategoria == null ||
+                dropdownValueSubCategoria == "Todas"))) {
+      String? codigo =
+          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: codigo,
+                    codigoCategoria: codigo,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 4,
+                    nombreCategoria: dropdownValueMarca,
+                    claseProducto: 6,
+                    codigoMarca: codigo,
+                    isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                  )));
+    }
+    //para marca e imperdible
+    if ((dropdownValueMarca != "Todas" && dropdownValueMarca != null) &&
+        valorRound == 2 &&
+        ((dropdownValueCategoria == null ||
+                dropdownValueCategoria == "Todas") &&
+            (dropdownValueSubCategoria == null ||
+                dropdownValueSubCategoria == "Todas"))) {
+      String? codigo =
+          await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: codigo,
+                    codigoCategoria: codigo,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 3,
+                    nombreCategoria: dropdownValueMarca,
+                    claseProducto: 6,
+                    codigoMarca: codigo,
+                    isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                  )));
+    }
+    //para promo sola
     if ((valorRound == 1) &&
         ((dropdownValueCategoria == "Todas" ||
-                dropdownValueCategoria == "null") &&
-            (dropdownValueMarca == "Todas" || dropdownValueMarca == "null"))) {
+                dropdownValueCategoria == null) &&
+            (dropdownValueMarca == "Todas" || dropdownValueMarca == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     codCategoria: widget.codCategoria,
                     numEmpresa: 'nutresa',
-                    nombreCategoria: widget.nombreCategoria,
+                    nombreCategoria: "Promociones",
                     tipoCategoria: 1,
                     img: widget.urlImagen,
                     claseProducto: 1,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
+    //para imperdible sola
     if ((valorRound == 2) &&
         ((dropdownValueCategoria == "Todas" ||
-                dropdownValueCategoria == "null") &&
-            (dropdownValueMarca == "Todas" || dropdownValueMarca == "null"))) {
+                dropdownValueCategoria == null) &&
+            (dropdownValueMarca == "Todas" || dropdownValueMarca == null))) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     codCategoria: widget.codCategoria,
                     numEmpresa: 'nutresa',
-                    nombreCategoria: widget.nombreCategoria,
+                    nombreCategoria: "Imperdibles",
                     tipoCategoria: 2,
                     img: widget.urlImagen,
                     claseProducto: 2,
                     isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: codigoMarca,
                   )));
     }
   }
