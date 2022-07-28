@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import "package:collection/collection.Dart";
 import 'package:get/get.dart';
 
-class PedidoEmart extends GetxController {
+class PedidoEmart {
   static RxString cantItems = "0".obs;
   static Map<String, TextEditingController>? listaControllersPedido;
   static Map<String, String>? listaValoresPedido;

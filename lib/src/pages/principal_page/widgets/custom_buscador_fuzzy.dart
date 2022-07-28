@@ -108,7 +108,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   ),
                   elevation: 0,
                   actions: <Widget>[
-                    BotonActualizar(),
+                    Visibility(
+                        visible: controlador.isDisponibleFiltro.value,
+                        child: BotonActualizar()),
                     AccionesBartCarrito(esCarrito: false),
                   ],
                 )
@@ -167,7 +169,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   Container(
                     height: Get.height * 0.8,
                     width: size.width * 1,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+                    padding: EdgeInsets.fromLTRB(
+                        10, 10, 10, widget.isActiveBanner ? 240 : 110),
                     child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4.0,
