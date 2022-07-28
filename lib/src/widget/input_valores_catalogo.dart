@@ -14,6 +14,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -28,12 +29,14 @@ class InputValoresCatalogo extends StatefulWidget {
   final Productos element;
   final String numEmpresa;
   final bool isCategoriaPromos;
+  final int index;
 
   InputValoresCatalogo(
       {Key? key,
       required this.element,
       required this.numEmpresa,
-      required this.isCategoriaPromos})
+      required this.isCategoriaPromos,
+      required this.index})
       : super(key: key);
 
   @override
@@ -66,14 +69,14 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               side: new BorderSide(color: Colors.white),
               borderRadius: BorderRadius.circular(8.0)),
           child: _cargarDisenoInterno(
-              widget.element, context, cartProvider, format),
+              widget.element, context, cartProvider, format, widget.index),
         );
       },
     );
   }
 
-  _cargarDisenoInterno(
-      element, BuildContext context, CarroModelo cartProvider, format) {
+  _cargarDisenoInterno(element, BuildContext context, CarroModelo cartProvider,
+      format, int index) {
     Productos productos = element;
     bool isAgotado = constrollerProductos.validarAgotado(productos);
 
@@ -81,6 +84,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
           TagueoFirebase().sendAnalityticSelectItem(productos, 1);
+          //UXCam: Llamamos el evento seeDetailProduct
+          UxcamTagueo().seeDetailProduct(element, index, '');
           detalleProducto(productos, cartProvider);
         },
         child: Container(

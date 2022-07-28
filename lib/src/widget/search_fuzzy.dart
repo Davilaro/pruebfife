@@ -9,6 +9,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
@@ -92,6 +93,8 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -349,6 +352,8 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
             searchInput.value = value;
             //FIREBASE: Llamamos el evento search
             TagueoFirebase().sendAnalityticsSearch(value);
+            //UXCam: Llamamos el evento search
+            UxcamTagueo().search(value);
             runFilter(value);
           },
         ));

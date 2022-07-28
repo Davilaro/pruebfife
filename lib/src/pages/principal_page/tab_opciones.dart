@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emart/src/classes/producto_cambiante.dart';
+import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
@@ -15,6 +16,7 @@ import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/pages/historico/historico_pedidos.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +41,8 @@ class _TabOpcionesState extends State<TabOpciones>
   final cargoControllerBase = Get.put(ControlBaseDatos());
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+
+  final bannerPut = Get.put(BannnerControllers());
 
   @override
   void initState() {
@@ -151,15 +155,14 @@ class _HomePageBody extends StatelessWidget {
 
       case 1:
         {
-          provider.getIisLocal == 0
-              ? ''
-              //FIREBASE: Llamamos el evento select_content
-              : TagueoFirebase().sendAnalityticSelectContent(
-                  "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
-          provider.getIisLocal == 0
-              ? ''
-              : onClickVerMas('Categorías', provider);
-
+          if (provider.getIisLocal != 0) {
+            //FIREBASE: Llamamos el evento select_content
+            TagueoFirebase().sendAnalityticSelectContent(
+                "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
+            //UXCam: Llamamos el evento selectFooter
+            UxcamTagueo().selectFooter('Catalogo');
+            onClickVerMas('Categorías', provider);
+          }
           return TabCategoriaMarca();
         }
 

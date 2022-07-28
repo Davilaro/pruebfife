@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -241,8 +242,13 @@ class _SoporteState extends State<Soporte> {
                                       Expanded(
                                         flex: 2,
                                         child: GestureDetector(
-                                            onTap: () => launch(
-                                                "mailto:$soportEmail?subject=&body="),
+                                            onTap: () => {
+                                                  //UXCam: Llamamos el evento selectSoport
+                                                  UxcamTagueo().selectSoport(
+                                                      'Correo Soporte'),
+                                                  launch(
+                                                      "mailto:$soportEmail?subject=&body="),
+                                                },
                                             child: Column(
                                               children: [
                                                 Container(
@@ -303,6 +309,8 @@ class _SoporteState extends State<Soporte> {
   }
 
   Future<void> lanzarLlamada(String command) async {
+    //UXCam: Llamamos el evento selectSoport
+    UxcamTagueo().selectSoport('Llámar línea soporte');
     command = command.replaceAll(' ', '');
     String url = Platform.isIOS ? 'tel://$command' : 'tel://$command';
 
@@ -326,6 +334,8 @@ class _SoporteState extends State<Soporte> {
   Future<void> lanzarWhatssap(String command) async {
     var whatappURL_ios = "https://wa.me/+57$command?text=${Uri.parse("Hola")}";
 
+    //UXCam: Llamamos el evento selectSoport
+    UxcamTagueo().selectSoport('Soporte Whatssap');
     try {
       if (Platform.isIOS) {
         // for iOS phone only

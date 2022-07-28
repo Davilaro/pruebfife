@@ -86,7 +86,7 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      var sql = await db.rawQuery('''
       
       SELECT m.codigo, m.descripcion, m.ico  
       FROM Marca m
@@ -96,6 +96,18 @@ class DBProvider {
       ORDER BY m.orden ASC 
        
     ''');
+      if (sql.length > 1) {
+        sql = await db.rawQuery('''
+      
+      SELECT m.codigo, m.descripcion, m.ico  
+      FROM Marca m
+      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
+      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '$buscar'
+      GROUP BY p.marcacodigopideki 
+      ORDER BY m.orden ASC 
+       
+    ''');
+      }
 
       return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
     } catch (e) {
@@ -558,6 +570,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
           ? sql.map((e) => Productos.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error consulta cargarProductosInterno $e');
       return [];
     }
   }

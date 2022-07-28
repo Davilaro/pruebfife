@@ -23,7 +23,6 @@ class BannnerControllers extends GetxController {
   List<dynamic> listaBanners = [].obs;
 
   void cambiarSubCategoria(int value) {
-    print('hola res de aca $value');
     inicialControllerSubCategoria.value = value;
   }
 
@@ -31,9 +30,14 @@ class BannnerControllers extends GetxController {
     isVisitBanner.value = value;
   }
 
+  setCargoDatos(bool value) {
+    cargoDatos.value = value;
+  }
+
   void cargarDatosBanner(dynamic banners) {
+    setCargoDatos(false);
     if (banners.length > 0) {
-      cargoDatos.value = true;
+      setCargoDatos(true);
     }
     listaBanners = banners;
   }

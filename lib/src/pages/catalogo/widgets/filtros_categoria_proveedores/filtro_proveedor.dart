@@ -334,8 +334,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
     listSubCategorias.value = ['Todas'];
     String? codigoCategoria = await DBProvider.db
         .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
-    print(codigoCategoria);
-    print(dropdownValueCategoria);
     var resQuery =
         await DBProvider.db.consultarCategoriasSubCategorias(codigoCategoria);
     for (var i = 0; i < resQuery.length; i++) {
@@ -387,7 +385,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
           .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
       String? codigoSubCategoria = await DBProvider.db
           .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
-      print(codigoSubCategoria);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -417,7 +414,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
           .consultarCodigoCategoriaaPorNombre(dropdownValueCategoria);
       String? codigoSubCategoria = await DBProvider.db
           .consultarCodigoSubCategoriaPorNombre(dropdownValueSubCategoria);
-      print(codigo);
       Navigator.push(
           context,
           MaterialPageRoute(

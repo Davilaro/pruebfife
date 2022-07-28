@@ -8,6 +8,7 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,8 @@ class _FabricantesState extends State<Fabricantes> {
               "",
               element.codIndirecto,
               'ViewProviders'),
+          //UXCam: Llamamos el evento seeProvider
+          UxcamTagueo().seeProvider(element.nombrecomercial),
           _onClickCatalogo(element.empresa, context, provider,
               element.nombrecomercial, element.icono),
         },
@@ -200,6 +203,8 @@ class _FabricantesState extends State<Fabricantes> {
       if (controllerSearch.text.length > 2) {
         //FIREBASE: Llamamos el evento search
         TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
+        //UXCam: Llamamos el evento search
+        UxcamTagueo().search(controllerSearch.text);
         List listaAux = [];
         listaAllFabricantes.forEach((element) {
           listaAux.add(element.nombrecomercial);

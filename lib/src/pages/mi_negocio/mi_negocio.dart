@@ -15,6 +15,7 @@ import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
@@ -50,15 +51,17 @@ class _MiNegocioState extends State<MiNegocio> {
       Future.delayed(Duration(seconds: 0)).then((value) {
         alert.alertCustom(context);
       });
-      //UXCAM: Se define el nombre de la pantalla
-      FlutterUxcam.tagScreenName('MyBusinessPage');
     }
+    //UXCAM: Se define el nombre de la pantalla
+    FlutterUxcam.tagScreenName('MyBusinessPage');
     cargarArchivos();
     validarVersionActual(context);
     _validarVersion();
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Mi Negocio", "", "", "Mi Negocio", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Mi Negocio');
     super.initState();
   }
 
@@ -78,6 +81,8 @@ class _MiNegocioState extends State<MiNegocio> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -556,10 +561,12 @@ class _MiNegocioState extends State<MiNegocio> {
 
   cargarArchivos() async {
     try {
-      politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
-      terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+      if (prefs.usurioLogin == 1) {
+        politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
+        terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+      }
     } catch (e) {
-      print('se genero error $e');
+      print('Error al cagar archivos $e');
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -7,7 +6,7 @@ import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
-import 'package:emart/src/provider/crear_file.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
@@ -43,7 +42,7 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
-  final bannerPut = Get.put(BannnerControllers());
+
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
@@ -61,6 +60,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Home", "", "", "Home", 'PrincipalPage');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
   }
 
@@ -79,6 +80,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -319,7 +322,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
                         return Container();
                       } else {
                         double size = 90.0 * snapshot.data[0].parametro.length;
-                        print('valor $size');
                         return Obx(() => Visibility(
                               visible:
                                   controllerEncuesta.isVisibleEncuesta.value,
@@ -397,6 +399,9 @@ class _PrincipalPageState extends State<PrincipalPage> {
             "",
             "${cargoConfirmar.seccionesDinamicas[i].descripcion}",
             'HomePage');
+        //UXCam: Llamamos el evento seeMore
+        UxcamTagueo().seeMore(
+            "${cargoConfirmar.seccionesDinamicas[i].descripcion}", provider);
         provider.selectOptionMenu = 1;
         provider.setIsLocal = 0;
         cargoConfirmar.tabController.index = i;

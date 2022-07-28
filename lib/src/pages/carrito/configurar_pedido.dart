@@ -10,12 +10,14 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/pedido_realizado.dart';
 import 'package:emart/src/widget/simple_card.dart';
 import 'package:emart/src/widget/simple_card_condiciones_entrega.dart';
 import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -39,6 +41,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   @override
   Widget build(BuildContext context) {
+    //UXCAM: Se define el nombre de la pantalla
+    FlutterUxcam.tagScreenName('ConfirmOrderPage');
     cartProvider = Provider.of<CarroModelo>(context);
     final size = MediaQuery.of(context).size;
     Locale locale = Localizations.localeOf(context);
@@ -96,7 +100,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                           ],
                         );
                       } else {
-                        // Navigator.pop(context);
                         return CircularProgressIndicator();
                       }
                     },
@@ -118,7 +121,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: HexColor("#30C3A3"),
-          //border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(20),
         ),
         height: 45,
@@ -141,9 +143,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   Widget _total(size, cartProvider, format) {
     return Container(
-      // height: size.height * 0.2,
       child: Container(
-        // width: size.width * 0.9,
         alignment: Alignment.topLeft,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +154,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                         .format(cartProvider.getTotal)
                         .replaceAll(',00', ''),
                 style: diseno_valores()),
-
             Text(
               '* Este pedido tiene incluido el iva',
               style: TextStyle(color: ConstantesColores.verde),
@@ -169,12 +168,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                             .replaceAll(',00', ''),
                     style: TextStyle(color: Colors.red[600]),
                   )
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // Text(
-            //     'Estos productos serán entregados según el itinerario del proveedor',
-            //     style: TextStyle(fontSize: 15.0)),
           ],
         ),
       ),
@@ -227,7 +220,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     DateTime now = DateTime.now();
     String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
     var numeroAleatorio = Random();
-    String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
+    String numDoc = DateFormat('yyyyMMddHHmmssSSS').format(now);
     numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
 
     ValidarPedido validar = await Servicies().enviarPedido(
@@ -243,6 +236,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       //FIREBASE: Llamamos el evento purchase
       TagueoFirebase().sendAnalityticsPurchase(
           cartProvider.getTotal, listaProductosPedidos, numDoc);
+      //UXCam: Llamamos el evento confirmOrder
+      UxcamTagueo().confirmOrder(listaProductosPedidos, cartProvider);
       cartProvider.guardarValorCompra = 0;
       cartProvider.guardarValorAhorro = 0;
 
@@ -351,22 +346,4 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       ],
     );
   }
-
-  // _irSoporte() {
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => Soporte(numEmpresa: widget.numEmpresa,)),
-  //     );
-
-  // }
-
-  // _irMenuPrincipal() {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => PrincipalPage()),
-  //     );
-  // }
-
 }

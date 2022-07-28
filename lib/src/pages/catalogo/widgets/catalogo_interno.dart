@@ -7,6 +7,7 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/widget/logica_actualizar.dart';
@@ -131,6 +132,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       //FIREBASE: Llamamos el evento view_item_list
       TagueoFirebase().sendAnalityticViewItemList(data, nameCategory);
     }
+
     for (var element in data) {
       bool isProductoPromo = false;
       if (widget.tipoCategoria != 2) {
@@ -141,6 +143,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         element: productos,
         numEmpresa: prefs.numEmpresa,
         isCategoriaPromos: isProductoPromo,
+        index: data.indexOf(element),
       );
 
       opciones.add(widgetTemp);
@@ -167,6 +170,8 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
     } else {
       //FIREBASE: Llamamos el evento search
       TagueoFirebase().sendAnalityticsSearch(_controllerSearch.text);
+      //UXCam: Llamamos el evento search
+      UxcamTagueo().search(_controllerSearch.text);
       List listaAux = [];
       listaProducto.value = [];
       listaAllProducts.forEach((element) {

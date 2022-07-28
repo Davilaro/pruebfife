@@ -63,6 +63,7 @@ class CatalogoPoductosCategorias extends StatelessWidget {
         element: productos,
         numEmpresa: numEmpresa,
         isCategoriaPromos: false,
+        index: data.indexOf(element),
       );
 
       opciones.add(widgetTemp);
