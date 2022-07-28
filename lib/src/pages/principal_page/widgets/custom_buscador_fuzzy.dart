@@ -317,7 +317,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
             widget.codigoMarca);
-        print(listaAllProducts.toString());
         listaProducto.value = listaAllProducts;
       }
     } else {
@@ -330,7 +329,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           widget.codigoMarca);
       listaProducto.value = listaAllProducts;
     }
-    print(listaProducto.toString());
   }
 
   void runFilter(String enteredKeyword) {

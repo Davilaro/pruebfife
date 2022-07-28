@@ -23,7 +23,6 @@ class BannnerControllers extends GetxController {
   List<dynamic> listaBanners = [].obs;
 
   void cambiarSubCategoria(int value) {
-    print('hola res de aca $value');
     inicialControllerSubCategoria.value = value;
   }
 

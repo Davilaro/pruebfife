@@ -72,7 +72,7 @@ class AppUtil {
         return true;
       }
     } catch (ex) {
-      print('hola data error ${ex.toString()}');
+      print('Error en downloadZip ${ex.toString()}');
       return false;
     }
 
@@ -103,7 +103,7 @@ class AppUtil {
       req = await http.Client().get(Uri.parse(url));
       file = File('$dir$fileName');
     } catch (e) {
-      print('error al descar archivo $e');
+      print('error al descargar la base datos $e');
     }
     return await file.writeAsBytes(
       req.bodyBytes,

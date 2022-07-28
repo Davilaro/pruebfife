@@ -312,7 +312,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
   cargarMarca() async {
     String? codigoSubCategoria = await DBProvider.db
         .consultarCodigoSubCategoriaPorNombre(widget.nombreCategoria);
-    print(codigoSubCategoria);
     var resQuery =
         await DBProvider.db.consultarMarcasFiltro("", codigoSubCategoria, 3);
     for (var i = 0; i < resQuery.length; i++) {

@@ -29,7 +29,6 @@ class UxcamTagueo {
 
   void activationCode(
       String code, String estado, bool privacyPolicy, bool dataPolicy) {
-    print('espuesta data $code -- $estado -- $privacyPolicy --- $dataPolicy');
     FlutterUxcam.logEventWithProperties("activationCode", {
       "code": code,
       "answer": estado,
@@ -242,31 +241,31 @@ class UxcamTagueo {
   }
 
 // quedo pendiente implemetar este evento en realizar pedido en el carrito
-  void clickPlaceOrder(
-    CarroModelo cartProvider,
-    List<Productos> listProducts,
-  ) {
-    List<Object> productos = [];
+  void clickPlaceOrder(CarroModelo cartProvider) {
     try {
-      if (cartProvider.getCantidadItems != 0) {
-        listProducts.forEach((product) {
-          dynamic cantidad = PedidoEmart.obtenerValor(product).toString();
-
-          int quantity = int.parse(cantidad);
-          var subTotal = product.precio * quantity;
-
-          productos.add({
-            "Subtotal": subTotal,
-            "description": product.nombrecomercial,
-            "quantity": quantity,
-            "price": product.precio,
-          });
-        });
-        FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
-          "screen": 'Check out 1',
-          "items": productos,
-        });
-      }
+      List<Object> listaProductos = [];
+      PedidoEmart.listaValoresPedido!.forEach((key, value) {
+        if (int.parse(value) > 0) {
+          if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
+            Productos producto = PedidoEmart.listaProductos![key]!;
+            dynamic cantidad = PedidoEmart.obtenerValor(producto).toString();
+            int quantity = int.parse(cantidad);
+            // var subTotal = producto.precio * quantity;
+            listaProductos.add({
+              "provider": producto.fabricante,
+              "Subtotal": cartProvider.getListaFabricante[producto.fabricante]
+                  ["precioFinal"],
+              "description": producto.nombrecomercial,
+              "quantity": quantity,
+              "price": producto.precio,
+            });
+          }
+        }
+      });
+      FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
+        "screen": 'Check out 1',
+        "items": listaProductos,
+      });
     } catch (e) {
       print('Error tagueo clickPlaceOrder $e');
     }

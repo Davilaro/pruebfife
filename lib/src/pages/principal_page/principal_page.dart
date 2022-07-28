@@ -321,7 +321,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
                         return Container();
                       } else {
                         double size = 90.0 * snapshot.data[0].parametro.length;
-                        print('valor $size');
                         return Obx(() => Visibility(
                               visible:
                                   controllerEncuesta.isVisibleEncuesta.value,
@@ -405,7 +404,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
         provider.selectOptionMenu = 1;
         provider.setIsLocal = 0;
         cargoConfirmar.tabController.index = i;
-        print('se ejecuto $i');
         cargoConfirmar.cargoBaseDatos(i);
         break;
       }

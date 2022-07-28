@@ -51,9 +51,9 @@ class _MiNegocioState extends State<MiNegocio> {
       Future.delayed(Duration(seconds: 0)).then((value) {
         alert.alertCustom(context);
       });
-      //UXCAM: Se define el nombre de la pantalla
-      FlutterUxcam.tagScreenName('MyBusinessPage');
     }
+    //UXCAM: Se define el nombre de la pantalla
+    FlutterUxcam.tagScreenName('MyBusinessPage');
     cargarArchivos();
     validarVersionActual(context);
     _validarVersion();
@@ -561,10 +561,12 @@ class _MiNegocioState extends State<MiNegocio> {
 
   cargarArchivos() async {
     try {
-      politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
-      terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+      if (prefs.usurioLogin == 1) {
+        politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
+        terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+      }
     } catch (e) {
-      print('se genero error $e');
+      print('Error al cagar archivos $e');
     }
   }
 

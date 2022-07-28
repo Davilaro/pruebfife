@@ -92,7 +92,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                   child: GestureDetector(
-                    onTap: () => {_configurarPedido(size)},
+                    onTap: () => {_configurarPedido(size, cartProvider)},
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(10),
@@ -670,11 +670,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  _configurarPedido(size) {
+  _configurarPedido(size, CarroModelo cartProvider) {
     try {
       String fabricantes = _validarPedidosMinimos();
       if (_verificarCantidadGrupos() > 0) {
         if (fabricantes == "") {
+          //UXCam: Llamamos el evento clickPlaceOrder
+          UxcamTagueo().clickPlaceOrder(cartProvider);
           _irConfigurarPedido();
         } else {
           if (_verificarCantidadGrupos() == fabricantes.split(",").length) {

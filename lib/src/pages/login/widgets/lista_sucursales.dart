@@ -214,9 +214,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
     var userUxCam = (elemento.nit + elemento.nombre).replaceAll(' ', '');
-    print('user UXCam $userUxCam');
-    //UXCam: se asigna el nombre de usuario
-    // FlutterUxcam.setUserIdentity('$userUxCam');
     await pr.show();
     await cargarInformacion(provider);
     if (prefs.usurioLogin == 1) {
