@@ -3,6 +3,7 @@ import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,17 +22,6 @@ class BtnOpciones extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      // child: FutureBuilder(
-      //     future: DBProvider.db.consultarSecciones(),
-      //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      //       if (!snapshot.hasData) {
-      //         return Center(
-      //           child: CircularProgressIndicator(),
-      //         );
-      //       } else {
-      //         return Row(children: _cargarSecciones(snapshot.data, context));
-      //       }
-      //     }),
       child: Row(
           children:
               _cargarSecciones(cargoConfirmar.seccionesDinamicas, context)),
@@ -62,6 +52,9 @@ class BtnOpciones extends StatelessWidget {
                             "",
                             "${seccion.descripcion}",
                             "PrincipalPage"),
+                        //UXCam: Llamamos el evento selectSeccion
+                        UxcamTagueo()
+                            .selectSeccion(seccion.descripcion.toString()),
                         provider.selectOptionMenu = 1,
                         provider.setIsLocal = 0,
                         cargoConfirmar.tabController.index = i,

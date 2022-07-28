@@ -1,4 +1,5 @@
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -217,6 +218,8 @@ class PedidoRealizado extends StatelessWidget {
   }
 
   _irSoporte(context) {
+    //UXCam: Llamamos el evento clickSoport
+    UxcamTagueo().clickSoport();
     Navigator.push(
       context,
       MaterialPageRoute(

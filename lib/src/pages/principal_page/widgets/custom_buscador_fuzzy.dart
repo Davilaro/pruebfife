@@ -6,6 +6,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
@@ -179,16 +180,28 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
 
-    for (var element in data) {
-      Productos productos = element;
+    for (var i = 0; i < data.length; i++) {
+      Productos productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
         isCategoriaPromos: false,
+        index: i,
       );
 
       opciones.add(widgetTemp);
     }
+
+    // for (var element in data) {
+    //   Productos productos = element;
+    //   final widgetTemp = InputValoresCatalogo(
+    //     element: productos,
+    //     numEmpresa: widget.numEmpresa,
+    //     isCategoriaPromos: false,
+    //   );
+
+    //   opciones.add(widgetTemp);
+    // }
 
     return opciones;
   }
@@ -225,6 +238,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                 if (val.length > 3) {
                   //FIREBASE: Llamamos el evento search
                   TagueoFirebase().sendAnalityticsSearch(val);
+                  //UXCam: Llamamos el evento search
+                  UxcamTagueo().search(val);
                 }
                 runFilter(_controllerSearch.text);
               })),
@@ -302,7 +317,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
             widget.codigoMarca);
-        print(listaAllProducts.toString());
         listaProducto.value = listaAllProducts;
       }
     } else {
@@ -315,7 +329,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           widget.codigoMarca);
       listaProducto.value = listaAllProducts;
     }
-    print(listaProducto.toString());
   }
 
   void runFilter(String enteredKeyword) {

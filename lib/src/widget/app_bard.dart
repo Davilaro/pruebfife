@@ -1,3 +1,4 @@
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
@@ -22,6 +23,8 @@ class AppBarGeneral extends StatelessWidget {
         child: new IconButton(
           icon: Image.asset('assets/boton_soporte.png'),
           onPressed: () => {
+            //UXCam: Llamamos el evento clickSoport
+            UxcamTagueo().clickSoport(),
             Navigator.push(
               context,
               MaterialPageRoute(
