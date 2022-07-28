@@ -3,12 +3,14 @@ import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dar
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
+import 'package:emart/src/widget/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -62,14 +64,27 @@ class _FabricantesState extends State<Fabricantes> {
                 () => Container(
                     height: size.height * 0.7,
                     margin: EdgeInsets.only(top: 10),
-                    child: GridView.count(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1,
-                        crossAxisSpacing: 1.0, // Espaciado vertical
-                        mainAxisSpacing: 1.0,
-                        children: _cargarFabricantes(
-                                listaFabricante, context, provider)
-                            .toList())),
+                    child: RefreshIndicator(
+                      color: ConstantesColores.azul_precio,
+                      backgroundColor: ConstantesColores.agua_marina,
+                      onRefresh: () async {
+                        await LogicaActualizar().actualizarDB();
+
+                        setState(() {
+                          initState();
+                          (context as Element).reassemble();
+                        });
+                        return Future<void>.delayed(const Duration(seconds: 3));
+                      },
+                      child: GridView.count(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 1.0, // Espaciado vertical
+                          mainAxisSpacing: 1.0,
+                          children: _cargarFabricantes(
+                                  listaFabricante, context, provider)
+                              .toList()),
+                    )),
               ),
             ),
           ],

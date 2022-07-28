@@ -165,7 +165,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     : Get.width * 0.15,
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 2.0, left: 10.0),
-                child: Column(
+                child: Wrap(
                   children: [
                     Text(
                       '${element.nombre}',

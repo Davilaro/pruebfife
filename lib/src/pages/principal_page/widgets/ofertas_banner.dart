@@ -29,7 +29,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
   @override
   void initState() {
     super.initState();
-      cargarBanners();
+    cargarBanners();
   }
 
   @override
