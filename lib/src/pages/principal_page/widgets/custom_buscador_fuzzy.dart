@@ -403,10 +403,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       );
     }
     if (widget.locacionFiltro == "categoria") {
-      print("NOMBREC ${widget.nombreCategoria}"); //sub
-      print("NOMBRECC ${widget.codCategoria}"); //sub
-      print("NOMBRE CC ${widget.codigoCategoria}");
-      print("NOMBRECS${widget.codigoSubCategoria}");
       Navigator.push(
         context,
         MaterialPageRoute(
