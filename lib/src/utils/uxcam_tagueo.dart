@@ -13,6 +13,31 @@ class UxcamTagueo {
     });
   }
 
+  void sendActivationCode(String metodo, String estado) {
+    FlutterUxcam.logEventWithProperties("sendActivationCode", {
+      "method_sent": metodo,
+      "answer": estado,
+    });
+  }
+
+  void manualActivation(String code, String estado) {
+    FlutterUxcam.logEventWithProperties("manualActivation", {
+      "code": code,
+      "answer": estado,
+    });
+  }
+
+  void activationCode(
+      String code, String estado, bool privacyPolicy, bool dataPolicy) {
+    print('espuesta data $code -- $estado -- $privacyPolicy --- $dataPolicy');
+    FlutterUxcam.logEventWithProperties("activationCode", {
+      "code": code,
+      "answer": estado,
+      "privacy_policy": privacyPolicy,
+      "data_policy": dataPolicy
+    });
+  }
+
   void selectBanner(String name, String ubicacion) {
     FlutterUxcam.logEventWithProperties("clickBanner", {
       "name": name,

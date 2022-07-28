@@ -9,6 +9,7 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/pages/login/widgets/bienvenido.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/politicas.dart';
 import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
@@ -586,7 +587,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
         TagueoFirebase()
             .sendAnalityticsActivationCodeReceived(_controllerCodigo.text);
         _cargandoCodigoVerificacion(
-            widget.codigoRespuesta, _controllerCodigo.text);
+            widget.codigoRespuesta, _controllerCodigo.text, estado, estado2);
       } else {
         mostrarAlert(context, 'Se debe aceptar las politicas', null);
       }
@@ -603,7 +604,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     }
   }*/
 
-  void _cargandoCodigoVerificacion(int codigo, String codVerificado) async {
+  void _cargandoCodigoVerificacion(
+      int codigo, String codVerificado, bool estado, bool estado2) async {
     prEnviarCodigo = ProgressDialog(context);
     prEnviarCodigo.style(
         message: 'Estamos validando el código para activar tu cuenta.');
@@ -611,23 +613,30 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
     await prEnviarCodigo.show();
-    await enviarCodigoVerificacion(context, codigo, codVerificado);
+    await enviarCodigoVerificacion(
+        context, codigo, codVerificado, estado, estado2);
     await prEnviarCodigo.hide();
   }
 
-  enviarCodigoVerificacion(
-      BuildContext context, int codigo, String codigoVerificacion) async {
+  enviarCodigoVerificacion(BuildContext context, int codigo,
+      String codigoVerificacion, bool estado, bool estado2) async {
     Validar validar =
         await Servicies().enviarCodigoVerificacion(codigo, codigoVerificacion);
 
     if (validar.activado == 'OK') {
       //FIREBASE: Llamamos el evento activation_code_succes
       TagueoFirebase().sendAnalityticsActivationCodeSucces("OK");
+      //UXCam: Llamamos el evento activationCode
+      UxcamTagueo()
+          .activationCode(codigoVerificacion, 'satisfactorio', estado, estado2);
       await prEnviarCodigo.hide();
       _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error
       TagueoFirebase().sendAnalityticsActivationCodeError("ERROR");
+      //UXCam: Llamamos el evento activationCode
+      UxcamTagueo()
+          .activationCode(codigoVerificacion, 'erróneo', estado, estado2);
       await prEnviarCodigo.hide();
       mostrarAlert(
           context,
