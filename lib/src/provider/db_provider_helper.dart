@@ -202,7 +202,7 @@ class DBProviderHelper {
     }
   }
 
-  Future<List<Historico>> consultarGrupoHistorico(int numeroDoc) async {
+  Future<List<Historico>> consultarGrupoHistorico(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -216,7 +216,7 @@ class DBProviderHelper {
   }
 
   Future<List<Historico>> consultarDetalleGrupo(
-      int numeroDoc, String fabricante) async {
+      String numeroDoc, String fabricante) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''

@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/Sugerido.dart';
 import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/src/modelos/productos.dart';
@@ -28,9 +29,9 @@ class PedidoEmart {
     int items = 0;
 
     listaValoresPedidoAgregados!.forEach((key, value) {
-      if (value) {
-        String valor = listaControllersPedido![key]!.text;
-        items += int.parse(valor);
+      String valor1 = listaControllersPedido![key]!.text;
+      if (valor1 != "") {
+        items += int.parse(valor1);
       }
     });
 

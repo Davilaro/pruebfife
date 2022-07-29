@@ -40,7 +40,7 @@ class AccionesBartCarrito extends StatelessWidget {
                 child: Obx(
                   () => Container(
                       height: 20,
-                      width: 20,
+                      width: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,

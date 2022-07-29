@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
@@ -37,9 +38,11 @@ class ExpansionCardLast extends StatefulWidget {
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   bool _cargando = false;
   RxBool estadoBoton = true.obs;
+  final controlador = Get.find<CambioEstadoProductos>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     // double cardExpadend = 310;
     // double cardNotExpadend = 109;
     return Padding(
@@ -68,6 +71,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   Widget _body(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    determinarBotonCarrito("${widget.historico.numeroDoc}");
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -212,9 +216,11 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   setState(() {
                     _cargando = true;
                   });
+                  determinarBotonCarrito(widget.historico.numeroDoc!);
                   _cargarPedido(widget.historico.numeroDoc!.toString(),
                       estadoBoton.value, widget.providerDatos);
-                  estadoBoton.value = !estadoBoton.value;
+
+                  // estadoBoton.value = !estadoBoton.value;
                 },
               ),
             ),
@@ -287,7 +293,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       List<Historico> datosDetalle =
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       datosDetalle.forEach((element) {
-        menos(element.codigoRef!, element.cantidad!);
+        menos(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
       });
     }
     actualizarEstadoPedido(providerDatos, numeroDoc);
@@ -295,18 +301,17 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     _cargando = false;
   }
 
-  menos(String prop, int cantidad) async {
+  menos(String prop, int cantidad, String numeroDoc) async {
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
     if (producto.codigo != "") {
-      String valorInicial = PedidoEmart.obtenerValor(producto)!;
+      //String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
       //if (valorInicial == "") {
       // } else {
       //  int valorResta = int.parse(valorInicial) - cantidad;
       //  if (valorResta <= 0) {
       //   setState(() {
-      //     PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-      //      PedidoEmart.registrarValoresPedido(producto, '0', false);
+
       //    });
       //  } else {
       int nuevaCantidad = PedidoEmart
@@ -314,12 +319,22 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
               ""
           ? cantidad
           : (int.parse(
-                  PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
+                  PedidoEmart.listaControllersPedido![producto.codigo]!.text) -
               cantidad);
       setState(() {
-        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-            "$nuevaCantidad";
-        PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
+        if (nuevaCantidad == 0) {
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+          PedidoEmart.registrarValoresPedido(producto, '0', false);
+          if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
+            // controlador.mapaHistoricos[numeroDoc] = false;
+            controlador.mapaHistoricos.update(numeroDoc, (value) => false);
+          }
+        } else {
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+              "$nuevaCantidad";
+          PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
+        }
+        determinarBotonCarrito(numeroDoc);
       });
       //  }
       //  }
@@ -328,7 +343,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     }
   }
 
-  mas(String prod, int cantidad) async {
+  mas(String prod, int cantidad, String numeroDoc) async {
     // final cartProvider = Provider.of<CarroModelo>(context);
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
     if (producto.codigo != "") {
@@ -350,6 +365,12 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
             "$nuevaCantidad";
         PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
+        if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
+          controlador.mapaHistoricos.update(numeroDoc, (value) => true);
+        } else {
+          controlador.mapaHistoricos.addAll({numeroDoc: true});
+        }
+        determinarBotonCarrito(numeroDoc);
       });
       // }
 
@@ -365,8 +386,18 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   cargarCadaProducto(List<Historico> datosDetalle) {
     datosDetalle.forEach((element) {
-      mas(element.codigoRef!, element.cantidad!);
+      mas(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
     });
+  }
+
+  void determinarBotonCarrito(String numeroDoc) {
+    if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
+      if (controlador.mapaHistoricos[numeroDoc]) {
+        estadoBoton.value = false;
+      } else {
+        estadoBoton.value = true;
+      }
+    }
   }
 }
 

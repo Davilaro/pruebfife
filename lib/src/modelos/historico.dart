@@ -17,7 +17,7 @@ class Historico {
     this.estado,
   });
 
-  int? numeroDoc;
+  String? numeroDoc;
   String? codigoRef;
   String? nombreProducto;
   int? cantidad;
@@ -28,7 +28,7 @@ class Historico {
   bool? estado;
 
   factory Historico.fromJson(Map<String, dynamic> json) => Historico(
-      numeroDoc: json["NumeroDoc"] == null ? 0 : json["NumeroDoc"],
+      numeroDoc: json["NumeroDoc"] == null ? "" : json["NumeroDoc"],
       codigoRef: json["codigoref"] == null ? "" : json["codigoref"],
       nombreProducto:
           json["nombreproducto"] == null ? "" : json["nombreproducto"],
