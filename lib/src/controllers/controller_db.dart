@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 class ControlBaseDatos extends GetxController {
   RxInt cambioTab = 0.obs;
   var seccionesDinamicas = [].obs;
-  RxBool isDisponibleFiltro = true.obs;
 
   late TabController tabController;
 

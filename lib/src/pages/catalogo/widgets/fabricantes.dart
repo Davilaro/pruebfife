@@ -71,7 +71,8 @@ class _FabricantesState extends State<Fabricantes> {
                         await LogicaActualizar().actualizarDB();
 
                         setState(() {
-                          cargarLista();
+                          initState();
+                          (context as Element).reassemble();
                         });
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },
@@ -153,7 +154,6 @@ class _FabricantesState extends State<Fabricantes> {
                   nombreCategoria: nombre,
                   img: icono,
                   locacionFiltro: "proveedor",
-                  codigoProveedor: codigo,
                 )));
   }
 

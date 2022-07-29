@@ -16,12 +16,8 @@ class CustonNavigatorBar extends StatelessWidget {
         elevation: 0,
         currentIndex: provider.selectOptionMenu,
         onTap: (int i) {
-          provider.setIsLocal = 0;
+          provider.setIsLocal = 1;
           provider.selectOptionMenu = i;
-          Navigator.pushReplacementNamed(
-            context,
-            'tab_opciones',
-          );
         },
         //showSelectedLabels: false,   // <-- HERE
         //showUnselectedLabels: false, // <-- AND HERE

@@ -39,6 +39,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     FlutterUxcam.tagScreenName('CategoriesPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
+
     super.initState();
   }
 
@@ -66,7 +67,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                       onRefresh: () async {
                         await LogicaActualizar().actualizarDB();
                         setState(() {
-                          cargarLista();
+                          initState();
+                          (context as Element).reassemble();
                         });
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },
@@ -169,10 +171,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => TabOpcionesCategorias(
-                  listaCategorias: listaSubCategorias,
-                  nombreCategoria: nombre,
-                )));
+            builder: (context) =>
+                TabOpcionesCategorias(listaCategorias: listaSubCategorias)));
   }
 
   _campoTexto(BuildContext context, Debouncer onSearchDebouncer) {
