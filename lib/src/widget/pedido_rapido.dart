@@ -106,7 +106,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
               //child: (seleccion == 1
               //    ? _ordenSugerida(size, cartProvider, providerDatos)
               //   : _ultimaOrden(size, cartProvider)))
-              child: _ultimaOrden(size, cartProvider)),
+              child: _ultimaOrden(size, cartProvider, providerDatos)),
         ));
   }
 
@@ -472,9 +472,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     });
   }
 
-  Widget _ultimaOrden(Size size, cartProvider) {
-    final providerDatos = Provider.of<DatosListas>(context);
-
+  Widget _ultimaOrden(Size size, cartProvider, providerDatos) {
+    //final providerDatos = Provider.of<DatosListas>(context);
     return FutureBuilder(
         future: providerDatos.getListaHistoricosHelper(
             filtro, fechaInicial, fechaFinal),

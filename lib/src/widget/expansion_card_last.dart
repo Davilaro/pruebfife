@@ -324,7 +324,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       //  }
       //  }
 
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
     }
   }
 
@@ -353,7 +353,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       });
       // }
 
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
     }
 
     // activo = false;
