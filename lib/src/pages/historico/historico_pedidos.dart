@@ -90,7 +90,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             Navigator.pushReplacementNamed(
               context,
               'tab_opciones',
-            ).timeout(Duration(seconds: 3));
+            );
             return Future<void>.delayed(const Duration(seconds: 3));
           },
           child: SingleChildScrollView(

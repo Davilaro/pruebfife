@@ -81,8 +81,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
                           setState(() {
-                            initState();
-                            (context as Element).reassemble();
+                            cargarProductos();
                           });
 
                           return Future<void>.delayed(
@@ -160,6 +159,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         catalogSearchViewModel.precioMinimo.value,
         catalogSearchViewModel.precioMaximo.value,
         0,
+        "",
         "");
     listaProducto.value = listaAllProducts;
   }
