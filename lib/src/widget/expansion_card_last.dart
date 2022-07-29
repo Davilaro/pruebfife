@@ -303,7 +303,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         menos(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
       });
     }
-    actualizarEstadoPedido(providerDatos, numeroDoc);
+    actualizarEstadoPedido(widget.providerDatos, numeroDoc);
     calcularValorTotal(widget.cartProvider);
     _cargando = false;
   }
@@ -409,12 +409,12 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         estadoBoton.value = true;
       }
     }
-    print("IMPORTANTE${controlador.mapaHistoricos.toString()}");
   }
 }
 
-void calcularValorTotal(CarroModelo cartProvider) {
+void calcularValorTotal(cartProvider) {
   double valorTotal = 0;
+  print("IMPOR${cartProvider.getTotal}");
   int cantidad = 0;
 
   PedidoEmart.listaValoresPedido!.forEach((key, value) {

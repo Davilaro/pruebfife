@@ -94,10 +94,10 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
-    PedidoEmart.listaControllersPedido = new Map();
-    PedidoEmart.listaValoresPedido = new Map();
-    PedidoEmart.listaProductos = new Map();
-    PedidoEmart.listaValoresPedidoAgregados = new Map();
+    //PedidoEmart.listaControllersPedido = new Map();
+    //PedidoEmart.listaValoresPedido = new Map();
+//PedidoEmart.listaProductos = new Map();
+    //PedidoEmart.listaValoresPedidoAgregados = new Map();
 
     providerDatos.guardarListaSugueridoHelper =
         await DBProviderHelper.db.consultarSugueridoHelper();
@@ -107,8 +107,8 @@ class _TabOpcionesState extends State<TabOpciones>
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
 
-    var listaProductos =
-        await DBProvider.db.cargarProductos('', 10, '', 0.0, 1000000000.0, "");
+    var listaProductos = await DBProvider.db
+        .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
     for (var i = 0; i < listaProductos.length; i++) {
       PedidoEmart.listaProductos!
           .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
@@ -122,7 +122,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
     String? token = PushNotificationServer.token as String;
     print('Token: $token');
-    setState(() {});
+    //setState(() {});
   }
 
   void cargarSecciones() async {

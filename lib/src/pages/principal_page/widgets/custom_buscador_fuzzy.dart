@@ -1,10 +1,11 @@
+import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -35,6 +36,7 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final String? codigoSubCategoria;
   final String? codigoCategoria;
   final String? locacionFiltro;
+  final String codigoProveedor;
 
   const CustomBuscardorFuzzy(
       {Key? key,
@@ -50,7 +52,8 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       this.codigoMarca,
       this.codigoSubCategoria,
       this.codigoCategoria,
-      required this.locacionFiltro})
+      required this.locacionFiltro,
+      required this.codigoProveedor})
       : super(key: key);
 
   @override
@@ -63,15 +66,17 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   RxList<dynamic> listaProducto = <dynamic>[].obs;
   List<dynamic> listaAllProducts = [];
   final TextEditingController _controllerSearch = TextEditingController();
-
+  final controlador = Get.find<ControlBaseDatos>();
   @override
   void initState() {
     cargarProductos();
+    print("IMPORT${widget.codigoProveedor}");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.didUpdateWidget(super.widget);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
@@ -94,6 +99,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       icon: new Icon(Icons.arrow_back_ios,
                           color: HexColor("#30C3A3")),
                       onPressed: () {
+                        controlador.isDisponibleFiltro.value = true;
                         Navigator.of(context).pop();
                         catalogSearchViewModel.setPrecioMinimo(0);
                         catalogSearchViewModel.setPrecioMaximo(100000);
@@ -104,7 +110,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   ),
                   elevation: 0,
                   actions: <Widget>[
-                    BotonActualizar(),
+                    Visibility(
+                        visible: controlador.isDisponibleFiltro.value,
+                        child: BotonActualizar()),
                     AccionesBartCarrito(esCarrito: false),
                   ],
                 )
@@ -114,10 +122,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             backgroundColor: ConstantesColores.agua_marina,
             onRefresh: () async {
               await LogicaActualizar().actualizarDB();
-
               setState(() {
-                initState();
-                (context as Element).reassemble();
+                cargarProductos();
               });
               return Future<void>.delayed(const Duration(seconds: 3));
             },
@@ -136,13 +142,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                             Expanded(
                               child: _buscador(context, onSearchDebouncer),
                             ),
-                            GestureDetector(
-                              onTap: () => {_irFiltro()},
-                              child: Container(
-                                margin: EdgeInsets.only(right: 30, bottom: 10),
-                                child: GestureDetector(
-                                  child:
-                                      SvgPicture.asset('assets/filtro_btn.svg'),
+                            Visibility(
+                              visible:
+                                  controlador.isDisponibleFiltro.value == true,
+                              child: GestureDetector(
+                                onTap: () => {_irFiltro()},
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.only(right: 30, bottom: 10),
+                                  child: GestureDetector(
+                                    child: SvgPicture.asset(
+                                        'assets/filtro_btn.svg'),
+                                  ),
                                 ),
                               ),
                             )
@@ -160,7 +171,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   Container(
                     height: Get.height * 0.8,
                     width: size.width * 1,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+                    padding: EdgeInsets.fromLTRB(
+                        10, 10, 10, widget.isActiveBanner ? 240 : 110),
                     child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4.0,
@@ -172,6 +184,15 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   ),
                 ],
               ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: CustonNavigatorBar(),
             ),
           ),
         ));
@@ -255,7 +276,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
             0,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 2) {
@@ -265,7 +287,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
             0,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
@@ -275,7 +298,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 3) {
@@ -285,7 +309,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
@@ -295,18 +320,20 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 6) {
         listaAllProducts = await DBProvider.db.cargarProductosFiltroProveedores(
-            widget.codigoCategoria,
+            widget.codCategoria,
             widget.tipoCategoria,
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
             widget.codigoSubCategoria,
-            widget.codigoMarca);
+            widget.codigoMarca,
+            widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 7) {
@@ -316,6 +343,19 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             '',
             catalogSearchViewModel.precioMinimo.value,
             catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        print(listaAllProducts.toString());
+        listaProducto.value = listaAllProducts;
+      }
+      //para el filtro de categorias
+      if (widget.claseProducto == 8) {
+        listaAllProducts = await DBProvider.db.cargarProductosFiltroCategoria(
+            widget.codigoCategoria,
+            widget.tipoCategoria,
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoSubCategoria,
             widget.codigoMarca);
         listaProducto.value = listaAllProducts;
       }
@@ -326,7 +366,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           '',
           catalogSearchViewModel.precioMinimo.value,
           catalogSearchViewModel.precioMaximo.value,
-          widget.codigoMarca);
+          widget.codigoMarca,
+          widget.codigoProveedor);
       listaProducto.value = listaAllProducts;
     }
   }
@@ -354,7 +395,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-  _irFiltro() {
+  _irFiltro() async {
     if (widget.locacionFiltro == "proveedor") {
       Navigator.push(
         context,
@@ -363,6 +404,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   codCategoria: widget.codCategoria!,
                   nombreCategoria: widget.nombreCategoria!,
                   urlImagen: widget.img,
+                  codigoProveedor: widget.codigoProveedor,
                 )),
       );
     }
@@ -382,10 +424,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         context,
         MaterialPageRoute(
             builder: (context) => FiltroCategoria(
-                  codCategoria: widget.codigoCategoria,
+                  codCategoria: widget.codCategoria,
                   nombreCategoria: widget.nombreCategoria,
                   urlImagen: widget.img,
-                  codSubCategoria: widget.codigoSubCategoria,
+                  codSubCategoria: widget.codCategoria,
                 )),
       );
     }
