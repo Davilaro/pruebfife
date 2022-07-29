@@ -13,19 +13,19 @@ String listaSucursalesDataToJson(ListaSucursalesData data) =>
     json.encode(data.toJson());
 
 class ListaSucursalesData {
-  ListaSucursalesData({
-    this.codigo,
-    this.nombre,
-    this.razonsocial,
-    this.nit,
-    this.direccion,
-    this.ciudad,
-    this.telefono,
-    this.fabricantes,
-    this.codigomeals,
-    this.codigonutresa,
-    this.codigozenu,
-  });
+  ListaSucursalesData(
+      {this.codigo,
+      this.nombre,
+      this.razonsocial,
+      this.nit,
+      this.direccion,
+      this.ciudad,
+      this.telefono,
+      this.fabricantes,
+      this.codigomeals,
+      this.codigonutresa,
+      this.codigozenu,
+      this.codigopadrepideky});
 
   String? codigo;
   String? nombre;
@@ -38,6 +38,7 @@ class ListaSucursalesData {
   String? codigonutresa;
   String? codigozenu;
   String? codigomeals;
+  String? codigopadrepideky;
 
   factory ListaSucursalesData.fromJson(Map<String, dynamic> json) =>
       ListaSucursalesData(
@@ -51,6 +52,7 @@ class ListaSucursalesData {
         codigomeals: json["codigomeals"],
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
+        codigopadrepideky: json["codigopadrepideky"],
         fabricantes: List<Fabricantes>.from(
             json["fabricantes"].map((x) => Fabricantes.fromJson(x))),
       );
@@ -67,5 +69,6 @@ class ListaSucursalesData {
         "codigomeals": codigomeals,
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
+        "codigopadrepideky": codigopadrepideky,
       };
 }

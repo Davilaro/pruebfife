@@ -10,6 +10,7 @@ class LogicaActualizar {
         prefs.codigonutresa,
         prefs.codigozenu,
         prefs.codigomeals,
+        prefs.codigopadrepideky,
         false);
     await AppUtil.appUtil.abrirBases();
   }

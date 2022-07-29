@@ -1,3 +1,6 @@
+import 'package:emart/src/controllers/controller_historico.dart';
+import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
+import 'package:emart/src/pages/historico/widgets/filtro_historico2.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';
+import 'package:get/get.dart';
 
 final Debouncer onSearchDebouncer =
     new Debouncer(delay: new Duration(milliseconds: 500));
@@ -187,7 +191,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           GestureDetector(
             // onTap: () => {pickDateRange(context)},
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FiltroHistorico())),
+                MaterialPageRoute(builder: (context) => FiltroHistorico2())),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(

@@ -63,7 +63,7 @@ class _SplashState extends State<Splash> {
     var cargo = false;
     if (prefs.usurioLogin == null) {
       cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-          '10360653', '10426885', '10847893', true);
+          '10360653', '10426885', '10847893', '', true);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = -1;
       if (res && cargo) {
@@ -71,7 +71,7 @@ class _SplashState extends State<Splash> {
       }
     } else if (prefs.usurioLogin == -1) {
       cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-          '10360653', '10426885', '10847893', true);
+          '10360653', '10426885', '10847893', '', true);
 
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = -1;
@@ -94,6 +94,7 @@ class _SplashState extends State<Splash> {
           prefs.codigonutresa,
           prefs.codigozenu,
           prefs.codigomeals,
+          prefs.codigopadrepideky,
           false);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = 1;
