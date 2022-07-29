@@ -229,11 +229,12 @@ class DBProviderHelper {
     }
   }
 
-  Future<List<Historico>> consultarDetallePedido(String ordenCompra) async {
+  Future<List<Historico>> consultarDetallePedido(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,CAST(p.precio AS double) precio from Historico h inner join producto p on p.codigo=h.codigoref where  h.ordencompra='$ordenCompra' GROUP BY h.codigoref
+      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,CAST(p.precio AS double) precio 
+      from Historico h inner join producto p on p.codigo=h.codigoref where  h.NumeroDoc='$numeroDoc' GROUP BY h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();

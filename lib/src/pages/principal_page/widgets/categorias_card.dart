@@ -125,12 +125,12 @@ class CategoriasCard extends StatelessWidget {
       String nombre) async {
     final List<dynamic> listaSubCategorias =
         await DBProvider.db.consultarCategoriasSubCategorias(codigo);
-
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TabOpcionesCategorias(
                   listaCategorias: listaSubCategorias,
+                  nombreCategoria: nombre,
                 )));
   }
 }

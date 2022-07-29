@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
@@ -17,11 +18,13 @@ class FiltroProveedor extends StatefulWidget {
   final String codCategoria;
   final String nombreCategoria;
   final String? urlImagen;
+  final String codigoProveedor;
   FiltroProveedor(
       {Key? key,
       required this.codCategoria,
       required this.nombreCategoria,
-      required this.urlImagen})
+      required this.urlImagen,
+      required this.codigoProveedor})
       : super(key: key);
 
   @override
@@ -49,6 +52,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final providerDatos = Provider.of<DatosListas>(context);
+    final controlador = Get.find<ControlBaseDatos>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Proveedor',
@@ -59,6 +63,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
         leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
             onPressed: () {
+              controlador.isDisponibleFiltro.value = true;
               Navigator.pop(context);
               catalogSearchViewModel.setPrecioMinimo(0);
               catalogSearchViewModel.setPrecioMaximo(1000000000);
@@ -266,6 +271,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    controlador.isDisponibleFiltro.value = false;
                     await _cargarPrecios(values, providerDatos);
                   },
                   child: Container(
@@ -395,6 +401,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoSubCategoria: codigoSubCategoria,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para promo, categoria y subcategoria
@@ -423,6 +430,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoSubCategoria: codigoSubCategoria,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para subcategoria y categoria
@@ -439,12 +447,13 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     numEmpresa: 'nutresa',
                     // debo evaluar el tipo de categoria
                     tipoCategoria: 2,
-                    nombreCategoria: widget.nombreCategoria,
+                    nombreCategoria: dropdownValueSubCategoria,
                     img: widget.urlImagen,
                     claseProducto: 3,
                     codigoSubCategoria: codigo,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para marca
@@ -466,6 +475,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigoMarca,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para de todo tipo
@@ -474,7 +484,22 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
         (dropdownValueSubCategoria == "Todas" ||
             dropdownValueSubCategoria == null) &&
         (dropdownValueCategoria == "Todas" || dropdownValueCategoria == null)) {
-      Navigator.pop(context);
+      print(widget.codCategoria);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: widget.codCategoria,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 4,
+                    nombreCategoria: widget.nombreCategoria,
+                    claseProducto: 4,
+                    codigoCategoria: "",
+                    isActiveBanner: false,
+                    locacionFiltro: "proveedor",
+                    codigoMarca: widget.codCategoria,
+                    codigoProveedor: widget.codigoProveedor,
+                  )));
     }
     //para categoria sola
     if ((dropdownValueCategoria != "Todas" &&
@@ -497,6 +522,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para marca y promo
@@ -521,6 +547,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigo,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para marca e imperdible
@@ -545,9 +572,11 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoMarca: codigo,
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para promo sola
+    print(valorRound);
     if ((valorRound == 1) &&
         ((dropdownValueCategoria == "Todas" ||
                 dropdownValueCategoria == null) &&
@@ -565,6 +594,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
     //para imperdible sola
@@ -585,6 +615,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     isActiveBanner: false,
                     locacionFiltro: "proveedor",
                     codigoMarca: codigoMarca,
+                    codigoProveedor: widget.codigoProveedor,
                   )));
     }
   }
