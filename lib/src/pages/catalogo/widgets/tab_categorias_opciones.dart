@@ -16,10 +16,8 @@ final prefs = new Preferencias();
 
 class TabOpcionesCategorias extends StatefulWidget {
   final List<dynamic> listaCategorias;
-  final String nombreCategoria;
 
-  const TabOpcionesCategorias(
-      {Key? key, required this.listaCategorias, required this.nombreCategoria})
+  const TabOpcionesCategorias({Key? key, required this.listaCategorias})
       : super(key: key);
 
   @override
@@ -155,11 +153,11 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                           codCategoria: widget.listaCategorias[index].codigo,
                           numEmpresa: 'nutresa',
                           tipoCategoria: 2,
-                          nombreCategoria: widget.nombreCategoria,
+                          nombreCategoria:
+                              widget.listaCategorias[index].descripcion,
                           isActiveBanner: false,
                           isVisibilityAppBar: false,
                           locacionFiltro: "categoria",
-                          codigoProveedor: "",
                         ),
                       );
                     }),

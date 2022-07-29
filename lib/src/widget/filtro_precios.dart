@@ -1,4 +1,3 @@
-import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -38,7 +37,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final providerDatos = Provider.of<DatosListas>(context);
-    final controlador = Get.find<ControlBaseDatos>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Producto',
@@ -52,7 +50,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
               color: HexColor("#30C3A3"),
             ),
             onPressed: () {
-              controlador.isDisponibleFiltro.value = true;
               Navigator.pop(context);
               catalogSearchViewModel.setPrecioMinimo(0);
               catalogSearchViewModel.setPrecioMaximo(1000000000);
@@ -201,7 +198,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
               ),
               GestureDetector(
                 onTap: () async {
-                  controlador.isDisponibleFiltro.value = false;
                   await _cargarPrecios(values, providerDatos);
                 },
                 child: Container(
@@ -259,7 +255,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     isActiveBanner: false,
                     codigoMarca: codigoMarca,
                     locacionFiltro: "categoria",
-                    codigoProveedor: "",
                   )));
     }
     if (valorRound == 1) {
@@ -275,7 +270,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoMarca: codigoMarca,
-                    codigoProveedor: "",
                   )));
     } else if (valorRound == 3) {
       String? codigo =
@@ -284,16 +278,14 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: widget.codMarca,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 3,
-                    nombreCategoria: widget.nombreMarca,
-                    claseProducto: 4,
-                    codigoMarca: codigo,
-                    isActiveBanner: false,
-                    locacionFiltro: "proveedor",
-                    codigoProveedor: "",
-                  )));
+                  codCategoria: widget.codMarca,
+                  numEmpresa: 'nutresa',
+                  tipoCategoria: 3,
+                  nombreCategoria: widget.nombreMarca,
+                  claseProducto: 4,
+                  codigoMarca: codigo,
+                  isActiveBanner: false,
+                  locacionFiltro: "proveedor")));
     }
   }
 }

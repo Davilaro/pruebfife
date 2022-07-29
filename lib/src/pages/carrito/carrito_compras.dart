@@ -569,7 +569,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                   nombreCategoria: nombre,
                   img: icono,
                   locacionFiltro: "categoria",
-                  codigoProveedor: "",
                 )));
   }
 

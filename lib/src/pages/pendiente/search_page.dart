@@ -50,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductosFiltro('', "");
+    listaAllProducts = await DBProvider.db.cargarProductosFiltro('');
     _controllerUser.text = "";
     searchInput.value = "";
   }

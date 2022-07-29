@@ -80,6 +80,15 @@ class _DetalleProductoState extends State<DetalleProducto> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
+          GestureDetector(
+            child: BotonActualizar(),
+            onTap: () {
+              setState(() {
+                initState();
+                (context as Element).reassemble();
+              });
+            },
+          ),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),

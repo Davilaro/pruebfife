@@ -95,21 +95,16 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               Column(children: [
                 OverflowBar(
                   children: [
-                    ((element.fechafinpromocion_1!
-                                    .contains(RegExp(r'[0-9]'))) ||
-                                widget.isCategoriaPromos) ||
-                            isProductoEnOferta
+                    (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')))
                         ? Container(
                             alignment: Alignment.centerRight,
                             padding: EdgeInsets.only(top: 5, right: 10),
                             child: Visibility(
-                              visible: (element.activopromocion == 1 &&
-                                      ((DateTime.parse(
-                                                  element.fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
-                                          0)) ||
-                                  widget.isCategoriaPromos ||
-                                  isProductoEnOferta,
+                              visible: element.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0),
                               child: Container(
                                 child: Image.asset(
                                   'assets/promo_abel.png',
@@ -142,7 +137,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   ],
                 ),
                 Container(
-                  height: Get.width * 0.20,
+                  height: Get.width * 0.24,
                   width: double.infinity,
                   padding: EdgeInsets.only(top: 5.0, left: 10, right: 10),
                   alignment: Alignment.center,
@@ -162,11 +157,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               ]),
               Container(
                 height: (element.activopromocion == 1 &&
-                                ((DateTime.parse(element.fechafinpromocion_1!))
-                                        .compareTo(DateTime.now()) >=
-                                    0)) ==
-                            false ||
-                        isProductoEnOferta == false
+                            ((DateTime.parse(element.fechafinpromocion_1!))
+                                    .compareTo(DateTime.now()) >=
+                                0)) ==
+                        false
                     ? Get.width * 0.2
                     : Get.width * 0.15,
                 alignment: Alignment.topLeft,
@@ -179,9 +173,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                                   ((DateTime.parse(
                                               element.fechafinpromocion_1!))
                                           .compareTo(DateTime.now()) >=
-                                      0)) ||
-                              widget.isCategoriaPromos ||
-                              isProductoEnOferta
+                                      0)) ==
+                              false
                           ? 3
                           : 2,
                       style: TextStyle(
@@ -207,12 +200,9 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                     children: [
                       Visibility(
                           visible: element.activopromocion == 1 &&
-                                  ((DateTime.parse(
-                                              element.fechafinpromocion_1!))
-                                          .compareTo(DateTime.now()) >=
-                                      0) ||
-                              widget.isCategoriaPromos ||
-                              isProductoEnOferta,
+                              ((DateTime.parse(element.fechafinpromocion_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
                           child: Container(
                             height: Get.width * 0.07,
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -232,12 +222,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                       Expanded(
                         child: Container(
                           height: element.activopromocion == 1 &&
-                                      ((DateTime.parse(
-                                                  element.fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
-                                          0) ||
-                                  widget.isCategoriaPromos ||
-                                  isProductoEnOferta
+                                  ((DateTime.parse(
+                                              element.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)
                               ? Get.width * 0.05
                               : Get.width * 0.07,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -246,24 +234,20 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                             '${format.currencySymbol}' +
                                 formatNumber
                                     .format(element.activopromocion == 1 &&
-                                                ((DateTime.parse(element
-                                                            .fechafinpromocion_1!))
-                                                        .compareTo(
-                                                            DateTime.now()) >=
-                                                    0) ||
-                                            widget.isCategoriaPromos ||
-                                            isProductoEnOferta
+                                            ((DateTime.parse(element
+                                                        .fechafinpromocion_1!))
+                                                    .compareTo(
+                                                        DateTime.now()) >=
+                                                0)
                                         ? element.precioinicial
                                         : element.precio)
                                     .replaceAll(',00', ''),
                             textAlign: TextAlign.left,
                             style: (element.activopromocion == 1 &&
-                                        ((DateTime.parse(element
-                                                    .fechafinpromocion_1!))
-                                                .compareTo(DateTime.now()) >=
-                                            0) ||
-                                    widget.isCategoriaPromos ||
-                                    isProductoEnOferta
+                                    ((DateTime.parse(
+                                                element.fechafinpromocion_1!))
+                                            .compareTo(DateTime.now()) >=
+                                        0)
                                 ? TextStyle(
                                     color: ConstantesColores.azul_precio,
                                     fontWeight: FontWeight.bold,
