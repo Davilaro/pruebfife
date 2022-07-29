@@ -32,7 +32,7 @@ bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
 late BuildContext _context2;
-dynamic cartProvider;
+late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
   final int numEmpresa;
@@ -45,7 +45,7 @@ class CarritoCompras extends StatefulWidget {
 
 class _CarritoComprasState extends State<CarritoCompras> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  final controladorPedidos = Get.find<PedidoEmart>();
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +60,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     _context2 = context;
     cartProvider = Provider.of<CarroModelo>(context);
     MetodosLLenarValores().calcularValorTotal(cartProvider);
+
     final size = MediaQuery.of(context).size;
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());

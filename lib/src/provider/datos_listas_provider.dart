@@ -139,9 +139,9 @@ class DatosListas extends ChangeNotifier {
     notifyListeners();
   }
 
-  actualizarHistoricoPedido(String numeroDoc) {
+  actualizarHistoricoPedido(String ordenCompra) {
     for (int i = 0; i < _listaHistoricos.length; i++) {
-      if (_listaHistoricos[i].numeroDoc == numeroDoc) {
+      if (_listaHistoricos[i].ordenCompra == ordenCompra) {
         _listaHistoricos[i].estado = !_listaHistoricos[i].estado;
         notifyListeners();
       }

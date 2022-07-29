@@ -1,23 +1,18 @@
-import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CarroModelo extends ChangeNotifier {
-  double precioTotal = 0;
+  double _precioTotal = 0;
   int cantidadItems = 0;
   Map<String, dynamic> _listaValorFabricante = new Map();
   int _cambioVista = 0;
   double _precioAhorro = 0;
-  final controladorPedidos = Get.find<PedidoEmart>();
 
   double get getTotal {
-    return precioTotal;
+    return _precioTotal;
   }
 
   set guardarValorCompra(double precio) {
-    precioTotal = precio;
-    controladorPedidos.setprecioTotal(precio);
+    _precioTotal = precio;
     notifyListeners();
   }
 
