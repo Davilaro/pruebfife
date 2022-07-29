@@ -1,10 +1,8 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/dropdown_custom.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -29,11 +27,24 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
   TextEditingController mesFinController = TextEditingController();
   TextEditingController anoFinController = TextEditingController();
 
-  TextEditingController hola = TextEditingController();
-
   List<String> listDias = [];
   List<String> listMeses = [];
   List<String> listAnos = [];
+
+  // final meses = {
+  //   'Enero': 1,
+  //   'Febrero': 2,
+  //   'Marzo': 3,
+  //   'Abril': 4,
+  //   'Mayo': 5,
+  //   'Junio': 6,
+  //   'Julio': 7,
+  //   'Agosto': 8,
+  //   'Septiembre': 9,
+  //   'Octubre': 10,
+  //   'Noviembre': 11,
+  //   'Diciembre': 12
+  // };
 
   final meses = {
     1: 'Enero',
@@ -258,8 +269,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
 
   Widget _dropFecha(String fecha, List<String> list, TextInputType? keyboard,
       TextEditingController controller) {
-    print('hola data ${list.toList()}');
-
     return Obx(() => Container(
           margin: EdgeInsets.only(top: 10),
           width: Get.width * 0.26,
@@ -268,39 +277,86 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: DropDownCustom(
-              value: fecha == 'Dia'
-                  ? controlerHistorico.dia.value != '-1'
-                      ? controlerHistorico.dia.value
-                      : ''
-                  : fecha == 'Mes'
-                      ? controlerHistorico.mes.value != '-1'
-                          ? controlerHistorico.mes.value
-                          : ''
-                      : controlerHistorico.ano.value != '-1'
-                          ? controlerHistorico.ano.value
-                          : '',
+              value: validarValue(fecha),
               hintText: fecha,
               enabled: true,
               keyboard: keyboard,
               textStyle:
                   TextStyle(color: ConstantesColores.azul_precio, fontSize: 15),
               hintStyle: TextStyle(color: ConstantesColores.azul_precio),
-              onChanged: (String? newValue) async {
-                print('entre vamos bien 2 $newValue');
-                if (fecha == 'Dia') {
-                  controlerHistorico.dia.value = newValue.toString();
-                } else if (fecha == 'Mes') {
-                  controlerHistorico.dia.value = '1';
-                  controlerHistorico.mes.value = newValue.toString();
-                  dropdownItemsDia();
-                } else {
-                  controlerHistorico.dia.value = '1';
-                  controlerHistorico.ano.value = newValue.toString();
-                  dropdownItemsDia();
-                }
-              },
+              // onChanged: (String? newValue) async {
+              //   print('entre vamos bien 2 $newValue');
+              //   if (fecha == 'Dia') {
+              //     controlerHistorico.dia.value = newValue.toString();
+              //   } else if (fecha == 'Mes') {
+              //     controlerHistorico.dia.value = '1';
+              //     controlerHistorico.mes.value = newValue.toString();
+              //     dropdownItemsDia();
+              //   } else {
+              //     controlerHistorico.dia.value = '1';
+              //     controlerHistorico.ano.value = newValue.toString();
+              //     dropdownItemsDia();
+              //   }
+              // },
+              validListSeleect: (String? newValue) =>
+                  validarData(newValue, fecha),
               items: list),
         ));
+  }
+
+  String validarValue(String fecha) {
+    if (fecha == 'Dia') {
+      if (controlerHistorico.dia.value != '' &&
+          controlerHistorico.dia.value != '-1') {
+        return controlerHistorico.dia.value;
+      } else {
+        return '';
+      }
+    } else if (fecha == 'Mes') {
+      if (controlerHistorico.mes.value != '' &&
+          controlerHistorico.mes.value != '-1') {
+        return meses[toInt(controlerHistorico.mes.value)].toString();
+      } else {
+        return '';
+      }
+    } else {
+      if (controlerHistorico.ano.value != '' &&
+          controlerHistorico.ano.value != '-1') {
+        return controlerHistorico.ano.value;
+      } else {
+        return '';
+      }
+    }
+  }
+
+  String obtenerMes(String? mes) {
+    var res = '';
+    // meses
+    meses.forEach((key, value) {
+      if (key == toInt(mes!)) {
+        res = value;
+      }
+    });
+    return res;
+  }
+
+  validarData(String? value, fecha) {
+    if (fecha == 'Dia') {
+      print('entre dia $value');
+      controlerHistorico.dia.value = value.toString();
+    } else if (fecha == 'Mes') {
+      print('entre mes $value');
+      print('entre mes ---- ${meses['$value']}');
+      String res = obtenerMes(value);
+      controlerHistorico.dia.value = '1';
+      controlerHistorico.mes.value = meses['$value'].toString();
+      dropdownItemsDia();
+    } else {
+      print('entre año $value');
+      controlerHistorico.dia.value = '1';
+      controlerHistorico.ano.value = value.toString();
+      dropdownItemsDia();
+    }
   }
 
   Widget inputFecha(
@@ -488,8 +544,10 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
   }
 
   validarInicio() {
-    if (controlerHistorico.fechaInicial.value != '-1' ||
-        controlerHistorico.fechaFinal.value != '-1') {
+    if (controlerHistorico.fechaInicial.value != '' &&
+            controlerHistorico.fechaInicial.value != '-1' ||
+        controlerHistorico.fechaFinal.value != '' &&
+            controlerHistorico.fechaFinal.value != '-1') {
       DateTime _fechaInicial =
           DateTime.parse(controlerHistorico.fechaInicial.value);
       DateTime _fechaFinal =
@@ -508,6 +566,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
   ///CARGAR ITEMS DORPDOWN
   void dropdownItemsDia() {
     Map<String, int> menuItems = {};
+
     List<String> list = [];
     // menuItems.addAll({'Dia': -1});
 

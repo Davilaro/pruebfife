@@ -52,7 +52,8 @@ class ListaSucursalesData {
         codigomeals: json["codigomeals"],
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
-        codigopadrepideky: json["codigopadrepideky"],
+        codigopadrepideky:
+            json["CodigoPadrePideky"] == null ? "" : json["CodigoPadrePideky"],
         fabricantes: List<Fabricantes>.from(
             json["fabricantes"].map((x) => Fabricantes.fromJson(x))),
       );
@@ -69,6 +70,6 @@ class ListaSucursalesData {
         "codigomeals": codigomeals,
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
-        "codigopadrepideky": codigopadrepideky,
+        "CodigoPadrePideky": codigopadrepideky,
       };
 }

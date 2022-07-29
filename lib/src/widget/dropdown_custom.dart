@@ -21,7 +21,7 @@ class DropDownCustom extends FormField<String> {
   final TextInputType? keyboard;
   final bool iconClear;
   final Function(String?)? onChanged;
-  final Function(String?)? valid;
+  final Function(String?)? validListSeleect;
   TextEditingController? controller;
 
   DropDownCustom(
@@ -47,7 +47,7 @@ class DropDownCustom extends FormField<String> {
       this.keyboard,
       this.iconClear: false,
       this.onChanged,
-      this.valid,
+      this.validListSeleect,
       this.strict: true})
       : super(
           key: key,
@@ -135,7 +135,8 @@ class DropDownCustom extends FormField<String> {
                           children: items!.isNotEmpty
                               ? ListTile.divideTiles(
                                       context: field.context,
-                                      tiles: state._getChildren(state._items!))
+                                      tiles: state._getChildren(
+                                          state._items!, validListSeleect))
                                   .toList()
                               : [],
                         ),
@@ -214,21 +215,22 @@ class DropDownFieldState extends FormFieldState<String> {
     });
   }
 
-  List<ListTile> _getChildren(List<String> items) {
+  List<ListTile> _getChildren(
+      List<String> items, Function(String?)? validListSeleect) {
     List<ListTile> childItems = [];
     for (var item in items) {
       if (_searchText.isNotEmpty) {
         if (item.toUpperCase().contains(_searchText.toUpperCase()))
-          childItems.add(_getListTile(item));
+          childItems.add(_getListTile(item, validListSeleect));
       } else {
-        childItems.add(_getListTile(item));
+        childItems.add(_getListTile(item, validListSeleect));
       }
     }
     _isSearching ? childItems : [];
     return childItems;
   }
 
-  ListTile _getListTile(String text) {
+  ListTile _getListTile(String text, Function(String?)? validListSeleect) {
     return ListTile(
       dense: true,
       title: Text(
@@ -236,6 +238,7 @@ class DropDownFieldState extends FormFieldState<String> {
       ),
       onTap: () {
         setState(() {
+          validListSeleect!(text);
           _effectiveController!.text = text;
           _handleControllerChanged();
           _showdropdown = false;

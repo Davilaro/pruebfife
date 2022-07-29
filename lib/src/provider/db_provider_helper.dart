@@ -196,8 +196,10 @@ class DBProviderHelper {
 	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''';
 
       final sql = await db.rawQuery(query);
+      log(jsonEncode(sql));
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
+      print('error historico $e');
       return [];
     }
   }
