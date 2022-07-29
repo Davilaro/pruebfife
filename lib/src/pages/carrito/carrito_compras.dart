@@ -32,7 +32,7 @@ bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
 late BuildContext _context2;
-late CarroModelo cartProvider;
+//late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
   final int numEmpresa;
@@ -58,7 +58,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
     _context2 = context;
-    cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CarroModelo>(context);
     MetodosLLenarValores().calcularValorTotal(cartProvider);
 
     final size = MediaQuery.of(context).size;
@@ -603,8 +603,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       PedidoEmart.listaProductos!.forEach((key, value) {
                         if (value.fabricante == fabricante) {
                           PedidoEmart.listaControllersPedido![value.codigo]!
-                              .text = "1";
-                          PedidoEmart.registrarValoresPedido(value, '1', false);
+                              .text = "0";
+                          PedidoEmart.registrarValoresPedido(value, '0', false);
                           cargarDeNuevo = true;
                         }
                       });
@@ -673,7 +673,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
   _configurarPedido(size, CarroModelo cartProvider) {
     try {
-      String fabricantes = _validarPedidosMinimos();
+      String fabricantes = _validarPedidosMinimos(cartProvider);
       if (_verificarCantidadGrupos() > 0) {
         if (fabricantes == "") {
           //UXCam: Llamamos el evento clickPlaceOrder
@@ -690,7 +690,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
             showLoaderDialog(
                 context,
                 size,
-                _pedidoMinimoNoCumple(context, size, fabricantes),
+                _pedidoMinimoNoCumple(context, size, fabricantes, cartProvider),
                 Get.height * 0.55);
           }
         }
@@ -706,7 +706,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     }
   }
 
-  String _validarPedidosMinimos() {
+  String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (value['precioProducto'] > 0.0) {
@@ -723,7 +723,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
         : listaFabricantesSinPedidoMinimo;
   }
 
-  _pedidoMinimoNoCumple(context, size, fabricantes) {
+  _pedidoMinimoNoCumple(context, size, fabricantes, cartProvider) {
     return FutureBuilder(
         future: DBProviderHelper.db.consultarNombreComercial(fabricantes),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -786,7 +786,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                               ),
                             ),
                             _botonSeguirComprando(size, fabricantes),
-                            _botonAceptar(size, fabricantes),
+                            _botonAceptar(size, fabricantes, cartProvider),
                           ],
                         )
                       ],
@@ -865,11 +865,11 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  Widget _botonAceptar(size, fabricantes) {
+  Widget _botonAceptar(size, fabricantes, cartProvider) {
     return GestureDetector(
       onTap: () {
         _cancelarPedidosSinPedidoMinimo(
-            fabricantes); //UXCam: Llamamos el evento clickAction
+            fabricantes, cartProvider); //UXCam: Llamamos el evento clickAction
         UxcamTagueo().clickAction('Aceptar', fabricantes);
       },
       child: Container(
@@ -935,7 +935,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                 ConfigurarPedido(numEmpresa: prefs.numEmpresa)));
   }
 
-  void _cancelarPedidosSinPedidoMinimo(fabricantes) {
+  void _cancelarPedidosSinPedidoMinimo(fabricantes, cartProvider) {
     Navigator.of(context).pop();
     List<String> listaFabricantes = fabricantes.split(",");
     listaFabricantes.forEach((fabricante) {

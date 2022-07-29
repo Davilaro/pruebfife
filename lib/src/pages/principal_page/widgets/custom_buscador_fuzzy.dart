@@ -70,6 +70,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   @override
   void initState() {
     cargarProductos();
+    print("IMPORT${widget.codigoProveedor}");
     super.initState();
   }
 

@@ -46,7 +46,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
-  final controladorPedidos = Get.put(PedidoEmart());
 
   var nombreTienda = prefs.usuarioRazonSocial;
 

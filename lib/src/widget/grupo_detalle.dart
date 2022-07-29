@@ -6,7 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 class GrupoDetalle extends StatefulWidget {
   final String grupo;
-  final int numeroDoc;
+  final String numeroDoc;
   const GrupoDetalle({Key? key, required this.grupo, required this.numeroDoc})
       : super(key: key);
 
