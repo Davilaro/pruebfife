@@ -35,12 +35,11 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
   @override
   void initState() {
+    super.initState();
     //UXCAM:Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('BrandsPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
-
-    super.initState();
   }
 
   @override
@@ -66,10 +65,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                         backgroundColor: ConstantesColores.agua_marina,
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
-
                           setState(() {
-                            initState();
-                            (context as Element).reassemble();
+                            cargarLista();
                           });
                           return Future<void>.delayed(
                               const Duration(seconds: 3));
@@ -140,6 +137,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                   nombreCategoria: nombre,
                   isActiveBanner: false,
                   locacionFiltro: "marca",
+                  codigoProveedor: "",
                 )));
   }
 

@@ -134,50 +134,50 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
     List<Widget> listaWidget = [];
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-
-      if(value['precioProducto'] == 0.0){
-        
-      }else{
-
-      listaWidget.add(
-        Column(
-          children: [
-            Container(
-              // padding: EdgeInsets.all(10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    alignment: Alignment.center,
-                    child: CachedNetworkImage(
-                        imageUrl: PedidoEmart
-                            .listaProductosPorFabricante![fabricante]["imagen"],
-                        placeholder: (context, url) =>
-                            Image.asset('assets/jar-loading.gif'),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/logo_login.png'),
-                        fit: BoxFit.cover),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      width: MediaQuery.of(context).size.width / 3,
-                      child: Text(
-                          cartProvider.getListaFabricante[fabricante] == null
-                              ? '0'
-                              : '${format.currencySymbol}' + formatNumber
-                                  .format(cartProvider
-                                          .getListaFabricante[fabricante]
-                                      ["precioFinal"])
-                                  .replaceAll(',00', ''),
-                          style: diseno_valores())),
-                ],
-              ),
-            )
-          ],
-        ),
-      );}
+      if (value['precioProducto'] == 0.0) {
+      } else {
+        listaWidget.add(
+          Column(
+            children: [
+              Container(
+                // padding: EdgeInsets.all(10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 70,
+                      width: 70,
+                      alignment: Alignment.center,
+                      child: CachedNetworkImage(
+                          imageUrl: PedidoEmart
+                                  .listaProductosPorFabricante![fabricante]
+                              ["imagen"],
+                          placeholder: (context, url) =>
+                              Image.asset('assets/jar-loading.gif'),
+                          errorWidget: (context, url, error) =>
+                              Image.asset('assets/logo_login.png'),
+                          fit: BoxFit.cover),
+                    ),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: Text(
+                            cartProvider.getListaFabricante[fabricante] == null
+                                ? '0'
+                                : '${format.currencySymbol}' +
+                                    formatNumber
+                                        .format(cartProvider
+                                                .getListaFabricante[fabricante]
+                                            ["precioFinal"])
+                                        .replaceAll(',00', ''),
+                            style: diseno_valores())),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      }
     });
 
     return listaWidget;
@@ -239,11 +239,10 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
                                 style: TextStyle(color: Colors.black),
                                 onChanged: (value) {
                                   setState(() {
-                                    if (value != "")
-                                    if(value != "0"){
+                                    if (value != "") if (value != "0") {
                                       PedidoEmart.registrarValoresPedido(
                                           product.productos, value, true);
-                                    }else
+                                    } else
                                       PedidoEmart.registrarValoresPedido(
                                           product.productos, "0", false);
                                   });

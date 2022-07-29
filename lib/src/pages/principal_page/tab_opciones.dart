@@ -58,9 +58,9 @@ class _TabOpcionesState extends State<TabOpciones>
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
-    setState(() {});
   }
 
+  @override
   dispose() {
     subscription.cancel();
     super.dispose();
@@ -107,8 +107,8 @@ class _TabOpcionesState extends State<TabOpciones>
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
 
-    var listaProductos =
-        await DBProvider.db.cargarProductos('', 10, '', 0.0, 1000000000.0, "");
+    var listaProductos = await DBProvider.db
+        .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
     for (var i = 0; i < listaProductos.length; i++) {
       PedidoEmart.listaProductos!
           .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);

@@ -17,20 +17,24 @@ class PedidoEmart {
   static List<dynamic>? listaFabricante = [];
   static Map<String, dynamic>? listaPrecioPorFabricante;
   static RxInt cambioVista = 1.obs;
+  RxDouble precioTotal = 0.0.obs;
+
+  void setprecioTotal(precio) {
+    precioTotal.value = precio;
+  }
 
   static registrarValoresPedido(
       Productos producto, dynamic valor, bool estado) {
     listaValoresPedido!.update(producto.codigo, (value) => valor);
     listaControllersPedido!.update(producto.codigo, (value) => value);
     listaValoresPedidoAgregados!.update(producto.codigo, (value) => estado);
-
     cantItems.value = "0";
     int items = 0;
 
     listaValoresPedidoAgregados!.forEach((key, value) {
-      if (value) {
-        String valor = listaControllersPedido![key]!.text;
-        items += int.parse(valor);
+      String valor1 = listaControllersPedido![key]!.text;
+      if (valor1 != "") {
+        items += int.parse(valor1);
       }
     });
 
@@ -40,7 +44,6 @@ class PedidoEmart {
   static iniciarProductosPorFabricante() {
     listaProductosPorFabricante = new Map();
     final listaAgrupar = <ProductoAsignado>[];
-
     listaProductos!.forEach((key, elemet) {
       if (listaValoresPedidoAgregados![key] == false) {
         ProductoAsignado productoAsignado = new ProductoAsignado(

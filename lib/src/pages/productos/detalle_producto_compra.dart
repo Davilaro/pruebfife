@@ -27,7 +27,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   @override
   void initState() {
     super.initState();
-    productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
+    productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo];
     PedidoEmart.cambioVista.value = 1;
   }
 
