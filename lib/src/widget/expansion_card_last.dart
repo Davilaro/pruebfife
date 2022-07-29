@@ -40,6 +40,13 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   RxBool estadoBoton = true.obs;
   final controlador = Get.find<CambioEstadoProductos>();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    determinarBotonCarrito("${widget.historico.numeroDoc}");
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
@@ -71,7 +78,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   Widget _body(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    determinarBotonCarrito("${widget.historico.numeroDoc}");
+
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -325,16 +332,18 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         if (nuevaCantidad == 0) {
           PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
           PedidoEmart.registrarValoresPedido(producto, '0', false);
-          if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
+          if (controlador.mapaHistoricos
+              .containsKey(widget.historico.numeroDoc)) {
             // controlador.mapaHistoricos[numeroDoc] = false;
-            controlador.mapaHistoricos.update(numeroDoc, (value) => false);
+            controlador.mapaHistoricos
+                .update(widget.historico.numeroDoc, (value) => false);
           }
         } else {
           PedidoEmart.listaControllersPedido![producto.codigo]!.text =
               "$nuevaCantidad";
           PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
         }
-        determinarBotonCarrito(numeroDoc);
+        determinarBotonCarrito(widget.historico.numeroDoc!);
       });
       //  }
       //  }
@@ -365,12 +374,14 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
             "$nuevaCantidad";
         PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
-        if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
-          controlador.mapaHistoricos.update(numeroDoc, (value) => true);
+        if (controlador.mapaHistoricos
+            .containsKey(widget.historico.numeroDoc)) {
+          controlador.mapaHistoricos
+              .update(widget.historico.numeroDoc, (value) => true);
         } else {
-          controlador.mapaHistoricos.addAll({numeroDoc: true});
+          controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
         }
-        determinarBotonCarrito(numeroDoc);
+        determinarBotonCarrito(widget.historico.numeroDoc!);
       });
       // }
 
@@ -398,6 +409,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         estadoBoton.value = true;
       }
     }
+    print("IMPORTANTE${controlador.mapaHistoricos.toString()}");
   }
 }
 
