@@ -94,35 +94,43 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
-    //PedidoEmart.listaControllersPedido = new Map();
-    //PedidoEmart.listaValoresPedido = new Map();
-//PedidoEmart.listaProductos = new Map();
-    //PedidoEmart.listaValoresPedidoAgregados = new Map();
+    try {
+      if (PedidoEmart.listaControllersPedido?.keys.length == null) {
+        print(
+            'entre aca otra vez ${PedidoEmart.listaControllersPedido?.keys.length}');
+        PedidoEmart.listaControllersPedido = new Map();
+        PedidoEmart.listaValoresPedido = new Map();
+        PedidoEmart.listaProductos = new Map();
+        PedidoEmart.listaValoresPedidoAgregados = new Map();
+      }
 
-    providerDatos.guardarListaSugueridoHelper =
-        await DBProviderHelper.db.consultarSugueridoHelper();
-    providerDatos.guardarListaHistoricosHelper =
-        await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
+      providerDatos.guardarListaSugueridoHelper =
+          await DBProviderHelper.db.consultarSugueridoHelper();
+      providerDatos.guardarListaHistoricosHelper =
+          await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
 
-    PedidoEmart.listaFabricante =
-        await DBProvider.db.consultarFricanteGeneral();
+      PedidoEmart.listaFabricante =
+          await DBProvider.db.consultarFricanteGeneral();
 
-    var listaProductos = await DBProvider.db
-        .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
-    for (var i = 0; i < listaProductos.length; i++) {
-      PedidoEmart.listaProductos!
-          .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
-      PedidoEmart.listaValoresPedidoAgregados!
-          .putIfAbsent(listaProductos[i].codigo, () => false);
-      PedidoEmart.listaValoresPedido!
-          .putIfAbsent(listaProductos[i].codigo, () => "1");
-      PedidoEmart.listaControllersPedido!
-          .putIfAbsent(listaProductos[i].codigo, () => TextEditingController());
+      var listaProductos = await DBProvider.db
+          .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
+      for (var i = 0; i < listaProductos.length; i++) {
+        PedidoEmart.listaProductos!
+            .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
+        PedidoEmart.listaValoresPedidoAgregados!
+            .putIfAbsent(listaProductos[i].codigo, () => false);
+        PedidoEmart.listaValoresPedido!
+            .putIfAbsent(listaProductos[i].codigo, () => "1");
+        PedidoEmart.listaControllersPedido!.putIfAbsent(
+            listaProductos[i].codigo, () => TextEditingController());
+      }
+
+      String? token = PushNotificationServer.token as String;
+      print('Token: $token');
+      setState(() {});
+    } catch (e) {
+      print('error de descarga prueba $e');
     }
-
-    String? token = PushNotificationServer.token as String;
-    print('Token: $token');
-    // setState(() {});
   }
 
   void cargarSecciones() async {

@@ -89,7 +89,6 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           backgroundColor: ConstantesColores.agua_marina,
           onRefresh: () async {
             await LogicaActualizar().actualizarDB();
-
             Navigator.pushReplacementNamed(
               context,
               'tab_opciones',

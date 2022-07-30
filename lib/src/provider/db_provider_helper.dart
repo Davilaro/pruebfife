@@ -358,7 +358,7 @@ class DBProviderHelper {
     }
   }
 
-  Future<void> guardarHistorico(Pedido miPedido, int documento) async {
+  Future<void> guardarHistorico(Pedido miPedido, String documento) async {
     final db = await baseAbierta;
     String nombreFabricante = '';
     try {
@@ -375,9 +375,11 @@ class DBProviderHelper {
           '/' +
           now.year.toString();
 
-      await db.rawInsert('''
-      INSERT INTO Historico VALUES ($documento,'${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante',$documento)
-    ''');
+      var query = '''
+      INSERT INTO Historico VALUES ('$documento','${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante','$documento')
+      ''';
+
+      await db.rawInsert(query);
     } catch (e) {
       print('ERROR CONSULTA $e');
     }

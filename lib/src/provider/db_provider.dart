@@ -454,7 +454,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ''';
       }
 
-      log(query);
       sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
