@@ -28,6 +28,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
   List<String> listMeses = [];
   List<String> listAnos = [];
   List<String> listFinDias = [];
+  RxString mensajeInformativo = ''.obs;
 
   final meses = {
     1: 'Enero',
@@ -93,167 +94,198 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                        height: Get.height * 0.7,
-                        child: Stack(
-                          overflow: Overflow.visible,
+                        height: Get.height * 0.75,
+                        child: Column(
                           children: [
-                            Positioned(
-                              top: 280,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                      child: Text('Periodo seleccionado',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey))),
-                                  Obx(() => Center(
-                                        child: Container(
-                                            margin: EdgeInsets.only(
-                                                top: 30, bottom: 130),
-                                            child: Text(
-                                                '${controlerHistorico.dia.isNotEmpty && controlerHistorico.dia.value != '-1' ? controlerHistorico.dia : ""} ${meses[toInt(controlerHistorico.mes.value)] ?? ""} - ${controlerHistorico.diaFin.isNotEmpty && controlerHistorico.diaFin.value != '-1' ? controlerHistorico.diaFin : ""} ${meses[toInt(controlerHistorico.mesFin.value)] ?? ""} ${controlerHistorico.anoFin.isNotEmpty && controlerHistorico.anoFin.value != '-1' ? controlerHistorico.anoFin : ""}',
-                                                style: TextStyle(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: ConstantesColores
-                                                        .azul_precio))),
-                                      )),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Center(
-                                      child: Container(
-                                        margin: EdgeInsets.only(top: 20),
-                                        width: Get.width * 0.8,
-                                        height: Get.height * 0.05,
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            confirmarFiltro();
-                                          },
-                                          child: Text(
-                                            'Filtrar',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          textColor: Colors.white,
-                                          color: ConstantesColores.agua_marina,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            //Fecha Final
-                            Positioned(
-                              top: 100,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      margin: EdgeInsets.only(top: 30),
-                                      child: Text('Fecha final',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey))),
-                                  Container(
-                                    width: Get.width * 0.8,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Año final
-                                        _dropFecha(
-                                            'Año',
-                                            listAnos,
-                                            TextInputType.number,
-                                            'fin',
-                                            anoFinController),
-                                        // Mes final
-                                        _dropFecha(
-                                            'Mes',
-                                            listMeses,
-                                            TextInputType.text,
-                                            'fin',
-                                            mesFinController),
-                                        // Dia final
-                                        _dropFecha(
-                                            'Dia',
-                                            listFinDias,
-                                            TextInputType.text,
-                                            'fin',
-                                            diaFinController),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                    margin: EdgeInsets.symmetric(vertical: 10),
-                                    child: Text('Fecha de inicio',
+                                  margin: EdgeInsets.zero,
+                                  height: Get.height * 0.4,
+                                  child: Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Obx(() => Visibility(
+                                              visible:
+                                                  mensajeInformativo.value !=
+                                                      '',
+                                              child: Positioned(
+                                                top: 250,
+                                                width: Get.width * 0.8,
+                                                child: Container(
+                                                  child: Text(
+                                                    mensajeInformativo.value,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                ),
+                                              ),
+                                            )),
+                                        Positioned(
+                                          top: 300,
+                                          child: Container(
+                                              width: Get.width,
+                                              margin:
+                                                  EdgeInsets.only(bottom: 20),
+                                              child: Divider(
+                                                thickness: 2,
+                                              )),
+                                        ),
+                                        //Fecha Final
+                                        Positioned(
+                                          top: 100,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 30),
+                                                  child: Text('Fecha final',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.grey))),
+                                              Container(
+                                                width: Get.width * 0.8,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    // Año final
+                                                    _dropFecha(
+                                                        'Año',
+                                                        listAnos,
+                                                        TextInputType.number,
+                                                        'fin',
+                                                        anoFinController),
+                                                    // Mes final
+                                                    _dropFecha(
+                                                        'Mes',
+                                                        listMeses,
+                                                        TextInputType.text,
+                                                        'fin',
+                                                        mesFinController),
+                                                    // Dia final
+                                                    _dropFecha(
+                                                        'Dia',
+                                                        listFinDias,
+                                                        TextInputType.text,
+                                                        'fin',
+                                                        diaFinController),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10),
+                                                child: Text('Fecha de inicio',
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.grey))),
+                                            Container(
+                                              width: Get.width * 0.8,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // Año inicio
+                                                  _dropFecha(
+                                                      'Año',
+                                                      listAnos,
+                                                      TextInputType.number,
+                                                      'inicio',
+                                                      anoInicioController),
+                                                  // Mes inicio
+                                                  _dropFecha(
+                                                      'Mes',
+                                                      listMeses,
+                                                      TextInputType.text,
+                                                      'inicio',
+                                                      mesInicioController),
+                                                  // Dia Inicio
+                                                  _dropFecha(
+                                                      'Dia',
+                                                      listDias,
+                                                      TextInputType.number,
+                                                      'inicio',
+                                                      diaInicioController),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ]),
+                                ),
+                                Container(
+                                    child: Text('Periodo seleccionado',
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey))),
-                                Container(
-                                  width: Get.width * 0.8,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Año inicio
-                                      _dropFecha(
-                                          'Año',
-                                          listAnos,
-                                          TextInputType.number,
-                                          'inicio',
-                                          anoInicioController),
-                                      // Mes inicio
-                                      _dropFecha(
-                                          'Mes',
-                                          listMeses,
-                                          TextInputType.text,
-                                          'inicio',
-                                          mesInicioController),
-                                      // Dia Inicio
-                                      _dropFecha(
-                                          'Dia',
-                                          listDias,
-                                          TextInputType.number,
-                                          'inicio',
-                                          diaInicioController),
-                                    ],
+                                Obx(() => Center(
+                                      child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 30, bottom: 130),
+                                          child: Text(
+                                              '${controlerHistorico.dia.isNotEmpty && controlerHistorico.dia.value != '-1' ? controlerHistorico.dia : ""} ${meses[toInt(controlerHistorico.mes.value)] ?? ""} - ${controlerHistorico.diaFin.isNotEmpty && controlerHistorico.diaFin.value != '-1' ? controlerHistorico.diaFin : ""} ${meses[toInt(controlerHistorico.mesFin.value)] ?? ""} ${controlerHistorico.anoFin.isNotEmpty && controlerHistorico.anoFin.value != '-1' ? controlerHistorico.anoFin : ""}',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: ConstantesColores
+                                                      .azul_precio))),
+                                    )),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Center(
+                                    child: Container(
+                                      width: Get.width * 0.8,
+                                      height: Get.height * 0.05,
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          confirmarFiltro();
+                                        },
+                                        child: Text(
+                                          'Filtrar',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        textColor: Colors.white,
+                                        color: ConstantesColores.agua_marina,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
-
-                            // Positioned(
-                            //   top: 230,
-                            //   width: 330,
-                            //   child: Container(
-                            //       margin: EdgeInsets.symmetric(vertical: 20),
-                            //       child: Divider(
-                            //         thickness: 2,
-                            //       )),
-                            // ),
                           ],
                         ),
                       ),
@@ -339,7 +371,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
 
   validarData(String? value, fecha, tipoFecha) {
     if (fecha == 'Dia') {
-      print('entre dia $value -- $tipoFecha');
       if (tipoFecha == 'inicio') {
         controlerHistorico.dia.value = value!;
       } else {
@@ -347,22 +378,18 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
       }
     } else if (fecha == 'Mes') {
       String res = obtenerMes(value);
-      print('entre mes ---- $res');
       if (tipoFecha == 'inicio') {
         diaInicioController.text = '';
         controlerHistorico.dia.value = '';
         controlerHistorico.mes.value = res;
         dropdownItemsDia();
       } else {
-        print('entre mes hola---- $res');
         diaFinController.text = '';
         controlerHistorico.diaFin.value = '';
         controlerHistorico.mesFin.value = res;
         dropdownItemsDiaFinal();
       }
-      // dropdownItemsDia(tipoFecha);
     } else {
-      print('entre año $value');
       if (tipoFecha == 'inicio') {
         diaInicioController.text = '';
         controlerHistorico.dia.value = '';
@@ -387,17 +414,24 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
         controlerHistorico.diaFin.value != '' &&
         controlerHistorico.mesFin.value != '' &&
         controlerHistorico.anoFin.value != '' &&
-        controlerHistorico.diaFin.value != '-' &&
+        controlerHistorico.diaFin.value != '-1' &&
         controlerHistorico.mesFin.value != '-1' &&
         controlerHistorico.anoFin.value != '-1') {
       var fechaInicial =
           '${controlerHistorico.ano.value}-${controlerHistorico.mes.value.toString().length > 1 ? controlerHistorico.mes.value : '0${controlerHistorico.mes.value}'}-${controlerHistorico.dia.value.toString().length > 1 ? controlerHistorico.dia.value : '0${controlerHistorico.dia.value}'}';
       var fechaFin =
           '${controlerHistorico.anoFin.value}-${controlerHistorico.mesFin.value.toString().length > 1 ? controlerHistorico.mesFin.value : '0${controlerHistorico.mesFin.value}'}-${controlerHistorico.diaFin.value.toString().length > 1 ? controlerHistorico.diaFin.value : '0${controlerHistorico.diaFin.value}'}';
-      print('hola final entre $fechaInicial  ---- $fechaFin');
-      controlerHistorico.setFechaInicial(fechaInicial);
-      controlerHistorico.setFechaFinal(fechaFin);
-      Navigator.pop(context);
+      var num1 = fechaInicial.replaceAll('-', '');
+      var num2 = fechaFin.replaceAll('-', '');
+      if (toInt(num1) < toInt(num2)) {
+        mensajeInformativo.value = '';
+        controlerHistorico.setFechaInicial(fechaInicial);
+        controlerHistorico.setFechaFinal(fechaFin);
+        Navigator.pop(context);
+      } else {
+        mensajeInformativo.value =
+            'Por favor selecciona una fecha inicial menor a la final';
+      }
     } else {
       controlerHistorico.setFechaFinal('-1');
       controlerHistorico.setFechaInicial('-1');
@@ -407,7 +441,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
   }
 
   limpiarFiltro() {
-    print('entre');
     setState(() {
       controlerHistorico.setFechaFinal('-1');
       controlerHistorico.setFechaInicial('-1');
@@ -476,12 +509,11 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
     }
   }
 
-  ///CARGAR ITEMS DORPDOWN
+  //cargar itemas de los dias
   void dropdownItemsDia() {
     Map<String, int> menuItems = {};
 
     List<String> list = [];
-    // menuItems.addAll({'Dia': -1});
 
     if (controlerHistorico.mes.value == '2' &&
             controlerHistorico.ano.value == '2024' ||
@@ -514,20 +546,16 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
     menuItems.forEach((key, value) {
       list.add(key);
     });
-    print('entre lista inicio');
     setState(() {
       listDias = list;
     });
-
-    // return menuItems;
   }
 
-  ///CARGAR ITEMS DORPDOWN dia final
+  //cargar itemas de los dias fecha final
   void dropdownItemsDiaFinal() {
     Map<String, int> menuItems = {};
 
     List<String> list = [];
-    // menuItems.addAll({'Dia': -1});
 
     if (controlerHistorico.mesFin.value == '2' &&
             controlerHistorico.anoFin.value == '2024' ||
@@ -561,7 +589,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
       list.add(key);
     });
 
-    print('entre lista fin');
     setState(() {
       listFinDias = list;
     });
@@ -569,12 +596,11 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
     // return menuItems;
   }
 
-  ///CARGAR ITEMS DORPDOWN
+  //cargar items de los meses
   void dropdownItemsMes() {
     Map<String, int> menuItems = {};
     List<String> list = [];
 
-    // menuItems.addAll({'Mes': -1});
     menuItems.addAll({'Enero': 1});
     menuItems.addAll({'Febrero': 2});
     menuItems.addAll({'Marzo': 3});
@@ -595,15 +621,12 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
     setState(() {
       listMeses = list;
     });
-    // return menuItems;
   }
 
-  ///CARGAR ITEMS DORPDOWN
+  //cargar itemas de los años
   void dropdownItemsAno() {
     Map<String, int> menuItems = {};
     List<String> list = [];
-
-    // menuItems.addAll({'Año': -1});
 
     for (int i = 2022; i <= 2050; i++) {
       menuItems.addAll({'$i': i});
@@ -615,7 +638,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico2> {
     setState(() {
       listAnos = list;
     });
-    // return menuItems;
   }
 
   @override
