@@ -50,7 +50,7 @@ class AppUtil {
   }
 
   Future<bool> downloadZip(String usuario, String sucursal, codigonutresa,
-      codigozenu, codigomeals, generico) async {
+      codigozenu, codigomeals, codigopadrepideky, generico) async {
     try {
       String archivo = '';
 
@@ -66,6 +66,7 @@ class AppUtil {
           codigonutresa,
           codigozenu,
           codigomeals,
+          codigopadrepideky,
           generico);
       var estado = await unarchiveAndSave(zippedFile, archivo);
       if (estado) {
@@ -87,6 +88,7 @@ class AppUtil {
       String codigonutresa,
       String codigozenu,
       String codigomeals,
+      String codigopadrepideky,
       bool generico) async {
     String url = "";
     var req;
@@ -95,7 +97,7 @@ class AppUtil {
       url = Constantes().urlBaseGenerico + 'sync/Db/Generico/db.zip';
     } else {
       url = Constantes().urlBase +
-          'CrearDB.aspx?nit=$usuario&cliente=$sucursal&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals';
+          'CrearDB.aspx?nit=$usuario&cliente=$sucursal&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky';
     }
 
     print('url : $url');

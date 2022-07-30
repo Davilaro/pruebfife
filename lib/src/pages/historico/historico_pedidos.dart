@@ -1,3 +1,5 @@
+import 'package:emart/src/controllers/controller_historico.dart';
+import 'package:emart/src/pages/historico/widgets/filtro_historico2.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';
+import 'package:get/get.dart';
 
 final Debouncer onSearchDebouncer =
     new Debouncer(delay: new Duration(milliseconds: 500));
@@ -29,7 +32,7 @@ class HistoricoPedidos extends StatefulWidget {
 }
 
 class _HistoricoPedidosState extends State<HistoricoPedidos> {
-  // ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
+  ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
   @override
   void initState() {
     //FIREBASE: Llamamos el evento select_content
@@ -86,7 +89,6 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           backgroundColor: ConstantesColores.agua_marina,
           onRefresh: () async {
             await LogicaActualizar().actualizarDB();
-
             Navigator.pushReplacementNamed(
               context,
               'tab_opciones',
@@ -98,9 +100,13 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
               child: Column(
                 children: [
                   _buscador(size),
-                  FutureBuilder<List<dynamic>>(
+                  Obx(() => FutureBuilder<List<dynamic>>(
                       future: DBProviderHelper.db.consultarHistoricos(
-                          _filtro, fechaInicial, fechaFinal),
+                          _filtro,
+                          catalogSearchViewModel.fechaInicial.value,
+                          catalogSearchViewModel.fechaFinal.value),
+                      // future: DBProviderHelper.db.consultarHistoricos(
+                      //     _filtro, fechaInicial, fechaFinal),
                       builder:
                           (context, AsyncSnapshot<List<dynamic>> snapshot) {
                         if (snapshot.hasData) {
@@ -139,7 +145,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
                         } else {
                           return Column(children: [Text("No hay registros!")]);
                         }
-                      }),
+                      })),
                 ],
               ),
             ),
@@ -185,9 +191,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            onTap: () => {pickDateRange(context)},
-            // onTap: () => Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => FiltroHistorico())),
+            // onTap: () => {pickDateRange(context)},
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(

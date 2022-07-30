@@ -208,6 +208,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigonutresa = elemento.codigonutresa;
     prefs.codigozenu = elemento.codigozenu;
     prefs.codigomeals = elemento.codigomeals;
+    prefs.codigopadrepideky = elemento.codigopadrepideky;
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
@@ -241,6 +242,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         prefs.codigonutresa,
         prefs.codigozenu,
         prefs.codigomeals,
+        prefs.codigopadrepideky,
         false);
     await AppUtil.appUtil.abrirBases();
   }

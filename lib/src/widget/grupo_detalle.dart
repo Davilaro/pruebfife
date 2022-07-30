@@ -1,6 +1,4 @@
-import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 

@@ -135,6 +135,14 @@ class Preferencias {
     _prefs.setString('codigozenu', value);
   }
 
+  get codigopadrepideky {
+    return _prefs.getString('codigopadrepideky') ?? '';
+  }
+
+  set codigopadrepideky(dynamic value) {
+    _prefs.setString('codigopadrepideky', value);
+  }
+
   clear() async {
     await _prefs.clear();
   }

@@ -350,7 +350,7 @@ class Servicies {
 
     for (var i = 0; i < listaPedido.length; i++) {
       datos += jsonEncode(<String, dynamic>{
-        "NumeroDoc": int.parse(numDoc),
+        "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
         "CodigoCliente": prefs.codCliente,
         "CodigoProducto": listaPedido[i].codigoProducto,
@@ -358,6 +358,7 @@ class Servicies {
         "DescripcionParam1": listaPedido[i].fabricante,
         "DescripcionParam2": listaPedido[i].codigocliente,
         "DescripcionParam3": usuarioLogin,
+        "descripcionparam5": prefs.codigopadrepideky,
         "FechaMovil": '$fechaPedido',
         "Iva": listaPedido[i].iva,
         "Observacion": 'Prueba',
@@ -367,8 +368,7 @@ class Servicies {
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
         "Param1": listaPedido[i].descuento!
       });
-      await DBProviderHelper.db
-          .guardarHistorico(listaPedido[i], int.parse(numDoc));
+      await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
       if (i < listaPedido.length - 1) {
         datos += ",";
       }
@@ -387,14 +387,14 @@ class Servicies {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: datos);
-
+      print('respuesta ${response.statusCode}');
       if (response.statusCode == 200) {
         return ValidarPedido.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed');
       }
     } catch (e) {
-      print(e.toString());
+      print('hola res error ${e.toString()}');
       return null;
     }
   }

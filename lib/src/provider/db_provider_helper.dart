@@ -198,6 +198,7 @@ class DBProviderHelper {
       final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
+      print('error historico $e');
       return [];
     }
   }
@@ -206,7 +207,7 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc=$numeroDoc GROUP BY fabricante
+      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc='$numeroDoc' GROUP BY fabricante
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -220,7 +221,7 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc=$numeroDoc  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
+      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -357,7 +358,7 @@ class DBProviderHelper {
     }
   }
 
-  Future<void> guardarHistorico(Pedido miPedido, int documento) async {
+  Future<void> guardarHistorico(Pedido miPedido, String documento) async {
     final db = await baseAbierta;
     String nombreFabricante = '';
     try {
@@ -374,9 +375,11 @@ class DBProviderHelper {
           '/' +
           now.year.toString();
 
-      await db.rawInsert('''
-      INSERT INTO Historico VALUES ($documento,'${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante',$documento)
-    ''');
+      var query = '''
+      INSERT INTO Historico VALUES ('$documento','${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante','$documento')
+      ''';
+
+      await db.rawInsert(query);
     } catch (e) {
       print('ERROR CONSULTA $e');
     }
