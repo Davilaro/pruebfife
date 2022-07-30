@@ -1,7 +1,5 @@
-import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustonNavigatorBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    final provider = Provider.of<OpcionesBard>(context);
 
     return BottomNavigationBar(
         backgroundColor: colorItems(),

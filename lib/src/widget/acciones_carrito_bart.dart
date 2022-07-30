@@ -40,7 +40,7 @@ class AccionesBartCarrito extends StatelessWidget {
                 child: Obx(
                   () => Container(
                       height: 20,
-                      width: 20,
+                      width: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -49,7 +49,9 @@ class AccionesBartCarrito extends StatelessWidget {
                           ),
                           color: Colors.white),
                       child: Text(
-                        '${PedidoEmart.cantItems.value}',
+                        int.parse(PedidoEmart.cantItems.value) >= 0
+                            ? '${PedidoEmart.cantItems.value}'
+                            : '0',
                         style: TextStyle(
                             color: HexColor("#41398D"), fontSize: 10.0),
                       )),

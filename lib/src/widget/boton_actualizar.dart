@@ -47,6 +47,7 @@ Future<void> actualizarPagina(
     AlertaActualizar().mostrarAlertaActualizar(context, true);
   }
   await LogicaActualizar().actualizarDB();
+  // await AppUtil.appUtil.abrirBases();
   isActualizando.value = false;
   if (isActualizando.value == false) {
     Navigator.pop(context);

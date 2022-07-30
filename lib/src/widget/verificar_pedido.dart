@@ -31,6 +31,7 @@ class VerificarPedido extends StatefulWidget {
 }
 
 class _VerificarPedidoState extends State<VerificarPedido> {
+  bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
     _context2 = context;

@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class FiltroHistorico2 extends StatefulWidget {
-  FiltroHistorico2({Key? key}) : super(key: key);
+class FiltroHistorico extends StatefulWidget {
+  FiltroHistorico({Key? key}) : super(key: key);
 
   @override
   _FiltroHistoricoState createState() => _FiltroHistoricoState();
 }
 
-class _FiltroHistoricoState extends State<FiltroHistorico2> {
+class _FiltroHistoricoState extends State<FiltroHistorico> {
   final controlerHistorico = Get.find<ControllerHistorico>();
 
   TextEditingController diaInicioController = TextEditingController();

@@ -195,7 +195,6 @@ class DBProviderHelper {
 	  GROUP BY NumeroDoc 
 	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''';
 
-      log(query);
       final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
@@ -235,8 +234,9 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,CAST(p.precio AS double) precio 
-      from Historico h inner join producto p on p.codigo=h.codigoref where  h.NumeroDoc='$numeroDoc' GROUP BY h.codigoref
+      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,
+      CAST(p.precio AS double) precio from Historico h inner join producto p on 
+      p.codigo=h.codigoref where  h.NumeroDoc='$numeroDoc' GROUP BY h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();

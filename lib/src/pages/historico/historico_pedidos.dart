@@ -1,5 +1,4 @@
 import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
 import 'package:emart/src/pages/historico/widgets/filtro_historico2.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
@@ -94,7 +93,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             Navigator.pushReplacementNamed(
               context,
               'tab_opciones',
-            );
+            ).timeout(Duration(seconds: 3));
             return Future<void>.delayed(const Duration(seconds: 3));
           },
           child: SingleChildScrollView(
@@ -195,7 +194,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           GestureDetector(
             // onTap: () => {pickDateRange(context)},
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FiltroHistorico2())),
+                MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(

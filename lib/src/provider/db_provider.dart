@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
@@ -264,6 +265,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       String codigoProveedor) async {
     final db = await baseAbierta;
     try {
+      var query = '';
       final sql;
       String? consulta;
       if (codigoMarca != "" && codigoMarca != null) {
@@ -273,7 +275,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 2) {
-        sql = await db.rawQuery('''
+        query = '''
       SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -301,9 +303,9 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         $consulta
         ORDER BY p.orden ASC
         
-    ''');
+    ''';
       } else if (tipo == 3) {
-        sql = await db.rawQuery('''
+        query = '''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -330,9 +332,9 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         $consulta
         ORDER BY p.orden ASC
          
-       ''');
+       ''';
       } else if (tipo == 4) {
-        sql = await db.rawQuery('''
+        query = '''
       SELECT p.codigo , p.nombre , 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -359,9 +361,9 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        
         ORDER BY p.orden ASC
          
-      ''');
+      ''';
       } else if (tipo == 5) {
-        sql = await db.rawQuery('''
+        query = '''
       SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -388,10 +390,10 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         $consulta
         ORDER BY p.orden ASC
          
-      ''');
+      ''';
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
-        sql = await db.rawQuery('''
+        query = '''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -420,9 +422,9 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         and p.codigo in (select distinct codigoref from Historico  )
         ORDER BY p.orden ASC
          
-      ''');
+      ''';
       } else {
-        sql = await db.rawQuery('''
+        query = '''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -449,13 +451,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         $consulta
         ORDER BY p.orden ASC
          
-        ''');
+        ''';
       }
+
+      log(query);
+      sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Productos.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error consulta cargarProductos $e');
       return [];
     }
   }

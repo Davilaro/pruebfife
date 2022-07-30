@@ -58,9 +58,9 @@ class _TabOpcionesState extends State<TabOpciones>
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
+    setState(() {});
   }
 
-  @override
   dispose() {
     subscription.cancel();
     super.dispose();
@@ -94,10 +94,10 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
-    PedidoEmart.listaControllersPedido = new Map();
-    PedidoEmart.listaValoresPedido = new Map();
-    PedidoEmart.listaProductos = new Map();
-    PedidoEmart.listaValoresPedidoAgregados = new Map();
+    //PedidoEmart.listaControllersPedido = new Map();
+    //PedidoEmart.listaValoresPedido = new Map();
+//PedidoEmart.listaProductos = new Map();
+    //PedidoEmart.listaValoresPedidoAgregados = new Map();
 
     providerDatos.guardarListaSugueridoHelper =
         await DBProviderHelper.db.consultarSugueridoHelper();

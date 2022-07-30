@@ -6,7 +6,7 @@ class CambioEstadoProductos extends GetxController {
   var dato = new ProductoCambiante().obs;
   var cambiarEscala = 0.5.obs;
   var controllerCantidadProducto = '1'.obs;
-
+  RxMap mapaHistoricos = {}.obs;
   void cargarProductoNuevo(ProductoCambiante productos, int vantana) {
     this.cambioEstado.value = vantana;
     this.dato.value = productos;
