@@ -5,6 +5,10 @@ class ControllerHistorico extends GetxController {
   RxString mes = '-1'.obs;
   RxString ano = '-1'.obs;
 
+  RxString diaFin = '-1'.obs;
+  RxString mesFin = '-1'.obs;
+  RxString anoFin = '-1'.obs;
+
   RxString fechaInicial = '-1'.obs;
   RxString fechaFinal = '-1'.obs;
   RxString filtro = '-1'.obs;

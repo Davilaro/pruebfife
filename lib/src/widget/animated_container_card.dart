@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 class AnimatedContainerCard extends StatefulWidget {
   final String grupo;
-  final int numeroDoc;
+  final String numeroDoc;
   final String ordenCompra;
   AnimatedContainerCard(
       {Key? key,

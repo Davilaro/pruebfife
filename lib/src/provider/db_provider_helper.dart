@@ -195,8 +195,8 @@ class DBProviderHelper {
 	  GROUP BY NumeroDoc 
 	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) DESC ''';
 
+      log(query);
       final sql = await db.rawQuery(query);
-      log(jsonEncode(sql));
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
       print('error historico $e');
@@ -204,11 +204,11 @@ class DBProviderHelper {
     }
   }
 
-  Future<List<Historico>> consultarGrupoHistorico(int numeroDoc) async {
+  Future<List<Historico>> consultarGrupoHistorico(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc=$numeroDoc GROUP BY fabricante
+      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc='$numeroDoc' GROUP BY fabricante
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -218,11 +218,11 @@ class DBProviderHelper {
   }
 
   Future<List<Historico>> consultarDetalleGrupo(
-      int numeroDoc, String fabricante) async {
+      String numeroDoc, String fabricante) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc=$numeroDoc  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
+      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();

@@ -102,9 +102,13 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
               child: Column(
                 children: [
                   _buscador(size),
-                  FutureBuilder<List<dynamic>>(
+                  Obx(() => FutureBuilder<List<dynamic>>(
                       future: DBProviderHelper.db.consultarHistoricos(
-                          _filtro, fechaInicial, fechaFinal),
+                          _filtro,
+                          catalogSearchViewModel.fechaInicial.value,
+                          catalogSearchViewModel.fechaFinal.value),
+                      // future: DBProviderHelper.db.consultarHistoricos(
+                      //     _filtro, fechaInicial, fechaFinal),
                       builder:
                           (context, AsyncSnapshot<List<dynamic>> snapshot) {
                         if (snapshot.hasData) {
@@ -143,7 +147,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
                         } else {
                           return Column(children: [Text("No hay registros!")]);
                         }
-                      }),
+                      })),
                 ],
               ),
             ),

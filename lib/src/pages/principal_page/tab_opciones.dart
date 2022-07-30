@@ -122,7 +122,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
     String? token = PushNotificationServer.token as String;
     print('Token: $token');
-    setState(() {});
+    // setState(() {});
   }
 
   void cargarSecciones() async {

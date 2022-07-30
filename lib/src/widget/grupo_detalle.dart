@@ -1,12 +1,10 @@
-import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class GrupoDetalle extends StatefulWidget {
   final String grupo;
-  final int numeroDoc;
+  final String numeroDoc;
   const GrupoDetalle({Key? key, required this.grupo, required this.numeroDoc})
       : super(key: key);
 
