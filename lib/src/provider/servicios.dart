@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
@@ -379,15 +380,16 @@ class Servicies {
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlPrincipal +
-          'Pedido?codigo=nutresa&codUsuario=$usuarioLogin');
+      url = Uri.parse(
+          '${Constantes().urlPrincipal}Pedido?codigo=nutresa&codUsuario=$usuarioLogin');
       print(url);
+
       final response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: datos);
-      print('respuesta ${response.statusCode}');
+
       if (response.statusCode == 200) {
         return ValidarPedido.fromJson(jsonDecode(response.body));
       } else {
