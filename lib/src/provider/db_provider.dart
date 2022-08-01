@@ -746,7 +746,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
       List<Map> sql = await db.rawQuery('''
-        SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+       SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
         p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
@@ -755,15 +755,11 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
-        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
-substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
-         ,activopromocion, activoprodnuevo
         FROM Producto p
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
-        ) tmp where  (p.fabricante like '%$codigoProveedor%') AND
-         tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo 
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo 
         $condicion 
         ORDER BY p.orden ASC 
          
@@ -773,6 +769,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       return lista;
     } catch (e) {
+      print('error consulta fitro');
       return [];
     }
   }
