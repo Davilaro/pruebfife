@@ -240,7 +240,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       UxcamTagueo().confirmOrder(listaProductosPedidos, cartProvider);
       cartProvider.guardarValorCompra = 0;
       cartProvider.guardarValorAhorro = 0;
-
+      PedidoEmart.cantItems.value = '0';
       Navigator.push(
           context,
           MaterialPageRoute(
