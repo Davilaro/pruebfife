@@ -18,7 +18,6 @@ import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -242,14 +241,17 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       cartProvider.guardarValorCompra = 0;
       cartProvider.guardarValorAhorro = 0;
       PedidoEmart.cantItems.value = '0';
- Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-    PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc)), (Route<dynamic> route) => false);
-     // Navigator.push(
-     //     context,
-        //  MaterialPageRoute(
-         //   builder: (context) =>
-          //      PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc),
-         // ));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => PedidoRealizado(
+                  numEmpresa: widget.numEmpresa, numdoc: numDoc)),
+          (Route<dynamic> route) => false);
+      // Navigator.push(
+      //     context,
+      //  MaterialPageRoute(
+      //   builder: (context) =>
+      //      PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc),
+      // ));
     } else {
       Navigator.pop(context);
       mostrarAlertaUtilsError(_context2, validar.mensaje!);

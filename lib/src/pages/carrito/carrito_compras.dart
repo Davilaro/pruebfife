@@ -31,7 +31,6 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
-late BuildContext _context2;
 //late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
@@ -57,7 +56,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
-    _context2 = context;
     final cartProvider = Provider.of<CarroModelo>(context);
     MetodosLLenarValores().calcularValorTotal(cartProvider);
 

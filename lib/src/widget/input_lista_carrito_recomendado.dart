@@ -37,7 +37,6 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      print(widget.productos.codigo);
       dynamic responseOferta = await DBProvider.db
           .consultarProductoEnOfertaPorCodigo(widget.productos.codigo);
       if (responseOferta == widget.productos.codigo) {

@@ -15,6 +15,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/card_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -51,7 +52,6 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
 
   @override
   Widget build(BuildContext context) {
-    print(isProductoEnOferta);
     final cartProvider = Provider.of<CarroModelo>(context);
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
@@ -64,13 +64,37 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         } else {
           isProductoEnOferta = false;
         }
-        return Card(
-          shape: RoundedRectangleBorder(
-              side: new BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(8.0)),
-          child: _cargarDisenoInterno(
-              widget.element, context, cartProvider, format, widget.index),
-        );
+        bool isAgotado = constrollerProductos.validarAgotado(widget.element);
+        return CardCustom(
+            producto: widget.element,
+            isProductoPromo: widget.isCategoriaPromos,
+            isProductoEnOferta: isProductoEnOferta,
+            isAgotado: isAgotado,
+            validatePromo: (widget.element.fechafinpromocion_1!
+                        .contains(RegExp(r'[0-9]')) ||
+                    widget.isCategoriaPromos) ||
+                isProductoEnOferta,
+            validateProductNuevo:
+                widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')),
+            onTapCard: () {
+              //FIREBASE: Llamamos el evento select_item
+              TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
+              //UXCam: Llamamos el evento seeDetailProduct
+              UxcamTagueo().seeDetailProduct(widget.element, widget.index, '');
+              detalleProducto(widget.element, cartProvider);
+            },
+            onTapBtn: () => {
+                  //FIREBASE: Llamamos el evento select_item
+                  TagueoFirebase().sendAnalityticSelectItem(widget.element, 1),
+                  detalleProducto(widget.element, cartProvider)
+                });
+        // return Card(
+        //   shape: RoundedRectangleBorder(
+        //       side: new BorderSide(color: Colors.white),
+        //       borderRadius: BorderRadius.circular(8.0)),
+        //   child: _cargarDisenoInterno(
+        //       widget.element, context, cartProvider, format, widget.index),
+        // );
       },
     );
   }
