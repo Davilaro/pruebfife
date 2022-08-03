@@ -76,8 +76,9 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                       width: Get.width * 1,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: RefreshIndicator(
-                        backgroundColor: ConstantesColores.agua_marina,
                         color: ConstantesColores.azul_precio,
+                        backgroundColor:
+                            ConstantesColores.agua_marina.withOpacity(0.6),
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
                           setState(() {
