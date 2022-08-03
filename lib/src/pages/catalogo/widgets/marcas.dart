@@ -62,8 +62,9 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                       width: Get.width * 1,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                       child: RefreshIndicator(
-                        color: ConstantesColores.azul_precio,
-                        backgroundColor: ConstantesColores.agua_marina,
+                        color: ConstantesColores.azul_precio.withOpacity(0.7),
+                        backgroundColor:
+                            ConstantesColores.agua_marina.withOpacity(0.5),
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
 

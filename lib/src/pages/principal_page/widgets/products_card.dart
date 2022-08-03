@@ -143,7 +143,7 @@ class _ProductsCardState extends State<ProductsCard> {
           detalleProducto(element, cartProvider);
         },
         child: Container(
-          height: Get.height * 0.35,
+          height: Get.height * 0.4,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // crossAxisAlignment: CrossAxisAlignment.end,
