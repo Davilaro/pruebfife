@@ -193,7 +193,14 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                           children: [
                             GestureDetector(
                                 onTap: () => {
-                                      _cambiarValor(1),
+                                      if (valorRound == 1)
+                                        {
+                                          _cambiarValor(3),
+                                        }
+                                      else
+                                        {
+                                          _cambiarValor(1),
+                                        }
                                     },
                                 child: valorRound == 2
                                     ? Icon(
@@ -222,7 +229,14 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                         children: [
                           GestureDetector(
                             onTap: () => {
-                              _cambiarValor(2),
+                              if (valorRound == 2)
+                                {
+                                  _cambiarValor(3),
+                                }
+                              else
+                                {
+                                  _cambiarValor(2),
+                                }
                             },
                             child: valorRound == 1
                                 ? Icon(
