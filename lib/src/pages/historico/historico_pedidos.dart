@@ -105,8 +105,6 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
                           _filtro,
                           catalogSearchViewModel.fechaInicial.value,
                           catalogSearchViewModel.fechaFinal.value),
-                      // future: DBProviderHelper.db.consultarHistoricos(
-                      //     _filtro, fechaInicial, fechaFinal),
                       builder:
                           (context, AsyncSnapshot<List<dynamic>> snapshot) {
                         if (snapshot.hasData) {
@@ -191,7 +189,6 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            // onTap: () => {pickDateRange(context)},
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
@@ -206,42 +203,4 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
       ),
     );
   }
-
-  Future pickDateRange(BuildContext context) async {
-    DateTime now = new DateTime.now();
-    DateTimeRange dateRange;
-    final newDateRange = await showDateRangePicker(
-      locale: const Locale("es", ""),
-      context: context,
-      firstDate: DateTime(2021, 1, 1),
-      currentDate: DateTime(now.year, now.month, now.day),
-      lastDate: DateTime(now.year, now.month, now.day),
-    );
-    if (newDateRange == null) return;
-    dateRange = newDateRange;
-    // catalogSearchViewModel.setFechaInicial(dateRange.start.toString());
-    // catalogSearchViewModel.setFechaFinal(dateRange.end.toString());
-    setState(() {
-      fechaInicial = dateRange.start.toString();
-      fechaFinal = dateRange.end.toString();
-    });
-  }
-}
-
-showLoaderDialog(BuildContext context, Widget widget, double altura) {
-  AlertDialog alert = AlertDialog(
-      content: Container(
-          height: altura,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: Colors.white,
-          ),
-          child: widget));
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

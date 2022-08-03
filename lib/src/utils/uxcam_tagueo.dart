@@ -240,7 +240,6 @@ class UxcamTagueo {
     });
   }
 
-// quedo pendiente implemetar este evento en realizar pedido en el carrito
   void clickPlaceOrder(CarroModelo cartProvider) {
     try {
       List<Object> listaProductos = [];

@@ -1,5 +1,7 @@
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/dropdown_custom.dart';
 import 'package:flutter/material.dart';
@@ -266,7 +268,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                       height: Get.height * 0.05,
                                       child: RaisedButton(
                                         onPressed: () {
-                                          confirmarFiltro();
+                                          confirmarFiltro(context);
                                         },
                                         child: Text(
                                           'Filtrar',
@@ -404,7 +406,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     }
   }
 
-  confirmarFiltro() {
+  confirmarFiltro(BuildContext context) async {
     if (controlerHistorico.dia.value != '' &&
         controlerHistorico.mes.value != '' &&
         controlerHistorico.ano.value != '' &&
@@ -424,10 +426,12 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       var num1 = fechaInicial.replaceAll('-', '');
       var num2 = fechaFin.replaceAll('-', '');
       if (toInt(num1) < toInt(num2)) {
-        mensajeInformativo.value = '';
-        controlerHistorico.setFechaInicial(fechaInicial);
-        controlerHistorico.setFechaFinal(fechaFin);
-        Navigator.pop(context);
+        if (await validarHistoricoFiltro(context, fechaInicial, fechaFin)) {
+          mensajeInformativo.value = '';
+          controlerHistorico.setFechaInicial(fechaInicial);
+          controlerHistorico.setFechaFinal(fechaFin);
+          Navigator.pop(context);
+        }
       } else {
         mensajeInformativo.value =
             'Por favor selecciona una fecha inicial menor a la final';
@@ -448,7 +452,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
 
       controlerHistorico.dia.value = '';
       controlerHistorico.mes.value = '';
-      controlerHistorico..ano.value = '';
+      controlerHistorico.ano.value = '';
 
       controlerHistorico.diaFin.value = '';
       controlerHistorico.mesFin.value = '';
@@ -628,7 +632,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     Map<String, int> menuItems = {};
     List<String> list = [];
 
-    for (int i = 2022; i <= 2050; i++) {
+    for (int i = 2021; i <= 2050; i++) {
       menuItems.addAll({'$i': i});
     }
 
@@ -638,6 +642,19 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     setState(() {
       listAnos = list;
     });
+  }
+
+  validarHistoricoFiltro(
+      BuildContext context, String fechaInicial, String fechaFin) async {
+    var res = await DBProviderHelper.db
+        .consultarHistoricos('-1', fechaInicial, fechaFin);
+    if (res.length > 0) {
+      return true;
+    } else {
+      String mensaje = 'No encontramos registros para esas fechas';
+      mostrarAlert(context, mensaje, null);
+      return false;
+    }
   }
 
   @override

@@ -176,7 +176,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   _dialogEnviarPedido(size) async {
     final List<Pedido> listaProductosPedidos = [];
-    final double precioFinal = 0;
 
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
       if (value == "") {
@@ -227,8 +226,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         listaProductosPedidos, prefs.codClienteLogueado, fechaPedido, numDoc);
 
     if (validar.estado == 'OK') {
-      //Navigator.pop(context);
-
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
         PedidoEmart.registrarValoresPedido(
             PedidoEmart.listaProductos![key]!, "0", false);
@@ -246,12 +243,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
               builder: (context) => PedidoRealizado(
                   numEmpresa: widget.numEmpresa, numdoc: numDoc)),
           (Route<dynamic> route) => false);
-      // Navigator.push(
-      //     context,
-      //  MaterialPageRoute(
-      //   builder: (context) =>
-      //      PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc),
-      // ));
     } else {
       Navigator.pop(context);
       mostrarAlertaUtilsError(_context2, validar.mensaje!);
