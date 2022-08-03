@@ -65,7 +65,7 @@ class _FabricantesState extends State<Fabricantes> {
                     height: size.height * 0.7,
                     margin: EdgeInsets.only(top: 10),
                     child: RefreshIndicator(
-                      color: ConstantesColores.azul_precio.withOpacity(0.7),
+                      color: ConstantesColores.azul_precio,
                       backgroundColor:
                           ConstantesColores.agua_marina.withOpacity(0.6),
                       onRefresh: () async {
