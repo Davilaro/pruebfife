@@ -157,11 +157,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          ' ${widget.producto.nombrecomercial}',
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        // Text(
+                        //   ' ${widget.producto.nombrecomercial}',
+                        //   maxLines: 2,
+                        //   style: TextStyle(fontSize: 12),
+                        // ),
                         Text(
                           'SKU: ${widget.producto.codigo}',
                           maxLines: 1,
@@ -237,7 +237,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                       ),
                                       Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text('Precio por unidad',
+                                        child: Text(
+                                            'Precio por unidad de venta',
                                             style: TextStyle(
                                               color: ConstantesColores.verde,
                                             )),

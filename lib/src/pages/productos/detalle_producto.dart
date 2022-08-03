@@ -20,7 +20,7 @@ import 'package:intl/intl.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
 
-import 'acciones_carrito_bart.dart';
+import '../../widget/acciones_carrito_bart.dart';
 
 class DetalleProducto extends StatefulWidget {
   final Productos productos;
@@ -159,11 +159,11 @@ class _DetalleProductoState extends State<DetalleProducto> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  '${widget.productos.nombrecomercial}',
-                                  maxLines: 2,
-                                  style: TextStyle(fontSize: 12),
-                                ),
+                                // Text(
+                                //   '${widget.productos.nombrecomercial}',
+                                //   maxLines: 2,
+                                //   style: TextStyle(fontSize: 12),
+                                // ),
                                 Text(
                                   'SKU: ' + widget.productos.codigo,
                                   maxLines: 1,
@@ -229,7 +229,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                 ),
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  child: Text('Precio por unidad',
+                                  child: Text('Precio por unidad de venta',
                                       style: TextStyle(
                                         color: ConstantesColores.verde,
                                       )),

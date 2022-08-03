@@ -7,7 +7,7 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/widget/detalle_producto.dart';
+import 'package:emart/src/pages/productos/detalle_producto.dart';
 import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
