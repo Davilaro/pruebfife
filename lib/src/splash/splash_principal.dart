@@ -23,8 +23,6 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    //UXCAM: Se define el nombre de la interfaz
-    FlutterUxcam.tagScreenName('LogoPidekyPage');
     Future.delayed(Duration(milliseconds: 1000), () {
       executeAfterBuild(context);
     });
@@ -32,20 +30,8 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //   future: _descarcarDB(),
-    //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-    //     if (snapshot.hasData) {
-    //       return TabOpciones();
-    //     } else {
-    //       return Center(
-    //           child: Image.asset(
-    //         'assets/splash.png',
-    //         fit: BoxFit.cover,
-    //       ));
-    //     }
-    //   },
-    // );
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('LogoPidekyPage');
     return Scaffold(
       body: Center(
           child: Image.asset(

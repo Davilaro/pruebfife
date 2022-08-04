@@ -37,9 +37,6 @@ class CardCustom extends StatelessWidget {
     final screeSize = MediaQuery.of(context).size;
     UIUtills()
         .updateScreenDimesion(width: screeSize.width, height: screeSize.height);
-
-    print(
-        'tamaño primero ${Get.height * UIUtills().getProportionalHeight(height: 0.03)} -- segundo ${Get.height * 0.04}');
     return Card(
       shape: RoundedRectangleBorder(
           side: new BorderSide(color: Colors.white),

@@ -129,7 +129,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 formatNumber
                                     .format(cartProvider.getTotal)
                                     .replaceAll(',00', ''),
-                            style: diseno_valores()),
+                            style: disenoValores()),
                         SizedBox(
                           height: 20,
                         ),
@@ -162,7 +162,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  TextStyle diseno_valores() => TextStyle(
+  TextStyle disenoValores() => TextStyle(
       fontSize: 15.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
@@ -474,7 +474,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             .text) *
                                         product.productos.preciodescuento))
                                 .replaceAll(',00', ''),
-                        style: diseno_valores(),
+                        style: disenoValores(),
                       ),
                     ),
                   ),
@@ -742,14 +742,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       color: Colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //     spreadRadius: 5,
-                      //     blurRadius: 7,
-                      //     offset: Offset(0, 3), // changes position of shadow
-                      //   ),
-                      // ],
                     ),
                     child: Column(
                       children: [
@@ -806,14 +798,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: widget));
     showDialog(
@@ -976,9 +960,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
           if (snapshot.hasData) {
             var proveedores =
                 snapshot.data.substring(0, snapshot.data.length - 2);
-
-            // String mensaje =
-            //     "Tu pedido no fue finalizado. Continúa comprando para cumplir con el pedido mínimo $singulaPlural $proveedores";
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -988,14 +969,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       color: Colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //     spreadRadius: 5,
-                      //     blurRadius: 7,
-                      //     offset: Offset(0, 3), // changes position of shadow
-                      //   ),
-                      // ],
                     ),
                     child: Column(
                       children: [
@@ -1038,7 +1011,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 ),
                               ),
                             ),
-                            // _botonSeguirComprando(size),
                             _botonAceptarNoCumplimiento(size, fabricantes),
                           ],
                         )
@@ -1064,14 +1036,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: Column(
               children: [
@@ -1089,7 +1053,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // _botonSeguirComprando(size),
                     _botonAceptarNoCumplimiento(size, fabricantes),
                   ],
                 )
@@ -1125,16 +1088,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
       if (valorPedido < (topeMinimo * 1.19)) {
         return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
             formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
-      } else {
-        return "Tu pedido será entregado el siguiente día hábil.";
       }
+      return "Tu pedido será entregado el siguiente día hábil.";
     } else {
       if (valorPedido < precioMinimo) {
         return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
-      } else {
-        return "";
       }
+      return "";
     }
   }
 }

@@ -12,7 +12,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 import 'dounser.dart';
-import 'filtro_precios.dart';
 
 var providerDatos = new DatosListas();
 
@@ -69,9 +68,7 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
           child: Container(
             height: Get.height * 0.8,
             width: Get.width * 1,
-            //padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
             child: FutureBuilder(
-                // initialData: [],
                 //SE VA DESCARGAR POR DB
                 future: DBProvider.db.cargarProductos(
                     widget.codCategoria,
@@ -87,13 +84,12 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else {
-                    return ListaProductosCatalogo(
-                        data: snapshot.data,
-                        numEmpresa: widget.numEmpresa,
-                        cantidadFilas: 2,
-                        location: widget.nombreCategoria);
                   }
+                  return ListaProductosCatalogo(
+                      data: snapshot.data,
+                      numEmpresa: widget.numEmpresa,
+                      cantidadFilas: 2,
+                      location: widget.nombreCategoria);
                 }),
           ),
         ),

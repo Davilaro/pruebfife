@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
@@ -26,8 +24,6 @@ import 'package:provider/provider.dart';
 
 NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
-final TextEditingController _controllerBuscarProductoMarca =
-    TextEditingController();
 
 class IrMiCarrito extends StatefulWidget {
   final Productos productos;
@@ -143,7 +139,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               Align(
                                   alignment: Alignment.topLeft,
                                   child: Container(
-                                      // height: Get.height * 0.13,
                                       width: MediaQuery.of(context).size.width *
                                           0.45,
                                       child: Text('${widget.productos.nombre}',
@@ -155,7 +150,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
-                                  // height: Get.height * 0.08,
                                   child: Column(
                                     children: [
                                       cargarValorPrecio(
@@ -175,7 +169,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
             ),
             //BOTONES DE ACCION
             Container(
-              // height: widget.tamano * 0.2,
               child: Column(
                 children: [
                   Center(
@@ -382,7 +375,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         : Container(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Container(
-                //height: 90,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -451,22 +443,21 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                   decoration: TextDecoration.lineThrough)),
         ),
       ]);
-    } else {
-      return Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        alignment: Alignment.topLeft,
-        child: Text(
-          '${format.currencySymbol}' +
-              formatNumber
-                  .format(widget.productos.precioinicial)
-                  .replaceAll(',00', ''),
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-        ),
-      );
     }
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      alignment: Alignment.topLeft,
+      child: Text(
+        '${format.currencySymbol}' +
+            formatNumber
+                .format(widget.productos.precioinicial)
+                .replaceAll(',00', ''),
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            color: ConstantesColores.azul_precio,
+            fontWeight: FontWeight.bold,
+            fontSize: 18),
+      ),
+    );
   }
 }

@@ -322,7 +322,6 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         decoration: BoxDecoration(
           color: HexColor("#E4E3EC"),
-          //border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(30),
         ),
         child: TextField(

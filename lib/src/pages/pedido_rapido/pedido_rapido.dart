@@ -22,9 +22,9 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-import 'acciones_carrito_bart.dart';
-import 'column_table.dart';
-import 'expansion_card_last.dart';
+import '../../widget/acciones_carrito_bart.dart';
+import '../../widget/column_table.dart';
+import '../../widget/expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
 final prefs = new Preferencias();
@@ -105,9 +105,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             return Future<void>.delayed(const Duration(seconds: 3));
           },
           child: SingleChildScrollView(
-              //child: (seleccion == 1
-              //    ? _ordenSugerida(size, cartProvider, providerDatos)
-              //   : _ultimaOrden(size, cartProvider)))
               child: _ultimaOrden(size, cartProvider, providerDatos)),
         ));
   }
@@ -176,7 +173,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                         },
                       ),
                       Container(
-                        // color: Colors.red,
                         width: 2,
                       ),
                     ],
@@ -302,13 +298,11 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           children: [
             Container(
               padding: const EdgeInsets.only(top: 20),
-              // color: Colors.yellow,
               child: Table(columnWidths: {
                 0: FlexColumnWidth(6),
                 1: FlexColumnWidth(3)
               }, children: [
                 TableRow(children: [
-                  // Text(""),
                   Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -316,10 +310,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                       style: TextStyle(color: HexColor("#9F9F9F")),
                     ),
                   ),
-                  // Text(
-                  //   "Cant. Ped",
-                  //   style: TextStyle(color: HexColor("#9F9F9F")),
-                  // ),
                   Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -441,21 +431,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     }
   }
 
-  Widget _ordenSugerida(size, cartProvider, providerDatos) {
-    return Column(
-      children: [
-        _tabs(size),
-        _sugerencia(size),
-        _tarjetaCantidades(size, cartProvider, providerDatos),
-        _botonGigante(size),
-        _tarjetaCantidadesSugeridas(size, cartProvider, providerDatos),
-        SizedBox(
-          height: 20,
-        )
-      ],
-    );
-  }
-
   Future pickDateRange(BuildContext context) async {
     DateTime now = new DateTime.now();
     DateTimeRange dateRange;
@@ -475,8 +450,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   }
 
   Widget _ultimaOrden(Size size, cartProvider, providerDatos) {
-    //final providerDatos = Provider.of<DatosListas>(context);
-    final controlador = Get.find<CambioEstadoProductos>();
     return FutureBuilder(
         future: providerDatos.getListaHistoricosHelper(
             filtro, fechaInicial, fechaFinal),
@@ -556,10 +529,9 @@ class _PedidoRapidoState extends State<PedidoRapido> {
               child: TextField(
                 onChanged: (value) => {
                   setState(() => {
-                        if (_filtroController.text == "")
-                          {this.filtro = "-1"}
-                        else
-                          {this.filtro = _filtroController.text}
+                        _filtroController.text == ""
+                            ? this.filtro = "-1"
+                            : this.filtro = _filtroController.text
                       })
                 },
                 controller: _filtroController,
@@ -614,140 +586,4 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     }
     return false;
   }
-
-  // Widget _tarjetaUltimaOrden(size) {
-  //   return Container(
-  //     padding: EdgeInsets.only(top: 16, bottom: 16),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(10),
-  //       color: Colors.white,
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: Colors.grey.withOpacity(0.5),
-  //           spreadRadius: 5,
-  //           blurRadius: 7,
-  //           offset: Offset(0, 3), // changes position of shadow
-  //         ),
-  //       ],
-  //     ),
-  //     width: size.width * 0.9,
-  //     child: Column(
-  //       children: [
-  //         Table(columnWidths: {
-  //           1: FractionColumnWidth(.3)
-  //         }, children: [
-  //           TableRow(
-  //             children: [
-  //               Container(
-  //                 // color: Colors.white,
-  //                 alignment: Alignment.centerLeft,
-  //                 child: Container(
-  //                   padding: EdgeInsets.only(left: 12),
-  //                   child: Column(
-  //                     children: [
-  //                       Text(
-  //                         "Orden Pideky 56789-0",
-  //                         style: TextStyle(
-  //                             fontSize: 15,
-  //                             fontWeight: FontWeight.bold,
-  //                             color: Colors.black),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //               Container(
-  //                 // color: Colors.green,
-  //                 child: Row(
-  //                   children: [
-  //                     Container(
-  //                       // color: Colors.yellow,
-  //                       child: Icon(
-  //                         Icons.clean_hands,
-  //                         color: HexColor("#30C3A3"),
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       width: 10,
-  //                     ),
-  //                     Container(
-  //                       color: Colors.white,
-  //                       child: Text(
-  //                         "Entregado",
-  //                         style: TextStyle(fontSize: 10),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 // color: Colors.yellow,
-  //               )
-  //             ],
-  //           ),
-  //         ]),
-  //         Table(
-  //           children: [
-  //             // TableRow(
-  //             //   children: [AnimatedContainerCard()],
-  //             // ),
-  //             // TableRow(
-  //             //   children: [AnimatedContainerCard()],
-  //             // ),
-  //             // TableRow(
-  //             //   children: [AnimatedContainerCard()],
-  //             // ),
-  //           ],
-  //         ),
-  //         _separador(size),
-  //         Container(
-  //           // color: Colors.red,
-  //           width: size.width * 0.9,
-  //           margin: const EdgeInsets.only(top: 8.0),
-  //           padding: EdgeInsets.only(right: 10),
-  //           alignment: Alignment.centerRight,
-  //           child: Container(
-  //             width: 124,
-  //             child: ElevatedButton(
-  //               style: ButtonStyle(
-  //                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-  //                       RoundedRectangleBorder(
-  //                           borderRadius: BorderRadius.circular(18.0),
-  //                           side: BorderSide(
-  //                               color: HexColor("#43398E"), width: 1.0)))),
-  //               child: Row(
-  //                 children: [
-  //                   Text(
-  //                     'Pedir',
-  //                     style: TextStyle(color: HexColor("#43398E")),
-  //                   ),
-  //                   Icon(
-  //                     Icons.car_rental,
-  //                     color: HexColor("#30C3A3"),
-  //                   )
-  //                 ],
-  //               ),
-  //               onPressed: () {},
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _separador(size) {
-  //   return AnimatedContainer(
-  //     duration: Duration(milliseconds: 500),
-  //     width: size.width * 0.8,
-  //     padding: EdgeInsets.only(left: 16, right: 16),
-  //     decoration: BoxDecoration(
-  //       border: Border(
-  //         bottom: BorderSide(
-  //           //                   <--- left side
-  //           color: HexColor("#EAE8F5"),
-  //           width: 0.5,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

@@ -134,23 +134,19 @@ void validarVersionActual(BuildContext context) async {
                         try {
                           launch("market://details?id=" + appPackageName);
                         } on PlatformException catch (e) {
-                          if (Platform.isAndroid) {
-                            launch(
-                                "https://play.google.com/store/apps/details?id=" +
-                                    appPackageName);
-                          } else {
-                            launch(
-                                "https://apps.apple.com/co/app/pideky/id1593480925");
-                          }
+                          Platform.isAndroid
+                              ? launch(
+                                  "https://play.google.com/store/apps/details?id=" +
+                                      appPackageName)
+                              : launch(
+                                  "https://apps.apple.com/co/app/pideky/id1593480925");
                         } finally {
-                          if (Platform.isAndroid) {
-                            launch(
-                                "https://play.google.com/store/apps/details?id=" +
-                                    appPackageName);
-                          } else {
-                            launch(
-                                "https://apps.apple.com/co/app/pideky/id1593480925");
-                          }
+                          Platform.isAndroid
+                              ? launch(
+                                  "https://play.google.com/store/apps/details?id=" +
+                                      appPackageName)
+                              : launch(
+                                  "https://apps.apple.com/co/app/pideky/id1593480925");
                         }
                       },
                       child: Text('Actualizar',

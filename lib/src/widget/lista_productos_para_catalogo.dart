@@ -29,7 +29,6 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
 
   @override
   void dispose() {
-    // constrollerProductos.dispose();
     super.dispose();
   }
 
@@ -64,18 +63,6 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
 
       opciones.add(widgetTemp);
     }
-
-    // for (var element in data) {
-    //   Productos productos = element;
-    //   final widgetTemp = InputValoresCatalogo(
-    //     element: productos,
-    //     numEmpresa: widget.numEmpresa,
-    //     isCategoriaPromos: false,
-    //   );
-
-    //   opciones.add(widgetTemp);
-    // }
-
     return opciones;
   }
 }

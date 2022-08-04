@@ -23,8 +23,6 @@ class CustonNavigatorBar extends StatelessWidget {
             'tab_opciones',
           );
         },
-        //showSelectedLabels: false,   // <-- HERE
-        //showUnselectedLabels: false, // <-- AND HERE
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 10.0,
         unselectedFontSize: 10.0,

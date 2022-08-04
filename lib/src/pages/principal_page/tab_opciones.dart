@@ -17,7 +17,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/pages/historico/historico_pedidos.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/pedido_rapido.dart';
+import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -96,8 +96,6 @@ class _TabOpcionesState extends State<TabOpciones>
   Future<void> _descarcarDB() async {
     try {
       if (PedidoEmart.listaControllersPedido?.keys.length == null) {
-        print(
-            'entre aca otra vez ${PedidoEmart.listaControllersPedido?.keys.length}');
         PedidoEmart.listaControllersPedido = new Map();
         PedidoEmart.listaValoresPedido = new Map();
         PedidoEmart.listaProductos = new Map();

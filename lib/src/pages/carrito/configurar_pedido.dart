@@ -138,7 +138,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     );
   }
 
-  TextStyle diseno_valores() => TextStyle(
+  TextStyle disenoValores() => TextStyle(
       fontSize: 17.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
 
   Widget _total(size, cartProvider, format) {
@@ -153,7 +153,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                     formatNumber
                         .format(cartProvider.getTotal)
                         .replaceAll(',00', ''),
-                style: diseno_valores()),
+                style: disenoValores()),
             Text(
               '* Este pedido tiene incluido el iva',
               style: TextStyle(color: ConstantesColores.verde),
@@ -256,14 +256,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: widget));
     showDialog(
@@ -285,14 +277,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: SingleChildScrollView(
               child: Column(

@@ -29,18 +29,6 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
           SingleChildScrollView(
             child: Container(
               height: 40,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(14),
-              //   color: Colors.white,
-              //   boxShadow: [
-              //     BoxShadow(
-              //       color: Colors.grey.withOpacity(0.5),
-              //       spreadRadius: 5,
-              //       blurRadius: 7,
-              //       offset: Offset(0, 3), // changes position of shadow
-              //     ),
-              //   ],
-              // ),
               child: Column(
                 children: [
                   Table(
@@ -51,10 +39,6 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
                     children: [
                       TableRow(children: [
                         Container(
-                          // decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     color: Colors.white),
-                          // padding: const EdgeInsets.all(20.0),
                           child: Text(
                             widget.texto,
                             style: TextStyle(
@@ -85,12 +69,10 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
                       children: [
                         TableRow(children: [
                           Container(
-                            // color: Colors.red,
                             child: Column(
                               children: [
                                 Container(
                                   width: size.width * 0.9,
-                                  // color: Colors.yellow,
                                   child: Text(
                                     widget.razonsocial.trim(),
                                     style: TextStyle(
@@ -101,14 +83,12 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
                                 ),
                                 Container(
                                   width: size.width * 0.9,
-                                  // color: Colors.blue,
                                   child: Text(
                                     widget.direccion,
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
                                 Container(
-                                  // color: Colors.green,
                                   width: size.width * 0.9,
                                   child: Text(
                                     widget.ciudad,
@@ -122,7 +102,6 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 14),
-                            // color: Colors.yellow,
                             alignment: Alignment.center,
                             child: Icon(
                               Icons.create_outlined,
@@ -133,7 +112,6 @@ class _SimpleCardNotExpandState extends State<SimpleCardNotExpand> {
                         ])
                       ],
                     ),
-                    // margin: EdgeInsets.only(top: 10),
                   ),
                 ],
               ),

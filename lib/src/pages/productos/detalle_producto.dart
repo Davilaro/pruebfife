@@ -159,11 +159,6 @@ class _DetalleProductoState extends State<DetalleProducto> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text(
-                                //   '${widget.productos.nombrecomercial}',
-                                //   maxLines: 2,
-                                //   style: TextStyle(fontSize: 12),
-                                // ),
                                 Text(
                                   'SKU: ' + widget.productos.codigo,
                                   maxLines: 1,
@@ -391,22 +386,19 @@ class _DetalleProductoState extends State<DetalleProducto> {
     String valorInicial = _controllerCantidadProducto.text;
     if (valorInicial != "" && valorInicial != '1' && valorInicial != '0') {
       int valorResta = int.parse(valorInicial) - 1;
-      if (valorResta <= 0) {
-        setState(() {
-          cargoConfirmar.cambiarValoresEditex('0');
-        });
-      } else {
-        setState(() {
-          cargoConfirmar.cambiarValoresEditex('$valorResta');
-        });
-      }
+      valorResta <= 0
+          ? setState(() {
+              cargoConfirmar.cambiarValoresEditex('0');
+            })
+          : setState(() {
+              cargoConfirmar.cambiarValoresEditex('$valorResta');
+            });
     }
   }
 
   llenarCarrito(Productos producto, CarroModelo cartProvider) {
-    if (_controllerCantidadProducto.text == '') {
-    } else if (_controllerCantidadProducto.text == '0') {
-    } else {
+    if (_controllerCantidadProducto.text != '' &&
+        _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =
           _controllerCantidadProducto.text;
       PedidoEmart.registrarValoresPedido(
@@ -430,6 +422,4 @@ class _DetalleProductoState extends State<DetalleProducto> {
 
   TextStyle diseno_valores() => TextStyle(
       fontSize: 16.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
-  TextStyle diseno_valores_text() =>
-      TextStyle(fontSize: 20.0, color: HexColor("#43398E"));
 }
