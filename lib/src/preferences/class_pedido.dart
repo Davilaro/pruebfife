@@ -1,5 +1,3 @@
-import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/Sugerido.dart';
 import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +51,8 @@ class PedidoEmart {
             productos: elemet);
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
               codigo: elemet.codigo,
@@ -120,7 +119,8 @@ class PedidoEmart {
             productos: elemet);
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
             codigo: elemet.codigo,
@@ -176,7 +176,8 @@ class PedidoEmart {
         );
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) == 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) == 0) {
         ProductoAsignado productoAsignado = new ProductoAsignado(
           codigo: elemet.codigo,
           nombre: elemet.nombre,
@@ -186,7 +187,8 @@ class PedidoEmart {
         );
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
             codigo: elemet.codigo,

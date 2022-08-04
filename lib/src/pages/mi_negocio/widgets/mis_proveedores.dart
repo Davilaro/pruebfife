@@ -57,7 +57,7 @@ class MisProveedores extends StatelessWidget {
                           ),
                         ),
                       ),
-                      for (int i = 0; i < snapshot.data!.length; i++)
+                      for (int i = 0; i < proveedores!.length; i++)
                         Container(
                           child: Acordion(
                             urlIcon: proveedores[i].icono,
@@ -95,7 +95,7 @@ class MisProveedores extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'Mi código de cliente: ${prefs.codCliente}',
+                                    'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
                                     style: TextStyle(
                                         fontSize: 13,
                                         color: ConstantesColores.gris_textos,
@@ -114,5 +114,18 @@ class MisProveedores extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  String validarCliente(empresa) {
+    if (empresa == 'NUTRESA') {
+      return prefs.codigonutresa.toString();
+    }
+    if (empresa == 'ZENU') {
+      return prefs.codigozenu.toString();
+    }
+    if (empresa == 'MEALS') {
+      return prefs.codigomeals.toString();
+    }
+    return '';
   }
 }

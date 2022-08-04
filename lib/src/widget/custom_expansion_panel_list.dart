@@ -1,17 +1,15 @@
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 const double _kPanelHeaderCollapsedHeight = 80.0;
 const double _kPanelHeaderExpandedHeight = 80.0;
 
 class CustomExpansionPanelList extends StatelessWidget {
-
   const CustomExpansionPanelList(
       {Key? key,
-        this.children: const <ExpansionPanel>[],
-        required this.expansionCallback,
-        this.animationDuration: kThemeAnimationDuration})
+      this.children: const <ExpansionPanel>[],
+      required this.expansionCallback,
+      this.animationDuration: kThemeAnimationDuration})
       : assert(children != null),
         assert(animationDuration != null),
         super(key: key);
@@ -73,13 +71,14 @@ class CustomExpansionPanelList extends StatelessWidget {
         ],
       );
 
-      double _radiusValue = _isChildExpanded(index)? 8.0 : 8.0;
+      double _radiusValue = _isChildExpanded(index) ? 8.0 : 8.0;
       items.add(
         new Container(
           key: new _SaltedKey<BuildContext, int>(context, index * 2),
           child: new Material(
             elevation: 2.0,
-            borderRadius: new BorderRadius.all(new Radius.circular(_radiusValue)),
+            borderRadius:
+                new BorderRadius.all(new Radius.circular(_radiusValue)),
             child: new Column(
               children: <Widget>[
                 header,
@@ -87,9 +86,9 @@ class CustomExpansionPanelList extends StatelessWidget {
                   firstChild: new Container(height: 0.0),
                   secondChild: children[index].body,
                   firstCurve:
-                  const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
+                      const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
                   secondCurve:
-                  const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                      const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
                   sizeCurve: Curves.fastOutSlowIn,
                   crossFadeState: _isChildExpanded(index)
                       ? CrossFadeState.showSecond

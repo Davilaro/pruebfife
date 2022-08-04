@@ -8,7 +8,6 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/provider.dart';
 
 class ColumnTable extends StatefulWidget {
   final Sugerido sugerido;
@@ -29,11 +28,8 @@ class _ColumnTableState extends State<ColumnTable> {
   // late bool activo = true;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return widget.sugerido.estado!
         ? Container(
-            // color: Colors.green,
             padding: const EdgeInsets.only(left: 30),
             child: GestureDetector(
               onTap: () =>
@@ -82,7 +78,6 @@ class _ColumnTableState extends State<ColumnTable> {
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
-                      // color: Colors.yellow,
                       alignment: Alignment.center,
                     ),
                   ],
@@ -94,7 +89,6 @@ class _ColumnTableState extends State<ColumnTable> {
   }
 
   mas(String prod, int cantidad) async {
-    // final cartProvider = Provider.of<CarroModelo>(context);
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
 
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
@@ -129,33 +123,7 @@ class _ColumnTableState extends State<ColumnTable> {
     }
 
     MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
-
-    // activo = false;
   }
-
-  // menos(String prop) async {
-  //   Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
-  //   String valorInicial = PedidoEmart.obtenerValor(producto)!;
-
-  //   if (valorInicial == "") {
-  //   } else {
-  //     int valorResta = int.parse(valorInicial) - 1;
-  //     if (valorResta <= 0) {
-  //       setState(() {
-  //         PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-  //         PedidoEmart.registrarValoresPedido(producto, '0');
-  //       });
-  //     } else {
-  //       setState(() {
-  //         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-  //             "$valorResta";
-  //         PedidoEmart.registrarValoresPedido(producto, '$valorResta');
-  //       });
-  //     }
-  //   }
-
-  //   calcularValorTotal(widget.cartProvider);
-  // }
 
   void calcularValorTotal(CarroModelo cartProvider) {
     double valorTotal = 0;
@@ -163,8 +131,7 @@ class _ColumnTableState extends State<ColumnTable> {
     int cantidad = 0;
 
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
-      if (value == '') {
-      } else if (value != "0" &&
+      if (value != "0" &&
           PedidoEmart.listaValoresPedidoAgregados![key] == true) {
         double precio = PedidoEmart.listaProductos![key]!.precio;
         valorTotal = valorTotal + precio * int.parse(value);

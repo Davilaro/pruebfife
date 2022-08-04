@@ -29,25 +29,16 @@ class _SimpleCardCondicionesEntregaState
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CarroModelo>(context);
-    final size = MediaQuery.of(context).size;
+
     return Container(
       margin: EdgeInsets.only(bottom: 14),
       child: Column(
         children: [
           SingleChildScrollView(
             child: Container(
-              // height: 62,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 color: Colors.white,
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey.withOpacity(0.5),
-                //     spreadRadius: 5,
-                //     blurRadius: 7,
-                //     offset: Offset(0, 3), // changes position of shadow
-                //   ),
-                // ],
               ),
               child: Column(
                 children: [
@@ -59,7 +50,6 @@ class _SimpleCardCondicionesEntregaState
                     children: [
                       TableRow(children: [
                         Container(
-                          // color: Colors.white,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white),
@@ -163,9 +153,8 @@ class _SimpleCardCondicionesEntregaState
                                 value["preciominimo"],
                                 value["topeMinimo"],
                                 condicionEntrega));
-                          } else {
-                            return CircularProgressIndicator();
                           }
+                          return CircularProgressIndicator();
                         },
                       )),
                     ),
@@ -194,16 +183,13 @@ class _SimpleCardCondicionesEntregaState
         .parse(hora + ":" + minuto.toString() + ":" + segundo.toString());
 
     if (fabricante.toUpperCase() == "MEALS") {
-      if (valorPedido < (topeMinimo * 1.19)) {
-        return condicionEntrega.mensaje1;
-      } else {
-        return "Tu pedido será entregado el siguiente día hábil.";
-      }
-    } else {
-      return horaActual.isBefore(hourRes)
+      return valorPedido < (topeMinimo * 1.19)
           ? condicionEntrega.mensaje1
-          : condicionEntrega.mensaje2;
+          : "Tu pedido será entregado el siguiente día hábil.";
     }
+    return horaActual.isBefore(hourRes)
+        ? condicionEntrega.mensaje1
+        : condicionEntrega.mensaje2;
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
@@ -231,15 +217,6 @@ class _SimpleCardCondicionesEntregaState
                     width: size.width / 3,
                     child: Row(
                       children: [
-                        // SizedBox(
-                        //   height: 40.0,
-                        //   width: 40.0,
-                        //   child: IconButton(
-                        //     icon: Image.asset('assets/menos.png'),
-                        //     onPressed: () => menos(
-                        //         product.productos, cartProvider, fabricante),
-                        //   ),
-                        // ),
                         Container(
                           width: 40,
                           alignment: Alignment.center,
@@ -283,15 +260,6 @@ class _SimpleCardCondicionesEntregaState
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 40.0,
-                        //   width: 40.0,
-                        //   child: IconButton(
-                        //     icon: Image.asset('assets/mas.png'),
-                        //     onPressed: () =>
-                        //         mas(product.productos, cartProvider),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -315,7 +283,6 @@ class _SimpleCardCondicionesEntregaState
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: HexColor("#EAE8F5"),
             width: 0.5,
           ),
@@ -323,7 +290,4 @@ class _SimpleCardCondicionesEntregaState
       ),
     );
   }
-
-  TextStyle diseno_valores() => TextStyle(
-      fontSize: 17.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
 }

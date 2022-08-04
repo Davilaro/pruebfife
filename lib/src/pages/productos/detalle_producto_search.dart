@@ -41,8 +41,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
-  final TextEditingController _controllerBuscarProductoMarca =
-      TextEditingController();
+
   bool isAgotado = false;
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
@@ -157,11 +156,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        // Text(
-                        //   ' ${widget.producto.nombrecomercial}',
-                        //   maxLines: 2,
-                        //   style: TextStyle(fontSize: 12),
-                        // ),
                         Text(
                           'SKU: ${widget.producto.codigo}',
                           maxLines: 1,
@@ -284,7 +278,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                           child: TextFormField(
                                             maxLines: 1,
                                             controller:
-                                                _controllerCantidadProducto, //PedidoEmart.listaControllersPedido![widget.productos.codigo],
+                                                _controllerCantidadProducto,
                                             keyboardType: TextInputType.number,
                                             textAlignVertical:
                                                 TextAlignVertical.center,
@@ -301,25 +295,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                               }
                                               return null;
                                             },
-
                                             style:
                                                 TextStyle(color: Colors.black),
-
                                             onChanged: (value) {
-                                              /*setState(() {
-                                                  if (value != "")
-                                                    PedidoEmart.registrarValoresPedido(
-                                                        widget.productos, value);
-                                                  else
-                                                    PedidoEmart.registrarValoresPedido(
-                                                        widget.productos, "0");
-                                                });*/
-
                                               cargoConfirmar
                                                   .cambiarValoresEditex(value);
-
-                                              /*MetodosLLenarValores()
-                                                    .calcularValorTotal(cartProvider);*/
                                             },
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -363,9 +343,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                   color: Colors.red[100],
                                 ),
                                 height: Get.width * 0.07,
-                                // width: Get.height * 0.1,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                // color: Colors.red[100],
                                 child: Text(
                                   'Agotado',
                                   style: TextStyle(
@@ -426,50 +404,34 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
     if (valorInicial.length < 3) {
       if (valorInicial == "") {
-        //_controllerCantidadProducto.text = '1';
-
         cargoConfirmar.cambiarValoresEditex('1');
         setState(() {});
-        //PedidoEmart.registrarValoresPedido(producto, '1');
       } else {
         int valoSuma = int.parse(valorInicial) + 1;
         setState(() {
-          //_controllerCantidadProducto.text = '$valoSuma';
           cargoConfirmar.cambiarValoresEditex('$valoSuma');
-          // PedidoEmart.registrarValoresPedido(producto, '$valoSuma');
         });
       }
     }
-
-    //MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
   menos(Productos producto, CarroModelo cartProvider) {
     String valorInicial = _controllerCantidadProducto.text;
     if (valorInicial != "" && valorInicial != '1' && valorInicial != '0') {
       int valorResta = int.parse(valorInicial) - 1;
-      if (valorResta <= 0) {
-        setState(() {
-          //_controllerCantidadProducto.text = '0';
-          cargoConfirmar.cambiarValoresEditex('0');
-          // PedidoEmart.registrarValoresPedido(producto, '0');
-        });
-      } else {
-        setState(() {
-          //_controllerCantidadProducto.text = '$valorResta';
-          cargoConfirmar.cambiarValoresEditex('$valorResta');
-          //PedidoEmart.registrarValoresPedido(producto, '$valorResta');
-        });
-      }
+      valorResta <= 0
+          ? setState(() {
+              cargoConfirmar.cambiarValoresEditex('0');
+            })
+          : setState(() {
+              cargoConfirmar.cambiarValoresEditex('$valorResta');
+            });
     }
-
-    // MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
   llenarCarrito(Productos producto, CarroModelo cartProvider) {
-    if (_controllerCantidadProducto.text == '') {
-    } else if (_controllerCantidadProducto.text == '0') {
-    } else {
+    if (_controllerCantidadProducto.text != '' &&
+        _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =
           _controllerCantidadProducto.text;
       PedidoEmart.registrarValoresPedido(
@@ -510,17 +472,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                   ["precioFinal"] <
               precioMinimo &&
           widget.producto.fabricante!.toUpperCase() != 'MEALS') {
-        if (Get.height > 600) {
-          valor = Get.height * 0.8;
-        } else {
-          valor = Get.height * 0.8;
-        }
+        valor = Get.height > 600 ? Get.height * 0.8 : Get.height * 0.8;
       } else {
-        if (widget.producto.fabricante!.toUpperCase() == 'MEALS') {
-          valor = Get.height * 0.8;
-        } else {
-          valor = Get.height * 0.8;
-        }
+        valor = widget.producto.fabricante!.toUpperCase() == 'MEALS'
+            ? Get.height * 0.8
+            : Get.height * 0.8;
       }
     } catch (e) {
       precioMinimo = 0;
@@ -544,17 +500,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                   ["precioFinal"] <
               precioMinimo &&
           widget.producto.fabricante!.toUpperCase() != 'MEALS') {
-        if (Get.height > 600) {
-          valor = Get.height * 0.75;
-        } else {
-          valor = Get.height * 0.8;
-        }
+        valor = Get.height > 600 ? Get.height * 0.75 : Get.height * 0.8;
       } else if (Get.height > 600) {
-        if (widget.producto.fabricante!.toUpperCase() == 'MEALS') {
-          valor = Get.height * 0.75;
-        } else {
-          valor = Get.height * 0.6;
-        }
+        valor = widget.producto.fabricante!.toUpperCase() == 'MEALS'
+            ? Get.height * 0.75
+            : Get.height * 0.6;
       }
     } catch (e) {
       precioMinimo = 0;
@@ -566,6 +516,4 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
   TextStyle diseno_valores() => TextStyle(
       fontSize: 16.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
-  TextStyle diseno_valores_text() =>
-      TextStyle(fontSize: 20.0, color: HexColor("#43398E"));
 }

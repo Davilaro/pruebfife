@@ -29,9 +29,8 @@ class Recomendados extends StatelessWidget {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              } else {
-                return ListView(children: _cargarDatos(context, snapshot.data));
               }
+              return ListView(children: _cargarDatos(context, snapshot.data));
             }));
   }
 

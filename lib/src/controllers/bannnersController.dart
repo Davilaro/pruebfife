@@ -51,13 +51,11 @@ class BannnerControllers extends GetxController {
       String locasionBanner) async {
     var resBusqueda;
     if (banner.tipoSeccion == 'Detalle Producto') {
-      // Listo
       resBusqueda = await DBProvider.db
           .cargarProductosFiltro(banner.seccion.toString(), "");
       _detalleProducto(
           resBusqueda[0], provider, context, cargoConfirmar, prefs);
     } else if (banner.tipoSeccion == 'Categoria') {
-      //Listo
       resBusqueda = await DBProvider.db
           .consultarCategorias(banner.subSeccion.toString(), 1);
       var resSubBusqueda = await DBProvider.db
@@ -65,12 +63,10 @@ class BannnerControllers extends GetxController {
       _direccionarCategoria(
           context, provider, resSubBusqueda, banner.seccion.toString());
     } else if (banner.tipoSeccion == 'Proveedor') {
-      // Listo
       resBusqueda =
           await DBProvider.db.consultarFricante(banner.seccion.toString());
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {
-      // Listo
       resBusqueda =
           await DBProvider.db.consultarMarcas(banner.seccion.toString());
       _direccionarMarca(context, resBusqueda[0]);

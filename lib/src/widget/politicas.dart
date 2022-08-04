@@ -68,7 +68,6 @@ class _PoliticasState extends State<Politicas> {
                     ),
                     decoration: BoxDecoration(
                       color: HexColor("#30C3A3"),
-                      //border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     height: 45,

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/productos.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -33,8 +32,6 @@ class TagueoFirebase {
         "item_category": itemCategoria,
         "item_id": itemId,
       });
-      print(
-          'TAGUEO SELECT_CONTENT $location, $itemBrand, $itemCategoria, $itemId');
     } catch (e) {
       print('ERROR SELECT_CONTENT $e');
     }
@@ -86,7 +83,6 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'search', parameters: {
         "search_term": value,
       });
-      print('TAG searsh $value');
     } catch (e) {
       print('ERROR SEARCH $e');
     }
@@ -101,7 +97,6 @@ class TagueoFirebase {
         "itemCategory": nombreComercial,
         "itemId": categoria
       });
-      print('TAGUEO DELETE_CART $categoria, $nombreComercial');
     } catch (e) {
       print('ERROR DELETE_CART $e');
     }
@@ -118,7 +113,6 @@ class TagueoFirebase {
         "promotion_id": "",
         "promotion_name": descripcion,
       });
-      print('TAGUEO SELECT_QUICK_ACCESS $descripcion, $codAccessTable');
     } catch (e) {
       print('ERROR SELECT_QUICK_ACCESS $e');
     }
@@ -136,8 +130,6 @@ class TagueoFirebase {
         "creative_slot": location,
         "item_id": banner.idBanner
       });
-      print(
-          'TAGUEO VIEW_PROMOTION $location, ${banner.fabricante}, ${banner.empresa}, ${banner.nombreBanner}, ${banner.idBanner}');
     } catch (e) {
       print('ERROR VIEW_PROMOTION $e');
     }
@@ -164,7 +156,7 @@ class TagueoFirebase {
         "price": resPrice,
         "quantity": cantidad,
       };
-      print('Tagueo SELECT_ITEM - ${jsonEncode(data)}');
+
       await _analytics.logEvent(name: 'select_item', parameters: {
         "item_list_id": producto.marca,
         "item_list_name": producto.marca,
@@ -195,7 +187,7 @@ class TagueoFirebase {
         "price": resPrice,
         "quantity": cantidad,
       };
-      print('Tagueo ADD_TO_CART - ${jsonEncode(data)}');
+
       await _analytics.logEvent(name: 'add_to_cart', parameters: {
         "currency": "COP",
         "value": total,
@@ -228,8 +220,7 @@ class TagueoFirebase {
         "price": resPrice,
         "quantity": int.parse(cantidad),
       };
-      print(
-          'Tagueo REMOVE_FROM_CART -$cantidad, $totalOrden  ${jsonEncode(data)}');
+
       await _analytics.logEvent(name: 'remove_from_cart', parameters: {
         "currency": "COP",
         "value": totalOrden,
@@ -258,8 +249,6 @@ class TagueoFirebase {
         "creative_slot": "",
         "item_id": idBanner
       });
-      print(
-          'TAGUEO SELECT_PROMOTION $location, $nombreBanner, $categoria, $fabricante, $idBanner');
     } catch (e) {
       print('ERROR SELECT_PROMOTION $e');
     }
@@ -286,7 +275,6 @@ class TagueoFirebase {
         "items": [data],
         "value": producto.precio * totalOrden
       });
-      print('TAGUEO VIEW_ITEM -${jsonEncode(data)}');
     } catch (e) {
       print('ERROR VIEW_ITEM $e');
     }
@@ -322,8 +310,7 @@ class TagueoFirebase {
           });
           contador++;
         });
-        print(
-            'TAGUEO VIEW_CART value: ${cartProvider.getTotal} - ${jsonEncode(productos)}');
+
         await _analytics.logEvent(name: 'view_cart', parameters: {
           "currency": "COP",
           "value": cartProvider.getTotal,
@@ -362,8 +349,7 @@ class TagueoFirebase {
           "quantity": item.cantidad,
         };
       }).toList();
-      print(
-          'TAGUEO PURCHARSE $codOrden, $iva, $totalOrden - ${listProductos.toList()}');
+
       await _analytics.logEvent(name: 'purchase', parameters: {
         "currency": "COP",
         "transaction_id": codOrden,
@@ -404,7 +390,7 @@ class TagueoFirebase {
           "quantity": 1,
         };
       });
-      print('TAGUEO VIEW_ITEM_LIST $location - ${data.toList()}');
+
       await _analytics.logEvent(name: 'view_item_list', parameters: {
         "item_list_id": location,
         "item_list_name": location,
@@ -422,7 +408,6 @@ class TagueoFirebase {
         "item_name": "multi-media",
         "content_type": "video"
       });
-      print('TAGUEO VIEW_MULTI_MEDIA');
     } catch (e) {
       print('ERROR VIEW_MULTI_MEDIA $e');
     }

@@ -4,8 +4,6 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:imagebutton/imagebutton.dart';
 import "package:intl/intl.dart";
 import 'package:provider/provider.dart';
 
@@ -50,8 +48,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
             height: 100,
             width: size.width * 0.3,
             child: CachedNetworkImage(
-              imageUrl:
-                  Constantes().urlImgProductos + '${element.codigo}.png',
+              imageUrl: Constantes().urlImgProductos + '${element.codigo}.png',
               placeholder: (context, url) =>
                   Image.asset('assets/jar-loading.gif'),
               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -147,7 +144,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
                               setState(() {
                                 if (value != "")
                                   PedidoEmart.registrarValoresPedido(
-                                      productos, value, true );
+                                      productos, value, true);
                                 else
                                   PedidoEmart.registrarValoresPedido(
                                       productos, "0", false);
@@ -201,8 +198,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
   menos(Productos producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
-    if (valorInicial == "") {
-    } else {
+    if (valorInicial != "") {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
         setState(() {
@@ -219,12 +215,6 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
     }
 
     calcularValorTotal(cartProvider);
-  }
-
-  double _carcularValor(precio, String? obtenerValor) {
-    double valor = precio * int.parse(obtenerValor!);
-
-    return valor;
   }
 
   void calcularValorTotal(CarroModelo cartProvider) {

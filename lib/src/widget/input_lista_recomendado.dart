@@ -215,8 +215,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
   menos(Productos producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
-    if (valorInicial == "") {
-    } else {
+    if (valorInicial != "") {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
         setState(() {
@@ -235,12 +234,6 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     calcularValorTotal(cartProvider);
   }
 
-  double _carcularValor(precio, String? obtenerValor) {
-    double valor = precio * int.parse(obtenerValor!);
-
-    return valor;
-  }
-
   void calcularValorTotal(CarroModelo cartProvider) {
     double valorTotal = 0;
     int cantidad = 0;
@@ -257,27 +250,13 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     cartProvider.guardarValorCompra = valorTotal;
   }
 
-  eliminar(Productos producto, CarroModelo cartProvider) {
-    setState(() {
-      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-      PedidoEmart.registrarValoresPedido(producto, '0', false);
-    });
-
-    calcularValorTotal(cartProvider);
-  }
-
   int obtenerValorProducto(Productos producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
       return 0;
-    } else {
-      int valor = int.parse(valorInicial);
-      if (valor > 0) {
-        return 1;
-      } else {
-        return 0;
-      }
     }
+    int valor = int.parse(valorInicial);
+    return valor > 0 ? 1 : 0;
   }
 }

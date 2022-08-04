@@ -1,15 +1,10 @@
 import 'dart:async';
 import 'package:emart/src/controllers/controller_db.dart';
-import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:emart/src/widget/logica_actualizar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +42,6 @@ Future<void> actualizarPagina(
     AlertaActualizar().mostrarAlertaActualizar(context, true);
   }
   await LogicaActualizar().actualizarDB();
-  // await AppUtil.appUtil.abrirBases();
   isActualizando.value = false;
   if (isActualizando.value == false) {
     Navigator.pop(context);
