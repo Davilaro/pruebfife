@@ -145,24 +145,20 @@ class _ProductsCardState extends State<ProductsCard> {
         child: Container(
           height: Get.height * 0.33,
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   //mensaje de precio especial y imagen producto
 
                   Container(
-                    //padding: EdgeInsets.only(top: 5.0),
-
-                    // height: element.descuento == 0 ? 120 : 100,
-                    height: 100,
+                    height: element.descuento != 0 ? 100 : 120,
                     width: Get.width * 0.22,
                     alignment: Alignment.center,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: CachedNetworkImage(
-                        //height: Get.height * 0.18,
                         imageUrl: Constantes().urlImgProductos +
                             '${element.codigo}.png',
                         placeholder: (context, url) =>
@@ -212,14 +208,7 @@ class _ProductsCardState extends State<ProductsCard> {
                             child: Column(
                               children: [
                                 Visibility(
-                                    visible: element.activopromocion == 1 &&
-                                            ((DateTime.parse(element
-                                                        .fechafinpromocion_1!))
-                                                    .compareTo(
-                                                        DateTime.now()) >=
-                                                0) ||
-                                        widget.tipoCategoria == 1 ||
-                                        isProductoEnOferta,
+                                    visible: element.descuento != 0,
                                     child: Container(
                                       height: 25,
                                       padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -252,28 +241,12 @@ class _ProductsCardState extends State<ProductsCard> {
                                   child: Text(
                                     '${format.currencySymbol}' +
                                         formatNumber
-                                            .format(element.activopromocion ==
-                                                            1 &&
-                                                        ((DateTime.parse(element
-                                                                    .fechafinpromocion_1!))
-                                                                .compareTo(
-                                                                    DateTime
-                                                                        .now()) >=
-                                                            0) ||
-                                                    widget.tipoCategoria == 1 ||
-                                                    isProductoEnOferta
+                                            .format(element.descuento != 0
                                                 ? element.precioinicial
                                                 : element.precio)
                                             .replaceAll(',00', ''),
                                     textAlign: TextAlign.left,
-                                    style: element.activopromocion == 1 &&
-                                                ((DateTime.parse(element
-                                                            .fechafinpromocion_1!))
-                                                        .compareTo(
-                                                            DateTime.now()) >=
-                                                    0) ||
-                                            widget.tipoCategoria == 1 ||
-                                            isProductoEnOferta
+                                    style: element.descuento != 0
                                         ? TextStyle(
                                             color:
                                                 ConstantesColores.azul_precio,

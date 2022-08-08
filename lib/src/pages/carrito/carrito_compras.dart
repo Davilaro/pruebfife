@@ -601,8 +601,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       PedidoEmart.listaProductos!.forEach((key, value) {
                         if (value.fabricante == fabricante) {
                           PedidoEmart.listaControllersPedido![value.codigo]!
-                              .text = "0";
-                          PedidoEmart.registrarValoresPedido(value, '0', false);
+                              .text = "1";
+                          PedidoEmart.registrarValoresPedido(value, '1', false);
                           cargarDeNuevo = true;
                         }
                       });

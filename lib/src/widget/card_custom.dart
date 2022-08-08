@@ -54,14 +54,10 @@ class CardCustom extends StatelessWidget {
                 children: [
                   // Cuerpo de la carta
                   Container(
-                    height: 100,
                     width: double.infinity,
-                    //height: 100,
-                    // width: Get.width * 0.23,
-                    //height: validateProductNuevo || validatePromo ? 85 : 100,
-                    //width: double.infinity,
-                    // height: validateProductNuevo || validatePromo ? 75 : 100,
-                    // width: double.infinity,
+                    height: producto.descuento != 0
+                        ? Get.height * 0.13
+                        : Get.height * 0.15,
                     padding: EdgeInsets.only(top: 5.0, left: 10, right: 10),
                     alignment: Alignment.center,
                     child: ClipRRect(
@@ -128,18 +124,11 @@ class CardCustom extends StatelessWidget {
                   //precio
                   Expanded(
                     child: Container(
-                      //  height: Get.height * 0.05,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Visibility(
-                              visible: producto.activopromocion == 1 &&
-                                      ((DateTime.parse(producto
-                                                  .fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
-                                          0) ||
-                                  isProductoPromo ||
-                                  isProductoEnOferta,
+                              visible: producto.descuento != 0,
                               child: Container(
                                 height: Get.width * 0.07,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -164,26 +153,12 @@ class CardCustom extends StatelessWidget {
                               child: Text(
                                 '${format.currencySymbol}' +
                                     formatNumber
-                                        .format(producto.activopromocion == 1 &&
-                                                    ((DateTime.parse(producto
-                                                                .fechafinpromocion_1!))
-                                                            .compareTo(DateTime
-                                                                .now()) >=
-                                                        0) ||
-                                                isProductoPromo ||
-                                                isProductoEnOferta
+                                        .format(producto.descuento != 0
                                             ? producto.precioinicial
                                             : producto.precio)
                                         .replaceAll(',00', ''),
                                 textAlign: TextAlign.left,
-                                style: (producto.activopromocion == 1 &&
-                                            ((DateTime.parse(producto
-                                                        .fechafinpromocion_1!))
-                                                    .compareTo(
-                                                        DateTime.now()) >=
-                                                0) ||
-                                        isProductoPromo ||
-                                        isProductoEnOferta
+                                style: (producto.descuento != 0
                                     ? TextStyle(
                                         color: ConstantesColores.azul_precio,
                                         fontWeight: FontWeight.bold,
@@ -239,10 +214,9 @@ class CardCustom extends StatelessWidget {
                 ],
               ),
               Positioned(
-                top: 0,
-                left: 60,
+                left: 80,
                 child: Container(
-                  child: OverflowBar(
+                  child: Column(
                     children: [
                       Visibility(
                           visible: validatePromo,
