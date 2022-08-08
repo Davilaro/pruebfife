@@ -143,243 +143,257 @@ class _ProductsCardState extends State<ProductsCard> {
           detalleProducto(element, cartProvider);
         },
         child: Container(
-          height: Get.height * 0.4,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // crossAxisAlignment: CrossAxisAlignment.end,
+          height: Get.height * 0.33,
+          child: Stack(
             children: [
-              //mensaje de precio especial y imagen producto
-              Container(
-                width: Get.width * 0.4,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    (element.fechafinpromocion_1!.contains(RegExp(r'[0-9]'))) ||
-                            widget.tipoCategoria == 1 ||
-                            isProductoEnOferta
-                        ? Container(
-                            padding: EdgeInsets.only(top: 5, right: 10),
-                            child: Visibility(
-                              visible: (element.activopromocion == 1 &&
-                                      ((DateTime.parse(
-                                                  element.fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
-                                          0)) ||
-                                  widget.tipoCategoria == 1 ||
-                                  isProductoEnOferta,
-                              child: Image.asset(
-                                'assets/promo_abel.png',
-                                height: 30,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
-                        ? Container(
-                            alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(top: 5, right: 10),
-                            child: Visibility(
-                              visible: element.activoprodnuevo == 1 &&
-                                  ((DateTime.parse(element.fechafinnuevo_1!))
-                                          .compareTo(DateTime.now()) >=
-                                      0),
-                              child: Image.asset(
-                                'assets/nuevos_label.png',
-                                height: 30,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 5.0),
-                margin: (element.activopromocion == 1 &&
-                                ((DateTime.parse(element.fechafinpromocion_1!))
-                                        .compareTo(DateTime.now()) >=
-                                    0)) ==
-                            false ||
-                        widget.tipoCategoria == 1 ||
-                        isProductoEnOferta
-                    ? EdgeInsets.only(top: 15)
-                    : EdgeInsets.zero,
-                // height: element.descuento == 0 ? 120 : 100,
-                height: 100,
-                width: Get.width * 0.22,
-                alignment: Alignment.center,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        Constantes().urlImgProductos + '${element.codigo}.png',
-                    placeholder: (context, url) =>
-                        Image.asset('assets/jar-loading.gif'),
-                    errorWidget: (context, url, error) =>
-                        Image.asset('assets/logo_login.png'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  //mensaje de precio especial y imagen producto
 
-              //cuerpo de la targeta
-              Container(
-                width: Get.width * 0.4,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 8),
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${element.nombre}',
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: ConstantesColores.verde),
-                              ),
-                              Text(
-                                'SKU: ${element.codigo}',
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: HexColor("#a2a2a2")),
-                              ),
-                            ],
-                          ),
-                        ),
+                  Container(
+                    //padding: EdgeInsets.only(top: 5.0),
+
+                    // height: element.descuento == 0 ? 120 : 100,
+                    height: 100,
+                    width: Get.width * 0.22,
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        //height: Get.height * 0.18,
+                        imageUrl: Constantes().urlImgProductos +
+                            '${element.codigo}.png',
+                        placeholder: (context, url) =>
+                            Image.asset('assets/jar-loading.gif'),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/logo_login.png'),
+                        fit: BoxFit.fill,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Visibility(
-                                visible: element.activopromocion == 1 &&
-                                        ((DateTime.parse(element
-                                                    .fechafinpromocion_1!))
-                                                .compareTo(DateTime.now()) >=
-                                            0) ||
-                                    widget.tipoCategoria == 1 ||
-                                    isProductoEnOferta,
-                                child: Container(
-                                  height: 25,
-                                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    '${format.currencySymbol}' +
-                                        formatNumber
-                                            .format(element.precio)
-                                            .replaceAll(',00', ''),
-                                    textAlign: TextAlign.left,
+                    ),
+                  ),
+
+                  //cuerpo de la targeta
+                  Container(
+                    width: Get.width * 0.4,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 8),
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${element.nombre}',
+                                    maxLines: 2,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.red),
+                                        color: ConstantesColores.verde),
                                   ),
-                                )),
-                            Container(
-                              height: element.activopromocion == 1 &&
-                                          ((DateTime.parse(element
-                                                      .fechafinpromocion_1!))
-                                                  .compareTo(DateTime.now()) >=
-                                              0) ||
-                                      widget.tipoCategoria == 1 ||
-                                      isProductoEnOferta
-                                  ? Get.width * 0.05
-                                  : Get.width * 0.07,
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                '${format.currencySymbol}' +
-                                    formatNumber
-                                        .format(element.activopromocion == 1 &&
-                                                    ((DateTime.parse(element
-                                                                .fechafinpromocion_1!))
-                                                            .compareTo(DateTime
-                                                                .now()) >=
-                                                        0) ||
-                                                widget.tipoCategoria == 1 ||
-                                                isProductoEnOferta
-                                            ? element.precioinicial
-                                            : element.precio)
-                                        .replaceAll(',00', ''),
-                                textAlign: TextAlign.left,
-                                style: element.activopromocion == 1 &&
+                                  Text(
+                                    'SKU: ${element.codigo}',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: HexColor("#a2a2a2")),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                Visibility(
+                                    visible: element.activopromocion == 1 &&
                                             ((DateTime.parse(element
                                                         .fechafinpromocion_1!))
                                                     .compareTo(
                                                         DateTime.now()) >=
                                                 0) ||
                                         widget.tipoCategoria == 1 ||
-                                        isProductoEnOferta
-                                    ? TextStyle(
-                                        color: ConstantesColores.azul_precio,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 11,
-                                        decoration: TextDecoration.lineThrough)
-                                    : TextStyle(
-                                        color: ConstantesColores.azul_precio,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                              ),
+                                        isProductoEnOferta,
+                                    child: Container(
+                                      height: 25,
+                                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        '${format.currencySymbol}' +
+                                            formatNumber
+                                                .format(element.precio)
+                                                .replaceAll(',00', ''),
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.red),
+                                      ),
+                                    )),
+                                Container(
+                                  height: element.activopromocion == 1 &&
+                                              ((DateTime.parse(element
+                                                          .fechafinpromocion_1!))
+                                                      .compareTo(
+                                                          DateTime.now()) >=
+                                                  0) ||
+                                          widget.tipoCategoria == 1 ||
+                                          isProductoEnOferta
+                                      ? Get.width * 0.05
+                                      : Get.width * 0.07,
+                                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    '${format.currencySymbol}' +
+                                        formatNumber
+                                            .format(element.activopromocion ==
+                                                            1 &&
+                                                        ((DateTime.parse(element
+                                                                    .fechafinpromocion_1!))
+                                                                .compareTo(
+                                                                    DateTime
+                                                                        .now()) >=
+                                                            0) ||
+                                                    widget.tipoCategoria == 1 ||
+                                                    isProductoEnOferta
+                                                ? element.precioinicial
+                                                : element.precio)
+                                            .replaceAll(',00', ''),
+                                    textAlign: TextAlign.left,
+                                    style: element.activopromocion == 1 &&
+                                                ((DateTime.parse(element
+                                                            .fechafinpromocion_1!))
+                                                        .compareTo(
+                                                            DateTime.now()) >=
+                                                    0) ||
+                                            widget.tipoCategoria == 1 ||
+                                            isProductoEnOferta
+                                        ? TextStyle(
+                                            color:
+                                                ConstantesColores.azul_precio,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 11,
+                                            decoration:
+                                                TextDecoration.lineThrough)
+                                        : TextStyle(
+                                            color:
+                                                ConstantesColores.azul_precio,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Visibility(
-                          visible: isAgotado,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                color: Colors.red[100],
-                              ),
-                              height: Get.width * 0.06,
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Text(
-                                'Agotado',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.red),
-                              ),
-                            ),
-                          )),
-                    ]),
-              ),
-              Visibility(
-                visible: !isAgotado,
-                child: Container(
-                    margin: EdgeInsets.only(bottom: 5),
-                    height: Get.width * 0.1,
-                    alignment: Alignment.center,
-                    child: GestureDetector(
+                          ),
+                          Visibility(
+                              visible: isAgotado,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    color: Colors.red[100],
+                                  ),
+                                  height: Get.width * 0.06,
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  child: Text(
+                                    'Agotado',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.red),
+                                  ),
+                                ),
+                              )),
+                        ]),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Visibility(
+                      visible: !isAgotado,
                       child: Container(
-                        width: 140,
-                        height: 30,
-                        child: Image.asset(
-                          "assets/agregar_btn.png",
-                        ),
-                      ),
-                      onTap: () {
-                        //FIREBASE: Llamamos el evento select_item
-                        TagueoFirebase().sendAnalityticSelectItem(element, 1);
-                        //UXCam: Llamamos el evento seeDetailProduct
-                        UxcamTagueo()
-                            .seeDetailProduct(element, index, nameCategory);
-                        detalleProducto(element, cartProvider);
-                      },
-                    )),
+                          margin: EdgeInsets.only(bottom: 5),
+                          height: Get.width * 0.1,
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            child: Container(
+                              width: 140,
+                              height: 30,
+                              child: Image.asset(
+                                "assets/agregar_btn.png",
+                              ),
+                            ),
+                            onTap: () {
+                              //FIREBASE: Llamamos el evento select_item
+                              TagueoFirebase()
+                                  .sendAnalityticSelectItem(element, 1);
+                              //UXCam: Llamamos el evento seeDetailProduct
+                              UxcamTagueo().seeDetailProduct(
+                                  element, index, nameCategory);
+                              detalleProducto(element, cartProvider);
+                            },
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 0,
+                left: 7,
+                child: Container(
+                  width: Get.width * 0.4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      (element.fechafinpromocion_1!
+                                  .contains(RegExp(r'[0-9]'))) ||
+                              widget.tipoCategoria == 1 ||
+                              isProductoEnOferta
+                          ? Container(
+                              padding: EdgeInsets.only(top: 5, right: 10),
+                              child: Visibility(
+                                visible: (element.activopromocion == 1 &&
+                                        ((DateTime.parse(element
+                                                    .fechafinpromocion_1!))
+                                                .compareTo(DateTime.now()) >=
+                                            0)) ||
+                                    widget.tipoCategoria == 1 ||
+                                    isProductoEnOferta,
+                                child: Image.asset(
+                                  'assets/promo_abel.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
+                          ? Container(
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(top: 5, right: 10),
+                              child: Visibility(
+                                visible: element.activoprodnuevo == 1 &&
+                                    ((DateTime.parse(element.fechafinnuevo_1!))
+                                            .compareTo(DateTime.now()) >=
+                                        0),
+                                child: Image.asset(
+                                  'assets/nuevos_label.png',
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
