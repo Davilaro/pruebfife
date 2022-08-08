@@ -1,5 +1,5 @@
 import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico2.dart';
+import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
