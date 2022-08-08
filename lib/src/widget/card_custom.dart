@@ -44,7 +44,6 @@ class CardCustom extends StatelessWidget {
       child: GestureDetector(
         onTap: onTapCard,
         child: Container(
-          // height: 100,
           margin: EdgeInsets.symmetric(horizontal: 2),
           padding: EdgeInsets.symmetric(vertical: 5),
           child: Stack(
@@ -56,8 +55,8 @@ class CardCustom extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: producto.descuento != 0
-                        ? Get.height * 0.13
-                        : Get.height * 0.15,
+                        ? MediaQuery.of(context).size.height * 0.13
+                        : MediaQuery.of(context).size.height * 0.15,
                     padding: EdgeInsets.only(top: 5.0, left: 10, right: 10),
                     alignment: Alignment.center,
                     child: ClipRRect(
@@ -87,7 +86,7 @@ class CardCustom extends StatelessWidget {
                                       0))) ==
                           false,
                       child: Spacer()),
-                  //nombre y sku
+                  //     //nombre y sku
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 10.0),
@@ -196,74 +195,62 @@ class CardCustom extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Visibility(
-                      visible: !isAgotado,
-                      child: Expanded(
-                        child: Container(
-                            height: Get.width * 0.1,
-                            width: 150,
-                            alignment: Alignment.center,
-                            child: GestureDetector(
-                                child: Image.asset("assets/agregar_btn.png"),
-                                onTap: onTapBtn)),
-                      ),
+                  Visibility(
+                    visible: !isAgotado,
+                    child: Expanded(
+                      child: Container(
+                          height: Get.width * 0.1,
+                          width: 150,
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                              child: Image.asset("assets/agregar_btn.png"),
+                              onTap: onTapBtn)),
                     ),
                   ),
                 ],
               ),
               Positioned(
-                left: 80,
-                child: Container(
-                  child: Column(
-                    children: [
-                      Visibility(
-                          visible: validatePromo,
+                  left: Get.width * 0.18,
+                  child: Column(children: [
+                    Visibility(
+                        visible: validatePromo,
+                        child: Visibility(
+                          visible: (producto.activopromocion == 1 &&
+                                  ((DateTime.parse(
+                                              producto.fechafinpromocion_1!))
+                                          .compareTo(DateTime.now()) >=
+                                      0)) ||
+                              isProductoPromo ||
+                              isProductoEnOferta,
                           child: Container(
-                            alignment: Alignment.centerRight,
-                            padding: EdgeInsets.only(top: 5, right: 10),
-                            child: Visibility(
-                              visible: (producto.activopromocion == 1 &&
-                                      ((DateTime.parse(producto
-                                                  .fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
-                                          0)) ||
-                                  isProductoPromo ||
-                                  isProductoEnOferta,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/promo_abel.png',
-                                  height: 30,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            child: Image.asset(
+                              'assets/promo_abel.png',
+                              height: 30,
+                              fit: BoxFit.cover,
                             ),
-                          )),
-                      Visibility(
-                        visible: validateProductNuevo,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(top: 5, right: 10),
-                          child: Visibility(
-                            visible: producto.activoprodnuevo == 1 &&
-                                ((DateTime.parse(producto.fechafinnuevo_1!))
-                                        .compareTo(DateTime.now()) >=
-                                    0),
-                            child: Container(
-                              child: Image.asset(
-                                'assets/nuevos_label.png',
-                                height: 30,
-                                fit: BoxFit.cover,
-                              ),
+                          ),
+                        )),
+                    Visibility(
+                      visible: validateProductNuevo,
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(top: 5, right: 10),
+                        child: Visibility(
+                          visible: producto.activoprodnuevo == 1 &&
+                              ((DateTime.parse(producto.fechafinnuevo_1!))
+                                      .compareTo(DateTime.now()) >=
+                                  0),
+                          child: Container(
+                            child: Image.asset(
+                              'assets/nuevos_label.png',
+                              height: 30,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                      ),
+                    )
+                  ]))
             ],
           ),
         ),
