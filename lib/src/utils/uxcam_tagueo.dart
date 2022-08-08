@@ -4,6 +4,7 @@ import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 class UxcamTagueo {
@@ -210,6 +211,16 @@ class UxcamTagueo {
       final listProductos = listaProductosPedidos.map((producto) {
         var subTotal =
             cartProvider.getListaFabricante[producto.fabricante]["precioFinal"];
+        var precio = double.parse(producto.cantidad.toString()) *
+            double.parse(producto.precio.toString());
+
+        var productIndividual = {
+          "product": producto.nombreProducto,
+          "quantity": producto.cantidad,
+          "provider": producto.fabricante,
+          "price": precio
+        };
+        clickPlaceIndividualOrder(productIndividual);
         return {
           "Subtotal": subTotal,
           "description": producto.nombreProducto,
@@ -218,8 +229,7 @@ class UxcamTagueo {
           "price": producto.precio,
         };
       }).toList();
-      print(
-          'resultado final ${cartProvider.getTotal} - ${listProductos.toList()}');
+
       FlutterUxcam.logEventWithProperties("confirmOrder", {
         "screen": "Check out 2",
         "products": [...listProductos],
@@ -243,30 +253,45 @@ class UxcamTagueo {
   void clickPlaceOrder(CarroModelo cartProvider) {
     try {
       List<Object> listaProductos = [];
+
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
         if (int.parse(value) > 0) {
           if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
             Productos producto = PedidoEmart.listaProductos![key]!;
             dynamic cantidad = PedidoEmart.obtenerValor(producto).toString();
             int quantity = int.parse(cantidad);
-            // var subTotal = producto.precio * quantity;
-            listaProductos.add({
+
+            var objeto = {
               "provider": producto.fabricante,
               "Subtotal": cartProvider.getListaFabricante[producto.fabricante]
                   ["precioFinal"],
               "description": producto.nombrecomercial,
               "quantity": quantity,
               "price": producto.precio,
-            });
+            };
+
+            listaProductos.add(objeto);
           }
         }
       });
+
       FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
         "screen": 'Check out 1',
         "items": listaProductos,
       });
     } catch (e) {
       print('Error tagueo clickPlaceOrder $e');
+    }
+  }
+
+  void clickPlaceIndividualOrder(Map<String, Object?> productIndividual) {
+    try {
+      FlutterUxcam.logEventWithProperties(
+        "clickPlaceIndividualOrder",
+        productIndividual,
+      );
+    } catch (e) {
+      print('Error tagueo clickPlaceIndividualOrder $e');
     }
   }
 }

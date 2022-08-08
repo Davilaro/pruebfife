@@ -228,7 +228,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     if (validar.estado == 'OK') {
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
         PedidoEmart.registrarValoresPedido(
-            PedidoEmart.listaProductos![key]!, "0", false);
+            PedidoEmart.listaProductos![key]!, "1", false);
       });
       //FIREBASE: Llamamos el evento purchase
       TagueoFirebase().sendAnalityticsPurchase(
