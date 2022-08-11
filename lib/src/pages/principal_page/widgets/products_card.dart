@@ -134,6 +134,9 @@ class _ProductsCardState extends State<ProductsCard> {
       int index,
       bool isProductoEnOferta) {
     isAgotado = constrollerProductos.validarAgotado(element);
+    var dateNow =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
     return GestureDetector(
         onTap: () {
           //FIREBASE: Llamamos el evento select_item
@@ -169,7 +172,6 @@ class _ProductsCardState extends State<ProductsCard> {
                       ),
                     ),
                   ),
-
                   //cuerpo de la targeta
                   Container(
                     width: Get.width * 0.4,
@@ -229,8 +231,7 @@ class _ProductsCardState extends State<ProductsCard> {
                                   height: element.activopromocion == 1 &&
                                               ((DateTime.parse(element
                                                           .fechafinpromocion_1!))
-                                                      .compareTo(
-                                                          DateTime.now()) >=
+                                                      .compareTo(dateNow) >=
                                                   0) ||
                                           widget.tipoCategoria == 1 ||
                                           isProductoEnOferta
@@ -335,7 +336,7 @@ class _ProductsCardState extends State<ProductsCard> {
                                 visible: (element.activopromocion == 1 &&
                                         ((DateTime.parse(element
                                                     .fechafinpromocion_1!))
-                                                .compareTo(DateTime.now()) >=
+                                                .compareTo(dateNow) >=
                                             0)) ||
                                     widget.tipoCategoria == 1 ||
                                     isProductoEnOferta,
@@ -354,7 +355,7 @@ class _ProductsCardState extends State<ProductsCard> {
                               child: Visibility(
                                 visible: element.activoprodnuevo == 1 &&
                                     ((DateTime.parse(element.fechafinnuevo_1!))
-                                            .compareTo(DateTime.now()) >=
+                                            .compareTo(dateNow) >=
                                         0),
                                 child: Image.asset(
                                   'assets/nuevos_label.png',
