@@ -35,8 +35,11 @@ class CardCustom extends StatelessWidget {
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
     final screeSize = MediaQuery.of(context).size;
+    var dateNow =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     UIUtills()
         .updateScreenDimesion(width: screeSize.width, height: screeSize.height);
+
     return Card(
       shape: RoundedRectangleBorder(
           side: new BorderSide(color: Colors.white),
@@ -76,17 +79,17 @@ class CardCustom extends StatelessWidget {
                       visible: (((producto.activopromocion == 1 &&
                                       ((DateTime.parse(producto
                                                   .fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
+                                              .compareTo(dateNow) >=
                                           0)) ||
                                   isProductoPromo ||
                                   isProductoEnOferta) ||
                               (producto.activoprodnuevo == 1 &&
                                   ((DateTime.parse(producto.fechafinnuevo_1!))
-                                          .compareTo(DateTime.now()) >=
+                                          .compareTo(dateNow) >=
                                       0))) ==
                           false,
                       child: Spacer()),
-                  //     //nombre y sku
+                  //nombre y sku
                   Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 10.0),
@@ -99,7 +102,7 @@ class CardCustom extends StatelessWidget {
                           maxLines: (producto.activopromocion == 1 &&
                                       ((DateTime.parse(producto
                                                   .fechafinpromocion_1!))
-                                              .compareTo(DateTime.now()) >=
+                                              .compareTo(dateNow) >=
                                           0)) ||
                                   isProductoPromo ||
                                   isProductoEnOferta
@@ -218,7 +221,7 @@ class CardCustom extends StatelessWidget {
                           visible: (producto.activopromocion == 1 &&
                                   ((DateTime.parse(
                                               producto.fechafinpromocion_1!))
-                                          .compareTo(DateTime.now()) >=
+                                          .compareTo(dateNow) >=
                                       0)) ||
                               isProductoPromo ||
                               isProductoEnOferta,
@@ -238,7 +241,7 @@ class CardCustom extends StatelessWidget {
                         child: Visibility(
                           visible: producto.activoprodnuevo == 1 &&
                               ((DateTime.parse(producto.fechafinnuevo_1!))
-                                      .compareTo(DateTime.now()) >=
+                                      .compareTo(dateNow) >=
                                   0),
                           child: Container(
                             child: Image.asset(

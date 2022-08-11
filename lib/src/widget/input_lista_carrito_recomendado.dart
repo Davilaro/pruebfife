@@ -67,6 +67,8 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
 
   _cargarDisenoInterno(Productos element, BuildContext context,
       CarroModelo cartProvider, NumberFormat format) {
+    var dateNow =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     return GestureDetector(
       onTap: () => detalleProducto(element, cartProvider),
       child: Column(
@@ -76,7 +78,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
               Visibility(
                 visible: element.activopromocion == 1 &&
                     ((DateTime.parse(element.fechafinpromocion_1!))
-                            .compareTo(DateTime.now()) >=
+                            .compareTo(dateNow) >=
                         0),
                 child: Container(
                   height: 30,
@@ -90,7 +92,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
               Visibility(
                 visible: element.activoprodnuevo == 1 &&
                     ((DateTime.parse(element.fechafinnuevo_1!))
-                            .compareTo(DateTime.now()) >=
+                            .compareTo(dateNow) >=
                         0),
                 child: Container(
                   height: 30,
@@ -105,7 +107,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                 padding: EdgeInsets.only(top: 10.0),
                 height: (element.activopromocion == 1 &&
                             ((DateTime.parse(element.fechafinpromocion_1!))
-                                    .compareTo(DateTime.now()) >=
+                                    .compareTo(dateNow) >=
                                 0)) ==
                         false
                     ? 140

@@ -213,17 +213,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       opciones.add(widgetTemp);
     }
 
-    // for (var element in data) {
-    //   Productos productos = element;
-    //   final widgetTemp = InputValoresCatalogo(
-    //     element: productos,
-    //     numEmpresa: widget.numEmpresa,
-    //     isCategoriaPromos: false,
-    //   );
-
-    //   opciones.add(widgetTemp);
-    // }
-
     return opciones;
   }
 
