@@ -127,7 +127,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                 builder: (context) => DialogDetailsImage(
                                     Constantes().urlImgProductos +
                                         '${widget.producto.codigo}.png',
-                                    '${widget.producto.nombrecomercial}'));
+                                    '${widget.producto.nombre}'));
                           },
                           child: Align(
                             alignment: Alignment.center,
