@@ -21,8 +21,8 @@ Future<void> main() async {
   //NOTIFICAICONES PARA HUAWI
   //injectDependencies();
   await PushNotificationServer.initializeApp();
-  await firebase_core.Firebase.initializeApp();
   Permisos.permisos.solicitarPermisos();
+  await firebase_core.Firebase.initializeApp();
   final prefs = new Preferencias();
   await prefs.initPrefs();
 
