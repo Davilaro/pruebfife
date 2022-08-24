@@ -1,4 +1,3 @@
-import 'package:emart/src/modelos/Sugerido.dart';
 import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +27,16 @@ class PedidoEmart {
     int items = 0;
 
     listaValoresPedidoAgregados!.forEach((key, value) {
-      if (value) {
-        String valor = listaControllersPedido![key]!.text;
-        items += int.parse(valor);
+      String valor1 = listaControllersPedido![key]!.text;
+      if (valor1 != "") {
+        items += int.parse(valor1);
       }
     });
 
     cantItems.value = "$items";
   }
+
+  static retirarPedido(Productos producto, dynamic valor, bool estado) {}
 
   static iniciarProductosPorFabricante() {
     listaProductosPorFabricante = new Map();
@@ -52,7 +53,8 @@ class PedidoEmart {
             productos: elemet);
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
               codigo: elemet.codigo,
@@ -119,7 +121,8 @@ class PedidoEmart {
             productos: elemet);
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
             codigo: elemet.codigo,
@@ -175,7 +178,8 @@ class PedidoEmart {
         );
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) == 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) == 0) {
         ProductoAsignado productoAsignado = new ProductoAsignado(
           codigo: elemet.codigo,
           nombre: elemet.nombre,
@@ -185,7 +189,8 @@ class PedidoEmart {
         );
 
         listaAgrupar.add(productoAsignado);
-      } else if (int.parse(obtenerValor(elemet)!) > 0) {
+      }
+      if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
             codigo: elemet.codigo,

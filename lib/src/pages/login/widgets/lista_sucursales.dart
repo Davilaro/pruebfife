@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -5,11 +7,13 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -118,15 +122,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               colorSeleccion = true;
               seleccion = element.codigo;
             }),
-            _mostrarCategorias(
-                context,
-                element.codigo,
-                provider,
-                element.fabricantes,
-                element.codigonutresa,
-                element.codigozenu,
-                element.codigomeals,
-                element.razonsocial)
+            _mostrarCategorias(context, element, provider)
           },
           title: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
@@ -205,29 +201,27 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   _mostrarCategorias(
-      BuildContext context,
-      String codigo,
-      DatosListas provider,
-      final List<dynamic> listaFabricantes,
-      String codigonutresa,
-      String codigozenu,
-      String codigomeals,
-      String razonSocial) async {
-    prefs.usuarioRazonSocial = razonSocial;
-    prefs.codCliente = codigo;
+      BuildContext context, dynamic elemento, DatosListas provider) async {
+    prefs.usuarioRazonSocial = elemento.razonsocial;
+    prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
-    prefs.codigonutresa = codigonutresa;
-    prefs.codigozenu = codigozenu;
-    prefs.codigomeals = codigomeals;
+    prefs.codigonutresa = elemento.codigonutresa;
+    prefs.codigozenu = elemento.codigozenu;
+    prefs.codigomeals = elemento.codigomeals;
+    prefs.codigopadrepideky = elemento.codigopadrepideky;
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-
+    var userUxCam = (elemento.nit + elemento.nombre).replaceAll(' ', '');
     await pr.show();
     await cargarInformacion(provider);
+    if (prefs.usurioLogin == 1) {
+      await _validarTipoUsario(userUxCam);
+    }
     await pr.hide();
+
     setState(() {});
     Navigator.pushReplacementNamed(context, 'tab_opciones');
   }
@@ -248,7 +242,30 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         prefs.codigonutresa,
         prefs.codigozenu,
         prefs.codigomeals,
+        prefs.codigopadrepideky,
         false);
     await AppUtil.appUtil.abrirBases();
+  }
+
+  _validarTipoUsario(userUxCam) async {
+    DateTime now = DateTime.now();
+    String typeUser = 'Begginer';
+
+    String fechaInicial =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
+    String fechaFinal =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
+
+    dynamic resQuery = await DBProviderHelper.db
+        .consultarHistoricos("-1", fechaInicial, fechaFinal);
+
+    if (resQuery.length > 3) {
+      typeUser = "Digitalizados";
+    } else if (resQuery.length > 1 && resQuery.length <= 3) {
+      typeUser = "En progreso";
+    }
+    //UXCam: se asigna el nombre de usuario
+    FlutterUxcam.setUserIdentity('$userUxCam');
+    FlutterUxcam.setUserProperty("subscription_type", typeUser);
   }
 }

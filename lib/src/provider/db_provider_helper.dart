@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -28,9 +30,11 @@ class DBProviderHelper {
     if (_database != null) {
       print('cerre helper');
       await _database!.close();
+      _database = null;
     }
     if (_temp != null) {
       await _temp!.close();
+      _temp = null;
     }
   }
 
@@ -118,15 +122,13 @@ class DBProviderHelper {
         WHERE tbl_name <> 'android_metadata'
     ''');
 
-    List<dynamic>? listaTablas;
+    List<dynamic> listaTablas = [];
 
     if (res.isNotEmpty) {
       listaTablas = res.map((e) => BorrarTablas.fromJson(e)).toList();
     }
-
-    listaTablas!.forEach((element) async {
-      final res2 = await temp.delete('${element.tblName}');
-      print(res2);
+    listaTablas.forEach((element) async {
+      await temp.delete('${element.tblName}');
     });
   }
 
@@ -148,43 +150,63 @@ class DBProviderHelper {
       String filtro, String fechaInicio, String fechaFin) async {
     var fechaInicioFor = fechaInicio;
     var fechaFinFor = fechaFin;
+    var isFormat = false;
+
     if (fechaInicio != '-1' && fechaFin != '-1') {
       var fechaInicioF = DateTime.parse(fechaInicio);
       var fechaFinF = DateTime.parse(fechaFin);
 
-      fechaInicioFor = fechaInicioF.day.toString() +
-          '/' +
-          fechaInicioF.month.toString() +
-          '/' +
-          fechaInicioF.year.toString();
-      fechaFinFor = fechaFinF.day.toString() +
-          '/' +
-          fechaFinF.month.toString() +
-          '/' +
-          fechaFinF.year.toString();
+      fechaInicioFor =
+          '${fechaInicioF.day.toString().length > 1 ? fechaInicioF.day : '0${fechaInicioF.day}'}/${fechaInicioF.month.toString().length > 1 ? fechaInicioF.month : '0${fechaInicioF.month}'}/${fechaInicioF.year}';
+
+      fechaFinFor =
+          '${fechaFinF.day.toString().length > 1 ? fechaFinF.day : '0${fechaFinF.day}'}/${fechaFinF.month.toString().length > 1 ? fechaFinF.month : '0${fechaFinF.month}'}/${fechaFinF.year}';
+      isFormat = true;
+    } else {
+      isFormat = false;
     }
 
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
-      SELECT DISTINCT NumeroDoc,MAX(fechatrans)fechatrans,MAX(fabricante)fabricante,MAX(ordencompra)ordencompra FROM Historico WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END 
-      AND Cast( fechatrans as DATE )>=Cast( CASE WHEN '$fechaInicioFor'='-1' THEN fechatrans ELSE '$fechaInicioFor' END  as DATE ) AND  Cast( fechatrans as DATE )<=Cast( CASE WHEN '$fechaFinFor'='-1' THEN fechatrans ELSE '$fechaFinFor' END as DATE )
-      GROUP BY NumeroDoc
-      ORDER BY fechatrans DESC
-    ''');
+      // String query = '''
+      //   SELECT DISTINCT NumeroDoc,MAX((substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 7, 4))) fechatrans,
+      //   MAX(fabricante)fabricante,MAX(ordencompra)ordencompra FROM Historico WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
+      //   AND Cast( fechatrans as DATE )>=Cast( CASE WHEN '$fechaInicioFor'='-1' THEN fechatrans ELSE '$fechaInicioFor' END  as DATE ) AND  Cast( fechatrans as DATE )<=Cast( CASE WHEN '$fechaFinFor'='-1' THEN fechatrans ELSE '$fechaFinFor' END as DATE )
+      //   GROUP BY NumeroDoc
+      //   ORDER BY fechatrans DESC
+      // ''';
 
+      String query =
+          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante,
+       MAX(ordencompra)ordencompra FROM Historico
+      WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
+      AND
+      substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      >= CASE WHEN ${isFormat == true ? ''' substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) ''' : "'-1'"} ='-1'
+      THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      ELSE substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) END
+      AND
+      substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      <= CASE WHEN ${isFormat == true ? ''' substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) ''' : "'-1'"} ='-1'
+      THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END
+      GROUP BY NumeroDoc
+      ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) ASC ''';
+
+      final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
+      print('error historico $e');
       return [];
     }
   }
 
-  Future<List<Historico>> consultarGrupoHistorico(int numeroDoc) async {
+  Future<List<Historico>> consultarGrupoHistorico(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc=$numeroDoc GROUP BY fabricante
+      SELECT fabricante,ordencompra ordencompra from Historico where NumeroDoc='$numeroDoc' GROUP BY fabricante
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -194,11 +216,11 @@ class DBProviderHelper {
   }
 
   Future<List<Historico>> consultarDetalleGrupo(
-      int numeroDoc, String fabricante) async {
+      String numeroDoc, String fabricante) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc=$numeroDoc  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
+      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -207,11 +229,13 @@ class DBProviderHelper {
     }
   }
 
-  Future<List<Historico>> consultarDetallePedido(String ordenCompra) async {
+  Future<List<Historico>> consultarDetallePedido(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,CAST(p.precio AS double) precio from Historico h inner join producto p on p.codigo=h.codigoref where  h.ordencompra='$ordenCompra' GROUP BY h.codigoref
+      SELECT h.codigoRef,max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,
+      CAST(p.precio AS double) precio from Historico h inner join producto p on 
+      p.codigo=h.codigoref where  h.NumeroDoc='$numeroDoc' GROUP BY h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();
@@ -333,7 +357,7 @@ class DBProviderHelper {
     }
   }
 
-  Future<void> guardarHistorico(Pedido miPedido, int documento) async {
+  Future<void> guardarHistorico(Pedido miPedido, String documento) async {
     final db = await baseAbierta;
     String nombreFabricante = '';
     try {
@@ -350,9 +374,11 @@ class DBProviderHelper {
           '/' +
           now.year.toString();
 
-      await db.rawInsert('''
-      INSERT INTO Historico VALUES ($documento,'${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante',$documento)
-    ''');
+      var query = '''
+      INSERT INTO Historico VALUES ('$documento','${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.cantidad},${miPedido.precio},'$fechaActual','$nombreFabricante','$documento')
+      ''';
+
+      await db.rawInsert(query);
     } catch (e) {
       print('ERROR CONSULTA $e');
     }

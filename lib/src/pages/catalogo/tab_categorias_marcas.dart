@@ -3,9 +3,11 @@ import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
 import 'package:emart/src/pages/catalogo/widgets/fabricantes.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/pages/catalogo/widgets/marcas.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -59,6 +61,8 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                 child: new IconButton(
                   icon: SvgPicture.asset('assets/boton_soporte.svg'),
                   onPressed: () => {
+                     //UXCam: Llamamos el evento clickSoport
+                    UxcamTagueo().clickSoport(),
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -66,11 +70,13 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                                 numEmpresa: 1,
                               )),
                     ),
+                   
                   },
                 ),
               ),
               elevation: 0,
               actions: <Widget>[
+                BotonActualizar(),
                 AccionNotificacion(),
                 AccionesBartCarrito(esCarrito: false),
               ],
@@ -93,6 +99,9 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                               "",
                               "${cargoConfirmar.seccionesDinamicas[index].descripcion}",
                               'CategoryPage');
+                          //UXCam: Llamamos el evento selectSeccion
+                          UxcamTagueo().selectSeccion(cargoConfirmar
+                              .seccionesDinamicas[index].descripcion);
                           cargoConfirmar.cargoBaseDatos(index);
                         },
                         indicatorColor: Colors.transparent,

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
@@ -5,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-DateTime? _selectedDate;
-DateTime? _selectedDate2;
 final controlerHistorico = Get.find<ControllerHistorico>();
 
 class FiltroHistorico extends StatefulWidget {
@@ -17,13 +16,21 @@ class FiltroHistorico extends StatefulWidget {
 }
 
 class _FiltroHistoricoState extends State<FiltroHistorico> {
-  TextEditingController diaInicioController = TextEditingController();
-  TextEditingController mesInicioController = TextEditingController();
-  TextEditingController anoInicioController = TextEditingController();
+  RxString diaInicio = ''.obs;
+  RxString mesInicio = ''.obs;
+  RxString anoInicio = ''.obs;
 
-  TextEditingController diaFinController = TextEditingController();
-  TextEditingController mesFinController = TextEditingController();
-  TextEditingController anoFinController = TextEditingController();
+  RxString diaFin = ''.obs;
+  RxString mesFin = ''.obs;
+  RxString anoFin = ''.obs;
+
+  RxString mensajeInformativo = ''.obs;
+
+  RxList<DropdownMenuItem<String>> listDias = <DropdownMenuItem<String>>[].obs;
+  RxList<DropdownMenuItem<String>> listMeses = <DropdownMenuItem<String>>[].obs;
+  RxList<DropdownMenuItem<String>> listAnos = <DropdownMenuItem<String>>[].obs;
+  RxList<DropdownMenuItem<String>> listFinDias =
+      <DropdownMenuItem<String>>[].obs;
 
   final meses = {
     1: 'Enero',
@@ -42,14 +49,14 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    validarInicio();
     super.initState();
+    cargarFechas();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: ConstantesColores.color_fondo_gris,
         appBar: AppBar(
           title: Text('Filtro',
               style: TextStyle(color: HexColor("#41398D"), fontSize: 27)),
@@ -58,302 +65,266 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           elevation: 0,
-          actions: [IconLimpiarFiltro()],
+          actions: [iconLimpiarFiltro()],
         ),
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                color: ConstantesColores.color_fondo_gris,
-                height: Get.height,
-                padding: EdgeInsets.symmetric(horizontal: 22),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-                        child: Text('Elige el periodo para filtrar tus pedidos',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey)),
-                      ),
-                      Card(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text('Fecha de inicio',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey))),
-                                  Container(
-                                    width: Get.width * 0.8,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Dia Inicio
-                                        inputFecha('Día', diaInicioController,
-                                            () => cargarFechaInicio()),
-                                        // Mes inicio
-                                        inputFecha('Mes', mesInicioController,
-                                            () => cargarFechaInicio()),
-                                        // Año inicio
-                                        inputFecha('Año', anoInicioController,
-                                            () => cargarFechaInicio()),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              //Fecha Final
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      margin: EdgeInsets.only(top: 30),
-                                      child: Text('Fecha final',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey))),
-                                  Container(
-                                    width: Get.width * 0.8,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Dia final
-                                        inputFecha('Día', diaFinController,
-                                            () => cargarFechaFinal()),
-                                        // Mes final
-                                        inputFecha('Mes', mesFinController,
-                                            () => cargarFechaFinal()),
-                                        // Año final
-                                        inputFecha('Año', anoFinController,
-                                            () => cargarFechaFinal()),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 3),
-                                  child: Divider(
-                                    thickness: 2,
-                                  )),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                      child: Text('Periodo seleccionado',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey))),
-                                  Center(
-                                    child: Container(
-                                        margin: EdgeInsets.only(
-                                            top: 30, bottom: 130),
-                                        child: Text(
-                                            '${diaInicioController.text.isNotEmpty ? diaInicioController.text : ""} ${meses[toInt(mesInicioController.text)] ?? ""} - ${diaFinController.text.isNotEmpty ? diaFinController.text : ""} ${meses[toInt(mesFinController.text)] ?? ""} ${anoFinController.text.isNotEmpty ? anoFinController.text : ""}',
-                                            style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                                color: ConstantesColores
-                                                    .azul_precio))),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Center(
-                                      child: Container(
-                                        margin: EdgeInsets.only(top: 20),
-                                        width: Get.width * 0.8,
-                                        height: Get.height * 0.05,
-                                        child: RaisedButton(
-                                          onPressed: () {
-                                            confirmarFiltro();
-                                          },
-                                          child: Text(
-                                            'Filtrar',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          textColor: Colors.white,
-                                          color: ConstantesColores.agua_marina,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                    child: Text('Elige el periodo para filtrar tus pedidos',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey)),
                   ),
-                ),
-              ),
-            ],
+                  Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 2),
+                                    child: Text('Fecha de inicio',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey))),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Año inicio
+                                    Obx(() => _dropFecha(listAnos, 'Año',
+                                        'inicio', anoInicio.value.toString())),
+                                    // Mes inicio
+                                    Obx(() => _dropFecha(listMeses, 'Mes',
+                                        'inicio', mesInicio.value.toString())),
+                                    // Dia Inicio
+                                    Obx(() => _dropFecha(listDias, 'Dia',
+                                        'inicio', diaInicio.value.toString())),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        top: 30, bottom: 10, left: 2),
+                                    child: Text('Fecha final',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey))),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Año final
+                                    Obx(() => _dropFecha(listAnos, 'Año', 'fin',
+                                        anoFin.value.toString())),
+                                    // Mes final
+                                    Obx(() => _dropFecha(listMeses, 'Mes',
+                                        'fin', mesFin.value.toString())),
+                                    // Dia final
+                                    Obx(() => _dropFecha(listFinDias, 'Dia',
+                                        'fin', diaFin.value.toString())),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Obx(() => Visibility(
+                                  visible: mensajeInformativo.value != '',
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      mensajeInformativo.value,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  ),
+                                )),
+                            Container(
+                                width: Get.width,
+                                margin: EdgeInsets.symmetric(vertical: 25),
+                                child: Divider(
+                                  thickness: 2,
+                                )),
+                            Container(
+                                child: Text('Periodo seleccionado',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey))),
+                            Obx(() => Center(
+                                  child: Container(
+                                      margin:
+                                          EdgeInsets.only(top: 30, bottom: 130),
+                                      child: Text(
+                                          '${diaInicio.value.isNotEmpty ? diaInicio.value : ""} ${meses[toInt(mesInicio.value)] ?? ""} - ${diaFin.isNotEmpty ? diaFin.value : ""} ${meses[toInt(mesFin.value)] ?? ""} ${anoFin.isNotEmpty ? anoFin.value : ""}',
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              color: ConstantesColores
+                                                  .azul_precio))),
+                                )),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Center(
+                                child: Container(
+                                  width: Get.width * 0.8,
+                                  height: Get.height * 0.05,
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      confirmarFiltro(context);
+                                    },
+                                    child: Text(
+                                      'Filtrar',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    textColor: Colors.white,
+                                    color: ConstantesColores.agua_marina,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ))
+                ]),
           ),
         ));
   }
 
-  Widget inputFecha(
-      String placeholder, TextEditingController controller, Function() onTap) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: Get.width * 0.26,
-          height: 50,
-          decoration: BoxDecoration(
-            color: HexColor("#E4E3EC"),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: TextField(
-            controller: controller,
-            enabled: false,
-            textAlign: TextAlign.start,
+  Widget _dropFecha(RxList<DropdownMenuItem<String>> dropdownItems,
+      String hintText, String tipoFecha, String value) {
+    return Flexible(
+      child: Container(
+        decoration: BoxDecoration(
+          color: HexColor("#E4E3EC"),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 2),
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Text(
+            hintText,
             style: TextStyle(
+                fontSize: 15,
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold),
-            decoration: InputDecoration(
-              floatingLabelAlignment: FloatingLabelAlignment.center,
-              alignLabelWithHint: true,
-              hintText: placeholder,
-              hintStyle: TextStyle(
-                  color: ConstantesColores.azul_precio,
-                  fontWeight: FontWeight.bold),
-              suffixIcon: Icon(
-                Icons.arrow_drop_down_outlined,
-                color: HexColor("#41398D"),
-              ),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.fromLTRB(7, 12, 0, 0),
-            ),
           ),
+          value: value,
+          items: dropdownItems.value,
+          iconSize: 30,
+          scrollbarThickness: 2,
+          onChanged: (String? value) {
+            validarValue(value!, hintText, tipoFecha);
+          },
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: ConstantesColores.azul_precio,
+          ),
+          buttonHeight: 60,
+          buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+          dropdownElevation: 8,
+          dropdownMaxHeight: 200,
+          dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: HexColor("#E4E3EC")),
+          underline: Container(
+            color: Colors.transparent,
+          ),
+          itemHeight: 40,
+          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
       ),
     );
   }
 
-  cargarFechaInicio() {
-    showDatePicker(
-      context: context,
-      initialEntryMode: DatePickerEntryMode.input,
-      initialDatePickerMode: DatePickerMode.year,
-      initialDate: DateTime.now(),
-      locale: Locale('en', 'IN'),
-      fieldHintText: 'dd/mm/yyyy',
-      firstDate: DateTime(DateTime.now().year - 100),
-      lastDate: DateTime(DateTime.now().year + 1),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: HexColor("#E4E3EC"), // header background color
-              onPrimary: ConstantesColores.azul_precio, // header text color
-              onSurface: ConstantesColores.azul_precio, // body text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: ConstantesColores.agua_marina, // button text color
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    ).then((value) {
-      if (value != null) {
-        setState(() {
-          diaInicioController.text = '${value.day.toString()}';
-          mesInicioController.text = '${value.month.toString()}';
-          anoInicioController.text = '${value.year.toString()}';
-          _selectedDate = value;
-        });
+  validarValue(String value, String hintText, String tipoFecha) {
+    if (hintText == 'Dia') {
+      tipoFecha == 'inicio' ? diaInicio.value = value : diaFin.value = value;
+    }
+    if (hintText == 'Mes') {
+      if (tipoFecha == 'inicio') {
+        diaInicio.value = '';
+        mesInicio.value = value;
+        listDias.value = controlerHistorico.getDropdownItemsDia(
+            mesInicio.value, anoInicio.value);
+      } else {
+        diaFin.value = '';
+        mesFin.value = value;
+        listFinDias.value =
+            controlerHistorico.getDropdownItemsDia(mesFin.value, anoFin.value);
       }
-    });
+    }
+    if (hintText == 'Año') {
+      if (tipoFecha == 'inicio') {
+        diaInicio.value = '';
+        anoInicio.value = value;
+        listDias.value = controlerHistorico.getDropdownItemsDia(
+            mesInicio.value, anoInicio.value);
+      } else {
+        diaFin.value = '';
+        anoFin.value = value;
+        listFinDias.value =
+            controlerHistorico.getDropdownItemsDia(mesFin.value, anoFin.value);
+      }
+    }
   }
 
-  cargarFechaFinal() {
-    showDatePicker(
-      context: context,
-      initialEntryMode: DatePickerEntryMode.input,
-      initialDate: DateTime.now(),
-      locale: Locale('en', 'IN'),
-      fieldHintText: 'dd/mm/yyyy',
-      firstDate: DateTime(DateTime.now().year - 100),
-      lastDate: DateTime(DateTime.now().year + 1),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: HexColor("#E4E3EC"), // header background color
-              onPrimary: ConstantesColores.azul_precio, // header text color
-              onSurface: ConstantesColores.azul_precio, // body text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: ConstantesColores.agua_marina, // button text color
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    ).then((value) {
-      if (value != null) {
-        setState(() {
-          diaFinController.text = '${value.day.toString()}';
-          mesFinController.text = '${value.month.toString()}';
-          anoFinController.text = '${value.year.toString()}';
-          _selectedDate2 = value;
-        });
+  confirmarFiltro(BuildContext context) async {
+    if (diaInicio.isNotEmpty &&
+        diaFin.isNotEmpty &&
+        mesInicio.isNotEmpty &&
+        mesFin.isNotEmpty &&
+        anoInicio.isNotEmpty &&
+        anoFin.isNotEmpty) {
+      var fechaInicial =
+          '${anoInicio.value}-${mesInicio.value.toString().length > 1 ? mesInicio.value : '0${mesInicio.value}'}-${mesInicio.value.toString().length > 1 ? diaInicio.value : '0${diaInicio.value}'}';
+      var fechaFin =
+          '${anoFin.value}-${mesFin.value.toString().length > 1 ? mesFin.value : '0${mesFin.value}'}-${diaFin.value.toString().length > 1 ? diaFin.value : '0${diaFin.value}'}';
+      var num1 = fechaInicial.replaceAll('-', '');
+      var num2 = fechaFin.replaceAll('-', '');
+      if (toInt(num1) < toInt(num2)) {
+        if (await controlerHistorico.validarHistoricoFiltro(
+            context, fechaInicial, fechaFin)) {
+          mensajeInformativo.value = '';
+          controlerHistorico.setFechaInicial(fechaInicial);
+          controlerHistorico.setFechaFinal(fechaFin);
+          Navigator.pop(context);
+        }
+      } else {
+        mensajeInformativo.value =
+            'Por favor selecciona una fecha inicial menor a la final';
       }
-    });
-  }
-
-  confirmarFiltro() {
-    if (_selectedDate.toString() != '' &&
-        _selectedDate != null &&
-        _selectedDate2 != null &&
-        _selectedDate2.toString() != '') {
-      controlerHistorico.setFechaInicial('${_selectedDate.toString()}');
-      controlerHistorico.setFechaFinal('${_selectedDate2.toString()}');
-      Navigator.pop(context);
     } else {
       controlerHistorico.setFechaFinal('-1');
       controlerHistorico.setFechaInicial('-1');
@@ -362,37 +333,32 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     }
   }
 
-  limpiarFiltro() {
-    setState(() {
-      controlerHistorico.setFechaFinal('-1');
-      controlerHistorico.setFechaInicial('-1');
-      controlerHistorico.setFiltro('-1');
-      _selectedDate = null;
-      _selectedDate2 = null;
-      diaInicioController.text = '';
-      mesInicioController.text = '';
-      anoInicioController.text = '';
+  validarInicio() {
+    if (controlerHistorico.fechaInicial.value != '-1' ||
+        controlerHistorico.fechaFinal.value != '-1') {
+      DateTime _fechaInicial =
+          DateTime.parse(controlerHistorico.fechaInicial.value);
+      DateTime _fechaFinal =
+          DateTime.parse(controlerHistorico.fechaFinal.value);
+      diaInicio.value = _fechaInicial.day.toString();
+      mesInicio.value = _fechaInicial.month.toString();
+      anoInicio.value = _fechaInicial.year.toString();
 
-      diaFinController.text = '';
-      mesFinController.text = '';
-      anoFinController.text = '';
-    });
+      diaFin.value = _fechaFinal.day.toString();
+      mesFin.value = _fechaFinal.month.toString();
+      anoFin.value = _fechaFinal.year.toString();
+    }
   }
 
-  Widget IconLimpiarFiltro() {
+  Widget iconLimpiarFiltro() {
     return OutlineButton(
       borderSide: BorderSide(style: BorderStyle.none),
-      onPressed: () {
-        setState(() {
-          limpiarFiltro();
-        });
-      },
+      onPressed: () => limpiarFiltro(),
       child: Row(
         children: [
-          Icon(
-            Icons.cleaning_services_outlined,
-            size: 30,
-            color: HexColor("#43398E"),
+          Image.asset(
+            'assets/limpiar_filtro_img.png',
+            width: Get.width * 0.07,
           ),
           Container(
             width: 60,
@@ -409,29 +375,24 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     );
   }
 
-  validarInicio() {
-    if (controlerHistorico.fechaInicial.value != '-1' ||
-        controlerHistorico.fechaFinal.value != '-1') {
-      DateTime _fechaInicial =
-          DateTime.parse(controlerHistorico.fechaInicial.value);
-      DateTime _fechaFinal =
-          DateTime.parse(controlerHistorico.fechaFinal.value);
+  limpiarFiltro() {
+    controlerHistorico.setFechaFinal('-1');
+    controlerHistorico.setFechaInicial('-1');
+    controlerHistorico.setFiltro('-1');
 
-      diaInicioController.text = _fechaInicial.day.toString();
-      mesInicioController.text = _fechaInicial.month.toString();
-      anoInicioController.text = _fechaInicial.year.toString();
-
-      diaFinController.text = _fechaFinal.day.toString();
-      mesFinController.text = _fechaFinal.month.toString();
-      anoFinController.text = _fechaFinal.year.toString();
-    }
+    diaInicio.value = '';
+    diaFin.value = '';
+    mesInicio.value = '';
+    mesFin.value = '';
+    anoInicio.value = '';
+    anoFin.value = '';
   }
 
-  @override
-  void dispose() {
-    diaInicioController.dispose();
-    mesInicioController.dispose();
-    anoInicioController.dispose();
-    super.dispose();
+  cargarFechas() {
+    listFinDias.value = controlerHistorico.getDropdownItemsDia('', '');
+    listMeses.value = controlerHistorico.getDropdownItemsMes();
+    listAnos.value = controlerHistorico.getDropdownItemsAno();
+    listDias.value = controlerHistorico.getDropdownItemsDia('', '');
+    validarInicio();
   }
 }

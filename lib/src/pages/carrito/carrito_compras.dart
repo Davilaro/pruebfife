@@ -14,6 +14,7 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/pages/carrito/configurar_pedido.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/custom_expansion_panel_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,8 +31,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
-late BuildContext _context2;
-late CarroModelo cartProvider;
+//late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
   final int numEmpresa;
@@ -56,8 +56,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
-    _context2 = context;
-    cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CarroModelo>(context);
     MetodosLLenarValores().calcularValorTotal(cartProvider);
 
     final size = MediaQuery.of(context).size;
@@ -91,7 +90,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                   child: GestureDetector(
-                    onTap: () => {_configurarPedido(size)},
+                    onTap: () => {_configurarPedido(size, cartProvider)},
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(10),
@@ -130,7 +129,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 formatNumber
                                     .format(cartProvider.getTotal)
                                     .replaceAll(',00', ''),
-                            style: diseno_valores()),
+                            style: disenoValores()),
                         SizedBox(
                           height: 20,
                         ),
@@ -163,7 +162,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  TextStyle diseno_valores() => TextStyle(
+  TextStyle disenoValores() => TextStyle(
       fontSize: 15.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
@@ -298,8 +297,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                     width: double.infinity,
                                     child: Column(
                                       children: this
-                                          .gridItem(value["items"], fabricante,
-                                              context, cartProvider, format)
+                                          .gridItem(
+                                              value["items"],
+                                              fabricante,
+                                              context,
+                                              cartProvider,
+                                              format,
+                                              value["preciominimo"])
                                           .toList(),
                                     ),
                                   ),
@@ -324,7 +328,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
-      BuildContext context, CarroModelo cartProvider, format) {
+      BuildContext context, CarroModelo cartProvider, format, precioMinimo) {
     List<Widget> result = [];
     List<Productos> listTag = [];
 
@@ -372,8 +376,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           child: IconButton(
                             icon: Image.asset('assets/menos.png'),
                             onPressed: () => {
-                              menos(
-                                  product.productos, cartProvider, fabricante),
+                              menos(product.productos, cartProvider, fabricante,
+                                  precioMinimo),
                             },
                           ),
                         ),
@@ -470,7 +474,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             .text) *
                                         product.productos.preciodescuento))
                                 .replaceAll(',00', ''),
-                        style: diseno_valores(),
+                        style: disenoValores(),
                       ),
                     ),
                   ),
@@ -485,7 +489,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          dialogVaciarCarrito(fabricante);
+          dialogVaciarCarrito(fabricante, cartProvider, value, precioMinimo);
         },
         child: Row(
           children: [
@@ -562,10 +566,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
                   tipoCategoria: 4,
                   nombreCategoria: nombre,
                   img: icono,
+                  locacionFiltro: "categoria",
+                  codigoProveedor: "",
                 )));
   }
 
-  void dialogVaciarCarrito(String fabricante) {
+  void dialogVaciarCarrito(String fabricante, CarroModelo cartProvider,
+      List<dynamic> listProductos, precioMinimo) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -585,14 +592,17 @@ class _CarritoComprasState extends State<CarritoCompras> {
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    //UXCam: Llamamos el evento emptyToCart
+                    UxcamTagueo().emptyToCart(
+                        fabricante, cartProvider, listProductos, precioMinimo);
                     //FIREBASE: Llamamos el evento delete_cart
                     TagueoFirebase().sendAnalityticDeleteCart("2", "Delete");
                     setState(() {
                       PedidoEmart.listaProductos!.forEach((key, value) {
                         if (value.fabricante == fabricante) {
                           PedidoEmart.listaControllersPedido![value.codigo]!
-                              .text = "1";
-                          PedidoEmart.registrarValoresPedido(value, '1', false);
+                              .text = "0";
+                          PedidoEmart.registrarValoresPedido(value, "1", false);
                           cargarDeNuevo = true;
                         }
                       });
@@ -628,25 +638,27 @@ class _CarritoComprasState extends State<CarritoCompras> {
     }
   }
 
-  menos(Productos producto, CarroModelo cartProvider, String fabricante) {
+  menos(Productos producto, CarroModelo cartProvider, String fabricante,
+      precioMinimo) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
     } else {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
-        setState(() {
-          PedidoEmart.listaControllersPedido![producto.codigo]!.text = "1";
-          PedidoEmart.registrarValoresPedido(producto, '1', false);
-          cargarDeNuevo = true;
-          PedidoEmart.iniciarProductosPorFabricante();
-        });
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+        PedidoEmart.registrarValoresPedido(producto, '1', false);
+        cargarDeNuevo = true;
+        PedidoEmart.iniciarProductosPorFabricante();
+        setState(() {});
       } else {
-        setState(() {
-          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-              "$valorResta";
-          PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
-        });
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+            "$valorResta";
+        PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
+        setState(() {});
+        //UXCam: Llamamos el evento removeToCart
+        UxcamTagueo()
+            .removeToCart(producto, valorResta, cartProvider, precioMinimo);
       }
     }
     //FIREBASE: Llamamos el evento remove_from_cart
@@ -655,11 +667,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  _configurarPedido(size) {
+  _configurarPedido(size, CarroModelo cartProvider) {
     try {
-      String fabricantes = _validarPedidosMinimos();
+      String fabricantes = _validarPedidosMinimos(cartProvider);
       if (_verificarCantidadGrupos() > 0) {
         if (fabricantes == "") {
+          //UXCam: Llamamos el evento clickPlaceOrder
+          UxcamTagueo().clickPlaceOrder(cartProvider);
           _irConfigurarPedido();
         } else {
           if (_verificarCantidadGrupos() == fabricantes.split(",").length) {
@@ -672,7 +686,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
             showLoaderDialog(
                 context,
                 size,
-                _pedidoMinimoNoCumple(context, size, fabricantes),
+                _pedidoMinimoNoCumple(context, size, fabricantes, cartProvider),
                 Get.height * 0.55);
           }
         }
@@ -684,12 +698,11 @@ class _CarritoComprasState extends State<CarritoCompras> {
             Get.height * 0.25);
       }
     } catch (error) {
-      print("CARRITO ERROR!");
-      print(error);
+      print("CARRITO ERROR! $error");
     }
   }
 
-  String _validarPedidosMinimos() {
+  String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (value['precioProducto'] > 0.0) {
@@ -706,7 +719,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
         : listaFabricantesSinPedidoMinimo;
   }
 
-  _pedidoMinimoNoCumple(context, size, fabricantes) {
+  _pedidoMinimoNoCumple(context, size, fabricantes, cartProvider) {
     return FutureBuilder(
         future: DBProviderHelper.db.consultarNombreComercial(fabricantes),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -727,14 +740,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       color: Colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //     spreadRadius: 5,
-                      //     blurRadius: 7,
-                      //     offset: Offset(0, 3), // changes position of shadow
-                      //   ),
-                      // ],
                     ),
                     child: Column(
                       children: [
@@ -768,8 +773,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 ),
                               ),
                             ),
-                            _botonSeguirComprando(size),
-                            _botonAceptar(size, fabricantes),
+                            _botonSeguirComprando(size, fabricantes),
+                            _botonAceptar(size, fabricantes, cartProvider),
                           ],
                         )
                       ],
@@ -791,14 +796,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: widget));
     showDialog(
@@ -810,9 +807,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  Widget _botonSeguirComprando(size) {
+  Widget _botonSeguirComprando(size, fabricantes) {
     return GestureDetector(
-      onTap: () => {Navigator.pop(context)},
+      onTap: () => {
+        Navigator.pop(context),
+        //UXCam: Llamamos el evento clickAction
+        UxcamTagueo().clickAction('Cancelar', fabricantes)
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,
@@ -844,9 +845,13 @@ class _CarritoComprasState extends State<CarritoCompras> {
     );
   }
 
-  Widget _botonAceptar(size, fabricantes) {
+  Widget _botonAceptar(size, fabricantes, cartProvider) {
     return GestureDetector(
-      onTap: () => _cancelarPedidosSinPedidoMinimo(fabricantes),
+      onTap: () {
+        _cancelarPedidosSinPedidoMinimo(
+            fabricantes, cartProvider); //UXCam: Llamamos el evento clickAction
+        UxcamTagueo().clickAction('Aceptar', fabricantes);
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,
@@ -910,7 +915,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                 ConfigurarPedido(numEmpresa: prefs.numEmpresa)));
   }
 
-  void _cancelarPedidosSinPedidoMinimo(fabricantes) {
+  void _cancelarPedidosSinPedidoMinimo(fabricantes, cartProvider) {
     Navigator.of(context).pop();
     List<String> listaFabricantes = fabricantes.split(",");
     listaFabricantes.forEach((fabricante) {
@@ -953,9 +958,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
           if (snapshot.hasData) {
             var proveedores =
                 snapshot.data.substring(0, snapshot.data.length - 2);
-
-            // String mensaje =
-            //     "Tu pedido no fue finalizado. Continúa comprando para cumplir con el pedido mínimo $singulaPlural $proveedores";
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -965,14 +967,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       color: Colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //     spreadRadius: 5,
-                      //     blurRadius: 7,
-                      //     offset: Offset(0, 3), // changes position of shadow
-                      //   ),
-                      // ],
                     ),
                     child: Column(
                       children: [
@@ -1015,7 +1009,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 ),
                               ),
                             ),
-                            // _botonSeguirComprando(size),
                             _botonAceptarNoCumplimiento(size, fabricantes),
                           ],
                         )
@@ -1041,14 +1034,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.5),
-              //     spreadRadius: 5,
-              //     blurRadius: 7,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
             ),
             child: Column(
               children: [
@@ -1066,7 +1051,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // _botonSeguirComprando(size),
                     _botonAceptarNoCumplimiento(size, fabricantes),
                   ],
                 )
@@ -1102,16 +1086,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
       if (valorPedido < (topeMinimo * 1.19)) {
         return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
             formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
-      } else {
-        return "Tu pedido será entregado el siguiente día hábil.";
       }
+      return "Tu pedido será entregado el siguiente día hábil.";
     } else {
       if (valorPedido < precioMinimo) {
         return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
-      } else {
-        return "";
       }
+      return "";
     }
   }
 }

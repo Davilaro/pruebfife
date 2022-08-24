@@ -16,8 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BannnerControllers extends GetxController {
-  var cargoDatos = false.obs;
+  RxBool cargoDatos = false.obs;
   RxInt inicialControllerSubCategoria = 0.obs;
+  RxBool isVisitBanner = false.obs;
 
   List<dynamic> listaBanners = [].obs;
 
@@ -25,9 +26,18 @@ class BannnerControllers extends GetxController {
     inicialControllerSubCategoria.value = value;
   }
 
+  void setIsVisitBanner(bool value) {
+    isVisitBanner.value = value;
+  }
+
+  setCargoDatos(bool value) {
+    cargoDatos.value = value;
+  }
+
   void cargarDatosBanner(dynamic banners) {
+    setCargoDatos(false);
     if (banners.length > 0) {
-      this.cargoDatos.value = true;
+      setCargoDatos(true);
     }
     listaBanners = banners;
   }
@@ -41,13 +51,11 @@ class BannnerControllers extends GetxController {
       String locasionBanner) async {
     var resBusqueda;
     if (banner.tipoSeccion == 'Detalle Producto') {
-      // Listo
-      resBusqueda =
-          await DBProvider.db.cargarProductosFiltro(banner.seccion.toString());
+      resBusqueda = await DBProvider.db
+          .cargarProductosFiltro(banner.seccion.toString(), "");
       _detalleProducto(
           resBusqueda[0], provider, context, cargoConfirmar, prefs);
     } else if (banner.tipoSeccion == 'Categoria') {
-      //Listo
       resBusqueda = await DBProvider.db
           .consultarCategorias(banner.subSeccion.toString(), 1);
       var resSubBusqueda = await DBProvider.db
@@ -55,12 +63,10 @@ class BannnerControllers extends GetxController {
       _direccionarCategoria(
           context, provider, resSubBusqueda, banner.seccion.toString());
     } else if (banner.tipoSeccion == 'Proveedor') {
-      // Listo
       resBusqueda =
           await DBProvider.db.consultarFricante(banner.seccion.toString());
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {
-      // Listo
       resBusqueda =
           await DBProvider.db.consultarMarcas(banner.seccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
@@ -75,6 +81,8 @@ class BannnerControllers extends GetxController {
                     nombreCategoria: banner.nombrecomercial!,
                     img: banner.link,
                     locasionBanner: locasionBanner,
+                    locacionFiltro: "proveedor",
+                    codigoProveedor: "",
                   )));
     }
   }
@@ -82,14 +90,17 @@ class BannnerControllers extends GetxController {
   _direccionarCategoria(BuildContext context, CarroModelo provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
+      setIsVisitBanner(true);
       cambiarSubCategoria(resSubBusqueda.indexWhere((element) =>
           element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
     }
+
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TabOpcionesCategorias(
                   listaCategorias: resSubBusqueda,
+                  nombreCategoria: subCategoria,
                 )));
   }
 
@@ -106,6 +117,8 @@ class BannnerControllers extends GetxController {
                   tipoCategoria: 3,
                   nombreCategoria: marca.titulo,
                   isActiveBanner: false,
+                  locacionFiltro: "marca",
+                  codigoProveedor: "",
                 )));
   }
 
@@ -122,6 +135,8 @@ class BannnerControllers extends GetxController {
                   tipoCategoria: 4,
                   nombreCategoria: proveedor.nombrecomercial!,
                   img: proveedor.icono,
+                  locacionFiltro: "proveedor",
+                  codigoProveedor: "",
                 )));
   }
 

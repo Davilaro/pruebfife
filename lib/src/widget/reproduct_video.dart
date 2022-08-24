@@ -17,7 +17,7 @@ class ReproductVideo extends StatefulWidget {
 class _ReproductVideoState extends State<ReproductVideo> {
   late final playerWidget;
   late ChewieController _chewieController;
-  // final cargoConfirmar = Get.find<ControlBaseDatos>();
+
   ControllerMultimedia multimediaController = Get.put(ControllerMultimedia());
 
   @override
@@ -78,9 +78,7 @@ class _ReproductVideoState extends State<ReproductVideo> {
 
   @override
   void dispose() {
-    // multimediaController.controllerVideo.dispose();
     _chewieController.dispose();
-    // multimediaController.dispose();
     super.dispose();
   }
 }

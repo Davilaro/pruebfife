@@ -60,7 +60,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
                 style: TextStyle(fontSize: 15),
               ),
             ),
-            Row(
+            //Row
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -72,7 +73,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                           ? true
                           : false,
                   child: Container(
-                    width: Get.width * 0.68,
+                    width: Get.width * 1,
                     decoration: BoxDecoration(
                       color: HexColor("#E4E3EC"),
                       borderRadius: BorderRadius.circular(20),
@@ -149,16 +150,46 @@ class _EncuestaFormState extends State<EncuestaForm> {
                         ),
                       )
                     : Container(),
-                IconButton(
-                  alignment: Alignment.center,
-                  iconSize: 35,
-                  color: ConstantesColores.verde,
-                  icon: const Icon(
-                    Icons.check,
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'Enviar',
+                //       style: TextStyle(fontWeight: FontWeight.bold),
+                //     ),
+                //     IconButton(
+                //       alignment: Alignment.center,
+                //       iconSize: 35,
+                //       color: ConstantesColores.verde,
+                //       icon: const Icon(
+                //         Icons.check,
+                //       ),
+                //       onPressed: () {
+                //         _validarInformacion(context, widget.encuesta);
+                //       },
+                //     ),
+
+                //   ],
+                // ),
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  width: Get.width * 0.5,
+                  height: Get.height * 0.04,
+                  child: RaisedButton(
+                    onPressed: () {
+                      _validarInformacion(context, widget.encuesta);
+                    },
+                    child: Text(
+                      'Enviar',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    textColor: Colors.white,
+                    color: ConstantesColores.agua_marina,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                   ),
-                  onPressed: () {
-                    _validarInformacion(context, widget.encuesta);
-                  },
                 ),
               ],
             ),
@@ -213,7 +244,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
   }
 
   Future _validarInformacion(BuildContext context, Encuesta encuesta) async {
-    if (encuesta.tipoPreguntaId == 1 ||
+    if (encuesta.tipoPreguntaId == 1 && controllerText.text.isNotEmpty ||
         encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty) {
       mensajeValid.value = '';
       var respues =

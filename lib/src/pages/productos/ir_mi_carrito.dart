@@ -1,4 +1,4 @@
-import 'dart:convert';
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/modelos/productos.dart';
@@ -9,7 +9,10 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +24,6 @@ import 'package:provider/provider.dart';
 
 NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
-final TextEditingController _controllerBuscarProductoMarca =
-    TextEditingController();
 
 class IrMiCarrito extends StatefulWidget {
   final Productos productos;
@@ -80,6 +81,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionNotificacion(),
           AccionesBartCarrito(esCarrito: false),
         ],
@@ -137,7 +139,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               Align(
                                   alignment: Alignment.topLeft,
                                   child: Container(
-                                      // height: Get.height * 0.13,
                                       width: MediaQuery.of(context).size.width *
                                           0.45,
                                       child: Text('${widget.productos.nombre}',
@@ -149,7 +150,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Container(
-                                  // height: Get.height * 0.08,
                                   child: Column(
                                     children: [
                                       cargarValorPrecio(
@@ -169,7 +169,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
             ),
             //BOTONES DE ACCION
             Container(
-              // height: widget.tamano * 0.2,
               child: Column(
                 children: [
                   Center(
@@ -259,37 +258,10 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     );
   }
 
-  _campoTexto(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      padding: EdgeInsets.fromLTRB(20, 10, 5, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: _controllerBuscarProductoMarca,
-        style: TextStyle(color: HexColor("#41398D"), fontSize: 11.5),
-        decoration: InputDecoration(
-            fillColor: HexColor("#41398D"),
-            hintText: 'Buscar tus productos de esta marca',
-            hintStyle: TextStyle(
-              color: HexColor("#41398D"),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Icon(
-                Icons.search,
-                color: HexColor("#41398D"),
-              ),
-            ),
-            border: InputBorder.none),
-      ),
-    );
-  }
-
-  //SE CREA UNA RESPUESTA PARA DEVOLVER
   Future<void> pasarCarrito() async {
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    //UXCam: Llamamos el evento clickCarrito
+    UxcamTagueo().clickCarrito(provider, 'Inferior');
     var resul = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -403,7 +375,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         : Container(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Container(
-                //height: 90,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -472,22 +443,21 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                   decoration: TextDecoration.lineThrough)),
         ),
       ]);
-    } else {
-      return Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        alignment: Alignment.topLeft,
-        child: Text(
-          '${format.currencySymbol}' +
-              formatNumber
-                  .format(widget.productos.precioinicial)
-                  .replaceAll(',00', ''),
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-        ),
-      );
     }
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      alignment: Alignment.topLeft,
+      child: Text(
+        '${format.currencySymbol}' +
+            formatNumber
+                .format(widget.productos.precioinicial)
+                .replaceAll(',00', ''),
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            color: ConstantesColores.azul_precio,
+            fontWeight: FontWeight.bold,
+            fontSize: 18),
+      ),
+    );
   }
 }

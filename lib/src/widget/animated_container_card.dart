@@ -1,11 +1,10 @@
-import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AnimatedContainerCard extends StatefulWidget {
   final String grupo;
-  final int numeroDoc;
+  final String numeroDoc;
   final String ordenCompra;
   AnimatedContainerCard(
       {Key? key,
@@ -64,18 +63,12 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                             color: HexColor("#43398E"),
                             fontWeight: FontWeight.bold)),
                     _validarNumeroPedido(widget.ordenCompra),
-                    // Text("N° Pedido ${widget.ordenCompra}",
-                    //     style: TextStyle(
-                    //         fontSize: 13,
-                    //         color: Colors.black.withOpacity(.6),
-                    //         fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
             ),
             Container(
                 padding: EdgeInsets.only(left: 50, top: 4),
-                // color: Colors.green,
                 child: ExpandIcon(
                   isExpanded: _isExpanded,
                   size: 30,
@@ -85,9 +78,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                       _isExpanded = !_isExpanded;
                     });
                   },
-                )
-                // color: Colors.yellow,
-                )
+                ))
           ],
         ),
         AnimatedOpacity(
@@ -108,16 +99,12 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white),
                                 width: size.width * 0.9,
-                                // duration: Duration(milliseconds: 500),
-                                // curve: Curves.fastOutSlowIn,
-                                // margin: _isExpanded ? kExpandedEdgeInsets : EdgeInsets.zero,
                                 child: Column(
                                   children: [
                                     Row(
                                       children: [
                                         Flexible(
                                           child: Container(
-                                            // duration: Duration(milliseconds: 500),
                                             padding: EdgeInsets.only(left: 16),
                                             child: Text(
                                               "${detalles[i].nombreProducto}",
@@ -130,7 +117,6 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                         ),
                                         Flexible(
                                           child: Container(
-                                            // duration: Duration(milliseconds: 500),
                                             padding: EdgeInsets.only(left: 16),
                                             child: Text(
                                               "${detalles[i].cantidad}",

@@ -14,8 +14,7 @@ final prefs = new Preferencias();
 
 class PushNotificationServer {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
+
   static String? token;
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {}
@@ -75,10 +74,8 @@ class PushNotificationServer {
         provisional: false,
         sound: true);
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('hola User granted permission');
-    } else {
-      print('hola User declined or has not accepted permission');
-    }
+    settings.authorizationStatus == AuthorizationStatus.authorized
+        ? print('hola User granted permission')
+        : print('hola User declined or has not accepted permission');
   }
 }

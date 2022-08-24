@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emart/src/classes/producto_cambiante.dart';
+import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
@@ -15,7 +16,8 @@ import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/pages/historico/historico_pedidos.dart';
-import 'package:emart/src/widget/pedido_rapido.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +41,8 @@ class _TabOpcionesState extends State<TabOpciones>
   final cargoControllerBase = Get.put(ControlBaseDatos());
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+
+  final bannerPut = Get.put(BannnerControllers());
 
   @override
   void initState() {
@@ -90,35 +94,41 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
-    PedidoEmart.listaControllersPedido = new Map();
-    PedidoEmart.listaValoresPedido = new Map();
-    PedidoEmart.listaProductos = new Map();
-    PedidoEmart.listaValoresPedidoAgregados = new Map();
+    try {
+      if (PedidoEmart.listaControllersPedido?.keys.length == null) {
+        PedidoEmart.listaControllersPedido = new Map();
+        PedidoEmart.listaValoresPedido = new Map();
+        PedidoEmart.listaProductos = new Map();
+        PedidoEmart.listaValoresPedidoAgregados = new Map();
+      }
 
-    providerDatos.guardarListaSugueridoHelper =
-        await DBProviderHelper.db.consultarSugueridoHelper();
-    providerDatos.guardarListaHistoricosHelper =
-        await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
+      providerDatos.guardarListaSugueridoHelper =
+          await DBProviderHelper.db.consultarSugueridoHelper();
+      providerDatos.guardarListaHistoricosHelper =
+          await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
 
-    PedidoEmart.listaFabricante =
-        await DBProvider.db.consultarFricanteGeneral();
+      PedidoEmart.listaFabricante =
+          await DBProvider.db.consultarFricanteGeneral();
 
-    var listaProductos =
-        await DBProvider.db.cargarProductos('', 10, '', 0.0, 1000000000.0);
-    for (var i = 0; i < listaProductos.length; i++) {
-      PedidoEmart.listaProductos!
-          .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
-      PedidoEmart.listaValoresPedidoAgregados!
-          .putIfAbsent(listaProductos[i].codigo, () => false);
-      PedidoEmart.listaValoresPedido!
-          .putIfAbsent(listaProductos[i].codigo, () => "1");
-      PedidoEmart.listaControllersPedido!
-          .putIfAbsent(listaProductos[i].codigo, () => TextEditingController());
+      var listaProductos = await DBProvider.db
+          .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
+      for (var i = 0; i < listaProductos.length; i++) {
+        PedidoEmart.listaProductos!
+            .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
+        PedidoEmart.listaValoresPedidoAgregados!
+            .putIfAbsent(listaProductos[i].codigo, () => false);
+        PedidoEmart.listaValoresPedido!
+            .putIfAbsent(listaProductos[i].codigo, () => "1");
+        PedidoEmart.listaControllersPedido!.putIfAbsent(
+            listaProductos[i].codigo, () => TextEditingController());
+      }
+
+      String? token = PushNotificationServer.token as String;
+      print('Token: $token');
+      setState(() {});
+    } catch (e) {
+      print('error de descarga prueba $e');
     }
-
-    String? token = PushNotificationServer.token as String;
-    print('Token: $token');
-    setState(() {});
   }
 
   void cargarSecciones() async {
@@ -151,15 +161,14 @@ class _HomePageBody extends StatelessWidget {
 
       case 1:
         {
-          provider.getIisLocal == 0
-              ? ''
-              //FIREBASE: Llamamos el evento select_content
-              : TagueoFirebase().sendAnalityticSelectContent(
-                  "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
-          provider.getIisLocal == 0
-              ? ''
-              : onClickVerMas('Categorías', provider);
-
+          if (provider.getIisLocal != 0) {
+            //FIREBASE: Llamamos el evento select_content
+            TagueoFirebase().sendAnalityticSelectContent(
+                "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
+            //UXCam: Llamamos el evento selectFooter
+            UxcamTagueo().selectFooter('Catalogo');
+            onClickVerMas('Categorías', provider);
+          }
           return TabCategoriaMarca();
         }
 

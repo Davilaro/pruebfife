@@ -3,11 +3,14 @@ import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -72,15 +75,29 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
                           UIUtills().getProportionalHeight(height: 0.7),
                       width: Get.width * 1,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5.0, // Espaciado vertical
-                          mainAxisSpacing:
-                              4.0, // espaciado entre ejes principales (horizontal)
-                          childAspectRatio: 1 / 1.7,
-                          children:
-                              _cargarProductosLista(listaProducto, context)
-                                  .toList()))))
+                      child: RefreshIndicator(
+                        color: ConstantesColores.azul_precio,
+                        backgroundColor:
+                            ConstantesColores.agua_marina.withOpacity(0.6),
+                        onRefresh: () async {
+                          await LogicaActualizar().actualizarDB();
+                          setState(() {
+                            cargarProductos();
+                          });
+
+                          return Future<void>.delayed(
+                              const Duration(seconds: 3));
+                        },
+                        child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5.0, // Espaciado vertical
+                            mainAxisSpacing:
+                                4.0, // espaciado entre ejes principales (horizontal)
+                            childAspectRatio: 1 / 1.7,
+                            children:
+                                _cargarProductosLista(listaProducto, context)
+                                    .toList()),
+                      ))))
             ])));
   }
 
@@ -116,11 +133,18 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       //FIREBASE: Llamamos el evento view_item_list
       TagueoFirebase().sendAnalityticViewItemList(data, nameCategory);
     }
+
     for (var element in data) {
+      bool isProductoPromo = false;
+      if (widget.tipoCategoria != 2) {
+        isProductoPromo = true;
+      }
       Productos productos = element;
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: prefs.numEmpresa,
+        isCategoriaPromos: isProductoPromo,
+        index: data.indexOf(element),
       );
 
       opciones.add(widgetTemp);
@@ -135,7 +159,9 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         '',
         catalogSearchViewModel.precioMinimo.value,
         catalogSearchViewModel.precioMaximo.value,
-        0);
+        0,
+        "",
+        "");
     listaProducto.value = listaAllProducts;
   }
 
@@ -145,6 +171,8 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
     } else {
       //FIREBASE: Llamamos el evento search
       TagueoFirebase().sendAnalityticsSearch(_controllerSearch.text);
+      //UXCam: Llamamos el evento search
+      UxcamTagueo().search(_controllerSearch.text);
       List listaAux = [];
       listaProducto.value = [];
       listaAllProducts.forEach((element) {

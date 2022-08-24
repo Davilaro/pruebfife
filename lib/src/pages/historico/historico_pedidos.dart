@@ -4,16 +4,19 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/expansion_card.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';
+import 'package:get/get.dart';
 
 final Debouncer onSearchDebouncer =
     new Debouncer(delay: new Duration(milliseconds: 500));
@@ -35,13 +38,15 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Historico", "", "", "Historico", 'MainActivity');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Histórico');
     validarVersionActual(context);
     super.initState();
   }
 
-  // String _filtro = "-1";
-  // String fechaInicial = "-1";
-  // String fechaFinal = "-1";
+  String _filtro = "-1";
+  String fechaInicial = "-1";
+  String fechaFinal = "-1";
   @override
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
@@ -59,6 +64,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             child: new IconButton(
               icon: SvgPicture.asset('assets/boton_soporte.svg'),
               onPressed: () => {
+                //UXCam: Llamamos el evento clickSoport
+                UxcamTagueo().clickSoport(),
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -72,56 +79,73 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
         ),
         elevation: 0,
         actions: <Widget>[
+          BotonActualizar(),
           AccionesBartCarrito(esCarrito: false),
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                _buscador(size),
-                FutureBuilder<List<dynamic>>(
-                    future: DBProviderHelper.db.consultarHistoricos(
-                        catalogSearchViewModel.filtro.value,
-                        catalogSearchViewModel.fechaInicial.value,
-                        catalogSearchViewModel.fechaFinal.value),
-                    builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-                      if (snapshot.hasData) {
-                        var cantidad = snapshot.data?.length;
-                        if (cantidad! > 0) {
-                          var historicos = snapshot.data;
-                          return Column(
-                            children: [
-                              for (int i = 0; i < historicos!.length; i++)
-                                Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    width: size.width * 0.9,
-                                    margin: EdgeInsets.only(bottom: 14),
-                                    child: ExpansionCard(
-                                        historico: historicos[i])),
-                            ],
-                          );
+        child: RefreshIndicator(
+          color: ConstantesColores.azul_precio,
+          backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
+          onRefresh: () async {
+            await LogicaActualizar().actualizarDB();
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            ).timeout(Duration(seconds: 3));
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  _buscador(size),
+                  Obx(() => FutureBuilder<List<dynamic>>(
+                      future: DBProviderHelper.db.consultarHistoricos(
+                          _filtro,
+                          catalogSearchViewModel.fechaInicial.value,
+                          catalogSearchViewModel.fechaFinal.value),
+                      builder:
+                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                        if (snapshot.hasData) {
+                          var cantidad = snapshot.data?.length;
+                          if (cantidad! > 0) {
+                            var historicos = snapshot.data;
+                            return Column(
+                              children: [
+                                for (int i = historicos!.length - 1;
+                                    i >= 0;
+                                    i--)
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      width: size.width * 0.9,
+                                      margin: EdgeInsets.only(bottom: 14),
+                                      child: ExpansionCard(
+                                          historico: historicos[i])),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                                children: [Text("No hay registros!")]);
+                          }
                         } else {
                           return Column(children: [Text("No hay registros!")]);
                         }
-                      } else {
-                        return Column(children: [Text("No hay registros!")]);
-                      }
-                    }),
-              ],
+                      })),
+                ],
+              ),
             ),
           ),
         ),
@@ -145,10 +169,9 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             child: TextField(
               onChanged: (valor) {
                 setState(() {
-                  catalogSearchViewModel.filtro.value =
-                      _controladorFiltro.text == ""
-                          ? "-1"
-                          : _controladorFiltro.text;
+                  _filtro = _controladorFiltro.text == ""
+                      ? "-1"
+                      : _controladorFiltro.text;
                 });
               },
               controller: _controladorFiltro,
@@ -166,7 +189,6 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            // onTap: () => {pickDateRange(context)},
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => FiltroHistorico())),
             child: Container(
@@ -181,40 +203,4 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
       ),
     );
   }
-
-  // Future pickDateRange(BuildContext context) async {
-  //   DateTime now = new DateTime.now();
-  //   DateTimeRange dateRange;
-  //   final newDateRange = await showDateRangePicker(
-  //     locale: const Locale("es", ""),
-  //     context: context,
-  //     firstDate: DateTime(2021, 1, 1),
-  //     currentDate: DateTime(now.year, now.month, now.day),
-  //     lastDate: DateTime(now.year, now.month, now.day),
-  //   );
-  //   if (newDateRange == null) return;
-  //   dateRange = newDateRange;
-  //   setState(() {
-  //     fechaInicial = dateRange.start.toString();
-  //     fechaFinal = dateRange.end.toString();
-  //   });
-  // }
-}
-
-showLoaderDialog(BuildContext context, Widget widget, double altura) {
-  AlertDialog alert = AlertDialog(
-      content: Container(
-          height: altura,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: Colors.white,
-          ),
-          child: widget));
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

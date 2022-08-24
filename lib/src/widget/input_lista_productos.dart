@@ -5,7 +5,6 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
 import "package:intl/intl.dart";
 import 'package:provider/provider.dart';
@@ -208,8 +207,7 @@ class _DisenoListaState extends State<DisenoLista> {
   menos(Productos producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
-    if (valorInicial == "") {
-    } else {
+    if (valorInicial != "") {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
         setState(() {
@@ -228,24 +226,13 @@ class _DisenoListaState extends State<DisenoLista> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  double _carcularValor(precio, String? obtenerValor) {
-    double valor = precio * int.parse(obtenerValor!);
-
-    return valor;
-  }
-
   int obtenerValorProducto(Productos producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
       return 0;
-    } else {
-      int valor = int.parse(valorInicial);
-      if (valor > 0) {
-        return 1;
-      } else {
-        return 0;
-      }
     }
+    int valor = int.parse(valorInicial);
+    return valor > 0 ? 1 : 0;
   }
 }

@@ -1,6 +1,6 @@
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/modelos/productos.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -8,6 +8,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'animated_container_card.dart';
@@ -34,31 +35,20 @@ class ExpansionCardLast extends StatefulWidget {
 }
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
-  bool _cargando = false;
+  RxBool _cargando = false.obs;
+  RxBool estadoBoton = true.obs;
+  final controlador = Get.find<CambioEstadoProductos>();
+  @override
+  void initState() {
+    super.initState();
+    determinarBotonCarrito("${widget.historico.numeroDoc}");
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    // double cardExpadend = 310;
-    // double cardNotExpadend = 109;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SingleChildScrollView(
-        // width: size.width * 0.9,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(10),
-        //   color: Colors.white,
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.grey.withOpacity(0.5),
-        //       spreadRadius: 5,
-        //       blurRadius: 7,
-        //       offset: Offset(0, 3), // changes position of shadow
-        //     ),
-        //   ],
-        // ),
-        // duration: Duration(milliseconds: 500),
-        // height: _isExpanded ? cardExpadend : cardNotExpadend,
-        // curve: Curves.easeInOut,
         child: _body(context),
       ),
     );
@@ -66,6 +56,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   Widget _body(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -89,12 +80,10 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   padding: EdgeInsets.all(16),
                 ),
                 Container(
-                  // color: Colors.green,
                   padding: EdgeInsets.only(top: 10),
                   child: Row(
                     children: [
                       Container(
-                        // color: Colors.yellow,
                         child: Icon(
                           Icons.clean_hands,
                           color: HexColor("#30C3A3"),
@@ -112,106 +101,61 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                       ),
                     ],
                   ),
-                  // color: Colors.yellow,
                 )
               ],
             ),
           ],
         ),
       ),
-      // Table(
-      //   columnWidths: {2: FractionColumnWidth(.3)},
-      //   children: [
-      //     TableRow(
-      //       children: [
-      //         Container(
-      //           child: Row(children: [
-      //             Text(
-      //               "Ver detalles",
-      //               style: TextStyle(
-      //                   color: HexColor("#43398E"),
-      //                   fontWeight: FontWeight.bold),
-      //             ),
-      //             ExpandIcon(
-      //               isExpanded: _isExpanded,
-      //               padding: const EdgeInsets.all(16.0),
-      //               onPressed: (bool isExpanded) {
-      //                 setState(() {
-      //                   _isExpanded = !_isExpanded;
-      //                 });
-      //               },
-      //             ),
-      //           ]),
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
-
-      // duration: Duration(milliseconds: 500),
-      // curve: Curves.fastOutSlowIn,
-      // margin: _isExpanded ? kExpandedEdgeInsets : EdgeInsets.zero,
       Column(
         children: [
-          // Row(
-          //   children: [
-          //     Container(
-          //       // duration: Duration(milliseconds: 500),
-          //       padding: EdgeInsets.only(left: 16),
-          //       child: Text(
-          //         "Número de pedido por validar",
-          //         style: TextStyle(
-          //             color: HexColor("#FFD94D"),
-          //             fontWeight: FontWeight.bold),
-          //       ),
-          //     )
-          //   ],
-          // ),
           _grupoComercial(size, widget.historico.numeroDoc),
           Container(
-            // color: Colors.red,
             width: size.width * 0.9,
             margin: const EdgeInsets.only(top: 8.0),
             padding: EdgeInsets.only(right: 10),
             alignment: Alignment.centerRight,
             child: Container(
               width: 124,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(
-                                color: HexColor("#43398E"), width: 1.0)))),
-                child: Row(
-                  children: [
-                    Text(
-                      widget.historico.estado! ? 'Pedir' : 'Cancelar',
-                      style: TextStyle(color: HexColor("#43398E")),
+              child: Obx(() => ElevatedButton(
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(
+                                        color: HexColor("#43398E"),
+                                        width: 1.0)))),
+                    child: Row(
+                      children: [
+                        Text(
+                          estadoBoton.value ? 'Pedir' : 'Cancelar',
+                          style: TextStyle(color: HexColor("#43398E")),
+                        ),
+                        !_cargando.value
+                            ? Icon(
+                                Icons.car_rental,
+                                color: HexColor("#30C3A3"),
+                              )
+                            : Container(
+                                height: 10,
+                                width: 10,
+                                margin: EdgeInsets.all(6),
+                                child: CircularProgressIndicator(
+                                  color: HexColor("#30C3A3"),
+                                ),
+                              )
+                      ],
                     ),
-                    !_cargando
-                        ? Icon(
-                            Icons.car_rental,
-                            color: HexColor("#30C3A3"),
-                          )
-                        : Container(
-                            height: 10,
-                            width: 10,
-                            margin: EdgeInsets.all(6),
-                            child: CircularProgressIndicator(
-                              color: HexColor("#30C3A3"),
-                            ),
-                          )
-                  ],
-                ),
-                onPressed: () {
-                  setState(() {
-                    _cargando = true;
-                  });
-                  _cargarPedido(widget.historico.ordenCompra!.toString(),
-                      widget.historico.estado!, widget.providerDatos);
-                },
-              ),
+                    onPressed: () async {
+                      _cargando.value = true;
+                      determinarBotonCarrito(widget.historico.numeroDoc!);
+                      await _cargarPedido(
+                          widget.historico.numeroDoc!.toString(),
+                          estadoBoton.value,
+                          widget.providerDatos);
+                    },
+                  )),
             ),
           ),
         ],
@@ -236,18 +180,6 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     );
   }
 
-  // pasarCarrito(datosProvider, ordenCompra, estado) {
-  //   Future.delayed(const Duration(milliseconds: 1000), () {
-  //     setState(() {
-  //       Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) =>
-  //                   CarritoCompras(numEmpresa: prefs.numEmpresa)));
-  //     });
-  //   });
-  // }
-
   Widget _grupoComercial(size, numeroDocumento) {
     return FutureBuilder<List<Historico>>(
         future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
@@ -265,80 +197,88 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                 _separador(size),
               ],
             );
-          } else {
-            return CircularProgressIndicator();
           }
+          return CircularProgressIndicator();
         });
   }
 
-  _cargarPedido(String ordenCompra, estado, providerDatos) async {
+  _cargarPedido(String numeroDoc, estado, providerDatos) async {
     if (estado) {
       List<Historico> datosDetalle =
-          await DBProviderHelper.db.consultarDetallePedido(ordenCompra);
+          await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       await cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
       // pasarCarrito(providerDatos, ordenCompra, estado);
     } else {
       List<Historico> datosDetalle =
-          await DBProviderHelper.db.consultarDetallePedido(ordenCompra);
+          await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       datosDetalle.forEach((element) {
-        menos(element.codigoRef!, element.cantidad!);
+        menos(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
       });
     }
-    actualizarEstadoPedido(providerDatos, ordenCompra);
+    actualizarEstadoPedido(widget.providerDatos, numeroDoc);
     calcularValorTotal(widget.cartProvider);
-    _cargando = false;
+    _cargando.value = false;
   }
 
-  menos(String prop, int cantidad) async {
+  menos(String prop, int cantidad, String numeroDoc) async {
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
-
     if (producto.codigo != "") {
-      String valorInicial = PedidoEmart.obtenerValor(producto)!;
-
-      if (valorInicial == "") {
-      } else {
-        int valorResta = int.parse(valorInicial) - cantidad;
-        if (valorResta <= 0) {
-          setState(() {
-            PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-            PedidoEmart.registrarValoresPedido(producto, '0', false);
-          });
+      int nuevaCantidad = PedidoEmart
+                  .listaControllersPedido![producto.codigo]!.text ==
+              ""
+          ? cantidad
+          : (int.parse(
+                  PedidoEmart.listaControllersPedido![producto.codigo]!.text) -
+              cantidad);
+      setState(() {
+        if (nuevaCantidad == 0) {
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+          PedidoEmart.registrarValoresPedido(producto, '1', false);
+          if (controlador.mapaHistoricos
+              .containsKey(widget.historico.numeroDoc)) {
+            // controlador.mapaHistoricos[numeroDoc] = false;
+            controlador.mapaHistoricos
+                .update(widget.historico.numeroDoc, (value) => false);
+          }
         } else {
-          setState(() {
-            PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-                "$valorResta";
-            PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
-          });
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+              "$nuevaCantidad";
+          PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
         }
-      }
+        determinarBotonCarrito(widget.historico.numeroDoc!);
+      });
 
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
     }
   }
 
-  mas(String prod, int cantidad) async {
-    // final cartProvider = Provider.of<CarroModelo>(context);
+  mas(String prod, int cantidad, String numeroDoc) async {
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
     if (producto.codigo != "") {
-      String valorInicial = PedidoEmart.obtenerValor(producto)!;
+      int nuevaCantidad = PedidoEmart
+                  .listaControllersPedido![producto.codigo]!.text ==
+              ""
+          ? cantidad
+          : (int.parse(
+                  PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
+              cantidad);
+      setState(() {
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+            "$nuevaCantidad";
+        PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
+        if (controlador.mapaHistoricos
+            .containsKey(widget.historico.numeroDoc)) {
+          controlador.mapaHistoricos
+              .update(widget.historico.numeroDoc, (value) => true);
+        } else {
+          controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
+        }
+        determinarBotonCarrito(widget.historico.numeroDoc!);
+      });
 
-      if (valorInicial == "") {
-        PedidoEmart.listaControllersPedido![producto.codigo]!.text = "1";
-        PedidoEmart.registrarValoresPedido(producto, '1', true);
-      } else {
-        int valoSuma = int.parse(valorInicial) + cantidad;
-        setState(() {
-          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-              "$valoSuma";
-          PedidoEmart.registrarValoresPedido(producto, '$valoSuma', true);
-        });
-      }
-
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
     }
-
-    // activo = false;
   }
 
   void actualizarEstadoPedido(datosProvider, ordenCompra) {
@@ -347,13 +287,22 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   cargarCadaProducto(List<Historico> datosDetalle) {
     datosDetalle.forEach((element) {
-      mas(element.codigoRef!, element.cantidad!);
+      mas(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
     });
+  }
+
+  void determinarBotonCarrito(String numeroDoc) {
+    if (controlador.mapaHistoricos.containsKey(numeroDoc)) {
+      controlador.mapaHistoricos[numeroDoc]
+          ? estadoBoton.value = false
+          : estadoBoton.value = true;
+    }
   }
 }
 
-void calcularValorTotal(CarroModelo cartProvider) {
+void calcularValorTotal(cartProvider) {
   double valorTotal = 0;
+
   int cantidad = 0;
 
   PedidoEmart.listaValoresPedido!.forEach((key, value) {

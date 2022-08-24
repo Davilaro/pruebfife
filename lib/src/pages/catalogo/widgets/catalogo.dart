@@ -1,5 +1,6 @@
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/catalogo_interno_generico.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -46,6 +47,7 @@ class _CatalogoPoductosState extends State<CatalogoPoductos> {
           ),
           elevation: 0,
           actions: <Widget>[
+            BotonActualizar(),
             AccionesBartCarrito(esCarrito: false),
           ],
         ),

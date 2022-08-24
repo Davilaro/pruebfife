@@ -13,7 +13,6 @@ class SimpleCardOneNotExpand extends StatefulWidget {
 }
 
 class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
-  // bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -24,18 +23,6 @@ class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
           SingleChildScrollView(
             child: Container(
               height: 40,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(14),
-              //   color: Colors.white,
-              //   boxShadow: [
-              //     BoxShadow(
-              //       color: Colors.grey.withOpacity(0.5),
-              //       spreadRadius: 5,
-              //       blurRadius: 7,
-              //       offset: Offset(0, 3), // changes position of shadow
-              //     ),
-              //   ],
-              // ),
               child: Column(
                 children: [
                   Table(
@@ -47,10 +34,6 @@ class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
                       TableRow(children: [
                         Container(
                           width: size.width * 0.9,
-                          // decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     color: Colors.white),
-                          // padding: const EdgeInsets.all(20.0),
                           child: Text(
                             widget.texto,
                             style: TextStyle(
@@ -81,12 +64,10 @@ class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
                       children: [
                         TableRow(children: [
                           Container(
-                            // color: Colors.red,
                             child: Column(
                               children: [
                                 Container(
                                   width: size.width * 0.9,
-                                  // color: Colors.yellow,
                                   child: Text(
                                     widget.referencia,
                                     style: TextStyle(
@@ -101,7 +82,6 @@ class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
                           Container(
                             width: size.width * 0.9,
                             padding: const EdgeInsets.only(top: 2),
-                            // color: Colors.yellow,
                             alignment: Alignment.center,
                             child: Icon(
                               Icons.create_outlined,
@@ -112,7 +92,6 @@ class _SimpleCardOneNotExpandState extends State<SimpleCardOneNotExpand> {
                         ])
                       ],
                     ),
-                    // margin: EdgeInsets.only(top: 14),
                   ),
                 ],
               ),

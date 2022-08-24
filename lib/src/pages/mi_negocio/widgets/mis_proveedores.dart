@@ -3,6 +3,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -27,6 +28,7 @@ class MisProveedores extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
+          BotonActualizar(),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),
@@ -55,7 +57,7 @@ class MisProveedores extends StatelessWidget {
                           ),
                         ),
                       ),
-                      for (int i = 0; i < snapshot.data!.length; i++)
+                      for (int i = 0; i < proveedores!.length; i++)
                         Container(
                           child: Acordion(
                             urlIcon: proveedores[i].icono,
@@ -75,9 +77,10 @@ class MisProveedores extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Text(
-                                          'Razón social agente o directa',
+                                          proveedores[i].razonSocial,
                                           style: TextStyle(
                                               fontSize: 13,
+                                              fontWeight: FontWeight.bold,
                                               color: ConstantesColores
                                                   .gris_textos),
                                         ),
@@ -92,7 +95,7 @@ class MisProveedores extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'Mi código de cliente: ${prefs.codCliente}',
+                                    'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
                                     style: TextStyle(
                                         fontSize: 13,
                                         color: ConstantesColores.gris_textos,
@@ -111,5 +114,18 @@ class MisProveedores extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  String validarCliente(empresa) {
+    if (empresa == 'NUTRESA') {
+      return prefs.codigonutresa.toString();
+    }
+    if (empresa == 'ZENU') {
+      return prefs.codigozenu.toString();
+    }
+    if (empresa == 'MEALS') {
+      return prefs.codigomeals.toString();
+    }
+    return '';
   }
 }

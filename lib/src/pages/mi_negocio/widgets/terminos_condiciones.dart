@@ -1,10 +1,10 @@
-import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-void verTerminosCondiciones(BuildContext context) {
+void verTerminosCondiciones(BuildContext context, terminosDatosPdf) {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   showDialog(
@@ -21,8 +21,8 @@ void verTerminosCondiciones(BuildContext context) {
               Container(
                 height: Get.height * 0.8,
                 width: Get.height * 0.8,
-                child: SfPdfViewer.network(
-                  Constantes().urlBaseGenerico + 'TerminosYCondiciones.pdf',
+                child: terminosDatosPdf = PDFView(
+                  pdfData: terminosDatosPdf,
                   key: _pdfViewerKey,
                 ),
               ),

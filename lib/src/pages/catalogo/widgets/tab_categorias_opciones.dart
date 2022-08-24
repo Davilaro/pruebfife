@@ -2,6 +2,7 @@ import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -15,8 +16,10 @@ final prefs = new Preferencias();
 
 class TabOpcionesCategorias extends StatefulWidget {
   final List<dynamic> listaCategorias;
+  final String nombreCategoria;
 
-  const TabOpcionesCategorias({Key? key, required this.listaCategorias})
+  const TabOpcionesCategorias(
+      {Key? key, required this.listaCategorias, required this.nombreCategoria})
       : super(key: key);
 
   @override
@@ -32,6 +35,10 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
 
   @override
   void initState() {
+    if (controllerBanner.isVisitBanner.value) {
+      valorSeleccionado.value =
+          controllerBanner.inicialControllerSubCategoria.value;
+    }
     _tabController = new TabController(
       length: this.widget.listaCategorias.length,
       vsync: this,
@@ -64,6 +71,7 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
           ),
           elevation: 0,
           actions: <Widget>[
+            BotonActualizar(),
             AccionNotificacion(),
             AccionesBartCarrito(esCarrito: false),
           ],
@@ -147,10 +155,11 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                           codCategoria: widget.listaCategorias[index].codigo,
                           numEmpresa: 'nutresa',
                           tipoCategoria: 2,
-                          nombreCategoria:
-                              widget.listaCategorias[index].descripcion,
+                          nombreCategoria: widget.nombreCategoria,
                           isActiveBanner: false,
                           isVisibilityAppBar: false,
+                          locacionFiltro: "categoria",
+                          codigoProveedor: "",
                         ),
                       );
                     }),
@@ -162,5 +171,12 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controllerBanner.setIsVisitBanner(false);
+    controllerBanner.inicialControllerSubCategoria(0);
+    super.dispose();
   }
 }

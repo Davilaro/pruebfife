@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/marcaFiltro.dart';
 import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/modelos/productos.dart';
@@ -27,6 +29,7 @@ class DBProvider {
     if (_database != null) {
       print('cerre provider');
       await _database!.close();
+      _database = null;
     }
   }
 
@@ -84,7 +87,7 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      var sql = await db.rawQuery('''
       
       SELECT m.codigo, m.descripcion, m.ico  
       FROM Marca m
@@ -94,6 +97,18 @@ class DBProvider {
       ORDER BY m.orden ASC 
        
     ''');
+      if (sql.length > 1) {
+        sql = await db.rawQuery('''
+      
+      SELECT m.codigo, m.descripcion, m.ico  
+      FROM Marca m
+      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
+      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '$buscar'
+      GROUP BY p.marcacodigopideki 
+      ORDER BY m.orden ASC 
+       
+    ''');
+      }
 
       return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
     } catch (e) {
@@ -112,7 +127,8 @@ class DBProvider {
       SELECT c.codigo, c.descripcion, c.ico2 as ico
       FROM Categoria c
       INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
-      WHERE c.codigo LIKE '%$buscar%' OR c.descripcion LIKE '%$buscar%'
+      WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
+
       GROUP BY p.categoriacodigopideki
       ORDER BY c.orden ASC $isLimit 
       
@@ -152,7 +168,7 @@ class DBProvider {
     }
   }
 
-  Future<dynamic> consultarCategoriasSubCategorias(String buscar) async {
+  Future<dynamic> consultarCategoriasSubCategorias(String? buscar) async {
     final db = await baseAbierta;
 
     try {
@@ -217,6 +233,9 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
         0.0 as preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
         FROM Producto p
         inner join Ofertas pn ON p.codigo = pn.codigo
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
@@ -236,14 +255,27 @@ class DBProvider {
     }
   }
 
-  Future<List<dynamic>> cargarProductos(String codigo, int tipo,
-      String buscador, double precioMinimo, double precioMaximo) async {
+  Future<List<dynamic>> cargarProductos(
+      String? codigo,
+      int tipo,
+      String buscador,
+      double precioMinimo,
+      double precioMaximo,
+      String? codigoMarca,
+      String codigoProveedor) async {
     final db = await baseAbierta;
     try {
+      var query = '';
       final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
 
       if (tipo == 2) {
-        sql = await db.rawQuery('''
+        query = '''
       SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -254,19 +286,26 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.subcategoriacodigopideki = '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%')
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+         p.subcategoriacodigopideki = '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%')
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+
+        $consulta
         ORDER BY p.orden ASC
         
-    ''');
+    ''';
       } else if (tipo == 3) {
-        sql = await db.rawQuery('''
+        query = '''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -277,19 +316,25 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.marcacodigopideki = '$codigo' AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        p.marcacodigopideki = $codigo  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
         ORDER BY p.orden ASC
          
-       ''');
+       ''';
       } else if (tipo == 4) {
-        sql = await db.rawQuery('''
+        query = '''
       SELECT p.codigo , p.nombre , 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -300,19 +345,55 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.fabricante = '$codigo' AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' ) 
+        WHERE  (p.fabricante like '%$codigoProveedor%') 
+         AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' ) 
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+       
         ORDER BY p.orden ASC
          
-      ''');
-      } else {
-        sql = await db.rawQuery('''
+      ''';
+      } else if (tipo == 5) {
+        query = '''
+      SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+         p.categoriacodigopideki = '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%')
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
+        ORDER BY p.orden ASC
+         
+      ''';
+      } else if (tipo == 7) {
+        //tipo para productos mas vendidos
+        query = '''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -323,23 +404,63 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
-        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+          ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-        WHERE p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' 
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        p.marcacodigopideki = $codigo  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
+        
+        and p.codigo in (select distinct codigoref from Historico  )
+        ORDER BY p.orden ASC
+         
+      ''';
+      } else {
+        query = '''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        (p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY p.orden ASC
          
-        ''');
+        ''';
       }
+
+      sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Productos.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error consulta cargarProductos $e');
       return [];
     }
   }
@@ -349,13 +470,21 @@ class DBProvider {
       String buscador,
       double precioMinimo,
       double precioMaximo,
-      int limit) async {
+      int limit,
+      String? codigoMarca,
+      String codigoProveedor) async {
     final db = await baseAbierta;
 
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
       final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
 
       if (tipoProducto == 2) {
         sql = await db.rawQuery('''
@@ -368,16 +497,21 @@ class DBProvider {
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_imperdible as orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
         FROM Producto p
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
         inner join ProductosNuevos pn ON p.codigo = pn.codigo 
-        WHERE p.codigo LIKE '%$buscador%' OR p.nombre LIKE '%$buscador%'
+        WHERE (p.fabricante like '%$codigoProveedor%') AND 
+        (p.codigo LIKE '%$buscador%' OR p.nombre LIKE '%$buscador%')
           and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
         ORDER BY pn.orden_imperdible ASC $isLimit 
          
     ''');
@@ -393,18 +527,22 @@ class DBProvider {
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+      , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+       ,activopromocion, activoprodnuevo
       FROM Producto p
       left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
       from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
       ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
       inner join Ofertas pn ON p.codigo = pn.codigo 
-      WHERE p.codigo LIKE '%$buscador%' OR p.nombre LIKE '%$buscador%'
+      WHERE  (p.fabricante like '%$codigoProveedor%') AND
+      (p.codigo LIKE '%$buscador%' OR p.nombre LIKE '%$buscador%')
       and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+      $consulta
       UNION 
-
       SELECT p.codigo , p.nombre , 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -415,14 +553,19 @@ class DBProvider {
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+, substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
       FROM Producto p left join Ofertas pn ON p.codigo = pn.codigo left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
       from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
       ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
-      WHERE (p.codigo like '%$buscador%' OR p.nombre like '%$buscador%') AND tmp.descuento > 0 
+      WHERE  (p.fabricante like '%$codigoProveedor%') AND
+      (p.codigo like '%$buscador%' OR p.nombre like '%$buscador%') AND tmp.descuento > 0 
       and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+      
       ORDER BY pn.orden_oferta ASC
          
      ''');
@@ -432,6 +575,7 @@ class DBProvider {
           ? sql.map((e) => Productos.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error consulta cargarProductosInterno $e');
       return [];
     }
   }
@@ -486,7 +630,7 @@ class DBProvider {
 
     try {
       final sql = await db.rawQuery('''
-	    SELECT empresa, ico, tipofabricante, codIndirecto, Estado, nombrecomercial, pedidominimo, NitCliente  
+	    SELECT empresa, ico, tipofabricante, codIndirecto, Estado, nombrecomercial, pedidominimo, NitCliente, RazonSocial 
       FROM ProveedoresActivos ORDER by Estado ASC
     ''');
 
@@ -538,7 +682,7 @@ class DBProvider {
     }
   }
 
-  Future<List<dynamic>> cargarBannersSql(String tipo) async {
+  Future<List<dynamic>> cargarBannersSql(String? tipo) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -593,7 +737,8 @@ class DBProvider {
     }
   }
 
-  Future<List<Productos>> cargarProductosFiltro(String? buscar) async {
+  Future<List<Productos>> cargarProductosFiltro(
+      String? buscar, String codigoProveedor) async {
     final db = await baseAbierta;
 
     try {
@@ -601,7 +746,7 @@ class DBProvider {
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
       List<Map> sql = await db.rawQuery('''
-        SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+       SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
         p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
@@ -624,6 +769,7 @@ class DBProvider {
 
       return lista;
     } catch (e) {
+      print('error consulta fitro');
       return [];
     }
   }
@@ -666,12 +812,12 @@ class DBProvider {
       List<Encuesta> lista = [];
 
       final sql = await db.rawQuery('''
-      SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta, 
-      par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre 
-      INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id 
-      left join EncuestasRealizadas e on e.encuestaId = pre.encuestaId
-      WHERE pre.orden = 1 and e.encuestaid is null
-    ''');
+        SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta,
+        par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre
+        INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id
+        left join EncuestasRealizadas e on e.encuestaId = pre.encuestaId
+        WHERE pre.orden = 1 and e.encuestaid is null
+      ''');
 
       if (sql.length > 1) {
         List<dynamic> parametros =
@@ -727,10 +873,535 @@ class DBProvider {
     final db = await baseAbierta;
     try {
       await db.rawUpdate(''' 
-          UPDATE Sucursales SET telefonowhatsapp = "$telefono" WHERE codigo = "${prefs.codCliente}" 
+          UPDATE Sucursales SET telefonowhatsapp = "$telefono" 
           ''');
     } catch (e) {
       print('ERROR CONSULTA $e');
+    }
+  }
+
+  Future<String?> consultarCodigoMarcaPorNombre(String? nombre) async {
+    final db = await baseAbierta;
+    try {
+      List<Map> list = await db.rawQuery('''
+         SELECT codigo FROM Marca where descripcion = '$nombre'
+    ''');
+
+      if (list.isNotEmpty) {
+        return list[0]['codigo'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return "";
+    }
+  }
+
+  Future<String?> consultarCodigoSubCategoriaPorNombre(String? nombre) async {
+    final db = await baseAbierta;
+    try {
+      List<Map> list = await db.rawQuery('''
+           SELECT codigo FROM subCategoria where descripcion='$nombre'
+    ''');
+
+      if (list.isNotEmpty) {
+        return list[0]['codigo'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return "";
+    }
+  }
+
+  Future<String?> consultarCodigoCategoriaaPorNombre(String? nombre) async {
+    final db = await baseAbierta;
+    try {
+      List<Map> list = await db.rawQuery('''
+          SELECT codigo FROM Categoria where descripcion='$nombre'
+    ''');
+
+      if (list.isNotEmpty) {
+        return list[0]['codigo'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return "";
+    }
+  }
+
+  Future<dynamic> consultarMarcasPorFabricante(String fabricante) async {
+    final db = await baseAbierta;
+
+    try {
+      final sql = await db.rawQuery('''
+         select * from marca where 
+         codigo in 
+         (select marcacodigopideki from producto where fabricante = '$fabricante')
+    ''');
+
+      return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarCategoriasPorFabricante(String fabricante) async {
+    final db = await baseAbierta;
+
+    try {
+      final sql = await db.rawQuery('''
+      
+      select codigo, descripcion from categoria WHERE CODIGO 
+      IN (select categoriacodigopideki from producto where fabricante = '$fabricante')
+      
+    ''');
+
+      return sql.isNotEmpty
+          ? sql.map((e) => Categorias.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarProductosFiltroProveedores(
+      String? codigo,
+      int tipo,
+      String buscador,
+      double precioMinimo,
+      double precioMaximo,
+      String? codigoSubCategoria,
+      String? codigoMarca,
+      String codigoProveedor) async {
+    final db = await baseAbierta;
+
+    try {
+      final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
+      String? consulta2;
+      if (codigoSubCategoria != "" && codigoSubCategoria != null) {
+        consulta2 = " and p.subcategoriacodigopideki = $codigoSubCategoria";
+      } else {
+        consulta2 = "";
+      }
+      String? consulta3;
+      if (codigo != "" && codigo != null) {
+        consulta3 = " and p.categoriacodigopideki = $codigo  ";
+      } else {
+        consulta3 = "";
+      }
+
+      if (tipo == 5) {
+        sql = await db.rawQuery('''
+      SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  (p.fabricante like '%$codigoProveedor%') 
+        $consulta3
+        $consulta2 
+         AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%')
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+
+        $consulta
+        ORDER BY p.orden ASC
+        
+    ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+      if (tipo == 1) {
+        //tipo 1 para imperdibles
+        sql = await db.rawQuery('''
+  SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        inner join ProductosNuevos pn ON p.codigo = pn.codigo 
+        WHERE  (p.fabricante like '%$codigoProveedor%') 
+        $consulta3  
+        $consulta2
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        $consulta
+        ORDER BY p.orden ASC
+        
+    ''');
+
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+      if (tipo == 3) {
+        //tipo 3 para marca e imperdible
+        sql = await db.rawQuery('''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+           inner join ProductosNuevos pn ON p.codigo = pn.codigo 
+        WHERE  (p.fabricante like '%$codigoProveedor%') 
+        $consulta3
+        $consulta2
+        AND
+        p.marcacodigopideki = '$codigo'
+         AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+      if (tipo == 6) {
+        //tipo 6 para productos del dia
+        String date = DateTime.now().toString();
+
+        sql = await db.rawQuery('''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+          ,activopromocion, activoprodnuevo
+         FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        p.marcacodigopideki = '$codigo'  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        and CAST(p.fechatrans AS date) = CAST('$date' AS date)
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+      if (tipo == 4) {
+        //tipo 4 para marca  y promo
+        sql = await db.rawQuery('''
+       SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+          inner join Ofertas pn ON p.codigo = pn.codigo 
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        p.marcacodigopideki = '$codigo' AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+        $consulta
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      } else {
+        sql = await db.rawQuery('''
+ SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+        ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+         inner join Ofertas pn ON p.codigo = pn.codigo 
+        WHERE  (p.fabricante like '%$codigoProveedor%') 
+        $consulta3
+        $consulta2
+        $consulta
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        
+        
+    ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<String?> consultarProductoEnOfertaPorCodigo(String? codigo) async {
+    final db = await baseAbierta;
+    try {
+      List<Map> list = await db.rawQuery('''
+         SELECT codigo FROM Ofertas where codigo='$codigo'
+    ''');
+
+      if (list.isNotEmpty) {
+        return list[0]['codigo'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return "";
+    }
+  }
+
+  Future<dynamic> consultarMarcasFiltro(
+    String? codigoCategoria,
+    String? codigoSubcateegoria,
+    int tipo,
+  ) async {
+    final db = await baseAbierta;
+    //tipo 1 para filtrar por marca  y categoria
+    // tipo 2 para filtrar por catergoria subcategoria y marca
+    //tipo 3 para filtrar por subcategoria y marca
+    try {
+      dynamic sql;
+      if (tipo == 1) {
+        sql = await db.rawQuery('''
+   select distinct marcapideki  as nombreMarca   
+   from Producto where categoriacodigopideki=$codigoCategoria
+      
+    ''');
+      } else if (tipo == 2) {
+        sql = await db.rawQuery('''
+   select distinct marcapideki  as nombreMarca  from Producto where categoriacodigopideki=$codigoCategoria and subcategoriacodigopideki=$codigoSubcateegoria
+      
+    ''');
+      }
+      if (tipo == 3) {
+        sql = await db.rawQuery('''
+   select distinct marcapideki  as nombreMarca  from Producto where subcategoriacodigopideki=$codigoSubcateegoria
+      
+    ''');
+      }
+      return sql.isNotEmpty
+          ? sql.map((e) => MarcaFiltro.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarProductosFiltroCategoria(
+      String? codigoCategoria,
+      int tipo,
+      double precioMinimo,
+      double precioMaximo,
+      String? codigoSubCategoria,
+      String? codigoMarca) async {
+    final db = await baseAbierta;
+    try {
+      final sql;
+      String? consulta;
+      if (codigoMarca != "" && codigoMarca != null) {
+        consulta = "   and  p.marcacodigopideki=$codigoMarca";
+      } else {
+        consulta = "";
+      }
+
+      if (tipo == 1) {
+        //tipo 1 para filtrar solo por marca, categoria y subcategoria
+        sql = await db.rawQuery('''
+            SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  
+      
+        (p.categoriacodigopideki = $codigoCategoria  )
+       and (p.subcategoriacodigopideki = $codigoSubCategoria)
+         $consulta
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+        //tipo 2 para productos mas vendidos
+      } else if (tipo == 2) {
+        sql = await db.rawQuery('''
+         SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+          ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  
+          (p.categoriacodigopideki = $codigoCategoria  )
+       and (p.subcategoriacodigopideki = $codigoSubCategoria)
+             $consulta
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
+    
+        
+        and p.codigo in (select distinct codigoref from Historico  )
+        ORDER BY p.orden ASC
+         
+       ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      } else {
+        //tipo 3 para imperdibles marcas, categorias y subc
+        sql = await db.rawQuery('''
+      SELECT p.codigo , p.nombre , 
+        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+      (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
+        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
+        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
+        p.codIndirecto , p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+           round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
+        cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
+        , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo
+        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+           inner join ProductosNuevos pn ON p.codigo = pn.codigo 
+        WHERE  
+        (p.categoriacodigopideki = $codigoCategoria  )
+       and (p.subcategoriacodigopideki = $codigoSubCategoria)
+             $consulta
+        AND
+        p.marcacodigopideki = '$codigoMarca'
+      
+        and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
+        ORDER BY p.orden ASC
+        ''');
+        return sql.isNotEmpty
+            ? sql.map((e) => Productos.fromJson(e)).toList()
+            : [];
+      }
+    } catch (e) {
+      return [];
     }
   }
 }

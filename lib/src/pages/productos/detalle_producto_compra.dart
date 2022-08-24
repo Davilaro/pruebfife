@@ -7,7 +7,7 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/widget/detalle_producto.dart';
+import 'package:emart/src/pages/productos/detalle_producto.dart';
 import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -97,13 +97,12 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else {
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children:
-                  _cargarDatos(context, snapshot.data, format, cartProvider),
-            );
           }
+          return ListView(
+            scrollDirection: Axis.horizontal,
+            children:
+                _cargarDatos(context, snapshot.data, format, cartProvider),
+          );
         });
   }
 
@@ -254,17 +253,11 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                   ["precioFinal"] <
               precioMinimo &&
           productos!.fabricante!.toUpperCase() != 'MEALS') {
-        if (Get.height > 600) {
-          valor = Get.height * 0.8;
-        } else {
-          valor = Get.height * 0.8;
-        }
+        valor = Get.height > 600 ? Get.height * 0.8 : Get.height * 0.8;
       } else {
-        if (productos!.fabricante!.toUpperCase() == 'MEALS') {
-          valor = Get.height * 0.8;
-        } else {
-          valor = Get.height * 0.8;
-        }
+        valor = productos!.fabricante!.toUpperCase() == 'MEALS'
+            ? Get.height * 0.8
+            : Get.height * 0.8;
       }
     } catch (e) {
       precioMinimo = 0;
@@ -288,17 +281,12 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                   ["precioFinal"] <
               precioMinimo &&
           productos!.fabricante!.toUpperCase() != 'MEALS') {
-        if (Get.height > 600) {
-          valor = Get.height * 0.75;
-        } else {
-          valor = Get.height * 0.8;
-        }
-      } else if (Get.height > 600) {
-        if (productos!.fabricante!.toUpperCase() == 'MEALS') {
-          valor = Get.height * 0.75;
-        } else {
-          valor = Get.height * 0.6;
-        }
+        valor = Get.height > 600 ? Get.height * 0.75 : Get.height * 0.8;
+      }
+      if (Get.height > 600) {
+        valor = productos!.fabricante!.toUpperCase() == 'MEALS'
+            ? Get.height * 0.75
+            : Get.height * 0.6;
       }
     } catch (e) {
       precioMinimo = 0;

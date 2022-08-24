@@ -1,7 +1,7 @@
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:emart/src/widget/grupo_detalle.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -29,29 +29,9 @@ class _ExpansionCardState extends State<ExpansionCard> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final estadoCompra = '';
-    // double cardExpadend = 310;
-    // double cardNotExpadend = 109;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SingleChildScrollView(
-        // width: size.width * 0.9,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(10),
-        //   color: Colors.white,
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.grey.withOpacity(0.5),
-        //       spreadRadius: 5,
-        //       blurRadius: 7,
-        //       offset: Offset(0, 3), // changes position of shadow
-        //     ),
-        //   ],
-        // ),
-        // duration: Duration(milliseconds: 500),
-        // height: _isExpanded ? cardExpadend : cardNotExpadend,
-        // curve: Curves.easeInOut,
         child: _body(context),
       ),
     );
@@ -59,6 +39,7 @@ class _ExpansionCardState extends State<ExpansionCard> {
 
   Widget _body(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -136,20 +117,10 @@ class _ExpansionCardState extends State<ExpansionCard> {
           duration: Duration(milliseconds: 700),
           opacity: _isExpanded ? 1 : 0,
           child: _isExpanded
-              ?
-              // duration: Duration(milliseconds: 500),
-              // curve: Curves.fastOutSlowIn,
-              // margin: _isExpanded ? kExpandedEdgeInsets : EdgeInsets.zero,
-              Column(
+              ? Column(
                   children: [
-                    // Row(
-                    //   children: [
-                    //     _validarNumeroPedido(widget.historico.numeroDoc)
-                    //   ],
-                    // ),
                     _grupoComercial(size, widget.historico.numeroDoc),
                     Container(
-                      // duration: Duration(milliseconds: 500),
                       margin: const EdgeInsets.only(top: 8.0),
                       padding: EdgeInsets.only(left: 16, right: 16),
                       alignment: Alignment.centerRight,
@@ -185,7 +156,6 @@ class _ExpansionCardState extends State<ExpansionCard> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: HexColor("#EAE8F5"),
             width: 0.5,
           ),
@@ -196,9 +166,6 @@ class _ExpansionCardState extends State<ExpansionCard> {
 
   Widget _grupoComercial(size, numeroDocumento) {
     return Column(children: [
-      // Row(
-      //   children: [_validarNumeroPedido(widget.historico.numeroDoc)],
-      // ),
       FutureBuilder<List<Historico>>(
           future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
           builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
@@ -215,35 +182,15 @@ class _ExpansionCardState extends State<ExpansionCard> {
                   _separador(size),
                 ],
               );
-            } else {
-              return CircularProgressIndicator();
             }
+            return CircularProgressIndicator();
           })
     ]);
-
-    // return FutureBuilder<List<Historico>>(
-    //     future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
-    //     builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
-    //       if (snapshot.hasData) {
-    //         var grupos = snapshot.data;
-    //         return Column(
-    //           children: [
-    //             for (int i = 0; i < grupos!.length; i++)
-    //               AnimatedContainerCard(
-    //                 grupo: grupos[i].fabricante!,
-    //                 numeroDoc: numeroDocumento,
-    //                 ordenCompra: grupos[i].ordenCompra!,
-    //               ),
-    //             _separador(size),
-    //           ],
-    //         );
-    //       } else {
-    //         return CircularProgressIndicator();
-    //       }
-    //     });
   }
 
   void _soporte() {
+    //UXCam: Llamamos el evento clickSoport
+    UxcamTagueo().clickSoport();
     Navigator.push(
         context,
         MaterialPageRoute(

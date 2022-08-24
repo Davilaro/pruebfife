@@ -1,12 +1,19 @@
+import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
+import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,25 +23,37 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CustomBuscardorFuzzy extends StatefulWidget {
-  final String codCategoria;
+  final String? codCategoria;
   final String numEmpresa;
   final int tipoCategoria;
-  final String nombreCategoria;
+  final String? nombreCategoria;
   final String? img;
   final bool isActiveBanner;
   final bool isVisibilityAppBar;
   final String locasionBanner;
+  final int? claseProducto;
+  final String? codigoMarca;
+  final String? codigoSubCategoria;
+  final String? codigoCategoria;
+  final String? locacionFiltro;
+  final String codigoProveedor;
 
   const CustomBuscardorFuzzy(
       {Key? key,
-      required this.codCategoria,
+      this.codCategoria,
       required this.numEmpresa,
       required this.tipoCategoria,
-      required this.nombreCategoria,
+      this.nombreCategoria,
+      this.claseProducto,
       this.img,
       this.isActiveBanner = true,
       this.isVisibilityAppBar = true,
-      this.locasionBanner = ''})
+      this.locasionBanner = '',
+      this.codigoMarca,
+      this.codigoSubCategoria,
+      this.codigoCategoria,
+      required this.locacionFiltro,
+      required this.codigoProveedor})
       : super(key: key);
 
   @override
@@ -47,7 +66,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   RxList<dynamic> listaProducto = <dynamic>[].obs;
   List<dynamic> listaAllProducts = [];
   final TextEditingController _controllerSearch = TextEditingController();
-
+  final controlador = Get.find<ControlBaseDatos>();
   @override
   void initState() {
     cargarProductos();
@@ -56,6 +75,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
   @override
   Widget build(BuildContext context) {
+    super.didUpdateWidget(super.widget);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
@@ -77,61 +97,101 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   leading: new IconButton(
                       icon: new Icon(Icons.arrow_back_ios,
                           color: HexColor("#30C3A3")),
-                      onPressed: () => Navigator.of(context).pop()),
+                      onPressed: () {
+                        controlador.isDisponibleFiltro.value = true;
+                        Navigator.of(context).pop();
+                        catalogSearchViewModel.setPrecioMinimo(0);
+                        catalogSearchViewModel.setPrecioMaximo(100000);
+                      }),
                   title: Text(
                     '${widget.nombreCategoria}',
                     style: TextStyle(color: HexColor("#41398D")),
                   ),
                   elevation: 0,
                   actions: <Widget>[
+                    Visibility(
+                        visible: controlador.isDisponibleFiltro.value,
+                        child: BotonActualizar()),
                     AccionesBartCarrito(esCarrito: false),
                   ],
                 )
               : null,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                    height: size.height * 0.1,
-                    width: size.width * 1,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buscador(context, onSearchDebouncer),
-                          GestureDetector(
-                            onTap: () => {_irFiltro()},
-                            child: Container(
-                              margin: EdgeInsets.only(right: 30, bottom: 10),
-                              child: GestureDetector(
-                                child:
-                                    SvgPicture.asset('assets/filtro_btn.svg'),
-                              ),
+          body: RefreshIndicator(
+            color: ConstantesColores.azul_precio,
+            backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
+            onRefresh: () async {
+              await LogicaActualizar().actualizarDB();
+              setState(() {
+                cargarProductos();
+              });
+              return Future<void>.delayed(const Duration(seconds: 3));
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      height: size.height * 0.1,
+                      width: size.width * 1,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: _buscador(context, onSearchDebouncer),
                             ),
-                          )
-                        ])),
-                //Banner
-                Visibility(
-                  visible: widget.isActiveBanner,
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      height: size.height * 0.2,
-                      width: double.infinity,
-                      child: OfertasInterna(
-                          nombreFabricante: widget.codCategoria)),
-                ),
-                Container(
-                  height: Get.height * 0.8,
-                  width: size.width * 1,
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
-                  child: GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing:
-                          4.0, // espaciado entre ejes principales (horizontal)
-                      childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                      children: _cargarProductosLista(listaProducto, context)),
-                ),
-              ],
+                            Visibility(
+                              visible:
+                                  controlador.isDisponibleFiltro.value == true,
+                              child: GestureDetector(
+                                onTap: () => {_irFiltro()},
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.only(right: 30, bottom: 10),
+                                  child: GestureDetector(
+                                    child: SvgPicture.asset(
+                                        'assets/filtro_btn.svg'),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ])),
+                  //Banner
+                  Visibility(
+                    visible: widget.isActiveBanner,
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                        height: size.height * 0.2,
+                        width: double.infinity,
+                        child: OfertasInterna(
+                            nombreFabricante: widget.codCategoria)),
+                  ),
+                  Container(
+                    height: Get.height * 0.8,
+                    width: size.width * 1,
+                    padding: EdgeInsets.fromLTRB(
+                        10, 10, 10, widget.isActiveBanner ? 240 : 110),
+                    child: GridView.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing:
+                            4.0, // espaciado entre ejes principales (horizontal)
+                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                        children:
+                            _cargarProductosLista(listaProducto, context)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: CustonNavigatorBar(),
             ),
           ),
         ));
@@ -140,11 +200,13 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
 
-    for (var element in data) {
-      Productos productos = element;
+    for (var i = 0; i < data.length; i++) {
+      Productos productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
+        isCategoriaPromos: false,
+        index: i,
       );
 
       opciones.add(widgetTemp);
@@ -185,6 +247,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                 if (val.length > 3) {
                   //FIREBASE: Llamamos el evento search
                   TagueoFirebase().sendAnalityticsSearch(val);
+                  //UXCam: Llamamos el evento search
+                  UxcamTagueo().search(val);
                 }
                 runFilter(_controllerSearch.text);
               })),
@@ -192,13 +256,108 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductos(
-        widget.codCategoria,
-        widget.tipoCategoria,
-        '',
-        catalogSearchViewModel.precioMinimo.value,
-        catalogSearchViewModel.precioMaximo.value);
-    listaProducto.value = listaAllProducts;
+    if (widget.claseProducto != null) {
+      if (widget.claseProducto == 1) {
+        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+            1,
+            "",
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            0,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 2) {
+        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+            2,
+            "",
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            0,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 4) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoMarca!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 3) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoSubCategoria!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 5) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoCategoria!,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 6) {
+        listaAllProducts = await DBProvider.db.cargarProductosFiltroProveedores(
+            widget.codCategoria,
+            widget.tipoCategoria,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoSubCategoria,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        listaProducto.value = listaAllProducts;
+      }
+      if (widget.claseProducto == 7) {
+        listaAllProducts = await DBProvider.db.cargarProductos(
+            widget.codigoMarca,
+            7,
+            '',
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoMarca,
+            widget.codigoProveedor);
+        print(listaAllProducts.toString());
+        listaProducto.value = listaAllProducts;
+      }
+      //para el filtro de categorias
+      if (widget.claseProducto == 8) {
+        listaAllProducts = await DBProvider.db.cargarProductosFiltroCategoria(
+            widget.codigoCategoria,
+            widget.tipoCategoria,
+            catalogSearchViewModel.precioMinimo.value,
+            catalogSearchViewModel.precioMaximo.value,
+            widget.codigoSubCategoria,
+            widget.codigoMarca);
+        listaProducto.value = listaAllProducts;
+      }
+    } else {
+      listaAllProducts = await DBProvider.db.cargarProductos(
+          widget.codCategoria!,
+          widget.tipoCategoria,
+          '',
+          catalogSearchViewModel.precioMinimo.value,
+          catalogSearchViewModel.precioMaximo.value,
+          widget.codigoMarca,
+          widget.codigoProveedor);
+      listaProducto.value = listaAllProducts;
+    }
   }
 
   void runFilter(String enteredKeyword) {
@@ -224,11 +383,42 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-  _irFiltro() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => FiltroPrecios()),
-    );
+  _irFiltro() async {
+    if (widget.locacionFiltro == "proveedor") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FiltroProveedor(
+                  codCategoria: widget.codCategoria!,
+                  nombreCategoria: widget.nombreCategoria!,
+                  urlImagen: widget.img,
+                  codigoProveedor: widget.codigoProveedor,
+                )),
+      );
+    }
+    if (widget.locacionFiltro == "marca") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FiltroPrecios(
+                  codMarca: widget.codigoMarca,
+                  nombreMarca: widget.nombreCategoria,
+                  urlImagen: widget.img,
+                )),
+      );
+    }
+    if (widget.locacionFiltro == "categoria") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FiltroCategoria(
+                  codCategoria: widget.codCategoria,
+                  nombreCategoria: widget.nombreCategoria,
+                  urlImagen: widget.img,
+                  codSubCategoria: widget.codCategoria,
+                )),
+      );
+    }
   }
 
   @override

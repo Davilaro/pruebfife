@@ -3,7 +3,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'class_pedido.dart';
 
 class MetodosLLenarValores {
-  void calcularValorTotal(CarroModelo cartProvider) {
+  void calcularValorTotal(cartProvider) {
     double valorTotal = 0;
     double valorAhorro = 0;
     int cantidad = 0;

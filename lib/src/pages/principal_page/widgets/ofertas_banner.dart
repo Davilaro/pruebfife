@@ -5,6 +5,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -28,17 +29,14 @@ class _OfertasBannerState extends State<OfertasBanner> {
   @override
   void initState() {
     super.initState();
-    _controllesBannes.cargoDatos.value = false;
-    if (_controllesBannes.cargoDatos.value == false) {
-      cargarBanners();
-    }
+    cargarBanners();
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
 
-    return _controllesBannes.cargoDatos.value == false
+    return Obx(() => _controllesBannes.cargoDatos.value == false
         ? Container(
             child: Center(
               child: Image.asset('assets/jar-loading.gif'),
@@ -77,6 +75,8 @@ class _OfertasBannerState extends State<OfertasBanner> {
                               item.link,
                               item.tipofabricante,
                               item.idBanner);
+                          //UXCam: Llamamos el evento selectBanner
+                          UxcamTagueo().selectBanner(item.nombreBanner, "Home");
                           _controllesBannes.validarOnClick(item, context,
                               provider, cargoConfirmar, prefs, '');
                         },
@@ -117,7 +117,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
                 }).toList(),
               ),
             ],
-          );
+          ));
   }
 
   void cargarBanners() async {

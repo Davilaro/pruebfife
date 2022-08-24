@@ -11,6 +11,7 @@ class LineaAtencion {
     this.descripcion,
     this.fabricante,
     this.telefono,
+    this.correo,
     this.vendedor1,
     this.telefonoVendedor1,
     this.vendedor2,
@@ -21,6 +22,7 @@ class LineaAtencion {
   String? descripcion;
   String? fabricante;
   String? telefono;
+  String? correo;
   String? vendedor1;
   String? telefonoVendedor1;
   String? vendedor2;
@@ -31,6 +33,7 @@ class LineaAtencion {
         descripcion: json["Descripcion"] == null ? "" : json["Descripcion"],
         fabricante: json["Fabricante"] == null ? "" : json["Fabricante"],
         telefono: json["Telefono"] == null ? "" : json["Telefono"],
+        correo: json["correo"] == null ? "" : json["correo"],
         vendedor1: json["nombrevendedor"] == null ? "" : json["nombrevendedor"],
         telefonoVendedor1:
             json["telefonovendedor"] == null ? "" : json["telefonovendedor"],
@@ -41,6 +44,7 @@ class LineaAtencion {
         "Descripcion": descripcion,
         "Fabricante": fabricante,
         "telefono": telefono,
+        "correo": correo,
         "nombrevendedor": vendedor1,
         "telefonovendedor": telefonoVendedor1,
       };

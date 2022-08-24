@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
@@ -349,7 +351,7 @@ class Servicies {
 
     for (var i = 0; i < listaPedido.length; i++) {
       datos += jsonEncode(<String, dynamic>{
-        "NumeroDoc": int.parse(numDoc),
+        "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
         "CodigoCliente": prefs.codCliente,
         "CodigoProducto": listaPedido[i].codigoProducto,
@@ -357,6 +359,7 @@ class Servicies {
         "DescripcionParam1": listaPedido[i].fabricante,
         "DescripcionParam2": listaPedido[i].codigocliente,
         "DescripcionParam3": usuarioLogin,
+        "descripcionparam5": prefs.codigopadrepideky,
         "FechaMovil": '$fechaPedido',
         "Iva": listaPedido[i].iva,
         "Observacion": 'Prueba',
@@ -366,8 +369,7 @@ class Servicies {
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
         "Param1": listaPedido[i].descuento!
       });
-      await DBProviderHelper.db
-          .guardarHistorico(listaPedido[i], int.parse(numDoc));
+      await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
       if (i < listaPedido.length - 1) {
         datos += ",";
       }
@@ -378,9 +380,10 @@ class Servicies {
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlPrincipal +
-          'Pedido?codigo=nutresa&codUsuario=$usuarioLogin');
+      url = Uri.parse(
+          '${Constantes().urlPrincipal}Pedido?codigo=nutresa&codUsuario=$usuarioLogin');
       print(url);
+
       final response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -393,7 +396,7 @@ class Servicies {
         throw Exception('Failed');
       }
     } catch (e) {
-      print(e.toString());
+      print('hola res error ${e.toString()}');
       return null;
     }
   }
@@ -632,6 +635,37 @@ class Servicies {
       }
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<dynamic> cargarArchivoPoliticas() async {
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlBaseGenerico +
+          'PoliticaDeTratamientoyDatosPersonales.pdf');
+      final response = await http.get(url);
+      Uint8List file = response.bodyBytes;
+
+      return file;
+    } catch (e) {
+      print('problemaa al descargar politicas $e');
+    }
+  }
+
+  Future<dynamic> cargarArchivoTerminos() async {
+    try {
+      final url;
+
+      url =
+          Uri.parse(Constantes().urlBaseGenerico + 'TerminosYCondiciones.pdf');
+      final response = await http.get(url);
+
+      Uint8List file = response.bodyBytes;
+
+      return file;
+    } catch (e) {
+      print('problemaa al descargar terminos  $e');
     }
   }
 }

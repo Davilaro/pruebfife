@@ -1,4 +1,3 @@
-import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
@@ -7,7 +6,6 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/provider.dart';
 
 class ColumnTableCar extends StatefulWidget {
   final CarroModelo cartProvider;
@@ -126,24 +124,12 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
               )
             ],
           ),
-          // Container(
-          //   padding: EdgeInsets.only(
-          //     top: 22,
-          //   ),
-          //   child: Text(
-          //     widget.producto.cantidad.toString()!,
-          //     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          //   ),
-          //   // color: Colors.yellow,
-          //   alignment: Alignment.center,
-          // )
         ],
       )
     ]);
   }
 
   mas(String prod) async {
-    // final cartProvider = Provider.of<CarroModelo>(context);
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
 
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
@@ -167,8 +153,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
-    if (valorInicial == "") {
-    } else {
+    if (valorInicial != "") {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
         setState(() {
@@ -199,8 +184,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
           double precio = PedidoEmart.listaProductos![key]!.precio;
           valorTotal = valorTotal + precio * int.parse(value);
           valorAhorro = valorAhorro +
-              PedidoEmart.listaProductos![key]!.precio *
-                  int.parse(value);
+              PedidoEmart.listaProductos![key]!.precio * int.parse(value);
           cantidad++;
         }
       }
@@ -218,8 +202,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
-    if (valorInicial == "") {
-    } else {
+    if (valorInicial != "") {
       int valorResta = 0;
       if (valorResta <= 0) {
         setState(() {
