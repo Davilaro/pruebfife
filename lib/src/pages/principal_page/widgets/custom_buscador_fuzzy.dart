@@ -13,7 +13,7 @@ import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
-import 'package:emart/src/widget/logica_actualizar.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -70,7 +70,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   @override
   void initState() {
     cargarProductos();
-    print("IMPORT${widget.codigoProveedor}");
     super.initState();
   }
 

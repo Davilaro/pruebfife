@@ -393,7 +393,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
         (dropdownValueMarca != null && dropdownValueMarca != "Todas")) {
       String? codigo =
           await DBProvider.db.consultarCodigoMarcaPorNombre(dropdownValueMarca);
-      print("CODIGO $codigo");
       Navigator.push(
           context,
           MaterialPageRoute(

@@ -73,8 +73,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
 
-    _controllerCantidadProducto.text =
-        isAgotado ? '0' : cargoConfirmar.controllerCantidadProducto.value;
+    _controllerCantidadProducto.text = isAgotado
+        ? '0'
+        : cargoConfirmar.controllerCantidadProducto.value == '0'
+            ? '1'
+            : cargoConfirmar.controllerCantidadProducto.value;
 
     final size = MediaQuery.of(context).size;
     return Scaffold(

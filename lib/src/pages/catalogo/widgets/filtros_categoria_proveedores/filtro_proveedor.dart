@@ -589,8 +589,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
                     codigoProveedor: widget.codigoProveedor,
                   )));
     }
-    //para promo sola
-    print(valorRound);
+
     if ((valorRound == 1) &&
         ((dropdownValueCategoria == "Todas" ||
                 dropdownValueCategoria == null) &&

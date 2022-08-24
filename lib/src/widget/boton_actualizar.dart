@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
-import 'package:emart/src/widget/logica_actualizar.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -20,17 +21,20 @@ class _BotonActualizarState extends State<BotonActualizar> {
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
     final cargoConfirmar = Get.find<ControlBaseDatos>();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
-      child: IconButton(
-          onPressed: () async {
-            await actualizarPagina(provider, context, cargoConfirmar);
-          },
-          icon: Icon(
-            Icons.refresh_sharp,
-            color: ConstantesColores.azul_precio,
-            size: Get.height * 0.04,
-          )),
+    return Visibility(
+      visible: prefs.usurioLogin == 1,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+        child: IconButton(
+            onPressed: () async {
+              await actualizarPagina(provider, context, cargoConfirmar);
+            },
+            icon: Icon(
+              Icons.refresh_sharp,
+              color: ConstantesColores.azul_precio,
+              size: Get.height * 0.04,
+            )),
+      ),
     );
   }
 }

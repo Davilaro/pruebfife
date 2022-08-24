@@ -976,7 +976,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       String? codigoMarca,
       String codigoProveedor) async {
     final db = await baseAbierta;
-    print('$tipo');
+
     try {
       final sql;
       String? consulta;
@@ -1112,7 +1112,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 6) {
         //tipo 6 para productos del dia
         String date = DateTime.now().toString();
-        print(date);
+
         sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 

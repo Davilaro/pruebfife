@@ -185,7 +185,7 @@ class UxcamTagueo {
           });
         }
       });
-      print('se me ejecute $productos');
+
       FlutterUxcam.logEventWithProperties(
           "emptyToCart", {"products": productos});
     } catch (e) {

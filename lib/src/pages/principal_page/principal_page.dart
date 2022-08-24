@@ -8,7 +8,7 @@ import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/logica_actualizar.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -107,13 +107,14 @@ class _PrincipalPageState extends State<PrincipalPage> {
           color: ConstantesColores.azul_precio,
           backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
           onRefresh: () async {
-            await LogicaActualizar().actualizarDB();
-
-            Navigator.pushReplacementNamed(
-              context,
-              'tab_opciones',
-            ).timeout(Duration(seconds: 3));
-            return Future<void>.delayed(const Duration(seconds: 3));
+            if (prefs.usurioLogin != null && prefs.usurioLogin != -1) {
+              await LogicaActualizar().actualizarDB();
+              Navigator.pushReplacementNamed(
+                context,
+                'tab_opciones',
+              ).timeout(Duration(seconds: 3));
+              return Future<void>.delayed(const Duration(seconds: 3));
+            }
           },
           child: SingleChildScrollView(
             child: Column(

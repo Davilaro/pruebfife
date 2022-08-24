@@ -128,8 +128,7 @@ class DBProviderHelper {
       listaTablas = res.map((e) => BorrarTablas.fromJson(e)).toList();
     }
     listaTablas.forEach((element) async {
-      final res2 = await temp.delete('${element.tblName}');
-      print(res2);
+      await temp.delete('${element.tblName}');
     });
   }
 
@@ -170,30 +169,30 @@ class DBProviderHelper {
     final db = await baseAbierta;
 
     try {
-      //   final sql = await db.rawQuery('''
+      // String query = '''
       //   SELECT DISTINCT NumeroDoc,MAX((substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 7, 4))) fechatrans,
       //   MAX(fabricante)fabricante,MAX(ordencompra)ordencompra FROM Historico WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
       //   AND Cast( fechatrans as DATE )>=Cast( CASE WHEN '$fechaInicioFor'='-1' THEN fechatrans ELSE '$fechaInicioFor' END  as DATE ) AND  Cast( fechatrans as DATE )<=Cast( CASE WHEN '$fechaFinFor'='-1' THEN fechatrans ELSE '$fechaFinFor' END as DATE )
       //   GROUP BY NumeroDoc
       //   ORDER BY fechatrans DESC
-      // ''');
+      // ''';
 
       String query =
-          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante, 
-	   MAX(ordencompra)ordencompra FROM Historico 
-	  WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END 
-	  AND 
-	  substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
-	  >= CASE WHEN ${isFormat == true ? ''' substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) ''' : "'-1'"} ='-1' 
-	  THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
-	  ELSE substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) END 
-	  AND 
-	  substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
-	  <= CASE WHEN ${isFormat == true ? ''' substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) ''' : "'-1'"} ='-1' 
-	  THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) 
-	  ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END 
-	  GROUP BY NumeroDoc 
-	  ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) ASC ''';
+          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante,
+       MAX(ordencompra)ordencompra FROM Historico
+      WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
+      AND
+      substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      >= CASE WHEN ${isFormat == true ? ''' substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) ''' : "'-1'"} ='-1'
+      THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      ELSE substr('$fechaInicioFor', 7, 4) || '/' || substr('$fechaInicioFor', 4, 2) || '/' || substr('$fechaInicioFor', 1, 2) END
+      AND
+      substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      <= CASE WHEN ${isFormat == true ? ''' substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) ''' : "'-1'"} ='-1'
+      THEN substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)
+      ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END
+      GROUP BY NumeroDoc
+      ORDER BY cast(substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2) as INT) ASC ''';
 
       final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();

@@ -36,6 +36,8 @@ class PedidoEmart {
     cantItems.value = "$items";
   }
 
+  static retirarPedido(Productos producto, dynamic valor, bool estado) {}
+
   static iniciarProductosPorFabricante() {
     listaProductosPorFabricante = new Map();
     final listaAgrupar = <ProductoAsignado>[];

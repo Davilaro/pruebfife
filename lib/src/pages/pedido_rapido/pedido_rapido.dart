@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -13,13 +12,12 @@ import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
-import 'package:emart/src/widget/logica_actualizar.dart';
+import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import '../../widget/acciones_carrito_bart.dart';
@@ -451,12 +449,12 @@ class _PedidoRapidoState extends State<PedidoRapido> {
 
   Widget _ultimaOrden(Size size, cartProvider, providerDatos) {
     return FutureBuilder(
+        initialData: [],
         future: providerDatos.getListaHistoricosHelper(
             filtro, fechaInicial, fechaFinal),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             var datos = snapshot.data;
-
             return Center(
                 child: Container(
                     width: size.width * 0.9,

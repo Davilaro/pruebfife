@@ -35,7 +35,7 @@ class ExpansionCardLast extends StatefulWidget {
 }
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
-  bool _cargando = false;
+  RxBool _cargando = false.obs;
   RxBool estadoBoton = true.obs;
   final controlador = Get.find<CambioEstadoProductos>();
   @override
@@ -117,45 +117,45 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
             alignment: Alignment.centerRight,
             child: Container(
               width: 124,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(
-                                color: HexColor("#43398E"), width: 1.0)))),
-                child: Row(
-                  children: [
-                    Obx(
-                      () => Text(
-                        estadoBoton.value ? 'Pedir' : 'Cancelar',
-                        style: TextStyle(color: HexColor("#43398E")),
-                      ),
+              child: Obx(() => ElevatedButton(
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(
+                                        color: HexColor("#43398E"),
+                                        width: 1.0)))),
+                    child: Row(
+                      children: [
+                        Text(
+                          estadoBoton.value ? 'Pedir' : 'Cancelar',
+                          style: TextStyle(color: HexColor("#43398E")),
+                        ),
+                        !_cargando.value
+                            ? Icon(
+                                Icons.car_rental,
+                                color: HexColor("#30C3A3"),
+                              )
+                            : Container(
+                                height: 10,
+                                width: 10,
+                                margin: EdgeInsets.all(6),
+                                child: CircularProgressIndicator(
+                                  color: HexColor("#30C3A3"),
+                                ),
+                              )
+                      ],
                     ),
-                    !_cargando
-                        ? Icon(
-                            Icons.car_rental,
-                            color: HexColor("#30C3A3"),
-                          )
-                        : Container(
-                            height: 10,
-                            width: 10,
-                            margin: EdgeInsets.all(6),
-                            child: CircularProgressIndicator(
-                              color: HexColor("#30C3A3"),
-                            ),
-                          )
-                  ],
-                ),
-                onPressed: () {
-                  setState(() {
-                    _cargando = true;
-                  });
-                  determinarBotonCarrito(widget.historico.numeroDoc!);
-                  _cargarPedido(widget.historico.numeroDoc!.toString(),
-                      estadoBoton.value, widget.providerDatos);
-                },
-              ),
+                    onPressed: () async {
+                      _cargando.value = true;
+                      determinarBotonCarrito(widget.historico.numeroDoc!);
+                      await _cargarPedido(
+                          widget.historico.numeroDoc!.toString(),
+                          estadoBoton.value,
+                          widget.providerDatos);
+                    },
+                  )),
             ),
           ),
         ],
@@ -218,7 +218,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     }
     actualizarEstadoPedido(widget.providerDatos, numeroDoc);
     calcularValorTotal(widget.cartProvider);
-    _cargando = false;
+    _cargando.value = false;
   }
 
   menos(String prop, int cantidad, String numeroDoc) async {
@@ -234,7 +234,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       setState(() {
         if (nuevaCantidad == 0) {
           PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-          PedidoEmart.registrarValoresPedido(producto, '0', false);
+          PedidoEmart.registrarValoresPedido(producto, '1', false);
           if (controlador.mapaHistoricos
               .containsKey(widget.historico.numeroDoc)) {
             // controlador.mapaHistoricos[numeroDoc] = false;

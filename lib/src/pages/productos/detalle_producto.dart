@@ -64,8 +64,11 @@ class _DetalleProductoState extends State<DetalleProducto> {
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
 
-    _controllerCantidadProducto.text =
-        isAgotado ? '0' : cargoConfirmar.controllerCantidadProducto.value;
+    _controllerCantidadProducto.text = isAgotado
+        ? '0'
+        : cargoConfirmar.controllerCantidadProducto.value == '0'
+            ? '1'
+            : cargoConfirmar.controllerCantidadProducto.value;
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,

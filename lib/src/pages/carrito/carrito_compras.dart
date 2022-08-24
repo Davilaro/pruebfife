@@ -601,8 +601,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       PedidoEmart.listaProductos!.forEach((key, value) {
                         if (value.fabricante == fabricante) {
                           PedidoEmart.listaControllersPedido![value.codigo]!
-                              .text = "1";
-                          PedidoEmart.registrarValoresPedido(value, '1', false);
+                              .text = "0";
+                          PedidoEmart.registrarValoresPedido(value, "1", false);
                           cargarDeNuevo = true;
                         }
                       });
@@ -646,18 +646,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
     } else {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
-        setState(() {
-          PedidoEmart.listaControllersPedido![producto.codigo]!.text = "1";
-          PedidoEmart.registrarValoresPedido(producto, '1', false);
-          cargarDeNuevo = true;
-          PedidoEmart.iniciarProductosPorFabricante();
-        });
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+        PedidoEmart.registrarValoresPedido(producto, '1', false);
+        cargarDeNuevo = true;
+        PedidoEmart.iniciarProductosPorFabricante();
+        setState(() {});
       } else {
-        setState(() {
-          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-              "$valorResta";
-          PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
-        });
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+            "$valorResta";
+        PedidoEmart.registrarValoresPedido(producto, '$valorResta', true);
+        setState(() {});
         //UXCam: Llamamos el evento removeToCart
         UxcamTagueo()
             .removeToCart(producto, valorResta, cartProvider, precioMinimo);
