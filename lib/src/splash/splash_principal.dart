@@ -6,6 +6,7 @@ import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -85,6 +86,9 @@ class _SplashState extends State<Splash> {
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = 1;
       if (res && cargo) {
+        if (prefs.usurioLogin == 1) {
+          UxcamTagueo().validarTipoUsario();
+        }
         Navigator.pushReplacementNamed(
           context,
           'tab_opciones',

@@ -1,13 +1,37 @@
-import 'dart:convert';
-
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 class UxcamTagueo {
+  void validarTipoUsario() async {
+    var datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+    var userUxCam =
+        (datosCliente[0].nit + datosCliente[0].nombre).replaceAll(' ', '');
+    DateTime now = DateTime.now();
+    String typeUser = 'Begginer';
+
+    String fechaInicial =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
+    String fechaFinal =
+        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
+
+    dynamic resQuery = await DBProviderHelper.db
+        .consultarHistoricos("-1", fechaInicial, fechaFinal);
+
+    if (resQuery.length > 3) {
+      typeUser = "Digitalizados";
+    } else if (resQuery.length > 1 && resQuery.length <= 3) {
+      typeUser = "En progreso";
+    }
+
+    //UXCam: se asigna el nombre de usuario
+    FlutterUxcam.setUserIdentity('$userUxCam');
+    FlutterUxcam.setUserProperty("subscription_type", typeUser);
+  }
+
   void selectSeccion(String name) {
     FlutterUxcam.logEventWithProperties("clickHeader", {
       "name": name,
