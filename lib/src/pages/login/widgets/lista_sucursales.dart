@@ -9,6 +9,7 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -203,6 +204,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     prefs.usuarioRazonSocial = elemento.razonsocial;
+
     prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
     prefs.codigonutresa = elemento.codigonutresa;
@@ -214,11 +216,11 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-    var userUxCam = (elemento.nit + elemento.nombre).replaceAll(' ', '');
+
     await pr.show();
     await cargarInformacion(provider);
     if (prefs.usurioLogin == 1) {
-      await _validarTipoUsario(userUxCam);
+      UxcamTagueo().validarTipoUsario();
     }
     await pr.hide();
 
@@ -245,27 +247,5 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         prefs.codigopadrepideky,
         false);
     await AppUtil.appUtil.abrirBases();
-  }
-
-  _validarTipoUsario(userUxCam) async {
-    DateTime now = DateTime.now();
-    String typeUser = 'Begginer';
-
-    String fechaInicial =
-        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
-    String fechaFinal =
-        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
-
-    dynamic resQuery = await DBProviderHelper.db
-        .consultarHistoricos("-1", fechaInicial, fechaFinal);
-
-    if (resQuery.length > 3) {
-      typeUser = "Digitalizados";
-    } else if (resQuery.length > 1 && resQuery.length <= 3) {
-      typeUser = "En progreso";
-    }
-    //UXCam: se asigna el nombre de usuario
-    FlutterUxcam.setUserIdentity('$userUxCam');
-    FlutterUxcam.setUserProperty("subscription_type", typeUser);
   }
 }
