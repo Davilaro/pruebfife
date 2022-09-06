@@ -411,7 +411,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       context: context2,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        bool isChequet = false;
+        bool isChequet = true;
         bool isChequet1 = false;
         var destino = this.val == 1 ? "SMS" : "correo electrónico";
         return WillPopScope(
