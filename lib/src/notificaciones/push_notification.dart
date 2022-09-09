@@ -2,6 +2,7 @@
 //SHA1:  90:3F:45:0A:17:48:B8:5C:AA:01:5A:00:9B:95:C6:03:D5:22:0C:C0
 
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:emart/src/notificaciones/message_notification.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -17,7 +18,9 @@ class PushNotificationServer {
 
   static String? token;
 
-  static Future<void> _backgroundHandler(RemoteMessage message) async {}
+  static Future<void> _backgroundHandler(RemoteMessage message) async {
+    print('hola res ${message.notification}');
+  }
 
   static Future _onMessageHandler(RemoteMessage message) async {
     var title = message.notification?.title;
@@ -52,6 +55,7 @@ class PushNotificationServer {
       await requesPermission();
 
       token = await _messaging.getToken();
+      // FlutterUxcam.setPushNotificationToken(token!);
       print('token $token');
 
       //handlers

@@ -321,7 +321,9 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       if (snapshot.data.length == 0) {
                         return Container();
                       } else {
-                        double size = 90.0 * snapshot.data[0].parametro.length;
+                        double size = Get.height *
+                            0.145 *
+                            snapshot.data[0].parametro.length;
                         return Obx(() => Visibility(
                               visible:
                                   controllerEncuesta.isVisibleEncuesta.value,

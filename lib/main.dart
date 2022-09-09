@@ -102,5 +102,6 @@ class _MyAppState extends State<MyApp> {
       FlutterUxcam.startWithKey("l0uak7nx63mtp1i");
     }
     FlutterUxcam.setAutomaticScreenNameTagging(false);
+    await PushNotificationServer.initializeApp();
   }
 }

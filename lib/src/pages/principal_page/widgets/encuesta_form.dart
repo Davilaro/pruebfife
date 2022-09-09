@@ -63,7 +63,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
             //Row
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
               children: [
                 //pregunta abierta
                 Visibility(
@@ -111,7 +110,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
                             ),
                             padding: EdgeInsets.zero,
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
                               children: radioButtons(widget.encuesta.parametro),
                             )),
                       )
@@ -143,7 +141,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                                         onChangeOpcionesCheckBox(value!,
                                             widget.encuesta.parametro![i]);
                                       }),
-                                  Text(widget.encuesta.parametro![i]),
+                                  Expanded(
+                                      child:
+                                          Text(widget.encuesta.parametro![i])),
                                 ],
                               ),
                           ]),
@@ -223,15 +223,19 @@ class _EncuestaFormState extends State<EncuestaForm> {
   List<Widget> radioButtons(List<dynamic>? parametro) {
     List<Widget> listOpciones = [];
     listOpciones = parametro!.map((item) {
-      return Row(
-        children: [
-          Radio(
-              value: item.toString(),
-              activeColor: ConstantesColores.azul_precio,
-              groupValue: _seleccion,
-              onChanged: (String? value) => onChangeOpcionesRadioButton(value)),
-          Text(item.toString()),
-        ],
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Radio(
+                value: item.toString(),
+                activeColor: ConstantesColores.azul_precio,
+                groupValue: _seleccion,
+                onChanged: (String? value) =>
+                    onChangeOpcionesRadioButton(value)),
+            Expanded(child: Text(item.toString())),
+          ],
+        ),
       );
     }).toList();
     return listOpciones;
