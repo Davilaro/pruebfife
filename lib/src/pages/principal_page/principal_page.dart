@@ -320,18 +320,12 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       if (snapshot.data.length == 0) {
                         return Container();
                       } else {
-                        double size = Get.height *
-                            0.145 *
-                            snapshot.data[0].parametro.length;
                         return Obx(() => Visibility(
                               visible:
                                   controllerEncuesta.isVisibleEncuesta.value,
                               child: Container(
-                                  constraints: BoxConstraints(
-                                      minHeight: 220,
-                                      maxHeight: size < 220 ? 220 : size),
                                   margin: EdgeInsets.only(
-                                      left: 10, right: 10, top: 15, bottom: 5),
+                                      left: 10, right: 10, top: 15, bottom: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
