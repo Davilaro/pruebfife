@@ -19,7 +19,7 @@ class PushNotificationServer {
   static String? token;
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
-    print('hola res ${message.notification}');
+    // print('hola res ${message.notification}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {

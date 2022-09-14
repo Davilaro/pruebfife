@@ -275,7 +275,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     }),
                 //CATEGORIAS DESTACAS
                 Container(
-                    // height: Get.height * 0.3,
                     width: double.infinity,
                     margin: EdgeInsets.only(top: 20),
                     padding: EdgeInsets.symmetric(horizontal: 4),
