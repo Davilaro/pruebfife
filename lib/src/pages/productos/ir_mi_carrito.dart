@@ -86,7 +86,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           AccionesBartCarrito(esCarrito: false),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
         child: Column(
           children: [
             Padding(

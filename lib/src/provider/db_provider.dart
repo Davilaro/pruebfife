@@ -616,7 +616,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      var query = '''
       SELECT f.empresa, f.ico, f.codIndirecto, cast((SELECT pedidominimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa) as float) as pedidominimo,cast((SELECT topeminimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante 
@@ -625,7 +625,9 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       GROUP BY f.empresa
       ORDER BY f.orden ASC 
 
-    ''');
+    ''';
+      log(query);
+      final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Fabricantes.fromJson(e)).toList()

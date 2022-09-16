@@ -286,7 +286,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
       if (Get.height > 600) {
         valor = productos!.fabricante!.toUpperCase() == 'MEALS'
             ? Get.height * 0.75
-            : Get.height * 0.6;
+            : Get.height * 0.7;
       }
     } catch (e) {
       precioMinimo = 0;

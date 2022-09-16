@@ -1,6 +1,8 @@
 //no borrar
 //SHA1:  90:3F:45:0A:17:48:B8:5C:AA:01:5A:00:9B:95:C6:03:D5:22:0C:C0
 
+import 'dart:io';
+
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -19,7 +21,7 @@ class PushNotificationServer {
   static String? token;
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
-    // print('hola res ${message.notification}');
+    print('hola res ${message.notification}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
@@ -54,8 +56,13 @@ class PushNotificationServer {
       FirebaseMessaging _messaging = FirebaseMessaging.instance;
       await requesPermission();
 
-      token = await _messaging.getToken();
-      // FlutterUxcam.setPushNotificationToken(token!);
+      token = Platform.isAndroid
+          ? await _messaging.getToken()
+          : await _messaging.getAPNSToken();
+      token != null
+          ? FlutterUxcam.setPushNotificationToken(token!)
+          : print('token null');
+
       print('token $token');
 
       //handlers
