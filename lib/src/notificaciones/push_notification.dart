@@ -55,22 +55,23 @@ class PushNotificationServer {
       await Firebase.initializeApp();
       FirebaseMessaging _messaging = FirebaseMessaging.instance;
       await requesPermission();
+      String? token2 = '';
+      token = await FirebaseMessaging.instance.getToken();
+      if (Platform.isIOS) {
+        token2 = await FirebaseMessaging.instance.getAPNSToken();
+        FlutterUxcam.setPushNotificationToken(token2!);
+      } else {
+        FlutterUxcam.setPushNotificationToken(token!);
+      }
 
-      token = Platform.isAndroid
-          ? await _messaging.getToken()
-          : await _messaging.getAPNSToken();
-      token != null
-          ? FlutterUxcam.setPushNotificationToken(token!)
-          : print('token null');
-
-      print('token $token');
+      print('token $token ---- $token2');
 
       //handlers
       FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
       FirebaseMessaging.onMessage.listen(_onMessageHandler);
       FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
     } catch (e) {
-      print('$e');
+      print('ERROR NOTIFICAICONES $e');
     }
   }
 

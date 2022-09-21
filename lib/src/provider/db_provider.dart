@@ -122,17 +122,30 @@ class DBProvider {
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
-      final sql = await db.rawQuery('''
-      
-      SELECT c.codigo, c.descripcion, c.ico2 as ico
-      FROM Categoria c
-      INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
-      WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
+      //   var query = '''
 
-      GROUP BY p.categoriacodigopideki
-      ORDER BY c.orden ASC $isLimit 
-      
-    ''');
+      //   SELECT c.codigo, c.descripcion, c.ico2 as ico
+      //   FROM Categoria c
+      //   INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki
+      //   WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
+
+      //   GROUP BY p.categoriacodigopideki
+      //   ORDER BY c.orden ASC $isLimit
+
+      // ''';
+      var query = ''' SELECT c.codigo, c.descripcion, c.ico2 as ico
+            FROM Categoria c 
+            INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
+            WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
+            GROUP BY p.categoriacodigopideki
+			UNION
+			SELECT c.codigo, c.descripcion, c.ico2 as ico
+            FROM Categoria c 
+            INNER JOIN Producto p ON c.codigo = p.categoriaId2 
+            WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
+            GROUP BY p.categoriaId2
+			ORDER by c.descripcion ASC ''';
+      final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
@@ -172,13 +185,26 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-      var query =
-          ''' SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante
+      // var query =
+      //     ''' SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante
+      // FROM SubCategoria s
+      // INNER JOIN Producto p ON s.codigo = p.subcategoriacodigopideki
+      // WHERE s.cod_categoria = '$buscar'
+      // GROUP BY p.subcategoriacodigopideki
+      // ORDER BY s.orden ASC ''';
+      var query = '''
+SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante
       FROM SubCategoria s 
       INNER JOIN Producto p ON s.codigo = p.subcategoriacodigopideki 
-      WHERE s.cod_categoria = '$buscar'
-      GROUP BY p.subcategoriacodigopideki
-      ORDER BY s.orden ASC ''';
+      WHERE s.cod_categoria = '$buscar' 
+      GROUP BY p.subcategoriacodigopideki 
+	  UNION 
+	  SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante 
+      FROM SubCategoria s 
+      INNER JOIN Producto p ON s.codigo = p.subcategoriaId2 
+      WHERE s.cod_categoria = '$buscar' 
+      GROUP BY p.subcategoriaId2 ORDER by s.descripcion ASC
+''';
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
@@ -676,15 +702,24 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      // var query =
+      //     '''       SELECT f.empresa, f.ico, f.codIndirecto, cast((SELECT pedidominimo FROM CondicionesEntrega
+      // WHERE Fabricante = f.empresa ) as float) as pedidominimo,cast((SELECT topeminimo FROM CondicionesEntrega
+      // WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante
+      // FROM Fabricante f
+      // GROUP BY f.empresa
+      // ORDER BY f.orden ASC ''';
+      var query = '''
       SELECT f.empresa, f.ico, f.codIndirecto, cast((SELECT pedidominimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as pedidominimo,cast((SELECT topeminimo FROM CondicionesEntrega
-      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante 
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, (SELECT restrictivo FROM CondicionesEntrega
+      WHERE Fabricante = f.empresa ) as restrictivo, f.nombrecomercial, f.tipofabricante
       FROM Fabricante f
       GROUP BY f.empresa
-      ORDER BY f.orden ASC 
-
-    ''');
+      ORDER BY f.orden ASC
+      ''';
+      final sql = await db.rawQuery(query);
+      print('resultados ${sql.toList()}');
 
       return sql.isNotEmpty
           ? sql.map((e) => Fabricantes.fromJson(e)).toList()
