@@ -1,6 +1,7 @@
 //no borrar
 //SHA1:  90:3F:45:0A:17:48:B8:5C:AA:01:5A:00:9B:95:C6:03:D5:22:0C:C0
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -21,7 +22,9 @@ class PushNotificationServer {
   static String? token;
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
-    print('hola res ${message.notification}');
+    print('hola res ${message.data['message']}');
+    var hola = jsonDecode(message.data['message']);
+    print('hola res 33 ${hola.title}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
@@ -49,6 +52,8 @@ class PushNotificationServer {
     Widget notificacion = Html(data: """${message.notification!.body}""");
     showSimpleNotification(notificacion);
   }
+
+  void setPushNotificationToken(String pushToken) {}
 
   static Future initializeApp() async {
     try {
