@@ -79,7 +79,8 @@ class PedidoEmart {
       double precio = 0;
       double topeMinimo = 0;
       double precioProductos = 0;
-      String icon = "";
+      String icon = '';
+      String restrictivo = '';
       for (int i = 0; i < value.length; i++) {
         precioProductos =
             precioProductos + (value[i].cantidad! * value[i].precio!);
@@ -90,6 +91,7 @@ class PedidoEmart {
           icon = listaFabricante![j].icono;
           precio = listaFabricante![j].pedidominimo;
           topeMinimo = listaFabricante![j].topeMinimo;
+          restrictivo = listaFabricante![j].restrictivo;
         }
       }
 
@@ -102,6 +104,7 @@ class PedidoEmart {
                 'preciominimo': precio,
                 'precioProducto': precioProductos,
                 'topeMinimo': topeMinimo,
+                'restrictivo': restrictivo,
               });
     });
   }

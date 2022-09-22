@@ -254,7 +254,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 children: [
                                   SvgPicture.asset(
                                     'assets/alerta_pedido_inferio.svg',
-                                    color: fabricante.toUpperCase() == "MEALS"
+                                    // color: fabricante.toUpperCase() == "MEALS"
+                                    //     ? HexColor("#42B39C")
+                                    //     : Colors.red,
+                                    color: value['restrictivo'] == "0"
                                         ? HexColor("#42B39C")
                                         : Colors.red,
                                   ),
@@ -271,10 +274,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             value["preciominimo"],
                                             value["topeMinimo"],
                                             format.currencySymbol,
-                                            value["iva"]),
+                                            value["iva"],
+                                            value['restrictivo']),
                                         style: TextStyle(
-                                            color: fabricante.toUpperCase() ==
-                                                    "MEALS"
+                                            // color: fabricante.toUpperCase() ==
+                                            //         "MEALS"
+                                            //     ? Colors.black.withOpacity(.7)
+                                            //     : Colors.red,
+                                            color: value['restrictivo'] == "0"
                                                 ? Colors.black.withOpacity(.7)
                                                 : Colors.red,
                                             fontWeight: FontWeight.bold),
@@ -705,11 +712,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (value['precioProducto'] > 0.0) {
-        if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
-            PedidoEmart.listaProductosPorFabricante![fabricante]
-                ["preciominimo"]) {
-          listaFabricantesSinPedidoMinimo += "," + fabricante;
+      if (PedidoEmart.listaProductosPorFabricante![fabricante]["restrictivo"] ==
+          '1') {
+        if (value['precioProducto'] > 0.0) {
+          if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                  ["preciominimo"]) {
+            listaFabricantesSinPedidoMinimo += "," + fabricante;
+          }
         }
       }
     });
@@ -1079,13 +1089,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
       double precioMinimo,
       double topeMinimo,
       String currentSymbol,
-      double iva) {
-    var calcular = topeMinimo * 1.19;
+      double iva,
+      String restrictivo) {
+    // var calcular = topeMinimo * 1.19;
 
-    if (fabricante.toUpperCase() == "MEALS") {
-      if (valorPedido < (topeMinimo * 1.19)) {
+    if (restrictivo == '0') {
+      if (valorPedido < precioMinimo) {
         return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
-            formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
+            formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
@@ -1095,5 +1106,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
       }
       return "";
     }
+    // if (fabricante.toUpperCase() == "MEALS") {
+    //   if (valorPedido < (topeMinimo * 1.19)) {
+    //     return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
+    //         formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
+    //   }
+    //   return "Tu pedido será entregado el siguiente día hábil.";
+    // } else {
+    //   if (valorPedido < precioMinimo) {
+    //     return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
+    //         formatNumber.format(precioMinimo).replaceAll(',00', '');
+    //   }
+    //   return "";
+    // }
   }
 }
