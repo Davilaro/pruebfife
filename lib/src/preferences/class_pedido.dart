@@ -89,8 +89,8 @@ class PedidoEmart {
       for (int j = 0; j < listaFabricante!.length; j++) {
         if (listaFabricante![j].empresa == key) {
           icon = listaFabricante![j].icono;
-          precio = listaFabricante![j].pedidominimo;
-          topeMinimo = listaFabricante![j].topeMinimo;
+          precio = listaFabricante![j].pedidominimo ?? 0;
+          topeMinimo = listaFabricante![j].topeMinimo ?? 0;
           restrictivo = listaFabricante![j].restrictivo;
         }
       }

@@ -58,19 +58,23 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           null) {
         productoEncontrado = false;
       } else {
+        double precioMinimo = PedidoEmart.listaProductosPorFabricante![
+                    widget.productos.fabricante]["preciominimo"] !=
+                null
+            ? PedidoEmart
+                    .listaProductosPorFabricante![widget.productos.fabricante]
+                ["preciominimo"]
+            : 0.0;
         productoEncontrado = PedidoEmart.listaProductosPorFabricante!.length > 0
             ? cartProvider.getListaFabricante[widget.productos.fabricante]
                     ["precioFinal"] <
-                PedidoEmart.listaProductosPorFabricante![
-                    widget.productos.fabricante]["preciominimo"]
+                precioMinimo
             : false;
         isRestrictivo = PedidoEmart.listaProductosPorFabricante![
                     widget.productos.fabricante]["restrictivo"] ==
                 '1'
             ? true
             : false;
-        print(
-            'aca llego con a info despues ${PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]["restrictivo"]}');
       }
     } catch (e) {
       productoEncontrado = false;
@@ -382,10 +386,17 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
 
   bool cargarResultadoPedidoCondicion(CarroModelo cartProvider) {
     double valor = 0.0;
+
     if (PedidoEmart.listaProductosPorFabricante!.length > 0) {
-      if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-              ["topeMinimo"] >
-          0) {
+      double topeMinimo =
+          PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+                      ["topeMinimo"] !=
+                  null
+              ? PedidoEmart
+                      .listaProductosPorFabricante![widget.productos.fabricante]
+                  ["topeMinimo"]
+              : 0.0;
+      if (topeMinimo > 0) {
         valor = PedidoEmart
                     .listaProductosPorFabricante![widget.productos.fabricante]
                 ["topeMinimo"] *
@@ -395,7 +406,14 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
 
         return valor > valorMinimo;
       } else {
-        return true;
+        return PedidoEmart.listaProductosPorFabricante![
+                        widget.productos.fabricante]["preciominimo"] !=
+                    null &&
+                PedidoEmart.listaProductosPorFabricante![
+                        widget.productos.fabricante]["preciominimo"] !=
+                    0
+            ? true
+            : false;
       }
     }
     return false;

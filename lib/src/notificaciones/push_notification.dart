@@ -21,15 +21,45 @@ class PushNotificationServer {
 
   static String? token;
 
-  static Future<void> _backgroundHandler(RemoteMessage message) async {
-    print('hola res ${message.data['message']}');
-    var hola = jsonDecode(message.data['message']);
-    print('hola res 33 ${hola.title}');
+  static Future _backgroundHandler(RemoteMessage message) async {
+    // try {
+    //   await Firebase.initializeApp();
+    //   print('hola res ${message.messageId}');
+    //   if (message.data != null) {
+    //     var hola = jsonDecode(message.data['message']);
+    //     print('hola res 33 ${hola['title']}');
+    //     showOverlayNotification((context) {
+    //       Widget notificacion = Html(data: """${hola['body']}""");
+    //       Widget titleNotificacion = Html(data: """${hola['title']}""");
+    //       return MessageNotification(
+    //           key: Key("1"),
+    //           message: notificacion,
+    //           title: titleNotificacion,
+    //           onReplay: () {
+    //             OverlaySupportEntry.of(context)
+    //                 ?.dismiss(); //use OverlaySupportEntry to dismiss overlay
+    //             toast('Notificación cerrada');
+    //           });
+    //     }, duration: Duration(seconds: 10));
+    //     // showSimpleNotification(notificacion);
+    //   }
+    // } catch (e) {
+    //   print('MENSAJE ERROR $e');
+    // }
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
-    var title = message.notification?.title;
-    var body = message.notification?.body;
+    String? title = '';
+    String? body = '';
+
+    if (message.data != null) {
+      var menssajeCapturado = jsonDecode(message.data['message']);
+      title = menssajeCapturado['title'];
+      body = menssajeCapturado['body'];
+    } else {
+      title = message.notification?.title;
+      body = message.notification?.body;
+    }
 
     showOverlayNotification((context) {
       Widget notificacion = Html(data: """${body!}""");
@@ -49,7 +79,9 @@ class PushNotificationServer {
   static Future _onMessageOpenApp(RemoteMessage message) async {
     await Firebase.initializeApp();
     await requesPermission();
-    Widget notificacion = Html(data: """${message.notification!.body}""");
+    var menssajeCapturado = jsonDecode(message.data['message']);
+    String? body = menssajeCapturado['body'];
+    Widget notificacion = Html(data: """$body""");
     showSimpleNotification(notificacion);
   }
 
@@ -61,9 +93,9 @@ class PushNotificationServer {
       FirebaseMessaging _messaging = FirebaseMessaging.instance;
       await requesPermission();
       String? token2 = '';
-      token = await FirebaseMessaging.instance.getToken();
+      token = await _messaging.getToken();
       if (Platform.isIOS) {
-        token2 = await FirebaseMessaging.instance.getAPNSToken();
+        token2 = await _messaging.getAPNSToken();
         FlutterUxcam.setPushNotificationToken(token2!);
       } else {
         FlutterUxcam.setPushNotificationToken(token!);
