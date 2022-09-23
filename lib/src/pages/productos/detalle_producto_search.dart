@@ -467,7 +467,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
     for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
       if (PedidoEmart.listaFabricante![i].empresa == widget.producto.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo;
+        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
     }
 
     try {

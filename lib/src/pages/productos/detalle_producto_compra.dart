@@ -245,7 +245,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
 
     for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
       if (PedidoEmart.listaFabricante![i].empresa == productos!.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo;
+        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
     }
 
     try {
@@ -263,7 +263,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
       precioMinimo = 0;
       valor = Get.height > 750 ? 0.7 : 0.8;
     }
-
     return valor;
   }
 
@@ -272,8 +271,9 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     double valor = 0.6;
 
     for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
-      if (PedidoEmart.listaFabricante![i].empresa == productos!.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo;
+      if (PedidoEmart.listaFabricante![i].empresa == productos!.fabricante) {
+        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
+      }
     }
 
     try {
