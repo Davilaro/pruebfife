@@ -31,6 +31,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
+RxBool isValid = false.obs;
 //late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
@@ -252,15 +253,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
                               padding: EdgeInsets.fromLTRB(20, 2, 10, 2),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    'assets/alerta_pedido_inferio.svg',
-                                    // color: fabricante.toUpperCase() == "MEALS"
-                                    //     ? HexColor("#42B39C")
-                                    //     : Colors.red,
-                                    color: value['restrictivo'] == "0"
-                                        ? HexColor("#42B39C")
-                                        : Colors.red,
-                                  ),
+                                  Obx(() => Visibility(
+                                        visible: isValid.value,
+                                        child: SvgPicture.asset(
+                                          'assets/alerta_pedido_inferio.svg',
+                                          // color: fabricante.toUpperCase() == "MEALS"
+                                          //     ? HexColor("#42B39C")
+                                          //     : Colors.red,
+                                          color: value['restrictivo'] == "0"
+                                              ? HexColor("#42B39C")
+                                              : Colors.red,
+                                        ),
+                                      )),
                                   Expanded(
                                     flex: 2,
                                     child: Container(
@@ -1095,15 +1099,19 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
     if (restrictivo == '0') {
       if (valorPedido < precioMinimo) {
+        isValid.value = true;
         return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
+      isValid.value = true;
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
       if (valorPedido < precioMinimo) {
+        isValid.value = true;
         return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
+      isValid.value = false;
       return "";
     }
     // if (fabricante.toUpperCase() == "MEALS") {
