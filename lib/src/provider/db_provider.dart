@@ -652,7 +652,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ORDER BY f.orden ASC 
 
     ''';
-      log(query);
+
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
