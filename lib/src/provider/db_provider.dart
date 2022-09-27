@@ -133,18 +133,18 @@ class DBProvider {
       //   ORDER BY c.orden ASC $isLimit
 
       // ''';
-      var query = ''' SELECT c.codigo, c.descripcion, c.ico2 as ico
+      var query = ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
             FROM Categoria c 
             INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
             WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
             GROUP BY p.categoriacodigopideki
 			UNION
-			SELECT c.codigo, c.descripcion, c.ico2 as ico
+			SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
             FROM Categoria c 
             INNER JOIN Producto p ON c.codigo = p.categoriaId2 
             WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
             GROUP BY p.categoriaId2
-			ORDER by c.descripcion ASC ''';
+			ORDER by c.orden ASC ''';
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
@@ -193,17 +193,17 @@ class DBProvider {
       // GROUP BY p.subcategoriacodigopideki
       // ORDER BY s.orden ASC ''';
       var query = '''
-SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante
+SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden 
       FROM SubCategoria s 
       INNER JOIN Producto p ON s.codigo = p.subcategoriacodigopideki 
       WHERE s.cod_categoria = '$buscar' 
       GROUP BY p.subcategoriacodigopideki 
 	  UNION 
-	  SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante 
+	  SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante , s.orden 
       FROM SubCategoria s 
       INNER JOIN Producto p ON s.codigo = p.subcategoriaId2 
       WHERE s.cod_categoria = '$buscar' 
-      GROUP BY p.subcategoriaId2 ORDER by s.descripcion ASC
+      GROUP BY p.subcategoriaId2 ORDER by s.orden ASC
 ''';
       final sql = await db.rawQuery(query);
 
