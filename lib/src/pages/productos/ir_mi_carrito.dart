@@ -272,54 +272,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           ));
     } else {
       return cargarWiguet(size, cartProvider, format);
-      // return productoEncontrado
-      //     ? Container(
-      //         height: size.height * 0.15,
-      //         alignment: Alignment.center,
-      //         decoration: BoxDecoration(
-      //           color: Colors.white,
-      //           borderRadius: BorderRadius.circular(20),
-      //         ),
-      //         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      //         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      //         child: Center(
-      //           child: Row(
-      //             children: [
-      //               Container(
-      //                 width: size.width * 0.1,
-      //                 child: IconButton(
-      //                   icon: SvgPicture.asset(
-      //                       'assets/check_producto_agregado.svg'),
-      //                   onPressed: () => {},
-      //                 ),
-      //               ),
-      //               Expanded(
-      //                   child: Center(
-      //                 child: RichText(
-      //                   text: TextSpan(children: [
-      //                     TextSpan(
-      //                         text: 'Has agregado un producto al carrito. ',
-      //                         style: TextStyle(
-      //                             color: ConstantesColores.gris_oscuro,
-      //                             fontSize: size.width * 0.04,
-      //                             fontFamily: 'RoundedMplus1c')),
-      //                     TextSpan(
-      //                       text:
-      //                           'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${format.currencySymbol}${cargarResultado(cartProvider)}',
-      //                       style: TextStyle(
-      //                           color: ConstantesColores.rojo_letra,
-      //                           fontSize: size.width * 0.04,
-      //                           fontFamily: 'RoundedMplus1c'),
-      //                     )
-      //                   ]),
-      //                 ),
-      //               ))
-      //             ],
-      //           ),
-      //         ))
-      //     : widget.productos.fabricante!.toUpperCase() != 'MEALS'
-      //         ? Container()
-      //         : cargarWiguet(size, cartProvider, format);
     }
   }
 
@@ -355,17 +307,17 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   String cargarResultadoPedido(CarroModelo cartProvider) {
     double precio = 0;
 
-    if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-            ["topeMinimo"] >
-        0) {
-      precio =
-          PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-                  ["topeMinimo"] *
-              1.19;
-      return PedidoEmart.listaProductosPorFabricante!.length > 0
-          ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
-          : "0";
-    }
+    // if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+    //         ["topeMinimo"] >
+    //     0) {
+    //   precio =
+    //       PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+    //               ["topeMinimo"] *
+    //           1.19;
+    //   return PedidoEmart.listaProductosPorFabricante!.length > 0
+    //       ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
+    //       : "0";
+    // }
     precio =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ["preciominimo"];

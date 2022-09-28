@@ -533,7 +533,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               child: ImageButton(
                 children: <Widget>[],
-                width: 300,
+                width: 250,
                 height: 35,
                 paddingTop: 5,
                 pressedImage: Image.asset(
@@ -1100,7 +1100,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     if (restrictivo == '0') {
       if (valorPedido < precioMinimo) {
         isValid.value = true;
-        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
+        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de $currentSymbol' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
       isValid.value = true;
@@ -1108,7 +1108,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     } else {
       if (valorPedido < precioMinimo) {
         isValid.value = true;
-        return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
+        return 'El pedido no cumple con el mínimo valor que establece el proveedor de $currentSymbol' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
       isValid.value = false;

@@ -154,7 +154,6 @@ class _ProductsCardState extends State<ProductsCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //mensaje de precio especial y imagen producto
-
                   Container(
                     height: element.descuento != 0 ? 100 : 120,
                     width: Get.width * 0.22,

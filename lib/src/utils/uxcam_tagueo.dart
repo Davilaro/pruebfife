@@ -1,6 +1,7 @@
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -10,6 +11,13 @@ class UxcamTagueo {
     var datosCliente = await DBProviderHelper.db.consultarDatosCliente();
     var userUxCam =
         (datosCliente[0].nit + datosCliente[0].nombre).replaceAll(' ', '');
+    if (Constantes().titulo != 'QA') {
+      if (datosCliente[0].nit == '4415415' ||
+          datosCliente[0].nit == '4415416') {
+        FlutterUxcam.optOutOverall();
+      }
+    }
+
     DateTime now = DateTime.now();
     String typeUser = 'Begginer';
 
