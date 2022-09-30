@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -31,6 +32,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   RxList<dynamic> listaCategoria = <dynamic>[].obs;
   List<dynamic> listaAllCategorias = [];
   final TextEditingController controllerSearch = TextEditingController();
+  // ControllerProductos constrollerProductos = Get.find();
 
   @override
   void initState() {
@@ -201,6 +203,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   }
 
   void cargarLista() async {
+    // constrollerProductos.getAgotados();
     listaAllCategorias =
         await DBProvider.db.consultarCategorias(controllerSearch.text, 0);
     listaCategoria.value = listaAllCategorias;

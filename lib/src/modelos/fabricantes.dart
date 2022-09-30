@@ -13,6 +13,7 @@ class Fabricantes {
       this.pedidominimo,
       this.tipofabricante,
       this.nombrecomercial,
+      this.restrictivo,
       this.estado,
       this.topeMinimo,
       this.nitCliente,
@@ -28,6 +29,7 @@ class Fabricantes {
   double? topeMinimo;
   String? nitCliente;
   String? razonSocial;
+  String? restrictivo;
 
   factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
         empresa: json["empresa"],
@@ -40,6 +42,7 @@ class Fabricantes {
         topeMinimo: json["topeMinimo"],
         nitCliente: json["NitCliente"],
         razonSocial: json["RazonSocial"],
+        restrictivo: json['restrictivo'] == null ? '0' : json['restrictivo'],
       );
 
   Map<String, dynamic> toJson() => {

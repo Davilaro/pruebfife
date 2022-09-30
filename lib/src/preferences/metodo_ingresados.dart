@@ -3,7 +3,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'class_pedido.dart';
 
 class MetodosLLenarValores {
-  void calcularValorTotal(cartProvider) {
+  void calcularValorTotal(CarroModelo cartProvider) {
     double valorTotal = 0;
     double valorAhorro = 0;
     int cantidad = 0;
@@ -23,6 +23,7 @@ class MetodosLLenarValores {
         }
       }
     });
+
     cartProvider.actualizarItems = cantidad;
     cartProvider.guardarValorCompra = valorTotal;
     cartProvider.guardarValorAhorro = valorAhorro;

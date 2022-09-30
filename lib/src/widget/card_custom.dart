@@ -183,7 +183,7 @@ class CardCustom extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8.0),
                                     color: Colors.red[100],
                                   ),
-                                  height: Get.width * 0.06,
+                                  // height: Get.width * 0.06,
                                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                   child: Text(
                                     'Agotado',

@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -8,8 +5,6 @@ import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
-import 'package:emart/src/preferences/const.dart';
-import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -18,7 +13,6 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/card_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

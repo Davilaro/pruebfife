@@ -1,4 +1,5 @@
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -30,7 +31,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     1: CatalogoPoductosInterno(tipoCategoria: 1),
     5: CatalogoPoductosInterno(tipoCategoria: 2)
   };
-
+  ControllerProductos constrollerProductos = Get.find();
   RxInt contador = 5.obs;
 
   final cargoConfirmar = Get.find<ControlBaseDatos>();
@@ -43,6 +44,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
 
   @override
   Widget build(BuildContext context) {
+    constrollerProductos.getAgotados();
     final size = MediaQuery.of(context).size;
 
     final selectedColor = Colors.yellow;
@@ -61,7 +63,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                 child: new IconButton(
                   icon: SvgPicture.asset('assets/boton_soporte.svg'),
                   onPressed: () => {
-                     //UXCam: Llamamos el evento clickSoport
+                    //UXCam: Llamamos el evento clickSoport
                     UxcamTagueo().clickSoport(),
                     Navigator.push(
                       context,
@@ -70,7 +72,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                                 numEmpresa: 1,
                               )),
                     ),
-                   
                   },
                 ),
               ),

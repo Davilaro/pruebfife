@@ -38,6 +38,7 @@ class IrMiCarrito extends StatefulWidget {
 
 class _IrMiCarritoState extends State<IrMiCarrito> {
   bool productoEncontrado = false;
+  bool isRestrictivo = false;
 
   @override
   void initState() {
@@ -57,15 +58,27 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           null) {
         productoEncontrado = false;
       } else {
+        double precioMinimo = PedidoEmart.listaProductosPorFabricante![
+                    widget.productos.fabricante]["preciominimo"] !=
+                null
+            ? PedidoEmart
+                    .listaProductosPorFabricante![widget.productos.fabricante]
+                ["preciominimo"]
+            : 0.0;
         productoEncontrado = PedidoEmart.listaProductosPorFabricante!.length > 0
             ? cartProvider.getListaFabricante[widget.productos.fabricante]
                     ["precioFinal"] <
-                PedidoEmart.listaProductosPorFabricante![
-                    widget.productos.fabricante]["preciominimo"]
+                precioMinimo
+            : false;
+        isRestrictivo = PedidoEmart.listaProductosPorFabricante![
+                    widget.productos.fabricante]["restrictivo"] ==
+                '1'
+            ? true
             : false;
       }
     } catch (e) {
       productoEncontrado = false;
+      isRestrictivo = false;
     }
 
     return Scaffold(
@@ -86,7 +99,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           AccionesBartCarrito(esCarrito: false),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
         child: Column(
           children: [
             Padding(
@@ -203,59 +216,63 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
               ),
             ),
             //MENSAJE DE PEDIDO MINIMO
-            productoEncontrado
-                ? Container(
-                    height: size.height * 0.15,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: Center(
-                      child: Row(
-                        children: [
-                          Container(
-                            width: size.width * 0.1,
-                            child: IconButton(
-                              icon: SvgPicture.asset(
-                                  'assets/check_producto_agregado.svg'),
-                              onPressed: () => {},
-                            ),
-                          ),
-                          Expanded(
-                              child: Center(
-                            child: RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                    text:
-                                        'Has agregado un producto al carrito. ',
-                                    style: TextStyle(
-                                        color: ConstantesColores.gris_oscuro,
-                                        fontSize: size.width * 0.04,
-                                        fontFamily: 'RoundedMplus1c')),
-                                TextSpan(
-                                  text:
-                                      'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${format.currencySymbol}${cargarResultado(cartProvider)}',
-                                  style: TextStyle(
-                                      color: ConstantesColores.rojo_letra,
-                                      fontSize: size.width * 0.04,
-                                      fontFamily: 'RoundedMplus1c'),
-                                )
-                              ]),
-                            ),
-                          ))
-                        ],
-                      ),
-                    ))
-                : widget.productos.fabricante!.toUpperCase() != 'MEALS'
-                    ? Container()
-                    : cargarWiguet(size, cartProvider, format)
+            validarPedidoMinimo(size, cartProvider, format)
           ],
         ),
       ),
     );
+  }
+
+  validarPedidoMinimo(
+      Size size, CarroModelo cartProvider, NumberFormat format) {
+    if (isRestrictivo) {
+      return Container(
+          height: size.height * 0.15,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Center(
+            child: Row(
+              children: [
+                Container(
+                  width: size.width * 0.1,
+                  child: IconButton(
+                    icon:
+                        SvgPicture.asset('assets/check_producto_agregado.svg'),
+                    onPressed: () => {},
+                  ),
+                ),
+                Expanded(
+                    child: Center(
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Has agregado un producto al carrito. ',
+                          style: TextStyle(
+                              color: ConstantesColores.gris_oscuro,
+                              fontSize: size.width * 0.04,
+                              fontFamily: 'RoundedMplus1c')),
+                      TextSpan(
+                        text:
+                            'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${format.currencySymbol}${cargarResultado(cartProvider)}',
+                        style: TextStyle(
+                            color: ConstantesColores.rojo_letra,
+                            fontSize: size.width * 0.04,
+                            fontFamily: 'RoundedMplus1c'),
+                      )
+                    ]),
+                  ),
+                ))
+              ],
+            ),
+          ));
+    } else {
+      return cargarWiguet(size, cartProvider, format);
+    }
   }
 
   Future<void> pasarCarrito() async {
@@ -288,15 +305,25 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   }
 
   String cargarResultadoPedido(CarroModelo cartProvider) {
-    double precio =
+    double precio = 0;
+
+    // if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+    //         ["topeMinimo"] >
+    //     0) {
+    //   precio =
+    //       PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+    //               ["topeMinimo"] *
+    //           1.19;
+    //   return PedidoEmart.listaProductosPorFabricante!.length > 0
+    //       ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
+    //       : "0";
+    // }
+    precio =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-                ["topeMinimo"] *
-            1.19;
-    var valor = PedidoEmart.listaProductosPorFabricante!.length > 0
+            ["preciominimo"];
+    return PedidoEmart.listaProductosPorFabricante!.length > 0
         ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
         : "0";
-
-    return valor;
   }
 
   String _nombreFabricante(String? fabricante) {
@@ -310,16 +337,38 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   }
 
   bool cargarResultadoPedidoCondicion(CarroModelo cartProvider) {
-    double valor = PedidoEmart.listaProductosPorFabricante!.length > 0
-        ? PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+    double valor = 0.0;
+
+    if (PedidoEmart.listaProductosPorFabricante!.length > 0) {
+      double topeMinimo =
+          PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+                      ["topeMinimo"] !=
+                  null
+              ? PedidoEmart
+                      .listaProductosPorFabricante![widget.productos.fabricante]
+                  ["topeMinimo"]
+              : 0.0;
+      if (topeMinimo > 0) {
+        valor = PedidoEmart
+                    .listaProductosPorFabricante![widget.productos.fabricante]
                 ["topeMinimo"] *
-            1.19
-        : 0.0;
+            1.19;
+        double valorMinimo = cartProvider
+            .getListaFabricante[widget.productos.fabricante]["precioFinal"];
 
-    double valorMinimo = cartProvider
-        .getListaFabricante[widget.productos.fabricante]["precioFinal"];
-
-    return valor > valorMinimo;
+        return valor > valorMinimo;
+      } else {
+        return PedidoEmart.listaProductosPorFabricante![
+                        widget.productos.fabricante]["preciominimo"] !=
+                    null &&
+                PedidoEmart.listaProductosPorFabricante![
+                        widget.productos.fabricante]["preciominimo"] !=
+                    0
+            ? true
+            : false;
+      }
+    }
+    return false;
   }
 
   Widget cargarWiguet(size, CarroModelo cartProvider, format) {
@@ -359,7 +408,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                       fontFamily: 'RoundedMplus1c')),
                               TextSpan(
                                   text:
-                                      'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${format.currencySymbol}${cargarResultadoPedido(cartProvider)} para entregado el próximo día hábil.',
+                                      'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${format.currencySymbol}${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.',
                                   style: TextStyle(
                                       color: ConstantesColores.rojo_letra,
                                       fontSize: size.width * 0.04,

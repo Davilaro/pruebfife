@@ -411,7 +411,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       context: context2,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        bool isChequet = false;
+        bool isChequet = true;
         bool isChequet1 = false;
         var destino = this.val == 1 ? "SMS" : "correo electrónico";
         return WillPopScope(
@@ -486,36 +486,36 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                                       EdgeInsets.fromLTRB(10, 0, 10, 0)),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: HexColor("#E4E3EC"),
-                            ),
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: isChequet,
-                                  shape: CircleBorder(),
-                                  checkColor: Colors.purple,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      isChequet = value!;
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  'Acepto política de privacidad',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color:
-                                          HexColor(Colores().color_azul_letra)),
-                                )),
-                              ],
-                            ),
-                          ),
+                          // Container(
+                          //   margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(20),
+                          //     color: HexColor("#E4E3EC"),
+                          //   ),
+                          //   child: Row(
+                          //     children: [
+                          //       Checkbox(
+                          //         value: isChequet,
+                          //         shape: CircleBorder(),
+                          //         checkColor: Colors.purple,
+                          //         onChanged: (bool? value) {
+                          //           setState(() {
+                          //             isChequet = value!;
+                          //           });
+                          //         },
+                          //       ),
+                          //       Expanded(
+                          //           child: Text(
+                          //         'Acepto política de privacidad',
+                          //         textAlign: TextAlign.left,
+                          //         style: TextStyle(
+                          //             fontSize: 12,
+                          //             color:
+                          //                 HexColor(Colores().color_azul_letra)),
+                          //       )),
+                          //     ],
+                          //   ),
+                          // ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
                             decoration: BoxDecoration(
@@ -536,7 +536,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                        'Acepto política de tratamiento de datos',
+                                        // 'Acepto política de tratamiento de datos',
+                                        'Acepto los términos y condiciones y autorizo el tratamiento de mis datos personales',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontSize: 12,

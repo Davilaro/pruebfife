@@ -31,6 +31,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
+RxBool isValid = false.obs;
 //late CarroModelo cartProvider;
 
 class CarritoCompras extends StatefulWidget {
@@ -252,12 +253,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
                               padding: EdgeInsets.fromLTRB(20, 2, 10, 2),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    'assets/alerta_pedido_inferio.svg',
-                                    color: fabricante.toUpperCase() == "MEALS"
-                                        ? HexColor("#42B39C")
-                                        : Colors.red,
-                                  ),
+                                  Obx(() => Visibility(
+                                        visible: isValid.value,
+                                        child: SvgPicture.asset(
+                                          'assets/alerta_pedido_inferio.svg',
+                                          // color: fabricante.toUpperCase() == "MEALS"
+                                          //     ? HexColor("#42B39C")
+                                          //     : Colors.red,
+                                          color: value['restrictivo'] == "0"
+                                              ? HexColor("#42B39C")
+                                              : Colors.red,
+                                        ),
+                                      )),
                                   Expanded(
                                     flex: 2,
                                     child: Container(
@@ -271,10 +278,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             value["preciominimo"],
                                             value["topeMinimo"],
                                             format.currencySymbol,
-                                            value["iva"]),
+                                            value["iva"],
+                                            value['restrictivo']),
                                         style: TextStyle(
-                                            color: fabricante.toUpperCase() ==
-                                                    "MEALS"
+                                            // color: fabricante.toUpperCase() ==
+                                            //         "MEALS"
+                                            //     ? Colors.black.withOpacity(.7)
+                                            //     : Colors.red,
+                                            color: value['restrictivo'] == "0"
                                                 ? Colors.black.withOpacity(.7)
                                                 : Colors.red,
                                             fontWeight: FontWeight.bold),
@@ -522,7 +533,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               child: ImageButton(
                 children: <Widget>[],
-                width: 300,
+                width: 250,
                 height: 35,
                 paddingTop: 5,
                 pressedImage: Image.asset(
@@ -705,11 +716,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (value['precioProducto'] > 0.0) {
-        if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
-            PedidoEmart.listaProductosPorFabricante![fabricante]
-                ["preciominimo"]) {
-          listaFabricantesSinPedidoMinimo += "," + fabricante;
+      if (PedidoEmart.listaProductosPorFabricante![fabricante]["restrictivo"] ==
+          '1') {
+        if (value['precioProducto'] > 0.0) {
+          if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                  ["preciominimo"]) {
+            listaFabricantesSinPedidoMinimo += "," + fabricante;
+          }
         }
       }
     });
@@ -1079,21 +1093,39 @@ class _CarritoComprasState extends State<CarritoCompras> {
       double precioMinimo,
       double topeMinimo,
       String currentSymbol,
-      double iva) {
-    var calcular = topeMinimo * 1.19;
+      double iva,
+      String restrictivo) {
+    // var calcular = topeMinimo * 1.19;
 
-    if (fabricante.toUpperCase() == "MEALS") {
-      if (valorPedido < (topeMinimo * 1.19)) {
-        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
-            formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
+    if (restrictivo == '0') {
+      if (valorPedido < precioMinimo) {
+        isValid.value = true;
+        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de $currentSymbol' +
+            formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
+      isValid.value = true;
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
       if (valorPedido < precioMinimo) {
-        return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
+        isValid.value = true;
+        return 'El pedido no cumple con el mínimo valor que establece el proveedor de $currentSymbol' +
             formatNumber.format(precioMinimo).replaceAll(',00', '');
       }
+      isValid.value = false;
       return "";
     }
+    // if (fabricante.toUpperCase() == "MEALS") {
+    //   if (valorPedido < (topeMinimo * 1.19)) {
+    //     return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +
+    //         formatNumber.format(((calcular.toInt()))).replaceAll(',00', '');
+    //   }
+    //   return "Tu pedido será entregado el siguiente día hábil.";
+    // } else {
+    //   if (valorPedido < precioMinimo) {
+    //     return 'El pedido no cumple con el mínimo valor que establece el proveedor : $currentSymbol ' +
+    //         formatNumber.format(precioMinimo).replaceAll(',00', '');
+    //   }
+    //   return "";
+    // }
   }
 }
