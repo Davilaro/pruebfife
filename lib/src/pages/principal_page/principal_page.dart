@@ -320,6 +320,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       if (snapshot.data.length == 0) {
                         return Container();
                       } else {
+                        controllerEncuesta.isVisibleEncuesta.value = true;
                         return Obx(() => Visibility(
                               visible:
                                   controllerEncuesta.isVisibleEncuesta.value,
