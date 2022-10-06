@@ -269,7 +269,7 @@ class _ProductsCardState extends State<ProductsCard> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
-                                  margin: EdgeInsets.only(left: 10),
+                                  margin: EdgeInsets.only(left: 10, top: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8.0),
                                     color: Colors.red[100],
