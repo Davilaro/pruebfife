@@ -106,7 +106,16 @@ class _BienvenidoState extends State<Bienvenido> {
     return Stack(
       children: [
         Positioned(
-            top: 80,
+          top: 50,
+          left: 7,
+          child: IconButton(
+              iconSize: 35,
+              color: Color(0XFF30C3A3),
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios_new_outlined)),
+        ),
+        Positioned(
+            top: 115,
             left: 25,
             child: Container(
               padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
@@ -232,7 +241,7 @@ class _BienvenidoState extends State<Bienvenido> {
               ),
             )),
         Positioned(
-          top: 50,
+          top: 87,
           right: 10,
           child: Container(
             height: 70,
