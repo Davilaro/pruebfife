@@ -68,7 +68,16 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
     return Stack(
       children: [
         Positioned(
-            top: 80,
+          top: 50,
+          left: 7,
+          child: IconButton(
+              iconSize: 35,
+              color: Color(0XFF30C3A3),
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios_new_outlined)),
+        ),
+        Positioned(
+            top: 105,
             left: 25,
             child: Container(
               padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
