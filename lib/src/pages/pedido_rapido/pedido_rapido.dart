@@ -22,7 +22,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/column_table.dart';
-import '../../widget/expansion_card_last.dart';
+import 'expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
 final prefs = new Preferencias();
@@ -180,80 +180,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         ));
   }
 
-  Widget _sugerencia(size) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 20),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Text("Te sugerimos los siguientes productos ",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Container(
-            width: size.width * 0.9,
-            child: Text(
-              "para que puedas hacer una compra rápida, Puedes modificar la cantidad, eliminar o agregar unidades",
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _tarjetaCantidades(size, cartProvider, providerDatos) {
-    return Container(
-      padding: EdgeInsets.only(top: 16, bottom: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      width: size.width * 0.9,
-      child: Column(
-        children: [
-          Table(
-            columnWidths: {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(5),
-              2: FlexColumnWidth(3),
-            },
-            children: [
-              TableRow(children: [
-                Text(""),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Descripción",
-                    style: TextStyle(color: HexColor("#9F9F9F")),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Cant. Ped",
-                    style: TextStyle(color: HexColor("#9F9F9F")),
-                  ),
-                ),
-              ]),
-            ],
-          ),
-          Column(
-            children: getProductosCarrito(cartProvider, providerDatos),
-          ),
-          _botoCarrito()
-        ],
-      ),
-    );
-  }
-
   List<Widget> getProductosCarrito(cartProvider, providerDatos) {
     List<Widget> listaWidgets = [];
     if (providerDatos.getListaSugueridoHelper.length > 0) {
@@ -273,145 +199,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     }
 
     return listaWidgets;
-  }
-
-  Widget _tarjetaCantidadesSugeridas(size, cartProvider, providerDatos) {
-    final providerDatos = Provider.of<DatosListas>(context);
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        width: size.width * 0.9,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 20),
-              child: Table(columnWidths: {
-                0: FlexColumnWidth(6),
-                1: FlexColumnWidth(3)
-              }, children: [
-                TableRow(children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Descripción",
-                      style: TextStyle(color: HexColor("#9F9F9F")),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Cant. Sug",
-                      style: TextStyle(color: HexColor("#9F9F9F")),
-                    ),
-                  ),
-                ]),
-              ]),
-            ),
-            _cargarSugeridos(providerDatos.getListaSugueridoHelper, size,
-                cartProvider, providerDatos),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _separador(size) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      width: size.width * 0.8,
-      padding: EdgeInsets.only(left: 16, right: 16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            //                   <--- left side
-            color: HexColor("#EAE8F5"),
-            width: 0.5,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _botonGigante(size) {
-    return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
-      width: size.width * 0.90,
-      child: Row(
-        children: [
-          Expanded(
-              child: Container(
-            child: _separadorColor(size),
-          )),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            'Orden sugerida',
-            style: TextStyle(
-                color: ConstantesColores.azul_precio,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-              child: Container(
-            child: _separadorColor(size),
-          )),
-        ],
-      ),
-    );
-  }
-
-  Widget _separadorColor(size) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      width: size.width * 0.8,
-      padding: EdgeInsets.only(left: 16, right: 16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            //                   <--- left side
-            color: ConstantesColores.azul_precio,
-            width: 0.9,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _botoCarrito() {
-    return Container(
-      padding: EdgeInsets.only(top: 16),
-      child: ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(HexColor("#30C3A3")),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ))),
-        child: Text(
-          'Ir a mi carrito',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-        ),
-        onPressed: () {
-          pasarCarrito();
-        },
-      ),
-    );
   }
 
   pasarCarrito() {
@@ -457,34 +244,67 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             var datos = snapshot.data;
             return Center(
                 child: Container(
-                    width: size.width * 0.9,
+                    width: size.width,
                     padding: EdgeInsets.only(bottom: 20),
                     child: Column(
                       children: [
                         _tabs(size),
                         _buscador(size),
                         _selecciona(size),
-                        for (int i = 0; i < datos!.length; i++)
-                          Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                        Container(
+                          height: size.height * 0.8,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: ListView.builder(
+                            itemCount: datos?.length,
+                            itemBuilder: (BuildContext context, int position) {
+                              return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              width: size.width * 0.9,
-                              margin: EdgeInsets.only(bottom: 14),
-                              child: ExpansionCardLast(
-                                  historico: datos[i],
-                                  cartProvider: cartProvider,
-                                  providerDatos: providerDatos)),
+                                  width: size.width * 0.9,
+                                  margin: EdgeInsets.only(
+                                      bottom: 14, left: 10, right: 10, top: 5),
+                                  child: ExpansionCardLast(
+                                      historico: datos![position],
+                                      cartProvider: cartProvider,
+                                      providerDatos: providerDatos));
+                            },
+                          ),
+                        ),
+                        // for (int i = 0; i < datos!.length; i++)
+                        //   Container(
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         color: Colors.white,
+                        //         boxShadow: [
+                        //           BoxShadow(
+                        //             color: Colors.grey.withOpacity(0.5),
+                        //             spreadRadius: 5,
+                        //             blurRadius: 7,
+                        //             offset: Offset(
+                        //                 0, 3), // changes position of shadow
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       width: size.width * 0.9,
+                        //       margin: EdgeInsets.only(bottom: 14),
+                        //       child: ExpansionCardLast(
+                        //           historico: datos[i],
+                        //           cartProvider: cartProvider,
+                        //           providerDatos: providerDatos)),
                       ],
                     )));
           } else {
@@ -559,20 +379,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           )
         ],
       ),
-    );
-  }
-
-  Widget _cargarSugeridos(
-      List<dynamic> datos, size, cartProvider, providerDatos) {
-    return Column(
-      children: [
-        for (int i = 0; i < datos.length; i++)
-          ColumnTable(
-              sugerido: datos[i],
-              cartProvider: cartProvider!,
-              providerDatos: providerDatos),
-        _separador(size),
-      ],
     );
   }
 

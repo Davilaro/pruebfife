@@ -7,11 +7,12 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/widget/animated_container_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import 'animated_container_card.dart';
+import '../../widget/animated_container_card.dart';
 
 final prefs = new Preferencias();
 const double _kPanelHeaderCollapsedHeight = 80.0;
@@ -206,7 +207,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     if (estado) {
       List<Historico> datosDetalle =
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
-      await cargarCadaProducto(datosDetalle);
+      cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
       // pasarCarrito(providerDatos, ordenCompra, estado);
     } else {
@@ -287,7 +288,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   cargarCadaProducto(List<Historico> datosDetalle) {
     datosDetalle.forEach((element) {
-      mas(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
+      mas(element.codigoRef.toString(), element.cantidad!,
+          "${element.numeroDoc}");
     });
   }
 
