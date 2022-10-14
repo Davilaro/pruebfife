@@ -25,7 +25,7 @@ void verPoliticasCondiciones(BuildContext context, politicasDatosPdf) {
                 height: Get.height * 0.8,
                 width: Get.height * 0.8,
                 child: PDFView(
-                  pdfData: politicasDatosPdf,
+                  pdfData: politicasDatosPdf ?? null,
                   key: _pdfViewerKey,
                 ),
               ),

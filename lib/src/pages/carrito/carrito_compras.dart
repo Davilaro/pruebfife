@@ -45,22 +45,21 @@ class CarritoCompras extends StatefulWidget {
 
 class _CarritoComprasState extends State<CarritoCompras> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-
+  late final cartProvider = Provider.of<CarroModelo>(context);
   @override
   void initState() {
     super.initState();
     cargarDeNuevo = false;
     PedidoEmart.iniciarProductosPorFabricante();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
-    final cartProvider = Provider.of<CarroModelo>(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      MetodosLLenarValores().calcularValorTotal(cartProvider);
-    });
 
     final size = MediaQuery.of(context).size;
     Locale locale = Localizations.localeOf(context);
@@ -418,32 +417,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 maxLength: 3,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(color: Colors.black),
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value != "")
-                                      PedidoEmart.registrarValoresPedido(
-                                          product.productos, '1', false);
-                                    else {
-                                      PedidoEmart.registrarValoresPedido(
-                                          product.productos, "1", false);
-
-                                      PedidoEmart.listaValoresPedido![
-                                          product.codigo] = "";
-
-                                      PedidoEmart
-                                          .listaControllersPedido![
-                                              product.codigo]!
-                                          .text = "0";
-
-                                      cargarDeNuevo = true;
-                                      PedidoEmart
-                                          .iniciarProductosPorFabricante();
-
-                                      MetodosLLenarValores()
-                                          .calcularValorTotal(cartProvider);
-                                    }
-                                  });
-                                },
+                                onChanged: (value) => editarCantidad(
+                                    product, cartProvider, value),
                                 decoration: InputDecoration(
                                   fillColor: Colors.black,
                                   hintText: '0',
@@ -629,6 +604,22 @@ class _CarritoComprasState extends State<CarritoCompras> {
             ],
           );
         });
+  }
+
+  editarCantidad(dynamic producto, CarroModelo cartProvider, String cantidad) {
+    if (cantidad != "" && int.parse(cantidad) > 0) {
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
+      PedidoEmart.registrarValoresPedido(producto.productos, cantidad, true);
+    } else {
+      PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
+      PedidoEmart.listaValoresPedido![producto.codigo] = "";
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+      cargarDeNuevo = true;
+      PedidoEmart.iniciarProductosPorFabricante();
+    }
+    MetodosLLenarValores().calcularValorTotal(cartProvider);
+    print('Estamos bien');
+    setState(() {});
   }
 
   mas(Productos producto, CarroModelo cartProvider) {
@@ -840,7 +831,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
         ),
         decoration: BoxDecoration(
           color: HexColor("#30C3A3"),
-          //border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(20),
         ),
         height: 45,
