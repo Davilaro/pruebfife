@@ -13,7 +13,8 @@ class UxcamTagueo {
         (datosCliente[0].nit + datosCliente[0].nombre).replaceAll(' ', '');
     if (Constantes().titulo != 'QA') {
       if (datosCliente[0].nit == '4415415' ||
-          datosCliente[0].nit == '4415416') {
+          datosCliente[0].nit == '4415416' ||
+          datosCliente[0].nit == '123123123') {
         FlutterUxcam.optOutOverall();
       }
     }

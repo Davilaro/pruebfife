@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:emart/src/modelos/datos_cliente.dart';
 import 'package:emart/src/pages/mi_negocio/widgets/editarNumero.dart';
 import 'package:emart/src/pages/mi_negocio/widgets/mis_proveedores.dart';
@@ -39,8 +41,8 @@ class MiNegocio extends StatefulWidget {
 }
 
 class _MiNegocioState extends State<MiNegocio> {
-  var politicasDatosPdf;
-  var terminosDatosPdf;
+  Uint8List? politicasDatosPdf;
+  Uint8List? terminosDatosPdf;
   String version = '';
   RxString validarInputNumero = ''.obs;
   TextEditingController controllerInput = TextEditingController();
@@ -564,6 +566,7 @@ class _MiNegocioState extends State<MiNegocio> {
       if (prefs.usurioLogin == 1) {
         politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
         terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+        setState(() {});
       }
     } catch (e) {
       print('Error al cagar archivos $e');
