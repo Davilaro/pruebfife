@@ -46,10 +46,14 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        child: _body(context),
+      child: Container(
+        width: size.width,
+        child: SingleChildScrollView(
+          child: _body(context),
+        ),
       ),
     );
   }
@@ -79,29 +83,6 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   ),
                   padding: EdgeInsets.all(16),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Row(
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.clean_hands,
-                          color: HexColor("#30C3A3"),
-                        ),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: Text(
-                          "Entregado",
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
           ],
