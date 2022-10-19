@@ -308,7 +308,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
         anoInicio.isNotEmpty &&
         anoFin.isNotEmpty) {
       var fechaInicial =
-          '${anoInicio.value}-${mesInicio.value.toString().length > 1 ? mesInicio.value : '0${mesInicio.value}'}-${mesInicio.value.toString().length > 1 ? diaInicio.value : '0${diaInicio.value}'}';
+          '${anoInicio.value}-${mesInicio.value.toString().length > 1 ? mesInicio.value : '0${mesInicio.value}'}-${diaInicio.value.toString().length > 1 ? diaInicio.value : '0${diaInicio.value}'}';
       var fechaFin =
           '${anoFin.value}-${mesFin.value.toString().length > 1 ? mesFin.value : '0${mesFin.value}'}-${diaFin.value.toString().length > 1 ? diaFin.value : '0${diaFin.value}'}';
       var num1 = fechaInicial.replaceAll('-', '');

@@ -4,7 +4,7 @@ const int PRUEBAS = 1;
 const int PRODUCCION = 2;
 
 //VARIABLE QUE IDENTIFICA EL TIPO DE AMBIENTE EN EL QUE SE VA A LANZAR
-const int APP = PRUEBAS;
+const int APP = PRODUCCION;
 
 String dominioPrincipal = APP == PRUEBAS
     ? 'http://186.147.143.44/'
