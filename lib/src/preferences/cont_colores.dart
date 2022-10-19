@@ -7,5 +7,6 @@ class ConstantesColores {
   static HexColor agua_marina = HexColor("#5BB1AE");
   static HexColor gris_oscuro = HexColor("#4F4F4F");
   static HexColor gris_textos = HexColor("#7B7B7B");
+  static HexColor gris_sku = HexColor("#a2a2a2");
   static HexColor rojo_letra = HexColor("#FB0100");
 }

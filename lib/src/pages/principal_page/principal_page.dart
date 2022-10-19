@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -162,8 +163,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Container(
-                                        width: Get.width * 0.73,
-                                        child: Text(
+                                        width: Get.width * 0.7,
+                                        child: AutoSizeText(
                                           'Imperdibles para $tituloImperdible',
                                           maxLines: 2,
                                           style: TextStyle(
@@ -195,7 +196,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     )),
                 //PROMOS
                 Container(
-                    height: Get.height * 0.44,
+                    height: Get.height * 0.4,
                     width: double.infinity,
                     margin: EdgeInsets.only(top: 10),
                     padding: EdgeInsets.symmetric(horizontal: 4),
