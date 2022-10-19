@@ -22,21 +22,24 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
 
   Widget _validarNumeroPedido(String? pedido) {
     if (pedido != 'Pendiente') {
-      return Container(
-        child: Text("N° Pedido ${widget.ordenCompra}",
-            style: TextStyle(
-                fontSize: 13,
-                color: Colors.black.withOpacity(.6),
-                fontWeight: FontWeight.bold)),
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text("N° Pedido ${widget.ordenCompra}",
+              style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xff43398E),
+                  fontWeight: FontWeight.bold)),
+        ),
       );
     } else {
-      return Container(
+      return Expanded(
         // duration: Duration(milliseconds: 500),
         child: Text(
           "Número de pedido por validar",
           style: TextStyle(
               fontSize: 13,
-              color: HexColor("#FFD94D"),
+              color: Color(0xff43398E),
               fontWeight: FontWeight.bold),
         ),
       );
@@ -48,14 +51,12 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Row(
-          children: [
-            Container(
-              // color: Colors.white,
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding: EdgeInsets.only(left: 16, top: 10),
-                child: Column(
+        Container(
+          width: size.width * 0.99,
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
                   children: [
                     Text(" ${widget.grupo}",
                         style: TextStyle(
@@ -66,20 +67,20 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                   ],
                 ),
               ),
-            ),
-            Container(
-                padding: EdgeInsets.only(left: 50, top: 4),
-                child: ExpandIcon(
-                  isExpanded: _isExpanded,
-                  size: 30,
-                  color: HexColor("#30C3A3"),
-                  onPressed: (bool isExpanded) {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                ))
-          ],
+              Container(
+                  padding: EdgeInsets.only(top: 4),
+                  child: ExpandIcon(
+                    isExpanded: _isExpanded,
+                    size: 30,
+                    color: HexColor("#30C3A3"),
+                    onPressed: (bool isExpanded) {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                  ))
+            ],
+          ),
         ),
         AnimatedOpacity(
             duration: Duration(milliseconds: 700),
