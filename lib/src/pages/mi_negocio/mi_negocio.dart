@@ -398,7 +398,7 @@ class _MiNegocioState extends State<MiNegocio> {
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
-                              width: Get.width * 1,
+                              // width: Get.width * 1,
                               child: GestureDetector(
                                 onTap: () => verTerminosCondiciones(
                                     context, terminosDatosPdf),
@@ -410,6 +410,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(right: 4),
@@ -420,6 +421,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                             ),
                                           ),
                                           Container(
+                                            width: Get.width * 0.52,
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
                                               'Términos y condiciones',

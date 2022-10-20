@@ -57,9 +57,10 @@ class CardCustom extends StatelessWidget {
                   // Cuerpo de la carta
                   Container(
                     width: double.infinity,
-                    height: producto.descuento != 0
-                        ? MediaQuery.of(context).size.height * 0.13
-                        : MediaQuery.of(context).size.height * 0.15,
+                    height: MediaQuery.of(context).size.height * 0.13,
+                    // height: producto.descuento != 0
+                    //     ? MediaQuery.of(context).size.height * 0.13
+                    //     : MediaQuery.of(context).size.height * 0.15,
                     padding: EdgeInsets.only(top: 5.0, left: 10, right: 10),
                     alignment: Alignment.center,
                     child: ClipRRect(
@@ -75,20 +76,20 @@ class CardCustom extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Visibility(
-                      visible: (((producto.activopromocion == 1 &&
-                                      ((DateTime.parse(producto
-                                                  .fechafinpromocion_1!))
-                                              .compareTo(dateNow) >=
-                                          0)) ||
-                                  isProductoPromo ||
-                                  isProductoEnOferta) ||
-                              (producto.activoprodnuevo == 1 &&
-                                  ((DateTime.parse(producto.fechafinnuevo_1!))
-                                          .compareTo(dateNow) >=
-                                      0))) ==
-                          false,
-                      child: Spacer()),
+                  // Visibility(
+                  //     visible: (((producto.activopromocion == 1 &&
+                  //                     ((DateTime.parse(producto
+                  //                                 .fechafinpromocion_1!))
+                  //                             .compareTo(dateNow) >=
+                  //                         0)) ||
+                  //                 isProductoPromo ||
+                  //                 isProductoEnOferta) ||
+                  //             (producto.activoprodnuevo == 1 &&
+                  //                 ((DateTime.parse(producto.fechafinnuevo_1!))
+                  //                         .compareTo(dateNow) >=
+                  //                     0))) ==
+                  //         false,
+                  //     child: Spacer()),
                   //nombre y sku
                   Container(
                     alignment: Alignment.centerLeft,
@@ -99,15 +100,16 @@ class CardCustom extends StatelessWidget {
                       children: [
                         Text(
                           '${producto.nombre}',
-                          maxLines: (producto.activopromocion == 1 &&
-                                      ((DateTime.parse(producto
-                                                  .fechafinpromocion_1!))
-                                              .compareTo(dateNow) >=
-                                          0)) ||
-                                  isProductoPromo ||
-                                  isProductoEnOferta
-                              ? 3
-                              : 2,
+                          maxLines: 2,
+                          // maxLines: (producto.activopromocion == 1 &&
+                          //             ((DateTime.parse(producto
+                          //                         .fechafinpromocion_1!))
+                          //                     .compareTo(dateNow) >=
+                          //                 0)) ||
+                          //         isProductoPromo ||
+                          //         isProductoEnOferta
+                          //     ? 3
+                          //     : 2,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: ConstantesColores.verde),
@@ -143,7 +145,7 @@ class CardCustom extends StatelessWidget {
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: Colors.red),
                                 ),
                               )),
@@ -169,7 +171,7 @@ class CardCustom extends StatelessWidget {
                                     : TextStyle(
                                         color: ConstantesColores.azul_precio,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18)),
+                                        fontSize: isAgotado ? 16 : 18)),
                               ),
                             ),
                           ),
