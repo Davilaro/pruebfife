@@ -82,10 +82,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                     "Orden Pideky ${widget.historico.ordenCompra}",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
-                  padding: EdgeInsets.only(
-                    top: 16,
-                    bottom: 16,
-                  ),
+                  padding: EdgeInsets.only(top: 16, bottom: 16, left: 4),
                 ),
               ],
             ),
