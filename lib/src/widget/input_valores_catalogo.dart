@@ -11,6 +11,7 @@ import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/card_custom.dart';
+import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -48,40 +49,62 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
 
-    return FutureBuilder(
-      future: DBProvider.db
-          .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.data == widget.element.codigo) {
-          isProductoEnOferta = true;
-        } else {
-          isProductoEnOferta = false;
-        }
-        bool isAgotado = constrollerProductos.validarAgotado(widget.element);
-        return CardCustom(
-            producto: widget.element,
-            isProductoPromo: widget.isCategoriaPromos,
-            isProductoEnOferta: isProductoEnOferta,
-            isAgotado: isAgotado,
-            validatePromo: (widget.element.fechafinpromocion_1!
-                        .contains(RegExp(r'[0-9]')) ||
-                    widget.isCategoriaPromos) ||
-                isProductoEnOferta,
-            validateProductNuevo:
-                widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')),
-            onTapCard: () {
-              //FIREBASE: Llamamos el evento select_item
-              TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
-              //UXCam: Llamamos el evento seeDetailProduct
-              UxcamTagueo().seeDetailProduct(widget.element, widget.index, '');
-              detalleProducto(widget.element, cartProvider);
-            },
-            onTapBtn: () => {
-                  //FIREBASE: Llamamos el evento select_item
-                  TagueoFirebase().sendAnalityticSelectItem(widget.element, 1),
-                  detalleProducto(widget.element, cartProvider)
-                });
-      },
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: FutureBuilder(
+        future: DBProvider.db
+            .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.data == widget.element.codigo) {
+            isProductoEnOferta = true;
+          } else {
+            isProductoEnOferta = false;
+          }
+          bool isAgotado = constrollerProductos.validarAgotado(widget.element);
+          return CardProductCustom(
+              producto: widget.element,
+              cartProvider: cartProvider,
+              isProductoEnOferta: isProductoEnOferta,
+              onTapCard: () {
+                //FIREBASE: Llamamos el evento select_item
+                TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
+                //UXCam: Llamamos el evento seeDetailProduct
+                UxcamTagueo()
+                    .seeDetailProduct(widget.element, widget.index, '');
+                detalleProducto(widget.element, cartProvider);
+              },
+              isAgotadoLabel: isAgotado,
+              isVisibleLabelPromo: (widget.element.fechafinpromocion_1!
+                          .contains(RegExp(r'[0-9]')) ||
+                      widget.isCategoriaPromos) ||
+                  isProductoEnOferta,
+              isVisibleLabelNuevo:
+                  widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')));
+          // return CardCustom(
+          //     producto: widget.element,
+          //     isProductoPromo: widget.isCategoriaPromos,
+          //     isProductoEnOferta: isProductoEnOferta,
+          //     isAgotado: isAgotado,
+          //     validatePromo: (widget.element.fechafinpromocion_1!
+          //                 .contains(RegExp(r'[0-9]')) ||
+          //             widget.isCategoriaPromos) ||
+          //         isProductoEnOferta,
+          //     validateProductNuevo:
+          //         widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')),
+          //     onTapCard: () {
+          //       //FIREBASE: Llamamos el evento select_item
+          //       TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
+          //       //UXCam: Llamamos el evento seeDetailProduct
+          //       UxcamTagueo().seeDetailProduct(widget.element, widget.index, '');
+          //       detalleProducto(widget.element, cartProvider);
+          //     },
+          //     onTapBtn: () => {
+          //           //FIREBASE: Llamamos el evento select_item
+          //           TagueoFirebase().sendAnalityticSelectItem(widget.element, 1),
+          //           detalleProducto(widget.element, cartProvider)
+          //         });
+        },
+      ),
     );
   }
 

@@ -108,17 +108,16 @@ class _CardProductCustomState extends State<CardProductCustom> {
                             ),
                             //Precio producto
                             Container(
-                              height: Get.height * 0.058,
+                              height: Get.height * 0.063,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Visibility(
                                       visible: widget.producto.descuento != 0,
                                       child: Container(
-                                        height: Get.height * 0.028,
+                                        height: Get.height * 0.035,
                                         padding:
                                             EdgeInsets.fromLTRB(0, 0, 10, 0),
                                         alignment: Alignment.topLeft,
