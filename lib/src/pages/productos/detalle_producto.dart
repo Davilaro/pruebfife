@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -144,7 +145,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
           ),
           Container(
             width: double.infinity,
-            height: widget.tamano * 0.29,
+            height: widget.tamano * 0.30,
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Container(
@@ -174,6 +175,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                             ),
                           ),
                           Container(
+                            height: Get.height * 0.15,
                             child: Column(
                               children: [
                                 Visibility(
@@ -182,15 +184,16 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                       height: Get.width * 0.07,
                                       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                       alignment: Alignment.topLeft,
-                                      child: Text(
+                                      child: AutoSizeText(
                                         '${format.currencySymbol}' +
                                             formatNumber
                                                 .format(widget.productos.precio)
                                                 .replaceAll(',00', ''),
                                         textAlign: TextAlign.left,
+                                        minFontSize: 17,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                            // fontSize: 18,
                                             color: Colors.red),
                                       ),
                                     )),
@@ -225,12 +228,15 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                             fontSize: 18),
                                   ),
                                 ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text('Precio por unidad de venta',
-                                      style: TextStyle(
-                                        color: ConstantesColores.verde,
-                                      )),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.topLeft,
+                                    child: AutoSizeText(
+                                        'Precio por unidad de venta',
+                                        style: TextStyle(
+                                          color: ConstantesColores.verde,
+                                        )),
+                                  ),
                                 ),
                                 Visibility(
                                     visible: isAgotado,

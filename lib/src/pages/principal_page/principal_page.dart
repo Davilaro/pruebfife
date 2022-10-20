@@ -285,13 +285,17 @@ class _PrincipalPageState extends State<PrincipalPage> {
                           padding: const EdgeInsets.only(left: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                'Categorías destacadas para ti ',
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: HexColor("#41398D"),
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                width: Get.width * 0.7,
+                                child: Text(
+                                  'Categorías destacadas para ti ',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: HexColor("#41398D"),
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                               TextButton(
                                   onPressed: () {

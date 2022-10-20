@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -55,7 +56,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    //iImagen producto
+                    //Imagen producto
                     Container(
                       alignment: Alignment.center,
                       child: ClipRRect(
@@ -82,112 +83,142 @@ class _CardProductCustomState extends State<CardProductCustom> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 8),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${widget.producto.nombre}',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: ConstantesColores.verde),
-                                    ),
-                                    Text(
-                                      'SKU: ${widget.producto.codigo}',
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          color: ConstantesColores.gris_sku),
-                                    ),
-                                  ],
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxHeight: 70, minHeight: 20),
+                                child: Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          '${widget.producto.nombre}',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                          minFontSize: 13,
+                                          maxFontSize: 16,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: ConstantesColores.verde),
+                                        ),
+                                      ),
+                                      AutoSizeText(
+                                        'SKU: ${widget.producto.codigo}',
+                                        maxLines: 1,
+                                        minFontSize: 10,
+                                        maxFontSize: 11,
+                                        style: TextStyle(
+                                            // fontSize: 11,
+                                            fontWeight: FontWeight.bold,
+                                            color: ConstantesColores.gris_sku),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             //Precio producto
-                            Container(
-                              height: Get.height * 0.063,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Visibility(
-                                      visible: widget.producto.descuento != 0,
+                            ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxHeight: 50, minHeight: 40),
+                              child: Container(
+                                // height: Get.height * 0.075,
+
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Visibility(
+                                        visible: widget.producto.descuento != 0,
+                                        child: Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            // height: Get.height * 0.035,
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 0, 10, 0),
+                                            alignment: Alignment.topLeft,
+                                            child: AutoSizeText(
+                                              '${format.currencySymbol}' +
+                                                  formatNumber
+                                                      .format(widget
+                                                          .producto.precio)
+                                                      .replaceAll(',00', ''),
+                                              minFontSize: 15,
+                                              maxFontSize: 18,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                        )),
+                                    Expanded(
+                                      flex: 1,
                                       child: Container(
-                                        height: Get.height * 0.035,
+                                        // color: Colors.green,
                                         padding:
                                             EdgeInsets.fromLTRB(0, 0, 10, 0),
                                         alignment: Alignment.topLeft,
-                                        child: Text(
+                                        child: AutoSizeText(
                                           '${format.currencySymbol}' +
                                               formatNumber
-                                                  .format(
-                                                      widget.producto.precio)
-                                                  .replaceAll(',00', ''),
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.red),
-                                        ),
-                                      )),
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      '${format.currencySymbol}' +
-                                          formatNumber
-                                              .format(
-                                                  widget.producto.descuento != 0
+                                                  .format(widget.producto
+                                                              .descuento !=
+                                                          0
                                                       ? widget.producto
                                                           .precioinicial
                                                       : widget.producto.precio)
-                                              .replaceAll(',00', ''),
-                                      textAlign: TextAlign.left,
-                                      style: widget.producto.descuento != 0
-                                          ? TextStyle(
-                                              color:
-                                                  ConstantesColores.azul_precio,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 11,
-                                              decoration:
-                                                  TextDecoration.lineThrough)
-                                          : TextStyle(
-                                              color:
-                                                  ConstantesColores.azul_precio,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: widget.isAgotadoLabel
-                                                  ? 16
-                                                  : 18),
-                                    ),
-                                  ),
-                                  //Label Agotado
-                                  Visibility(
-                                      visible: widget.isAgotadoLabel,
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: Colors.red[100],
-                                          ),
-                                          height: Get.width * 0.045,
-                                          padding:
-                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                          child: Text(
-                                            'Agotado',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: Colors.red),
-                                          ),
+                                                  .replaceAll(',00', ''),
+                                          minFontSize: 10,
+                                          textAlign: TextAlign.left,
+                                          style: widget.producto.descuento != 0
+                                              ? TextStyle(
+                                                  color: ConstantesColores
+                                                      .azul_precio,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 11,
+                                                  decoration: TextDecoration
+                                                      .lineThrough)
+                                              : TextStyle(
+                                                  color: ConstantesColores
+                                                      .azul_precio,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      widget.isAgotadoLabel
+                                                          ? 16
+                                                          : 18),
                                         ),
-                                      )),
-                                ],
+                                      ),
+                                    ),
+                                    //Label Agotado
+                                    Visibility(
+                                        visible: widget.isAgotadoLabel,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: Colors.red[100],
+                                            ),
+                                            // height: Get.width * 0.045,
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 0, 10, 0),
+                                            child: AutoSizeText(
+                                              'Agotado',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
                               ),
                             ),
                           ]),
