@@ -256,15 +256,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 4,
-                                        blurRadius: 5,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
                                   ),
                                   width: size.width * 0.9,
                                   margin: EdgeInsets.only(
