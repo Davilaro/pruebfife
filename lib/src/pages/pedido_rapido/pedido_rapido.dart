@@ -316,7 +316,9 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             child: Text(
               "Seleccionar una de tus últimas ordenes para hacer un pedido rapido. ",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(
+                color: Colors.black87,
+              ),
             ),
           )
         ],

@@ -22,26 +22,21 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
 
   Widget _validarNumeroPedido(String? pedido) {
     if (pedido != 'Pendiente') {
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text("N° Pedido ${widget.ordenCompra}",
-              style: TextStyle(
-                  fontSize: 13,
-                  color: Color(0xff43398E),
-                  fontWeight: FontWeight.bold)),
-        ),
+      return Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Text("No Pedido ${widget.ordenCompra}",
+            style: TextStyle(
+                fontSize: 13,
+                color: Color(0xff4f4f4f),
+                fontWeight: FontWeight.bold)),
       );
     } else {
-      return Expanded(
-        // duration: Duration(milliseconds: 500),
-        child: Text(
-          "Número de pedido por validar",
-          style: TextStyle(
-              fontSize: 13,
-              color: Color(0xff43398E),
-              fontWeight: FontWeight.bold),
-        ),
+      return Text(
+        "Número de pedido por validar",
+        style: TextStyle(
+            fontSize: 13,
+            color: Color(0xff43398E),
+            fontWeight: FontWeight.bold),
       );
     }
   }
@@ -56,7 +51,8 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
           child: Row(
             children: [
               Expanded(
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(" ${widget.grupo}",
                         style: TextStyle(
@@ -106,7 +102,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                       children: [
                                         Flexible(
                                           child: Container(
-                                            padding: EdgeInsets.only(left: 16),
+                                            padding: EdgeInsets.only(left: 4),
                                             child: Text(
                                               "${detalles[i].nombreProducto}",
                                               style: TextStyle(

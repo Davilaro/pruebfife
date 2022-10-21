@@ -83,7 +83,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
-                        color: Colors.black.withOpacity(0.7)),
+                        color: Color(0xff4f4f4f)),
                   ),
                   padding: EdgeInsets.only(top: 16, bottom: 16, left: 4),
                 ),
