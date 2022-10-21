@@ -80,7 +80,10 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   ),
                   child: Text(
                     "Orden Pideky ${widget.historico.ordenCompra}",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black.withOpacity(0.7)),
                   ),
                   padding: EdgeInsets.only(top: 16, bottom: 16, left: 4),
                 ),
@@ -109,16 +112,19 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                                         color: HexColor("#43398E"),
                                         width: 1.0)))),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           estadoBoton.value ? 'Pedir' : 'Cancelar',
                           style: TextStyle(color: HexColor("#43398E")),
                         ),
                         !_cargando.value
-                            ? Icon(
-                                Icons.car_rental,
-                                color: HexColor("#30C3A3"),
-                              )
+                            ? Container(
+                                margin: EdgeInsets.only(left: 5),
+                                width: 20,
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                    'assets/icon/carrito_pedir.png'))
                             : Container(
                                 height: 10,
                                 width: 10,
