@@ -79,10 +79,11 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                     color: Colors.white,
                   ),
                   child: Text(
-                    "Orden Pideky ${widget.historico.ordenCompra}",
+                    "Orden Pideky ${widget.historico.numeroDoc}",
                     style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "RoundedMplus1c-ExtraBold.ttf",
                         fontWeight: FontWeight.bold,
-                        fontSize: 15,
                         color: Color(0xff4f4f4f)),
                   ),
                   padding: EdgeInsets.only(top: 16, bottom: 16, left: 4),
@@ -180,7 +181,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   AnimatedContainerCard(
                     grupo: grupos[i].fabricante!,
                     numeroDoc: numeroDocumento,
-                    ordenCompra: "",
+                    ordenCompra: grupos[i].ordenCompra.toString(),
                   ),
                 _separador(size),
               ],

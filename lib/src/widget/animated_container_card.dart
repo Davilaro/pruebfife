@@ -24,19 +24,22 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
     if (pedido != 'Pendiente') {
       return Padding(
         padding: const EdgeInsets.only(left: 4),
-        child: Text("No Pedido ${widget.ordenCompra}",
+        child: Text("N° ${widget.ordenCompra}",
             style: TextStyle(
                 fontSize: 13,
                 color: Color(0xff4f4f4f),
                 fontWeight: FontWeight.bold)),
       );
     } else {
-      return Text(
-        "Número de pedido por validar",
-        style: TextStyle(
-            fontSize: 13,
-            color: Color(0xff43398E),
-            fontWeight: FontWeight.bold),
+      return Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Text(
+          "Número de pedido por validar",
+          style: TextStyle(
+              fontSize: 13,
+              color: Color(0xff43398E),
+              fontWeight: FontWeight.bold),
+        ),
       );
     }
   }
@@ -57,6 +60,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                     Text(" ${widget.grupo}",
                         style: TextStyle(
                             fontSize: 13,
+                            fontFamily: "RoundedMplus1c-Bold.ttf",
                             color: HexColor("#43398E"),
                             fontWeight: FontWeight.bold)),
                     _validarNumeroPedido(widget.ordenCompra),
