@@ -13,6 +13,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
+import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
@@ -87,30 +88,34 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           elevation: 0,
           actions: <Widget>[
             BotonActualizar(),
+            AccionNotificacion(),
             AccionesBartCarrito(esCarrito: false),
           ],
         ),
-        body: RefreshIndicator(
-          color: ConstantesColores.azul_precio,
-          backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
-          onRefresh: () async {
-            await LogicaActualizar().actualizarDB();
+        body: Container(
+          color: ConstantesColores.color_fondo_gris,
+          child: RefreshIndicator(
+            color: ConstantesColores.azul_precio,
+            backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
+            onRefresh: () async {
+              await LogicaActualizar().actualizarDB();
 
-            Navigator.pushReplacementNamed(
-              context,
-              'tab_opciones',
-            ).timeout(Duration(seconds: 3));
-            return Future<void>.delayed(const Duration(seconds: 3));
-          },
-          child: SingleChildScrollView(
-              child: _ultimaOrden(size, cartProvider, providerDatos)),
+              Navigator.pushReplacementNamed(
+                context,
+                'tab_opciones',
+              ).timeout(Duration(seconds: 3));
+              return Future<void>.delayed(const Duration(seconds: 3));
+            },
+            child: SingleChildScrollView(
+                child: _ultimaOrden(size, cartProvider, providerDatos)),
+          ),
         ));
   }
 
   Widget _tabs(size) {
     return Container(
         width: size.width * 0.9,
-        margin: const EdgeInsets.only(top: 20, bottom: 20),
+        margin: const EdgeInsets.only(bottom: 20, top: 20),
         child: Table(
           columnWidths: {
             0: FlexColumnWidth(4),
@@ -119,28 +124,15 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           },
           children: [
             TableRow(children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: seleccion == 2
-                        ? MaterialStateProperty.all(HexColor("#FFE24B"))
-                        : MaterialStateProperty.all(HexColor("#FFE24B")),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ))),
+              Container(
                 child: Text(
-                  'Última orden',
+                  'Pedido Rápido',
                   style: TextStyle(
-                      color:
-                          seleccion == 2 ? HexColor("#43398E") : Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12),
+                      color: HexColor("#43398E"),
+                      fontSize: 20,
+                      fontFamily: "monserrat",
+                      fontWeight: FontWeight.bold),
                 ),
-                onPressed: () {
-                  setState(() {
-                    seleccion = 2;
-                  });
-                },
               ),
               Visibility(
                   visible: false,
@@ -256,7 +248,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: ListView.builder(
                             itemCount: datos?.length,
                             itemBuilder: (BuildContext context, int position) {
@@ -267,8 +259,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
+                                        spreadRadius: 4,
+                                        blurRadius: 5,
                                         offset: Offset(
                                             0, 3), // changes position of shadow
                                       ),
@@ -323,7 +315,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             width: size.width * 0.9,
             child: Text(
               "Seleccionar una de tus últimas ordenes para hacer un pedido rapido. ",
-              textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black87),
             ),
           )
         ],
@@ -335,15 +328,14 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     return Container(
       width: size.width * 0.9,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-              width: size.width * 0.7,
+              width: size.width * 0.75,
               decoration: BoxDecoration(
                 color: HexColor("#E4E3EC"),
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(45),
               ),
-              margin: const EdgeInsets.only(right: 20.0),
               child: TextField(
                 onChanged: (value) => {
                   setState(() => {
@@ -369,13 +361,12 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           GestureDetector(
             onTap: () => {pickDateRange(context)},
             child: Container(
-              color: Colors.white,
-              child: Icon(
-                Icons.calendar_today_outlined,
-                color: HexColor("#43398E"),
-                size: 32,
-              ),
-            ),
+                padding: EdgeInsets.only(right: 6),
+                color: Colors.transparent,
+                child: Image.asset(
+                  'assets/icon/calendario.png',
+                  width: 35,
+                )),
           )
         ],
       ),
