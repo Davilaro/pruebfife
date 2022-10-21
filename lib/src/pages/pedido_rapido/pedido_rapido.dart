@@ -256,15 +256,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 4,
-                                        blurRadius: 5,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
                                   ),
                                   width: size.width * 0.9,
                                   margin: EdgeInsets.only(
@@ -307,19 +298,16 @@ class _PedidoRapidoState extends State<PedidoRapido> {
 
   Widget _selecciona(Size size) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20, top: 14),
+      padding: EdgeInsets.only(bottom: 20, top: 14, right: 20, left: 20),
       alignment: Alignment.center,
-      child: Column(
-        children: [
-          Container(
-            width: size.width * 0.9,
-            child: Text(
-              "Seleccionar una de tus últimas ordenes para hacer un pedido rapido. ",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black87),
-            ),
-          )
-        ],
+      child: Text(
+        "Seleccionar una de tus últimas ordenes para hacer un pedido rapido. ",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 15,
+          fontFamily: "RoundedMplus1c-Medium.ttf",
+          color: Color(0xff707070),
+        ),
       ),
     );
   }
@@ -361,7 +349,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           GestureDetector(
             onTap: () => {pickDateRange(context)},
             child: Container(
-                padding: EdgeInsets.only(right: 6),
                 color: Colors.transparent,
                 child: Image.asset(
                   'assets/icon/calendario.png',
