@@ -1,4 +1,4 @@
-import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +13,14 @@ class Terminos extends StatefulWidget {
 }
 
 class _TerminosState extends State<Terminos> {
+  var urlTerminos = '';
+
+  @override
+  void initState() {
+    super.initState();
+    cargarArchivo();
+  }
+
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -49,7 +57,7 @@ class _TerminosState extends State<Terminos> {
                   height: Get.height * 0.8,
                   width: Get.height * 0.8,
                   child: SfPdfViewer.network(
-                    Constantes().urlBaseGenerico + 'TerminosYCondiciones.pdf',
+                    urlTerminos,
                     key: _pdfViewerKey,
                   ),
                 ),
@@ -86,6 +94,15 @@ class _TerminosState extends State<Terminos> {
             ),
           );
         });
+  }
+
+  cargarArchivo() async {
+    try {
+      urlTerminos = await DBProvider.db.consultarDocumentoLegal('Autorización');
+      setState(() {});
+    } catch (e) {
+      print('Error al cagar archivos $e');
+    }
   }
 }
 

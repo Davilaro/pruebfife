@@ -702,13 +702,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     final db = await baseAbierta;
 
     try {
-      // var query =
-      //     '''       SELECT f.empresa, f.ico, f.codIndirecto, cast((SELECT pedidominimo FROM CondicionesEntrega
-      // WHERE Fabricante = f.empresa ) as float) as pedidominimo,cast((SELECT topeminimo FROM CondicionesEntrega
-      // WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante
-      // FROM Fabricante f
-      // GROUP BY f.empresa
-      // ORDER BY f.orden ASC ''';
       var query = '''
       SELECT f.empresa, f.ico, f.codIndirecto, cast((SELECT pedidominimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as pedidominimo,cast((SELECT topeminimo FROM CondicionesEntrega
@@ -719,7 +712,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ORDER BY f.orden ASC
       ''';
       final sql = await db.rawQuery(query);
-      print('resultados ${sql.toList()}');
 
       return sql.isNotEmpty
           ? sql.map((e) => Fabricantes.fromJson(e)).toList()
@@ -1468,6 +1460,21 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ? sql.map((e) => Productos.fromJson(e)).toList()
             : [];
       }
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarDocumentoLegal(String buscar) async {
+    final db = await baseAbierta;
+
+    try {
+      var sql = await db.rawQuery('''
+      
+        SELECT URL FROM DocumentosLegales WHERE TipoDocumento LIKE '%$buscar%'
+       
+    ''');
+      return sql.isNotEmpty ? sql[0]['URL'] : '';
     } catch (e) {
       return [];
     }
