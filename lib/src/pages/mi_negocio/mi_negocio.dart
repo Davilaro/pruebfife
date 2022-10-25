@@ -349,8 +349,10 @@ class _MiNegocioState extends State<MiNegocio> {
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: GestureDetector(
-                                onTap: () => verPoliticasCondiciones(
-                                    context, politicasDatosPdf),
+                                onTap: () => politicasDatosPdf != null
+                                    ? verPoliticasCondiciones(
+                                        context, politicasDatosPdf)
+                                    : null,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -400,8 +402,10 @@ class _MiNegocioState extends State<MiNegocio> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               // width: Get.width * 1,
                               child: GestureDetector(
-                                onTap: () => verTerminosCondiciones(
-                                    context, terminosDatosPdf),
+                                onTap: () => terminosDatosPdf != null
+                                    ? verTerminosCondiciones(
+                                        context, terminosDatosPdf)
+                                    : null,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -566,8 +570,10 @@ class _MiNegocioState extends State<MiNegocio> {
   cargarArchivos() async {
     try {
       if (prefs.usurioLogin == 1) {
-        politicasDatosPdf = await Servicies().cargarArchivoPoliticas();
-        terminosDatosPdf = await Servicies().cargarArchivoTerminos();
+        politicasDatosPdf = await Servicies().cargarArchivo(
+            await DBProvider.db.consultarDocumentoLegal('Políticas'));
+        terminosDatosPdf = await Servicies().cargarArchivo(
+            await DBProvider.db.consultarDocumentoLegal('Términos'));
         setState(() {});
       }
     } catch (e) {
@@ -577,7 +583,6 @@ class _MiNegocioState extends State<MiNegocio> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     controllerInput.dispose();
     super.dispose();
   }

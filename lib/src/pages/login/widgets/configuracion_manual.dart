@@ -14,7 +14,6 @@ import 'package:emart/src/widget/politicas.dart';
 import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
@@ -23,8 +22,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 final TextEditingController _controllerCorreo = TextEditingController();
 final TextEditingController _controllerCodigo = TextEditingController();
 final TextEditingController _controllerNumero = TextEditingController();
-
-final TextEditingController _controllerUser = TextEditingController();
 
 late ProgressDialog pr;
 late ProgressDialog prValidar;
@@ -399,7 +396,6 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
             });
 
         _mostrarDilogActivarCuenta(context2);
-        //_mostrarDilogActivarCuenta(context2);
       } else {
         await prEnviarCorreo.hide();
       }

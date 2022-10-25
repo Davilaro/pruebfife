@@ -638,34 +638,17 @@ class Servicies {
     }
   }
 
-  Future<dynamic> cargarArchivoPoliticas() async {
+  Future<dynamic> cargarArchivo(urlGeneral) async {
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlBaseGenerico +
-          'PoliticaDeTratamientoyDatosPersonales.pdf');
+      url = Uri.parse(urlGeneral.toString());
       final response = await http.get(url);
       Uint8List file = response.bodyBytes;
 
       return file;
     } catch (e) {
-      print('problemaa al descargar politicas $e');
-    }
-  }
-
-  Future<dynamic> cargarArchivoTerminos() async {
-    try {
-      final url;
-
-      url =
-          Uri.parse(Constantes().urlBaseGenerico + 'TerminosYCondiciones.pdf');
-      final response = await http.get(url);
-
-      Uint8List file = response.bodyBytes;
-
-      return file;
-    } catch (e) {
-      print('problemaa al descargar terminos  $e');
+      print('problema al buscar archivo en db $e');
     }
   }
 }

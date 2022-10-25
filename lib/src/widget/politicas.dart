@@ -1,4 +1,4 @@
-import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +13,14 @@ class Politicas extends StatefulWidget {
 }
 
 class _PoliticasState extends State<Politicas> {
+  var urlPoliticas = '';
+
+  @override
+  void initState() {
+    super.initState();
+    cargarArchivo();
+  }
+
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -49,8 +57,7 @@ class _PoliticasState extends State<Politicas> {
                   height: Get.height * 0.8,
                   width: Get.height * 0.8,
                   child: SfPdfViewer.network(
-                    Constantes().urlBaseGenerico +
-                        'PoliticaDeTratamientoyDatosPersonales.pdf',
+                    urlPoliticas,
                     key: _pdfViewerKey,
                   ),
                 ),
@@ -87,6 +94,15 @@ class _PoliticasState extends State<Politicas> {
             ),
           );
         });
+  }
+
+  cargarArchivo() async {
+    try {
+      urlPoliticas = await DBProvider.db.consultarDocumentoLegal('Políticas');
+      setState(() {});
+    } catch (e) {
+      print('Error al cagar archivos $e');
+    }
   }
 
   void _aceptarPoliticas() {
