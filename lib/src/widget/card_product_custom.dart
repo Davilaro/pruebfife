@@ -92,26 +92,30 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
+                                        flex: 3,
                                         child: AutoSizeText(
                                           '${widget.producto.nombre}',
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
-                                          minFontSize: 13,
+                                          minFontSize: 12,
                                           maxFontSize: 16,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: ConstantesColores.verde),
                                         ),
                                       ),
-                                      AutoSizeText(
-                                        'SKU: ${widget.producto.codigo}',
-                                        maxLines: 1,
-                                        minFontSize: 10,
-                                        maxFontSize: 11,
-                                        style: TextStyle(
-                                            // fontSize: 11,
-                                            fontWeight: FontWeight.bold,
-                                            color: ConstantesColores.gris_sku),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          'SKU: ${widget.producto.codigo}',
+                                          maxLines: 1,
+                                          minFontSize: 10,
+                                          maxFontSize: 11,
+                                          style: TextStyle(
+                                              // fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  ConstantesColores.gris_sku),
+                                        ),
                                       ),
                                     ],
                                   ),

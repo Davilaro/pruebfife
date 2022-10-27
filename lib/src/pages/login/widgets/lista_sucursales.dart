@@ -160,7 +160,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: Get.height * 0.1,
+      height: Get.height * 0.15,
       width: double.infinity,
       child: Row(
         children: [
@@ -171,6 +171,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
+                    flex: 2,
                     child: Text('Nombre: ${element.nombre}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
