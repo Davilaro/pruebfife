@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -153,7 +154,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                   ),
                   // Cuerpo
                   Container(
-                    // padding: EdgeInsets.fromLTRB(30, 0, 20, 0),
                     alignment: Alignment.centerLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,16 +186,17 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                             padding:
                                                 EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             alignment: Alignment.topLeft,
-                                            child: Text(
+                                            child: AutoSizeText(
                                               '${format.currencySymbol}' +
                                                   formatNumber
                                                       .format(widget
                                                           .producto.precio)
                                                       .replaceAll(',00', ''),
                                               textAlign: TextAlign.left,
+                                              presetFontSizes: [17, 15],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
+                                                  fontSize: 17,
                                                   color: Colors.red),
                                             ),
                                           )),
@@ -206,7 +207,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                         padding:
                                             EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         alignment: Alignment.topLeft,
-                                        child: Text(
+                                        child: AutoSizeText(
                                           '${format.currencySymbol}' +
                                               formatNumber
                                                   .format(widget.producto
@@ -234,8 +235,10 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                       ),
                                       Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text(
+                                        child: AutoSizeText(
                                             'Precio por unidad de venta',
+                                            maxLines: 2,
+                                            presetFontSizes: [15, 14],
                                             style: TextStyle(
                                               color: ConstantesColores.verde,
                                             )),

@@ -97,8 +97,8 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                           '${widget.producto.nombre}',
                                           textAlign: TextAlign.left,
                                           maxLines: 2,
-                                          minFontSize: 12,
-                                          maxFontSize: 16,
+                                          overflow: TextOverflow.ellipsis,
+                                          presetFontSizes: [16, 15],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: ConstantesColores.verde),
@@ -111,7 +111,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                           minFontSize: 10,
                                           maxFontSize: 11,
                                           style: TextStyle(
-                                              // fontSize: 11,
                                               fontWeight: FontWeight.bold,
                                               color:
                                                   ConstantesColores.gris_sku),
@@ -127,8 +126,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
                               constraints:
                                   BoxConstraints(maxHeight: 50, minHeight: 40),
                               child: Container(
-                                // height: Get.height * 0.075,
-
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -140,7 +137,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                         child: Expanded(
                                           flex: 1,
                                           child: Container(
-                                            // height: Get.height * 0.035,
                                             padding: EdgeInsets.fromLTRB(
                                                 0, 0, 10, 0),
                                             alignment: Alignment.topLeft,
@@ -163,7 +159,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                     Expanded(
                                       flex: 1,
                                       child: Container(
-                                        // color: Colors.green,
                                         padding:
                                             EdgeInsets.fromLTRB(0, 0, 10, 0),
                                         alignment: Alignment.topLeft,
@@ -209,7 +204,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                   BorderRadius.circular(5.0),
                                               color: Colors.red[100],
                                             ),
-                                            // height: Get.width * 0.045,
                                             padding: EdgeInsets.fromLTRB(
                                                 10, 0, 10, 0),
                                             child: AutoSizeText(

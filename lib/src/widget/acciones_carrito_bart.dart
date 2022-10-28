@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -48,10 +49,11 @@ class AccionesBartCarrito extends StatelessWidget {
                             color: HexColor("#41398D"),
                           ),
                           color: Colors.white),
-                      child: Text(
+                      child: AutoSizeText(
                         int.parse(PedidoEmart.cantItems.value) >= 0
                             ? '${PedidoEmart.cantItems.value}'
                             : '0',
+                        presetFontSizes: [12, 10],
                         style: TextStyle(
                             color: HexColor("#41398D"), fontSize: 10.0),
                       )),

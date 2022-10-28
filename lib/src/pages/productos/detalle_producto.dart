@@ -190,7 +190,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                 .format(widget.productos.precio)
                                                 .replaceAll(',00', ''),
                                         textAlign: TextAlign.left,
-                                        minFontSize: 17,
+                                        // minFontSize: 17,
+                                        presetFontSizes: [17, 15],
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             // fontSize: 18,
@@ -233,6 +234,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                     alignment: Alignment.topLeft,
                                     child: AutoSizeText(
                                         'Precio por unidad de venta',
+                                        maxLines: 2,
+                                        presetFontSizes: [15, 13],
                                         style: TextStyle(
                                           color: ConstantesColores.verde,
                                         )),
@@ -301,12 +304,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                   reverse: true,
                                   child: TextFormField(
                                     maxLines: 1,
-                                    controller:
-                                        _controllerCantidadProducto, //PedidoEmart.listaControllersPedido![widget.productos.codigo],
+                                    controller: _controllerCantidadProducto,
                                     keyboardType: TextInputType.number,
                                     textAlignVertical: TextAlignVertical.center,
                                     textAlign: TextAlign.center,
-                                    maxLength: 3,
                                     inputFormatters: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
