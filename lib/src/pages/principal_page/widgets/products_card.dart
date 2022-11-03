@@ -1,5 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -7,8 +5,6 @@ import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
-import 'package:emart/src/preferences/const.dart';
-import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -17,7 +13,6 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -100,12 +95,14 @@ class _ProductsCardState extends State<ProductsCard> {
                 cartProvider: cartProvider,
                 isProductoEnOferta: isProductoEnOferta,
                 onTapCard: () {
-                  //FIREBASE: Llamamos el evento select_item
-                  TagueoFirebase()
-                      .sendAnalityticSelectItem(listaProductos[i], 1);
-                  //UXCam: Llamamos el evento seeDetailProduct
-                  UxcamTagueo()
-                      .seeDetailProduct(listaProductos[i], i, nameCategory);
+                  if (prefs.usurioLogin != -1) {
+                    //FIREBASE: Llamamos el evento select_item
+                    TagueoFirebase()
+                        .sendAnalityticSelectItem(listaProductos[i], 1);
+                    //UXCam: Llamamos el evento seeDetailProduct
+                    UxcamTagueo()
+                        .seeDetailProduct(listaProductos[i], i, nameCategory);
+                  }
                   detalleProducto(listaProductos[i], cartProvider);
                 },
                 isAgotadoLabel:
@@ -122,12 +119,6 @@ class _ProductsCardState extends State<ProductsCard> {
                     widget.tipoCategoria == 1 ||
                     isProductoEnOferta,
               );
-              // return Card(
-              //     shape: RoundedRectangleBorder(
-              //         side: new BorderSide(color: Colors.white),
-              //         borderRadius: BorderRadius.circular(8.0)),
-              //     child: _cargarDisenoInterno(listaProductos[i], context,
-              //         cartProvider, format, i, isProductoEnOferta));
             }),
       ));
 
@@ -143,259 +134,6 @@ class _ProductsCardState extends State<ProductsCard> {
 
     return opciones;
   }
-
-  /// Por el momento este codigo esta en validacion
-  // _cargarDisenoInterno(
-  //     Productos element,
-  //     BuildContext context,
-  //     CarroModelo cartProvider,
-  //     NumberFormat format,
-  //     int index,
-  //     bool isProductoEnOferta) {
-  //   isAgotado = constrollerProductos.validarAgotado(element);
-  //   var dateNow =
-  //       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-  //   return GestureDetector(
-  //       onTap: () {
-  //         //FIREBASE: Llamamos el evento select_item
-  //         TagueoFirebase().sendAnalityticSelectItem(element, 1);
-  //         //UXCam: Llamamos el evento seeDetailProduct
-  //         UxcamTagueo().seeDetailProduct(element, index, nameCategory);
-  //         detalleProducto(element, cartProvider);
-  //       },
-  //       child: Container(
-  //         // height: Get.height * 0.33,
-  //         child: Stack(
-  //           clipBehavior: Clip.none,
-  //           children: [
-  //             Column(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 //imagen producto
-  //                 Container(
-  //                   // height: element.descuento != 0 ? 100 : 120,
-  //                   // width: Get.width * 0.22,
-  //                   alignment: Alignment.center,
-  //                   child: ClipRRect(
-  //                     borderRadius: BorderRadius.circular(10.0),
-  //                     child: CachedNetworkImage(
-  //                       height: Get.height * 0.12,
-  //                       imageUrl: Constantes().urlImgProductos +
-  //                           '${element.codigo}.png',
-  //                       placeholder: (context, url) =>
-  //                           Image.asset('assets/jar-loading.gif'),
-  //                       errorWidget: (context, url, error) =>
-  //                           Image.asset('assets/logo_login.png'),
-  //                       fit: BoxFit.fill,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 //cuerpo de la targeta
-  //                 Container(
-  //                   width: Get.width * 0.4,
-  //                   // height: Get.height * 0.15,
-  //                   child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       mainAxisAlignment: MainAxisAlignment.start,
-  //                       children: [
-  //                         Padding(
-  //                           padding: const EdgeInsets.symmetric(
-  //                               vertical: 2, horizontal: 8),
-  //                           child: Container(
-  //                             child: Column(
-  //                               crossAxisAlignment: CrossAxisAlignment.start,
-  //                               children: [
-  //                                 Text(
-  //                                   '${element.nombre}',
-  //                                   textAlign: TextAlign.left,
-  //                                   maxLines: 2,
-  //                                   style: TextStyle(
-  //                                       fontWeight: FontWeight.bold,
-  //                                       color: ConstantesColores.verde),
-  //                                 ),
-  //                                 Text(
-  //                                   'SKU: ${element.codigo}',
-  //                                   maxLines: 1,
-  //                                   style: TextStyle(
-  //                                       fontSize: 11,
-  //                                       fontWeight: FontWeight.bold,
-  //                                       color: HexColor("#a2a2a2")),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         Container(
-  //                           height: Get.height * 0.05,
-  //                           padding: const EdgeInsets.symmetric(horizontal: 10),
-  //                           child: Column(
-  //                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                             children: [
-  //                               Visibility(
-  //                                   visible: element.descuento != 0,
-  //                                   child: Container(
-  //                                     height: Get.height * 0.028,
-  //                                     padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-  //                                     alignment: Alignment.topLeft,
-  //                                     child: Text(
-  //                                       '${format.currencySymbol}' +
-  //                                           formatNumber
-  //                                               .format(element.precio)
-  //                                               .replaceAll(',00', ''),
-  //                                       textAlign: TextAlign.left,
-  //                                       style: TextStyle(
-  //                                           fontWeight: FontWeight.bold,
-  //                                           fontSize: 16,
-  //                                           color: Colors.red),
-  //                                     ),
-  //                                   )),
-  //                               Container(
-  //                                 // height: element.activopromocion == 1 &&
-  //                                 //             ((DateTime.parse(element
-  //                                 //                         .fechafinpromocion_1!))
-  //                                 //                     .compareTo(dateNow) >=
-  //                                 //                 0) ||
-  //                                 //         widget.tipoCategoria == 1 ||
-  //                                 //         isProductoEnOferta
-  //                                 //     ? Get.width * 0.05
-  //                                 //     : Get.width * 0.07,
-  //                                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-  //                                 alignment: Alignment.topLeft,
-  //                                 child: Text(
-  //                                   '${format.currencySymbol}' +
-  //                                       formatNumber
-  //                                           .format(element.descuento != 0
-  //                                               ? element.precioinicial
-  //                                               : element.precio)
-  //                                           .replaceAll(',00', ''),
-  //                                   textAlign: TextAlign.left,
-  //                                   style: element.descuento != 0
-  //                                       ? TextStyle(
-  //                                           color:
-  //                                               ConstantesColores.azul_precio,
-  //                                           fontWeight: FontWeight.bold,
-  //                                           fontSize: 10,
-  //                                           decoration:
-  //                                               TextDecoration.lineThrough)
-  //                                       : TextStyle(
-  //                                           color:
-  //                                               ConstantesColores.azul_precio,
-  //                                           fontWeight: FontWeight.bold,
-  //                                           fontSize: 18),
-  //                                 ),
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                         Visibility(
-  //                             visible: isAgotado,
-  //                             child: Align(
-  //                               alignment: Alignment.centerLeft,
-  //                               child: Container(
-  //                                 margin: EdgeInsets.only(left: 10, top: 10),
-  //                                 decoration: BoxDecoration(
-  //                                   borderRadius: BorderRadius.circular(8.0),
-  //                                   color: Colors.red[100],
-  //                                 ),
-  //                                 height: Get.width * 0.06,
-  //                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-  //                                 child: Text(
-  //                                   'Agotado',
-  //                                   style: TextStyle(
-  //                                       fontWeight: FontWeight.bold,
-  //                                       fontSize: 15,
-  //                                       color: Colors.red),
-  //                                 ),
-  //                               ),
-  //                             )),
-  //                       ]),
-  //                 ),
-  //                 Align(
-  //                   alignment: Alignment.bottomCenter,
-  //                   child: Visibility(
-  //                     visible: !isAgotado,
-  //                     child: Container(
-  //                         margin: EdgeInsets.only(bottom: 5),
-  //                         height: Get.width * 0.1,
-  //                         alignment: Alignment.center,
-  //                         child: GestureDetector(
-  //                           child: Container(
-  //                             width: 140,
-  //                             height: 40,
-  //                             child: Image.asset(
-  //                               "assets/agregar_btn.png",
-  //                             ),
-  //                           ),
-  //                           onTap: () {
-  //                             //FIREBASE: Llamamos el evento select_item
-  //                             TagueoFirebase()
-  //                                 .sendAnalityticSelectItem(element, 1);
-  //                             //UXCam: Llamamos el evento seeDetailProduct
-  //                             UxcamTagueo().seeDetailProduct(
-  //                                 element, index, nameCategory);
-  //                             detalleProducto(element, cartProvider);
-  //                           },
-  //                         )),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             Positioned(
-  //               top: 0,
-  //               left: 7,
-  //               child: Container(
-  //                 width: Get.width * 0.4,
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.end,
-  //                   children: [
-  //                     (element.fechafinpromocion_1!
-  //                                 .contains(RegExp(r'[0-9]'))) ||
-  //                             widget.tipoCategoria == 1 ||
-  //                             isProductoEnOferta
-  //                         ? Container(
-  //                             padding: EdgeInsets.only(top: 5, right: 10),
-  //                             child: Visibility(
-  //                               visible: (element.activopromocion == 1 &&
-  //                                       ((DateTime.parse(element
-  //                                                   .fechafinpromocion_1!))
-  //                                               .compareTo(dateNow) >=
-  //                                           0)) ||
-  //                                   widget.tipoCategoria == 1 ||
-  //                                   isProductoEnOferta,
-  //                               child: Image.asset(
-  //                                 'assets/promo_abel.png',
-  //                                 height: 30,
-  //                                 fit: BoxFit.cover,
-  //                               ),
-  //                             ),
-  //                           )
-  //                         : Container(),
-  //                     (element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')))
-  //                         ? Container(
-  //                             alignment: Alignment.centerRight,
-  //                             padding: EdgeInsets.only(top: 5, right: 10),
-  //                             child: Visibility(
-  //                               visible: element.activoprodnuevo == 1 &&
-  //                                   ((DateTime.parse(element.fechafinnuevo_1!))
-  //                                           .compareTo(dateNow) >=
-  //                                       0),
-  //                               child: Image.asset(
-  //                                 'assets/nuevos_label.png',
-  //                                 height: 30,
-  //                                 fit: BoxFit.cover,
-  //                               ),
-  //                             ),
-  //                           )
-  //                         : Container(),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ));
-  // }
 
   detalleProducto(Productos element, final CarroModelo cartProvider) {
     if (prefs.usurioLogin == -1) {
