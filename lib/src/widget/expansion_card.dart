@@ -57,7 +57,7 @@ class _ExpansionCardState extends State<ExpansionCard> {
                     color: Colors.white,
                   ),
                   child: Text(
-                    "Orden Pideky ${widget.historico.numeroDoc}",
+                    "Orden Pideky ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   padding: EdgeInsets.all(16),
@@ -78,6 +78,16 @@ class _ExpansionCardState extends State<ExpansionCard> {
             ),
           ],
         ),
+      ),
+      Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 16),
+            child: Text('${widget.historico.numeroDoc}',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          ),
+        ],
       ),
       Container(
         padding: EdgeInsets.only(left: 16),

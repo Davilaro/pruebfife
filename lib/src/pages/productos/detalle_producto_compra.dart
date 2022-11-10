@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/productos.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -9,6 +10,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/pages/productos/detalle_producto.dart';
 import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
+import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -23,6 +25,7 @@ class CambiarDetalleCompra extends StatefulWidget {
 class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   Productos? productos;
+  final constrollerProductos = Get.find<ControllerProductos>();
 
   @override
   void initState() {
@@ -115,119 +118,44 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     }
 
     listaProductos.forEach((element) {
-      Productos productos = element;
+      Productos producto = element;
 
-      final template =
-          _cargarDisenoInterno(context, productos, format, cartProvider);
+      final template = Container(
+          child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: FutureBuilder(
+                  future: DBProvider.db
+                      .consultarProductoEnOfertaPorCodigo(producto.codigo),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    bool isProductoEnOferta = false;
+                    var dateNow = DateTime(DateTime.now().year,
+                        DateTime.now().month, DateTime.now().day);
+                    if (snapshot.data == producto.codigo) {
+                      isProductoEnOferta = true;
+                    } else {
+                      isProductoEnOferta = false;
+                    }
+                    return CardProductCustom(
+                        producto: producto,
+                        cartProvider: cartProvider,
+                        isProductoEnOferta: isProductoEnOferta,
+                        onTapCard: () =>
+                            detalleProducto(producto, cartProvider),
+                        isAgotadoLabel:
+                            constrollerProductos.validarAgotado(producto),
+                        isVisibleLabelPromo: (producto.activopromocion == 1 &&
+                            ((DateTime.parse(producto.fechafinpromocion_1!))
+                                    .compareTo(dateNow) >=
+                                0)),
+                        isVisibleLabelNuevo: producto.fechafinnuevo_1!
+                            .contains(RegExp(r'[0-9]')));
+                  })));
 
       opciones.add(template);
     });
 
     return opciones;
-  }
-
-  _cargarDisenoInterno(
-      BuildContext context, Productos productos, format, cartProvider) {
-    return Container(
-      width: 190,
-      child: Card(
-        shape: RoundedRectangleBorder(
-            side: new BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(8.0)),
-        child:
-            _cargarDisenoInternoDatos(context, productos, cartProvider, format),
-      ),
-    );
-  }
-
-  _cargarDisenoInternoDatos(BuildContext context, element,
-      CarroModelo cartProvider, NumberFormat format) {
-    final size = MediaQuery.of(context).size;
-    return GestureDetector(
-      onTap: () => detalleProducto(element, cartProvider),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 10.0),
-            height: Get.height * 0.15,
-            width: size.width * 0.3,
-            alignment: Alignment.center,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: CachedNetworkImage(
-                imageUrl:
-                    Constantes().urlImgProductos + '${element.codigo}.png',
-                placeholder: (context, url) =>
-                    Image.asset('assets/jar-loading.gif'),
-                errorWidget: (context, url, error) =>
-                    Image.asset('assets/logo_login.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          Container(
-            height: Get.height * 0.23,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      height: Get.height * 0.15,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${element.nombre}',
-                            maxLines: 4,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ConstantesColores.verde),
-                          ),
-                          Text(
-                            'SKU: ${element.codigo}',
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: HexColor("#a2a2a2")),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                    child: Container(
-                      height: Get.height * 0.05,
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        '${format.currencySymbol}' +
-                            formatNumber
-                                .format(element.precio)
-                                .replaceAll(',00', ''),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: ConstantesColores.azul_precio,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ]),
-          ),
-          Container(
-              height: 30,
-              width: 140,
-              alignment: Alignment.center,
-              child: GestureDetector(
-                child: Image.asset("assets/agregar_btn.png"),
-                onTap: () => detalleProducto(element, cartProvider),
-              )),
-        ],
-      ),
-    );
   }
 
   detalleProducto(Productos element, CarroModelo cartProvider) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
@@ -199,14 +200,15 @@ class _SoporteState extends State<Soporte> {
                                                                 FontWeight
                                                                     .bold),
                                                       ),
-                                                      Text(
-                                                        "$contactoCel",
-                                                        maxLines: 3,
-                                                        style: TextStyle(
-                                                            color:
-                                                                ConstantesColores
-                                                                    .gris_textos,
-                                                            fontSize: 11),
+                                                      Expanded(
+                                                        child: AutoSizeText(
+                                                          "$contactoCel",
+                                                          maxLines: 3,
+                                                          style: TextStyle(
+                                                              color: ConstantesColores
+                                                                  .gris_textos,
+                                                              fontSize: 11),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),

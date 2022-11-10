@@ -47,10 +47,14 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        child: _body(context),
+      child: Container(
+        width: size.width,
+        child: SingleChildScrollView(
+          child: _body(context),
+        ),
       ),
     );
   }
@@ -75,34 +79,15 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                     color: Colors.white,
                   ),
                   child: Text(
-                    "Orden Pideky ${widget.historico.ordenCompra}",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    "Orden Pideky ${widget.historico.numeroDoc}",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "RoundedMplus1c-ExtraBold.ttf",
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff4f4f4f)),
                   ),
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.only(top: 16, bottom: 16, left: 4),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Row(
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.clean_hands,
-                          color: HexColor("#30C3A3"),
-                        ),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: Text(
-                          "Entregado",
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
           ],
@@ -128,16 +113,19 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                                         color: HexColor("#43398E"),
                                         width: 1.0)))),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           estadoBoton.value ? 'Pedir' : 'Cancelar',
                           style: TextStyle(color: HexColor("#43398E")),
                         ),
                         !_cargando.value
-                            ? Icon(
-                                Icons.car_rental,
-                                color: HexColor("#30C3A3"),
-                              )
+                            ? Container(
+                                margin: EdgeInsets.only(left: 5),
+                                width: 20,
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                    'assets/icon/carrito_pedir.png'))
                             : Container(
                                 height: 10,
                                 width: 10,
@@ -193,7 +181,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                   AnimatedContainerCard(
                     grupo: grupos[i].fabricante!,
                     numeroDoc: numeroDocumento,
-                    ordenCompra: "",
+                    ordenCompra: grupos[i].ordenCompra.toString(),
                   ),
                 _separador(size),
               ],

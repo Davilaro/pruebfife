@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -160,7 +161,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: 80.0,
+      height: Get.height * 0.15,
       width: double.infinity,
       child: Row(
         children: [
@@ -171,19 +172,22 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                    child: Text('Nombre: ${element.nombre}',
+                    flex: 2,
+                    child: AutoSizeText('Nombre: ${element.nombre}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        presetFontSizes: [16, 14],
+                        style: diseno_sucursales(element))),
+                Flexible(
+                    child: AutoSizeText('Télefono: ${element.telefono}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: Text('Télefono: ${element.telefono}',
+                    child: AutoSizeText('Dirección: ${element.direccion}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: Text('Dirección: ${element.direccion}',
-                        overflow: TextOverflow.clip,
-                        style: diseno_sucursales(element))),
-                Flexible(
-                    child: Text('Ciudad: ${element.ciudad}',
+                    child: AutoSizeText('Ciudad: ${element.ciudad}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
               ],

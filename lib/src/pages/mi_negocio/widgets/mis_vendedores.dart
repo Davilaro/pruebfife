@@ -82,20 +82,24 @@ class MisVendedores extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '${listaVendedores[i]['vendedores'][j]['vendedor']}',
-                                            style: TextStyle(
+                                          Expanded(
+                                            child: Text(
+                                              '${listaVendedores[i]['vendedores'][j]['vendedor']}',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: ConstantesColores
+                                                      .gris_textos,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              '+57 ${listaVendedores[i]['vendedores'][j]['telefono']}',
+                                              style: TextStyle(
                                                 fontSize: 13,
                                                 color: ConstantesColores
                                                     .gris_textos,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            '+57 ${listaVendedores[i]['vendedores'][j]['telefono']}',
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color:
-                                                  ConstantesColores.gris_textos,
+                                              ),
                                             ),
                                           ),
                                         ],

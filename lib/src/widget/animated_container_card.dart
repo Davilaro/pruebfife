@@ -22,21 +22,22 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
 
   Widget _validarNumeroPedido(String? pedido) {
     if (pedido != 'Pendiente') {
-      return Container(
-        child: Text("N° Pedido ${widget.ordenCompra}",
+      return Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Text("N° ${widget.ordenCompra}",
             style: TextStyle(
                 fontSize: 13,
-                color: Colors.black.withOpacity(.6),
+                color: Color(0xff4f4f4f),
                 fontWeight: FontWeight.bold)),
       );
     } else {
-      return Container(
-        // duration: Duration(milliseconds: 500),
+      return Padding(
+        padding: const EdgeInsets.only(left: 4),
         child: Text(
           "Número de pedido por validar",
           style: TextStyle(
               fontSize: 13,
-              color: HexColor("#FFD94D"),
+              color: Color(0xff43398E),
               fontWeight: FontWeight.bold),
         ),
       );
@@ -48,38 +49,38 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Row(
-          children: [
-            Container(
-              // color: Colors.white,
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding: EdgeInsets.only(left: 16, top: 10),
+        Container(
+          width: size.width * 0.99,
+          child: Row(
+            children: [
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(" ${widget.grupo}",
                         style: TextStyle(
                             fontSize: 13,
+                            fontFamily: "RoundedMplus1c-Bold.ttf",
                             color: HexColor("#43398E"),
                             fontWeight: FontWeight.bold)),
                     _validarNumeroPedido(widget.ordenCompra),
                   ],
                 ),
               ),
-            ),
-            Container(
-                padding: EdgeInsets.only(left: 50, top: 4),
-                child: ExpandIcon(
-                  isExpanded: _isExpanded,
-                  size: 30,
-                  color: HexColor("#30C3A3"),
-                  onPressed: (bool isExpanded) {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                ))
-          ],
+              Container(
+                  padding: EdgeInsets.only(top: 4),
+                  child: ExpandIcon(
+                    isExpanded: _isExpanded,
+                    size: 30,
+                    color: HexColor("#30C3A3"),
+                    onPressed: (bool isExpanded) {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                  ))
+            ],
+          ),
         ),
         AnimatedOpacity(
             duration: Duration(milliseconds: 700),
@@ -105,7 +106,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                       children: [
                                         Flexible(
                                           child: Container(
-                                            padding: EdgeInsets.only(left: 16),
+                                            padding: EdgeInsets.only(left: 4),
                                             child: Text(
                                               "${detalles[i].nombreProducto}",
                                               style: TextStyle(

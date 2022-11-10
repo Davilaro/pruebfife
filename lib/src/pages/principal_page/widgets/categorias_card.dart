@@ -57,7 +57,7 @@ class CategoriasCard extends StatelessWidget {
                   element.descripcion,
                   element.codigo,
                   'ViewCategoris'),
-              //UXCam: Llamamos el evento seeDetailProduct
+              //UXCam: Llamamos el evento seeCategory
               UxcamTagueo().seeCategory(element.descripcion),
               _onClickCatalogo(
                   element.codigo, context, provider, element.descripcion)
