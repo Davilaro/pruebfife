@@ -626,7 +626,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       //UXCam: Llamamos el evento activationCode
       UxcamTagueo()
           .activationCode(codigoVerificacion, 'satisfactorio', estado, estado2);
+
       await prEnviarCodigo.hide();
+      await Servicies().loadDataTermsAndConditions();
       _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error

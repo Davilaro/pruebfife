@@ -96,7 +96,7 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
-                      '¡Lo sentimos! No hemos podido procesaar tu orden. Por favor comunícate con nuestro equipo de ayuda.',
+                      '¡Lo sentimos! No hemos podido procesar tu orden. Por favor comunícate con nuestro equipo de ayuda.',
                       textAlign: TextAlign.center,
                     ),
                   ),
