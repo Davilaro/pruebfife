@@ -609,16 +609,10 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     prEnviarCodigo = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
-    final validorInformacionTerminosYCondiciones =
-        await Servicies().loadDataTermsAndConditions();
-    if (validorInformacionTerminosYCondiciones == true) {
-      await prEnviarCodigo.show();
-      await enviarCodigoVerificacion(
-          context, codigo, codVerificado, estado, estado2);
-      await prEnviarCodigo.hide();
-    } else {
-      mostrarAlertaUtilsError(context, "");
-    }
+    await prEnviarCodigo.show();
+    await enviarCodigoVerificacion(
+        context, codigo, codVerificado, estado, estado2);
+    await prEnviarCodigo.hide();
   }
 
   enviarCodigoVerificacion(BuildContext context, int codigo,
@@ -634,7 +628,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
           .activationCode(codigoVerificacion, 'satisfactorio', estado, estado2);
 
       await prEnviarCodigo.hide();
-
+      await Servicies().loadDataTermsAndConditions();
       _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error
