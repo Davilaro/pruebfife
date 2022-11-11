@@ -609,10 +609,16 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     prEnviarCodigo = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
-    await prEnviarCodigo.show();
-    await enviarCodigoVerificacion(
-        context, codigo, codVerificado, estado, estado2);
-    await prEnviarCodigo.hide();
+    final validorInformacionTerminosYCondiciones =
+        await Servicies().loadDataTermsAndConditions();
+    if (validorInformacionTerminosYCondiciones == true) {
+      await prEnviarCodigo.show();
+      await enviarCodigoVerificacion(
+          context, codigo, codVerificado, estado, estado2);
+      await prEnviarCodigo.hide();
+    } else {
+      mostrarAlertaUtilsError(context, "");
+    }
   }
 
   enviarCodigoVerificacion(BuildContext context, int codigo,
@@ -626,7 +632,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       //UXCam: Llamamos el evento activationCode
       UxcamTagueo()
           .activationCode(codigoVerificacion, 'satisfactorio', estado, estado2);
+
       await prEnviarCodigo.hide();
+
       _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error
