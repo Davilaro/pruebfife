@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 class ControllerHistorico extends GetxController {
   RxString fechaInicial = '-1'.obs;
   RxString fechaFinal = '-1'.obs;
-  RxString filtro = '-1'.obs;
 
   void setFechaInicial(String val) {
     fechaInicial.value = val;
@@ -17,8 +16,9 @@ class ControllerHistorico extends GetxController {
     fechaFinal.value = val;
   }
 
-  void setFiltro(String val) {
-    filtro.value = val;
+  void inicializarController() {
+    fechaInicial = '-1'.obs;
+    fechaFinal = '-1'.obs;
   }
 
   ///CARGAR ITEMS DORPDOWN

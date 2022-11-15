@@ -3,6 +3,7 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/mi_negocio/mi_negocio.dart';
@@ -41,6 +42,7 @@ class _TabOpcionesState extends State<TabOpciones>
   final cargoControllerBase = Get.put(ControlBaseDatos());
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
 
@@ -127,7 +129,7 @@ class _TabOpcionesState extends State<TabOpciones>
       print('Token: $token');
       setState(() {});
     } catch (e) {
-      print('error de descarga prueba $e');
+      print('error de descarga db $e');
     }
   }
 

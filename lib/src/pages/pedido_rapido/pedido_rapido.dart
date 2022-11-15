@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
+import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -19,10 +21,10 @@ import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import '../../widget/acciones_carrito_bart.dart';
-import '../../widget/column_table.dart';
 import 'expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
@@ -38,6 +40,8 @@ class PedidoRapido extends StatefulWidget {
 
 @override
 class _PedidoRapidoState extends State<PedidoRapido> {
+  final controllerHistorico = Get.find<ControllerHistorico>();
+
   @override
   void initState() {
     super.initState();
@@ -47,12 +51,11 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         "Footer", "PedidoRapido", "", "", "PedidoRapido", 'MainActivity');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Rápido');
+    controllerHistorico.inicializarController();
   }
 
   int seleccion = 1;
   String filtro = "-1";
-  String fechaInicial = "-1";
-  String fechaFinal = "-1";
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +118,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   Widget _tabs(size) {
     return Container(
         width: size.width * 0.9,
-        margin: const EdgeInsets.only(bottom: 20, top: 20),
+        margin: const EdgeInsets.only(bottom: 0, top: 20),
         child: Table(
           columnWidths: {
             0: FlexColumnWidth(4),
@@ -125,14 +128,14 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           children: [
             TableRow(children: [
               Container(
-                child: Text(
-                  'Pedido Rápido',
-                  style: TextStyle(
-                      color: HexColor("#43398E"),
-                      fontSize: 20,
-                      fontFamily: "monserrat",
-                      fontWeight: FontWeight.bold),
-                ),
+                child: Obx(() => Text(
+                      'Pedido Rápido',
+                      style: TextStyle(
+                          color: HexColor("#43398E"),
+                          fontSize: 20,
+                          fontFamily: "monserrat",
+                          fontWeight: FontWeight.bold),
+                    )),
               ),
               Visibility(
                   visible: false,
@@ -220,17 +223,15 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     );
     if (newDateRange == null) return;
     dateRange = newDateRange;
-    setState(() {
-      fechaInicial = dateRange.start.toString();
-      fechaFinal = dateRange.end.toString();
-    });
   }
 
-  Widget _ultimaOrden(Size size, cartProvider, providerDatos) {
-    return FutureBuilder(
+  Widget _ultimaOrden(Size size, cartProvider, DatosListas providerDatos) {
+    return Obx(() => FutureBuilder(
         initialData: [],
         future: providerDatos.getListaHistoricosHelper(
-            filtro, fechaInicial, fechaFinal),
+            filtro,
+            controllerHistorico.fechaInicial.value,
+            controllerHistorico.fechaFinal.value),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             var datos = snapshot.data;
@@ -244,7 +245,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                         _buscador(size),
                         _selecciona(size),
                         Container(
-                          height: size.height * 0.8,
+                          height: size.height * 0.62,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -267,33 +268,12 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                             },
                           ),
                         ),
-                        // for (int i = 0; i < datos!.length; i++)
-                        //   Container(
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         color: Colors.white,
-                        //         boxShadow: [
-                        //           BoxShadow(
-                        //             color: Colors.grey.withOpacity(0.5),
-                        //             spreadRadius: 5,
-                        //             blurRadius: 7,
-                        //             offset: Offset(
-                        //                 0, 3), // changes position of shadow
-                        //           ),
-                        //         ],
-                        //       ),
-                        //       width: size.width * 0.9,
-                        //       margin: EdgeInsets.only(bottom: 14),
-                        //       child: ExpansionCardLast(
-                        //           historico: datos[i],
-                        //           cartProvider: cartProvider,
-                        //           providerDatos: providerDatos)),
                       ],
                     )));
           } else {
             return Text("No hay registros encontrados");
           }
-        });
+        }));
   }
 
   Widget _selecciona(Size size) {
@@ -346,8 +326,22 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.center,
               )),
+          // GestureDetector(
+          //   onTap: () => {pickDateRange(context)},
+          //   child: Container(
+          //       color: Colors.transparent,
+          //       child: Image.asset(
+          //         'assets/icon/calendario.png',
+          //         width: 35,
+          //       )),
+          // )
           GestureDetector(
-            onTap: () => {pickDateRange(context)},
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FiltroHistorico(
+                          controlerFiltro: controllerHistorico,
+                        ))),
             child: Container(
                 color: Colors.transparent,
                 child: Image.asset(
@@ -367,5 +361,10 @@ class _PedidoRapidoState extends State<PedidoRapido> {
       }
     }
     return false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
