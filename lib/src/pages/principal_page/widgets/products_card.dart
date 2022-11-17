@@ -74,6 +74,21 @@ class _ProductsCardState extends State<ProductsCard> {
       return opciones..add(Text('No hay informacion para mostrar'));
     }
     for (var i = 0; i < listaProductos.length; i++) {
+      var dateNow = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      bool isProductoEnOferta = false;
+      bool isAgotadoLabel =
+          constrollerProductos.validarAgotado(listaProductos[i]);
+      bool isNewProduct = listaProductos[i].activoprodnuevo == 1 &&
+          ((DateTime.parse(listaProductos[i].fechafinnuevo_1!))
+                  .compareTo(dateNow) >=
+              0);
+      bool isPromoProduct = (listaProductos[i].activopromocion == 1 &&
+              ((DateTime.parse(listaProductos[i].fechafinpromocion_1!))
+                      .compareTo(dateNow) >=
+                  0)) ||
+          widget.tipoCategoria == 1 ||
+          isProductoEnOferta;
       final template = Container(
           child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -81,10 +96,6 @@ class _ProductsCardState extends State<ProductsCard> {
             future: DBProvider.db
                 .consultarProductoEnOfertaPorCodigo(listaProductos[i].codigo),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              bool isProductoEnOferta = false;
-              var dateNow = DateTime(DateTime.now().year, DateTime.now().month,
-                  DateTime.now().day);
-
               if (snapshot.data == listaProductos[i].codigo) {
                 isProductoEnOferta = true;
               } else {
@@ -100,24 +111,19 @@ class _ProductsCardState extends State<ProductsCard> {
                     TagueoFirebase()
                         .sendAnalityticSelectItem(listaProductos[i], 1);
                     //UXCam: Llamamos el evento seeDetailProduct
-                    UxcamTagueo()
-                        .seeDetailProduct(listaProductos[i], i, nameCategory);
+                    UxcamTagueo().seeDetailProduct(
+                        listaProductos[i],
+                        i,
+                        nameCategory,
+                        isAgotadoLabel,
+                        isNewProduct,
+                        isPromoProduct);
                   }
                   detalleProducto(listaProductos[i], cartProvider);
                 },
-                isAgotadoLabel:
-                    constrollerProductos.validarAgotado(listaProductos[i]),
-                isVisibleLabelNuevo: listaProductos[i].activoprodnuevo == 1 &&
-                    ((DateTime.parse(listaProductos[i].fechafinnuevo_1!))
-                            .compareTo(dateNow) >=
-                        0),
-                isVisibleLabelPromo: (listaProductos[i].activopromocion == 1 &&
-                        ((DateTime.parse(
-                                    listaProductos[i].fechafinpromocion_1!))
-                                .compareTo(dateNow) >=
-                            0)) ||
-                    widget.tipoCategoria == 1 ||
-                    isProductoEnOferta,
+                isAgotadoLabel: isAgotadoLabel,
+                isVisibleLabelNuevo: isNewProduct,
+                isVisibleLabelPromo: isPromoProduct,
               );
             }),
       ));

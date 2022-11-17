@@ -8,35 +8,54 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 class UxcamTagueo {
   void validarTipoUsario() async {
+    DateTime now = DateTime.now();
+    String typeUser = 'Inactivo';
+
+    String fechaInicial = '';
+    String fechaFinal = '';
+
     var datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+    //se define el nombre del usuarios nit + nombre
     var userUxCam =
         (datosCliente[0].nit + datosCliente[0].nombre).replaceAll(' ', '');
+
+    //se descartan usuarios que no se va ser seguimiento de uxcam en PRD
     if (Constantes().titulo != 'QA') {
       if (datosCliente[0].nit == '4415415' ||
           datosCliente[0].nit == '4415416' ||
           datosCliente[0].nit == '123123123') {
         FlutterUxcam.optOutOverall();
       }
+    } else {
+      FlutterUxcam.optInOverall();
     }
-
-    DateTime now = DateTime.now();
-    String typeUser = 'Begginer';
-
-    String fechaInicial =
-        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
-    String fechaFinal =
-        '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-29';
+    // se capturan las fechas para validar compras
+    if (now.month == 1) {
+      fechaInicial = '${now.year - 1}-12-01';
+      fechaFinal = '${now.year}-01-01';
+    }
+    if (now.month != 1) {
+      fechaInicial =
+          '${now.year}-${now.month.toString().length > 1 ? now.month == 10 ? '0${now.month - 1}' : now.month - 1 : '0${now.month - 1}'}-01';
+      fechaFinal =
+          '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
+    }
 
     dynamic resQuery = await DBProviderHelper.db
         .consultarHistoricos("-1", fechaInicial, fechaFinal);
 
-    if (resQuery.length > 3) {
-      typeUser = "Digitalizados";
-    } else if (resQuery.length > 1 && resQuery.length <= 3) {
-      typeUser = "En progreso";
+    // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
+    if (resQuery.length == 1) {
+      typeUser = "Begginer";
+    }
+    if (resQuery.length >= 4) {
+      typeUser = "Digitalizado";
+    }
+    if (resQuery.length > 1 && resQuery.length <= 3) {
+      typeUser = "Progreso";
     }
 
-    //UXCam: se asigna el nombre de usuario
+    //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
   }
@@ -95,7 +114,8 @@ class UxcamTagueo {
     try {
       if (name == 'Imperdibles') {
         provider.agregarNumeroClickVerImpedibles = 1;
-      } else if (name == 'Promos') {
+      }
+      if (name == 'Promos') {
         provider.agregarNumeroClickVerPromos = 1;
       }
 
@@ -108,14 +128,23 @@ class UxcamTagueo {
     }
   }
 
-  void seeDetailProduct(Productos element, int index, String? nameSeccion) {
+  void seeDetailProduct(Productos element, int index, String? nameSeccion,
+      bool isAgotadoLabel, bool isNewProduct, bool isPromoProduct) {
     try {
+      print(
+          'agotado -- $isAgotadoLabel, nuevo--- $isNewProduct, promo ----$isPromoProduct');
       var descuento = nameSeccion == 'Promos'
           ? (element.descuento! * 100) / element.precio
           : 0;
+      var label = '';
+
+      if (isNewProduct) label = 'Nuevo';
+      if (isPromoProduct) label = 'Promo';
+      if (isAgotadoLabel) label = 'Agotado';
 
       FlutterUxcam.logEventWithProperties("seeDetailProduct", {
         "name": element.nombrecomercial,
+        "label": label,
         "category": element.marca,
         "price": element.precio,
         "discount": "$descuento%",

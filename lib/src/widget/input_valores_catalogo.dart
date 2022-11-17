@@ -54,6 +54,12 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         future: DBProvider.db
             .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          bool isNewProduct =
+              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
+          bool isPromoProduct =
+              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
+                      widget.isCategoriaPromos) ||
+                  isProductoEnOferta;
           if (snapshot.data == widget.element.codigo) {
             isProductoEnOferta = true;
           } else {
@@ -69,18 +75,14 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   //FIREBASE: Llamamos el evento select_item
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
-                  UxcamTagueo()
-                      .seeDetailProduct(widget.element, widget.index, '');
+                  UxcamTagueo().seeDetailProduct(widget.element, widget.index,
+                      '', isAgotado, isNewProduct, isPromoProduct);
                 }
                 detalleProducto(widget.element, cartProvider);
               },
               isAgotadoLabel: isAgotado,
-              isVisibleLabelPromo: (widget.element.fechafinpromocion_1!
-                          .contains(RegExp(r'[0-9]')) ||
-                      widget.isCategoriaPromos) ||
-                  isProductoEnOferta,
-              isVisibleLabelNuevo:
-                  widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')));
+              isVisibleLabelPromo: isPromoProduct,
+              isVisibleLabelNuevo: isNewProduct);
         },
       ),
     );
