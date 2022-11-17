@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:emart/src/notificaciones/message_notification.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -22,6 +23,23 @@ class PushNotificationServer {
   static String? token;
 
   static Future _backgroundHandler(RemoteMessage message) async {
+    // print('nnotificacion ${jsonDecode(message.data['message'])}');
+
+//     if (title != null && body != null) {
+//    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+//             .setSmallIcon(R.mipmap.ic_launcher)
+//             .setContentTitle(title)
+//             .setContentText(body)
+//             .setAutoCancel(true)
+//             .setContentIntent(pendingIntent);
+
+// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//         NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
+//         manager.createNotificationChannel(channel);
+//     }
+//     manager.notify((int) System.currentTimeMillis(), builder.build());
+// }
+
     // try {
     //   await Firebase.initializeApp();
     //   print('hola res ${message.messageId}');
