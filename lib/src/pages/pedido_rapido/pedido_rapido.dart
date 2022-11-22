@@ -128,14 +128,14 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           children: [
             TableRow(children: [
               Container(
-                child: Obx(() => Text(
-                      'Pedido Rápido',
-                      style: TextStyle(
-                          color: HexColor("#43398E"),
-                          fontSize: 20,
-                          fontFamily: "monserrat",
-                          fontWeight: FontWeight.bold),
-                    )),
+                child: Text(
+                  'Pedido Rápido',
+                  style: TextStyle(
+                      color: HexColor("#43398E"),
+                      fontSize: 20,
+                      fontFamily: "monserrat",
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               Visibility(
                   visible: false,
