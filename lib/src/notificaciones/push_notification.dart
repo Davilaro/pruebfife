@@ -22,8 +22,9 @@ class PushNotificationServer {
 
   static String? token;
 
-  static Future _backgroundHandler(RemoteMessage message) async {
-    // print('nnotificacion ${jsonDecode(message.data['message'])}');
+  static Future<void> _backgroundHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print('notificacion ${jsonDecode(message.data['message'])}');
 
 //     if (title != null && body != null) {
 //    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
@@ -122,8 +123,8 @@ class PushNotificationServer {
       print('token $token ---- $token2');
 
       //handlers
-      FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
       FirebaseMessaging.onMessage.listen(_onMessageHandler);
+      FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
       FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
     } catch (e) {
       print('ERROR NOTIFICAICONES $e');

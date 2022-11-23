@@ -1,5 +1,6 @@
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AnimatedContainerCard extends StatefulWidget {
@@ -101,11 +102,14 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                     color: Colors.white),
                                 width: size.width * 0.9,
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
                                         Flexible(
+                                          flex: 2,
                                           child: Container(
+                                            width: Get.width * 0.9,
                                             padding: EdgeInsets.only(left: 4),
                                             child: Text(
                                               "${detalles[i].nombreProducto}",
@@ -117,6 +121,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
                                           ),
                                         ),
                                         Flexible(
+                                          flex: 1,
                                           child: Container(
                                             padding: EdgeInsets.only(left: 16),
                                             child: Text(

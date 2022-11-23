@@ -1,0 +1,6 @@
+projectKey=pideky
+serverUrl=https://sonarqube.sandboxcw.net
+serverVersion=9.7.1.62043
+dashboardUrl=https://sonarqube.sandboxcw.net/dashboard?id=pideky
+ceTaskId=AYSLpG1XhnaMVJChMf_C
+ceTaskUrl=https://sonarqube.sandboxcw.net/api/ce/task?id=AYSLpG1XhnaMVJChMf_C

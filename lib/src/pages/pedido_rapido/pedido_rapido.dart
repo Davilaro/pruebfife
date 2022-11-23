@@ -211,20 +211,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     }
   }
 
-  Future pickDateRange(BuildContext context) async {
-    DateTime now = new DateTime.now();
-    DateTimeRange dateRange;
-    final newDateRange = await showDateRangePicker(
-      locale: const Locale("es", ""),
-      context: context,
-      firstDate: DateTime(2021, 1, 1),
-      currentDate: DateTime(now.year, now.month, now.day),
-      lastDate: DateTime(now.year, now.month, now.day),
-    );
-    if (newDateRange == null) return;
-    dateRange = newDateRange;
-  }
-
   Widget _ultimaOrden(Size size, cartProvider, DatosListas providerDatos) {
     return Obx(() => FutureBuilder(
         initialData: [],
@@ -281,7 +267,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
       padding: EdgeInsets.only(bottom: 20, top: 14, right: 20, left: 20),
       alignment: Alignment.center,
       child: Text(
-        "Seleccionar una de tus últimas ordenes para hacer un pedido rapido. ",
+        "Seleccionar una de tus últimas órdenes para hacer un pedido rápido.",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 15,
@@ -326,15 +312,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.center,
               )),
-          // GestureDetector(
-          //   onTap: () => {pickDateRange(context)},
-          //   child: Container(
-          //       color: Colors.transparent,
-          //       child: Image.asset(
-          //         'assets/icon/calendario.png',
-          //         width: 35,
-          //       )),
-          // )
           GestureDetector(
             onTap: () => Navigator.push(
                 context,
