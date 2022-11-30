@@ -87,8 +87,8 @@ class _ProductsCardState extends State<ProductsCard> {
               ((DateTime.parse(listaProductos[i].fechafinpromocion_1!))
                       .compareTo(dateNow) >=
                   0)) ||
-          widget.tipoCategoria == 1 ||
-          isProductoEnOferta;
+          isProductoEnOferta ||
+          widget.tipoCategoria == 1;
       final template = Container(
           child: FittedBox(
         fit: BoxFit.scaleDown,

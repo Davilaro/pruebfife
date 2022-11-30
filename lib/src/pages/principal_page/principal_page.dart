@@ -154,9 +154,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
                                 future: DBProvider.db.consultarSucursal(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<dynamic> snapshot) {
-                                  var tituloImperdible = prefs.usurioLogin == -1
-                                      ? 'tí'
-                                      : snapshot.data;
+                                  var tituloImperdible =
+                                      prefs.usurioLogin == -1 ||
+                                              snapshot.data.length == []
+                                          ? 'tí'
+                                          : snapshot.data;
                                   return Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

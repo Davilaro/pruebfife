@@ -67,8 +67,10 @@ class _CardProductCustomState extends State<CardProductCustom> {
                               '${widget.producto.codigo}.png',
                           placeholder: (context, url) =>
                               Image.asset('assets/jar-loading.gif'),
-                          errorWidget: (context, url, error) =>
-                              Image.asset('assets/logo_login.png'),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/logo_login.png',
+                            width: Get.width * 0.35,
+                          ),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -250,22 +252,17 @@ class _CardProductCustomState extends State<CardProductCustom> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        (widget.producto.fechafinpromocion_1!
-                                    .contains(RegExp(r'[0-9]'))) ||
-                                widget.tipoCategoria == 1 ||
-                                widget.isProductoEnOferta
-                            ? Container(
-                                padding: EdgeInsets.only(top: 5, right: 10),
-                                child: Visibility(
-                                  visible: widget.isVisibleLabelPromo,
-                                  child: Image.asset(
-                                    'assets/promo_abel.png',
-                                    height: 30,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        Container(
+                          padding: EdgeInsets.only(top: 5, right: 10),
+                          child: Visibility(
+                            visible: widget.isVisibleLabelPromo,
+                            child: Image.asset(
+                              'assets/promo_abel.png',
+                              height: 30,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                         (widget.producto.fechafinnuevo_1!
                                 .contains(RegExp(r'[0-9]')))
                             ? Container(
