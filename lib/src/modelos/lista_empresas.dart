@@ -1,63 +1,62 @@
-
 import 'dart:convert';
 
-import 'package:emart/src/modelos/sucursales.dart';
+import 'package:emart/_pideky/domain/sucursal/model/sucursales.dart';
 
-
-ListaEmpresas ListaEmpresasFromJson(String str) => ListaEmpresas.fromJson(json.decode(str));
+ListaEmpresas ListaEmpresasFromJson(String str) =>
+    ListaEmpresas.fromJson(json.decode(str));
 
 String ListaEmpresasToJson(ListaEmpresas data) => json.encode(data.toJson());
 
 class ListaEmpresas {
-    ListaEmpresas({
-        required this.numEmpresa,
-        required this.codigoEmpresa,
-        required this.nombreEmpresa,
-        required this.tipo,
-        required this.url,
-        required this.path,
-        required this.imagen,
-        required this.pedidoMinimo,
-        required this.maxPedidos,
-        required this.textoInicial,
-        required this.textoFinal,
-        required this.urlSync,
-        required this.color,
-        required this.horaLimite,
-        required this.cantDecimales,
-        required this.moneda,
-        required this.impuesto,
-        required this.labelCondiciones1,
-        required this.urlCondiciones1,
-        required this.labelCondiciones2,
-        required this.urlCondiciones2,
-        required this.sucursales,
-    });
+  ListaEmpresas({
+    required this.numEmpresa,
+    required this.codigoEmpresa,
+    required this.nombreEmpresa,
+    required this.tipo,
+    required this.url,
+    required this.path,
+    required this.imagen,
+    required this.pedidoMinimo,
+    required this.maxPedidos,
+    required this.textoInicial,
+    required this.textoFinal,
+    required this.urlSync,
+    required this.color,
+    required this.horaLimite,
+    required this.cantDecimales,
+    required this.moneda,
+    required this.impuesto,
+    required this.labelCondiciones1,
+    required this.urlCondiciones1,
+    required this.labelCondiciones2,
+    required this.urlCondiciones2,
+    required this.sucursales,
+  });
 
-    int numEmpresa;
-    String codigoEmpresa;
-    String nombreEmpresa;
-    String tipo;
-    String url;
-    String path;
-    String imagen;
-    int pedidoMinimo;
-    int maxPedidos;
-    String textoInicial;
-    String textoFinal;
-    String urlSync;
-    String color;
-    String horaLimite;
-    int cantDecimales;
-    String moneda;
-    String impuesto;
-    String labelCondiciones1;
-    String urlCondiciones1;
-    String labelCondiciones2;
-    String urlCondiciones2;
-    List<Sucursales> sucursales;
+  int numEmpresa;
+  String codigoEmpresa;
+  String nombreEmpresa;
+  String tipo;
+  String url;
+  String path;
+  String imagen;
+  int pedidoMinimo;
+  int maxPedidos;
+  String textoInicial;
+  String textoFinal;
+  String urlSync;
+  String color;
+  String horaLimite;
+  int cantDecimales;
+  String moneda;
+  String impuesto;
+  String labelCondiciones1;
+  String urlCondiciones1;
+  String labelCondiciones2;
+  String urlCondiciones2;
+  List<Sucursales> sucursales;
 
-    factory ListaEmpresas.fromJson(Map<String, dynamic> json) => ListaEmpresas(
+  factory ListaEmpresas.fromJson(Map<String, dynamic> json) => ListaEmpresas(
         numEmpresa: json["num_empresa"],
         codigoEmpresa: json["codigo_empresa"],
         nombreEmpresa: json["nombre_empresa"],
@@ -79,10 +78,11 @@ class ListaEmpresas {
         urlCondiciones1: json["url_condiciones1"],
         labelCondiciones2: json["label_condiciones2"],
         urlCondiciones2: json["url_condiciones2"],
-        sucursales: List<Sucursales>.from(json["sucursales"].map((x) => Sucursales.fromJson(x))),
-    );
+        sucursales: List<Sucursales>.from(
+            json["sucursales"].map((x) => Sucursales.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "num_empresa": numEmpresa,
         "codigo_empresa": codigoEmpresa,
         "nombre_empresa": nombreEmpresa,
@@ -105,5 +105,5 @@ class ListaEmpresas {
         "label_condiciones2": labelCondiciones2,
         "url_condiciones2": urlCondiciones2,
         "sucursales": List<dynamic>.from(sucursales.map((x) => x.toJson())),
-    };
+      };
 }
