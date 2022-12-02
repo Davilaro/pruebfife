@@ -184,7 +184,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                       margin:
                                           EdgeInsets.only(top: 30, bottom: 80),
                                       child: Text(
-                                          '${diaInicio.value.isNotEmpty ? diaInicio.value : ""} ${meses[toInt(mesInicio.value)] ?? ""} - ${diaFin.isNotEmpty ? diaFin.value : ""} ${meses[toInt(mesFin.value)] ?? ""} ${anoFin.isNotEmpty ? anoFin.value : ""}',
+                                          '${diaInicio.value.isNotEmpty ? diaInicio.value : ""} ${meses[toInt(mesInicio.value)] == null ? "" : meses[toInt(mesInicio.value)]!.substring(0, 3)} - ${diaFin.isNotEmpty ? diaFin.value : ""} ${meses[toInt(mesFin.value)] == null ? "" : meses[toInt(mesFin.value)]!.substring(0, 3)} ${anoFin.isNotEmpty ? anoFin.value : ""}',
                                           style: TextStyle(
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold,
