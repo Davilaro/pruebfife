@@ -128,6 +128,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           children: [
             TableRow(children: [
               Container(
+                margin: EdgeInsets.only(bottom: 10),
                 child: Text(
                   'Pedido Rápido',
                   style: TextStyle(

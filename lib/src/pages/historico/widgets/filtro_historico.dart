@@ -182,7 +182,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                             Obx(() => Center(
                                   child: Container(
                                       margin:
-                                          EdgeInsets.only(top: 30, bottom: 130),
+                                          EdgeInsets.only(top: 30, bottom: 80),
                                       child: Text(
                                           '${diaInicio.value.isNotEmpty ? diaInicio.value : ""} ${meses[toInt(mesInicio.value)] ?? ""} - ${diaFin.isNotEmpty ? diaFin.value : ""} ${meses[toInt(mesFin.value)] ?? ""} ${anoFin.isNotEmpty ? anoFin.value : ""}',
                                           style: TextStyle(
