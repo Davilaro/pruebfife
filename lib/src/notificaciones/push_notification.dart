@@ -72,10 +72,12 @@ class PushNotificationServer {
     String? body = '';
 
     if (message.data != null) {
+      //notificaciones de UXCam
       var menssajeCapturado = jsonDecode(message.data['message']);
       title = menssajeCapturado['title'];
       body = menssajeCapturado['body'];
     } else {
+      //Notificaciones de Firebase
       title = message.notification?.title;
       body = message.notification?.body;
     }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 
 ListaProductos listaProductosFromJson(String str) =>
     ListaProductos.fromJson(json.decode(str));
@@ -22,7 +22,7 @@ class ListaProductos {
   int next;
   int prev;
   int now;
-  List<Productos> result;
+  List<Producto> result;
 
   factory ListaProductos.fromJson(Map<String, dynamic> json) => ListaProductos(
         total: json["total"],
@@ -30,8 +30,8 @@ class ListaProductos {
         next: json["next"],
         prev: json["prev"],
         now: json["now"],
-        result: List<Productos>.from(
-            json["result"].map((x) => Productos.fromJson(x))),
+        result: List<Producto>.from(
+            json["result"].map((x) => Producto.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

@@ -29,7 +29,7 @@ class AccionesBartCarrito extends StatelessWidget {
         child: Stack(
           children: [
             IconButton(
-              icon: Image.asset('assets/carrito_btn.png'),
+              icon: Image.asset('assets/image/carrito_btn.png'),
               tooltip: 'Show Snackbar',
               onPressed: () {
                 _cambiarDePantalla(context, esCarrito, provider);

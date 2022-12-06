@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -24,7 +24,7 @@ import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
 
 class DetalleProductoSearch extends StatefulWidget {
-  final Productos producto;
+  final Producto producto;
   final double tamano;
   final String title;
   DetalleProductoSearch(
@@ -141,10 +141,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                               image: CachedNetworkImage(
                                   imageUrl: Constantes().urlImgProductos +
                                       '${widget.producto.codigo}.png',
-                                  placeholder: (context, url) =>
-                                      Image.asset('assets/jar-loading.gif'),
+                                  placeholder: (context, url) => Image.asset(
+                                      'assets/image/jar-loading.gif'),
                                   errorWidget: (context, url, error) =>
-                                      Image.asset('assets/logo_login.png'),
+                                      Image.asset(
+                                          'assets/image/logo_login.png'),
                                   fit: BoxFit.contain),
                             ),
                           ),
@@ -263,7 +264,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                       height: 70.0,
                                       width: Get.width * 0.11,
                                       child: IconButton(
-                                        icon: Image.asset('assets/menos.png'),
+                                        icon: Image.asset(
+                                            'assets/image/menos.png'),
                                         onPressed: () => menos(
                                             widget.producto, cartProvider),
                                       ),
@@ -325,7 +327,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                       height: 70.0,
                                       width: Get.width * 0.11,
                                       child: IconButton(
-                                        icon: Image.asset('assets/mas.png'),
+                                        icon:
+                                            Image.asset('assets/image/mas.png'),
                                         onPressed: () =>
                                             mas(widget.producto, cartProvider),
                                       ),
@@ -374,7 +377,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
                           child: Image.asset(
-                            "assets/agregar_al_carrito_btn.png",
+                            "assets/image/agregar_al_carrito_btn.png",
                           ),
                         ),
                       ),
@@ -405,7 +408,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     );
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = _controllerCantidadProducto.text;
 
     if (valorInicial.length < 3) {
@@ -421,7 +424,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     }
   }
 
-  menos(Productos producto, CarroModelo cartProvider) {
+  menos(Producto producto, CarroModelo cartProvider) {
     String valorInicial = _controllerCantidadProducto.text;
     if (valorInicial != "" && valorInicial != '1' && valorInicial != '0') {
       int valorResta = int.parse(valorInicial) - 1;
@@ -435,7 +438,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     }
   }
 
-  llenarCarrito(Productos producto, CarroModelo cartProvider) {
+  llenarCarrito(Producto producto, CarroModelo cartProvider) {
     if (_controllerCantidadProducto.text != '' &&
         _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =

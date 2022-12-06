@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -12,7 +12,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class CarritoDisenoListaRLista extends StatefulWidget {
   final int numTienda;
-  final Productos productos;
+  final Producto productos;
 
   const CarritoDisenoListaRLista(
       {Key? key, required this.numTienda, required this.productos})
@@ -41,7 +41,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
 
   _cargarDisenoInterno(
       element, BuildContext context, CarroModelo cartProvider) {
-    Productos productos = element;
+    Producto productos = element;
 
     final size = MediaQuery.of(context).size;
     return Row(
@@ -56,7 +56,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
                 imageUrl: Constantes().urlImgProductos +
                     '${widget.numTienda}/${element.codigo}.png',
                 placeholder: (context, url) =>
-                    Image.asset('assets/jar-loading.gif'),
+                    Image.asset('assets/image/jar-loading.gif'),
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 fit: BoxFit.fill),
           ),
@@ -114,9 +114,10 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
                         height: 30,
                         paddingTop: 5,
                         pressedImage: Image.asset(
-                          "assets/agregar_btn.png",
+                          "assets/image/agregar_btn.png",
                         ),
-                        unpressedImage: Image.asset("assets/agregar_btn.png"),
+                        unpressedImage:
+                            Image.asset("assets/image/agregar_btn.png"),
                         onTap: () => mas(productos, cartProvider),
                       )
                     : Row(
@@ -129,7 +130,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
                               height: 40.0,
                               width: 40.0,
                               child: IconButton(
-                                icon: Image.asset('assets/menos.png'),
+                                icon: Image.asset('assets/image/menos.png'),
                                 onPressed: () => menos(productos, cartProvider),
                               ),
                             ),
@@ -181,7 +182,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
                               height: 40.0,
                               width: 40.0,
                               child: IconButton(
-                                icon: Image.asset('assets/mas.png'),
+                                icon: Image.asset('assets/image/mas.png'),
                                 onPressed: () => mas(productos, cartProvider),
                               ),
                             ),
@@ -194,7 +195,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     );
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -212,7 +213,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     calcularValorTotal(cartProvider);
   }
 
-  menos(Productos producto, CarroModelo cartProvider) {
+  menos(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -250,7 +251,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     cartProvider.guardarValorCompra = valorTotal;
   }
 
-  int obtenerValorProducto(Productos producto, CarroModelo cartProvider) {
+  int obtenerValorProducto(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {

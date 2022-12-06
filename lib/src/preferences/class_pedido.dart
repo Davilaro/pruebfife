@@ -1,5 +1,5 @@
 import 'package:emart/src/modelos/asignado.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.Dart";
 import 'package:get/get.dart';
@@ -10,15 +10,14 @@ class PedidoEmart {
   static Map<String, String>? listaValoresPedido;
   static Map<String, bool>? listaValoresPedidoAgregados;
   static Map<String, bool>? listSugeridosAgregados;
-  static Map<String, Productos>? listaProductos;
+  static Map<String, Producto>? listaProductos;
   static Map<String, dynamic>? listaSugeridos;
   static Map<String, dynamic>? listaProductosPorFabricante;
   static List<dynamic>? listaFabricante = [];
   static Map<String, dynamic>? listaPrecioPorFabricante;
   static RxInt cambioVista = 1.obs;
 
-  static registrarValoresPedido(
-      Productos producto, dynamic valor, bool estado) {
+  static registrarValoresPedido(Producto producto, dynamic valor, bool estado) {
     listaValoresPedido!.update(producto.codigo, (value) => valor);
     listaControllersPedido!.update(producto.codigo, (value) => value);
     listaValoresPedidoAgregados!.update(producto.codigo, (value) => estado);
@@ -36,7 +35,7 @@ class PedidoEmart {
     cantItems.value = "$items";
   }
 
-  static retirarPedido(Productos producto, dynamic valor, bool estado) {}
+  static retirarPedido(Producto producto, dynamic valor, bool estado) {}
 
   static iniciarProductosPorFabricante() {
     listaProductosPorFabricante = new Map();
@@ -235,13 +234,13 @@ class PedidoEmart {
     });
   }
 
-  static String? obtenerValor(Productos productos) {
+  static String? obtenerValor(Producto productos) {
     return listaValoresPedido![productos.codigo] == null
         ? "0"
         : listaValoresPedido![productos.codigo];
   }
 
-  static bool? obtenerValorController(Productos productos) {
+  static bool? obtenerValorController(Producto productos) {
     return listaControllersPedido![productos.codigo] == null ? false : true;
   }
 

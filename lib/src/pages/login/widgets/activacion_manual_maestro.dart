@@ -157,9 +157,9 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
       height: 45,
       paddingTop: 5,
       pressedImage: Image.asset(
-        "assets/registar_cuenta_btn.png",
+        "assets/image/registar_cuenta_btn.png",
       ),
-      unpressedImage: Image.asset("assets/registar_cuenta_btn.png"),
+      unpressedImage: Image.asset("assets/image/registar_cuenta_btn.png"),
       onTap: () => _enviarMensajeServicio(),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -21,7 +21,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class CarritoDisenoListaR extends StatefulWidget {
   final int numTienda;
-  final Productos productos;
+  final Producto productos;
   final String tipoVenta;
 
   const CarritoDisenoListaR(this.numTienda, this.productos, this.tipoVenta);
@@ -65,7 +65,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     );
   }
 
-  _cargarDisenoInterno(Productos element, BuildContext context,
+  _cargarDisenoInterno(Producto element, BuildContext context,
       CarroModelo cartProvider, NumberFormat format) {
     var dateNow =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -84,7 +84,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                   height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Image.asset(
-                    'assets/promo_abel.png',
+                    'assets/image/promo_abel.png',
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -98,7 +98,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                   height: 30,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Image.asset(
-                    'assets/nuevos_label.png',
+                    'assets/image/nuevos_label.png',
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -120,9 +120,9 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                     imageUrl:
                         Constantes().urlImgProductos + '${element.codigo}.png',
                     placeholder: (context, url) =>
-                        Image.asset('assets/jar-loading.gif'),
+                        Image.asset('assets/image/jar-loading.gif'),
                     errorWidget: (context, url, error) =>
-                        Image.asset('assets/logo_login.png'),
+                        Image.asset('assets/image/logo_login.png'),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -177,9 +177,9 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                 height: 30,
                 paddingTop: 5,
                 pressedImage: Image.asset(
-                  "assets/iniciar_sesion_btn.png",
+                  "assets/image/iniciar_sesion_btn.png",
                 ),
-                unpressedImage: Image.asset("assets/agregar_btn.png"),
+                unpressedImage: Image.asset("assets/image/agregar_btn.png"),
                 onTap: () => detalleProducto(element, cartProvider),
               )),
         ],
@@ -187,8 +187,8 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     );
   }
 
-  detalleProducto(Productos element, final CarroModelo cartProvider) {
-    Productos productos = element;
+  detalleProducto(Producto element, final CarroModelo cartProvider) {
+    Producto productos = element;
 
     if (prefs.usurioLogin == -1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
@@ -207,7 +207,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     }
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -225,7 +225,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  menos(Productos producto, CarroModelo cartProvider) {
+  menos(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {

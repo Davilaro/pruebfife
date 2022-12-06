@@ -10,7 +10,7 @@ import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/modelos/marcas.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/modelos/tablas_borrar.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -257,28 +257,28 @@ class DBProviderHelper {
     }
   }
 
-  Future<Productos> consultarDatosProducto(String producto) async {
-    final db = await baseAbierta;
+  // Future<Producto> consultarDatosProducto(String producto) async {
+  //   final db = await baseAbierta;
 
-    final sql = await db.rawQuery('''
-      SELECT * FROM Producto where codigo='$producto' limit 1
-    ''');
+  //   final sql = await db.rawQuery('''
+  //     SELECT * FROM Producto where codigo='$producto' limit 1
+  //   ''');
 
-    return Productos.fromJson(sql.first);
-  }
+  //   return Producto.fromJson(sql.first);
+  // }
 
-  Future<List<Productos>> consultarProductos() async {
-    final db = await baseAbierta;
-    try {
-      final sql = await db.rawQuery('''
-      SELECT * FROM Producto
-    ''');
+  // Future<List<Producto>> consultarProductos() async {
+  //   final db = await baseAbierta;
+  //   try {
+  //     final sql = await db.rawQuery('''
+  //     SELECT * FROM Producto
+  //   ''');
 
-      return sql.map((e) => Productos.fromJson(e)).toList();
-    } catch (e) {
-      return [];
-    }
-  }
+  //     return sql.map((e) => Producto.fromJson(e)).toList();
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
 
   Future<dynamic> consultarSugueridoHelper() async {
     final db = await baseAbierta;

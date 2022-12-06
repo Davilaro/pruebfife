@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
@@ -43,7 +45,8 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
   @override
   Widget build(BuildContext context) {
     providerDatos = Provider.of<DatosListas>(context, listen: true);
-
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
     return Column(
       children: [
         Container(
@@ -58,7 +61,7 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
                     child: Container(
                       margin: EdgeInsets.only(right: 20, bottom: 10),
                       child: GestureDetector(
-                        child: SvgPicture.asset('assets/filtro_btn.svg'),
+                        child: SvgPicture.asset('assets/image/filtro_btn.svg'),
                       ),
                     ),
                   )
@@ -70,7 +73,7 @@ class _CatalogInternoGenericoState extends State<CatalogInternoGenerico> {
             width: Get.width * 1,
             child: FutureBuilder(
                 //SE VA DESCARGAR POR DB
-                future: DBProvider.db.cargarProductos(
+                future: productService.cargarProductos(
                     widget.codCategoria,
                     widget.tipoCategoria,
                     _controllerUser.text,
