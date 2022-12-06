@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -175,7 +176,7 @@ class _HomePageBody extends StatelessWidget {
         }
 
       case 2:
-        return PedidoRapido();
+        return PedidoSugeridoPage();
 
       case 3:
         return HistoricoPedidos();

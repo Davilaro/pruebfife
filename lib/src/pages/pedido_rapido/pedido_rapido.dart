@@ -65,54 +65,24 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: ConstantesColores.color_fondo_gris,
-          title: TituloPideky(size: size),
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-            child: Container(
-              width: 100,
-              child: new IconButton(
-                icon: SvgPicture.asset('assets/boton_soporte.svg'),
-                onPressed: () => {
-                  //UXCam: Llamamos el evento clickSoport
-                  UxcamTagueo().clickSoport(),
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Soporte(
-                              numEmpresa: 1,
-                            )),
-                  ),
-                },
-              ),
-            ),
-          ),
-          elevation: 0,
-          actions: <Widget>[
-            BotonActualizar(),
-            AccionNotificacion(),
-            AccionesBartCarrito(esCarrito: false),
-          ],
-        ),
         body: Container(
-          color: ConstantesColores.color_fondo_gris,
-          child: RefreshIndicator(
-            color: ConstantesColores.azul_precio,
-            backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
-            onRefresh: () async {
-              await LogicaActualizar().actualizarDB();
+      color: ConstantesColores.color_fondo_gris,
+      child: RefreshIndicator(
+        color: ConstantesColores.azul_precio,
+        backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
+        onRefresh: () async {
+          await LogicaActualizar().actualizarDB();
 
-              Navigator.pushReplacementNamed(
-                context,
-                'tab_opciones',
-              ).timeout(Duration(seconds: 3));
-              return Future<void>.delayed(const Duration(seconds: 3));
-            },
-            child: SingleChildScrollView(
-                child: _ultimaOrden(size, cartProvider, providerDatos)),
-          ),
-        ));
+          Navigator.pushReplacementNamed(
+            context,
+            'tab_opciones',
+          ).timeout(Duration(seconds: 3));
+          return Future<void>.delayed(const Duration(seconds: 3));
+        },
+        child: SingleChildScrollView(
+            child: _ultimaOrden(size, cartProvider, providerDatos)),
+      ),
+    ));
   }
 
   Widget _tabs(size) {
@@ -127,17 +97,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           },
           children: [
             TableRow(children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  'Pedido Rápido',
-                  style: TextStyle(
-                      color: HexColor("#43398E"),
-                      fontSize: 20,
-                      fontFamily: "monserrat",
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
               Visibility(
                   visible: false,
                   child: Column(
