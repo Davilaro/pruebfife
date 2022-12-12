@@ -103,53 +103,62 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
             alignment: Alignment.centerRight,
             child: Container(
               width: 124,
-              child: Obx(() => ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        color: HexColor("#43398E"),
-                                        width: 1.0)))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          estadoBoton.value ? 'Pedir' : 'Cancelar',
-                          style: TextStyle(color: HexColor("#43398E")),
-                        ),
-                        !_cargando.value
-                            ? Container(
-                                margin: EdgeInsets.only(left: 5),
-                                width: 20,
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                    'assets/icon/carrito_pedir.png'))
-                            : Container(
-                                height: 10,
-                                width: 10,
-                                margin: EdgeInsets.all(6),
-                                child: CircularProgressIndicator(
-                                  color: HexColor("#30C3A3"),
-                                ),
-                              )
-                      ],
+              child: Obx(() => AbsorbPointer(
+                    absorbing: _cargando.value,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color: HexColor("#43398E"),
+                                          width: 1.0)))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            estadoBoton.value ? 'Pedir' : 'Cancelar',
+                            style: TextStyle(color: HexColor("#43398E")),
+                          ),
+                          !_cargando.value
+                              ? Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  width: 20,
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                      'assets/icon/carrito_pedir.png'))
+                              : Container(
+                                  height: 10,
+                                  width: 10,
+                                  margin: EdgeInsets.all(6),
+                                  child: CircularProgressIndicator(
+                                    color: HexColor("#30C3A3"),
+                                  ),
+                                )
+                        ],
+                      ),
+                      onPressed: () async {
+                        _cargando.value = true;
+                        onBlockBoubleClick();
+                        await _cargarPedido(
+                            widget.historico.numeroDoc!.toString(),
+                            estadoBoton.value,
+                            widget.providerDatos);
+                      },
                     ),
-                    onPressed: () async {
-                      _cargando.value = true;
-                      determinarBotonCarrito(widget.historico.numeroDoc!);
-                      await _cargarPedido(
-                          widget.historico.numeroDoc!.toString(),
-                          estadoBoton.value,
-                          widget.providerDatos);
-                    },
                   )),
             ),
           ),
         ],
       )
     ]);
+  }
+
+  onBlockBoubleClick() {
+    Future.delayed(Duration(seconds: 2), () {
+      _cargando.value = false;
+    });
   }
 
   Widget _separador(size) {
@@ -197,20 +206,23 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
+      onBlockBoubleClick();
       // pasarCarrito(providerDatos, ordenCompra, estado);
     } else {
       List<Historico> datosDetalle =
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       datosDetalle.forEach((element) {
+        print("${element.cantidad}");
+        print("${element.numeroDoc}");
         menos(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
       });
     }
     actualizarEstadoPedido(widget.providerDatos, numeroDoc);
     calcularValorTotal(widget.cartProvider);
-    _cargando.value = false;
   }
 
   menos(String prop, int cantidad, String numeroDoc) async {
+    onBlockBoubleClick();
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
     if (producto.codigo != "") {
       int nuevaCantidad = PedidoEmart
@@ -220,6 +232,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           : (int.parse(
                   PedidoEmart.listaControllersPedido![producto.codigo]!.text) -
               cantidad);
+
       setState(() {
         if (nuevaCantidad == 0) {
           PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
@@ -234,6 +247,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           PedidoEmart.listaControllersPedido![producto.codigo]!.text =
               "$nuevaCantidad";
           PedidoEmart.registrarValoresPedido(producto, '$nuevaCantidad', true);
+          controlador.mapaHistoricos
+              .addAll({widget.historico.numeroDoc: false});
         }
         determinarBotonCarrito(widget.historico.numeroDoc!);
       });
@@ -243,6 +258,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   }
 
   mas(String prod, int cantidad, String numeroDoc) async {
+    onBlockBoubleClick();
     Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
     if (producto.codigo != "") {
       int nuevaCantidad = PedidoEmart

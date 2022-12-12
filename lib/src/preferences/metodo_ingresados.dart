@@ -9,8 +9,7 @@ class MetodosLLenarValores {
     int cantidad = 0;
 
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
-      if (value == "") {
-      } else if (value != "0") {
+      if (value != "0") {
         if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
           double? precio = PedidoEmart.listaProductos![key]!.descuento == 0
               ? PedidoEmart.listaProductos![key]!.precio
