@@ -596,6 +596,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       });
                       PedidoEmart.iniciarProductosPorFabricante();
                     });
+                    cargoConfirmar.mapaHistoricos
+                        .updateAll((key, value) => value = false);
                   },
                   child: Text(
                     'Aceptar',
