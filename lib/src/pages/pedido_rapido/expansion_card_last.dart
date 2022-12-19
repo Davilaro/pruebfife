@@ -212,8 +212,6 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       List<Historico> datosDetalle =
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       datosDetalle.forEach((element) {
-        print("${element.cantidad}");
-        print("${element.numeroDoc}");
         menos(element.codigoRef!, element.cantidad!, "${element.numeroDoc}");
       });
     }

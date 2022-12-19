@@ -147,15 +147,12 @@ class PedidoEmart {
 
     groups.forEach((key, value) {
       var precio = 0.0;
-      String icon = "";
       for (int i = 0; i < value.length; i++) {
         precio = precio + (value[i].cantidad! * value[i].precio!);
       }
 
       for (int j = 0; j < listaFabricante!.length; j++) {
-        if (listaFabricante![j].empresa == key) {
-          icon = listaFabricante![j].icono;
-        }
+        if (listaFabricante![j].empresa == key) {}
       }
 
       listaPrecioPorFabricante!.putIfAbsent(
@@ -216,15 +213,12 @@ class PedidoEmart {
 
     groups.forEach((key, value) {
       var precio = 0.0;
-      String icon = "";
       for (int i = 0; i < value.length; i++) {
         precio = precio + (value[i].cantidad! * value[i].precio!);
       }
 
       for (int j = 0; j < listaFabricante!.length; j++) {
-        if (listaFabricante![j].empresa == key) {
-          icon = listaFabricante![j].icono;
-        }
+        if (listaFabricante![j].empresa == key) {}
       }
 
       listaPrecioPorFabricante!.putIfAbsent(

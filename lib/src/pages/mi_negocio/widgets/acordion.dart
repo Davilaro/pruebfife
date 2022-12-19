@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +91,7 @@ class _EstadoAcordion extends State<Acordion> {
         ),
         _mostrarContenido
             ? Container(
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: EdgeInsets.only(bottom: 15),
                 child: widget.contenido,
               )
             : Container()

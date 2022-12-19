@@ -9,9 +9,12 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+
 final prefs = new Preferencias();
 
 modalCerrarSesion(context, size, provider) {
+  final controllerGet = Get.find<PedidoSugeridoController>();
   String mensaje =
       "Estas apunto de salir de Pideky, deberás volver a ingresar los datos " +
           "de tu negocio para ver los productos y proveedores.";
@@ -55,6 +58,7 @@ modalCerrarSesion(context, size, provider) {
         _showLoaderDialog(context),
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
+          controllerGet.usuarioLogueado.value = "";
           prefs.usurioLogin = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
