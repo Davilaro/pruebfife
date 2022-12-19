@@ -1,4 +1,4 @@
-import 'package:emart/src/pages/mi_negocio/widgets/acordion.dart';
+import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';

@@ -39,7 +39,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
     return Obx(() => _controllesBannes.cargoDatos.value == false
         ? Container(
             child: Center(
-              child: Image.asset('assets/jar-loading.gif'),
+              child: Image.asset('assets/image/jar-loading.gif'),
             ),
           )
         : Column(

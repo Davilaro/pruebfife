@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
@@ -13,7 +13,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class DisenoLista extends StatefulWidget {
   final int numTienda;
-  final Productos productos;
+  final Producto productos;
 
   const DisenoLista(
       {Key? key, required this.numTienda, required this.productos})
@@ -37,7 +37,7 @@ class _DisenoListaState extends State<DisenoLista> {
 
   _cargarDisenoInterno(
       element, BuildContext context, CarroModelo cartProvider) {
-    Productos productos = element;
+    Producto productos = element;
 
     final size = MediaQuery.of(context).size;
     return Row(
@@ -53,7 +53,7 @@ class _DisenoListaState extends State<DisenoLista> {
               imageUrl: Constantes().urlImgProductos +
                   '${widget.numTienda}/${element.codigo}.png',
               placeholder: (context, url) =>
-                  Image.asset('assets/jar-loading.gif'),
+                  Image.asset('assets/image/jar-loading.gif'),
               errorWidget: (context, url, error) => Icon(Icons.error),
               fit: BoxFit.fill,
             ),
@@ -108,9 +108,10 @@ class _DisenoListaState extends State<DisenoLista> {
                       height: 30,
                       paddingTop: 5,
                       pressedImage: Image.asset(
-                        "assets/iniciar_sesion_btn.png",
+                        "assets/image/iniciar_sesion_btn.png",
                       ),
-                      unpressedImage: Image.asset("assets/agregar_btn.png"),
+                      unpressedImage:
+                          Image.asset("assets/image/agregar_btn.png"),
                       onTap: () => mas(productos, cartProvider),
                     )
                   : Row(
@@ -123,7 +124,7 @@ class _DisenoListaState extends State<DisenoLista> {
                             height: 40.0,
                             width: 40.0,
                             child: IconButton(
-                              icon: Image.asset('assets/menos.png'),
+                              icon: Image.asset('assets/image/menos.png'),
                               onPressed: () => menos(productos, cartProvider),
                             ),
                           ),
@@ -174,7 +175,7 @@ class _DisenoListaState extends State<DisenoLista> {
                             height: 40.0,
                             width: 40.0,
                             child: IconButton(
-                              icon: Image.asset('assets/mas.png'),
+                              icon: Image.asset('assets/image/mas.png'),
                               onPressed: () => mas(productos, cartProvider),
                             ),
                           ),
@@ -186,7 +187,7 @@ class _DisenoListaState extends State<DisenoLista> {
     );
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -204,7 +205,7 @@ class _DisenoListaState extends State<DisenoLista> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  menos(Productos producto, CarroModelo cartProvider) {
+  menos(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -226,7 +227,7 @@ class _DisenoListaState extends State<DisenoLista> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  int obtenerValorProducto(Productos producto, CarroModelo cartProvider) {
+  int obtenerValorProducto(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {

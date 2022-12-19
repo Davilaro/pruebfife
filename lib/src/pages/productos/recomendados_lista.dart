@@ -1,4 +1,6 @@
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -10,11 +12,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 final prefs = new Preferencias();
 
 class Recomendados extends StatelessWidget {
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: SvgPicture.asset('assets/app_bar.svg', fit: BoxFit.fill),
+          title: SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill),
           elevation: 0,
           actions: <Widget>[
             BotonActualizar(),
@@ -23,7 +27,7 @@ class Recomendados extends StatelessWidget {
         ),
         body: FutureBuilder(
             initialData: [],
-            future: DBProvider.db.consultarSuguerido(),
+            future: productService.consultarSugerido(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -43,7 +47,7 @@ class Recomendados extends StatelessWidget {
     }
 
     listaProductos.forEach((element) {
-      Productos productos = element;
+      Producto productos = element;
 
       final template = CarritoDisenoListaRLista(
           numTienda: prefs.numEmpresa, productos: productos);

@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
-import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -24,7 +24,7 @@ class CambiarDetalleCompra extends StatefulWidget {
 
 class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  Productos? productos;
+  Producto? productos;
   final constrollerProductos = Get.find<ControllerProductos>();
 
   @override
@@ -92,8 +92,10 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   }
 
   _cargarInformacionInferior(format, cartProvider) {
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
-        future: DBProvider.db.consultarSuguerido(),
+        future: productService.consultarSugerido(),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
@@ -118,7 +120,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     }
 
     listaProductos.forEach((element) {
-      Productos producto = element;
+      Producto producto = element;
 
       final template = Container(
           child: FittedBox(
@@ -158,7 +160,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     return opciones;
   }
 
-  detalleProducto(Productos element, CarroModelo cartProvider) {
+  detalleProducto(Producto element, CarroModelo cartProvider) {
     cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(element)!);
     cargoConfirmar.cargarProductoNuevo(
         ProductoCambiante.m(element.nombre, element.codigo), 2);

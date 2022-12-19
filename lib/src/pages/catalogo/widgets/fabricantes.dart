@@ -126,9 +126,9 @@ class _FabricantesState extends State<Fabricantes> {
                     child: CachedNetworkImage(
                         imageUrl: '${element.icono}',
                         placeholder: (context, url) =>
-                            Image.asset('assets/jar-loading.gif'),
+                            Image.asset('assets/image/jar-loading.gif'),
                         errorWidget: (context, url, error) =>
-                            Image.asset('assets/logo_login.png'),
+                            Image.asset('assets/image/logo_login.png'),
                         fit: BoxFit.fill),
                   ),
                 ],

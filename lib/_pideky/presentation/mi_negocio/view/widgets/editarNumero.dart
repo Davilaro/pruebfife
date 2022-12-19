@@ -1,12 +1,13 @@
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-editarNumero(BuildContext context, TextEditingController controllerInput,
-    RxString validarInputNumero, Function() validarNumero) {
-  controllerInput.text = '+57 ';
+editarNumero(BuildContext context) {
+  final MiNegocioViewModel viewModel = Get.find();
+  viewModel.controllerInput.text = '+57 ';
 
   return showDialog(
       context: context,
@@ -32,7 +33,7 @@ editarNumero(BuildContext context, TextEditingController controllerInput,
                   textAlign: TextAlign.left,
                   keyboardType: TextInputType.number,
                   textAlignVertical: TextAlignVertical.top,
-                  controller: controllerInput,
+                  controller: viewModel.controllerInput,
                   style: TextStyle(color: Colors.black, fontSize: 15),
                   decoration: InputDecoration(
                     fillColor: Colors.black,
@@ -48,12 +49,12 @@ editarNumero(BuildContext context, TextEditingController controllerInput,
               Obx(() => Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      validarInputNumero.value,
+                      viewModel.validarInputNumero.value,
                       style: TextStyle(color: Colors.red, fontSize: 12),
                     ),
                   )),
             ]),
             hasRightButton: true,
-            onLeftPressed: () => validarNumero(),
+            onLeftPressed: () => viewModel.validarNumero(context),
           ));
 }

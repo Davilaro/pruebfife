@@ -165,9 +165,9 @@ class _ActivacionManualNovedadState extends State<ActivacionManualNovedad> {
       height: 45,
       paddingTop: 5,
       pressedImage: Image.asset(
-        "assets/activar_cuenta_btn.png",
+        "assets/image/activar_cuenta_btn.png",
       ),
-      unpressedImage: Image.asset("assets/activar_cuenta_btn.png"),
+      unpressedImage: Image.asset("assets/image/activar_cuenta_btn.png"),
       onTap: () => _enviarMensajeServicio(),
     );
   }

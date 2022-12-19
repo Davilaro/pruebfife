@@ -1,6 +1,8 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -151,7 +153,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                                       EdgeInsets.only(right: 30, bottom: 10),
                                   child: GestureDetector(
                                     child: SvgPicture.asset(
-                                        'assets/filtro_btn.svg'),
+                                        'assets/image/filtro_btn.svg'),
                                   ),
                                 ),
                               ),
@@ -201,7 +203,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     final List<Widget> opciones = [];
 
     for (var i = 0; i < data.length; i++) {
-      Productos productos = data[i];
+      Producto productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
@@ -256,9 +258,11 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   }
 
   void cargarProductos() async {
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
     if (widget.claseProducto != null) {
       if (widget.claseProducto == 1) {
-        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+        listaAllProducts = await productService.cargarProductosInterno(
             1,
             "",
             catalogSearchViewModel.precioMinimo.value,
@@ -269,7 +273,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 2) {
-        listaAllProducts = await DBProvider.db.cargarProductosInterno(
+        listaAllProducts = await productService.cargarProductosInterno(
             2,
             "",
             catalogSearchViewModel.precioMinimo.value,
@@ -280,7 +284,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
-        listaAllProducts = await DBProvider.db.cargarProductos(
+        listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca!,
             widget.tipoCategoria,
             '',
@@ -291,7 +295,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 3) {
-        listaAllProducts = await DBProvider.db.cargarProductos(
+        listaAllProducts = await productService.cargarProductos(
             widget.codigoSubCategoria!,
             widget.tipoCategoria,
             '',
@@ -302,7 +306,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
-        listaAllProducts = await DBProvider.db.cargarProductos(
+        listaAllProducts = await productService.cargarProductos(
             widget.codigoCategoria!,
             widget.tipoCategoria,
             '',
@@ -313,19 +317,20 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 6) {
-        listaAllProducts = await DBProvider.db.cargarProductosFiltroProveedores(
-            widget.codCategoria,
-            widget.tipoCategoria,
-            '',
-            catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value,
-            widget.codigoSubCategoria,
-            widget.codigoMarca,
-            widget.codigoProveedor);
+        listaAllProducts =
+            await productService.cargarProductosFiltroProveedores(
+                widget.codCategoria,
+                widget.tipoCategoria,
+                '',
+                catalogSearchViewModel.precioMinimo.value,
+                catalogSearchViewModel.precioMaximo.value,
+                widget.codigoSubCategoria,
+                widget.codigoMarca,
+                widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 7) {
-        listaAllProducts = await DBProvider.db.cargarProductos(
+        listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca,
             7,
             '',
@@ -338,7 +343,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       }
       //para el filtro de categorias
       if (widget.claseProducto == 8) {
-        listaAllProducts = await DBProvider.db.cargarProductosFiltroCategoria(
+        listaAllProducts = await productService.cargarProductosFiltroCategoria(
             widget.codigoCategoria,
             widget.tipoCategoria,
             catalogSearchViewModel.precioMinimo.value,
@@ -348,7 +353,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
     } else {
-      listaAllProducts = await DBProvider.db.cargarProductos(
+      listaAllProducts = await productService.cargarProductos(
           widget.codCategoria!,
           widget.tipoCategoria,
           '',

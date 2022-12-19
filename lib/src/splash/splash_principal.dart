@@ -36,7 +36,7 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       body: Center(
           child: Image.asset(
-        'assets/splash.png',
+        'assets/image/splash.png',
         fit: BoxFit.cover,
       )),
     );

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -209,9 +209,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                     PedidoEmart.listaProductosPorFabricante![
                                         fabricante]["imagen"],
                                 placeholder: (context, url) =>
-                                    Image.asset('assets/jar-loading.gif'),
+                                    Image.asset('assets/image/jar-loading.gif'),
                                 errorWidget: (context, url, error) =>
-                                    Image.asset('assets/logo_login.png'),
+                                    Image.asset('assets/image/logo_login.png'),
                                 fit: BoxFit.cover),
                           ),
                           SizedBox(
@@ -257,7 +257,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                   Obx(() => Visibility(
                                         visible: isValid.value,
                                         child: SvgPicture.asset(
-                                          'assets/alerta_pedido_inferio.svg',
+                                          'assets/image/alerta_pedido_inferio.svg',
                                           // color: fabricante.toUpperCase() == "MEALS"
                                           //     ? HexColor("#42B39C")
                                           //     : Colors.red,
@@ -342,12 +342,12 @@ class _CarritoComprasState extends State<CarritoCompras> {
   List<Widget> gridItem(List<dynamic> value, String fabricante,
       BuildContext context, CarroModelo cartProvider, format, precioMinimo) {
     List<Widget> result = [];
-    List<Productos> listTag = [];
+    List<Producto> listTag = [];
 
     final size = MediaQuery.of(context).size;
 
     value.forEach((product) {
-      Productos productos = PedidoEmart.listaProductos![product.codigo]!;
+      Producto productos = PedidoEmart.listaProductos![product.codigo]!;
 
       if (product.fabricante == fabricante && product.cantidad > 0) {
         listTag.add(productos);
@@ -386,7 +386,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           height: 40.0,
                           width: 40.0,
                           child: IconButton(
-                            icon: Image.asset('assets/menos.png'),
+                            icon: Image.asset('assets/image/menos.png'),
                             onPressed: () => {
                               menos(product.productos, cartProvider, fabricante,
                                   precioMinimo),
@@ -435,7 +435,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           height: 40.0,
                           width: 40.0,
                           child: IconButton(
-                            icon: Image.asset('assets/mas.png'),
+                            icon: Image.asset('assets/image/mas.png'),
                             onPressed: () =>
                                 mas(product.productos, cartProvider),
                           ),
@@ -514,10 +514,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
                 height: 35,
                 paddingTop: 5,
                 pressedImage: Image.asset(
-                  "assets/seguir_comprando_btn_detalle-white.png",
+                  "assets/image/seguir_comprando_btn_detalle-white.png",
                 ),
                 unpressedImage: Image.asset(
-                    "assets/seguir_comprando_btn_detalle-white.png"),
+                    "assets/image/seguir_comprando_btn_detalle-white.png"),
                 onTap: () async {
                   PedidoEmart.cambioVista.value = 1;
                   cartProvider.guardarCambiodevista = 1;
@@ -624,7 +624,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     setState(() {});
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial.length < 3) {
@@ -644,7 +644,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     }
   }
 
-  menos(Productos producto, CarroModelo cartProvider, String fabricante,
+  menos(Producto producto, CarroModelo cartProvider, String fabricante,
       precioMinimo) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 

@@ -1,9 +1,11 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/src/modelos/marcas.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
@@ -49,10 +51,13 @@ class BannnerControllers extends GetxController {
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs,
       String locasionBanner) async {
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
+
     var resBusqueda;
     if (banner.tipoSeccion == 'Detalle Producto') {
-      resBusqueda = await DBProvider.db
-          .cargarProductosFiltro(banner.seccion.toString(), "");
+      resBusqueda = await productService.cargarProductosFiltro(
+          banner.seccion.toString(), "");
       _detalleProducto(
           resBusqueda[0], provider, context, cargoConfirmar, prefs);
     } else if (banner.tipoSeccion == 'Categoria') {
@@ -141,7 +146,7 @@ class BannnerControllers extends GetxController {
   }
 
   _detalleProducto(
-      Productos producto,
+      Producto producto,
       final CarroModelo cartProvider,
       BuildContext context,
       CambioEstadoProductos cargoConfirmar,

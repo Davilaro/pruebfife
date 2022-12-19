@@ -1,5 +1,5 @@
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class CatalogoPoductosCategorias extends StatelessWidget {
     final List<Widget> opciones = [];
 
     for (var element in data) {
-      Productos productos = element;
+      Producto productos = element;
       bool isProductoPromo = false;
 
       final widgetTemp = InputValoresCatalogo(

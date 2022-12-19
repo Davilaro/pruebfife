@@ -514,6 +514,7 @@ class Servicies {
           "Token": "$token"
         }),
       );
+      print(response.body);
       print([
         "DeviceId $idUnicoMovil",
         "DeviceType $plataforma",

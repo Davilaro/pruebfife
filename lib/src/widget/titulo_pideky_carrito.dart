@@ -19,7 +19,8 @@ class TituloPidekyCarrito extends StatelessWidget {
         child: Container(
             height: 30,
             width: size.width * 0.3,
-            child: SvgPicture.asset('assets/app_bar.svg', fit: BoxFit.fill)),
+            child:
+                SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
         onTap: () => {
           Navigator.of(context).pushNamedAndRemoveUntil(
               'tab_opciones', (Route<dynamic> route) => false),

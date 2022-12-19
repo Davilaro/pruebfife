@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:emart/src/modelos/pedido.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -135,8 +133,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticSelectItem(
-      Productos producto, int cantidad) async {
+  Future<void> sendAnalityticSelectItem(Producto producto, int cantidad) async {
     try {
       var resPrice = producto.precio / 1000000;
       var data = {
@@ -167,7 +164,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticAddToCart(Productos producto, int cantidad) async {
+  Future<void> sendAnalityticAddToCart(Producto producto, int cantidad) async {
     try {
       final total = producto.precio * cantidad;
       var resPrice = producto.precio / 1000000;
@@ -199,7 +196,7 @@ class TagueoFirebase {
   }
 
   Future<void> sendAnalityticRemoveFromCart(
-      Productos producto, String? cantidad) async {
+      Producto producto, String? cantidad) async {
     try {
       final totalOrden = producto.precio * int.parse(cantidad!);
       var resPrice = producto.precio / 1000000;
@@ -254,8 +251,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticViewItem(
-      Productos producto, int totalOrden) async {
+  Future<void> sendAnalityticViewItem(Producto producto, int totalOrden) async {
     try {
       var resPrice = producto.precio / 1000000;
       var data = {
@@ -281,7 +277,7 @@ class TagueoFirebase {
   }
 
   Future<void> sendAnalityticViewCart(CarroModelo cartProvider,
-      List<Productos> listProducts, String? view) async {
+      List<Producto> listProducts, String? view) async {
     try {
       List<Object> productos = [];
       var contador = 1;
@@ -369,7 +365,7 @@ class TagueoFirebase {
     try {
       var contador = -1;
       var data = list.map((item) {
-        Productos productos = item;
+        Producto productos = item;
         var resPrice = productos.precio / 1000000;
         contador++;
         return {

@@ -44,7 +44,7 @@ class _OfertasInternaState extends State<OfertasInterna> {
     return _listaBanners?.length == 0
         ? Container(
             child: Center(
-              child: Image.asset('assets/jar-loading.gif'),
+              child: Image.asset('assets/image/jar-loading.gif'),
             ),
           )
         : Column(

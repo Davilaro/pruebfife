@@ -1,5 +1,5 @@
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
     final List<Widget> opciones = [];
 
     for (var i = 0; i < data.length; i++) {
-      Productos productos = data[i];
+      Producto productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: widget.numEmpresa,
