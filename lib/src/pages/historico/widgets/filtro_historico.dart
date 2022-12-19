@@ -359,7 +359,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       child: Row(
         children: [
           Image.asset(
-            'assets/limpiar_filtro_img.png',
+            'assets/image/limpiar_filtro_img.png',
             width: Get.width * 0.07,
           ),
           Container(

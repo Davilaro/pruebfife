@@ -31,32 +31,32 @@ class CustonNavigatorBar extends StatelessWidget {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 0
-                ? SvgPicture.asset('assets/home_img.svg')
-                : SvgPicture.asset('assets/home_img_norm.svg'),
+                ? SvgPicture.asset('assets/image/home_img.svg')
+                : SvgPicture.asset('assets/image/home_img_norm.svg'),
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 1
-                ? SvgPicture.asset('assets/catalogo_img.svg')
-                : SvgPicture.asset('assets/catalogo_img_norm.svg'),
+                ? SvgPicture.asset('assets/image/catalogo_img.svg')
+                : SvgPicture.asset('assets/image/catalogo_img_norm.svg'),
             label: 'Catálogo',
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 2
-                ? SvgPicture.asset('assets/pedido_rapido_img.svg')
-                : SvgPicture.asset('assets/pedido_rapido_img_norm.svg'),
+                ? SvgPicture.asset('assets/image/pedido_rapido_img.svg')
+                : SvgPicture.asset('assets/image/pedido_rapido_img_norm.svg'),
             label: 'Pedido rápido',
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 3
-                ? SvgPicture.asset('assets/historico_img.svg')
-                : SvgPicture.asset('assets/historico_img_norm.svg'),
+                ? SvgPicture.asset('assets/image/historico_img.svg')
+                : SvgPicture.asset('assets/image/historico_img_norm.svg'),
             label: 'Histórico',
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 4
-                ? SvgPicture.asset('assets/mi_negocio_img.svg')
-                : SvgPicture.asset('assets/mi_negocio_norm.svg'),
+                ? SvgPicture.asset('assets/image/mi_negocio_img.svg')
+                : SvgPicture.asset('assets/image/mi_negocio_norm.svg'),
             label: 'Mi negocio',
           ),
         ]);

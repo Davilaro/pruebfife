@@ -21,7 +21,7 @@ class MessageNotification extends StatelessWidget {
         child: ListTile(
           leading: SizedBox.fromSize(
               size: const Size(40, 40),
-              child: ClipOval(child: Image.asset('assets/app_bar2.png'))),
+              child: ClipOval(child: Image.asset('assets/image/app_bar2.png'))),
           title: title,
           subtitle: message,
           trailing: IconButton(

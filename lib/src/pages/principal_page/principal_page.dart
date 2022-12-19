@@ -78,7 +78,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           child: Container(
             width: 100,
             child: new IconButton(
-              icon: SvgPicture.asset('assets/boton_soporte.svg'),
+              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
               onPressed: () => {
                 //UXCam: Llamamos el evento clickSoport
                 UxcamTagueo().clickSoport(),

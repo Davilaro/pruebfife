@@ -1,5 +1,5 @@
 import 'package:emart/src/modelos/pedido.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -128,7 +128,7 @@ class UxcamTagueo {
     }
   }
 
-  void seeDetailProduct(Productos element, int index, String? nameSeccion,
+  void seeDetailProduct(Producto element, int index, String? nameSeccion,
       bool isAgotadoLabel, bool isNewProduct, bool isPromoProduct) {
     try {
       print(
@@ -179,7 +179,7 @@ class UxcamTagueo {
     });
   }
 
-  void addToCart(Productos element, int cantidad) {
+  void addToCart(Producto element, int cantidad) {
     try {
       // final total = element.precio * cantidad;
       FlutterUxcam.logEventWithProperties("addToCart", {
@@ -195,7 +195,7 @@ class UxcamTagueo {
   }
 
   void removeToCart(
-      Productos element, int cantidad, CarroModelo cartProvider, precioMinimo) {
+      Producto element, int cantidad, CarroModelo cartProvider, precioMinimo) {
     try {
       var isSufficientAmount = 'Si';
       var valorPedido = cartProvider.getListaFabricante[element.fabricante]
@@ -319,7 +319,7 @@ class UxcamTagueo {
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
         if (int.parse(value) > 0) {
           if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
-            Productos producto = PedidoEmart.listaProductos![key]!;
+            Producto producto = PedidoEmart.listaProductos![key]!;
             dynamic cantidad = PedidoEmart.obtenerValor(producto).toString();
             int quantity = int.parse(cantidad);
 

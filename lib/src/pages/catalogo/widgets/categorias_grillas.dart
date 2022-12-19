@@ -125,12 +125,12 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                       imageUrl: element.ico,
                       alignment: Alignment.bottomCenter,
                       placeholder: (context, url) => Image.asset(
-                        'assets/jar-loading.gif',
+                        'assets/image/jar-loading.gif',
                         alignment: Alignment.center,
                         height: 50,
                       ),
                       errorWidget: (context, url, error) => Image.asset(
-                        'assets/logo_login.png',
+                        'assets/image/logo_login.png',
                         height: 50,
                         alignment: Alignment.center,
                       ),

@@ -1,8 +1,10 @@
 // @dart=2.9
+import 'package:emart/initial_bindings.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'src/preferences/preferencias.dart';
@@ -18,7 +20,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
-  //NOTIFICAICONES PARA HUAWI
+  //NOTIFICAICONES PARA HUAWEI
   //injectDependencies();
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
@@ -69,7 +71,8 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => DatosListas()),
         ],
         child: OverlaySupport.global(
-          child: MaterialApp(
+          child: GetMaterialApp(
+            initialBinding: InitialBindings(),
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
