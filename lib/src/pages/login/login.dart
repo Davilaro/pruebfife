@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: new AssetImage('assets/fondo.png'), fit: BoxFit.fill),
+            image: new AssetImage('assets/image/fondo.png'), fit: BoxFit.fill),
       ),
     );
   }
@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
             padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
             child: Column(
               children: [
-                Image(image: AssetImage('assets/logo_login.png')),
+                Image(image: AssetImage('assets/image/logo_login.png')),
                 SizedBox(
                   height: 80,
                 ),
@@ -182,9 +182,9 @@ class _LoginState extends State<Login> {
       height: 45,
       paddingTop: 5,
       pressedImage: Image.asset(
-        "assets/registrar_btn.png",
+        "assets/image/registrar_btn.png",
       ),
-      unpressedImage: Image.asset("assets/registrar_btn.png"),
+      unpressedImage: Image.asset("assets/image/registrar_btn.png"),
       onTap: () => _logicaBoton(context, provider),
     );
   }

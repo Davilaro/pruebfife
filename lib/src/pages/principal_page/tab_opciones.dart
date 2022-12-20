@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -7,7 +10,6 @@ import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
-import 'package:emart/src/pages/mi_negocio/mi_negocio.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -104,6 +106,8 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaProductos = new Map();
         PedidoEmart.listaValoresPedidoAgregados = new Map();
       }
+      ProductoService productService =
+          ProductoService(ProductoRepositorySqlite());
 
       providerDatos.guardarListaSugueridoHelper =
           await DBProviderHelper.db.consultarSugueridoHelper();
@@ -113,8 +117,8 @@ class _TabOpcionesState extends State<TabOpciones>
       PedidoEmart.listaFabricante =
           await DBProvider.db.consultarFricanteGeneral();
 
-      var listaProductos = await DBProvider.db
-          .cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
+      var listaProductos = await productService.cargarProductos(
+          '', 10, '', 0.0, 1000000000.0, "", "");
       for (var i = 0; i < listaProductos.length; i++) {
         PedidoEmart.listaProductos!
             .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);

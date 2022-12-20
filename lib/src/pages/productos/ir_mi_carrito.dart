@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -26,7 +26,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
 
 class IrMiCarrito extends StatefulWidget {
-  final Productos productos;
+  final Producto productos;
   final double tamano;
 
   const IrMiCarrito({Key? key, required this.productos, required this.tamano})
@@ -136,9 +136,9 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               imageUrl: Constantes().urlImgProductos +
                                   '${widget.productos.codigo}.png',
                               placeholder: (context, url) =>
-                                  Image.asset('assets/jar-loading.gif'),
+                                  Image.asset('assets/image/jar-loading.gif'),
                               errorWidget: (context, url, error) =>
-                                  Image.asset('assets/logo_login.png'),
+                                  Image.asset('assets/image/logo_login.png'),
                               fit: BoxFit.contain),
                         ),
                         Container(
@@ -192,7 +192,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                           height: 50,
                           child: GestureDetector(
                             child: Image.asset(
-                              "assets/seguir_comprando_btn.png",
+                              "assets/image/seguir_comprando_btn.png",
                             ),
                             onTap: () => {
                               Navigator.pop(context, true),
@@ -207,7 +207,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                         height: 50,
                         child: GestureDetector(
                           child: Image.asset(
-                            "assets/ir_carrito_btn.png",
+                            "assets/image/ir_carrito_btn.png",
                           ),
                           onTap: () => pasarCarrito(),
                         ),
@@ -241,8 +241,8 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                 Container(
                   width: size.width * 0.1,
                   child: IconButton(
-                    icon:
-                        SvgPicture.asset('assets/check_producto_agregado.svg'),
+                    icon: SvgPicture.asset(
+                        'assets/image/check_producto_agregado.svg'),
                     onPressed: () => {},
                   ),
                 ),
@@ -392,7 +392,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                         width: size.width * 0.1,
                         child: IconButton(
                           icon: SvgPicture.asset(
-                              'assets/check_producto_agregado.svg'),
+                              'assets/image/check_producto_agregado.svg'),
                           onPressed: () => {},
                         ),
                       ),
@@ -437,7 +437,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                         width: size.width * 0.1,
                         child: IconButton(
                           icon: SvgPicture.asset(
-                              'assets/check_producto_agregado.svg'),
+                              'assets/image/check_producto_agregado.svg'),
                           onPressed: () => {},
                         ),
                       ),

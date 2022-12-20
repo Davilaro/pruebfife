@@ -1,4 +1,6 @@
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -9,7 +11,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 class ColumnTableCar extends StatefulWidget {
   final CarroModelo cartProvider;
-  final Productos producto;
+  final Producto producto;
   final int cantidad;
   final DatosListas providerDatos;
   ColumnTableCar(
@@ -25,6 +27,7 @@ class ColumnTableCar extends StatefulWidget {
 }
 
 class _ColumnTableCarState extends State<ColumnTableCar> {
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
   @override
   Widget build(BuildContext context) {
     return Table(columnWidths: {
@@ -130,7 +133,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   mas(String prod) async {
-    Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
+    Producto producto = await productService.consultarDatosProducto(prod);
 
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
@@ -150,7 +153,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   menos(String prop, providerDatos) async {
-    Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
+    Producto producto = await productService.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -199,7 +202,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   eliminarProductoCarrito(String prop, providerDatos) async {
-    Productos producto = await DBProviderHelper.db.consultarDatosProducto(prop);
+    Producto producto = await productService.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {

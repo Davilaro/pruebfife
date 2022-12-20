@@ -8,7 +8,7 @@ class AccionNotificacion extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
       child: IconButton(
-        icon: Image.asset('assets/notificacion_btn.png'),
+        icon: Image.asset('assets/image/notificacion_btn.png'),
         tooltip: 'Show Snackbar',
         onPressed: () {
           Navigator.push(context,

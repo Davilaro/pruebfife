@@ -1,4 +1,6 @@
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
@@ -89,7 +91,9 @@ class _ColumnTableState extends State<ColumnTable> {
   }
 
   mas(String prod, int cantidad) async {
-    Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
+    Producto producto = await productService.consultarDatosProducto(prod);
 
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
     bool valorInicialController = PedidoEmart.obtenerValorController(producto)!;

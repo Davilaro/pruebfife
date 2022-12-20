@@ -151,7 +151,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                                   color: HexColor("#30C3A3"),
                                 )),
                   SizedBox(width: 10),
-                  Text("Productos del día",
+                  Text("Producto del día",
                       style: TextStyle(color: HexColor("#41398D")))
                 ],
               ),
@@ -181,7 +181,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                               ),
                   ),
                   SizedBox(width: 10),
-                  Text("Productos más vendidos",
+                  Text("Producto más vendidos",
                       style: TextStyle(color: HexColor("#41398D")))
                 ],
               ),
@@ -260,7 +260,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     numEmpresa: 'nutresa',
-                    nombreCategoria: "Productos más vendidos",
+                    nombreCategoria: "Producto más vendidos",
                     tipoCategoria: 7,
                     img: widget.urlImagen,
                     claseProducto: 7,
@@ -276,7 +276,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
                     numEmpresa: 'nutresa',
-                    nombreCategoria: "Productos del día",
+                    nombreCategoria: "Producto del día",
                     tipoCategoria: 6,
                     img: widget.urlImagen,
                     claseProducto: 6,

@@ -159,7 +159,7 @@ class ControllerHistorico extends GetxController {
 
   textCustomation(String texto) {
     return AutoSizeText(
-      texto,
+      texto.substring(0, 3),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(

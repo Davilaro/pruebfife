@@ -1,7 +1,9 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
@@ -38,6 +40,7 @@ class ExpansionCardLast extends StatefulWidget {
 }
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
   RxBool _cargando = false.obs;
   final controlador = Get.find<CambioEstadoProductos>();
   @override
@@ -223,8 +226,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   // }
 
   mas(String prod, int cantidad, String numeroDoc) async {
-    onBlockBoubleClick();
-    Productos producto = await DBProviderHelper.db.consultarDatosProducto(prod);
+    Producto producto = await productService.consultarDatosProducto(prod);
     if (producto.codigo != "") {
       // int nuevaCantidad = PedidoEmart
       //             .listaControllersPedido![producto.codigo]!.text ==

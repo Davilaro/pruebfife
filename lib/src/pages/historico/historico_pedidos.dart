@@ -65,7 +65,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           child: Container(
             width: 100,
             child: new IconButton(
-              icon: SvgPicture.asset('assets/boton_soporte.svg'),
+              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
               onPressed: () => {
                 //UXCam: Llamamos el evento clickSoport
                 UxcamTagueo().clickSoport(),
@@ -203,7 +203,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
               margin: const EdgeInsets.only(right: 0),
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset('assets/filtro_btn.svg',
+                  child: SvgPicture.asset('assets/image/filtro_btn.svg',
                       fit: BoxFit.fill)),
             ),
           )

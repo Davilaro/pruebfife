@@ -1,7 +1,7 @@
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -21,7 +21,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
 
 class InputValoresCatalogo extends StatefulWidget {
-  final Productos element;
+  final Producto element;
   final String numEmpresa;
   final bool isCategoriaPromos;
   final int index;
@@ -88,7 +88,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
     );
   }
 
-  detalleProducto(Productos producto, CarroModelo cartProvider) async {
+  detalleProducto(Producto producto, CarroModelo cartProvider) async {
     if (prefs.usurioLogin == -1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     } else {

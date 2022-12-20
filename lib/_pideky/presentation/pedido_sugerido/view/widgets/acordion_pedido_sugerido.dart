@@ -1,24 +1,20 @@
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/_pideky/presentation/widgets/widgets.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/acordion.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../../src/preferences/metodo_ingresados.dart';
-import '../../../../../src/provider/carrito_provider.dart';
 
 List<Widget> acordionDinamico(BuildContext context) {
-  final cartProvider = Provider.of<CarroModelo>(context);
   Locale locale = Localizations.localeOf(context);
   var format = NumberFormat.simpleCurrency(locale: locale.toString());
+  final db = ProductoRepositorySqlite();
   final controller = Get.find<PedidoSugeridoController>();
   List<Widget> lista = [];
 
@@ -50,10 +46,9 @@ List<Widget> acordionDinamico(BuildContext context) {
                     width: 190,
                     onTap: () async {
                       value["items"].forEach((prod) async {
-                        Productos producto = await DBProviderHelper.db
-                            .consultarDatosProducto(prod.codigo);
-                        controller.llenarCarrito(
-                            producto, prod.cantidad);
+                        Producto producto =
+                            await db.consultarDatosProducto(prod.codigo);
+                        controller.llenarCarrito(producto, prod.cantidad);
                       });
                     },
                     text: 'Agregar al carrito',

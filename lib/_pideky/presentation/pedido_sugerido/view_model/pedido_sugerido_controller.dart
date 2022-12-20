@@ -2,18 +2,14 @@
 import 'package:collection/collection.Dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import 'package:emart/src/classes/producto_cambiante.dart';
-import 'package:emart/src/modelos/productos.dart';
-import 'package:emart/src/preferences/const.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../src/controllers/cambio_estado_pedido.dart';
 import '../../../../src/preferences/class_pedido.dart';
-import '../../../../src/preferences/metodo_ingresados.dart';
 
 class PedidoSugeridoController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -46,7 +42,7 @@ class PedidoSugeridoController extends GetxController
     this.tabActual.value = estado;
   }
 
-  llenarCarrito(Productos producto, int cantidad) async {
+  llenarCarrito(Producto producto, int cantidad) async {
     if (producto.codigo != "") {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);

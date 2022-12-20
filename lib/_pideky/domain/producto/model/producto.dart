@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-Productos productosFromJson(String str) => Productos.fromJson(json.decode(str));
+Producto productosFromJson(String str) => Producto.fromJson(json.decode(str));
 
-String productosToJson(Productos data) => json.encode(data.toJson());
+String productosToJson(Producto data) => json.encode(data.toJson());
 
-class Productos {
-  Productos(
+class Producto {
+  Producto(
       {required this.codigo,
       required this.nombre,
       required this.precio,
@@ -58,7 +58,7 @@ class Productos {
   String? fechafinpromocion_1;
   String? fechafinnuevo_1;
 
-  factory Productos.fromJson(Map<String, dynamic> json) => Productos(
+  factory Producto.fromJson(Map<String, dynamic> json) => Producto(
         codigo: json["codigo"] == null ? '' : json["codigo"],
         nombre: json["nombre"] == null ? '' : json["nombre"],
         precio: json["precio"] == null ? 0 : json["precio"],
@@ -86,7 +86,7 @@ class Productos {
         fechafinpromocion_1: json["fechafinpromocion_1"],
       );
 
-  factory Productos.fromJson2(Map<dynamic, dynamic> json) => Productos(
+  factory Producto.fromJson2(Map<dynamic, dynamic> json) => Producto(
         codigo: json["codigo"] == null ? '' : json["codigo"],
         nombre: json["nombre"] == null ? '' : json["nombre"],
         precio: json["precio"] == null ? 0 : json["precio"],
