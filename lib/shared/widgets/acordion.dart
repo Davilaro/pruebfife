@@ -28,6 +28,7 @@ class _EstadoAcordion extends State<Acordion> {
   bool _mostrarContenido = false;
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       children: [
         Card(
@@ -41,11 +42,11 @@ class _EstadoAcordion extends State<Acordion> {
               child: ListTile(
                 leading: CachedNetworkImage(
                   imageUrl: widget.urlIcon,
-                  height: Get.height * 0.1,
+                  height: size.height * 0.1,
                   placeholder: (context, url) =>
-                      Image.asset('assets/jar-loading.gif'),
+                      Image.asset('assets/image/jar-loading.gif'),
                   errorWidget: (context, url, error) =>
-                      Image.asset('assets/logo_login.png'),
+                      Image.asset('assets/image/logo_login.png'),
                   fit: BoxFit.contain,
                 ),
                 title: widget.title,

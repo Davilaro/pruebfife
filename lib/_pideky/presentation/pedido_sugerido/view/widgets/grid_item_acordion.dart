@@ -38,14 +38,14 @@ List<Widget> gridItem(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: CachedNetworkImage(
-                          height: Get.height * 0.11,
+                          height: size.height * 0.11,
                           imageUrl: Constantes().urlImgProductos +
                               '${producto.codigo}.png',
                           placeholder: (context, url) =>
-                              Image.asset('assets/jar-loading.gif'),
+                              Image.asset('assets/image/jar-loading.gif'),
                           errorWidget: (context, url, error) => Image.asset(
-                            'assets/logo_login.png',
-                            width: Get.width * 0.35,
+                            'assets/image/logo_login.png',
+                            width: size.width * 0.35,
                           ),
                           fit: BoxFit.fill,
                         ),
