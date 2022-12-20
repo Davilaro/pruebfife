@@ -19,6 +19,13 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import '../../../_pideky/domain/producto/model/producto.dart';
+import '../../../_pideky/domain/producto/service/producto_service.dart';
+import '../../../_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import '../../../_pideky/presentation/widgets/boton_agregar_carrito.dart';
+import '../../controllers/cambio_estado_pedido.dart';
+import '../../modelos/historico.dart';
+import '../../provider/db_provider_helper.dart';
 import 'expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
@@ -35,7 +42,8 @@ class PedidoRapido extends StatefulWidget {
 @override
 class _PedidoRapidoState extends State<PedidoRapido> {
   final controllerHistorico = Get.find<ControllerHistorico>();
-
+  final controlador = Get.find<CambioEstadoProductos>();
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
   @override
   void initState() {
     super.initState();
@@ -82,7 +90,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   Widget _tabs(size) {
     return Container(
         width: size.width * 0.9,
-        margin: const EdgeInsets.only(bottom: 0, top: 20),
         child: Table(
           columnWidths: {
             0: FlexColumnWidth(4),
@@ -178,7 +185,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             return Center(
                 child: Container(
                     width: size.width,
-                    padding: EdgeInsets.only(bottom: 20),
+                    padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: Column(
                       children: [
                         _tabs(size),
@@ -189,22 +196,39 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: ListView.builder(
                             itemCount: datos?.length,
                             itemBuilder: (BuildContext context, int position) {
-                              return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
+                              return Column(
+                                children: [
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                      width: size.width * 0.9,
+                                      margin: EdgeInsets.only(top: 5),
+                                      child: ExpansionCardLast(
+                                          historico: datos![position],
+                                          cartProvider: cartProvider,
+                                          providerDatos: providerDatos)),
+                                  BotonAgregarCarrito(
+                                    color: HexColor("#42B39C"),
+                                    height: 40,
+                                    width: 190,
+                                    onTap: () async {
+                                      _cargarPedido(
+                                        datos[position].numeroDoc,
+                                        providerDatos,
+                                      );
+                                    },
+                                    text: 'Agregar al carrito',
                                   ),
-                                  width: size.width * 0.9,
-                                  margin: EdgeInsets.only(
-                                      bottom: 14, left: 10, right: 10, top: 5),
-                                  child: ExpansionCardLast(
-                                      historico: datos![position],
-                                      cartProvider: cartProvider,
-                                      providerDatos: providerDatos));
+                                  SizedBox(
+                                    height: 5,
+                                  )
+                                ],
+                              );
                             },
                           ),
                         ),
@@ -218,11 +242,11 @@ class _PedidoRapidoState extends State<PedidoRapido> {
 
   Widget _selecciona(Size size) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20, top: 14, right: 20, left: 20),
+      padding: EdgeInsets.only(bottom: 20, top: 14),
       alignment: Alignment.center,
       child: Text(
         "Seleccionar una de tus últimas órdenes para hacer un pedido rápido.",
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         style: TextStyle(
           fontSize: 15,
           fontFamily: "RoundedMplus1c-Medium.ttf",
@@ -283,6 +307,52 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         ],
       ),
     );
+  }
+
+  _cargarPedido(
+    String numeroDoc,
+    providerDatos,
+  ) async {
+    List<Historico> datosDetalle =
+        await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
+    cargarCadaProducto(datosDetalle);
+    await PedidoEmart.iniciarProductosPorFabricante();
+    actualizarEstadoPedido(providerDatos, numeroDoc);
+  }
+
+  mas(String prod, int cantidad, String numeroDoc, Historico historico) async {
+    Producto producto = await productService.consultarDatosProducto(prod);
+    if (producto.codigo != "") {
+      // int nuevaCantidad = PedidoEmart
+      //             .listaControllersPedido![producto.codigo]!.text ==
+      //         ""
+      //     ? cantidad
+      //     : (int.parse(
+      //             PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
+      //         cantidad);
+      setState(() {
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+            "$cantidad";
+        PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
+        if (controlador.mapaHistoricos.containsKey(historico.numeroDoc)) {
+          controlador.mapaHistoricos
+              .update(historico.numeroDoc, (value) => true);
+        } else {
+          controlador.mapaHistoricos.addAll({historico.numeroDoc: true});
+        }
+      });
+    }
+  }
+
+  void actualizarEstadoPedido(datosProvider, ordenCompra) {
+    datosProvider.actualizarHistoricoPedido(ordenCompra);
+  }
+
+  cargarCadaProducto(List<Historico> datosDetalle) {
+    datosDetalle.forEach((element) {
+      mas(element.codigoRef.toString(), element.cantidad!,
+          "${element.numeroDoc}", element);
+    });
   }
 
   bool _existeSugerido(providerDatos, producto) {

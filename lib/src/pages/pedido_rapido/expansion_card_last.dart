@@ -61,23 +61,24 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
               child: _body(context),
             ),
           ),
-          Container(
-            width: 200,
-            child: Obx(() => AbsorbPointer(
-                  absorbing: _cargando.value,
-                  child: BotonAgregarCarrito(
-                      color: ConstantesColores.agua_marina,
-                      height: 40,
-                      width: 190,
-                      onTap: () async {
-                        onBlockBoubleClick();
-                        await _cargarPedido(
-                            widget.historico.numeroDoc!.toString(),
-                            widget.providerDatos);
-                      },
-                      text: "Agregar al carrito"),
-                )),
-          ),
+          //antiguo boton de agregar al carrito
+          // Container(
+          //   width: 200,
+          //   child: Obx(() => AbsorbPointer(
+          //         absorbing: _cargando.value,
+          //         child: BotonAgregarCarrito(
+          //             color: ConstantesColores.agua_marina,
+          //             height: 40,
+          //             width: 190,
+          //             onTap: () async {
+          //               onBlockBoubleClick();
+          //               await _cargarPedido(
+          //                   widget.historico.numeroDoc!.toString(),
+          //                   widget.providerDatos);
+          //             },
+          //             text: "Agregar al carrito"),
+          //       )),
+          // ),
         ],
       ),
     );
@@ -176,18 +177,18 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         });
   }
 
-  _cargarPedido(String numeroDoc, providerDatos) async {
-    //if (estado) {
-    List<Historico> datosDetalle =
-        await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
-    cargarCadaProducto(datosDetalle);
-    await PedidoEmart.iniciarProductosPorFabricante();
-    onBlockBoubleClick();
-    // pasarCarrito(providerDatos, ordenCompra, estado);
-    //}
-    actualizarEstadoPedido(widget.providerDatos, numeroDoc);
-    calcularValorTotal(widget.cartProvider);
-  }
+  // _cargarPedido(String numeroDoc, providerDatos) async {
+  //   //if (estado) {
+  //   List<Historico> datosDetalle =
+  //       await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
+  //   cargarCadaProducto(datosDetalle);
+  //   await PedidoEmart.iniciarProductosPorFabricante();
+  //   onBlockBoubleClick();
+  //   // pasarCarrito(providerDatos, ordenCompra, estado);
+  //   //}
+  //   actualizarEstadoPedido(widget.providerDatos, numeroDoc);
+  //   calcularValorTotal(widget.cartProvider);
+  // }
 
   // menos(String prop, int cantidad, String numeroDoc) async {
   //   onBlockBoubleClick();
@@ -225,68 +226,68 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   //   }
   // }
 
-  mas(String prod, int cantidad, String numeroDoc) async {
-    Producto producto = await productService.consultarDatosProducto(prod);
-    if (producto.codigo != "") {
-      // int nuevaCantidad = PedidoEmart
-      //             .listaControllersPedido![producto.codigo]!.text ==
-      //         ""
-      //     ? cantidad
-      //     : (int.parse(
-      //             PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
-      //         cantidad);
-      setState(() {
-        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-            "$cantidad";
-        PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
-        if (controlador.mapaHistoricos
-            .containsKey(widget.historico.numeroDoc)) {
-          controlador.mapaHistoricos
-              .update(widget.historico.numeroDoc, (value) => true);
-        } else {
-          controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
-        }
-      });
-    }
-  }
+  // mas(String prod, int cantidad, String numeroDoc) async {
+  //   Producto producto = await productService.consultarDatosProducto(prod);
+  //   if (producto.codigo != "") {
+  //     // int nuevaCantidad = PedidoEmart
+  //     //             .listaControllersPedido![producto.codigo]!.text ==
+  //     //         ""
+  //     //     ? cantidad
+  //     //     : (int.parse(
+  //     //             PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
+  //     //         cantidad);
+  //     setState(() {
+  //       PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+  //           "$cantidad";
+  //       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
+  //       if (controlador.mapaHistoricos
+  //           .containsKey(widget.historico.numeroDoc)) {
+  //         controlador.mapaHistoricos
+  //             .update(widget.historico.numeroDoc, (value) => true);
+  //       } else {
+  //         controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
+  //       }
+  //     });
+  //   }
+  // }
 
-  void actualizarEstadoPedido(datosProvider, ordenCompra) {
-    datosProvider.actualizarHistoricoPedido(ordenCompra);
-  }
+  // void actualizarEstadoPedido(datosProvider, ordenCompra) {
+  //   datosProvider.actualizarHistoricoPedido(ordenCompra);
+  // }
 
-  cargarCadaProducto(List<Historico> datosDetalle) {
-    datosDetalle.forEach((element) {
-      mas(element.codigoRef.toString(), element.cantidad!,
-          "${element.numeroDoc}");
-    });
-  }
+  // cargarCadaProducto(List<Historico> datosDetalle) {
+  //   datosDetalle.forEach((element) {
+  //     mas(element.codigoRef.toString(), element.cantidad!,
+  //         "${element.numeroDoc}");
+  //   });
+  // }
 }
 
-void calcularValorTotal(cartProvider) {
-  double valorTotal = 0;
+// void calcularValorTotal(cartProvider) {
+//   double valorTotal = 0;
 
-  int cantidad = 0;
+//   int cantidad = 0;
 
-  PedidoEmart.listaValoresPedido!.forEach((key, value) {
-    if (value != "0" && PedidoEmart.listaValoresPedidoAgregados![key] == true) {
-      double precio = PedidoEmart.listaProductos![key]!.precio;
-      valorTotal = valorTotal + precio * int.parse(value);
-      cantidad++;
-    }
-  });
+//   PedidoEmart.listaValoresPedido!.forEach((key, value) {
+//     if (value != "0" && PedidoEmart.listaValoresPedidoAgregados![key] == true) {
+//       double precio = PedidoEmart.listaProductos![key]!.precio;
+//       valorTotal = valorTotal + precio * int.parse(value);
+//       cantidad++;
+//     }
+//   });
 
-  cartProvider.actualizarItems = cantidad;
-  cartProvider.guardarValorCompra = valorTotal;
-  PedidoEmart.calcularPrecioPorFabricante();
-  cartProvider.actualizarListaFabricante =
-      PedidoEmart.listaPrecioPorFabricante!;
+//   cartProvider.actualizarItems = cantidad;
+//   cartProvider.guardarValorCompra = valorTotal;
+//   PedidoEmart.calcularPrecioPorFabricante();
+//   cartProvider.actualizarListaFabricante =
+//       PedidoEmart.listaPrecioPorFabricante!;
 
-  MetodosLLenarValores().calcularValorTotal(cartProvider);
-}
+//   MetodosLLenarValores().calcularValorTotal(cartProvider);
+// }
 
-class Item {
-  String orden;
-  String fecha;
-  String numeroPedido;
-  Item({required this.orden, required this.fecha, required this.numeroPedido});
-}
+// class Item {
+//   String orden;
+//   String fecha;
+//   String numeroPedido;
+//   Item({required this.orden, required this.fecha, required this.numeroPedido});
+// }

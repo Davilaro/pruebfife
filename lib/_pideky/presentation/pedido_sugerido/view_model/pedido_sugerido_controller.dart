@@ -19,7 +19,7 @@ class PedidoSugeridoController extends GetxController
   //controlador de botones superiores
   late TabController controller;
   RxInt tabActual = 0.obs;
-  final List titulosSeccion = ["Pedido Sugerido", "Pedido Rápido"];
+  final List titulosSeccion = ["Pedido Sugerido", "Repetir Orden"];
 
   //usuario logueado
   final prefs = new Preferencias();

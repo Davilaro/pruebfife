@@ -9,6 +9,7 @@ import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 
 List<Widget> acordionDinamico(BuildContext context) {
@@ -41,7 +42,7 @@ List<Widget> acordionDinamico(BuildContext context) {
                     ),
                   ),
                   BotonAgregarCarrito(
-                    color: ConstantesColores.agua_marina,
+                    color: HexColor("#42B39C"),
                     height: 40,
                     width: 190,
                     onTap: () async {

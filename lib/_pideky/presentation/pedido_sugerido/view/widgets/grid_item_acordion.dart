@@ -53,7 +53,7 @@ List<Widget> gridItem(
                     ),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.only(left: 5),
+                        padding: EdgeInsets.only(left: 10),
                         width: size.width / 1.4,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
