@@ -8,7 +8,7 @@ class BotonAgregarCarrito extends StatelessWidget {
   final double width;
   final Color color;
   final Color? colortext;
-  final VoidCallback onTap;
+  final Function()? onTap;
   const BotonAgregarCarrito({
     Key? key,
     this.colortext = Colors.white,

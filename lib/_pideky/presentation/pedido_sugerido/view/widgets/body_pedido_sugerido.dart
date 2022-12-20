@@ -26,23 +26,17 @@ class BodyPedidoSugerido extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 35),
-                child: Obx(() => controller.usuarioLogueado.value != ""
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [TopText(), ...acordionDinamico(context)],
-                      )
-                    : Container(
-                        padding: EdgeInsets.symmetric(vertical: 30),
-                        child: Text("Inicia sesión para habilitar esta vista",
-                            style: TextStyle(
-                              color: ConstantesColores.gris_oscuro,
-                              fontSize: 15,
-                            ),
-                            textAlign: TextAlign.center),
-                      )),
-              ),
+                  padding: EdgeInsets.symmetric(horizontal: 35),
+                  // ignore: unrelated_type_equality_checks
+                  child: Obx(() => PedidoSugeridoController.userLog.value != -1
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [TopText(), ...acordionDinamico(context)],
+                        )
+                      : Container(
+                          child: TopText(),
+                        ))),
             ],
           ),
         ),

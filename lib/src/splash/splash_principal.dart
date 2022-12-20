@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -85,6 +86,7 @@ class _SplashState extends State<Splash> {
           false);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = 1;
+      PedidoSugeridoController.userLog.value = 1;
       if (res && cargo) {
         if (prefs.usurioLogin == 1) {
           UxcamTagueo().validarTipoUsario();

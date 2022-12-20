@@ -15,6 +15,7 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
   S.Codigo, P.Nombre, P.Precio, S.Cantidad
   FROM pedidoSugerido S INNER JOIN Producto P ON P.Codigo = S.Codigo
 ''');
+      print("$sql-------------");
       return sql.isNotEmpty
           ? sql.map((e) => PedidoSugeridoModel.fromJson(e)).toList()
           : [];

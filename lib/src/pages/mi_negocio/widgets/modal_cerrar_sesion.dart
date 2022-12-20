@@ -14,7 +14,6 @@ import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_suger
 final prefs = new Preferencias();
 
 modalCerrarSesion(context, size, provider) {
-  final controllerGet = Get.find<PedidoSugeridoController>();
   String mensaje =
       "Estas apunto de salir de Pideky, deberás volver a ingresar los datos " +
           "de tu negocio para ver los productos y proveedores.";
@@ -58,8 +57,8 @@ modalCerrarSesion(context, size, provider) {
         _showLoaderDialog(context),
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
-          controllerGet.usuarioLogueado.value = "";
           prefs.usurioLogin = -1;
+          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;

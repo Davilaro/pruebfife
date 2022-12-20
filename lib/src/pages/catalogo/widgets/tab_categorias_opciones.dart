@@ -81,69 +81,71 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
             FocusScope.of(context).requestFocus(new FocusNode());
           },
           child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  width: Get.width * 1,
-                  decoration: BoxDecoration(
-                    color: HexColor("#E4E3EC"),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Obx(() => TabBar(
-                      controller: _tabController,
-                      labelPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      labelColor: Colors.black,
-                      isScrollable: true,
-                      indicatorColor: Colors.transparent,
-                      unselectedLabelColor: Colors.black,
-                      onTap: (index) {
-                        valorSeleccionado.value = index;
-                      },
-                      tabs: List<Widget>.generate(
-                          this.widget.listaCategorias.length, (index) {
-                        return new Tab(
-                          child: Container(
-                            width: size.width *
-                                this
-                                    .widget
-                                    .listaCategorias[index]
-                                    .descripcion
-                                    .toString()
-                                    .length /
-                                35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              color: valorSeleccionado.value == index
-                                  ? selectedColor
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Container(
+                    width: Get.width * 1,
+                    decoration: BoxDecoration(
+                      color: HexColor("#E4E3EC"),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Obx(() => TabBar(
+                        controller: _tabController,
+                        labelPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        labelColor: Colors.black,
+                        isScrollable: true,
+                        indicatorColor: Colors.transparent,
+                        unselectedLabelColor: Colors.black,
+                        onTap: (index) {
+                          valorSeleccionado.value = index;
+                        },
+                        tabs: List<Widget>.generate(
+                            this.widget.listaCategorias.length, (index) {
+                          return new Tab(
                             child: Container(
+                              width: size.width *
+                                  this
+                                      .widget
+                                      .listaCategorias[index]
+                                      .descripcion
+                                      .toString()
+                                      .length /
+                                  35,
+                              height: 35,
                               decoration: BoxDecoration(
                                 color: valorSeleccionado.value == index
                                     ? selectedColor
                                     : Colors.transparent,
-                                borderRadius: BorderRadius.circular(30.0),
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  this
-                                      .widget
-                                      .listaCategorias[index]
-                                      .descripcion,
-                                  style: TextStyle(
-                                      color: valorSeleccionado.value == index
-                                          ? Colors.white
-                                          : Colors.black),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: valorSeleccionado.value == index
+                                      ? selectedColor
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    this
+                                        .widget
+                                        .listaCategorias[index]
+                                        .descripcion,
+                                    style: TextStyle(
+                                        color: valorSeleccionado.value == index
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }))),
+                          );
+                        }))),
+                  ),
                 ),
                 Expanded(
                   child: TabBarView(

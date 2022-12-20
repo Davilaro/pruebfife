@@ -10,7 +10,6 @@ class TopText extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(
         bottom: 20,
-        top: 14,
       ),
       alignment: Alignment.center,
       child: Text(

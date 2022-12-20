@@ -136,9 +136,6 @@ List<Widget> gridItem(
                   ],
                 ),
               ),
-              Divider(
-                color: Colors.grey,
-              ),
             ],
           ),
         ));

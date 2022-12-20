@@ -9,7 +9,7 @@ class TopButtons extends StatelessWidget {
     final controller = Get.find<PedidoSugeridoController>();
     final selectedColor = Colors.yellow;
     return Obx(() => (Padding(
-        padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+        padding: const EdgeInsets.fromLTRB(3, 0, 3, 20),
         child: TabBar(
           indicatorColor: Colors.transparent,
           unselectedLabelColor: Colors.black,

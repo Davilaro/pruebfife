@@ -16,13 +16,11 @@ class PedidoSugeridoPage extends StatefulWidget {
 
   @override
   State<PedidoSugeridoPage> createState() => _PedidoSugeridoPageState();
-  
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   @override
   void initState() {
-    
     super.initState();
     validarVersionActual(context);
   }

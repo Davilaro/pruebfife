@@ -230,11 +230,11 @@ class _LoginState extends State<Login> {
   }
 
   Future loguin(BuildContext context, String nit) async {
-    final controllerGet = Get.find<PedidoSugeridoController>();
     List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
 
     prefs.codClienteLogueado = nit;
-    controllerGet.usuarioLogueado.value = prefs.codClienteLogueado;
+    // ignore: unnecessary_statements
+    PedidoSugeridoController.userLog.value = 1;
 
     if (respuesta.length > 0) {
       await pr.hide();
