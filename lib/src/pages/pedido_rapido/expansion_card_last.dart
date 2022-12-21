@@ -1,6 +1,6 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/widgets/boton_agregar_carrito.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
