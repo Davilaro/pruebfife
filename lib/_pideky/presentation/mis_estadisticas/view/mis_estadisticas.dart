@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/acordionEmpodio.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -60,7 +61,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           child: Column(
                             children: [
                               Image.asset(
-                                'assets/image/jar-loading.gif',
+                                'assets/image/carritos_sin_prod_img.png',
                                 alignment: Alignment.center,
                                 width: Get.width * 0.6,
                               ),
@@ -115,11 +116,12 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           ),
                           child: Column(
                             children: [
-                              acordionEmpodio(
-                                  'Mi top 3 de productos',
-                                  viewModel.listTopProductos.value,
-                                  'Estos son los tres productos que más has comprado para tu negocio en el último mes.',
-                                  'productos'),
+                              AcordionEmpodio(
+                                  titulo: 'Mi top 3 de productos',
+                                  lista: viewModel.listTopProductos.value,
+                                  subTitulo:
+                                      'Estos son los tres productos que más has comprado para tu negocio en el último mes.',
+                                  tipo: 'productos'),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
@@ -128,8 +130,12 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                   color: HexColor('#EAE8F5'),
                                 ),
                               ),
-                              acordionEmpodio('Mi top 3 de marcas',
-                                  viewModel.listTopMarcas.value, '', 'marcas'),
+                              AcordionEmpodio(
+                                  titulo: 'Mi top 3 de marcas',
+                                  lista: viewModel.listTopMarcas.value,
+                                  subTitulo:
+                                      'Estos son las tres marcas que más has comprado para tu negocio en el último mes.',
+                                  tipo: 'marcas'),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
@@ -138,11 +144,12 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                   color: HexColor('#EAE8F5'),
                                 ),
                               ),
-                              acordionEmpodio(
-                                  'Mi top 3 de subcategorias',
-                                  viewModel.listTopSubCategorias.value,
-                                  '',
-                                  'subcategorias')
+                              AcordionEmpodio(
+                                  titulo: 'Mi top 3 de subcategorias',
+                                  lista: viewModel.listTopSubCategorias.value,
+                                  subTitulo:
+                                      'Estos son las tres subcategorías que más has comprado para tu negocio en el último mes.',
+                                  tipo: 'subcategorias')
                             ],
                           ),
                         )
@@ -150,145 +157,4 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
           )),
     );
   }
-}
-
-acordionEmpodio(String titulo, List lista, String subTitulo, String tipo) {
-  return Acordion(
-    title: Text(
-      titulo,
-      style: TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-          color: ConstantesColores.azul_precio),
-    ),
-    elevation: 0,
-    contenido: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          //Descripcion
-          Container(
-            margin: EdgeInsets.only(bottom: 20),
-            width: Get.width * 0.83,
-            child: AutoSizeText(
-              subTitulo,
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: ConstantesColores.gris_textos),
-            ),
-          ),
-          for (var index = 0; index < lista.length; index++)
-            //Cuerpo del acordion
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //Posicion
-                      Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 9, horizontal: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: index + 1 == 1
-                                ? ConstantesColores.empodio_verde
-                                : index + 1 == 2
-                                    ? ConstantesColores.empodio_amarillo
-                                    : ConstantesColores.azul_precio,
-                          ),
-                          child: Center(
-                              child: AutoSizeText('${index + 1}',
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.bold,
-                                      color: index + 1 == 1 || index + 1 == 3
-                                          ? Colors.white
-                                          : ConstantesColores.azul_precio)))),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            //Imagen
-                            Container(
-                              margin: EdgeInsets.only(right: 7),
-                              child: tipo == 'productos' || tipo == 'marcas'
-                                  ? CachedNetworkImage(
-                                      height: Get.height * 0.08,
-                                      imageUrl: tipo == 'productos'
-                                          ? Constantes().urlImgProductos +
-                                              '${lista[index].codigo}.png'
-                                          : lista[index].imagen,
-                                      placeholder: (context, url) =>
-                                          Image.asset(
-                                              'assets/image/jar-loading.gif'),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                        'assets/image/logo_login.png',
-                                        width: Get.width * 0.35,
-                                      ),
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Image.asset(
-                                      'assets/icon/mis_vendedores_img.png',
-                                      alignment: Alignment.center,
-                                      width: 30,
-                                    ),
-                            ),
-                            //Descripcion
-                            Container(
-                              width: Get.width * 0.3,
-                              margin: EdgeInsets.only(left: 10),
-                              child: AutoSizeText(
-                                lista[index].descripcion,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: ConstantesColores.azul_precio),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      //Unidad
-                      Container(
-                        width: Get.width * 0.21,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[300],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            AutoSizeText(lista[index].cantidad.toString(),
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: ConstantesColores.azul_precio)),
-                            AutoSizeText('Unidades',
-                                style: TextStyle(
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.bold,
-                                    color: ConstantesColores.azul_precio))
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  index == 2
-                      ? Container()
-                      : Divider(
-                          thickness: 1,
-                          color: HexColor('#EAE8F5'),
-                        ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    ),
-  );
 }
