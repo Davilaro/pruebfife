@@ -2,6 +2,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 class ConstantesColores {
   static HexColor verde = HexColor("#037F7F");
+  static HexColor azul_aguamarina_botones = HexColor("#42B39C");
   static HexColor azul_precio = HexColor("#43398E");
   static HexColor color_fondo_gris = HexColor("#EEEEEE");
   static HexColor agua_marina = HexColor("#5BB1AE");

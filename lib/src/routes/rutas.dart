@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/src/pages/login/widgets/comprobar_sesion.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/principal_page/widgets/lista_empresas_emart.dart';
@@ -18,5 +19,6 @@ Map<String, WidgetBuilder> getRutas() {
     'splash': (_) => Splash(),
     'detalle_compra_producto': (_) => CambiarDetalleCompra(),
     'inicio_compra': (_) => PrincipalPage(),
+    'pedido_sugerido': (_) => PedidoSugeridoPage(),
   };
 }

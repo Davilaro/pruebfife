@@ -172,6 +172,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
     List<Widget> listaWidget = [];
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
+      print(fabricante);
+      print(value);
       if (value['precioProducto'] == 0.0) {
       } else {
         listaWidget.add(
