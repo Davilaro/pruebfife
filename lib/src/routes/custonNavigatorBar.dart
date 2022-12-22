@@ -45,7 +45,7 @@ class CustonNavigatorBar extends StatelessWidget {
             icon: provider.selectOptionMenu == 2
                 ? SvgPicture.asset('assets/image/pedido_rapido_img.svg')
                 : SvgPicture.asset('assets/image/pedido_rapido_img_norm.svg'),
-            label: 'Pedido rápido',
+            label: 'Pedido Sugerido',
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 3

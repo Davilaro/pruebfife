@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -13,6 +15,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
@@ -77,6 +80,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     contextPrincipal = context;
+
     final provider = Provider.of<DatosListas>(context);
 
     return Scaffold(
@@ -229,6 +233,8 @@ class _LoginState extends State<Login> {
     List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
 
     prefs.codClienteLogueado = nit;
+    // ignore: unnecessary_statements
+    PedidoSugeridoController.userLog.value = 1;
 
     if (respuesta.length > 0) {
       await pr.hide();

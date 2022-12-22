@@ -9,6 +9,8 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+
 final prefs = new Preferencias();
 
 modalCerrarSesion(context, size, provider) {
@@ -56,6 +58,7 @@ modalCerrarSesion(context, size, provider) {
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
+          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;

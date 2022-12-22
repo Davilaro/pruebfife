@@ -71,7 +71,7 @@ class CustomExpansionPanelList extends StatelessWidget {
         ],
       );
 
-      double _radiusValue = _isChildExpanded(index) ? 8.0 : 8.0;
+      double _radiusValue = _isChildExpanded(index) ? 10.0 : 12.0;
       items.add(
         new Container(
           key: new _SaltedKey<BuildContext, int>(context, index * 2),
