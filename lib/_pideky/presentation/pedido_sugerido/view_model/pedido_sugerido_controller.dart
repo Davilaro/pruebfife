@@ -27,7 +27,6 @@ class PedidoSugeridoController extends GetxController
   static RxInt userLog = 0.obs;
 
   PedidoSugeridoModel model = PedidoSugeridoModel();
-  final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final controlador = Get.find<CambioEstadoProductos>();
 
   RxMap listaProductosPorFabricante = {}.obs;

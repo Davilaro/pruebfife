@@ -10,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
 import '../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
+import '../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
 import '../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
+import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
 
 class BotonActualizar extends StatefulWidget {
   @override
@@ -47,6 +50,8 @@ Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
   final controller = Get.put(
       PedidoSugeridoController(PedidoSugeridoServicio(PedidoSugeridoQuery())));
+  final controllerNequi = Get.put(
+      MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);
@@ -55,6 +60,9 @@ Future<void> actualizarPagina(
   isActualizando.value = false;
   controller.listaProductosPorFabricante.clear();
   controller.initController();
+  controllerNequi.listaPagosPendientes.clear();
+  controllerNequi.listaPagosRealizados.clear();
+  controllerNequi.initData();
   if (isActualizando.value == false) {
     Navigator.pop(context);
     AlertaActualizar().mostrarAlertaActualizar(context, false);

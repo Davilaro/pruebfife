@@ -24,6 +24,7 @@ List<Widget> acordionDinamico(BuildContext context) {
     lista.add(
       Container(
           child: Acordion(
+              elevation: 0,
               contenido2: Column(
                 children: [
                   Container(

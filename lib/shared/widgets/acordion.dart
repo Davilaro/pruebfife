@@ -14,6 +14,7 @@ class Acordion extends StatefulWidget {
   final bool isIconState;
   final String? estado;
   final double? elevation;
+  final double? margin;
 
   Acordion(
       {this.urlIcon,
@@ -22,7 +23,8 @@ class Acordion extends StatefulWidget {
       this.isIconState = false,
       this.estado,
       this.elevation,
-      this.contenido2});
+      this.contenido2,
+      this.margin});
   _EstadoAcordion createState() => _EstadoAcordion();
 }
 
@@ -30,7 +32,6 @@ class _EstadoAcordion extends State<Acordion> {
   bool _mostrarContenido = false;
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Card(
@@ -41,10 +42,13 @@ class _EstadoAcordion extends State<Acordion> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 15),
+              margin: widget.margin == null
+                  ? EdgeInsets.symmetric(vertical: 15)
+                  : EdgeInsets.symmetric(vertical: widget.margin!),
               child: ListTile(
-                leading: widget.urlIcon == ''
-                    ? CachedNetworkImage(
+                leading: widget.urlIcon == null
+                    ? null
+                    : CachedNetworkImage(
                         imageUrl: widget.urlIcon ?? '',
                         height: Get.height * 0.1,
                         placeholder: (context, url) =>
@@ -52,8 +56,7 @@ class _EstadoAcordion extends State<Acordion> {
                         errorWidget: (context, url, error) =>
                             Image.asset('assets/image/logo_login.png'),
                         fit: BoxFit.contain,
-                      )
-                    : null,
+                      ),
                 title: widget.title,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
