@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -8,6 +9,9 @@ import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+import '../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
+import '../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
 
 class BotonActualizar extends StatefulWidget {
   @override
@@ -41,12 +45,16 @@ class _BotonActualizarState extends State<BotonActualizar> {
 
 Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
+  final controller = Get.put(
+      PedidoSugeridoController(PedidoSugeridoServicio(PedidoSugeridoQuery())));
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);
   }
   await LogicaActualizar().actualizarDB();
   isActualizando.value = false;
+  controller.listaProductosPorFabricante.clear();
+  controller.initController();
   if (isActualizando.value == false) {
     Navigator.pop(context);
     AlertaActualizar().mostrarAlertaActualizar(context, false);
