@@ -339,7 +339,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(right: 7),
                                             child: Image.asset(
-                                              'assets/icon/mis_vendedores_img.png',
+                                              'assets/icon/mis_estadisticas.png',
                                               alignment: Alignment.center,
                                               width: 30,
                                             ),
