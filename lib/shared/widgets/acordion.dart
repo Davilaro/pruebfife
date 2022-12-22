@@ -30,7 +30,7 @@ class _EstadoAcordion extends State<Acordion> {
   bool _mostrarContenido = false;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+
     return Column(
       children: [
         Card(

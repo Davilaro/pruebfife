@@ -1,6 +1,5 @@
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/circulo_posicion_empodio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 
 class Empodio extends StatelessWidget {
   List lista;
@@ -13,7 +12,7 @@ class Empodio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
+      height: 240,
       child: Stack(
         fit: StackFit.loose,
         clipBehavior: Clip.none,

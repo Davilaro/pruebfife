@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/domain/estadistica/model/estadistica.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,8 +35,9 @@ class CirculoPosicionEmpodio extends StatelessWidget {
                 height: Get.width * 0.3,
                 padding: EdgeInsets.all(50),
                 decoration: BoxDecoration(
+                  color: Colors.transparent,
                   border: Border.all(
-                      color: Color.fromARGB(255, 244, 242, 242),
+                      color: Color.fromARGB(255, 249, 249, 249),
                       width: Get.width * 0.03,
                       style: BorderStyle.solid),
                   borderRadius: BorderRadius.circular(100),
@@ -73,19 +73,19 @@ class CirculoPosicionEmpodio extends StatelessWidget {
                       style: BorderStyle.solid),
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(255, 194, 194, 194),
+                      color: Color.fromARGB(255, 237, 234, 234),
                       offset: const Offset(
                         1.0,
                         1.0,
                       ),
-                      blurRadius: 10.0,
+                      blurRadius: 5.0,
                       spreadRadius: 2.0,
                     ), //BoxShadow
                     BoxShadow(
                       color: Colors.white,
                       offset: const Offset(0.0, 0.0),
-                      blurRadius: 5.0,
-                      spreadRadius: 5.0,
+                      blurRadius: 0.0,
+                      spreadRadius: 0.0,
                     ), //BoxShadow
                   ],
                   borderRadius: BorderRadius.circular(100),
