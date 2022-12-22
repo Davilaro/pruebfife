@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/acordion_empodio.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
@@ -47,9 +49,9 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
             child: Container(
                 color: ConstantesColores.color_fondo_gris,
                 padding: EdgeInsets.symmetric(horizontal: 15),
-                child: viewModel.listTopMarcas.length == 0 &&
-                        viewModel.listTopProductos.length == 0 &&
-                        viewModel.listTopSubCategorias.length == 0
+                child: viewModel.listTopMarcas.value.length < 3 ||
+                        viewModel.listTopProductos.value.length < 3 ||
+                        viewModel.listTopSubCategorias.value.length < 3
                     ? Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 100, horizontal: 50),

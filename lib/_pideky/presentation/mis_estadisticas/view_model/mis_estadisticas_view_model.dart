@@ -20,9 +20,6 @@ class MisEstadisticasViewModel extends GetxController {
     cargarTopMarcas();
     cargarTopSubCategorias();
     cargarTopProductos();
-    print('top 1 --- ${listTopMarcas.toList()}');
-    print('top 2 --- ${listTopSubCategorias.toList()}');
-    print('top 3 --- ${listTopProductos.toList()}');
   }
 
   void cargarTopMarcas() async {
