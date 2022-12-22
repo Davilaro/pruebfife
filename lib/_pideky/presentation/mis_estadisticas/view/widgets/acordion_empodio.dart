@@ -118,6 +118,8 @@ class AcordionEmpodio extends StatelessWidget {
                                   tipo == 'marcas'
                                       ? ''
                                       : lista[index].descripcion,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -138,11 +140,13 @@ class AcordionEmpodio extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               AutoSizeText(lista[index].cantidad.toString(),
+                                  maxLines: 1,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: ConstantesColores.azul_precio)),
                               AutoSizeText('Unidades',
+                                  maxLines: 1,
                                   style: TextStyle(
                                       fontSize: 8,
                                       fontWeight: FontWeight.bold,

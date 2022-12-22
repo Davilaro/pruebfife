@@ -13,7 +13,7 @@ class Empodio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height * 0.26,
+      height: 220,
       child: Stack(
         fit: StackFit.loose,
         clipBehavior: Clip.none,

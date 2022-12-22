@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/acordionEmpodio.dart';
+import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/acordion_empodio.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/preferences/const.dart';
