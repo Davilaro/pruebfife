@@ -4,7 +4,6 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/acordion
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_text.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
-import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
