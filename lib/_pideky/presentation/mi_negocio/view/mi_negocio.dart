@@ -3,6 +3,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_pagos_neq
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_vendedores.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_estadisticas/view/mis_estadisticas.dart';
 import 'package:emart/shared/widgets/politicas_datos.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -326,7 +327,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            MisPagosNequiPage())),
+                                            MisEstadisticas())),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -347,7 +348,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Mis Pagos Nequi',
+                                              'Mis estadisticas',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -439,7 +440,6 @@ class _MiNegocioState extends State<MiNegocio> {
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
-                              // width: Get.width * 1,
                               child: GestureDetector(
                                 onTap: () => viewModel.terminosDatosPdf != null
                                     ? verTerminosCondiciones(

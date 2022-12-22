@@ -10,4 +10,7 @@ class ConstantesColores {
   static HexColor gris_textos = HexColor("#7B7B7B");
   static HexColor gris_sku = HexColor("#a2a2a2");
   static HexColor rojo_letra = HexColor("#FB0100");
+
+  static HexColor empodio_verde = HexColor("#48c4a5");
+  static HexColor empodio_amarillo = HexColor("#ffe17e");
 }

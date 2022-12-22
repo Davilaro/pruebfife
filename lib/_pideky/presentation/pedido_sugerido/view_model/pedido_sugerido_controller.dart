@@ -30,11 +30,12 @@ class PedidoSugeridoController extends GetxController
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final controlador = Get.find<CambioEstadoProductos>();
 
-  Map<String, dynamic> listaProductosPorFabricante = new Map();
+  RxMap listaProductosPorFabricante = {}.obs;
   RxList<dynamic> listaFabricante = <dynamic>[].obs;
   RxList listaPedidoSugerido = [].obs;
   Map<String, PedidoSugeridoModel> listaProductos = {};
   List listaAgrupar = <PedidoSugeridoModel>[];
+  List<Widget> listaAcordion = [];
 
   RxBool isValid = false.obs;
 
@@ -59,6 +60,7 @@ class PedidoSugeridoController extends GetxController
 
   Future getListaProductosSugeridos() async {
     final listaPedidoSugerido = await pedidoSugerido.obtenerPedidoSugerido();
+    print(listaPedidoSugerido);
     mapearProductos(listaPedidoSugerido);
     final groups = groupBy(listaPedidoSugerido, (PedidoSugeridoModel p) {
       return p.negocio;
@@ -104,18 +106,23 @@ class PedidoSugeridoController extends GetxController
     // });
   }
 
+  initController() async {
+    await getListaFabricantes();
+    await getListaProductosSugeridos();
+    print("se volvieron a cargar los datos de pedido suerido ---------------");
+  }
+
   @override
   void onInit() {
     controller = TabController(length: 2, vsync: this, initialIndex: 0);
-    getListaFabricantes();
-    getListaProductosSugeridos();
-
+    initController();
     super.onInit();
   }
 
   @override
   void onClose() {
     controller.dispose();
+
     super.onClose();
   }
 }

@@ -22,7 +22,6 @@ class MiNegocioViewModel extends GetxController {
 
   void validarVersion() async {
     version.value = await cargarVersion();
-    // setState(() {});
   }
 
   showLoaderDialog(BuildContext context, Widget widget) {

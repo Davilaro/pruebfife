@@ -18,10 +18,9 @@ List<Widget> acordionDinamico(BuildContext context) {
   final db = ProductoRepositorySqlite();
   final controller = Get.find<PedidoSugeridoController>();
   List<Widget> lista = [];
+  lista.clear();
 
   controller.listaProductosPorFabricante.forEach((fabricante, value) {
-    print(fabricante);
-    print(value);
     lista.add(
       Container(
           child: Acordion(
