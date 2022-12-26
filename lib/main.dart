@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:emart/initial_bindings.dart';
+import 'package:emart/lang/translations.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
@@ -72,12 +73,14 @@ class _MyAppState extends State<MyApp> {
         ],
         child: OverlaySupport.global(
           child: GetMaterialApp(
+            translations: AppTranslations(),
             initialBinding: InitialBindings(),
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+            fallbackLocale: const Locale('es', 'CO'),
             supportedLocales: [
               const Locale('en', ''), // English,
               const Locale('es_CO', ''), // español,

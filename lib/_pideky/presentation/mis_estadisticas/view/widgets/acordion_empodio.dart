@@ -14,8 +14,8 @@ class AcordionEmpodio extends StatelessWidget {
   List lista;
 
   List imgSubCategoria = [
-    'assets/image/Corazon.png',
     'assets/image/corona.png',
+    'assets/image/Corazon.png',
     'assets/image/estrella.png'
   ];
   AcordionEmpodio(
