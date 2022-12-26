@@ -22,7 +22,7 @@ import 'package:provider/provider.dart';
 import '../../../_pideky/domain/producto/model/producto.dart';
 import '../../../_pideky/domain/producto/service/producto_service.dart';
 import '../../../_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import '../../../_pideky/presentation/widgets/boton_agregar_carrito.dart';
+import '../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../controllers/cambio_estado_pedido.dart';
 import '../../modelos/historico.dart';
 import '../../provider/db_provider_helper.dart';
