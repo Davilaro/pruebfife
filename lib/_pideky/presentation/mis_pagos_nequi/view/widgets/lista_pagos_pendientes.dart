@@ -13,8 +13,8 @@ List<Widget> listaPagosPendientesFecha(BuildContext context) {
   var outputFormat = DateFormat("dd/MM/yy HH:mm");
   var inputFormat = DateFormat("yyyy-MM-dd HH:mm");
 
-  if (controller.listaPagosRealizados.isNotEmpty) {
-    controller.listaPagosRealizados.forEach((element) {
+  if (controller.listaPagosPendientes.isNotEmpty) {
+    controller.listaPagosPendientes.forEach((element) {
       var fecha = inputFormat.parse(element.fechaPago);
       String fechaFinal = outputFormat.format(fecha);
       lista.add(Padding(
