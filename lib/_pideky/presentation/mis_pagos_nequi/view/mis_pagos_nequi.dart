@@ -26,7 +26,7 @@ class MisPagosNequiPage extends StatelessWidget {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: Text(
-          'Mis vendedores',
+          'Mis Pagos Nequi',
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
