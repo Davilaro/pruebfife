@@ -32,6 +32,13 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+import '../../../_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
+import '../../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
+import '../../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
+import '../../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
+import '../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import '../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+
 final prefs = new Preferencias();
 
 bool limpiar = false;
@@ -43,6 +50,10 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
+  final controller = Get.put(
+      PedidoSugeridoController(PedidoSugeridoServicio(PedidoSugeridoQuery())));
+  final controllerNequi = Get.put(
+      MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
@@ -63,6 +74,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
+    controller.listaProductosPorFabricante.clear();
+    controller.initController();
+    controllerNequi.listaPagosPendientes.clear();
+    controllerNequi.listaPagosRealizados.clear();
+    controllerNequi.initData();
   }
 
   @override

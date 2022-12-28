@@ -117,13 +117,17 @@ class MisProveedores extends StatelessWidget {
   }
 
   String validarCliente(empresa) {
+    print('soy la empresa $empresa');
     if (empresa == 'NUTRESA') {
+      print('soy la respuesta ${prefs.codigonutresa.toString()}');
       return prefs.codigonutresa.toString();
     }
     if (empresa == 'ZENU') {
+      print('soy la respuesta ${prefs.codigozenu.toString()}');
       return prefs.codigozenu.toString();
     }
     if (empresa == 'MEALS') {
+      print('soy la respuesta ${prefs.codigomeals.toString()}');
       return prefs.codigomeals.toString();
     }
     return '';
