@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'src/preferences/preferencias.dart';
 import 'src/provider/carrito_provider.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _validarKeyUXCam();
-
+    Intl.defaultLocale = 'es';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -80,12 +81,12 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: S.delegate.supportedLocales,
-            // supportedLocales: [
-            //   const Locale('en', ''), // English,
-            //   const Locale('es_CO', ''), // español,
-            //   const Locale('es_CR', ''),
-            // ],
+            // supportedLocales: S.delegate.supportedLocales,
+            supportedLocales: [
+              const Locale('en', ''), // English,
+              const Locale('es', 'CO'), // español,
+              const Locale('es', 'CR'),
+            ],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',

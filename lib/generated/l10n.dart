@@ -50,11 +50,11 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Hello`
-  String get hello {
+  /// `estamos en ingles `
+  String get imperdible {
     return Intl.message(
-      'Hello',
-      name: 'hello',
+      'estamos en ingles ',
+      name: 'imperdible',
       desc: '',
       args: [],
     );

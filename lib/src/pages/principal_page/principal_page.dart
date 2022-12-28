@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -183,7 +184,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
                                       Container(
                                         width: Get.width * 0.7,
                                         child: AutoSizeText(
-                                          'Imperdibles para $tituloImperdible',
+                                          // 'Imperdibles para $tituloImperdible',
+                                          '${S.current.imperdible} $tituloImperdible',
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 14.0,
