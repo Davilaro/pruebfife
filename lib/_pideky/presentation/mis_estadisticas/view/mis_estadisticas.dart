@@ -78,7 +78,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                               ConstantesColores.empodio_verde),
                                     ),
                                     AutoSizeText(
-                                      'No tienes información sificiente para calcular sus estadísticas. Te invitamos a seguir comprando en Pideky.',
+                                      'No tienes información suficiente para calcular sus estadísticas. Te invitamos a seguir comprando en Pideky.',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 17,

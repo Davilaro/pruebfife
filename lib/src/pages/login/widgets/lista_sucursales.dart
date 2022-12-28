@@ -208,7 +208,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     prefs.usuarioRazonSocial = elemento.razonsocial;
-
+    print('soy el proveedor ${jsonEncode(elemento)}');
     prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
     prefs.codigonutresa = elemento.codigonutresa;
