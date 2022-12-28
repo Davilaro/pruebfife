@@ -22,6 +22,34 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "imperdible": MessageLookupByLibrary.simpleMessage("estamos en ingles ")
+        "activate_user":
+            MessageLookupByLibrary.simpleMessage("Activate your account!"),
+        "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
+            "to buy on Pideky and view your business data you must activate your account"),
+        "cell_phone_number":
+            MessageLookupByLibrary.simpleMessage("cell phone number"),
+        "email_address": MessageLookupByLibrary.simpleMessage("email address"),
+        "enter_your_master_code": MessageLookupByLibrary.simpleMessage(
+            "Enter your master code for manual activation"),
+        "error_code":
+            MessageLookupByLibrary.simpleMessage("Error getting code"),
+        "get_active_with_your": MessageLookupByLibrary.simpleMessage(
+            "You wish to activate yourself with your"),
+        "imperdible":
+            MessageLookupByLibrary.simpleMessage("Not to be missed by "),
+        "login_placeholder": MessageLookupByLibrary.simpleMessage(
+            "Nit without verification digit"),
+        "manual_activation":
+            MessageLookupByLibrary.simpleMessage("Manual registration"),
+        "master_code": MessageLookupByLibrary.simpleMessage("Master code"),
+        "or_via_text_message": MessageLookupByLibrary.simpleMessage("or via "),
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "secod_welcome_pideky": MessageLookupByLibrary.simpleMessage(
+            "Before you can enjoy our shopping experience you must become active."),
+        "text_message": MessageLookupByLibrary.simpleMessage("text message."),
+        "text_your_email_address": MessageLookupByLibrary.simpleMessage(
+            "Or sign up with your email address "),
+        "welcome_pideky":
+            MessageLookupByLibrary.simpleMessage("Welcome to Pideky!")
       };
 }

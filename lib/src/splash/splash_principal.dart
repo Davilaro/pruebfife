@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -11,6 +12,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -89,8 +91,14 @@ class _SplashState extends State<Splash> {
       PedidoSugeridoController.userLog.value = 1;
       if (res && cargo) {
         if (prefs.usurioLogin == 1) {
+          S.load(prefs.paisUsuario == 'CR'
+              ? Locale('es', prefs.paisUsuario)
+              : prefs.paisUsuario == 'CO'
+                  ? Locale('es', 'CO')
+                  : Locale('en', ''));
           UxcamTagueo().validarTipoUsario();
         }
+        print('hola pais ${Intl.defaultLocale}');
         Navigator.pushReplacementNamed(
           context,
           'tab_opciones',

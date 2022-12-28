@@ -50,11 +50,171 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `estamos en ingles `
+  /// `Not to be missed by `
   String get imperdible {
     return Intl.message(
-      'estamos en ingles ',
+      'Not to be missed by ',
       name: 'imperdible',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nit without verification digit`
+  String get login_placeholder {
+    return Intl.message(
+      'Nit without verification digit',
+      name: 'login_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome to Pideky!`
+  String get welcome_pideky {
+    return Intl.message(
+      'Welcome to Pideky!',
+      name: 'welcome_pideky',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Before you can enjoy our shopping experience you must become active.`
+  String get secod_welcome_pideky {
+    return Intl.message(
+      'Before you can enjoy our shopping experience you must become active.',
+      name: 'secod_welcome_pideky',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You wish to activate yourself with your`
+  String get get_active_with_your {
+    return Intl.message(
+      'You wish to activate yourself with your',
+      name: 'get_active_with_your',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `cell phone number`
+  String get cell_phone_number {
+    return Intl.message(
+      'cell phone number',
+      name: 'cell_phone_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `or via `
+  String get or_via_text_message {
+    return Intl.message(
+      'or via ',
+      name: 'or_via_text_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `text message.`
+  String get text_message {
+    return Intl.message(
+      'text message.',
+      name: 'text_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Or sign up with your email address `
+  String get text_your_email_address {
+    return Intl.message(
+      'Or sign up with your email address ',
+      name: 'text_your_email_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `email address`
+  String get email_address {
+    return Intl.message(
+      'email address',
+      name: 'email_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get register {
+    return Intl.message(
+      'Register',
+      name: 'register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manual registration`
+  String get manual_activation {
+    return Intl.message(
+      'Manual registration',
+      name: 'manual_activation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your master code for manual activation`
+  String get enter_your_master_code {
+    return Intl.message(
+      'Enter your master code for manual activation',
+      name: 'enter_your_master_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Master code`
+  String get master_code {
+    return Intl.message(
+      'Master code',
+      name: 'master_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error getting code`
+  String get error_code {
+    return Intl.message(
+      'Error getting code',
+      name: 'error_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to buy on Pideky and view your business data you must activate your account`
+  String get activate_user_for_buy {
+    return Intl.message(
+      'to buy on Pideky and view your business data you must activate your account',
+      name: 'activate_user_for_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activate your account!`
+  String get activate_user {
+    return Intl.message(
+      'Activate your account!',
+      name: 'activate_user',
       desc: '',
       args: [],
     );

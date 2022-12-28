@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _validarKeyUXCam();
-    Intl.defaultLocale = 'es';
+    // Intl.defaultLocale = 'es_CO';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -81,12 +81,12 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            // supportedLocales: S.delegate.supportedLocales,
-            supportedLocales: [
-              const Locale('en', ''), // English,
-              const Locale('es', 'CO'), // español,
-              const Locale('es', 'CR'),
-            ],
+            supportedLocales: S.delegate.supportedLocales,
+            // supportedLocales: [
+            //   const Locale('en', ''), // English,
+            //   const Locale('es', 'CO'), // español,
+            //   const Locale('es', 'CR'),
+            // ],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',

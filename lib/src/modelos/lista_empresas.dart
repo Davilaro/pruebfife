@@ -31,6 +31,7 @@ class ListaEmpresas {
     required this.labelCondiciones2,
     required this.urlCondiciones2,
     required this.sucursales,
+    this.pais,
   });
 
   int numEmpresa;
@@ -54,6 +55,7 @@ class ListaEmpresas {
   String urlCondiciones1;
   String labelCondiciones2;
   String urlCondiciones2;
+  String? pais;
   List<Sucursal> sucursales;
 
   factory ListaEmpresas.fromJson(Map<String, dynamic> json) => ListaEmpresas(
@@ -78,6 +80,7 @@ class ListaEmpresas {
         urlCondiciones1: json["url_condiciones1"],
         labelCondiciones2: json["label_condiciones2"],
         urlCondiciones2: json["url_condiciones2"],
+        pais: json["Pais"],
         sucursales: List<Sucursal>.from(
             json["sucursales"].map((x) => Sucursal.fromJson(x))),
       );
@@ -104,6 +107,7 @@ class ListaEmpresas {
         "url_condiciones1": urlCondiciones1,
         "label_condiciones2": labelCondiciones2,
         "url_condiciones2": urlCondiciones2,
+        "Pais": pais,
         "sucursales": List<dynamic>.from(sucursales.map((x) => x.toJson())),
       };
 }
