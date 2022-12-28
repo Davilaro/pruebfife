@@ -75,13 +75,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                         AsyncSnapshot<List<dynamic>> snapshot) {
                       if (snapshot.hasData) {
                         var data = snapshot.data;
-                        data!.forEach((e) {
-                          prefs.paisUsuario = e.pais;
-                        });
-                        print("pais ${prefs.paisUsuario}");
                         return Column(
                           children: [
-                            for (int i = 0; i < data.length; i++)
+                            for (int i = 0; i < data!.length; i++)
                               Column(
                                 children: [
                                   SimpleCard(

@@ -24,7 +24,7 @@ class AcordionPagosRealizados extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 18),
         ),
-        contenido: Obx(() => controller.listaPagosPendientes.isNotEmpty
+        contenido: Obx(() => controller.listaPagosRealizados.isNotEmpty
             ? Container(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
