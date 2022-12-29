@@ -39,6 +39,7 @@ import '../../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.d
 import '../../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
 import '../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
 import '../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import '../../provider/db_provider_helper.dart';
 
 final prefs = new Preferencias();
 
@@ -74,12 +75,21 @@ class _PrincipalPageState extends State<PrincipalPage> {
         "Footer", "Home", "", "", "Home", 'PrincipalPage');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
+    _pais();
+    print("pais ${prefs.paisUsuario}");
     _cargarLista();
     controller.listaProductosPorFabricante.clear();
     controller.initController();
     controllerNequi.listaPagosPendientes.clear();
     controllerNequi.listaPagosRealizados.clear();
     controllerNequi.initData();
+  }
+
+  _pais() async {
+    final data = await DBProviderHelper.db.consultarDatosCliente();
+    data.forEach((e) {
+      prefs.paisUsuario = e.pais;
+    });
   }
 
   @override

@@ -23,6 +23,8 @@ import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/db_provider_helper.dart';
+
 final TextEditingController _controllerUser = TextEditingController();
 final TextEditingController _controllerCorreo = TextEditingController();
 
@@ -74,8 +76,16 @@ class _LoginState extends State<Login> {
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('LoginPage');
     _controllerUser.text = '';
+    _pais();
+    print("pais ${prefs.paisUsuario}");
     super.initState();
     _cargarVersion();
+  }
+  _pais() async {
+    final data = await DBProviderHelper.db.consultarDatosCliente();
+    data.forEach((e) {
+      prefs.paisUsuario = e.pais;
+    });
   }
 
   @override
