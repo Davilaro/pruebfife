@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
+import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
 import 'package:get/get.dart';
 
 class MisPagosNequiController extends GetxController {
@@ -12,7 +13,7 @@ class MisPagosNequiController extends GetxController {
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
-    numeroCelular.value = listaPagos.first.celular!;
+    numeroCelular.value = listaPagos.first.celular;
     agruparListas(listaPagos);
 
     print(numeroCelular);
@@ -38,5 +39,15 @@ class MisPagosNequiController extends GetxController {
   void onInit() {
     initData();
     super.onInit();
+  }
+
+  static MisPagosNequiController get findOrInitialize {
+    try {
+      return Get.find<MisPagosNequiController>();
+    } catch (e) {
+      Get.put(
+          MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
+      return Get.find<MisPagosNequiController>();
+    }
   }
 }

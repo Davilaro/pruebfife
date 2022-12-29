@@ -51,10 +51,8 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
-  final controller = Get.put(
-      PedidoSugeridoController(PedidoSugeridoServicio(PedidoSugeridoQuery())));
-  final controllerNequi = Get.put(
-      MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
+  final controller = Get.find<PedidoSugeridoController>();
+  final controllerNequi = Get.find<MisPagosNequiController>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
@@ -64,6 +62,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   void initState() {
+    controller.listaProductosPorFabricante.clear();
+    controller.initController();
+    controllerNequi.listaPagosPendientes.clear();
+    controllerNequi.listaPagosRealizados.clear();
+    controllerNequi.initData();
     super.initState();
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
@@ -74,21 +77,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         "Footer", "Home", "", "", "Home", 'PrincipalPage');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
-    _pais();
-    print("pais ${prefs.paisUsuario}");
     _cargarLista();
-    controller.listaProductosPorFabricante.clear();
-    controller.initController();
-    controllerNequi.listaPagosPendientes.clear();
-    controllerNequi.listaPagosRealizados.clear();
-    controllerNequi.initData();
-  }
-
-  _pais() async {
-    final data = await DBProviderHelper.db.consultarDatosCliente();
-    data.forEach((e) {
-      prefs.paisUsuario = e.pais;
-    });
   }
 
   @override

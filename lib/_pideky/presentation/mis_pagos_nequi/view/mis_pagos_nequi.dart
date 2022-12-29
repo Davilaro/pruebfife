@@ -20,8 +20,7 @@ class MisPagosNequiPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(
-        MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
+    final controller = Get.find<MisPagosNequiController>();
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
