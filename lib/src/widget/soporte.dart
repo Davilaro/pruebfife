@@ -91,7 +91,7 @@ class _SoporteState extends State<Soporte> {
                                   height: 40,
                                 ),
                                 Text(
-                                  "Si requieres ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
+                                  "Si requiere ayuda con tu proceso de compra, de soporte técnico o necesitas eliminar tu cuenta, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: colorLetter,
