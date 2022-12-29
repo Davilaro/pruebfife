@@ -1,0 +1,20 @@
+{
+    "imperdible":"Imperdibles dhola",
+
+    "login_placeholder":"Número de identificación",
+    "welcome_pideky":"¡Bienvenido a Pideky!",
+    "secod_welcome_pideky":"Antes de disfrutar nuestra experiencia de compra debes registrarte.",
+    "get_active_with_your": "Deseas registrarte con tu",
+    "cell_phone_number": "número de celular",
+    "or_via_text_message":"o través de un ",
+    "text_message": "mensaje de texto.",
+    "text_your_email_address": "O actívate con tu ",
+    "email_address":"correo electrónico.",
+    "register":"Registrarse",
+    "manual_activation":"Registro manual",
+    "enter_your_master_code":"Ingresa tu código maestro para realizar el registro manual",
+    "master_code":"Código maestro",
+    "error_code": "Error obteniendo código",
+    "activate_user_for_buy":"para comprar en Pideky y ver los datos de tu negocio debes registrar tu cuenta",
+    "activate_user":"Registra tu cuenta!"
+}

@@ -1,0 +1,20 @@
+{
+    "imperdible":"Not to be missed by ",
+
+    "login_placeholder":"Nit without verification digit",
+    "welcome_pideky":"Welcome to Pideky!",
+    "secod_welcome_pideky":"Before you can enjoy our shopping experience you must become active.",
+    "get_active_with_your": "You wish to activate yourself with your",
+    "cell_phone_number": "cell phone number",
+    "or_via_text_message":"or via ",
+    "text_message": "text message.",
+    "text_your_email_address": "Or sign up with your email address ",
+    "email_address":"email address",
+    "register": "Register",
+    "manual_activation":"Manual registration",
+    "enter_your_master_code":"Enter your master code for manual activation",
+    "master_code":"Master code",
+    "error_code": "Error getting code",
+    "activate_user_for_buy":"to buy on Pideky and view your business data you must activate your account",
+    "activate_user":"Activate your account!"
+}

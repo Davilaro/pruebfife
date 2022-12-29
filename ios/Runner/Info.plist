@@ -64,5 +64,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<array>
+		<string>en</string>
+		<string>es_CO</string>
+		<string>es_CR</string>
+	</array>
 </dict>
 </plist>

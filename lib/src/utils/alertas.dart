@@ -1,3 +1,4 @@
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
@@ -132,7 +133,7 @@ void alertCustom(BuildContext context) {
             title: Container(
                 margin: EdgeInsets.only(top: 40),
                 child: Text(
-                  'Activa tu cuenta!',
+                  S.current.activate_user,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 25,
@@ -154,7 +155,7 @@ void alertCustom(BuildContext context) {
             content: Container(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  'para comprar en Pideky y ver los datos de tu negocio debes activar tu cuenta',
+                  S.current.activate_user_for_buy,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 )),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -111,6 +112,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
 
     listaEmpresas.forEach((element) {
+      print('hola res ${jsonEncode(element)}');
       final widgetTemp = Card(
         color: seleccion == element.codigo
             ? ConstantesColores.azul_precio
@@ -208,13 +210,19 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     prefs.usuarioRazonSocial = elemento.razonsocial;
-    print('soy el proveedor ${jsonEncode(elemento)}');
     prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
     prefs.codigonutresa = elemento.codigonutresa;
     prefs.codigozenu = elemento.codigozenu;
     prefs.codigomeals = elemento.codigomeals;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
+    prefs.paisUsuario = elemento.pais;
+    //se cambia el idioma
+    S.load(elemento.pais == 'CR'
+        ? Locale('es', elemento.pais)
+        : elemento.pais == 'CO'
+            ? Locale('es', 'CO')
+            : Locale('en', ''));
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');

@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
@@ -34,12 +35,12 @@ final prefs = new Preferencias();
 late BuildContext contextPrincipal;
 late bool isChecked = false;
 
-const htmlNumeroCel = """ 
- <FONT SIZE=4>Deseas activarte con tu </FONT><FONT SIZE=4 COLOR="#43398E"><b>número de celular</b></FONT><FONT SIZE=4> a través de un </FONT><FONT SIZE=4 COLOR="#43398E"><b>mensaje de texto.</b></FONT> 
+var htmlNumeroCel = """ 
+ <FONT SIZE=4>${S.current.get_active_with_your} </FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.cell_phone_number}</b></FONT><FONT SIZE=4>${S.current.or_via_text_message}</FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.text_message}</b></FONT> 
 """;
 
-const htmlNumeroMensaje = """ 
-<FONT SIZE=4> O activate con tu </FONT><FONT SIZE=4 COLOR="#43398E"><b>correo electrónico.</b></FONT> 
+var htmlNumeroMensaje = """ 
+<FONT SIZE=4> ${S.current.text_your_email_address} </FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.email_address}</b></FONT> 
 """;
 
 class Bienvenido extends StatefulWidget {
@@ -128,14 +129,14 @@ class _BienvenidoState extends State<Bienvenido> {
               child: ListView(
                 children: [
                   Text(
-                    '¡Bienvenido a Pideky!',
+                    S.current.welcome_pideky,
                     style: diseno_dialog_titulos(),
                     textAlign: TextAlign.center,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Text(
-                      'Antes de disfrutar nuestra experiencia de compra debes activarte.',
+                      S.current.secod_welcome_pideky,
                       textAlign: TextAlign.center,
                     ),
                   ),

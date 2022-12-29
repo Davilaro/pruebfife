@@ -1,12 +1,13 @@
 // @dart=2.9
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
-import 'package:emart/lang/translations.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'src/preferences/preferencias.dart';
 import 'src/provider/carrito_provider.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _validarKeyUXCam();
-
+    // Intl.defaultLocale = 'es_CO';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -73,18 +74,19 @@ class _MyAppState extends State<MyApp> {
         ],
         child: OverlaySupport.global(
           child: GetMaterialApp(
-            translations: AppTranslations(),
             initialBinding: InitialBindings(),
             localizationsDelegates: [
+              S.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            fallbackLocale: const Locale('es', 'CO'),
-            supportedLocales: [
-              const Locale('en', ''), // English,
-              const Locale('es_CO', ''), // español,
-            ],
+            supportedLocales: S.delegate.supportedLocales,
+            // supportedLocales: [
+            //   const Locale('en', ''), // English,
+            //   const Locale('es', 'CO'), // español,
+            //   const Locale('es', 'CR'),
+            // ],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',
