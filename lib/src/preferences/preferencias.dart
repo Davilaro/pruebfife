@@ -18,14 +18,6 @@ class Preferencias {
     _prefs.setString('usuarioRazonSocial', value);
   }
 
-  get paisUsuario {
-    return _prefs.getString("paisUsuario") ?? null;
-  }
-
-  set paisUsuario(dynamic value) {
-    _prefs.setString("paisUsuario", value);
-  }
-
   get usuarioLogueado {
     return _prefs.getString('usuarioLogueado') ?? null;
   }
