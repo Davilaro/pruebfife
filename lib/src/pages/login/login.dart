@@ -76,16 +76,8 @@ class _LoginState extends State<Login> {
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('LoginPage');
     _controllerUser.text = '';
-    _pais();
-    print("pais ${prefs.paisUsuario}");
     super.initState();
     _cargarVersion();
-  }
-  _pais() async {
-    final data = await DBProviderHelper.db.consultarDatosCliente();
-    data.forEach((e) {
-      prefs.paisUsuario = e.pais;
-    });
   }
 
   @override

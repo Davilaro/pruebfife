@@ -3,6 +3,8 @@ import 'package:collection/collection.Dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
+import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class PedidoSugeridoController extends GetxController
   static RxInt userLog = 0.obs;
 
   PedidoSugeridoModel model = PedidoSugeridoModel();
-  final controlador = Get.find<CambioEstadoProductos>();
+  final controlador = Get.put<CambioEstadoProductos>(CambioEstadoProductos());
 
   RxMap listaProductosPorFabricante = {}.obs;
   RxList<dynamic> listaFabricante = <dynamic>[].obs;
@@ -123,5 +125,15 @@ class PedidoSugeridoController extends GetxController
     controller.dispose();
 
     super.onClose();
+  }
+
+  static PedidoSugeridoController get findOrInitialize {
+    try {
+      return Get.find<PedidoSugeridoController>();
+    } catch (e) {
+      Get.put(PedidoSugeridoController(
+          PedidoSugeridoServicio(PedidoSugeridoQuery())));
+      return Get.find<PedidoSugeridoController>();
+    }
   }
 }

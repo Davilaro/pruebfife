@@ -27,8 +27,7 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PedidoSugeridoController(
-        PedidoSugeridoServicio(PedidoSugeridoQuery())));
+    final controller = Get.find<PedidoSugeridoController>();
     final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 2,

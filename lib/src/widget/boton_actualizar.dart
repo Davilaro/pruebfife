@@ -48,10 +48,8 @@ class _BotonActualizarState extends State<BotonActualizar> {
 
 Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
-  final controller = Get.put(
-      PedidoSugeridoController(PedidoSugeridoServicio(PedidoSugeridoQuery())));
-  final controllerNequi = Get.put(
-      MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
+  final controller = Get.find<PedidoSugeridoController>();
+  final controllerNequi = Get.find<MisPagosNequiController>();
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);
