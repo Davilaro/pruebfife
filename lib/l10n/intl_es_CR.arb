@@ -1,5 +1,11 @@
 {
-    "imperdible":"Imperdibles dhola",
+    "imperdible":"Imperdibles costa rica",
+
+    "home":"Inicio",
+    "catalog":"Categorías",
+    "suggested_order":"Pedido Sugerido",
+    "history":"Histórico",
+    "my_business":"Mi Negocio",
 
     "login_placeholder":"Número de identificación",
     "welcome_pideky":"¡Bienvenido a Pideky!",
@@ -12,9 +18,27 @@
     "email_address":"correo electrónico.",
     "register":"Registrarse",
     "manual_activation":"Registro manual",
+    "manual_registration":"registro manual",
+    "you_want_to_go":"O deseas ir al ",
     "enter_your_master_code":"Ingresa tu código maestro para realizar el registro manual",
     "master_code":"Código maestro",
-    "error_code": "Error obteniendo código",
     "activate_user_for_buy":"para comprar en Pideky y ver los datos de tu negocio debes registrar tu cuenta",
-    "activate_user":"Registra tu cuenta!"
+    "activate_your_user":"Registra tu cuenta!",
+    "activate_user":"Registro de cuenta",
+    "please_enter_activation_cod":"Por favor ingresa el código de registro, enviado por {destino} a tu número seleccionado:",
+    "i_accept_privacy_policy": "Acepto política de privacidad",
+    "i_accept_processing_policy": "Acepto política de tratamiento de datos",
+    "we_validating_code_activate":"Estamos validando el código para registrar tu cuenta.",
+    "the_verification_code_incorrect":"El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente.",
+    "registration_successful":"¡Registro Exitoso!",
+    "pideky_account_successfully_registered": "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos.",
+    "loading_branches": "Cargando sucursales",
+    "unable_send_text_message":"No fue posible enviar el mensaje de texto {e}",
+    "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",
+
+    "error_code": "Error obteniendo código",
+    "error_information": "Error al obtener información",
+    "the_email_does_not":"El email no cumple con el formato",
+
+    "text_sms":"SMS"
 }

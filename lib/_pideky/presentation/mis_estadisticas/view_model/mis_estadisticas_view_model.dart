@@ -1,11 +1,5 @@
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/estadistica/model/estadistica.dart';
 import 'package:emart/_pideky/domain/estadistica/service/estadistica_service.dart';
 import 'package:emart/_pideky/infrastructure/mis_estadisticas/mis_estadisticas_sqlite.dart';
-import 'package:emart/src/preferences/const.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class MisEstadisticasViewModel extends GetxController {

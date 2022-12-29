@@ -133,7 +133,7 @@ void alertCustom(BuildContext context) {
             title: Container(
                 margin: EdgeInsets.only(top: 40),
                 child: Text(
-                  S.current.activate_user,
+                  S.current.activate_your_user,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 25,

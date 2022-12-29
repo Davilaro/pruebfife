@@ -521,7 +521,7 @@ class Servicies {
         "Nit $codUsuario",
         "Token $token",
       ]);
-      print(jsonDecode(response.body));
+      print(response.statusCode);
       if (response.statusCode == 200) {
         return Validacion.fromJson(jsonDecode(response.body));
       } else {

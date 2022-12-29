@@ -20,12 +20,23 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es_CR';
 
+  static String m0(destino) =>
+      "Por favor ingresa el código de registro, enviado por ${destino} a tu número seleccionado:";
+
+  static String m1(e) => "No fue posible enviar el mensaje de texto ${e}";
+
+  static String m2(e) =>
+      "No fue posible enviar el mensaje, por favor intente nuevamente ${e}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "activate_user":
-            MessageLookupByLibrary.simpleMessage("Registra tu cuenta!"),
+            MessageLookupByLibrary.simpleMessage("Registro de cuenta"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
             "para comprar en Pideky y ver los datos de tu negocio debes registrar tu cuenta"),
+        "activate_your_user":
+            MessageLookupByLibrary.simpleMessage("Registra tu cuenta!"),
+        "catalog": MessageLookupByLibrary.simpleMessage("Categorías"),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
         "email_address":
@@ -34,24 +45,57 @@ class MessageLookup extends MessageLookupByLibrary {
             "Ingresa tu código maestro para realizar el registro manual"),
         "error_code":
             MessageLookupByLibrary.simpleMessage("Error obteniendo código"),
+        "error_information": MessageLookupByLibrary.simpleMessage(
+            "Error al obtener información"),
         "get_active_with_your":
             MessageLookupByLibrary.simpleMessage("Deseas registrarte con tu"),
-        "imperdible": MessageLookupByLibrary.simpleMessage("Imperdibles dhola"),
+        "history": MessageLookupByLibrary.simpleMessage("Histórico"),
+        "home": MessageLookupByLibrary.simpleMessage("Inicio"),
+        "i_accept_privacy_policy": MessageLookupByLibrary.simpleMessage(
+            "Acepto política de privacidad"),
+        "i_accept_processing_policy": MessageLookupByLibrary.simpleMessage(
+            "Acepto política de tratamiento de datos"),
+        "imperdible":
+            MessageLookupByLibrary.simpleMessage("Imperdibles costa rica"),
+        "loading_branches":
+            MessageLookupByLibrary.simpleMessage("Cargando sucursales"),
         "login_placeholder":
             MessageLookupByLibrary.simpleMessage("Número de identificación"),
         "manual_activation":
             MessageLookupByLibrary.simpleMessage("Registro manual"),
+        "manual_registration":
+            MessageLookupByLibrary.simpleMessage("registro manual"),
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),
+        "my_business": MessageLookupByLibrary.simpleMessage("Mi Negocio"),
         "or_via_text_message":
             MessageLookupByLibrary.simpleMessage("o través de un "),
+        "pideky_account_successfully_registered":
+            MessageLookupByLibrary.simpleMessage(
+                "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
+        "please_enter_activation_cod": m0,
         "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
+        "registration_successful":
+            MessageLookupByLibrary.simpleMessage("¡Registro Exitoso!"),
         "secod_welcome_pideky": MessageLookupByLibrary.simpleMessage(
             "Antes de disfrutar nuestra experiencia de compra debes registrarte."),
+        "suggested_order":
+            MessageLookupByLibrary.simpleMessage("Pedido Sugerido"),
         "text_message":
             MessageLookupByLibrary.simpleMessage("mensaje de texto."),
+        "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
         "text_your_email_address":
             MessageLookupByLibrary.simpleMessage("O actívate con tu "),
+        "the_email_does_not": MessageLookupByLibrary.simpleMessage(
+            "El email no cumple con el formato"),
+        "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
+            "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
+        "unable_send_text_message": m1,
+        "unable_send_text_message2": m2,
+        "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
+            "Estamos validando el código para registrar tu cuenta."),
         "welcome_pideky":
-            MessageLookupByLibrary.simpleMessage("¡Bienvenido a Pideky!")
+            MessageLookupByLibrary.simpleMessage("¡Bienvenido a Pideky!"),
+        "you_want_to_go":
+            MessageLookupByLibrary.simpleMessage("O deseas ir al ")
       };
 }

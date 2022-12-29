@@ -25,6 +25,7 @@ class ListaSucursalesData {
       this.codigomeals,
       this.codigonutresa,
       this.codigozenu,
+      this.codigopozuelo,
       this.pais,
       this.codigopadrepideky});
 
@@ -39,6 +40,7 @@ class ListaSucursalesData {
   String? codigonutresa;
   String? codigozenu;
   String? codigomeals;
+  String? codigopozuelo;
   String? pais;
   String? codigopadrepideky;
 
@@ -54,6 +56,7 @@ class ListaSucursalesData {
         codigomeals: json["codigomeals"],
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
+        codigopozuelo: json["codigopozuelo"],
         codigopadrepideky:
             json["CodigoPadrePideky"] == null ? "" : json["CodigoPadrePideky"],
         pais: json["Pais"] == null ? "" : json["Pais"],
@@ -73,6 +76,7 @@ class ListaSucursalesData {
         "codigomeals": codigomeals,
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
+        "codigopozuelo": codigopozuelo,
         "Pais": pais,
         "CodigoPadrePideky": codigopadrepideky,
       };

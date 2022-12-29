@@ -143,6 +143,14 @@ class Preferencias {
     _prefs.setString('codigozenu', value);
   }
 
+  get codigopozuelo {
+    return _prefs.getString('codigopozuelo') ?? '';
+  }
+
+  set codigopozuelo(dynamic value) {
+    _prefs.setString('codigopozuelo', value);
+  }
+
   get codigopadrepideky {
     return _prefs.getString('codigopadrepideky') ?? '';
   }

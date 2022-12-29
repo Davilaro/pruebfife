@@ -20,12 +20,23 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(destino) =>
+      "Please enter the activation code, sent by ${destino} to your selected number:";
+
+  static String m1(e) => "Unable to send text message ${e}";
+
+  static String m2(e) =>
+      "It was not possible to send the message, please try again ${e}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "activate_user":
-            MessageLookupByLibrary.simpleMessage("Activate your account!"),
+            MessageLookupByLibrary.simpleMessage("Account registration"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
             "to buy on Pideky and view your business data you must activate your account"),
+        "activate_your_user":
+            MessageLookupByLibrary.simpleMessage("Activate your account!"),
+        "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("cell phone number"),
         "email_address": MessageLookupByLibrary.simpleMessage("email address"),
@@ -33,23 +44,55 @@ class MessageLookup extends MessageLookupByLibrary {
             "Enter your master code for manual activation"),
         "error_code":
             MessageLookupByLibrary.simpleMessage("Error getting code"),
+        "error_information":
+            MessageLookupByLibrary.simpleMessage("Error obtaining information"),
         "get_active_with_your": MessageLookupByLibrary.simpleMessage(
             "You wish to activate yourself with your"),
+        "history": MessageLookupByLibrary.simpleMessage("History"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
+        "i_accept_privacy_policy":
+            MessageLookupByLibrary.simpleMessage("I accept privacy policy"),
+        "i_accept_processing_policy": MessageLookupByLibrary.simpleMessage(
+            "I accept the data processing policy"),
         "imperdible":
             MessageLookupByLibrary.simpleMessage("Not to be missed by "),
+        "loading_branches":
+            MessageLookupByLibrary.simpleMessage("Loading branches"),
         "login_placeholder": MessageLookupByLibrary.simpleMessage(
             "Nit without verification digit"),
         "manual_activation":
             MessageLookupByLibrary.simpleMessage("Manual registration"),
+        "manual_registration":
+            MessageLookupByLibrary.simpleMessage("manual registration"),
         "master_code": MessageLookupByLibrary.simpleMessage("Master code"),
+        "my_business": MessageLookupByLibrary.simpleMessage("My Business"),
         "or_via_text_message": MessageLookupByLibrary.simpleMessage("or via "),
+        "pideky_account_successfully_registered":
+            MessageLookupByLibrary.simpleMessage(
+                "Your Pideky account has been successfully registered, then select a branch to start placing orders."),
+        "please_enter_activation_cod": m0,
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "registration_successful":
+            MessageLookupByLibrary.simpleMessage("Registration Successful!"),
         "secod_welcome_pideky": MessageLookupByLibrary.simpleMessage(
             "Before you can enjoy our shopping experience you must become active."),
+        "suggested_order":
+            MessageLookupByLibrary.simpleMessage("Suggested Order"),
         "text_message": MessageLookupByLibrary.simpleMessage("text message."),
+        "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
         "text_your_email_address": MessageLookupByLibrary.simpleMessage(
             "Or sign up with your email address "),
+        "the_email_does_not": MessageLookupByLibrary.simpleMessage(
+            "The email does not comply with the format"),
+        "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
+            "The verification code is incorrect, \nplease check it and try again."),
+        "unable_send_text_message": m1,
+        "unable_send_text_message2": m2,
+        "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
+            "We are validating the code to activate your account."),
         "welcome_pideky":
-            MessageLookupByLibrary.simpleMessage("Welcome to Pideky!")
+            MessageLookupByLibrary.simpleMessage("Welcome to Pideky!"),
+        "you_want_to_go":
+            MessageLookupByLibrary.simpleMessage("Or do you want to go to the ")
       };
 }
