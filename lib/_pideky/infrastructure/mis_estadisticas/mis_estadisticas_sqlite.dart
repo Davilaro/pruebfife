@@ -8,7 +8,7 @@ class EstadisticasRepositorySqlite extends IEstadisticaRepository {
     try {
       final sql = await db.rawQuery('''
       SELECT t.nit codigo, t.marca descripcion, t.cantidad cantidad, t.CantidadP posicion, m.ico imagen
-       FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion ASC
+FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion DESC, cantidad DESC
     ''');
 
       return sql.map((e) => Estadistica.fromJson(e)).toList();
@@ -21,8 +21,8 @@ class EstadisticasRepositorySqlite extends IEstadisticaRepository {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT nit codigo, subcategoria descripcion, cantidad cantidad, CantidadP posicion 
-      FROM TopSubcategorias order by posicion ASC
+      SELECT nit codigo, subcategoria descripcion, cantidad cantidad, CantidadP posicion
+FROM TopSubcategorias order by posicion DESC, cantidad DESC
     ''');
 
       return sql.map((e) => Estadistica.fromJson(e)).toList();
