@@ -364,6 +364,7 @@ class Servicies {
         "Iva": listaPedido[i].iva,
         "Observacion": 'Prueba',
         "Posicion": i,
+        "Pais": prefs.paisUsuario,
         "Precio": listaPedido[i].precio,
         "ValorDescuento":
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
@@ -591,6 +592,7 @@ class Servicies {
           "Valor": "${encuesta.valor}",
           "Parametro": "$respuesta", //respuesta
           "CodigoCliente": "${prefs.codCliente}",
+          "pais": prefs.paisUsuario,
           "NitCliente": "${prefs.codClienteLogueado}",
         }),
       );
