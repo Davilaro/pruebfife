@@ -36,6 +36,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "activate_your_user":
             MessageLookupByLibrary.simpleMessage("Activa tu cuenta!"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
+        "categories_for_you": MessageLookupByLibrary.simpleMessage(
+            "categorias destacadas para tí "),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
         "email_address":
@@ -78,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Antes de disfrutar nuestra experiencia de compra debes activarte."),
         "suggested_order":
             MessageLookupByLibrary.simpleMessage("Pedido Sugerido"),
+        "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
+            "Estos productos serán entregados según el itinerario del proveedor"),
         "text_message":
             MessageLookupByLibrary.simpleMessage("mensaje de texto."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),

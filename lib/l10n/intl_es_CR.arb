@@ -40,5 +40,8 @@
     "error_information": "Error al obtener información",
     "the_email_does_not":"El email no cumple con el formato",
 
-    "text_sms":"SMS"
+    "text_sms":"SMS",
+
+    "categories_for_you": "categorias destacadas ",
+    "terms_of_delivery" : "Tu pedido sera entregado en tu día normal de entrega"
 }

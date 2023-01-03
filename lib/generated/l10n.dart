@@ -429,6 +429,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Featured categories for you `
+  String get categories_for_you {
+    return Intl.message(
+      'Featured categories for you ',
+      name: 'categories_for_you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `These products will be delivered according to the supplier's itinerary.`
+  String get terms_of_delivery {
+    return Intl.message(
+      'These products will be delivered according to the supplier\'s itinerary.',
+      name: 'terms_of_delivery',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

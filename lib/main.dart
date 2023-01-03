@@ -76,10 +76,10 @@ class _MyAppState extends State<MyApp> {
           child: GetMaterialApp(
             initialBinding: InitialBindings(),
             localizationsDelegates: [
-              S.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
+              S.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
             // supportedLocales: [

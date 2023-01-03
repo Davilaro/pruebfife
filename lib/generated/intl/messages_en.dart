@@ -37,6 +37,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "activate_your_user":
             MessageLookupByLibrary.simpleMessage("Activate your account!"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
+        "categories_for_you": MessageLookupByLibrary.simpleMessage(
+            "Featured categories for you "),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("cell phone number"),
         "email_address": MessageLookupByLibrary.simpleMessage("email address"),
@@ -78,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Before you can enjoy our shopping experience you must become active."),
         "suggested_order":
             MessageLookupByLibrary.simpleMessage("Suggested Order"),
+        "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
+            "These products will be delivered according to the supplier\'s itinerary."),
         "text_message": MessageLookupByLibrary.simpleMessage("text message."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
         "text_your_email_address": MessageLookupByLibrary.simpleMessage(

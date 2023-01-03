@@ -40,5 +40,9 @@
     "error_information": "Error obtaining information",
     "the_email_does_not":"The email does not comply with the format",
     
-    "text_sms":"SMS"
+    "text_sms":"SMS",
+
+    "categories_for_you" : "Featured categories for you ",
+    "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary."
+
 }

@@ -309,7 +309,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                               Container(
                                 width: Get.width * 0.7,
                                 child: Text(
-                                  'Categorías destacadas para ti ',
+                                  S.current.categories_for_you,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       color: HexColor("#41398D"),

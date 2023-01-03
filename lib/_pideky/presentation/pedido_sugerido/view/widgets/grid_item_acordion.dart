@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
+
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,13 @@ import 'package:intl/intl.dart';
 
 List<Widget> gridItem(
     BuildContext context, String fabricante, List<dynamic> lista) {
-  Locale locale = Localizations.localeOf(context);
-  var format = NumberFormat.simpleCurrency(locale: locale.toString());
+  var locale = Intl().locale;
+  var format = locale.toString() != 'es_CO'
+      ? locale.toString() != 'es_CR'
+          ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+          : NumberFormat.simpleCurrency(locale: locale.toString())
+      : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
   final size = MediaQuery.of(context).size;
   List<Widget> result = [];
   List<PedidoSugeridoModel> listTag = [];
