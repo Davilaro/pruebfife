@@ -672,14 +672,40 @@ class Servicies {
             "fecha": "$currentDate"
           }));
       if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      print("something wrong $err");
+      return false;
+    }
+  }
+
+  Future<bool> deleteAccount() async {
+    try {
+      DateTime current = DateTime.now();
+      String currentDate = DateFormat('yyyy-MM-dd HH:mm').format(current);
+
+      final url;
+      url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/eliminaUsuario');
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(<String, String>{
+            "CCUP": "${prefs.codigoUnicoPideky}",
+            "fecha": "$currentDate",
+            "pais": "${prefs.paisUsuario}"
+          }));
+      if (response.statusCode == 200) {
         print("true----------------------validacion correcta");
         return true;
       } else {
         print("false----------------------validacion incorrecta");
         return false;
       }
-    } catch (err) {
-      print("something wrong $err");
+    } catch (e) {
       return false;
     }
   }

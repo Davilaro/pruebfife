@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
 import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:get/get.dart';
 
 class MisPagosNequiController extends GetxController {
@@ -10,10 +11,12 @@ class MisPagosNequiController extends GetxController {
   RxList listaPagosRealizados = [].obs;
   RxList listaPagosPendientes = [].obs;
   var listaPagos = [];
+  final prefs = new Preferencias();
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
     numeroCelular.value = listaPagos.first.celular;
+    prefs.codigoUnicoPideky = listaPagos.first.ccup;
     agruparListas(listaPagos);
 
     print(numeroCelular);

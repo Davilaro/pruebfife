@@ -9,6 +9,7 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/pages/login/widgets/bienvenido.dart';
@@ -234,6 +235,15 @@ class _LoginState extends State<Login> {
 
   Future loguin(BuildContext context, String nit) async {
     List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
+    respuesta.forEach((element) {
+      if (element.bloqueado == "1") {
+        Navigator.pushReplacementNamed(context, "inicio_compra");
+        return mostrarAlert(
+            context,
+            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte",
+            null);
+      }
+    });
 
     prefs.codClienteLogueado = nit;
     // ignore: unnecessary_statements
@@ -300,13 +310,13 @@ class _LoginState extends State<Login> {
       await prValidar.hide();
       mostrarAlert(
           context,
-          'El Nit ingresado esta mal escrito o no pertenece a un usuario registrado',
+          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
           null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
       mostrarAlert(
           context,
-          'El Nit ingresado esta mal escrito o no pertenece a un usuario registrado',
+          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
           null);
     } else if (respues.codigo == 0) {
       mostrarAlert(context, 'No se pudo generar el código', null);

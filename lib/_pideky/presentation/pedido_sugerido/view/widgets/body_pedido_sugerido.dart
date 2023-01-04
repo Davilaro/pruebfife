@@ -20,7 +20,8 @@ class BodyPedidoSugerido extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Expanded(
-          child: TabBarView(controller: controller.controller, children: [
+          child: TabBarView(
+            controller: controller.controller, children: [
         SingleChildScrollView(
           child: Column(
             children: [

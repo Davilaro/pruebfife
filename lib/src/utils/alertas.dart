@@ -6,7 +6,11 @@ import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void mostrarAlert(BuildContext context, String mensaje, Widget? icon) {
+void mostrarAlert(
+  BuildContext context,
+  String mensaje,
+  Widget? icon,
+) {
   showDialog(
       context: context,
       barrierDismissible: false,
