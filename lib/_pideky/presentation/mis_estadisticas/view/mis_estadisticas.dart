@@ -143,8 +143,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
-                                  titulo: 'Mi top 3 de subcategorias',
-                                  lista: viewModel.listTopSubCategorias.value,
+                                  titulo: 'Mi top 3 de subcategorías',
+                                  lista: viewModel.listTopSubCategorias,
                                   subTitulo:
                                       'Estas son las tres subcategorías que más has comprado para tu negocio en el último mes.',
                                   tipo: 'subcategorias')
