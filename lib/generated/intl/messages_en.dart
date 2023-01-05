@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "activate": MessageLookupByLibrary.simpleMessage("the activation"),
         "activate_user":
             MessageLookupByLibrary.simpleMessage("Account registration"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
@@ -64,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Nit without verification digit"),
         "manual_activation":
             MessageLookupByLibrary.simpleMessage("Manual registration"),
+        "manual_activation_subtitle":
+            MessageLookupByLibrary.simpleMessage("the manual registration"),
         "manual_registration":
             MessageLookupByLibrary.simpleMessage("manual registration"),
         "master_code": MessageLookupByLibrary.simpleMessage("Master code"),

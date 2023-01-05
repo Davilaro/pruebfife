@@ -30,12 +30,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "activate": MessageLookupByLibrary.simpleMessage("el registro"),
         "activate_user":
             MessageLookupByLibrary.simpleMessage("Registro de cuenta"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
-            "para comprar en Pideky y ver los datos de tu negocio debes registrar tu cuenta"),
+            "para comprar en Pideky y ver los datos de tu negocio debes tener una cuenta activa"),
         "activate_your_user":
-            MessageLookupByLibrary.simpleMessage("Registra tu cuenta!"),
+            MessageLookupByLibrary.simpleMessage("Registrate!"),
         "catalog": MessageLookupByLibrary.simpleMessage("Categorías"),
         "categories_for_you":
             MessageLookupByLibrary.simpleMessage("categorias destacadas "),
@@ -65,6 +66,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Número de identificación"),
         "manual_activation":
             MessageLookupByLibrary.simpleMessage("Registro manual"),
+        "manual_activation_subtitle":
+            MessageLookupByLibrary.simpleMessage("el registro manual"),
         "manual_registration":
             MessageLookupByLibrary.simpleMessage("registro manual"),
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),

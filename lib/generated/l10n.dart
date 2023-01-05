@@ -220,6 +220,16 @@ class S {
     );
   }
 
+  /// `the manual registration`
+  String get manual_activation_subtitle {
+    return Intl.message(
+      'the manual registration',
+      name: 'manual_activation_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `manual registration`
   String get manual_registration {
     return Intl.message(
@@ -285,6 +295,16 @@ class S {
     return Intl.message(
       'Account registration',
       name: 'activate_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `the activation`
+  String get activate {
+    return Intl.message(
+      'the activation',
+      name: 'activate',
       desc: '',
       args: [],
     );

@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "activate": MessageLookupByLibrary.simpleMessage("la activación"),
         "activate_user": MessageLookupByLibrary.simpleMessage("Activar Cuenta"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
             "para comprar en Pideky y ver los datos de tu negocio debes activar tu cuenta"),
@@ -63,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Nit sin dígito de verificación"),
         "manual_activation":
             MessageLookupByLibrary.simpleMessage("Activación manual"),
+        "manual_activation_subtitle":
+            MessageLookupByLibrary.simpleMessage("la activacion manual"),
         "manual_registration":
             MessageLookupByLibrary.simpleMessage("registro manual"),
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),

@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/login.dart';
@@ -107,14 +108,14 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
               child: ListView(
                 children: [
                   Text(
-                    'Activación manual',
+                    S.current.manual_activation,
                     style: diseno_dialog_titulos(),
                     textAlign: TextAlign.center,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Text(
-                      'Selecciona el método para realizar la activación manual.',
+                      'Selecciona el método para realizar ${S.current.manual_activation_subtitle}.',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -446,7 +447,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                             child: Text(
-                              'Activar Cuenta',
+                              S.current.activate_user,
                               style: diseno_dialog_titulos(),
                               textAlign: TextAlign.center,
                             ),
@@ -454,7 +455,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                             child: Text(
-                              'Por favor ingresa el código de activación, enviado por $destino',
+                              'Por favor ingresa el código de ${S.current.activate}, enviado por $destino',
                               textAlign: TextAlign.center,
                             ),
                           ),
