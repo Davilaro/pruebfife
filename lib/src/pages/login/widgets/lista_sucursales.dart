@@ -158,12 +158,12 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   TextStyle diseno_sucursales(dynamic element) => TextStyle(
-      fontSize: 15,
+      fontSize: 13,
       color: seleccion == element.codigo ? Colors.white : Colors.black);
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: Get.height * 0.15,
+      height: Get.height * 0.2,
       width: double.infinity,
       child: Row(
         children: [
@@ -175,21 +175,22 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               children: [
                 Flexible(
                     flex: 2,
-                    child: AutoSizeText('Nombre: ${element.nombre}',
+                    child: Text('Nombre: ${element.nombre}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        presetFontSizes: [16, 14],
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: AutoSizeText('Télefono: ${element.telefono}',
+                    child: Text('Télefono: ${element.telefono}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: AutoSizeText('Dirección: ${element.direccion}',
+                    flex: 2,
+                    child: Text('Dirección: ${element.direccion}',
                         overflow: TextOverflow.clip,
+                        maxLines: 2,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: AutoSizeText('Ciudad: ${element.ciudad}',
+                    child: Text('Ciudad: ${element.ciudad}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
               ],

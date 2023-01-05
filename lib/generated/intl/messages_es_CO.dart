@@ -71,7 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),
         "my_business": MessageLookupByLibrary.simpleMessage("Mi Negocio"),
         "or_via_text_message":
-            MessageLookupByLibrary.simpleMessage("o través de un "),
+            MessageLookupByLibrary.simpleMessage(" o a través de un "),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
