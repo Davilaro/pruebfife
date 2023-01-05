@@ -348,7 +348,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Mis estadisticas',
+                                              'Mis estadísticas',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
