@@ -94,7 +94,7 @@ class MisVendedores extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              '+57 ${listaVendedores[i]['vendedores'][j]['telefono']}',
+                                              '${listaVendedores[i]['vendedores'][j]['indicativo']} ${listaVendedores[i]['vendedores'][j]['telefono']}',
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 color: ConstantesColores
@@ -130,7 +130,8 @@ class MisVendedores extends StatelessWidget {
         if (item.nombreEmpresa == listTemporal[j].nombreEmpresa) {
           res.add({
             "vendedor": listTemporal[j].nombre,
-            "telefono": listTemporal[j].telefono
+            "telefono": listTemporal[j].telefono,
+            "indicativo": listTemporal[j].indicativo
           });
         }
       }
