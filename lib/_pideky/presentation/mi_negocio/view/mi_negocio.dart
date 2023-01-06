@@ -543,83 +543,43 @@ class _MiNegocioState extends State<MiNegocio> {
                           ],
                         )),
                         Container(
-                          margin: EdgeInsets.only(top: 30, left: 5, right: 15),
+                          margin: EdgeInsets.only(top: 30, left: 15),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/icon/logout_img.png',
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 15),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () => {
-                                            viewModel.iniciarModalCerrarSesion(
-                                                context, size, provider)
-                                          },
-                                          child: Text(
-                                            "Cerrar sesión.",
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 15,
-                                                decoration: TextDecoration.none,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Obx(() => Text(
-                                              Constantes().titulo == 'QA'
-                                                  ? 'Versión QA ${viewModel.version.value}'
-                                                  : 'Versión ${viewModel.version.value}',
-                                              style: TextStyle(
-                                                  color: ConstantesColores
-                                                      .gris_textos,
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                              Image.asset(
+                                'assets/icon/logout_img.png',
+                                alignment: Alignment.center,
+                                width: 30,
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // ignore: unrelated_type_equality_checks
-                                  var estadoEliminar =
-                                      await Servicies().deleteAccount();
-                                  if (estadoEliminar) {
-                                    viewModel.iniciarModalCerrarSesion(
-                                        context, size, provider);
-                                  }
-
-                                  print("hola");
-                                  viewModel.iniciarModalCerrarSesion(
-                                      context, size, provider);
-                                },
-                                child: Row(
+                              Container(
+                                margin: EdgeInsets.only(left: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.asset(
-                                      "assets/icon/eliminar_cuenta.png",
-                                      alignment: Alignment.center,
-                                      width: 25,
+                                    GestureDetector(
+                                      onTap: () => {
+                                        viewModel.iniciarModalCerrarSesion(
+                                            context, size, provider)
+                                      },
+                                      child: Text(
+                                        "Cerrar sesión.",
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 15,
+                                            decoration: TextDecoration.none,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Eliminar cuenta",
-                                      style: TextStyle(
-                                          color: ConstantesColores.gris_textos,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
+                                    Obx(() => Text(
+                                          Constantes().titulo == 'QA'
+                                              ? 'Versión QA ${viewModel.version.value}'
+                                              : 'Versión ${viewModel.version.value}',
+                                          style: TextStyle(
+                                              color:
+                                                  ConstantesColores.gris_textos,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold),
+                                        )),
                                   ],
                                 ),
                               )

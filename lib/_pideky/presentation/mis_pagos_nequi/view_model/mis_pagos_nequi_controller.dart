@@ -16,7 +16,6 @@ class MisPagosNequiController extends GetxController {
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
     numeroCelular.value = listaPagos.first.celular;
-    prefs.codigoUnicoPideky = listaPagos.first.ccup;
     agruparListas(listaPagos);
 
     print(numeroCelular);
