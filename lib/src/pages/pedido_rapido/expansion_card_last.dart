@@ -67,7 +67,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
             child: Obx(() => AbsorbPointer(
                   absorbing: _cargando.value,
                   child: BotonAgregarCarrito(
-                      color: ConstantesColores.agua_marina,
+                      color: HexColor("#42B39C"),
                       height: 40,
                       width: 190,
                       onTap: () async {
