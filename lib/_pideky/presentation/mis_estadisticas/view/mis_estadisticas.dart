@@ -31,7 +31,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
-        title: Text('Mis estadisticas',
+        title: Text('Mis estadísticas',
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold)),
@@ -98,7 +98,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
-                              'En esta sección encontrarás los productos, marcas y subcategorias que más compras en Pideky.',
+                              'En esta sección encontrarás los productos, marcas y subcategorías que más compras en Pideky.',
                               textAlign: TextAlign.justify,
                               style: TextStyle(
                                   fontSize: 13,
@@ -132,7 +132,7 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                   titulo: 'Mi top 3 de marcas',
                                   lista: viewModel.listTopMarcas.value,
                                   subTitulo:
-                                      'Estos son las tres marcas que más has comprado para tu negocio en el último mes.',
+                                      'Estas son las tres marcas que más has comprado para tu negocio en el último mes.',
                                   tipo: 'marcas'),
                               Padding(
                                 padding:
@@ -143,10 +143,10 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
-                                  titulo: 'Mi top 3 de subcategorias',
-                                  lista: viewModel.listTopSubCategorias.value,
+                                  titulo: 'Mi top 3 de subcategorías',
+                                  lista: viewModel.listTopSubCategorias,
                                   subTitulo:
-                                      'Estos son las tres subcategorías que más has comprado para tu negocio en el último mes.',
+                                      'Estas son las tres subcategorías que más has comprado para tu negocio en el último mes.',
                                   tipo: 'subcategorias')
                             ],
                           ),

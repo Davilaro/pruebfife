@@ -26,7 +26,7 @@ class BodyPedidoSugerido extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   // ignore: unrelated_type_equality_checks
                   child: Obx(() => PedidoSugeridoController.userLog.value != -1
                       ? Column(

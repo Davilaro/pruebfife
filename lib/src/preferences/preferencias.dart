@@ -159,6 +159,14 @@ class Preferencias {
     _prefs.setString('codigopadrepideky', value);
   }
 
+  get codigoUnicoPideky {
+    return _prefs.getString("codigounicopideky") ?? "";
+  }
+
+  set codigoUnicoPideky(dynamic value) {
+    _prefs.setString("codigounicopideky", value);
+  }
+
   clear() async {
     await _prefs.clear();
   }

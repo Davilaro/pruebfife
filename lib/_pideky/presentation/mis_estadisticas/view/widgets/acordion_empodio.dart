@@ -112,7 +112,7 @@ class AcordionEmpodio extends StatelessWidget {
                               ),
                               //Descripcion
                               Container(
-                                width: Get.width * 0.3,
+                                width: Get.width * 0.28,
                                 margin: EdgeInsets.only(left: 10),
                                 child: AutoSizeText(
                                   tipo == 'marcas'
@@ -129,15 +129,18 @@ class AcordionEmpodio extends StatelessWidget {
                             ],
                           ),
                         ),
+                        SizedBox(
+                          width: 3,
+                        ),
                         //Unidad
                         Container(
-                          width: Get.width * 0.21,
+                          width: Get.width * 0.25,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.grey[300],
                           ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AutoSizeText(lista[index].cantidad.toString(),
                                   maxLines: 1,

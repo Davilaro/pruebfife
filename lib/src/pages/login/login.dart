@@ -235,7 +235,17 @@ class _LoginState extends State<Login> {
 
   Future loguin(BuildContext context, String nit) async {
     List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
-
+    respuesta.forEach((element) {
+      if (element.bloqueado == "1") {
+        Navigator.pushReplacementNamed(context, "inicio_compra");
+        return mostrarAlert(
+            context,
+            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte",
+            null);
+      }
+    });
+    prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
+    print(prefs.codigoUnicoPideky);
     prefs.codClienteLogueado = nit;
     // ignore: unnecessary_statements
     PedidoSugeridoController.userLog.value = 1;
