@@ -87,7 +87,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
                                 item?.link,
                                 fit: BoxFit.fill,
                                 errorBuilder: (context, url, error) =>
-                                    Image.asset('assets/jar-loading.gif'),
+                                    Image.asset('assets/image/jar-loading.gif'),
                               )),
                         ),
                       );

@@ -19,6 +19,9 @@ class MiNegocioViewModel extends GetxController {
   iniciarModalCerrarSesion(context, size, provider) {
     showLoaderDialog(context, modalCerrarSesion(context, size, provider));
   }
+  iniciarModalEliminarUsuario(context, size, provider) {
+    showLoaderDialog(context, modalEliminarUsuario(context, size, provider));
+  }
 
   void validarVersion() async {
     version.value = await cargarVersion();

@@ -227,7 +227,17 @@ class _LoginState extends State<Login> {
 
   Future loguin(BuildContext context, String nit) async {
     List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
-
+    respuesta.forEach((element) {
+      if (element.bloqueado == "1") {
+        Navigator.pushReplacementNamed(context, "inicio_compra");
+        return mostrarAlert(
+            context,
+            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte",
+            null);
+      }
+    });
+    prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
+    print(prefs.codigoUnicoPideky);
     prefs.codClienteLogueado = nit;
 
     if (respuesta.length > 0) {
@@ -291,13 +301,13 @@ class _LoginState extends State<Login> {
       await prValidar.hide();
       mostrarAlert(
           context,
-          'El Nit ingresado esta mal escrito o no pertenece a un usuario registrado',
+          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
           null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
       mostrarAlert(
           context,
-          'El Nit ingresado esta mal escrito o no pertenece a un usuario registrado',
+          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
           null);
     } else if (respues.codigo == 0) {
       mostrarAlert(context, 'No se pudo generar el código', null);
