@@ -25,37 +25,6 @@ List<Widget> acordionDinamico(BuildContext context) {
       Container(
           child: Acordion(
               elevation: 0,
-              contenido2: Column(
-                children: [
-                  Container(
-                    child: Text(
-                      "Total: ${format.currencySymbol}" +
-                          formatNumber
-                              .format(controller
-                                      .listaProductosPorFabricante[fabricante]
-                                  ["precioProductos"])
-                              .replaceAll(",00", ""),
-                      style: TextStyle(
-                          color: ConstantesColores.azul_precio,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                  BotonAgregarCarrito(
-                    color: HexColor("#42B39C"),
-                    height: 40,
-                    width: 190,
-                    onTap: () async {
-                      value["items"].forEach((prod) async {
-                        Producto producto =
-                            await db.consultarDatosProducto(prod.codigo);
-                        controller.llenarCarrito(producto, prod.cantidad);
-                      });
-                    },
-                    text: 'Agregar al carrito',
-                  )
-                ],
-              ),
               title: Container(
                 width: MediaQuery.of(context).size.width / 4,
                 child: Text(
@@ -76,6 +45,41 @@ List<Widget> acordionDinamico(BuildContext context) {
                     Column(
                       children: [
                         ...gridItem(context, fabricante, value["items"]),
+                        SizedBox(
+                          height: 35,
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              child: Text(
+                                "Total: ${format.currencySymbol}" +
+                                    formatNumber
+                                        .format(controller
+                                                .listaProductosPorFabricante[
+                                            fabricante]["precioProductos"])
+                                        .replaceAll(",00", ""),
+                                style: TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                            BotonAgregarCarrito(
+                              color: HexColor("#42B39C"),
+                              height: 40,
+                              width: 190,
+                              onTap: () async {
+                                value["items"].forEach((prod) async {
+                                  Producto producto = await db
+                                      .consultarDatosProducto(prod.codigo);
+                                  controller.llenarCarrito(
+                                      producto, prod.cantidad);
+                                });
+                              },
+                              text: 'Agregar al carrito',
+                            )
+                          ],
+                        ),
                       ],
                     )
                   ],

@@ -213,18 +213,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                                           historico: datos![position],
                                           cartProvider: cartProvider,
                                           providerDatos: providerDatos)),
-                                  BotonAgregarCarrito(
-                                    color: HexColor("#42B39C"),
-                                    height: 40,
-                                    width: 190,
-                                    onTap: () async {
-                                      _cargarPedido(
-                                        datos[position].numeroDoc,
-                                        providerDatos,
-                                      );
-                                    },
-                                    text: 'Agregar al carrito',
-                                  ),
+                                  
                                   SizedBox(
                                     height: 5,
                                   )
@@ -308,52 +297,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         ],
       ),
     );
-  }
-
-  _cargarPedido(
-    String numeroDoc,
-    providerDatos,
-  ) async {
-    List<Historico> datosDetalle =
-        await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
-    cargarCadaProducto(datosDetalle);
-    await PedidoEmart.iniciarProductosPorFabricante();
-    actualizarEstadoPedido(providerDatos, numeroDoc);
-  }
-
-  mas(String prod, int cantidad, String numeroDoc, Historico historico) async {
-    Producto producto = await productService.consultarDatosProducto(prod);
-    if (producto.codigo != "") {
-      // int nuevaCantidad = PedidoEmart
-      //             .listaControllersPedido![producto.codigo]!.text ==
-      //         ""
-      //     ? cantidad
-      //     : (int.parse(
-      //             PedidoEmart.listaControllersPedido![producto.codigo]!.text) +
-      //         cantidad);
-      setState(() {
-        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
-            "$cantidad";
-        PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
-        if (controlador.mapaHistoricos.containsKey(historico.numeroDoc)) {
-          controlador.mapaHistoricos
-              .update(historico.numeroDoc, (value) => true);
-        } else {
-          controlador.mapaHistoricos.addAll({historico.numeroDoc: true});
-        }
-      });
-    }
-  }
-
-  void actualizarEstadoPedido(datosProvider, ordenCompra) {
-    datosProvider.actualizarHistoricoPedido(ordenCompra);
-  }
-
-  cargarCadaProducto(List<Historico> datosDetalle) {
-    datosDetalle.forEach((element) {
-      mas(element.codigoRef.toString(), element.cantidad!,
-          "${element.numeroDoc}", element);
-    });
   }
 
   bool _existeSugerido(providerDatos, producto) {
