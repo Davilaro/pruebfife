@@ -63,11 +63,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   void initState() {
-    controller.listaProductosPorFabricante.clear();
-    controller.initController();
-    controllerNequi.listaPagosPendientes.clear();
-    controllerNequi.listaPagosRealizados.clear();
-    controllerNequi.initData();
     super.initState();
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
@@ -404,6 +399,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void _cargarLista() async {
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
+    controllerNequi.listaPagosPendientes.clear();
+    controllerNequi.listaPagosRealizados.clear();
+    controller.listaProductosPorFabricante.clear();
+    controller.initController();
+    controllerNequi.initData();
   }
 
   void onClickVerMas(String ubicacion, provider) async {
