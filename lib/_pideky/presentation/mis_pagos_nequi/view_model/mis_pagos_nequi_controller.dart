@@ -15,7 +15,8 @@ class MisPagosNequiController extends GetxController {
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
-    numeroCelular.value = listaPagos.first.celular;
+    numeroCelular.value =
+        listaPagos.first.celular != "" ? listaPagos.first.celular : "";
     agruparListas(listaPagos);
 
     print(numeroCelular);
@@ -37,12 +38,6 @@ class MisPagosNequiController extends GetxController {
     obtenerPagosNequi();
   }
 
-  @override
-  void onInit() {
-    initData();
-    super.onInit();
-  }
-
   static MisPagosNequiController get findOrInitialize {
     try {
       return Get.find<MisPagosNequiController>();
@@ -51,5 +46,16 @@ class MisPagosNequiController extends GetxController {
           MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
       return Get.find<MisPagosNequiController>();
     }
+  }
+
+  @override
+  void onInit() {
+    initData();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

@@ -9,7 +9,7 @@ class InitialBindings extends Bindings {
   void dependencies() {
     MiNegocioViewModel.findOrInitialize;
     MisEstadisticasViewModel.findOrInitialize;
-    MisPagosNequiController.findOrInitialize;
     PedidoSugeridoController.findOrInitialize;
+    MisPagosNequiController.findOrInitialize;
   }
 }
