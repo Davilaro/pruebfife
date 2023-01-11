@@ -45,8 +45,6 @@
     "text_sms":"SMS",
 
     "categories_for_you" : "Featured categories for you ",
-    "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary.",
-    "delete_account_mode" : "You are about to delete your Pideky account. Your data will be deleted from the application. ",
-    "delete_account_mode_confirmation" : "Are you sure about this action?."
+    "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary."
 
 }

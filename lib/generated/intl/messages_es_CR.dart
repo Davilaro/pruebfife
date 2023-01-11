@@ -42,10 +42,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("categorias destacadas "),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
-        "delete_account_mode": MessageLookupByLibrary.simpleMessage(
-            "Estas apunto de eliminar tu cuenta Pideky. Tus datos serán eliminados de la aplicación "),
-        "delete_account_mode_confirmation":
-            MessageLookupByLibrary.simpleMessage("¿Seguro de esta acción?."),
         "email_address":
             MessageLookupByLibrary.simpleMessage("correo electrónico."),
         "enter_your_master_code": MessageLookupByLibrary.simpleMessage(
