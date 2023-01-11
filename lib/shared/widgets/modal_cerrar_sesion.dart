@@ -147,8 +147,9 @@ modalCerrarSesion(context, size, provider) {
 }
 
 modalEliminarUsuario(context, size, provider) {
-  String mensaje = "Estas apunto de eliminar tu cuenta Pideky, tus datos serán eliminados de la aplicación " +
-      "¿Seguro de esta acción?.";
+  String mensaje =
+      "Estas apunto de eliminar tu cuenta Pideky. Tus datos serán eliminados de la aplicación. " +
+          "¿Seguro de esta acción?.";
 
   Widget _botonSeguirComprando(size) {
     return GestureDetector(
