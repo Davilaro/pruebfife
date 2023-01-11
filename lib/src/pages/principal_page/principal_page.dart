@@ -74,6 +74,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
+    _actualizarControladores();
   }
 
   @override
@@ -399,6 +400,9 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void _cargarLista() async {
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
+  }
+
+  void _actualizarControladores() async {
     controllerNequi.listaPagosPendientes.clear();
     controllerNequi.listaPagosRealizados.clear();
     controller.listaProductosPorFabricante.clear();
