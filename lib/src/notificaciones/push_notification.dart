@@ -71,7 +71,7 @@ class PushNotificationServer {
     String? title = '';
     String? body = '';
 
-    if (message.data != null) {
+    if (message.notification?.title == null) {
       //notificaciones de UXCam
       var menssajeCapturado = jsonDecode(message.data['message']);
       title = menssajeCapturado['title'];
@@ -80,6 +80,7 @@ class PushNotificationServer {
       //Notificaciones de Firebase
       title = message.notification?.title;
       body = message.notification?.body;
+      print(' si entre');
     }
 
     showOverlayNotification((context) {
