@@ -9,14 +9,12 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -158,12 +156,12 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   TextStyle diseno_sucursales(dynamic element) => TextStyle(
-      fontSize: 13,
+      fontSize: 15,
       color: seleccion == element.codigo ? Colors.white : Colors.black);
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: Get.height * 0.2,
+      height: Get.height * 0.15,
       width: double.infinity,
       child: Row(
         children: [
@@ -175,9 +173,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               children: [
                 Flexible(
                     flex: 2,
-                    child: Text('Nombre: ${element.nombre}',
+                    child: AutoSizeText('Nombre: ${element.nombre}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
+                        presetFontSizes: [16, 14],
                         style: diseno_sucursales(element))),
                 Flexible(
                     child: Text('Télefono: ${element.telefono}',
@@ -185,7 +184,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                         style: diseno_sucursales(element))),
                 Flexible(
                     flex: 2,
-                    child: Text('Dirección: ${element.direccion}',
+                    child: AutoSizeText('Dirección: ${element.direccion}',
                         overflow: TextOverflow.clip,
                         maxLines: 2,
                         style: diseno_sucursales(element))),

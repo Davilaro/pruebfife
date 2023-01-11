@@ -1,5 +1,3 @@
-import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';

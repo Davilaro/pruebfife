@@ -58,8 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Acepto política de privacidad"),
         "i_accept_processing_policy": MessageLookupByLibrary.simpleMessage(
             "Acepto política de tratamiento de datos"),
-        "imperdible":
-            MessageLookupByLibrary.simpleMessage("Imperdibles costa rica"),
+        "imperdible": MessageLookupByLibrary.simpleMessage("Imperdibles para "),
         "loading_branches":
             MessageLookupByLibrary.simpleMessage("Cargando sucursales"),
         "login_placeholder":

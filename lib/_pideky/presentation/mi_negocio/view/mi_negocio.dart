@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/editarNumero.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/mis_pagos_nequi.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
@@ -12,7 +13,6 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
@@ -119,13 +119,14 @@ class _MiNegocioState extends State<MiNegocio> {
                     AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.data!.length != 0) {
                     DatosCliente sucursal = snapshot.data![0];
-                    var capturar =
-                        sucursal.telefonoWhatsapp.toString().split('+57');
-                    String telefono = capturar.length > 1
-                        ? capturar[1]
-                        : sucursal.telefonoWhatsapp != null
-                            ? ' ${sucursal.telefonoWhatsapp.toString()}'
-                            : '';
+                    // var capturar =
+                    //     sucursal.telefonoWhatsapp.toString().split('+57');
+                    // String telefono = capturar.length > 1
+                    //     ? capturar[1]
+                    //     : sucursal.telefonoWhatsapp != null
+                    //         ? ' ${sucursal.telefonoWhatsapp.toString()}'
+                    String telefono = sucursal.telefonoWhatsapp.toString();
+                    // : '';
                     return Column(
                       children: [
                         cardStyle(
@@ -184,9 +185,9 @@ class _MiNegocioState extends State<MiNegocio> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(
+                                              AutoSizeText(
                                                 'Número WhatsApp:$telefono',
-                                                maxLines: 4,
+                                                maxLines: 2,
                                                 style: TextStyle(
                                                     fontSize: 11,
                                                     color: ConstantesColores

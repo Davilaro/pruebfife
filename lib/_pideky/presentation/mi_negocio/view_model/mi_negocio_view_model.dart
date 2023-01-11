@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -20,6 +19,7 @@ class MiNegocioViewModel extends GetxController {
   iniciarModalCerrarSesion(context, size, provider) {
     showLoaderDialog(context, modalCerrarSesion(context, size, provider));
   }
+
   iniciarModalEliminarUsuario(context, size, provider) {
     showLoaderDialog(context, modalEliminarUsuario(context, size, provider));
   }
@@ -42,15 +42,15 @@ class MiNegocioViewModel extends GetxController {
     );
   }
 
-  validarNumero(context) async {
-    var telefono = controllerInput.text.split('+57');
+  validarNumero(context, String telefonoDefecto) async {
+    var telefono = controllerInput.text.split(telefonoDefecto);
     if (telefono[telefono.length > 1 ? 1 : 0].length - 1 == 10) {
       validarInputNumero.value = '';
       var res = await Servicies().editarTelefonoWhatsapp(
-          '+57 ${telefono[telefono.length > 1 ? 1 : 0]}');
+          '$telefonoDefecto ${telefono[telefono.length > 1 ? 1 : 0]}');
       if (res == 200) {
         await DBProvider.db.editarTelefonoWhatsapp(
-            '+57${telefono[telefono.length > 1 ? 1 : 0]}');
+            '$telefonoDefecto${telefono[telefono.length > 1 ? 1 : 0]}');
         Navigator.pop(context);
         alert.mostrarAlert(
             context,
@@ -65,7 +65,7 @@ class MiNegocioViewModel extends GetxController {
       }
     } else {
       validarInputNumero.value =
-          'La cantidad de caracteres debe ser igual a 10, sin contar el +57';
+          'La cantidad de caracteres debe ser igual a 10, sin contar el $telefonoDefecto';
     }
   }
 
@@ -82,7 +82,6 @@ class MiNegocioViewModel extends GetxController {
       print('Error al cagar archivos $e');
     }
   }
-
 
   static MiNegocioViewModel get findOrInitialize {
     try {

@@ -335,7 +335,7 @@ class _SoporteState extends State<Soporte> {
   }
 
   Future<void> lanzarWhatssap(String command) async {
-    var whatappURL_ios = "https://wa.me/+57$command?text=${Uri.parse("Hola")}";
+    var whatappURL_ios = "https://wa.me/+$command?text=${Uri.parse("Hola")}";
 
     //UXCam: Llamamos el evento selectSoport
     UxcamTagueo().selectSoport('Soporte Whatssap');
@@ -350,7 +350,7 @@ class _SoporteState extends State<Soporte> {
         }
       } else {
         // android , web
-        await launch('https://api.whatsapp.com/send?phone=+57$command');
+        await launch('https://api.whatsapp.com/send?phone=+$command');
       }
     } catch (e) {
       print(e);
