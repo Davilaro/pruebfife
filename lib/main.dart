@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _validarKeyUXCam();
-    // Intl.defaultLocale = 'es_CO';
+    Intl.defaultLocale = 'es_CO';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
