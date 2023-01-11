@@ -33,7 +33,7 @@ class _ProductsCardState extends State<ProductsCard> {
   RxString codigo = "".obs;
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+
   bool isAgotado = false;
   var contador = 0;
   final constrollerProductos = Get.find<ControllerProductos>();
@@ -48,8 +48,7 @@ class _ProductsCardState extends State<ProductsCard> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
+
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
@@ -63,15 +62,14 @@ class _ProductsCardState extends State<ProductsCard> {
           } else {
             return ListView(
               scrollDirection: Axis.horizontal,
-              children:
-                  _cargarDatos(context, snapshot.data, cartProvider, format),
+              children: _cargarDatos(context, snapshot.data, cartProvider),
             );
           }
         });
   }
 
-  List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaProductos,
-      cartProvider, format) {
+  List<Widget> _cargarDatos(
+      BuildContext context, List<dynamic> listaProductos, cartProvider) {
     final List<Widget> opciones = [];
     if (listaProductos.length == 0) {
       return opciones..add(Text('No hay informacion para mostrar'));

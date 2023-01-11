@@ -8,11 +8,9 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final prefs = new Preferencias();
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class Soporte extends StatefulWidget {
   final int numEmpresa;

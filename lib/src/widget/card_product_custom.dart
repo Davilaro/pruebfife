@@ -41,15 +41,15 @@ class _CardProductCustomState extends State<CardProductCustom> {
   @override
   Widget build(BuildContext context) {
     var locale = Intl().locale;
-    // Locale locale = Localizations.localeOf(context);
+
     var format = locale.toString() != 'es_CO'
-        ? locale.toString() != 'es_CR'
+        ? locale.toString() == 'es_CR'
             ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
             : NumberFormat.simpleCurrency(locale: locale.toString())
         : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
     NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
-    print('moneda ${format.currencySymbol} --- ${locale}');
+    print('moneda $format --- ${locale}');
     return Card(
         shape: RoundedRectangleBorder(
             side: new BorderSide(color: Colors.white),

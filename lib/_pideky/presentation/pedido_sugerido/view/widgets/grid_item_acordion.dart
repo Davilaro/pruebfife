@@ -12,7 +12,7 @@ List<Widget> gridItem(
     BuildContext context, String fabricante, List<dynamic> lista) {
   var locale = Intl().locale;
   var format = locale.toString() != 'es_CO'
-      ? locale.toString() != 'es_CR'
+      ? locale.toString() == 'es_CR'
           ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
           : NumberFormat.simpleCurrency(locale: locale.toString())
       : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
