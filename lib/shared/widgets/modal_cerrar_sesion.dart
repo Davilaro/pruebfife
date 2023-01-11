@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import '../../generated/l10n.dart';
 
 final prefs = new Preferencias();
 
@@ -147,8 +148,8 @@ modalCerrarSesion(context, size, provider) {
 }
 
 modalEliminarUsuario(context, size, provider) {
-  String mensaje = "Estas apunto de eliminar tu cuenta Pideky, " +
-      "¿Seguro de esta acción?.";
+  String mensaje = S.current.delete_account_mode +
+      S.current.delete_account_mode_confirmation;
 
   Widget _botonSeguirComprando(size) {
     return GestureDetector(

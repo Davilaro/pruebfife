@@ -45,5 +45,7 @@
     "text_sms":"SMS",
 
     "categories_for_you": "categorias destacadas ",
-    "terms_of_delivery" : "Tu pedido sera entregado en tu día normal de entrega"
+    "terms_of_delivery" : "Tu pedido sera entregado en tu día normal de entrega",
+    "delete_account_mode" : "Estas apunto de eliminar tu cuenta Pideky. Tus datos serán eliminados de la aplicación ",
+    "delete_account_mode_confirmation" : "¿Seguro de esta acción?."
 }

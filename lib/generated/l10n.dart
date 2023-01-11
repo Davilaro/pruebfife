@@ -469,6 +469,26 @@ class S {
       args: [],
     );
   }
+
+  /// `You are about to delete your Pideky account. Your data will be deleted from the application. `
+  String get delete_account_mode {
+    return Intl.message(
+      'You are about to delete your Pideky account. Your data will be deleted from the application. ',
+      name: 'delete_account_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure about this action?.`
+  String get delete_account_mode_confirmation {
+    return Intl.message(
+      'Are you sure about this action?.',
+      name: 'delete_account_mode_confirmation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
