@@ -71,7 +71,7 @@ class PushNotificationServer {
     String? title = '';
     String? body = '';
 
-    if (message.data != null) {
+    if (message.notification?.title == null) {
       //notificaciones de UXCam
       var menssajeCapturado = jsonDecode(message.data['message']);
       title = menssajeCapturado['title'];
