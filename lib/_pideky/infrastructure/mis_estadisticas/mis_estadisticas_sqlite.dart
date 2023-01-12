@@ -35,7 +35,7 @@ FROM TopSubcategorias order by posicion DESC, cantidad DESC
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT t.codigosku codigo, t.nombre descripcion, t.cantidad cantidad, t.cantidadP posicion  
+      SELECT t.codigosku codigo, p.nombre descripcion, t.cantidad cantidad, t.cantidadP posicion  
       FROM TopProductos t INNER JOIN Producto p ON t.codigosku = p.codigo order by posicion ASC
     ''');
 
