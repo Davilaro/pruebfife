@@ -258,17 +258,13 @@ modalEliminarUsuario(context, size, provider) {
                   Container(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Column(
-                      children: [
-                        Text(
-                          mensaje,
-                          style: TextStyle(
-                              color: ConstantesColores.azul_precio,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.justify,
-                        ),
-                      ],
+                    child: Text(
+                      mensaje,
+                      style: TextStyle(
+                          color: ConstantesColores.azul_precio,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   _botonSeguirComprando(size),
