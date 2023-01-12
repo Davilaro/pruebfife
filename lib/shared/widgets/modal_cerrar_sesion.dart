@@ -266,7 +266,7 @@ modalEliminarUsuario(context, size, provider) {
                               color: ConstantesColores.azul_precio,
                               fontSize: 14,
                               fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.justify,
                         ),
                       ],
                     ),
