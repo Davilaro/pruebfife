@@ -264,7 +264,7 @@ modalEliminarUsuario(context, size, provider) {
                           color: ConstantesColores.azul_precio,
                           fontSize: 14,
                           fontWeight: FontWeight.normal),
-                      textAlign: TextAlign.justify,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   _botonSeguirComprando(size),
