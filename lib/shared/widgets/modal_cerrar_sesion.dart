@@ -16,7 +16,7 @@ final prefs = new Preferencias();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
-      "Estas apunto de salir de Pideky, deberás volver a ingresar los datos " +
+      "Estás apunto de salir de Pideky, deberás volver a ingresar los datos " +
           "de tu negocio para ver los productos y proveedores.";
 
   Widget _botonSeguirComprando(size) {
@@ -148,8 +148,7 @@ modalCerrarSesion(context, size, provider) {
 
 modalEliminarUsuario(context, size, provider) {
   String mensaje =
-      "Estás a punto de eliminar tu cuenta en Pideky. Tus datos serán eliminados de manera permanente y no podrás realizar compras desde la aplicación. " +
-          "¿Estás seguro de esta acción?.";
+      "Estás a punto de eliminar tu cuenta en Pideky. Tus datos serán eliminados de manera permanente y no podrás realizar compras desde la aplicación. ";
 
   Widget _botonSeguirComprando(size) {
     return GestureDetector(
@@ -258,14 +257,26 @@ modalEliminarUsuario(context, size, provider) {
                   ),
                   Container(
                     margin:
-                        const EdgeInsets.symmetric(horizontal: 35, vertical: 5),
-                    child: Text(
-                      mensaje,
-                      style: TextStyle(
-                          color: ConstantesColores.azul_precio,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-                      textAlign: TextAlign.center,
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          mensaje,
+                          style: TextStyle(
+                              color: ConstantesColores.azul_precio,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "¿Estás seguro de esta acción?.",
+                          style: TextStyle(
+                              color: ConstantesColores.azul_precio,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                   _botonSeguirComprando(size),
