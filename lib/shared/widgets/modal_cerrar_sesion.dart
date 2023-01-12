@@ -148,7 +148,7 @@ modalCerrarSesion(context, size, provider) {
 
 modalEliminarUsuario(context, size, provider) {
   String mensaje =
-      "Estás a punto de eliminar tu cuenta en Pideky. Tus datos serán eliminados de manera permanente y no podrás realizar compras desde la aplicación. ";
+      "Estás a punto de eliminar tu cuenta en Pideky. Tus datos serán eliminados de manera permanente y no podrás realizar compras desde la aplicación. \n¿Estás seguro de esta acción?.";
 
   Widget _botonSeguirComprando(size) {
     return GestureDetector(
@@ -266,15 +266,7 @@ modalEliminarUsuario(context, size, provider) {
                               color: ConstantesColores.azul_precio,
                               fontSize: 14,
                               fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "¿Estás seguro de esta acción?.",
-                          style: TextStyle(
-                              color: ConstantesColores.azul_precio,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.justify,
                         ),
                       ],
                     ),
