@@ -119,16 +119,14 @@ class PedidoSugeridoController extends GetxController
 
   @override
   void onInit() {
-    controller = TabController(length: 2, vsync: this, initialIndex: 0);
-    initController();
     super.onInit();
+    controller = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
   void onClose() {
-    controller.dispose();
-
     super.onClose();
+    controller.dispose();
   }
 
   static PedidoSugeridoController get findOrInitialize {

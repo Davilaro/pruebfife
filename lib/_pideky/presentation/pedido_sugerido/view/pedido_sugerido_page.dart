@@ -20,10 +20,10 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   final controller = Get.find<PedidoSugeridoController>();
   @override
   void initState() {
-    super.initState();
     validarVersionActual(context);
-    controller.clearList();
+    //controller.clearList();
     controller.initController();
+    super.initState();
   }
 
   @override
