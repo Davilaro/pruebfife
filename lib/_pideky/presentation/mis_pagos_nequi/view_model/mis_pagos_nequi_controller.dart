@@ -38,6 +38,11 @@ class MisPagosNequiController extends GetxController {
     obtenerPagosNequi();
   }
 
+  clearList() {
+    listaPagosPendientes.clear();
+    listaPagosRealizados.clear();
+  }
+
   static MisPagosNequiController get findOrInitialize {
     try {
       return Get.find<MisPagosNequiController>();

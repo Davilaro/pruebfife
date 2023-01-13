@@ -15,6 +15,8 @@ class MiNegocioViewModel extends GetxController {
   Uint8List? terminosDatosPdf;
   RxString validarInputNumero = ''.obs;
   RxString version = ''.obs;
+  RxString pais = "".obs;
+  
 
   iniciarModalCerrarSesion(context, size, provider) {
     showLoaderDialog(context, modalCerrarSesion(context, size, provider));

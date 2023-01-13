@@ -15,12 +15,24 @@ import '../../../../src/widget/boton_actualizar.dart';
 import '../../../../src/widget/imagen_notification.dart';
 import '../../../../src/widget/soporte.dart';
 
-class MisPagosNequiPage extends StatelessWidget {
+class MisPagosNequiPage extends StatefulWidget {
   const MisPagosNequiPage({Key? key}) : super(key: key);
 
   @override
+  State<MisPagosNequiPage> createState() => _MisPagosNequiPageState();
+}
+
+class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
+  final controller = Get.find<MisPagosNequiController>();
+  @override
+  void initState() {
+    super.initState();
+    controller.clearList();
+    controller.initData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MisPagosNequiController>();
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(

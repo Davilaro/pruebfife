@@ -17,15 +17,17 @@ class PedidoSugeridoPage extends StatefulWidget {
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
+  final controller = Get.find<PedidoSugeridoController>();
   @override
   void initState() {
     super.initState();
     validarVersionActual(context);
+    controller.clearList();
+    controller.initController();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<PedidoSugeridoController>();
     final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 2,

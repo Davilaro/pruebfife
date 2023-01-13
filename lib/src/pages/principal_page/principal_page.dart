@@ -33,13 +33,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../../../_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
-import '../../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import '../../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
-import '../../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
-import '../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
-import '../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
-import '../../provider/db_provider_helper.dart';
 
 final prefs = new Preferencias();
 
@@ -52,8 +45,6 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
-  final controller = Get.find<PedidoSugeridoController>();
-  final controllerNequi = Get.find<MisPagosNequiController>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
@@ -74,7 +65,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
-    _actualizarControladores();
+    
   }
 
   @override
@@ -400,14 +391,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void _cargarLista() async {
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
-  }
-
-  void _actualizarControladores() async {
-    controllerNequi.listaPagosPendientes.clear();
-    controllerNequi.listaPagosRealizados.clear();
-    controller.listaProductosPorFabricante.clear();
-    controller.initController();
-    controllerNequi.initData();
   }
 
   void onClickVerMas(String ubicacion, provider) async {

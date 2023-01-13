@@ -161,7 +161,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: Get.height * 0.15,
+      height: Get.height * 0.2,
       width: double.infinity,
       child: Row(
         children: [
