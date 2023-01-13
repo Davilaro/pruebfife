@@ -14,4 +14,13 @@ class ControllerMultimedia extends GetxController {
     controllerVideo = VideoPlayerController.network('${urlMultimedia.value}')
       ..initialize();
   }
+
+  static ControllerMultimedia get findOrInitialize {
+    try {
+      return Get.find<ControllerMultimedia>();
+    } catch (e) {
+      Get.put(ControllerMultimedia());
+      return Get.find<ControllerMultimedia>();
+    }
+  }
 }
