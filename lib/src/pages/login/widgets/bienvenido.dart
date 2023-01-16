@@ -801,6 +801,7 @@ class _BienvenidoState extends State<Bienvenido> {
     if (respuesta.length > 0) {
       pr.hide();
       //Se inicializa la variable
+      prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
 
       Navigator.pushReplacementNamed(
         context,

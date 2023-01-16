@@ -699,10 +699,8 @@ class Servicies {
             "pais": "CO"
           }));
       if (response.statusCode == 200) {
-        print("true----------------------validacion correcta");
         return true;
       } else {
-        print("false----------------------validacion incorrecta");
         return false;
       }
     } catch (e) {

@@ -721,6 +721,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
     if (respuesta.length > 0) {
       pr.hide();
+      prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
 
       /*Navigator.pushNamedAndRemoveUntil(
         context,
