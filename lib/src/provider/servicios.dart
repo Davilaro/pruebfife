@@ -696,7 +696,7 @@ class Servicies {
           body: jsonEncode(<String, String>{
             "CCUP": "${prefs.codigoUnicoPideky}",
             "fecha": "$currentDate",
-            "pais": "CO"
+            "pais": "${prefs.paisUsuario}"
           }));
       if (response.statusCode == 200) {
         return true;
