@@ -517,12 +517,14 @@ class Servicies {
       );
       print(response.body);
       print([
+        "datos enviados",
         "DeviceId $idUnicoMovil",
         "DeviceType $plataforma",
         "Nit $codUsuario",
         "Token $token",
       ]);
       print(response.statusCode);
+
       if (response.statusCode == 200) {
         return Validacion.fromJson(jsonDecode(response.body));
       } else {
@@ -662,6 +664,7 @@ class Servicies {
 
       final url;
       url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/crearCondiciones');
+      print("url de tyc $url");
 
       final response = await http.post(url,
           headers: <String, String>{
@@ -669,9 +672,12 @@ class Servicies {
           },
           body: jsonEncode(<String, String>{
             "nit": "${prefs.codClienteLogueado}",
-            "fecha": "$currentDate"
+            "fecha": "$currentDate",
+            "pais": "${prefs.paisUsuario}"
           }));
+      print("estado envio ${response.statusCode}");
       if (response.statusCode == 200) {
+        print("tyc enviados correctamente");
         return true;
       } else {
         return false;

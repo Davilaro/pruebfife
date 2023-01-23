@@ -12,6 +12,7 @@ class Validacion {
         required this.tieneDomicilio,
         this.telefonos,
         this.email,
+        this.pais,
     });
 
     int codigo;
@@ -20,6 +21,7 @@ class Validacion {
     int tieneDomicilio;
     List<String>? telefonos;
     String? email;
+    String? pais;
 
     factory Validacion.fromJson(Map<String, dynamic> json) => Validacion(
         codigo: json["Codigo"],
@@ -27,6 +29,7 @@ class Validacion {
         codTienda: json["CodTienda"],
         tieneDomicilio: json["TieneDomicilio"],
         telefonos: json["Telefonos"] == null || json["Telefonos"] == 0  ? ['sin informacion'] : List<String>.from(json["Telefonos"].map((x) => x)),
+        pais: json["Pais"],
         email: json["Email"],
     );
 
@@ -36,6 +39,7 @@ class Validacion {
         "CodTienda": codTienda,
         "TieneDomicilio": tieneDomicilio,
         "Telefonos": List<dynamic>.from(telefonos!.map((x) => x)),
+        "Pais" : pais,
         "Email" : email,
     };
 }

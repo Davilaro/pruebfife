@@ -328,6 +328,8 @@ class _LoginState extends State<Login> {
 
       prefs.codActivacionLogin = respues.codigo;
       prefs.codClienteLogueado = _controllerUser.text;
+      prefs.paisUsuario = respues.pais;
+      print("pais tyc ${respues.pais}");
       Navigator.push(
         context,
         MaterialPageRoute(
