@@ -7,6 +7,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -23,6 +24,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
   @override
   void initState() {
     viewModel.initData();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('MyStatisticsPage');
     super.initState();
   }
 

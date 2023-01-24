@@ -1,4 +1,6 @@
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:get/get.dart';
 
@@ -21,8 +23,11 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   @override
   void initState() {
     validarVersionActual(context);
-    //controller.clearList();
     controller.initController();
+    //Se define el nombre de la pantalla para UXCAM
+    FlutterUxcam.tagScreenName('SuggestedOrderPage');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Pedido Sugerido');
     super.initState();
   }
 

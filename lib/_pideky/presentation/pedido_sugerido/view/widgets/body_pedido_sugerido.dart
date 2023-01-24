@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_text
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 
 class BodyPedidoSugerido extends StatelessWidget {
@@ -17,11 +18,12 @@ class BodyPedidoSugerido extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Se define el nombre de la pantalla para UXCAM
+    FlutterUxcam.tagScreenName('SuggestedOrderPage');
     return WillPopScope(
       onWillPop: () async => false,
       child: Expanded(
-          child: TabBarView(
-            controller: controller.controller, children: [
+          child: TabBarView(controller: controller.controller, children: [
         SingleChildScrollView(
           child: Column(
             children: [

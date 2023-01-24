@@ -7,6 +7,7 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -29,6 +30,8 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
     super.initState();
     controller.clearList();
     controller.initData();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('MyNequiPaymentsPage');
   }
 
   @override
