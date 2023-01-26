@@ -82,9 +82,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
         height: 45,
         paddingTop: 5,
         pressedImage: Image.asset(
-          "assets/registar_cuenta_btn.png",
+          "assets/image/registar_cuenta_btn.png",
         ),
-        unpressedImage: Image.asset("assets/registar_cuenta_btn.png"),
+        unpressedImage: Image.asset("assets/image/registar_cuenta_btn.png"),
         onTap: () => {_enviarCorreoElectronico(context)});
   }
 
@@ -254,7 +254,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                       Container(
                         height: 50,
                         width: 50,
-                        child: Image.asset('assets/alerta_img.png'),
+                        child: Image.asset('assets/image/alerta_img.png'),
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -277,7 +277,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                             height: 40,
                             width: double.infinity,
                             child: Image.asset(
-                              "assets/btn_aceptar.png",
+                              "assets/image/btn_aceptar.png",
                             ),
                           ),
                         ),
@@ -307,7 +307,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                       Container(
                         height: 50,
                         width: 50,
-                        child: Image.asset('assets/alerta_img.png'),
+                        child: Image.asset('assets/image/alerta_img.png'),
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -329,7 +329,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                             height: 40,
                             width: double.infinity,
                             child: Image.asset(
-                              "assets/btn_aceptar.png",
+                              "assets/image/btn_aceptar.png",
                             ),
                           ),
                         ),
@@ -557,7 +557,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                               height: 40,
                               width: double.infinity,
                               child: Image.asset(
-                                "assets/activar_cuenta_btn.png",
+                                "assets/image/activar_cuenta_btn.png",
                               ),
                             ),
                           ),
@@ -626,7 +626,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       //UXCam: Llamamos el evento activationCode
       UxcamTagueo()
           .activationCode(codigoVerificacion, 'satisfactorio', estado, estado2);
+
       await prEnviarCodigo.hide();
+      await Servicies().loadDataTermsAndConditions();
       _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error
@@ -659,7 +661,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                         Container(
                           height: 50,
                           width: 50,
-                          child: Image.asset('assets/checked.png'),
+                          child: Image.asset('assets/image/checked.png'),
                         ),
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -681,7 +683,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                               height: 40,
                               width: double.infinity,
                               child: Image.asset(
-                                "assets/btn_aceptar.png",
+                                "assets/image/btn_aceptar.png",
                               ),
                             ),
                           ),
@@ -719,6 +721,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
     if (respuesta.length > 0) {
       pr.hide();
+      prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
 
       /*Navigator.pushNamedAndRemoveUntil(
         context,

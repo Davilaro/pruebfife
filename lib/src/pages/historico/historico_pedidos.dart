@@ -33,21 +33,23 @@ class HistoricoPedidos extends StatefulWidget {
 }
 
 class _HistoricoPedidosState extends State<HistoricoPedidos> {
-  ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
+  final controllerHistorico = Get.find<ControllerHistorico>();
+  // ControllerHistorico catalogSearchViewModel = Get.put(ControllerHistorico());
+
   @override
   void initState() {
+    super.initState();
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Historico", "", "", "Historico", 'MainActivity');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Histórico');
     validarVersionActual(context);
-    super.initState();
+    controllerHistorico.inicializarController();
   }
 
   String _filtro = "-1";
-  String fechaInicial = "-1";
-  String fechaFinal = "-1";
+
   @override
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
@@ -63,7 +65,7 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
           child: Container(
             width: 100,
             child: new IconButton(
-              icon: SvgPicture.asset('assets/boton_soporte.svg'),
+              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
               onPressed: () => {
                 //UXCam: Llamamos el evento clickSoport
                 UxcamTagueo().clickSoport(),
@@ -105,8 +107,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
                   Obx(() => FutureBuilder<List<dynamic>>(
                       future: DBProviderHelper.db.consultarHistoricos(
                           _filtro,
-                          catalogSearchViewModel.fechaInicial.value,
-                          catalogSearchViewModel.fechaFinal.value),
+                          controllerHistorico.fechaInicial.value,
+                          controllerHistorico.fechaFinal.value),
                       builder:
                           (context, AsyncSnapshot<List<dynamic>> snapshot) {
                         if (snapshot.hasData) {
@@ -191,18 +193,28 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
             ),
           ),
           GestureDetector(
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FiltroHistorico())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FiltroHistorico(
+                          controlerFiltro: controllerHistorico,
+                        ))),
             child: Container(
               margin: const EdgeInsets.only(right: 0),
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset('assets/filtro_btn.svg',
+                  child: SvgPicture.asset('assets/image/filtro_btn.svg',
                       fit: BoxFit.fill)),
             ),
           )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

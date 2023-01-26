@@ -1,7 +1,9 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -48,9 +50,10 @@ class _ProductsCardState extends State<ProductsCard> {
     final cartProvider = Provider.of<CarroModelo>(context);
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
-
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
-        future: DBProvider.db.cargarProductosInterno(
+        future: productService.cargarProductosInterno(
             widget.tipoCategoria, '', 0, 1000000, 8, "", ""),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
@@ -74,6 +77,21 @@ class _ProductsCardState extends State<ProductsCard> {
       return opciones..add(Text('No hay informacion para mostrar'));
     }
     for (var i = 0; i < listaProductos.length; i++) {
+      var dateNow = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      bool isProductoEnOferta = false;
+      bool isAgotadoLabel =
+          constrollerProductos.validarAgotado(listaProductos[i]);
+      bool isNewProduct = listaProductos[i].activoprodnuevo == 1 &&
+          ((DateTime.parse(listaProductos[i].fechafinnuevo_1!))
+                  .compareTo(dateNow) >=
+              0);
+      bool isPromoProduct = (listaProductos[i].activopromocion == 1 &&
+              ((DateTime.parse(listaProductos[i].fechafinpromocion_1!))
+                      .compareTo(dateNow) >=
+                  0)) ||
+          isProductoEnOferta ||
+          widget.tipoCategoria == 1;
       final template = Container(
           child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -81,10 +99,6 @@ class _ProductsCardState extends State<ProductsCard> {
             future: DBProvider.db
                 .consultarProductoEnOfertaPorCodigo(listaProductos[i].codigo),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              bool isProductoEnOferta = false;
-              var dateNow = DateTime(DateTime.now().year, DateTime.now().month,
-                  DateTime.now().day);
-
               if (snapshot.data == listaProductos[i].codigo) {
                 isProductoEnOferta = true;
               } else {
@@ -100,24 +114,19 @@ class _ProductsCardState extends State<ProductsCard> {
                     TagueoFirebase()
                         .sendAnalityticSelectItem(listaProductos[i], 1);
                     //UXCam: Llamamos el evento seeDetailProduct
-                    UxcamTagueo()
-                        .seeDetailProduct(listaProductos[i], i, nameCategory);
+                    UxcamTagueo().seeDetailProduct(
+                        listaProductos[i],
+                        i,
+                        nameCategory,
+                        isAgotadoLabel,
+                        isNewProduct,
+                        isPromoProduct);
                   }
                   detalleProducto(listaProductos[i], cartProvider);
                 },
-                isAgotadoLabel:
-                    constrollerProductos.validarAgotado(listaProductos[i]),
-                isVisibleLabelNuevo: listaProductos[i].activoprodnuevo == 1 &&
-                    ((DateTime.parse(listaProductos[i].fechafinnuevo_1!))
-                            .compareTo(dateNow) >=
-                        0),
-                isVisibleLabelPromo: (listaProductos[i].activopromocion == 1 &&
-                        ((DateTime.parse(
-                                    listaProductos[i].fechafinpromocion_1!))
-                                .compareTo(dateNow) >=
-                            0)) ||
-                    widget.tipoCategoria == 1 ||
-                    isProductoEnOferta,
+                isAgotadoLabel: isAgotadoLabel,
+                isVisibleLabelNuevo: isNewProduct,
+                isVisibleLabelPromo: isPromoProduct,
               );
             }),
       ));
@@ -135,7 +144,7 @@ class _ProductsCardState extends State<ProductsCard> {
     return opciones;
   }
 
-  detalleProducto(Productos element, final CarroModelo cartProvider) {
+  detalleProducto(Producto element, final CarroModelo cartProvider) {
     if (prefs.usurioLogin == -1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     } else {

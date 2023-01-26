@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -11,7 +11,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class CarritoDisenoLista extends StatefulWidget {
   final int numTienda;
-  final Productos productos;
+  final Producto productos;
 
   const CarritoDisenoLista(
       {Key? key, required this.numTienda, required this.productos})
@@ -35,7 +35,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
 
   _cargarDisenoInterno(
       element, BuildContext context, CarroModelo cartProvider) {
-    Productos productos = element;
+    Producto productos = element;
 
     final size = MediaQuery.of(context).size;
     return Row(
@@ -50,7 +50,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
             child: CachedNetworkImage(
               imageUrl: Constantes().urlImgProductos + '${element.codigo}.png',
               placeholder: (context, url) =>
-                  Image.asset('assets/jar-loading.gif'),
+                  Image.asset('assets/image/jar-loading.gif'),
               errorWidget: (context, url, error) => Icon(Icons.error),
               fit: BoxFit.fill,
             ),
@@ -108,7 +108,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
                       height: 40.0,
                       width: 40.0,
                       child: IconButton(
-                        icon: Image.asset('assets/delete.png'),
+                        icon: Image.asset('assets/image/delete.png'),
                         onPressed: () => eliminar(productos, cartProvider),
                       ),
                     ),
@@ -116,7 +116,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
                       height: 40.0,
                       width: 40.0,
                       child: IconButton(
-                        icon: Image.asset('assets/menos.png'),
+                        icon: Image.asset('assets/image/menos.png'),
                         onPressed: () => menos(productos, cartProvider),
                       ),
                     ),
@@ -165,7 +165,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
                       height: 40.0,
                       width: 40.0,
                       child: IconButton(
-                        icon: Image.asset('assets/mas.png'),
+                        icon: Image.asset('assets/image/mas.png'),
                         onPressed: () => mas(productos, cartProvider),
                       ),
                     ),
@@ -177,7 +177,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
     );
   }
 
-  mas(Productos producto, CarroModelo cartProvider) {
+  mas(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -195,7 +195,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
     calcularValorTotal(cartProvider);
   }
 
-  menos(Productos producto, CarroModelo cartProvider) {
+  menos(Producto producto, CarroModelo cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -233,7 +233,7 @@ class _CarritoDisenoListaState extends State<CarritoDisenoLista> {
     cartProvider.guardarValorCompra = valorTotal;
   }
 
-  eliminar(Productos producto, CarroModelo cartProvider) {
+  eliminar(Producto producto, CarroModelo cartProvider) {
     setState(() {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
       PedidoEmart.registrarValoresPedido(producto, '0', false);

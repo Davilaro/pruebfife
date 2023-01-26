@@ -282,9 +282,9 @@ class _BienvenidoState extends State<Bienvenido> {
         height: 45,
         paddingTop: 5,
         pressedImage: Image.asset(
-          "assets/registar_cuenta_btn.png",
+          "assets/image/registar_cuenta_btn.png",
         ),
-        unpressedImage: Image.asset("assets/registar_cuenta_btn.png"),
+        unpressedImage: Image.asset("assets/image/registar_cuenta_btn.png"),
         onTap: () => _enviarCorreoElectronico(context),
       ),
     );
@@ -296,9 +296,9 @@ class _BienvenidoState extends State<Bienvenido> {
       width: 55,
       height: 55,
       pressedImage: Image.asset(
-        "assets/activacion_manual_btn.png",
+        "assets/image/activacion_manual_btn.png",
       ),
-      unpressedImage: Image.asset("assets/activacion_manual_btn.png"),
+      unpressedImage: Image.asset("assets/image/activacion_manual_btn.png"),
       onTap: () => {
         Navigator.push(
           context,
@@ -324,7 +324,7 @@ class _BienvenidoState extends State<Bienvenido> {
                   Container(
                     height: 50,
                     width: 50,
-                    child: Image.asset('assets/alerta_img.png'),
+                    child: Image.asset('assets/image/alerta_img.png'),
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -340,7 +340,7 @@ class _BienvenidoState extends State<Bienvenido> {
                         height: 40,
                         width: double.infinity,
                         child: Image.asset(
-                          "assets/btn_aceptar.png",
+                          "assets/image/btn_aceptar.png",
                         ),
                       ),
                     ),
@@ -419,7 +419,7 @@ class _BienvenidoState extends State<Bienvenido> {
                         Container(
                           height: 50,
                           width: 50,
-                          child: Image.asset('assets/alerta_img.png'),
+                          child: Image.asset('assets/image/alerta_img.png'),
                         ),
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -434,7 +434,7 @@ class _BienvenidoState extends State<Bienvenido> {
                               height: 40,
                               width: double.infinity,
                               child: Image.asset(
-                                "assets/btn_aceptar.png",
+                                "assets/image/btn_aceptar.png",
                               ),
                             ),
                           ),
@@ -667,7 +667,7 @@ class _BienvenidoState extends State<Bienvenido> {
                           height: 40,
                           width: double.infinity,
                           child: Image.asset(
-                            "assets/activar_cuenta_btn.png",
+                            "assets/image/activar_cuenta_btn.png",
                           ),
                         ),
                       ),
@@ -741,7 +741,7 @@ class _BienvenidoState extends State<Bienvenido> {
                     Container(
                       height: 50,
                       width: 50,
-                      child: Image.asset('assets/checked.png'),
+                      child: Image.asset('assets/image/checked.png'),
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -762,7 +762,7 @@ class _BienvenidoState extends State<Bienvenido> {
                           height: 40,
                           width: double.infinity,
                           child: Image.asset(
-                            "assets/btn_aceptar.png",
+                            "assets/image/btn_aceptar.png",
                           ),
                         ),
                       ),
@@ -801,6 +801,7 @@ class _BienvenidoState extends State<Bienvenido> {
     if (respuesta.length > 0) {
       pr.hide();
       //Se inicializa la variable
+      prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
 
       Navigator.pushReplacementNamed(
         context,

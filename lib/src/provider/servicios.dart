@@ -396,7 +396,7 @@ class Servicies {
         throw Exception('Failed');
       }
     } catch (e) {
-      print('hola res error ${e.toString()}');
+      print('pedido res error ${e.toString()}');
       return null;
     }
   }
@@ -514,13 +514,14 @@ class Servicies {
           "Token": "$token"
         }),
       );
+      print(response.body);
       print([
         "DeviceId $idUnicoMovil",
         "DeviceType $plataforma",
         "Nit $codUsuario",
-        "Token $token"
+        "Token $token",
       ]);
-
+      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         return Validacion.fromJson(jsonDecode(response.body));
       } else {
@@ -649,6 +650,61 @@ class Servicies {
       return file;
     } catch (e) {
       print('problema al buscar archivo en db $e');
+    }
+  }
+
+  Future<bool> loadDataTermsAndConditions() async {
+    try {
+      DateTime current = DateTime.now();
+      String currentDate = DateFormat('yyyy-MM-dd HH:mm').format(current);
+
+      final url;
+      url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/crearCondiciones');
+
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(<String, String>{
+            "nit": "${prefs.codClienteLogueado}",
+            "fecha": "$currentDate"
+          }));
+      if (response.statusCode == 200) {
+        print("true----------------------validacion correcta");
+        return true;
+      } else {
+        print("false----------------------validacion incorrecta");
+        return false;
+      }
+    } catch (err) {
+      print("something wrong $err");
+      return false;
+    }
+  }
+
+  Future<bool> deleteAccount() async {
+    try {
+      DateTime current = DateTime.now();
+      String currentDate = DateFormat('yyyy-MM-dd HH:mm').format(current);
+
+      final url;
+      url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/eliminaUsuario');
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(<String, String>{
+            "CCUP": "${prefs.codigoUnicoPideky}",
+            "fecha": "$currentDate",
+            "pais": "CO"
+          }));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 }

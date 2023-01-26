@@ -82,9 +82,9 @@ class CategoriasCard extends StatelessWidget {
                         imageUrl: element.ico,
                         height: Get.height * 0.08,
                         placeholder: (context, url) =>
-                            Image.asset('assets/jar-loading.gif'),
+                            Image.asset('assets/image/jar-loading.gif'),
                         errorWidget: (context, url, error) =>
-                            Image.asset('assets/logo_login.png'),
+                            Image.asset('assets/image/logo_login.png'),
                         fit: BoxFit.contain,
                       ),
                       // SvgPicture.network(

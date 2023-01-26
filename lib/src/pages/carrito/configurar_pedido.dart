@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -18,6 +19,7 @@ import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -216,6 +218,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   }
 
   _dialogPedidoRegistrado(listaProductosPedidos, size) async {
+    final controladorCambioEstadoProductos = Get.find<CambioEstadoProductos>();
     DateTime now = DateTime.now();
     String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
     var numeroAleatorio = Random();
@@ -227,9 +230,13 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
     if (validar.estado == 'OK') {
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
+        PedidoEmart
+            .listaControllersPedido![PedidoEmart.listaProductos![key]!.codigo]!
+            .text = "0";
         PedidoEmart.registrarValoresPedido(
             PedidoEmart.listaProductos![key]!, "1", false);
       });
+
       //FIREBASE: Llamamos el evento purchase
       TagueoFirebase().sendAnalityticsPurchase(
           cartProvider.getTotal, listaProductosPedidos, numDoc);
@@ -238,6 +245,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       cartProvider.guardarValorCompra = 0;
       cartProvider.guardarValorAhorro = 0;
       PedidoEmart.cantItems.value = '0';
+      controladorCambioEstadoProductos.mapaHistoricos
+          .updateAll((key, value) => value = false);
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => PedidoRealizado(

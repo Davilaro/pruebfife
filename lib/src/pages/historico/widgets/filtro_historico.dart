@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-final controlerHistorico = Get.find<ControllerHistorico>();
+// final controlerHistorico = Get.find<ControllerHistorico>();
 
 class FiltroHistorico extends StatefulWidget {
-  FiltroHistorico({Key? key}) : super(key: key);
+  final ControllerHistorico controlerFiltro;
+
+  FiltroHistorico({Key? key, required this.controlerFiltro}) : super(key: key);
 
   @override
   _FiltroHistoricoState createState() => _FiltroHistoricoState();
@@ -180,7 +182,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                             Obx(() => Center(
                                   child: Container(
                                       margin:
-                                          EdgeInsets.only(top: 30, bottom: 130),
+                                          EdgeInsets.only(top: 30, bottom: 80),
                                       child: Text(
                                           '${diaInicio.value.isNotEmpty ? diaInicio.value : ""} ${meses[toInt(mesInicio.value)] ?? ""} - ${diaFin.isNotEmpty ? diaFin.value : ""} ${meses[toInt(mesFin.value)] ?? ""} ${anoFin.isNotEmpty ? anoFin.value : ""}',
                                           style: TextStyle(
@@ -276,26 +278,26 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       if (tipoFecha == 'inicio') {
         diaInicio.value = '';
         mesInicio.value = value;
-        listDias.value = controlerHistorico.getDropdownItemsDia(
-            mesInicio.value, anoInicio.value);
+        listDias.value = widget.controlerFiltro
+            .getDropdownItemsDia(mesInicio.value, anoInicio.value);
       } else {
         diaFin.value = '';
         mesFin.value = value;
-        listFinDias.value =
-            controlerHistorico.getDropdownItemsDia(mesFin.value, anoFin.value);
+        listFinDias.value = widget.controlerFiltro
+            .getDropdownItemsDia(mesFin.value, anoFin.value);
       }
     }
     if (hintText == 'Año') {
       if (tipoFecha == 'inicio') {
         diaInicio.value = '';
         anoInicio.value = value;
-        listDias.value = controlerHistorico.getDropdownItemsDia(
-            mesInicio.value, anoInicio.value);
+        listDias.value = widget.controlerFiltro
+            .getDropdownItemsDia(mesInicio.value, anoInicio.value);
       } else {
         diaFin.value = '';
         anoFin.value = value;
-        listFinDias.value =
-            controlerHistorico.getDropdownItemsDia(mesFin.value, anoFin.value);
+        listFinDias.value = widget.controlerFiltro
+            .getDropdownItemsDia(mesFin.value, anoFin.value);
       }
     }
   }
@@ -314,11 +316,11 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       var num1 = fechaInicial.replaceAll('-', '');
       var num2 = fechaFin.replaceAll('-', '');
       if (toInt(num1) < toInt(num2)) {
-        if (await controlerHistorico.validarHistoricoFiltro(
-            context, fechaInicial, fechaFin)) {
+        if (await widget.controlerFiltro
+            .validarHistoricoFiltro(context, fechaInicial, fechaFin)) {
           mensajeInformativo.value = '';
-          controlerHistorico.setFechaInicial(fechaInicial);
-          controlerHistorico.setFechaFinal(fechaFin);
+          widget.controlerFiltro.setFechaInicial(fechaInicial);
+          widget.controlerFiltro.setFechaFinal(fechaFin);
           Navigator.pop(context);
         }
       } else {
@@ -326,20 +328,20 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
             'Por favor selecciona una fecha inicial menor a la final';
       }
     } else {
-      controlerHistorico.setFechaFinal('-1');
-      controlerHistorico.setFechaInicial('-1');
-      controlerHistorico.setFiltro('-1');
+      widget.controlerFiltro.setFechaFinal('-1');
+      widget.controlerFiltro.setFechaInicial('-1');
+
       Navigator.pop(context);
     }
   }
 
   validarInicio() {
-    if (controlerHistorico.fechaInicial.value != '-1' ||
-        controlerHistorico.fechaFinal.value != '-1') {
+    if (widget.controlerFiltro.fechaInicial.value != '-1' ||
+        widget.controlerFiltro.fechaFinal.value != '-1') {
       DateTime _fechaInicial =
-          DateTime.parse(controlerHistorico.fechaInicial.value);
+          DateTime.parse(widget.controlerFiltro.fechaInicial.value);
       DateTime _fechaFinal =
-          DateTime.parse(controlerHistorico.fechaFinal.value);
+          DateTime.parse(widget.controlerFiltro.fechaFinal.value);
       diaInicio.value = _fechaInicial.day.toString();
       mesInicio.value = _fechaInicial.month.toString();
       anoInicio.value = _fechaInicial.year.toString();
@@ -357,7 +359,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       child: Row(
         children: [
           Image.asset(
-            'assets/limpiar_filtro_img.png',
+            'assets/image/limpiar_filtro_img.png',
             width: Get.width * 0.07,
           ),
           Container(
@@ -376,9 +378,8 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   }
 
   limpiarFiltro() {
-    controlerHistorico.setFechaFinal('-1');
-    controlerHistorico.setFechaInicial('-1');
-    controlerHistorico.setFiltro('-1');
+    widget.controlerFiltro.setFechaFinal('-1');
+    widget.controlerFiltro.setFechaInicial('-1');
 
     diaInicio.value = '';
     diaFin.value = '';
@@ -389,10 +390,10 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   }
 
   cargarFechas() {
-    listFinDias.value = controlerHistorico.getDropdownItemsDia('', '');
-    listMeses.value = controlerHistorico.getDropdownItemsMes();
-    listAnos.value = controlerHistorico.getDropdownItemsAno();
-    listDias.value = controlerHistorico.getDropdownItemsDia('', '');
+    listFinDias.value = widget.controlerFiltro.getDropdownItemsDia('', '');
+    listMeses.value = widget.controlerFiltro.getDropdownItemsMes();
+    listAnos.value = widget.controlerFiltro.getDropdownItemsAno();
+    listDias.value = widget.controlerFiltro.getDropdownItemsDia('', '');
     validarInicio();
   }
 }

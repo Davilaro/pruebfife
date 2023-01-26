@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -7,7 +8,6 @@ import 'package:get/get.dart';
 class ControllerHistorico extends GetxController {
   RxString fechaInicial = '-1'.obs;
   RxString fechaFinal = '-1'.obs;
-  RxString filtro = '-1'.obs;
 
   void setFechaInicial(String val) {
     fechaInicial.value = val;
@@ -17,8 +17,9 @@ class ControllerHistorico extends GetxController {
     fechaFinal.value = val;
   }
 
-  void setFiltro(String val) {
-    filtro.value = val;
+  void inicializarController() {
+    fechaInicial = '-1'.obs;
+    fechaFinal = '-1'.obs;
   }
 
   ///CARGAR ITEMS DORPDOWN
@@ -101,125 +102,32 @@ class ControllerHistorico extends GetxController {
   ///CARGAR ITEMS DORPDOWN
   List<DropdownMenuItem<String>> getDropdownItemsMes() {
     List<DropdownMenuItem<String>> menuItems = [];
+    menuItems.add(DropdownMenuItem(child: textCustomation('Mes'), value: ''));
     menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Mes',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              inherit: false,
-              fontWeight: FontWeight.bold),
-        ),
-        value: ''));
-    menuItems.add(DropdownMenuItem(
-      child: Text(
-        'Enero',
-        style: TextStyle(
-            color: ConstantesColores.azul_precio,
-            fontSize: 13,
-            fontWeight: FontWeight.bold),
-      ),
+      child: textCustomation('Enero'),
       value: '1',
     ));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Febrero',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '2'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Marzo',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '3'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Abril',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '4'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Mayo',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '5'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Junio',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '6'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Julio',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '7'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Agosto',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '8'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Septiembre',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '9'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Octubre',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '10'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Noviembre',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '11'));
-    menuItems.add(DropdownMenuItem(
-        child: Text(
-          'Diciembre',
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontSize: 13,
-              fontWeight: FontWeight.bold),
-        ),
-        value: '12'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Febrero'), value: '2'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Marzo'), value: '3'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Abril'), value: '4'));
+    menuItems.add(DropdownMenuItem(child: textCustomation('Mayo'), value: '5'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Junio'), value: '6'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Julio'), value: '7'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Agosto'), value: '8'));
+    menuItems.add(
+        DropdownMenuItem(child: textCustomation('Septiembre'), value: '9'));
+    menuItems
+        .add(DropdownMenuItem(child: textCustomation('Octubre'), value: '10'));
+    menuItems.add(
+        DropdownMenuItem(child: textCustomation('Noviembre'), value: '11'));
+    menuItems.add(
+        DropdownMenuItem(child: textCustomation('Diciembre'), value: '12'));
 
     return menuItems;
   }
@@ -247,5 +155,17 @@ class ControllerHistorico extends GetxController {
     }
 
     return menuItems;
+  }
+
+  textCustomation(String texto) {
+    return AutoSizeText(
+      texto.substring(0, 3),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          color: ConstantesColores.azul_precio,
+          fontSize: 13,
+          fontWeight: FontWeight.bold),
+    );
   }
 }

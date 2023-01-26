@@ -1,7 +1,7 @@
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -21,7 +21,7 @@ NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
 
 class InputValoresCatalogo extends StatefulWidget {
-  final Productos element;
+  final Producto element;
   final String numEmpresa;
   final bool isCategoriaPromos;
   final int index;
@@ -54,6 +54,12 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         future: DBProvider.db
             .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          bool isNewProduct =
+              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
+          bool isPromoProduct =
+              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
+                      widget.isCategoriaPromos) ||
+                  isProductoEnOferta;
           if (snapshot.data == widget.element.codigo) {
             isProductoEnOferta = true;
           } else {
@@ -69,24 +75,20 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   //FIREBASE: Llamamos el evento select_item
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
-                  UxcamTagueo()
-                      .seeDetailProduct(widget.element, widget.index, '');
+                  UxcamTagueo().seeDetailProduct(widget.element, widget.index,
+                      '', isAgotado, isNewProduct, isPromoProduct);
                 }
                 detalleProducto(widget.element, cartProvider);
               },
               isAgotadoLabel: isAgotado,
-              isVisibleLabelPromo: (widget.element.fechafinpromocion_1!
-                          .contains(RegExp(r'[0-9]')) ||
-                      widget.isCategoriaPromos) ||
-                  isProductoEnOferta,
-              isVisibleLabelNuevo:
-                  widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]')));
+              isVisibleLabelPromo: isPromoProduct,
+              isVisibleLabelNuevo: isNewProduct);
         },
       ),
     );
   }
 
-  detalleProducto(Productos producto, CarroModelo cartProvider) async {
+  detalleProducto(Producto producto, CarroModelo cartProvider) async {
     if (prefs.usurioLogin == -1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     } else {

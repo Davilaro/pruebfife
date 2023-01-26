@@ -1,16 +1,13 @@
-import 'dart:typed_data';
-
+import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/editarNumero.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_vendedores.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/shared/widgets/politicas_datos.dart';
+import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/editarNumero.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/mis_proveedores.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/mis_vendedores.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/modal_cerrar_sesion.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/politicas_datos.dart';
-import 'package:emart/src/pages/mi_negocio/widgets/terminos_condiciones.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -41,11 +38,7 @@ class MiNegocio extends StatefulWidget {
 }
 
 class _MiNegocioState extends State<MiNegocio> {
-  Uint8List? politicasDatosPdf;
-  Uint8List? terminosDatosPdf;
-  String version = '';
-  RxString validarInputNumero = ''.obs;
-  TextEditingController controllerInput = TextEditingController();
+  final MiNegocioViewModel viewModel = Get.find();
 
   @override
   void initState() {
@@ -56,9 +49,9 @@ class _MiNegocioState extends State<MiNegocio> {
     }
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('MyBusinessPage');
-    cargarArchivos();
+    viewModel.cargarArchivos(prefs);
     validarVersionActual(context);
-    _validarVersion();
+    viewModel.validarVersion();
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Mi Negocio", "", "", "Mi Negocio", 'MainActivity');
@@ -81,7 +74,7 @@ class _MiNegocioState extends State<MiNegocio> {
           child: Container(
             width: 100,
             child: new IconButton(
-              icon: SvgPicture.asset('assets/boton_soporte.svg'),
+              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
               onPressed: () => {
                 //UXCam: Llamamos el evento clickSoport
                 UxcamTagueo().clickSoport(),
@@ -204,11 +197,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                         ),
                                       ])),
                                   GestureDetector(
-                                    onTap: () => editarNumero(
-                                        context,
-                                        controllerInput,
-                                        validarInputNumero,
-                                        validarNumero),
+                                    onTap: () => editarNumero(context),
                                     child: Container(
                                         margin: EdgeInsets.only(
                                             bottom: 1, left: 18),
@@ -349,9 +338,9 @@ class _MiNegocioState extends State<MiNegocio> {
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: GestureDetector(
-                                onTap: () => politicasDatosPdf != null
+                                onTap: () => viewModel.politicasDatosPdf != null
                                     ? verPoliticasCondiciones(
-                                        context, politicasDatosPdf)
+                                        context, viewModel.politicasDatosPdf)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:
@@ -402,9 +391,9 @@ class _MiNegocioState extends State<MiNegocio> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               // width: Get.width * 1,
                               child: GestureDetector(
-                                onTap: () => terminosDatosPdf != null
+                                onTap: () => viewModel.terminosDatosPdf != null
                                     ? verTerminosCondiciones(
-                                        context, terminosDatosPdf)
+                                        context, viewModel.terminosDatosPdf)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:
@@ -453,47 +442,79 @@ class _MiNegocioState extends State<MiNegocio> {
                           ],
                         )),
                         Container(
-                          margin: EdgeInsets.only(top: 30, left: 29),
+                          margin: EdgeInsets.only(top: 30, left: 5, right: 15),
                           child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/icon/logout_img.png',
-                                alignment: Alignment.center,
-                                width: 30,
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
                                   children: [
-                                    GestureDetector(
-                                      onTap: () => {
-                                        _iniciarModalCerrarSesion(
-                                            size, provider)
-                                      },
-                                      child: Text(
-                                        "Cerrar sesión.",
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 15,
-                                            decoration: TextDecoration.none,
-                                            fontWeight: FontWeight.bold),
+                                    Image.asset(
+                                      'assets/icon/logout_img.png',
+                                      alignment: Alignment.center,
+                                      width: 30,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () => {
+                                              viewModel
+                                                  .iniciarModalCerrarSesion(
+                                                      context, size, provider)
+                                            },
+                                            child: Text(
+                                              "Cerrar sesión.",
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Obx(() => Text(
+                                                Constantes().titulo == 'QA'
+                                                    ? 'Versión QA ${viewModel.version.value}'
+                                                    : 'Versión ${viewModel.version.value}',
+                                                style: TextStyle(
+                                                    color: ConstantesColores
+                                                        .gris_textos,
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                        ],
                                       ),
-                                    ),
-                                    Text(
-                                      Constantes().titulo == 'QA'
-                                          ? 'Versión QA $version'
-                                          : 'Versión $version',
-                                      style: TextStyle(
-                                          color: ConstantesColores.gris_textos,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    )
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    viewModel.iniciarModalEliminarUsuario(
+                                        context, size, provider);
+                                  },
+                                  child: Row(children: [
+                                    Image.asset(
+                                      "assets/icon/eliminar_cuenta.png",
+                                      alignment: Alignment.center,
+                                      width: 25,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Eliminar cuenta",
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_textos,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ]),
+                                )
+                              ]),
                         )
                       ],
                     );
@@ -502,11 +523,6 @@ class _MiNegocioState extends State<MiNegocio> {
                 })),
       ),
     );
-  }
-
-  void _validarVersion() async {
-    version = await cargarVersion();
-    setState(() {});
   }
 
   Widget cardStyle({bodyContainer}) {
@@ -519,71 +535,5 @@ class _MiNegocioState extends State<MiNegocio> {
       ),
       child: bodyContainer,
     );
-  }
-
-  _iniciarModalCerrarSesion(size, provider) {
-    showLoaderDialog(context, modalCerrarSesion(context, size, provider));
-  }
-
-  showLoaderDialog(BuildContext context, Widget widget) {
-    AlertDialog alert = AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        content: widget);
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  validarNumero() async {
-    var telefono = controllerInput.text.split('+57');
-    if (telefono[telefono.length > 1 ? 1 : 0].length - 1 == 10) {
-      validarInputNumero.value = '';
-      var res = await Servicies().editarTelefonoWhatsapp(
-          '+57 ${telefono[telefono.length > 1 ? 1 : 0]}');
-      if (res == 200) {
-        await DBProvider.db.editarTelefonoWhatsapp(
-            '+57${telefono[telefono.length > 1 ? 1 : 0]}');
-        Navigator.pop(context);
-        alert.mostrarAlert(
-            context,
-            'Guardamos tu número de WhatsApp con éxito!',
-            Icon(
-              Icons.check_circle_outline_outlined,
-              size: 65,
-              color: ConstantesColores.agua_marina,
-            ));
-        setState(() {});
-      } else {
-        alert.mostrarAlert(context, 'Se a generado un error', null);
-      }
-    } else {
-      validarInputNumero.value =
-          'La cantidad de caracteres debe ser igual a 10, sin contar el +57';
-    }
-  }
-
-  cargarArchivos() async {
-    try {
-      if (prefs.usurioLogin == 1) {
-        politicasDatosPdf = await Servicies().cargarArchivo(
-            await DBProvider.db.consultarDocumentoLegal('Políticas'));
-        terminosDatosPdf = await Servicies().cargarArchivo(
-            await DBProvider.db.consultarDocumentoLegal('Términos'));
-        setState(() {});
-      }
-    } catch (e) {
-      print('Error al cagar archivos $e');
-    }
-  }
-
-  @override
-  void dispose() {
-    controllerInput.dispose();
-    super.dispose();
   }
 }

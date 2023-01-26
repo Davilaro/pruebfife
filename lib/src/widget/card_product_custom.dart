@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class CardProductCustom extends StatefulWidget {
-  final Productos producto;
+  final Producto producto;
   final CarroModelo cartProvider;
   final bool isProductoEnOferta;
   final bool isAgotadoLabel;
@@ -66,9 +66,11 @@ class _CardProductCustomState extends State<CardProductCustom> {
                           imageUrl: Constantes().urlImgProductos +
                               '${widget.producto.codigo}.png',
                           placeholder: (context, url) =>
-                              Image.asset('assets/jar-loading.gif'),
-                          errorWidget: (context, url, error) =>
-                              Image.asset('assets/logo_login.png'),
+                              Image.asset('assets/image/jar-loading.gif'),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/image/logo_login.png',
+                            width: Get.width * 0.35,
+                          ),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -231,7 +233,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                             child: Container(
                               width: Get.width * 0.35,
                               child: Image.asset(
-                                "assets/agregar_btn.png",
+                                "assets/image/agregar_btn.png",
                               ),
                             ),
                             onTap: widget.isAgotadoLabel
@@ -250,22 +252,17 @@ class _CardProductCustomState extends State<CardProductCustom> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        (widget.producto.fechafinpromocion_1!
-                                    .contains(RegExp(r'[0-9]'))) ||
-                                widget.tipoCategoria == 1 ||
-                                widget.isProductoEnOferta
-                            ? Container(
-                                padding: EdgeInsets.only(top: 5, right: 10),
-                                child: Visibility(
-                                  visible: widget.isVisibleLabelPromo,
-                                  child: Image.asset(
-                                    'assets/promo_abel.png',
-                                    height: 30,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        Container(
+                          padding: EdgeInsets.only(top: 5, right: 10),
+                          child: Visibility(
+                            visible: widget.isVisibleLabelPromo,
+                            child: Image.asset(
+                              'assets/image/promo_abel.png',
+                              height: 30,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                         (widget.producto.fechafinnuevo_1!
                                 .contains(RegExp(r'[0-9]')))
                             ? Container(
@@ -274,7 +271,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                 child: Visibility(
                                   visible: widget.isVisibleLabelNuevo,
                                   child: Image.asset(
-                                    'assets/nuevos_label.png',
+                                    'assets/image/nuevos_label.png',
                                     height: 30,
                                     fit: BoxFit.cover,
                                   ),

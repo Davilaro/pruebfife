@@ -43,7 +43,7 @@ void mostrarAlert(BuildContext context, String mensaje, Widget? icon) {
                       width: 50,
                       child: icon != null
                           ? icon
-                          : Image.asset('assets/alerta_img.png'),
+                          : Image.asset('assets/image/alerta_img.png'),
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -60,7 +60,7 @@ void mostrarAlert(BuildContext context, String mensaje, Widget? icon) {
                           height: 40,
                           width: double.infinity,
                           child: Image.asset(
-                            "assets/btn_aceptar.png",
+                            "assets/image/btn_aceptar.png",
                           ),
                         ),
                       ),
@@ -91,12 +91,12 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
                   Container(
                     height: 50,
                     width: 50,
-                    child: Image.asset('assets/alerta_img.png'),
+                    child: Image.asset('assets/image/alerta_img.png'),
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
-                      '¡Lo sentimos! No hemos podido procesaar tu orden. Por favor comunícate con nuestro equipo de ayuda.',
+                      '¡Lo sentimos! No hemos podido procesar tu orden. Por favor comunícate con nuestro equipo de ayuda.',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -108,7 +108,7 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
                         height: 40,
                         width: double.infinity,
                         child: Image.asset(
-                          "assets/btn_aceptar.png",
+                          "assets/image/btn_aceptar.png",
                         ),
                       ),
                     ),

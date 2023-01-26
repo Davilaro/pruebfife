@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/classes/uiUtil.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -10,7 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 
 class CardCustom extends StatelessWidget {
-  Productos producto;
+  Producto producto;
   bool isProductoPromo;
   bool isProductoEnOferta;
   bool isAgotado;
@@ -69,9 +69,9 @@ class CardCustom extends StatelessWidget {
                         imageUrl: Constantes().urlImgProductos +
                             '${producto.codigo}.png',
                         placeholder: (context, url) =>
-                            Image.asset('assets/jar-loading.gif'),
+                            Image.asset('assets/image/jar-loading.gif'),
                         errorWidget: (context, url, error) =>
-                            Image.asset('assets/logo_login.png'),
+                            Image.asset('assets/image/logo_login.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -208,7 +208,8 @@ class CardCustom extends StatelessWidget {
                           width: 150,
                           alignment: Alignment.center,
                           child: GestureDetector(
-                              child: Image.asset("assets/agregar_btn.png"),
+                              child:
+                                  Image.asset("assets/image/agregar_btn.png"),
                               onTap: onTapBtn)),
                     ),
                   ),
@@ -229,7 +230,7 @@ class CardCustom extends StatelessWidget {
                               isProductoEnOferta,
                           child: Container(
                             child: Image.asset(
-                              'assets/promo_abel.png',
+                              'assets/image/promo_abel.png',
                               height: 30,
                               fit: BoxFit.cover,
                             ),
@@ -247,7 +248,7 @@ class CardCustom extends StatelessWidget {
                                   0),
                           child: Container(
                             child: Image.asset(
-                              'assets/nuevos_label.png',
+                              'assets/image/nuevos_label.png',
                               height: 30,
                               fit: BoxFit.cover,
                             ),

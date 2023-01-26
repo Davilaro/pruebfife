@@ -48,7 +48,7 @@ class ListaEmpresasEmart extends StatelessWidget {
               child: FadeInImage(
                 image: NetworkImage(Constantes().urlImg +
                     '${listaDatos[i].codigoEmpresa}/${listaDatos[i].codigoEmpresa}.png'),
-                placeholder: AssetImage('assets/jar-loading.gif'),
+                placeholder: AssetImage('assets/image/jar-loading.gif'),
                 fadeInDuration: Duration(milliseconds: 200),
                 fit: BoxFit.fill,
               ),

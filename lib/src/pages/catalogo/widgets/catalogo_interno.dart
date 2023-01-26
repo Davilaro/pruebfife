@@ -1,11 +1,11 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/classes/uiUtil.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/dounser.dart';
@@ -139,7 +139,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       if (widget.tipoCategoria != 2) {
         isProductoPromo = true;
       }
-      Productos productos = element;
+      Producto productos = element;
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         numEmpresa: prefs.numEmpresa,
@@ -154,7 +154,9 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductosInterno(
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
+    listaAllProducts = await productService.cargarProductosInterno(
         widget.tipoCategoria,
         '',
         catalogSearchViewModel.precioMinimo.value,

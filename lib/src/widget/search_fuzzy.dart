@@ -1,13 +1,14 @@
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/productos.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/productos/detalle_producto_search.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -23,9 +24,9 @@ import 'package:provider/provider.dart';
 
 final prefs = new Preferencias();
 final TextEditingController _controllerUser = TextEditingController();
-RxList<Productos> listaProducto = <Productos>[].obs;
+RxList<Producto> listaProducto = <Producto>[].obs;
 RxString searchInput = "".obs;
-List<Productos> listaAllProducts = [];
+List<Producto> listaAllProducts = [];
 RxList<String> listaRecientes = <String>[].obs;
 
 class SearchFuzzy extends StatefulWidget {
@@ -50,7 +51,9 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
   }
 
   void cargarProductos() async {
-    listaAllProducts = await DBProvider.db.cargarProductosFiltro('', "");
+    ProductoService productService =
+        ProductoService(ProductoRepositorySqlite());
+    listaAllProducts = await productService.cargarProductosFiltro('', "");
   }
 
   void runFilter(String enteredKeyword) {
@@ -91,7 +94,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
           child: Container(
             width: 100,
             child: new IconButton(
-              icon: SvgPicture.asset('assets/boton_soporte.svg'),
+              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
               onPressed: () => {
                 //UXCam: Llamamos el evento clickSoport
                 UxcamTagueo().clickSoport(),
@@ -285,7 +288,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
     return opciones;
   }
 
-  void logicaSeleccion(Productos producto, cargoConfirmar, cartProvider) {
+  void logicaSeleccion(Producto producto, cargoConfirmar, cartProvider) {
     if (_controllerUser.text != '') {
       listaRecientes.add(_controllerUser.text);
     }
@@ -374,7 +377,7 @@ class titulo_pideky extends StatelessWidget {
       child: Container(
           height: 30,
           width: size.width * 0.3,
-          child: SvgPicture.asset('assets/app_bar.svg', fit: BoxFit.fill)),
+          child: SvgPicture.asset('assets/image/pp_bar.svg', fit: BoxFit.fill)),
     );
   }
 }
@@ -397,7 +400,8 @@ class titulo_pideky_carrito extends StatelessWidget {
         child: Container(
             height: 30,
             width: size.width * 0.3,
-            child: SvgPicture.asset('assets/app_bar.svg', fit: BoxFit.fill)),
+            child:
+                SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
         onTap: () => {
           Navigator.of(context).pushNamedAndRemoveUntil(
               'tab_opciones', (Route<dynamic> route) => false),

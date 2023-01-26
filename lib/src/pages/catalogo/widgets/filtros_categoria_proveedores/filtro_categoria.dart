@@ -262,7 +262,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                                                     .agua_marina,
                                               )),
                             SizedBox(width: 10),
-                            Text("Productos más vendidos ",
+                            Text("Producto más vendidos ",
                                 style: TextStyle(
                                     color: ConstantesColores.azul_precio))
                           ],
@@ -477,7 +477,7 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
               builder: (context) => CustomBuscardorFuzzy(
                     codigoCategoria: codigoCategoria,
                     numEmpresa: 'nutresa',
-                    nombreCategoria: "Productos más vendidos",
+                    nombreCategoria: "Producto más vendidos",
                     tipoCategoria: 2,
                     codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
