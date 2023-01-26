@@ -16,6 +16,7 @@ class DatosCliente {
     this.telefono,
     this.telefonoWhatsapp,
     this.condicion_pago,
+    this.pais,
   });
 
   String? codigo;
@@ -27,6 +28,7 @@ class DatosCliente {
   String? telefono;
   String? telefonoWhatsapp;
   String? condicion_pago;
+  String? pais;
 
   factory DatosCliente.fromJson(Map<String, dynamic> json) => DatosCliente(
         codigo: json["codigo"],
@@ -38,6 +40,7 @@ class DatosCliente {
         telefono: json["telefono"],
         telefonoWhatsapp: json["telefonowhatsapp"],
         condicion_pago: json["condicion_pago"],
+        pais: json["Pais"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +53,6 @@ class DatosCliente {
         "telefono": telefono,
         "telefonowhatsapp": telefonoWhatsapp,
         "condicion_pago": condicion_pago,
+        "Pais" : pais
       };
 }

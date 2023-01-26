@@ -126,6 +126,9 @@ class MisProveedores extends StatelessWidget {
     if (empresa == 'MEALS') {
       return prefs.codigomeals.toString();
     }
+    if (empresa == 'POZUELO') {
+      return prefs.codigopozuelo.toString();
+    }
     return '';
   }
 }

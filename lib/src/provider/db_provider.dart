@@ -685,9 +685,9 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
 
     try {
       final sql = await db.rawQuery('''
-      SELECT fa.empresa, fa.nombrecomercial, la.descripcion, la.telefonovendedor, 
-      la.nombrevendedor, la.codigovendedor, fa.ico FROM fabricante as fa 
-      JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
+      SELECT fa.empresa, fa.nombrecomercial, la.descripcion, la.Indicativo, la.telefonovendedor,
+la.nombrevendedor, la.codigovendedor, fa.ico FROM fabricante as fa
+JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     ''');
 
       return sql.isNotEmpty

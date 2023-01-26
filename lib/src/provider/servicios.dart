@@ -364,6 +364,7 @@ class Servicies {
         "Iva": listaPedido[i].iva,
         "Observacion": 'Prueba',
         "Posicion": i,
+        "Pais": prefs.paisUsuario,
         "Precio": listaPedido[i].precio,
         "ValorDescuento":
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
@@ -516,12 +517,14 @@ class Servicies {
       );
       print(response.body);
       print([
+        "datos enviados",
         "DeviceId $idUnicoMovil",
         "DeviceType $plataforma",
         "Nit $codUsuario",
         "Token $token",
       ]);
-      print(jsonDecode(response.body));
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
         return Validacion.fromJson(jsonDecode(response.body));
       } else {
@@ -591,6 +594,7 @@ class Servicies {
           "Valor": "${encuesta.valor}",
           "Parametro": "$respuesta", //respuesta
           "CodigoCliente": "${prefs.codCliente}",
+          "pais": prefs.paisUsuario,
           "NitCliente": "${prefs.codClienteLogueado}",
         }),
       );
@@ -628,7 +632,7 @@ class Servicies {
           "telefono": "$telefono",
         }),
       );
-
+      print('respuesta ${response.statusCode}');
       if (response.statusCode == 200) {
         return response.statusCode;
       } else {
@@ -660,6 +664,7 @@ class Servicies {
 
       final url;
       url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/crearCondiciones');
+      print("url de tyc $url");
 
       final response = await http.post(url,
           headers: <String, String>{
@@ -667,13 +672,14 @@ class Servicies {
           },
           body: jsonEncode(<String, String>{
             "nit": "${prefs.codClienteLogueado}",
-            "fecha": "$currentDate"
+            "fecha": "$currentDate",
+            "pais": "${prefs.paisUsuario}"
           }));
+      print("estado envio ${response.statusCode}");
       if (response.statusCode == 200) {
-        print("true----------------------validacion correcta");
+        print("tyc enviados correctamente");
         return true;
       } else {
-        print("false----------------------validacion incorrecta");
         return false;
       }
     } catch (err) {
@@ -696,7 +702,7 @@ class Servicies {
           body: jsonEncode(<String, String>{
             "CCUP": "${prefs.codigoUnicoPideky}",
             "fecha": "$currentDate",
-            "pais": "CO"
+            "pais": "${prefs.paisUsuario}"
           }));
       if (response.statusCode == 200) {
         return true;

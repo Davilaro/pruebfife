@@ -38,8 +38,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   Widget build(BuildContext context) {
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     final cartProvider = Provider.of<CarroModelo>(context);
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
 
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
@@ -80,7 +78,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                       ),
                       Container(
                         height: Get.height * 0.45,
-                        child: _cargarInformacionInferior(format, cartProvider),
+                        child: _cargarInformacionInferior(cartProvider),
                       ),
                     ],
                   ),
@@ -91,7 +89,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
         ));
   }
 
-  _cargarInformacionInferior(format, cartProvider) {
+  _cargarInformacionInferior(cartProvider) {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
@@ -105,14 +103,13 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
           }
           return ListView(
             scrollDirection: Axis.horizontal,
-            children:
-                _cargarDatos(context, snapshot.data, format, cartProvider),
+            children: _cargarDatos(context, snapshot.data, cartProvider),
           );
         });
   }
 
-  List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaProductos,
-      format, cartProvider) {
+  List<Widget> _cargarDatos(
+      BuildContext context, List<dynamic> listaProductos, cartProvider) {
     final List<Widget> opciones = [];
 
     if (listaProductos.length == 0) {

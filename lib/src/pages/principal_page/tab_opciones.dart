@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -170,16 +172,21 @@ class _HomePageBody extends StatelessWidget {
           if (provider.getIisLocal != 0) {
             //FIREBASE: Llamamos el evento select_content
             TagueoFirebase().sendAnalityticSelectContent(
-                "Footer", "Catalogo", "", "", "Catalogo", 'MainActivity');
+                "Footer",
+                "${S.current.catalog}",
+                "",
+                "",
+                "${S.current.catalog}",
+                'MainActivity');
             //UXCam: Llamamos el evento selectFooter
-            UxcamTagueo().selectFooter('Catalogo');
+            UxcamTagueo().selectFooter('${S.current.catalog}');
             onClickVerMas('Categorías', provider);
           }
           return TabCategoriaMarca();
         }
 
       case 2:
-        return PedidoRapido();
+        return PedidoSugeridoPage();
 
       case 3:
         return HistoricoPedidos();
