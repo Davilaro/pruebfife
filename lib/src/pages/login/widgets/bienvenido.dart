@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
@@ -34,12 +35,12 @@ final prefs = new Preferencias();
 late BuildContext contextPrincipal;
 late bool isChecked = false;
 
-const htmlNumeroCel = """ 
- <FONT SIZE=4>Deseas activarte con tu </FONT><FONT SIZE=4 COLOR="#43398E"><b>número de celular</b></FONT><FONT SIZE=4> a través de un </FONT><FONT SIZE=4 COLOR="#43398E"><b>mensaje de texto.</b></FONT> 
+var htmlNumeroCel = """ 
+ <FONT SIZE=4>${S.current.get_active_with_your} </FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.cell_phone_number}</b></FONT><FONT SIZE=4>${S.current.or_via_text_message}</FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.text_message}</b></FONT> 
 """;
 
-const htmlNumeroMensaje = """ 
-<FONT SIZE=4> O activate con tu </FONT><FONT SIZE=4 COLOR="#43398E"><b>correo electrónico.</b></FONT> 
+var htmlNumeroMensaje = """ 
+<FONT SIZE=4> ${S.current.text_your_email_address} </FONT><FONT SIZE=4 COLOR="#43398E"><b>${S.current.email_address}</b></FONT> 
 """;
 
 class Bienvenido extends StatefulWidget {
@@ -128,14 +129,14 @@ class _BienvenidoState extends State<Bienvenido> {
               child: ListView(
                 children: [
                   Text(
-                    '¡Bienvenido a Pideky!',
+                    S.current.welcome_pideky,
                     style: diseno_dialog_titulos(),
                     textAlign: TextAlign.center,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Text(
-                      'Antes de disfrutar nuestra experiencia de compra debes activarte.',
+                      S.current.secod_welcome_pideky,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -350,7 +351,7 @@ class _BienvenidoState extends State<Bienvenido> {
                     child: SingleChildScrollView(
                       child: Column(children: <Widget>[
                         Text(
-                          'O deseas ir al',
+                          S.current.you_want_to_go,
                           style: TextStyle(fontSize: 10),
                         ),
                         GestureDetector(
@@ -364,7 +365,7 @@ class _BienvenidoState extends State<Bienvenido> {
                             )
                           },
                           child: Text(
-                            ' registro manual',
+                            ' ${S.current.manual_registration}',
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontSize: 10),
@@ -401,7 +402,7 @@ class _BienvenidoState extends State<Bienvenido> {
     } else {
       if (_controllerCorreoMsm.text == '') {
       } else if (!EmailValidator.validate(_controllerCorreoMsm.text)) {
-        mostrarAlert(context2!, 'El email no cumple con el formato', null);
+        mostrarAlert(context2!, S.current.the_email_does_not, null);
       } else {
         showDialog(
             context: context2!,
@@ -443,7 +444,7 @@ class _BienvenidoState extends State<Bienvenido> {
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           child: SingleChildScrollView(
                             child: Column(children: <Widget>[
-                              Text('O deseas ir al '),
+                              Text(S.current.you_want_to_go),
                               GestureDetector(
                                 onTap: () => {
                                   Navigator.of(context).pop(),
@@ -455,7 +456,7 @@ class _BienvenidoState extends State<Bienvenido> {
                                   )
                                 },
                                 child: Text(
-                                  ' registro manual',
+                                  ' ${S.current.manual_registration}',
                                   style: TextStyle(
                                       decoration: TextDecoration.underline),
                                 ),
@@ -511,15 +512,12 @@ class _BienvenidoState extends State<Bienvenido> {
         //UXCam: Llamamos el evento sendActivationCode
         UxcamTagueo().sendActivationCode(val == 1 ? 'sms' : 'correo', 'Error');
         await prEnviarCorreo.hide();
-        mostrarAlert(
-            context2,
-            'No fue posible enviar el mensaje, por favor intente nuevamente ${estado.mensaje}',
-            null);
+        mostrarAlert(context2,
+            S.current.unable_send_text_message2(estado.mensaje), null);
       }
     } catch (e) {
       await prEnviarCorreo.hide();
-      mostrarAlert(
-          context2, 'No fue posible enviar el mensaje de texto $e', null);
+      mostrarAlert(context2, S.current.unable_send_text_message(e), null);
     }
   }
 
@@ -530,7 +528,8 @@ class _BienvenidoState extends State<Bienvenido> {
       builder: (BuildContext context) {
         bool isChequet = false;
         bool isChequet1 = false;
-        var destino = this.val == 1 ? "SMS" : "correo electrónico";
+        var destino =
+            this.val == 1 ? S.current.text_sms : S.current.email_address;
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -561,7 +560,7 @@ class _BienvenidoState extends State<Bienvenido> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                         child: Text(
-                          'Activar Cuenta',
+                          S.current.activate_user,
                           style: diseno_dialog_titulos(),
                           textAlign: TextAlign.center,
                         ),
@@ -569,7 +568,7 @@ class _BienvenidoState extends State<Bienvenido> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(
-                          'Por favor ingresa el código de activacion, enviado por $destino a tu número seleccionado:',
+                          S.current.please_enter_activation_cod(destino),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -612,7 +611,7 @@ class _BienvenidoState extends State<Bienvenido> {
                             ),
                             Expanded(
                                 child: Text(
-                              'Acepto política de privacidad',
+                              S.current.i_accept_privacy_policy,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 12,
@@ -641,7 +640,7 @@ class _BienvenidoState extends State<Bienvenido> {
                             ),
                             Expanded(
                                 child: Text(
-                                    'Acepto política de tratamiento de datos',
+                                    S.current.i_accept_processing_policy,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         fontSize: 12,
@@ -695,8 +694,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
   void _cargandoCodigoVerificacion(int codigo, String codVerificado) async {
     prEnviarCodigo = ProgressDialog(context);
-    prEnviarCodigo.style(
-        message: 'Estamos validando el código para activar tu cuenta.');
+    prEnviarCodigo.style(message: S.current.we_validating_code_activate);
     prEnviarCodigo = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
@@ -719,10 +717,7 @@ class _BienvenidoState extends State<Bienvenido> {
       //FIREBASE: Llamamos el evento activation_code_error
       TagueoFirebase().sendAnalityticsActivationCodeError("ERROR");
       await prEnviarCodigo.hide();
-      mostrarAlert(
-          context2!,
-          'El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente. ',
-          null);
+      mostrarAlert(context2!, S.current.the_verification_code_incorrect, null);
     }
   }
 
@@ -745,12 +740,12 @@ class _BienvenidoState extends State<Bienvenido> {
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Text('¡Registro Exitoso!'),
+                      child: Text(S.current.registration_successful),
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Text(
-                        'Se ha realizado correctamente el registro de tu cuenta pideky a continuación selecciona una sucursal para comenzar a realizar todos pedidos.',
+                        S.current.pideky_account_successfully_registered,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -781,7 +776,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
   _diloagCargando(BuildContext context) async {
     pr = ProgressDialog(context);
-    pr.style(message: 'Cargando sucursales');
+    pr.style(message: S.current.loading_branches);
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
@@ -810,7 +805,7 @@ class _BienvenidoState extends State<Bienvenido> {
       );
     } else {
       await pr.hide();
-      mostrarAlert(context, 'Error al obtener información', null);
+      mostrarAlert(context, S.current.error_information, null);
       return false;
     }
 

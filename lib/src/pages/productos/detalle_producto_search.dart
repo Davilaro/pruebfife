@@ -71,8 +71,13 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
+    var locale = Intl().locale;
+
+    var format = locale.toString() != 'es_CO'
+        ? locale.toString() == 'es_CR'
+            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+            : NumberFormat.simpleCurrency(locale: locale.toString())
+        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
 
     _controllerCantidadProducto.text = isAgotado
         ? '0'
@@ -80,7 +85,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
             ? '1'
             : cargoConfirmar.controllerCantidadProducto.value;
 
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(

@@ -1,11 +1,15 @@
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/pages/login/widgets/bienvenido.dart';
@@ -13,11 +17,14 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/db_provider_helper.dart';
 
 final TextEditingController _controllerUser = TextEditingController();
 final TextEditingController _controllerCorreo = TextEditingController();
@@ -77,6 +84,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     contextPrincipal = context;
+
     final provider = Provider.of<DatosListas>(context);
 
     return Scaffold(
@@ -158,7 +166,7 @@ class _LoginState extends State<Login> {
         style: TextStyle(color: HexColor("#41398D"), fontSize: 15),
         decoration: InputDecoration(
             fillColor: HexColor("#41398D"),
-            hintText: 'NIT sin dígito de verificación',
+            hintText: S.current.login_placeholder,
             hintStyle: TextStyle(
               color: HexColor("#41398D"),
             ),
@@ -239,6 +247,8 @@ class _LoginState extends State<Login> {
     prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
     print('validacion loguin ${prefs.codigoUnicoPideky}');
     prefs.codClienteLogueado = nit;
+    // ignore: unnecessary_statements
+    PedidoSugeridoController.userLog.value = 1;
 
     if (respuesta.length > 0) {
       await pr.hide();
@@ -315,9 +325,10 @@ class _LoginState extends State<Login> {
       await prValidar.hide();
 
       codigoRespuesta = respues.codigo;
-
       prefs.codActivacionLogin = respues.codigo;
       prefs.codClienteLogueado = _controllerUser.text;
+      prefs.paisUsuario = respues.pais;
+
       Navigator.push(
         context,
         MaterialPageRoute(

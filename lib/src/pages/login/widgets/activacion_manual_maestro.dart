@@ -1,3 +1,4 @@
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/widgets/activacion_manual_novedad.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -90,14 +91,14 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
               child: ListView(
                 children: [
                   Text(
-                    'Activación manual',
+                    S.current.manual_activation,
                     style: diseno_dialog_titulos(),
                     textAlign: TextAlign.center,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Text(
-                      'Ingresa tu código maestro para realizar la activación manual',
+                      S.current.enter_your_master_code,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -129,7 +130,7 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
           textAlign: TextAlign.center,
           decoration: InputDecoration(
             fillColor: HexColor("#41398D"),
-            hintText: 'Código maestro',
+            hintText: S.current.master_code,
             hintStyle: TextStyle(
               color: HexColor("#41398D"),
             ),
@@ -201,7 +202,7 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
       //UXCam: Llamamos el evento sendActivationCode
       UxcamTagueo().manualActivation(_controllerCorreo.text, 'erróneo');
       prEnviarCorreo.hide();
-      mostrarAlert(contex_dos, 'Error obteniendo código', null);
+      mostrarAlert(contex_dos, S.current.error_code, null);
     }
   }
 

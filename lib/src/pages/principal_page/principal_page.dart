@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -32,6 +33,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+
 final prefs = new Preferencias();
 
 bool limpiar = false;
@@ -63,6 +65,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
+    
   }
 
   @override
@@ -167,7 +170,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
                                       Container(
                                         width: Get.width * 0.7,
                                         child: AutoSizeText(
-                                          'Imperdibles para $tituloImperdible',
+                                          // 'Imperdibles para $tituloImperdible',
+                                          '${S.current.imperdible} $tituloImperdible',
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 14.0,
@@ -292,7 +296,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                               Container(
                                 width: Get.width * 0.7,
                                 child: Text(
-                                  'Categorías destacadas para ti ',
+                                  S.current.categories_for_you,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       color: HexColor("#41398D"),

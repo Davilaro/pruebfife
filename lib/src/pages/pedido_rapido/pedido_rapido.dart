@@ -12,19 +12,16 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-import '../../widget/acciones_carrito_bart.dart';
+import '../../../_pideky/domain/producto/service/producto_service.dart';
+import '../../../_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import '../../controllers/cambio_estado_pedido.dart';
 import 'expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
@@ -41,7 +38,8 @@ class PedidoRapido extends StatefulWidget {
 @override
 class _PedidoRapidoState extends State<PedidoRapido> {
   final controllerHistorico = Get.find<ControllerHistorico>();
-
+  final controlador = Get.find<CambioEstadoProductos>();
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
   @override
   void initState() {
     super.initState();
@@ -49,8 +47,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "PedidoRapido", "", "", "PedidoRapido", 'MainActivity');
-    //UXCam: Llamamos el evento selectFooter
-    UxcamTagueo().selectFooter('Pedido Rápido');
+
     controllerHistorico.inicializarController();
   }
 
@@ -60,65 +57,34 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   @override
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
-    FlutterUxcam.tagScreenName('QuickOrderPage');
+    FlutterUxcam.tagScreenName('RepeatOrderPage');
     CarroModelo cartProvider = Provider.of<CarroModelo>(context);
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: ConstantesColores.color_fondo_gris,
-          title: TituloPideky(size: size),
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-            child: Container(
-              width: 100,
-              child: new IconButton(
-                icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-                onPressed: () => {
-                  //UXCam: Llamamos el evento clickSoport
-                  UxcamTagueo().clickSoport(),
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Soporte(
-                              numEmpresa: 1,
-                            )),
-                  ),
-                },
-              ),
-            ),
-          ),
-          elevation: 0,
-          actions: <Widget>[
-            BotonActualizar(),
-            AccionNotificacion(),
-            AccionesBartCarrito(esCarrito: false),
-          ],
-        ),
         body: Container(
-          color: ConstantesColores.color_fondo_gris,
-          child: RefreshIndicator(
-            color: ConstantesColores.azul_precio,
-            backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
-            onRefresh: () async {
-              await LogicaActualizar().actualizarDB();
+      color: ConstantesColores.color_fondo_gris,
+      child: RefreshIndicator(
+        color: ConstantesColores.azul_precio,
+        backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
+        onRefresh: () async {
+          await LogicaActualizar().actualizarDB();
 
-              Navigator.pushReplacementNamed(
-                context,
-                'tab_opciones',
-              ).timeout(Duration(seconds: 3));
-              return Future<void>.delayed(const Duration(seconds: 3));
-            },
-            child: SingleChildScrollView(
-                child: _ultimaOrden(size, cartProvider, providerDatos)),
-          ),
-        ));
+          Navigator.pushReplacementNamed(
+            context,
+            'tab_opciones',
+          ).timeout(Duration(seconds: 3));
+          return Future<void>.delayed(const Duration(seconds: 3));
+        },
+        child: SingleChildScrollView(
+            child: _ultimaOrden(size, cartProvider, providerDatos)),
+      ),
+    ));
   }
 
   Widget _tabs(size) {
     return Container(
         width: size.width * 0.9,
-        margin: const EdgeInsets.only(bottom: 0, top: 20),
         child: Table(
           columnWidths: {
             0: FlexColumnWidth(4),
@@ -127,17 +93,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
           },
           children: [
             TableRow(children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  'Pedido Rápido',
-                  style: TextStyle(
-                      color: HexColor("#43398E"),
-                      fontSize: 20,
-                      fontFamily: "monserrat",
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
               Visibility(
                   visible: false,
                   child: Column(
@@ -225,33 +180,39 @@ class _PedidoRapidoState extends State<PedidoRapido> {
             return Center(
                 child: Container(
                     width: size.width,
-                    padding: EdgeInsets.only(bottom: 20),
+                    padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                     child: Column(
                       children: [
                         _tabs(size),
                         _buscador(size),
                         _selecciona(size),
                         Container(
+                          padding: EdgeInsets.only(bottom: 45),
                           height: size.height * 0.62,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: ListView.builder(
                             itemCount: datos?.length,
                             itemBuilder: (BuildContext context, int position) {
-                              return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ),
-                                  width: size.width * 0.9,
-                                  margin: EdgeInsets.only(
-                                      bottom: 14, left: 10, right: 10, top: 5),
-                                  child: ExpansionCardLast(
-                                      historico: datos![position],
-                                      cartProvider: cartProvider,
-                                      providerDatos: providerDatos));
+                              return Column(
+                                children: [
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                      width: size.width * 0.9,
+                                      margin: EdgeInsets.only(top: 5),
+                                      child: ExpansionCardLast(
+                                          historico: datos![position],
+                                          cartProvider: cartProvider,
+                                          providerDatos: providerDatos)),
+                                  SizedBox(
+                                    height: 5,
+                                  )
+                                ],
+                              );
                             },
                           ),
                         ),
@@ -265,11 +226,11 @@ class _PedidoRapidoState extends State<PedidoRapido> {
 
   Widget _selecciona(Size size) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20, top: 14, right: 20, left: 20),
+      padding: EdgeInsets.only(bottom: 20, top: 14),
       alignment: Alignment.center,
       child: Text(
         "Seleccionar una de tus últimas órdenes para hacer un pedido rápido.",
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         style: TextStyle(
           fontSize: 15,
           fontFamily: "RoundedMplus1c-Medium.ttf",

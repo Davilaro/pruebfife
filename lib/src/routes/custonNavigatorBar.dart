@@ -1,3 +1,4 @@
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -33,31 +34,31 @@ class CustonNavigatorBar extends StatelessWidget {
             icon: provider.selectOptionMenu == 0
                 ? SvgPicture.asset('assets/image/home_img.svg')
                 : SvgPicture.asset('assets/image/home_img_norm.svg'),
-            label: 'Inicio',
+            label: S.current.home,
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 1
                 ? SvgPicture.asset('assets/image/catalogo_img.svg')
                 : SvgPicture.asset('assets/image/catalogo_img_norm.svg'),
-            label: 'Catálogo',
+            label: S.current.catalog,
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 2
                 ? SvgPicture.asset('assets/image/pedido_rapido_img.svg')
                 : SvgPicture.asset('assets/image/pedido_rapido_img_norm.svg'),
-            label: 'Pedido rápido',
+            label: S.current.suggested_order,
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 3
                 ? SvgPicture.asset('assets/image/historico_img.svg')
                 : SvgPicture.asset('assets/image/historico_img_norm.svg'),
-            label: 'Histórico',
+            label: S.current.history,
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 4
                 ? SvgPicture.asset('assets/image/mi_negocio_img.svg')
                 : SvgPicture.asset('assets/image/mi_negocio_norm.svg'),
-            label: 'Mi negocio',
+            label: S.current.my_business,
           ),
         ]);
   }

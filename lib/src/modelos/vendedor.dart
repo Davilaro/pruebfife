@@ -11,6 +11,7 @@ class Vendedor {
     this.nombreComercial,
     this.nombreEmpresa,
     this.icono,
+    this.indicativo,
     this.codigoVendedor,
   });
 
@@ -19,6 +20,7 @@ class Vendedor {
   String? nombreComercial;
   String? nombreEmpresa;
   String? icono;
+  String? indicativo;
   String? codigoVendedor;
 
   factory Vendedor.fromJson(Map<String, dynamic> json) => Vendedor(
@@ -27,6 +29,7 @@ class Vendedor {
         nombreComercial: json["nombrecomercial"],
         nombreEmpresa: json["empresa"],
         icono: json["ico"],
+        indicativo: json["Indicativo"],
         codigoVendedor: json["codigovendedor"],
       );
 
@@ -35,6 +38,7 @@ class Vendedor {
         "telefonovendedor": telefono,
         "nombrecomercial": nombreComercial,
         "empresa": nombreEmpresa,
+        "Indicativo": indicativo,
         "codigovendedor": codigoVendedor,
       };
 }

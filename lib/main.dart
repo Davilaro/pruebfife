@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -61,7 +62,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _validarKeyUXCam();
-
+    // Intl.defaultLocale = 'es_CO';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -73,15 +74,19 @@ class _MyAppState extends State<MyApp> {
         child: OverlaySupport.global(
           child: GetMaterialApp(
             initialBinding: InitialBindings(),
+            locale: Locale('es', 'CO'),
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
+              S.delegate,
             ],
-            supportedLocales: [
-              const Locale('en', ''), // English,
-              const Locale('es_CO', ''), // español,
-            ],
+            supportedLocales: S.delegate.supportedLocales,
+            // supportedLocales: [
+            //   const Locale('en', ''), // English,
+            //   const Locale('es', 'CO'), // español,
+            //   const Locale('es', 'CR'),
+            // ],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',
