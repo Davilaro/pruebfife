@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         child: OverlaySupport.global(
           child: GetMaterialApp(
             initialBinding: InitialBindings(),
+            locale: Locale('es', 'CO'),
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
