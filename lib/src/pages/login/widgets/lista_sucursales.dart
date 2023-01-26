@@ -224,7 +224,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         ? Locale('es', elemento.pais)
         : elemento.pais == 'CO'
             ? Locale('es', 'CO')
-            : Locale('en', ''));
+            : Locale('es', 'CO'));
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');

@@ -95,7 +95,7 @@ class _SplashState extends State<Splash> {
               ? Locale('es', prefs.paisUsuario)
               : prefs.paisUsuario == 'CO'
                   ? Locale('es', 'CO')
-                  : Locale('en', ''));
+                  : Locale('es', 'CO'));
           UxcamTagueo().validarTipoUsario();
         }
         print('hola pais ${Intl.defaultLocale}');
