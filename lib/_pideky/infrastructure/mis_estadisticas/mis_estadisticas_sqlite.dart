@@ -10,9 +10,10 @@ class EstadisticasRepositorySqlite extends IEstadisticaRepository {
       SELECT t.nit codigo, t.marca descripcion, t.cantidad cantidad, t.CantidadP posicion, m.ico imagen
 FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion DESC, cantidad DESC
     ''');
-
+      print('top marcas ${sql.toList()}');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {
+      print('Error en top de marcas $e');
       return [];
     }
   }
@@ -24,9 +25,10 @@ FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion
       SELECT nit codigo, subcategoria descripcion, cantidad cantidad, CantidadP posicion
 FROM TopSubcategorias order by posicion DESC, cantidad DESC
     ''');
-
+      print('top subcategorias ${sql.toList()}');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {
+      print('Error en top de subcategorias $e');
       return [];
     }
   }
@@ -35,12 +37,13 @@ FROM TopSubcategorias order by posicion DESC, cantidad DESC
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT t.codigosku codigo, t.nombre descripcion, t.cantidad cantidad, t.cantidadP posicion  
+      SELECT t.codigosku codigo, p.nombre descripcion, t.cantidad cantidad, t.cantidadP posicion  
       FROM TopProductos t INNER JOIN Producto p ON t.codigosku = p.codigo order by posicion ASC
     ''');
-
+      print('top productos ${sql.toList()}');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {
+      print('Error en top de productos $e');
       return [];
     }
   }

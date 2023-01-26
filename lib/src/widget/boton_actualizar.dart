@@ -48,7 +48,7 @@ class _BotonActualizarState extends State<BotonActualizar> {
 
 Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
-  final controller = Get.find<PedidoSugeridoController>();
+  final controllerPedidoSugerido = Get.find<PedidoSugeridoController>();
   final controllerNequi = Get.find<MisPagosNequiController>();
   isActualizando.value = true;
   if (isActualizando.value) {
@@ -56,10 +56,9 @@ Future<void> actualizarPagina(
   }
   await LogicaActualizar().actualizarDB();
   isActualizando.value = false;
-  controller.listaProductosPorFabricante.clear();
-  controller.initController();
-  controllerNequi.listaPagosPendientes.clear();
-  controllerNequi.listaPagosRealizados.clear();
+  controllerPedidoSugerido.clearList();
+  controllerPedidoSugerido.initController();
+  controllerNequi.clearList();
   controllerNequi.initData();
   if (isActualizando.value == false) {
     Navigator.pop(context);

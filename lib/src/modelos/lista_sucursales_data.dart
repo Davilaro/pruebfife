@@ -25,6 +25,8 @@ class ListaSucursalesData {
       this.codigomeals,
       this.codigonutresa,
       this.codigozenu,
+      this.codigopozuelo,
+      this.pais,
       this.codigoUnicoPideky,
       this.bloqueado,
       this.codigopadrepideky});
@@ -40,9 +42,11 @@ class ListaSucursalesData {
   String? codigonutresa;
   String? codigozenu;
   String? codigomeals;
+  String? codigopozuelo;
+  String? pais;
+  String? bloqueado;
   String? codigopadrepideky;
   String? codigoUnicoPideky;
-  String? bloqueado;
 
   factory ListaSucursalesData.fromJson(Map<String, dynamic> json) =>
       ListaSucursalesData(
@@ -56,10 +60,12 @@ class ListaSucursalesData {
         codigomeals: json["codigomeals"],
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
+        codigopozuelo: json["codigopozuelo"],
         codigoUnicoPideky: json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"],
         codigopadrepideky:
             json["CodigoPadrePideky"] == null ? "" : json["CodigoPadrePideky"],
+        pais: json["Pais"] == null ? "" : json["Pais"],
         fabricantes: List<Fabricantes>.from(
             json["fabricantes"].map((x) => Fabricantes.fromJson(x))),
       );
@@ -76,6 +82,8 @@ class ListaSucursalesData {
         "codigomeals": codigomeals,
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
+        "codigopozuelo": codigopozuelo,
+        "Pais": pais,
         "CodigoUnicoPideky": codigoUnicoPideky,
         "Bloqueado": bloqueado,
         "CodigoPadrePideky": codigopadrepideky,

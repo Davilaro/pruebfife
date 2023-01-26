@@ -113,18 +113,20 @@ class PedidoSugeridoController extends GetxController
     print("se volvieron a cargar los datos de pedido suerido ---------------");
   }
 
+  clearList() {
+    listaProductosPorFabricante.clear();
+  }
+
   @override
   void onInit() {
-    controller = TabController(length: 2, vsync: this, initialIndex: 0);
-    initController();
     super.onInit();
+    controller = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
   void onClose() {
-    controller.dispose();
-
     super.onClose();
+    controller.dispose();
   }
 
   static PedidoSugeridoController get findOrInitialize {

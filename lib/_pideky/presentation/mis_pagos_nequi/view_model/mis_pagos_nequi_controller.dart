@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
 import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:get/get.dart';
 
 class MisPagosNequiController extends GetxController {
@@ -10,10 +11,14 @@ class MisPagosNequiController extends GetxController {
   RxList listaPagosRealizados = [].obs;
   RxList listaPagosPendientes = [].obs;
   var listaPagos = [];
+  final prefs = new Preferencias();
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
-    numeroCelular.value = listaPagos.first.celular;
+    if(listaPagos.length != 0) {
+      numeroCelular.value =
+        listaPagos.first.celular != "" ? listaPagos.first.celular : "";
+    }
     agruparListas(listaPagos);
 
     print(numeroCelular);
@@ -35,10 +40,9 @@ class MisPagosNequiController extends GetxController {
     obtenerPagosNequi();
   }
 
-  @override
-  void onInit() {
-    initData();
-    super.onInit();
+  clearList() {
+    listaPagosPendientes.clear();
+    listaPagosRealizados.clear();
   }
 
   static MisPagosNequiController get findOrInitialize {
@@ -49,5 +53,16 @@ class MisPagosNequiController extends GetxController {
           MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
       return Get.find<MisPagosNequiController>();
     }
+  }
+
+  @override
+  void onInit() {
+    initData();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

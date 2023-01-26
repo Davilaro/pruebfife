@@ -80,6 +80,7 @@ class PushNotificationServer {
       //Notificaciones de Firebase
       title = message.notification?.title;
       body = message.notification?.body;
+      print(' si entre');
     }
 
     showOverlayNotification((context) {

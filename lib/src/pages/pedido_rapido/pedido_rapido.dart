@@ -19,13 +19,9 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-import '../../../_pideky/domain/producto/model/producto.dart';
 import '../../../_pideky/domain/producto/service/producto_service.dart';
 import '../../../_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import '../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../controllers/cambio_estado_pedido.dart';
-import '../../modelos/historico.dart';
-import '../../provider/db_provider_helper.dart';
 import 'expansion_card_last.dart';
 
 final TextEditingController _filtroController = TextEditingController();
@@ -51,8 +47,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "PedidoRapido", "", "", "PedidoRapido", 'MainActivity');
-    //UXCam: Llamamos el evento selectFooter
-    UxcamTagueo().selectFooter('Pedido Rápido');
+
     controllerHistorico.inicializarController();
   }
 
@@ -62,7 +57,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   @override
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
-    FlutterUxcam.tagScreenName('QuickOrderPage');
+    FlutterUxcam.tagScreenName('RepeatOrderPage');
     CarroModelo cartProvider = Provider.of<CarroModelo>(context);
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
@@ -213,7 +208,6 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                                           historico: datos![position],
                                           cartProvider: cartProvider,
                                           providerDatos: providerDatos)),
-                                  
                                   SizedBox(
                                     height: 5,
                                   )

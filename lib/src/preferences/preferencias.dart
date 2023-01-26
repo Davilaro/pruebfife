@@ -18,6 +18,14 @@ class Preferencias {
     _prefs.setString('usuarioRazonSocial', value);
   }
 
+  get paisUsuario {
+    return _prefs.getString("paisUsuario") ?? null;
+  }
+
+  set paisUsuario(dynamic value) {
+    _prefs.setString("paisUsuario", value);
+  }
+
   get usuarioLogueado {
     return _prefs.getString('usuarioLogueado') ?? null;
   }
@@ -133,6 +141,14 @@ class Preferencias {
 
   set codigozenu(dynamic value) {
     _prefs.setString('codigozenu', value);
+  }
+
+  get codigopozuelo {
+    return _prefs.getString('codigopozuelo') ?? '';
+  }
+
+  set codigopozuelo(dynamic value) {
+    _prefs.setString('codigopozuelo', value);
   }
 
   get codigopadrepideky {

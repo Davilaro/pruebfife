@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -39,10 +40,16 @@ class CardProductCustom extends StatefulWidget {
 class _CardProductCustomState extends State<CardProductCustom> {
   @override
   Widget build(BuildContext context) {
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
+    var locale = Intl().locale;
+
+    var format = locale.toString() != 'es_CO'
+        ? locale.toString() == 'es_CR'
+            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+            : NumberFormat.simpleCurrency(locale: locale.toString())
+        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
     NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
+    print('moneda $format --- ${locale}');
     return Card(
         shape: RoundedRectangleBorder(
             side: new BorderSide(color: Colors.white),

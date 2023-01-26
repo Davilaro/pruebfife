@@ -47,8 +47,12 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     FlutterUxcam.tagScreenName('ConfirmOrderPage');
     cartProvider = Provider.of<CarroModelo>(context);
     final size = MediaQuery.of(context).size;
-    Locale locale = Localizations.localeOf(context);
-    var format = NumberFormat.simpleCurrency(locale: locale.toString());
+    var locale = Intl().locale;
+    var format = locale.toString() != 'es_CO'
+        ? locale.toString() == 'es_CR'
+            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+            : NumberFormat.simpleCurrency(locale: locale.toString())
+        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
     _context2 = context;
 
     return Scaffold(

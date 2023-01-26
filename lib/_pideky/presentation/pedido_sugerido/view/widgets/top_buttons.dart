@@ -17,7 +17,7 @@ class TopButtons extends StatelessWidget {
           controller: controller.controller,
           onTap: (index) {
             controller.cambiarTab(index);
-            print(index);
+            print('tap$index');
           },
           tabs: List.generate(
               2,

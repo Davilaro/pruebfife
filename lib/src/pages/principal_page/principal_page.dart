@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -32,13 +33,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../../../_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
-import '../../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import '../../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
-import '../../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
-import '../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
-import '../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
-import '../../provider/db_provider_helper.dart';
 
 final prefs = new Preferencias();
 
@@ -51,8 +45,6 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
-  final controller = Get.find<PedidoSugeridoController>();
-  final controllerNequi = Get.find<MisPagosNequiController>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
@@ -62,11 +54,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   void initState() {
-    controller.listaProductosPorFabricante.clear();
-    controller.initController();
-    controllerNequi.listaPagosPendientes.clear();
-    controllerNequi.listaPagosRealizados.clear();
-    controllerNequi.initData();
     super.initState();
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
@@ -78,6 +65,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
+    
   }
 
   @override
@@ -182,7 +170,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
                                       Container(
                                         width: Get.width * 0.7,
                                         child: AutoSizeText(
-                                          'Imperdibles para $tituloImperdible',
+                                          // 'Imperdibles para $tituloImperdible',
+                                          '${S.current.imperdible} $tituloImperdible',
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 14.0,
@@ -307,7 +296,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                               Container(
                                 width: Get.width * 0.7,
                                 child: Text(
-                                  'Categorías destacadas para ti ',
+                                  S.current.categories_for_you,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       color: HexColor("#41398D"),

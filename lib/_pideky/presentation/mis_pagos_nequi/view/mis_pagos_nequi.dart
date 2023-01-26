@@ -7,6 +7,7 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -15,12 +16,26 @@ import '../../../../src/widget/boton_actualizar.dart';
 import '../../../../src/widget/imagen_notification.dart';
 import '../../../../src/widget/soporte.dart';
 
-class MisPagosNequiPage extends StatelessWidget {
+class MisPagosNequiPage extends StatefulWidget {
   const MisPagosNequiPage({Key? key}) : super(key: key);
 
   @override
+  State<MisPagosNequiPage> createState() => _MisPagosNequiPageState();
+}
+
+class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
+  final controller = Get.find<MisPagosNequiController>();
+  @override
+  void initState() {
+    super.initState();
+    controller.clearList();
+    controller.initData();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('MyNequiPaymentsPage');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MisPagosNequiController>();
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(

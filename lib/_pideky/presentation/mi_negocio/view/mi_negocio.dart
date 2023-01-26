@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/editarNumero.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/mis_pagos_nequi.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
@@ -12,7 +13,6 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
@@ -48,6 +48,11 @@ class _MiNegocioState extends State<MiNegocio> {
       Future.delayed(Duration(seconds: 0)).then((value) {
         alert.alertCustom(context);
       });
+    }
+    if (prefs.paisUsuario == "CO") {
+      viewModel.pais.value = "CO";
+    } else {
+      viewModel.pais.value = "CR";
     }
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('MyBusinessPage');
@@ -119,13 +124,14 @@ class _MiNegocioState extends State<MiNegocio> {
                     AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.data!.length != 0) {
                     DatosCliente sucursal = snapshot.data![0];
-                    var capturar =
-                        sucursal.telefonoWhatsapp.toString().split('+57');
-                    String telefono = capturar.length > 1
-                        ? capturar[1]
-                        : sucursal.telefonoWhatsapp != null
-                            ? ' ${sucursal.telefonoWhatsapp.toString()}'
-                            : '';
+                    // var capturar =
+                    //     sucursal.telefonoWhatsapp.toString().split('+57');
+                    // String telefono = capturar.length > 1
+                    //     ? capturar[1]
+                    //     : sucursal.telefonoWhatsapp != null
+                    //         ? ' ${sucursal.telefonoWhatsapp.toString()}'
+                    String telefono = sucursal.telefonoWhatsapp.toString();
+                    // : '';
                     return Column(
                       children: [
                         cardStyle(
@@ -184,9 +190,9 @@ class _MiNegocioState extends State<MiNegocio> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(
+                                              AutoSizeText(
                                                 'Número WhatsApp:$telefono',
-                                                maxLines: 4,
+                                                maxLines: 2,
                                                 style: TextStyle(
                                                     fontSize: 11,
                                                     color: ConstantesColores
@@ -371,56 +377,69 @@ class _MiNegocioState extends State<MiNegocio> {
                               thickness: 1,
                               color: HexColor('#EAE8F5'),
                             ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            MisPagosNequiPage())),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 7),
-                                            child: Image.asset(
-                                              'assets/icon/mis_pagos_nequi.png',
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                            ),
+                            Obx(() => viewModel.pais.value == "CO"
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 10),
+                                        child: GestureDetector(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MisPagosNequiPage())),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          right: 7),
+                                                      child: Image.asset(
+                                                        'assets/icon/mis_pagos_nequi.png',
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Text(
+                                                        'Mis Pagos Nequi',
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                size: 30,
+                                                color: ConstantesColores
+                                                    .agua_marina,
+                                              )
+                                            ],
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Mis Pagos Nequi',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            )
+                                      Divider(
+                                        thickness: 1,
+                                        color: HexColor('#EAE8F5'),
+                                      )
+                                    ],
+                                  )
+                                : Container())
                           ],
                         )),
                         cardStyle(

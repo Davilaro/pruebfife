@@ -1,6 +1,6 @@
-import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:get/get.dart';
 
@@ -19,15 +19,20 @@ class PedidoSugeridoPage extends StatefulWidget {
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
+  final controller = Get.find<PedidoSugeridoController>();
   @override
   void initState() {
-    super.initState();
     validarVersionActual(context);
+    controller.initController();
+    //Se define el nombre de la pantalla para UXCAM
+    FlutterUxcam.tagScreenName('SuggestedOrderPage');
+    //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Pedido Sugerido');
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<PedidoSugeridoController>();
     final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 2,

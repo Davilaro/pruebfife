@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -8,14 +9,12 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -111,6 +110,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
 
     listaEmpresas.forEach((element) {
+      print('hola res ${jsonEncode(element)}');
       final widgetTemp = Card(
         color: seleccion == element.codigo
             ? ConstantesColores.azul_precio
@@ -161,7 +161,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   Widget valoresSubTitulo(dynamic element, bool color) {
     return Container(
-      height: Get.height * 0.15,
+      height: Get.height * 0.2,
       width: double.infinity,
       child: Row(
         children: [
@@ -179,15 +179,17 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                         presetFontSizes: [16, 14],
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: AutoSizeText('Télefono: ${element.telefono}',
+                    child: Text('Télefono: ${element.telefono}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
                 Flexible(
+                    flex: 2,
                     child: AutoSizeText('Dirección: ${element.direccion}',
                         overflow: TextOverflow.clip,
+                        maxLines: 2,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: AutoSizeText('Ciudad: ${element.ciudad}',
+                    child: Text('Ciudad: ${element.ciudad}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
               ],
@@ -208,13 +210,21 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     prefs.usuarioRazonSocial = elemento.razonsocial;
-    print('soy el proveedor ${jsonEncode(elemento)}');
     prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
     prefs.codigonutresa = elemento.codigonutresa;
     prefs.codigozenu = elemento.codigozenu;
     prefs.codigomeals = elemento.codigomeals;
+    prefs.codigopozuelo = elemento.codigopozuelo;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
+    prefs.paisUsuario = elemento.pais;
+    //se cambia el idioma
+    print("pais ${prefs.paisUsuario}");
+    S.load(elemento.pais == 'CR'
+        ? Locale('es', elemento.pais)
+        : elemento.pais == 'CO'
+            ? Locale('es', 'CO')
+            : Locale('es', 'CO'));
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');

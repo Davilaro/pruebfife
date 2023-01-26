@@ -8,11 +8,9 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final prefs = new Preferencias();
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class Soporte extends StatefulWidget {
   final int numEmpresa;
@@ -92,6 +90,7 @@ class _SoporteState extends State<Soporte> {
                                 ),
                                 Text(
                                   "Si requiere ayuda con tu proceso de compra, de soporte técnico o necesitas eliminar tu cuenta, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
+                                  // "Si requieres ayuda con tu proceso de compra o soporte técnico, puedes comunicarte a estos canales presionando cualquiera de estas opciones.",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: colorLetter,
@@ -334,7 +333,7 @@ class _SoporteState extends State<Soporte> {
   }
 
   Future<void> lanzarWhatssap(String command) async {
-    var whatappURL_ios = "https://wa.me/+57$command?text=${Uri.parse("Hola")}";
+    var whatappURL_ios = "https://wa.me/+$command?text=${Uri.parse("Hola")}";
 
     //UXCam: Llamamos el evento selectSoport
     UxcamTagueo().selectSoport('Soporte Whatssap');
@@ -349,7 +348,7 @@ class _SoporteState extends State<Soporte> {
         }
       } else {
         // android , web
-        await launch('https://api.whatsapp.com/send?phone=+57$command');
+        await launch('https://api.whatsapp.com/send?phone=+$command');
       }
     } catch (e) {
       print(e);

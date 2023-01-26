@@ -21,8 +21,9 @@ class Constantes {
   String urlPrincipalToken =
       '$dominioPrincipal${APP == PRUEBAS ? 'ApiPideky/api/' : 'ApiPidekiPRD/api/'}';
   String urlImg = 'http://emartwebapi.celuwebdev.com/logo/';
-  String urlImgProductos =
-      'https://sfa.grupochocolates.com/WsCatalogo_Pibox/Pideky/';
+  // String urlImgProductos =
+  //     'https://sfa.grupochocolates.com/WsCatalogo_Pibox/Pideky/';
+  String urlImgProductos = '$dominioPrincipal/WsCatalogo_Pibox/Pideky/';
   String contencion = 'https://emartwebapi.celuwebdev.com/ApiPideki/api/';
   String apiPedidodos =
       'https://emartwebapi.celuwebdev.com/WebApiEmartPruebas/api/Pedido';
