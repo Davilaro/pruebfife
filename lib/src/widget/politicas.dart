@@ -98,7 +98,8 @@ class _PoliticasState extends State<Politicas> {
 
   cargarArchivo() async {
     try {
-      urlPoliticas = await DBProvider.db.consultarDocumentoLegal('Políticas');
+      urlPoliticas =
+          await DBProvider.db.consultarDocumentoLegal('Autorización');
       setState(() {});
     } catch (e) {
       print('Error al cagar archivos $e');
