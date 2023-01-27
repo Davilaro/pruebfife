@@ -23,19 +23,27 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(destino) =>
       "Por favor ingresa el código de activación, enviado por ${destino} a tu número seleccionado:";
 
-  static String m1(e) => "No fue posible enviar el mensaje de texto ${e}";
+  static String m1(activate, destino) =>
+      "Por favor ingresa el código de ${activate}, enviado por ${destino}";
 
-  static String m2(e) =>
+  static String m2(e) => "No fue posible enviar el mensaje de texto ${e}";
+
+  static String m3(e) =>
       "No fue posible enviar el mensaje, por favor intente nuevamente ${e}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accept_terms_conditions": MessageLookupByLibrary.simpleMessage(
+            "Acepto términos y condiciones"),
         "activate": MessageLookupByLibrary.simpleMessage("la activación"),
         "activate_user": MessageLookupByLibrary.simpleMessage("Activar Cuenta"),
         "activate_user_for_buy": MessageLookupByLibrary.simpleMessage(
             "para comprar en Pideky y ver los datos de tu negocio debes activar tu cuenta"),
         "activate_your_user":
             MessageLookupByLibrary.simpleMessage("Activa tu cuenta!"),
+        "authorize_processing_personal_data":
+            MessageLookupByLibrary.simpleMessage(
+                "Autorizo el tratamiento de mis datos personales"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
             "categorias destacadas para tí "),
@@ -76,6 +84,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
         "please_enter_activation_cod": m0,
+        "please_enter_the_code": m1,
+        "policies_accepted": MessageLookupByLibrary.simpleMessage(
+            "Se debe aceptar las políticas"),
         "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
         "registration_successful":
             MessageLookupByLibrary.simpleMessage("¡Registro Exitoso!"),
@@ -94,8 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "El email no cumple con el formato"),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
-        "unable_send_text_message": m1,
-        "unable_send_text_message2": m2,
+        "unable_send_text_message": m2,
+        "unable_send_text_message2": m3,
+        "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(
+            "El código de verificación no puede estar vacío"),
         "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
             "Estamos validando el código para activar tu cuenta."),
         "welcome_pideky":
