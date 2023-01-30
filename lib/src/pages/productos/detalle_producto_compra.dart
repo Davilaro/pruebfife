@@ -67,7 +67,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Aprovecha estas ofertas',
+                        'Imperdibles para tu negocio',
                         style: TextStyle(
                             fontSize: 16.0,
                             color: HexColor("#41398D"),
@@ -93,7 +93,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
-        future: productService.consultarSugerido(),
+        future:
+            productService.cargarProductosInterno(2, '', 0, 1000000, 8, "", ""),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
