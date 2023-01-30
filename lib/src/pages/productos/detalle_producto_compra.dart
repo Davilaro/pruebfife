@@ -94,7 +94,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
         future:
-            productService.cargarProductosInterno(2, '', 0, 1000000, 8, "", ""),
+            productService.cargarProductosInterno(2, '', 0, 1000000, 0, "", ""),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
