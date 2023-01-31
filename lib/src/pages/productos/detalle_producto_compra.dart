@@ -1,5 +1,7 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto.dart';
+import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -8,8 +10,6 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/pages/productos/detalle_producto.dart';
-import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
