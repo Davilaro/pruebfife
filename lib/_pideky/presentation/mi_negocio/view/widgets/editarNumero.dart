@@ -12,7 +12,6 @@ editarNumero(BuildContext context) {
 
   viewModel.controllerInput.text = '$telefonoDefecto ';
 
-  print(telefonoDefecto + '${prefs.paisUsuario}');
   return showDialog(
       context: context,
       builder: (context) => CustomDialog(

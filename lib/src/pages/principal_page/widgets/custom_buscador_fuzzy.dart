@@ -338,7 +338,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMaximo.value,
             widget.codigoMarca,
             widget.codigoProveedor);
-        print(listaAllProducts.toString());
+
         listaProducto.value = listaAllProducts;
       }
       //para el filtro de categorias

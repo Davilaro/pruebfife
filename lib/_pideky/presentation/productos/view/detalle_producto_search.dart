@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -14,12 +16,10 @@ import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_card.dart';
 import 'package:emart/src/widget/dialog_details_image.dart';
-import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
 
@@ -39,14 +39,13 @@ class DetalleProductoSearch extends StatefulWidget {
 }
 
 class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+  final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final constrollerProductos = Get.find<ControllerProductos>();
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
 
   bool isAgotado = false;
-
-  final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  final constrollerProductos = Get.find<ControllerProductos>();
 
   @override
   void initState() {
@@ -71,13 +70,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
 
     _controllerCantidadProducto.text = isAgotado
         ? '0'
@@ -192,11 +184,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                 EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             alignment: Alignment.topLeft,
                                             child: AutoSizeText(
-                                              '${format.currencySymbol}' +
-                                                  formatNumber
-                                                      .format(widget
-                                                          .producto.precio)
-                                                      .replaceAll(',00', ''),
+                                              productViewModel.getCurrency(
+                                                  widget.producto.precio),
                                               textAlign: TextAlign.left,
                                               presetFontSizes: [17, 15],
                                               style: TextStyle(
@@ -213,15 +202,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                             EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         alignment: Alignment.topLeft,
                                         child: AutoSizeText(
-                                          '${format.currencySymbol}' +
-                                              formatNumber
-                                                  .format(widget.producto
-                                                              .descuento !=
-                                                          0
-                                                      ? widget.producto
-                                                          .precioinicial
-                                                      : widget.producto.precio)
-                                                  .replaceAll(',00', ''),
+                                          productViewModel.getCurrency(
+                                              widget.producto.descuento != 0
+                                                  ? widget
+                                                      .producto.precioinicial
+                                                  : widget.producto.precio),
                                           textAlign: TextAlign.left,
                                           style: widget.producto.descuento != 0
                                               ? TextStyle(
@@ -466,8 +451,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
               builder: (context) => IrMiCarrito(
                   productos: widget.producto,
                   tamano: retornarTamano(cartProvider) * 1.5)));
-
-      // Navigator.of(context).pop();
     }
   }
 

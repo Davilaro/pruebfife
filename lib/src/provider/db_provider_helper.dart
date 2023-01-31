@@ -197,7 +197,7 @@ class DBProviderHelper {
       final sql = await db.rawQuery(query);
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
-      print('error historico $e');
+      print('-----Error historico $e');
       return [];
     }
   }

@@ -498,7 +498,6 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
         (dropdownValueSubCategoria == "Todas" ||
             dropdownValueSubCategoria == null) &&
         (dropdownValueCategoria == "Todas" || dropdownValueCategoria == null)) {
-      print(widget.codCategoria);
       Navigator.push(
           context,
           MaterialPageRoute(

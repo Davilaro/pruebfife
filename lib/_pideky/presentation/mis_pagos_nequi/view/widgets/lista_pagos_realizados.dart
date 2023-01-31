@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
@@ -31,13 +32,8 @@ List<Widget> listaPagosRealizadosFecha(BuildContext context) {
 
 List<Widget> listaPagosRealizadosValor(BuildContext context) {
   final controller = Get.find<MisPagosNequiController>();
-  var locale = Intl().locale;
-  var format = locale.toString() != 'es_CO'
-      ? locale.toString() == 'es_CR'
-          ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-          : NumberFormat.simpleCurrency(locale: locale.toString())
-      : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+
   List<Widget> lista = [];
 
   if (controller.listaPagosRealizados.isNotEmpty) {
@@ -45,10 +41,7 @@ List<Widget> listaPagosRealizadosValor(BuildContext context) {
       lista.add(Padding(
         padding: const EdgeInsets.only(top: 7, bottom: 7, left: 25),
         child: Text(
-          "${format.currencySymbol}" +
-              formatNumber
-                  .format(toInt(element.valorPago))
-                  .replaceAll(",00", ""),
+          productViewModel.getCurrency(toInt(element.valorPago)),
           style: TextStyle(color: ConstantesColores.gris_sku, fontSize: 13),
         ),
       ));

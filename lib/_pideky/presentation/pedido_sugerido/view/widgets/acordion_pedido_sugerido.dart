@@ -3,23 +3,17 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 
 List<Widget> acordionDinamico(BuildContext context) {
-  Locale locale = Localizations.localeOf(context);
-  var format = locale.toString() != 'es_CO'
-      ? locale.toString() == 'es_CR'
-          ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-          : NumberFormat.simpleCurrency(locale: locale.toString())
-      : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+
   final db = ProductoRepositorySqlite();
   final controller = Get.find<PedidoSugeridoController>();
   List<Widget> lista = [];
@@ -57,12 +51,7 @@ List<Widget> acordionDinamico(BuildContext context) {
                           children: [
                             Container(
                               child: Text(
-                                "Total: ${format.currencySymbol}" +
-                                    formatNumber
-                                        .format(controller
-                                                .listaProductosPorFabricante[
-                                            fabricante]["precioProductos"])
-                                        .replaceAll(",00", ""),
+                                "Total: ${productViewModel.getCurrency(controller.listaProductosPorFabricante[fabricante]["precioProductos"])}",
                                 style: TextStyle(
                                     color: ConstantesColores.azul_precio,
                                     fontSize: 18,

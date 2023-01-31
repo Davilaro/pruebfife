@@ -20,11 +20,12 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
         select count(P.codigo) identificador,*
         from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
         ) tmp where tmp.identificador = 1) tmp on P.fabricante = tmp.proveedor and P.codigo = tmp.codigo''');
-      print("$sql-------------");
+
       return sql.isNotEmpty
           ? sql.map((e) => PedidoSugeridoModel.fromJson(e)).toList()
           : [];
     } catch (err) {
+      print('----Error consulta obtenerPedidoSugerido');
       return [];
     }
   }

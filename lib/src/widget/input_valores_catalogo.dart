@@ -1,8 +1,8 @@
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -13,10 +13,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 final prefs = new Preferencias();
 

@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 bool cargarDeNuevo = false;
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class SimpleCardGroups extends StatefulWidget {
   final String texto;
@@ -20,19 +20,11 @@ class SimpleCardGroups extends StatefulWidget {
 
 class _SimpleCardGroupsState extends State<SimpleCardGroups> {
   bool _isExpanded = false;
+  ProductoViewModel productoViewModel = Get.find();
+
   @override
   Widget build(BuildContext context) {
     CarroModelo cartProvider = Provider.of<CarroModelo>(context);
-
-    // Locale locale = Localizations.localeOf(context);
-    // var format = NumberFormat.simpleCurrency(locale: locale.toString());
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
 
     return Container(
       margin: EdgeInsets.only(bottom: 14),
@@ -113,7 +105,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: _cargarWidgetDinamicoAcordeon(
-                                        context, cartProvider, format)),
+                                        context, cartProvider)),
                               ])
                             ],
                           ),
@@ -130,7 +122,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
   }
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
-      BuildContext context1, CarroModelo cartProvider, NumberFormat format) {
+      BuildContext context1, CarroModelo cartProvider) {
     List<Widget> listaWidget = [];
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
@@ -162,12 +154,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
                         child: Text(
                             cartProvider.getListaFabricante[fabricante] == null
                                 ? '0'
-                                : '${format.currencySymbol}' +
-                                    formatNumber
-                                        .format(cartProvider
-                                                .getListaFabricante[fabricante]
-                                            ["precioFinal"])
-                                        .replaceAll(',00', ''),
+                                : '${productoViewModel.getCurrency(cartProvider.getListaFabricante[fabricante]["precioFinal"])}',
                             style: diseno_valores())),
                   ],
                 ),
@@ -255,9 +242,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
                   ),
                   Container(
                     width: size.width / 6,
-                    child: Text(
-                      formatNumber.format(product.precio).replaceAll(',00', ''),
-                    ),
+                    child: Text(productoViewModel.getCurrency(product.precio)),
                   ),
                   _separador(size)
                 ],

@@ -110,7 +110,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
 
     listaEmpresas.forEach((element) {
-      print('hola res ${jsonEncode(element)}');
       final widgetTemp = Card(
         color: seleccion == element.codigo
             ? ConstantesColores.azul_precio
@@ -218,8 +217,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigopozuelo = elemento.codigopozuelo;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
     prefs.paisUsuario = elemento.pais;
-    //se cambia el idioma
-    print("pais ${prefs.paisUsuario}");
+
     S.load(elemento.pais == 'CR'
         ? Locale('es', elemento.pais)
         : elemento.pais == 'CO'

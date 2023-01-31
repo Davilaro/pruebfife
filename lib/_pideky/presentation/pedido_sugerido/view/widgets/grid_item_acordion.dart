@@ -1,25 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 List<Widget> gridItem(
     BuildContext context, String fabricante, List<dynamic> lista) {
-  var locale = Intl().locale;
-  var format = locale.toString() != 'es_CO'
-      ? locale.toString() == 'es_CR'
-          ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-          : NumberFormat.simpleCurrency(locale: locale.toString())
-      : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+
   final size = MediaQuery.of(context).size;
   List<Widget> result = [];
   List<PedidoSugeridoModel> listTag = [];
+
   lista.forEach((producto) {
     print(producto.codigo);
     final controller = Get.find<PedidoSugeridoController>();
@@ -126,10 +122,8 @@ List<Widget> gridItem(
                             height: 3,
                           ),
                           Text(
-                            "${format.currencySymbol}" +
-                                formatNumber
-                                    .format(producto.cantidad * producto.precio)
-                                    .replaceAll(',00', ''),
+                            productViewModel.getCurrency(
+                                producto.cantidad * producto.precio),
                             style: TextStyle(
                                 color: ConstantesColores.gris_textos,
                                 fontWeight: FontWeight.bold,

@@ -15,10 +15,7 @@ class TopButtons extends StatelessWidget {
           unselectedLabelColor: Colors.black,
           isScrollable: false,
           controller: controller.controller,
-          onTap: (index) {
-            controller.cambiarTab(index);
-            print('tap$index');
-          },
+          onTap: (index) => controller.cambiarTab(index),
           tabs: List.generate(
               2,
               (index) => Container(

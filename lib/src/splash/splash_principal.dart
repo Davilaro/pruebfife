@@ -98,7 +98,7 @@ class _SplashState extends State<Splash> {
                   : Locale('es', 'CO'));
           UxcamTagueo().validarTipoUsario();
         }
-        print('hola pais ${Intl.defaultLocale}');
+
         Navigator.pushReplacementNamed(
           context,
           'tab_opciones',

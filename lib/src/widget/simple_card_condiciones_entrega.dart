@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 late CarroModelo cartProvider;
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class SimpleCardCondicionesEntrega extends StatefulWidget {
   final String texto;

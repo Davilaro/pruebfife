@@ -245,7 +245,7 @@ class _LoginState extends State<Login> {
       }
     });
     prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
-    print('validacion loguin ${prefs.codigoUnicoPideky}');
+
     prefs.codClienteLogueado = nit;
     // ignore: unnecessary_statements
     PedidoSugeridoController.userLog.value = 1;

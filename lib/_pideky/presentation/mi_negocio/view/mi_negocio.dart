@@ -124,14 +124,7 @@ class _MiNegocioState extends State<MiNegocio> {
                     AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.data!.length != 0) {
                     DatosCliente sucursal = snapshot.data![0];
-                    // var capturar =
-                    //     sucursal.telefonoWhatsapp.toString().split('+57');
-                    // String telefono = capturar.length > 1
-                    //     ? capturar[1]
-                    //     : sucursal.telefonoWhatsapp != null
-                    //         ? ' ${sucursal.telefonoWhatsapp.toString()}'
                     String telefono = sucursal.telefonoWhatsapp.toString();
-                    // : '';
                     return Column(
                       children: [
                         cardStyle(
