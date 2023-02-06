@@ -22,6 +22,7 @@ class CambiarDetalleCompra extends StatefulWidget {
 }
 
 class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
+  final scrollController = ScrollController();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   Producto? productos;
   final constrollerProductos = Get.find<ControllerProductos>();
@@ -43,6 +44,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
         extendBodyBehindAppBar: true,
         body: Obx(
           () => SingleChildScrollView(
+            controller: scrollController,
             child: Column(
               children: [
                 PedidoEmart.cambioVista.value == 1
@@ -66,7 +68,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Aprovecha estas ofertas',
+                        'Imperdibles para tu negocio',
                         style: TextStyle(
                             fontSize: 16.0,
                             color: HexColor("#41398D"),
@@ -92,7 +94,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
-        future: productService.consultarSugerido(),
+        future:
+            productService.cargarProductosInterno(2, '', 0, 1000000, 0, "", ""),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
@@ -138,8 +141,12 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                         producto: producto,
                         cartProvider: cartProvider,
                         isProductoEnOferta: isProductoEnOferta,
-                        onTapCard: () =>
-                            detalleProducto(producto, cartProvider),
+                        onTapCard: () {
+                          scrollController.animateTo(0.0,
+                              duration: Duration(seconds: 1),
+                              curve: Curves.ease);
+                          detalleProducto(producto, cartProvider);
+                        },
                         isAgotadoLabel:
                             constrollerProductos.validarAgotado(producto),
                         isVisibleLabelPromo: (producto.activopromocion == 1 &&
