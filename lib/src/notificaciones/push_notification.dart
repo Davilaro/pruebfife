@@ -23,6 +23,7 @@ class PushNotificationServer {
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
+    print('notificacion ${message.notification?.body}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {

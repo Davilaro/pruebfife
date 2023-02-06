@@ -217,6 +217,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigopozuelo = elemento.codigopozuelo;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
     prefs.paisUsuario = elemento.pais;
+    prefs.sucursal = elemento.sucursal;
 
     S.load(elemento.pais == 'CR'
         ? Locale('es', elemento.pais)
@@ -253,6 +254,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     var cargo = await AppUtil.appUtil.downloadZip(
         usuariLogin!,
         prefs.codCliente,
+        prefs.sucursal,
         prefs.codigonutresa,
         prefs.codigozenu,
         prefs.codigomeals,
