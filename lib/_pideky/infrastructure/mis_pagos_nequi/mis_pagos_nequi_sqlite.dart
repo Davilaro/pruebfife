@@ -12,11 +12,10 @@ class MisPagosNequiSqlite extends IMisPagosNequi {
       final sql = await db.rawQuery("""
   SELECT * from PagosNequi
 """);
-      print(sql);
+
       return sql.map((e) => PagosNequiModel.fromJson(e)).toList();
     } catch (e) {
-      print("algo salio mal al consultar mis pagos nequi");
-      print(e);
+      print("---algo salio mal al consultar mis pagos nequi $e");
       return [];
     }
   }

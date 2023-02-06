@@ -110,7 +110,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
 
     listaEmpresas.forEach((element) {
-      print('hola res ${jsonEncode(element)}');
       final widgetTemp = Card(
         color: seleccion == element.codigo
             ? ConstantesColores.azul_precio
@@ -218,8 +217,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigopozuelo = elemento.codigopozuelo;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
     prefs.paisUsuario = elemento.pais;
-    //se cambia el idioma
-    print("pais ${prefs.paisUsuario}");
+    prefs.sucursal = elemento.sucursal;
+
     S.load(elemento.pais == 'CR'
         ? Locale('es', elemento.pais)
         : elemento.pais == 'CO'
@@ -255,6 +254,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     var cargo = await AppUtil.appUtil.downloadZip(
         usuariLogin!,
         prefs.codCliente,
+        prefs.sucursal,
         prefs.codigonutresa,
         prefs.codigozenu,
         prefs.codigomeals,

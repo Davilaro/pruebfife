@@ -14,7 +14,6 @@ import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CambiarDetalleCompra extends StatefulWidget {
@@ -67,7 +66,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Imperdibles para tu negocio',
+                        'Aprovecha estas ofertas',
                         style: TextStyle(
                             fontSize: 16.0,
                             color: HexColor("#41398D"),
@@ -93,8 +92,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     return FutureBuilder(
-        future:
-            productService.cargarProductosInterno(2, '', 0, 1000000, 0, "", ""),
+        future: productService.consultarSugerido(),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {

@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:imagebutton/imagebutton.dart';
-import "package:intl/intl.dart";
 import 'package:provider/provider.dart';
-
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class DisenoLista extends StatefulWidget {
   final int numTienda;
@@ -24,6 +23,8 @@ class DisenoLista extends StatefulWidget {
 }
 
 class _DisenoListaState extends State<DisenoLista> {
+  ProductoViewModel productoViewModel = Get.find();
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
@@ -92,7 +93,8 @@ class _DisenoListaState extends State<DisenoLista> {
                       Container(
                         padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
                         child: Text(
-                          '' + formatNumber.format(element.precio),
+                          'hola' +
+                              productoViewModel.getCurrency(element.precio),
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               color: Colors.purple,

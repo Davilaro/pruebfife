@@ -68,7 +68,6 @@ Future<void> actualizarPagina(
       //pop dialog
     });
     if (provider.selectOptionMenu == 1) {
-      print("entro");
       cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
       cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
       provider.selectOptionMenu = 1;

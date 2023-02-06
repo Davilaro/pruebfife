@@ -1,6 +1,6 @@
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/widgets/comprobar_sesion.dart';
-import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/principal_page/widgets/lista_empresas_emart.dart';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/login/login.dart';

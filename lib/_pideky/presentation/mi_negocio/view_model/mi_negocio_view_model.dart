@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class MiNegocioViewModel extends GetxController {
   TextEditingController controllerInput = TextEditingController();
-  
+
   Uint8List? politicasDatosPdf;
   Uint8List? terminosDatosPdf;
   RxString validarInputNumero = ''.obs;
@@ -81,7 +81,7 @@ class MiNegocioViewModel extends GetxController {
         update();
       }
     } catch (e) {
-      print('Error al cagar archivos $e');
+      print('---Error al cagar archivos $e');
     }
   }
 

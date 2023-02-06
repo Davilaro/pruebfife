@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -16,8 +17,6 @@ import 'package:get/get.dart';
 import 'package:imagebutton/imagebutton.dart';
 import "package:intl/intl.dart";
 import 'package:provider/provider.dart';
-
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 class CarritoDisenoListaR extends StatefulWidget {
   final int numTienda;
@@ -33,6 +32,8 @@ class CarritoDisenoListaR extends StatefulWidget {
 class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
   final prefs = new Preferencias();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  ProductoViewModel productoViewModel = Get.find();
+
   RxBool isProductoEnOferta = false.obs;
   @override
   void initState() {
@@ -161,10 +162,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
                 child: Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    '${format.currencySymbol}' +
-                        formatNumber
-                            .format(element.precio)
-                            .replaceAll(',00', ''),
+                    productoViewModel.getCurrency(element.precio),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: ConstantesColores.azul_precio,

@@ -18,19 +18,16 @@ class MisEstadisticasViewModel extends GetxController {
 
   void cargarTopMarcas() async {
     listTopMarcas.value = await misEstadisticasService.consultarTopMarcas();
-    print('respuesta top marca ${listTopMarcas.length}');
   }
 
   void cargarTopSubCategorias() async {
     listTopSubCategorias.value =
         await misEstadisticasService.consultarTopSubCategorias();
-    print('respuesta top subcategoria ${listTopSubCategorias.length}');
   }
 
   void cargarTopProductos() async {
     listTopProductos.value =
         await misEstadisticasService.consultarTopProductos();
-    print('respuesta top producto ${listTopProductos.length}');
   }
 
   static MisEstadisticasViewModel get findOrInitialize {

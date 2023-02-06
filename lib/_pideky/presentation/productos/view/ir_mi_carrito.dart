@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -22,7 +23,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 final prefs = new Preferencias();
 
 class IrMiCarrito extends StatefulWidget {
@@ -37,6 +37,7 @@ class IrMiCarrito extends StatefulWidget {
 }
 
 class _IrMiCarritoState extends State<IrMiCarrito> {
+  ProductoViewModel productViewModel = Get.find();
   bool productoEncontrado = false;
   bool isRestrictivo = false;
 
@@ -49,15 +50,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-    // Locale locale = Localizations.localeOf(context);
-    // var format = NumberFormat.simpleCurrency(locale: locale.toString());
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
 
     final size = MediaQuery.of(context).size;
 
@@ -174,7 +166,8 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                   child: Column(
                                     children: [
                                       cargarValorPrecio(
-                                          widget.productos.descuento, format),
+                                          widget.productos.descuento,
+                                          productViewModel),
                                     ],
                                   ),
                                 ),
@@ -224,7 +217,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
               ),
             ),
             //MENSAJE DE PEDIDO MINIMO
-            validarPedidoMinimo(size, cartProvider, format)
+            validarPedidoMinimo(size, cartProvider, productViewModel)
           ],
         ),
       ),
@@ -232,7 +225,14 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   }
 
   validarPedidoMinimo(
-      Size size, CarroModelo cartProvider, NumberFormat format) {
+      Size size, CarroModelo cartProvider, ProductoViewModel productViewModel) {
+    var locale = Intl().locale;
+    var format = locale.toString() != 'es_CO'
+        ? locale.toString() == 'es_CR'
+            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+            : NumberFormat.simpleCurrency(locale: locale.toString())
+        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+
     if (isRestrictivo) {
       return Container(
           height: size.height * 0.15,
@@ -266,7 +266,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               fontFamily: 'RoundedMplus1c')),
                       TextSpan(
                         text:
-                            'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${format.currencySymbol}${cargarResultado(cartProvider)}',
+                            'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${cargarResultado(cartProvider)}',
                         style: TextStyle(
                             color: ConstantesColores.rojo_letra,
                             fontSize: size.width * 0.04,
@@ -306,7 +306,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ["preciominimo"];
     var valor = PedidoEmart.listaProductosPorFabricante!.length > 0
-        ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
+        ? productViewModel.getCurrency(precio.toInt())
         : "0";
 
     return valor;
@@ -315,22 +315,11 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
   String cargarResultadoPedido(CarroModelo cartProvider) {
     double precio = 0;
 
-    // if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-    //         ["topeMinimo"] >
-    //     0) {
-    //   precio =
-    //       PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-    //               ["topeMinimo"] *
-    //           1.19;
-    //   return PedidoEmart.listaProductosPorFabricante!.length > 0
-    //       ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
-    //       : "0";
-    // }
     precio =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ["preciominimo"];
     return PedidoEmart.listaProductosPorFabricante!.length > 0
-        ? formatNumber.format(precio.toInt()).replaceAll(',00', '')
+        ? productViewModel.getCurrency(precio.toInt())
         : "0";
   }
 
@@ -468,17 +457,15 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           );
   }
 
-  Widget cargarValorPrecio(double? descuento, format) {
+  Widget cargarValorPrecio(
+      double? descuento, ProductoViewModel productViewModel) {
     if (descuento != 0) {
       return Column(children: [
         Container(
           padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
           alignment: Alignment.topLeft,
           child: Text(
-            '${format.currencySymbol}' +
-                formatNumber
-                    .format(widget.productos.preciodescuento)
-                    .replaceAll(',00', ''),
+            productViewModel.getCurrency(widget.productos.preciodescuento),
             textAlign: TextAlign.left,
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 18, color: Colors.red),
@@ -488,10 +475,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           alignment: Alignment.topLeft,
           child: Text(
-              '${format.currencySymbol}' +
-                  formatNumber
-                      .format(widget.productos.precioinicial)
-                      .replaceAll(',00', ''),
+              productViewModel.getCurrency(widget.productos.precioinicial),
               textAlign: TextAlign.left,
               style: TextStyle(
                   color: ConstantesColores.azul_precio,
@@ -505,10 +489,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       alignment: Alignment.topLeft,
       child: Text(
-        '${format.currencySymbol}' +
-            formatNumber
-                .format(widget.productos.precioinicial)
-                .replaceAll(',00', ''),
+        productViewModel.getCurrency(widget.productos.precioinicial),
         textAlign: TextAlign.left,
         style: TextStyle(
             color: ConstantesColores.azul_precio,

@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:emart/src/notificaciones/message_notification.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -24,64 +23,12 @@ class PushNotificationServer {
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
-    print('notificacion ${jsonDecode(message.data['message'])}');
-
-//     if (title != null && body != null) {
-//    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-//             .setSmallIcon(R.mipmap.ic_launcher)
-//             .setContentTitle(title)
-//             .setContentText(body)
-//             .setAutoCancel(true)
-//             .setContentIntent(pendingIntent);
-
-// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//         NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
-//         manager.createNotificationChannel(channel);
-//     }
-//     manager.notify((int) System.currentTimeMillis(), builder.build());
-// }
-
-    // try {
-    //   await Firebase.initializeApp();
-    //   print('hola res ${message.messageId}');
-    //   if (message.data != null) {
-    //     var hola = jsonDecode(message.data['message']);
-    //     print('hola res 33 ${hola['title']}');
-    //     showOverlayNotification((context) {
-    //       Widget notificacion = Html(data: """${hola['body']}""");
-    //       Widget titleNotificacion = Html(data: """${hola['title']}""");
-    //       return MessageNotification(
-    //           key: Key("1"),
-    //           message: notificacion,
-    //           title: titleNotificacion,
-    //           onReplay: () {
-    //             OverlaySupportEntry.of(context)
-    //                 ?.dismiss(); //use OverlaySupportEntry to dismiss overlay
-    //             toast('Notificación cerrada');
-    //           });
-    //     }, duration: Duration(seconds: 10));
-    //     // showSimpleNotification(notificacion);
-    //   }
-    // } catch (e) {
-    //   print('MENSAJE ERROR $e');
-    // }
+    print('notificacion ${message.notification?.body}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
-    String? title = '';
-    String? body = '';
-
-    if (message.notification?.title == null) {
-      //notificaciones de UXCam
-      var menssajeCapturado = jsonDecode(message.data['message']);
-      title = menssajeCapturado['title'];
-      body = menssajeCapturado['body'];
-    } else {
-      //Notificaciones de Firebase
-      title = message.notification?.title;
-      body = message.notification?.body;
-      print(' si entre');
-    }
+    String? title = message.notification?.title;
+    String? body = message.notification?.body;
 
     showOverlayNotification((context) {
       Widget notificacion = Html(data: """${body!}""");
@@ -101,10 +48,23 @@ class PushNotificationServer {
   static Future _onMessageOpenApp(RemoteMessage message) async {
     await Firebase.initializeApp();
     await requesPermission();
-    var menssajeCapturado = jsonDecode(message.data['message']);
-    String? body = menssajeCapturado['body'];
-    Widget notificacion = Html(data: """$body""");
-    showSimpleNotification(notificacion);
+    String? title = message.notification?.title;
+    String? body = message.notification?.body;
+
+    showOverlayNotification((context) {
+      Widget titleNotificacion = Html(data: """${title!}""");
+      Widget notificacion = Html(data: """${body!}""");
+
+      return MessageNotification(
+          key: Key("1"),
+          message: notificacion,
+          title: titleNotificacion,
+          onReplay: () {
+            OverlaySupportEntry.of(context)
+                ?.dismiss(); //use OverlaySupportEntry to dismiss overlay
+            toast('Notificación cerrada');
+          });
+    }, duration: Duration(seconds: 10));
   }
 
   void setPushNotificationToken(String pushToken) {}
@@ -113,6 +73,7 @@ class PushNotificationServer {
     try {
       await Firebase.initializeApp();
       FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
       await requesPermission();
       String? token2 = '';
       token = await _messaging.getToken();
@@ -130,7 +91,7 @@ class PushNotificationServer {
       FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
       FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
     } catch (e) {
-      print('ERROR NOTIFICAICONES $e');
+      print('---ERROR NOTIFICAICONES $e');
     }
   }
 
@@ -146,7 +107,7 @@ class PushNotificationServer {
         sound: true);
 
     settings.authorizationStatus == AuthorizationStatus.authorized
-        ? print('hola User granted permission')
-        : print('hola User declined or has not accepted permission');
+        ? print('User granted permission')
+        : print('User declined or has not accepted permission');
   }
 }

@@ -75,7 +75,7 @@ class CirculoPosicionEmpodio extends StatelessWidget {
                     color: Color.fromARGB(255, 237, 234, 234),
                     offset: const Offset(0, 0),
                     spreadRadius: 5.0,
-                  ), //BoxShadow
+                  ),
                   BoxShadow(
                     color: Colors.white70,
                     offset: const Offset(
@@ -83,13 +83,13 @@ class CirculoPosicionEmpodio extends StatelessWidget {
                       0,
                     ),
                     spreadRadius: 4.0,
-                  ), //BoxShadow
+                  ),
                   BoxShadow(
                     color: Colors.white,
                     offset: const Offset(0.0, 0.0),
                     blurRadius: 0.0,
                     spreadRadius: 0.0,
-                  ), //BoxShadow
+                  ),
                 ],
                 borderRadius: BorderRadius.circular(100),
               )),

@@ -131,8 +131,6 @@ class UxcamTagueo {
   void seeDetailProduct(Producto element, int index, String? nameSeccion,
       bool isAgotadoLabel, bool isNewProduct, bool isPromoProduct) {
     try {
-      print(
-          'agotado -- $isAgotadoLabel, nuevo--- $isNewProduct, promo ----$isPromoProduct');
       var descuento = nameSeccion == 'Promos'
           ? (element.descuento! * 100) / element.precio
           : 0;

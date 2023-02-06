@@ -167,6 +167,14 @@ class Preferencias {
     _prefs.setString("codigounicopideky", value);
   }
 
+  get sucursal {
+    return _prefs.getString("sucursal") ?? "";
+  }
+
+  set sucursal(dynamic value) {
+    _prefs.setString("sucursal", value);
+  }
+
   clear() async {
     await _prefs.clear();
   }
