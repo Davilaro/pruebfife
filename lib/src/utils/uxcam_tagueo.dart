@@ -2,12 +2,14 @@ import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 class UxcamTagueo {
   void validarTipoUsario() async {
+    Preferencias prefs = Preferencias();
     DateTime now = DateTime.now();
     String typeUser = 'Inactivo';
 
@@ -58,6 +60,8 @@ class UxcamTagueo {
     //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
+    FlutterUxcam.logEventWithProperties(
+        "sendLocation", {"City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void selectSeccion(String name) {
