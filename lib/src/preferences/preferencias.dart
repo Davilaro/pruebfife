@@ -174,6 +174,13 @@ class Preferencias {
   set sucursal(dynamic value) {
     _prefs.setString("sucursal", value);
   }
+  get ciudad {
+    return _prefs.getString("ciudad") ?? "";
+  }
+
+  set ciudad(dynamic value) {
+    _prefs.setString("ciudad", value);
+  }
 
   clear() async {
     await _prefs.clear();
