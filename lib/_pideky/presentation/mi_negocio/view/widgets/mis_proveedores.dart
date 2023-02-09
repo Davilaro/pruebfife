@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -6,10 +8,12 @@ import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class MisProveedores extends StatelessWidget {
   final prefs = new Preferencias();
+  final productViewModel = Get.find<ProductoViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -69,41 +73,76 @@ class MisProveedores extends StatelessWidget {
                             isIconState: true,
                             estado: proveedores[i].estado,
                             contenido: Container(
-                              padding: EdgeInsets.only(left: 20),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    child: Row(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                proveedores[i].razonSocial,
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: ConstantesColores
+                                                        .gris_textos),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         Text(
-                                          proveedores[i].razonSocial,
+                                          'Nit con el que me facturan: ${proveedores[i].nitCliente}',
                                           style: TextStyle(
                                               fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: ConstantesColores
-                                                  .gris_textos),
+                                              color:
+                                                  ConstantesColores.gris_textos,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color:
+                                                  ConstantesColores.gris_textos,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Text(
-                                    'Nit con el que me facturan: ${proveedores[i].nitCliente}',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: ConstantesColores.gris_textos,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: ConstantesColores.gris_textos,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  Visibility(
+                                    visible: prefs.paisUsuario == 'CR',
+                                    child: Container(
+                                      width: Get.width * 1,
+                                      margin: EdgeInsets.only(top: 15),
+                                      decoration: BoxDecoration(
+                                          color: ConstantesColores
+                                              .azul_aguamarina_botones,
+                                          borderRadius: BorderRadius.vertical(
+                                              bottom: Radius.circular(5))),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                      child: AutoSizeText(
+                                        'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa!)}',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
+                            paddingContenido: prefs.paisUsuario == 'CR'
+                                ? EdgeInsets.zero
+                                : EdgeInsets.only(bottom: 15),
                           ),
                         )
                     ],

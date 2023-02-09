@@ -5,10 +5,14 @@
     "activate_user_for_buy":"to buy on Pideky and view your business data you must activate your account",
     "activate_your_user":"Activate your account!",
     "authorize_processing_personal_data":"I authorize the processing of my personal data",
+    "accept":"Accept",
+    "cancel":"Cancel",
 
     "catalog":"Catalog",
     "categories_for_you" : "Featured categories for you ",
     "cell_phone_number": "cell phone number",
+
+    "delivery_days": "Remember that you can place your order: {diasEntrega}",
 
     "email_address":"email address",
     "enter_your_master_code":"Enter your master code for manual activation",

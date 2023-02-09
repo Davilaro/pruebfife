@@ -5,14 +5,11 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
-import '../../_pideky/domain/pagos_nequi/model/pagos_nequi_model.dart';
 
 final prefs = new Preferencias();
 final controllerNequi = Get.find<MisPagosNequiController>();

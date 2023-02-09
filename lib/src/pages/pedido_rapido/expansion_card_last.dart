@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
@@ -41,12 +42,9 @@ class ExpansionCardLast extends StatefulWidget {
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
+  ProductoViewModel productViewModel = Get.find();
   RxBool _cargando = false.obs;
   final controlador = Get.find<CambioEstadoProductos>();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +65,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
             child: Obx(() => AbsorbPointer(
                   absorbing: _cargando.value,
                   child: BotonAgregarCarrito(
-                      color: HexColor("#42B39C"),
+                      color: ConstantesColores.azul_aguamarina_botones,
                       height: 40,
                       width: 190,
                       onTap: () async {

@@ -3,6 +3,7 @@ import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';

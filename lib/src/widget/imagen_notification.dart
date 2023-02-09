@@ -19,12 +19,12 @@ class AccionNotificacion extends StatelessWidget {
   }
 }
 
-showLoaderDialog(BuildContext context, Widget widget) {
+showLoaderDialog(BuildContext context, Widget widget, double? height) {
   AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(24.0))),
       content: Container(
-          height: Get.height * 0.8,
+          height: height ?? Get.height * 0.8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             color: Colors.white,
