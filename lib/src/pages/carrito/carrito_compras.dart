@@ -1127,7 +1127,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       } else {
         if (valorPedido < precioMinimo) {
           isValid.value = false;
-          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los dias asignados que son los $diasSinComa.";
+          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
         } else {
           return "Tu pedido será entregado el siguiente día hábil.";
         }
