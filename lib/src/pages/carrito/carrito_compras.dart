@@ -1121,7 +1121,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       if (isFrecuencia == true) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
-          return 'El pedido no cumple con el mínimo valor que establece el proveedor de ' +
+          return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
               productoViewModel.getCurrency(precioMinimo);
         }
       } else {
