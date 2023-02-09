@@ -218,6 +218,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigopadrepideky = elemento.codigopadrepideky;
     prefs.paisUsuario = elemento.pais;
     prefs.sucursal = elemento.sucursal;
+    prefs.ciudad = elemento.ciudad;
 
     S.load(elemento.pais == 'CR'
         ? Locale('es', elemento.pais)
