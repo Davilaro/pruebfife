@@ -43,13 +43,9 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     final cartProvider = Provider.of<CarroModelo>(context);
 
-    // bool isFrecuencia = prefs.paisUsuario == 'CR'
-    //     ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
-    //     : true;
-
-    //Descomentar la condicion anterior y remplazar por esta
-    bool isFrecuencia =
-        productViewModel.validarFrecuencia(productos!.fabricante.toString());
+    bool isFrecuencia = prefs.paisUsuario == 'CR'
+        ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
+        : true;
 
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,

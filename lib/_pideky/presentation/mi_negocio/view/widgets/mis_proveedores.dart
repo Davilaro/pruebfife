@@ -116,27 +116,28 @@ class MisProveedores extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  Visibility(
-                                    visible: prefs.paisUsuario == 'CR',
-                                    child: Container(
-                                      width: Get.width * 1,
-                                      margin: EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          color: ConstantesColores
-                                              .azul_aguamarina_botones,
-                                          borderRadius: BorderRadius.vertical(
-                                              bottom: Radius.circular(5))),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 10),
-                                      child: AutoSizeText(
-                                        'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa!)}',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                                  prefs.paisUsuario == 'CR'
+                                      ? Container(
+                                          width: Get.width * 1,
+                                          margin: EdgeInsets.only(top: 15),
+                                          decoration: BoxDecoration(
+                                              color: ConstantesColores
+                                                  .azul_aguamarina_botones,
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                      bottom:
+                                                          Radius.circular(5))),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
+                                          child: AutoSizeText(
+                                            'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa!)}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      : Container()
                                 ],
                               ),
                             ),

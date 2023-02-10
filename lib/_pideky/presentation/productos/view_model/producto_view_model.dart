@@ -53,7 +53,6 @@ class ProductoViewModel extends GetxController {
   void cargarCondicionEntrega() async {
     listCondicionEntrega =
         await condicionEntregaService.consultarCondicionEntrega();
-    print('vamos bien ${jsonEncode(listCondicionEntrega[2])}');
   }
 
   bool validarFrecuencia(String fabricante) {

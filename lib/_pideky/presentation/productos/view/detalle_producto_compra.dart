@@ -42,13 +42,13 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   Widget build(BuildContext context) {
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     final cartProvider = Provider.of<CarroModelo>(context);
-    // bool isFrecuencia = prefs.paisUsuario == 'CR'
-    //     ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
-    //     : true;
+    bool isFrecuencia = prefs.paisUsuario == 'CR'
+        ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
+        : true;
 
     //Descomentar la condicion anterior y remplazar por esta
-    bool isFrecuencia =
-        productViewModel.validarFrecuencia(productos!.fabricante.toString());
+    // bool isFrecuencia =
+    //     productViewModel.validarFrecuencia(productos!.fabricante.toString());
 
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
