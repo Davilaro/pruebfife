@@ -4,6 +4,7 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_multimedia.dart';
+import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:get/get.dart';
 
 class InitialBindings extends Bindings {
@@ -15,5 +16,6 @@ class InitialBindings extends Bindings {
     PedidoSugeridoController.findOrInitialize;
     MisPagosNequiController.findOrInitialize;
     ProductoViewModel.findOrInitialize;
+    RepetirOrdenViewModel.findOrInitialize;
   }
 }

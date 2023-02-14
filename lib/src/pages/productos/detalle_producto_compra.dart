@@ -47,6 +47,9 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
         ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
         : true;
 
+    // bool isFrecuencia =
+    //     productViewModel.validarFrecuencia(productos!.fabricante.toString());
+
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         extendBodyBehindAppBar: true,

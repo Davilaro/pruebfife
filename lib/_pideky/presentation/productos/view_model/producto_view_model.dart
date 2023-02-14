@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:emart/_pideky/domain/condicion_entrega/model/condicionEntrega.dart';
 import 'package:emart/_pideky/domain/condicion_entrega/service/condicion_entrega_service.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/condicion_entrega/condicion_entrega_sqlite.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/custom_modal.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
-import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -93,16 +89,49 @@ class ProductoViewModel extends GetxController {
   }
 
   String getListaDiasSemana(String fabricante) {
-    CondicionEntrega condicionEntrega = listCondicionEntrega
-        .firstWhere((element) => element.fabricante == fabricante);
-    var diasCondicion = condicionEntrega.diaVisita?.split('-');
+    try {
+      CondicionEntrega condicionEntrega = listCondicionEntrega
+          .firstWhere((element) => element.fabricante == fabricante);
+      var diasCondicion = condicionEntrega.diaVisita?.split('-');
 
-    String listDias = '';
-    diasCondicion?.forEach((element) {
-      listDias += "${listSemana[element].toString()}, ";
-    });
+      String listDias = '';
+      if (diasCondicion!.length == 1) {
+        listDias = "${listSemana[diasCondicion[0]].toString()}.";
+        // diasCondicion.forEach((element) {
+        //   listDias += "${listSemana[element].toString()}, ";
+        // });
+        print("estoy aca 1");
+      }
+      if (diasCondicion.length == 2) {
+        for (var i = 0; i < diasCondicion.length; i++) {
+          i == 0
+              ? listDias = "${listSemana[diasCondicion[i]].toString()} y "
+              : listDias += " ${listSemana[diasCondicion[i]].toString()}.";
+        }
+        print("estoy aca 2");
+        // diasCondicion.forEach((element) {
+        //   listDias += "${listSemana[element].toString()}, ";
+        // });
+      }
+      if (diasCondicion.length > 2) {
+        print("estoy aca 3");
+        for (var i = 0; i < diasCondicion.length; i++) {
+          if (i == diasCondicion.length - 2) {
+            listDias += "${listSemana[diasCondicion[i]].toString()} y ";
+          }
+          if (i == diasCondicion.length - 1) {
+            listDias += "${listSemana[diasCondicion[i]].toString()}.";
+          } else {
+            listDias += "${listSemana[diasCondicion[i]].toString()}, ";
+          }
+        }
+      }
 
-    return listDias;
+      return listDias;
+    } catch (e) {
+      print('sin resultados $e');
+      return '';
+    }
   }
 
   List<dynamic> trasformarDias(List<String>? diasCondicion) {

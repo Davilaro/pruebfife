@@ -130,7 +130,7 @@ class MisProveedores extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 10),
                                           child: AutoSizeText(
-                                            'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa!)}',
+                                            'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa)}',
                                             style: TextStyle(
                                               fontSize: 13,
                                               color: Colors.white,
@@ -169,6 +169,10 @@ class MisProveedores extends StatelessWidget {
     if (empresa == 'POZUELO') {
       return prefs.codigopozuelo.toString();
     }
+    if (empresa == 'ALPINA') {
+      return prefs.codigoalpina.toString();
+    }
+
     return '';
   }
 }

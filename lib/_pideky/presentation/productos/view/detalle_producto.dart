@@ -104,7 +104,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
             padding: EdgeInsets.fromLTRB(30, 0, 20, 0),
             child: Container(
               child: Text(
-                '${widget.productos.nombre} hola',
+                '${widget.productos.nombre}',
                 maxLines: 2,
                 style: diseno_valores(),
               ),

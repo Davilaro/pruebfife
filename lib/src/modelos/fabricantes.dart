@@ -32,16 +32,18 @@ class Fabricantes {
   String? restrictivo;
 
   factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
-        empresa: json["empresa"],
-        icono: json["ico"],
-        tipofabricante: json["tipofabricante"],
-        codIndirecto: json["codIndirecto"],
-        pedidominimo: json["pedidominimo"],
-        nombrecomercial: json["nombrecomercial"],
-        estado: json["Estado"],
-        topeMinimo: json["topeMinimo"],
-        nitCliente: json["NitCliente"],
-        razonSocial: json["RazonSocial"],
+        empresa: json["empresa"] == null ? '' : json["empresa"],
+        icono: json["ico"] == null ? '' : json["ico"],
+        tipofabricante:
+            json["tipofabricante"] == null ? '' : json["tipofabricante"],
+        codIndirecto: json["codIndirecto"] == null ? '' : json["codIndirecto"],
+        pedidominimo: json["pedidominimo"] == null ? 0 : json["pedidominimo"],
+        nombrecomercial:
+            json["nombrecomercial"] == null ? '' : json["nombrecomercial"],
+        estado: json["Estado"] == null ? '' : json["Estado"],
+        topeMinimo: json["topeMinimo"] == null ? 0 : json["topeMinimo"],
+        nitCliente: json["NitCliente"] == null ? '' : json["NitCliente"],
+        razonSocial: json["RazonSocial"] == null ? '' : json["RazonSocial"],
         restrictivo: json['restrictivo'] == null ? '0' : json['restrictivo'],
       );
 
