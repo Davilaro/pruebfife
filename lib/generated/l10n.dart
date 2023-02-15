@@ -110,6 +110,26 @@ class S {
     );
   }
 
+  /// `Accept`
+  String get accept {
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Catalog`
   String get catalog {
     return Intl.message(
@@ -137,6 +157,16 @@ class S {
       name: 'cell_phone_number',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Remember that you can place your order: {diasEntrega}`
+  String delivery_days(Object diasEntrega) {
+    return Intl.message(
+      'Remember that you can place your order: $diasEntrega',
+      name: 'delivery_days',
+      desc: '',
+      args: [diasEntrega],
     );
   }
 

@@ -151,6 +151,14 @@ class Preferencias {
     _prefs.setString('codigopozuelo', value);
   }
 
+  get codigoalpina {
+    return _prefs.getString('codigoalpina') ?? '';
+  }
+
+  set codigoalpina(dynamic value) {
+    _prefs.setString('codigoalpina', value);
+  }
+
   get codigopadrepideky {
     return _prefs.getString('codigopadrepideky') ?? '';
   }
@@ -174,6 +182,7 @@ class Preferencias {
   set sucursal(dynamic value) {
     _prefs.setString("sucursal", value);
   }
+
   get ciudad {
     return _prefs.getString("ciudad") ?? "";
   }

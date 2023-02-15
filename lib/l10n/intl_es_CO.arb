@@ -5,10 +5,14 @@
     "activate_user_for_buy": "para comprar en Pideky y ver los datos de tu negocio debes activar tu cuenta",
     "activate_your_user": "Activa tu cuenta!",
     "authorize_processing_personal_data":"Autorizo el tratamiento de mis datos personales",
+    "accept":"Aceptar",
+    "cancel":"Cancelar",
 
     "catalog":"Catálogo",
     "categories_for_you": "categorias destacadas para tí ",
     "cell_phone_number": "número de celular",
+
+    "delivery_days": "Recuerda que puedes realizar el pedido: {diasEntrega}",
 
     "email_address": "correo electrónico",
     "enter_your_master_code": "Ingresa tu código maestro para realizar la activación manual",

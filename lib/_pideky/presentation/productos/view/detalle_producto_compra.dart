@@ -2,12 +2,14 @@ import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
@@ -15,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+
+final prefs = new Preferencias();
 
 class CambiarDetalleCompra extends StatefulWidget {
   @override
@@ -25,6 +29,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   Producto? productos;
   final constrollerProductos = Get.find<ControllerProductos>();
+  final productViewModel = Get.find<ProductoViewModel>();
 
   @override
   void initState() {
@@ -37,6 +42,13 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   Widget build(BuildContext context) {
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     final cartProvider = Provider.of<CarroModelo>(context);
+    bool isFrecuencia = prefs.paisUsuario == 'CR'
+        ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
+        : true;
+
+    //Descomentar la condicion anterior y remplazar por esta
+    // bool isFrecuencia =
+    //     productViewModel.validarFrecuencia(productos!.fabricante.toString());
 
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
@@ -51,7 +63,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                         child: DetalleProducto(
                             productos: PedidoEmart.listaProductos![
                                 cargoConfirmar.dato.value.codigo]!,
-                            tamano: Get.height * 0.7))
+                            tamano: Get.height * 0.7,
+                            isFrecuencia: isFrecuencia))
                     : Container(
                         height: retornarTamanoPrincipal(cartProvider) * 1.1,
                         child: IrMiCarrito(

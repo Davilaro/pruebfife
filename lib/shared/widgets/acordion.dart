@@ -15,6 +15,8 @@ class Acordion extends StatefulWidget {
   final String? estado;
   final double? elevation;
   final double? margin;
+  final EdgeInsetsGeometry? paddingContenido;
+  final EdgeInsetsGeometry? paddingContenido2;
 
   Acordion(
       {this.urlIcon,
@@ -24,7 +26,9 @@ class Acordion extends StatefulWidget {
       this.estado,
       this.elevation,
       this.contenido2,
-      this.margin});
+      this.margin,
+      this.paddingContenido,
+      this.paddingContenido2});
   _EstadoAcordion createState() => _EstadoAcordion();
 }
 
@@ -105,7 +109,8 @@ class _EstadoAcordion extends State<Acordion> {
             ),
             _mostrarContenido
                 ? Container(
-                    padding: EdgeInsets.only(bottom: 15),
+                    padding:
+                        widget.paddingContenido ?? EdgeInsets.only(bottom: 15),
                     child: widget.contenido,
                   )
                 : Container()
@@ -115,7 +120,7 @@ class _EstadoAcordion extends State<Acordion> {
           visible: _mostrarContenido,
           child: Container(
             color: Colors.transparent,
-            padding: EdgeInsets.only(bottom: 15),
+            padding: widget.paddingContenido2 ?? EdgeInsets.only(bottom: 15),
             child: widget.contenido2,
           ),
         ),

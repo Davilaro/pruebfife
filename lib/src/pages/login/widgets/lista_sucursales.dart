@@ -111,7 +111,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
     listaEmpresas.forEach((element) {
       final widgetTemp = Card(
-        color: seleccion == element.codigo
+        color: seleccion == element.sucursal
             ? ConstantesColores.azul_precio
             : Colors.white,
         shape:
@@ -121,7 +121,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
           onTap: () => {
             setState(() {
               colorSeleccion = true;
-              seleccion = element.codigo;
+              seleccion = element.sucursal;
             }),
             _mostrarCategorias(context, element, provider)
           },
@@ -134,7 +134,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                   '${element.razonsocial}',
                   style: TextStyle(
                       fontSize: 15,
-                      color: seleccion == element.codigo
+                      color: seleccion == element.sucursal
                           ? Colors.white
                           : Colors.black,
                       fontWeight: FontWeight.bold),
@@ -156,9 +156,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   TextStyle diseno_sucursales(dynamic element) => TextStyle(
       fontSize: 15,
-      color: seleccion == element.codigo ? Colors.white : Colors.black);
+      color: seleccion == element.sucursal ? Colors.white : Colors.black);
 
   Widget valoresSubTitulo(dynamic element, bool color) {
+    print('soy el ${element.sucursal}');
     return Container(
       height: Get.height * 0.2,
       width: double.infinity,
@@ -197,7 +198,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
           Icon(
             Icons.play_arrow_rounded,
             size: 44,
-            color: seleccion == element.codigo
+            color: seleccion == element.sucursal
                 ? Colors.white
                 : ConstantesColores.azul_precio,
           )
@@ -208,6 +209,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
+    print('hola res ${jsonEncode(elemento.codigoalpina)}');
     prefs.usuarioRazonSocial = elemento.razonsocial;
     prefs.codCliente = elemento.codigo;
     prefs.codTienda = 'nutresa';
@@ -215,6 +217,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.codigozenu = elemento.codigozenu;
     prefs.codigomeals = elemento.codigomeals;
     prefs.codigopozuelo = elemento.codigopozuelo;
+    prefs.codigoalpina = elemento.codigoalpina;
     prefs.codigopadrepideky = elemento.codigopadrepideky;
     prefs.paisUsuario = elemento.pais;
     prefs.sucursal = elemento.sucursal;

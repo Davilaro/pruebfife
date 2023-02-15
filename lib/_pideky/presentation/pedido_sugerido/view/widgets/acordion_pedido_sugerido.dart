@@ -1,4 +1,5 @@
 // ignore: import_of_legacy_library_into_null_safe
+
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
@@ -7,19 +8,23 @@ import 'package:emart/_pideky/presentation/productos/view_model/producto_view_mo
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
+
+final prefs = new Preferencias();
 
 List<Widget> acordionDinamico(BuildContext context) {
   ProductoViewModel productViewModel = Get.find();
 
-  final db = ProductoRepositorySqlite();
   final controller = Get.find<PedidoSugeridoController>();
   List<Widget> lista = [];
   lista.clear();
 
   controller.listaProductosPorFabricante.forEach((fabricante, value) {
+    bool isFrecuencia = prefs.paisUsuario == 'CR'
+        ? productViewModel.validarFrecuencia(fabricante)
+        : true;
     lista.add(
       Container(
           child: Acordion(
@@ -59,16 +64,14 @@ List<Widget> acordionDinamico(BuildContext context) {
                               ),
                             ),
                             BotonAgregarCarrito(
-                              color: HexColor("#42B39C"),
+                              color: isFrecuencia
+                                  ? ConstantesColores.azul_aguamarina_botones
+                                  : ConstantesColores.gris_sku,
                               height: 40,
                               width: 190,
                               onTap: () async {
-                                value["items"].forEach((prod) async {
-                                  Producto producto = await db
-                                      .consultarDatosProducto(prod.codigo);
-                                  controller.llenarCarrito(
-                                      producto, prod.cantidad);
-                                });
+                                _validarFrecuencia(isFrecuencia, value["items"],
+                                    controller, productViewModel, context);
                               },
                               text: 'Agregar al carrito',
                             )
@@ -82,4 +85,17 @@ List<Widget> acordionDinamico(BuildContext context) {
     );
   });
   return lista;
+}
+
+_validarFrecuencia(isFrecuencia, value, controller,
+    ProductoViewModel productViewModel, context) async {
+  final db = ProductoRepositorySqlite();
+  if (isFrecuencia) {
+    value.forEach((prod) async {
+      Producto producto = await db.consultarDatosProducto(prod.codigo);
+      controller.llenarCarrito(producto, prod.cantidad);
+    });
+  } else {
+    productViewModel.iniciarModal(context, value[0].negocio);
+  }
 }

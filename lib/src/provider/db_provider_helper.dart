@@ -220,7 +220,7 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
+      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad, p.fabricante from Historico h inner join producto p on p.codigo=h.codigoref  where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' GROUP BY h.fabricante,h.codigoref
     ''');
 
       return sql.map((e) => Historico.fromJson(e)).toList();

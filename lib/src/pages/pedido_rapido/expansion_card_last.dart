@@ -1,9 +1,11 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
@@ -41,15 +43,16 @@ class ExpansionCardLast extends StatefulWidget {
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
+  RepetirOrdenViewModel repetirOrdenViewModel = Get.find();
+  ProductoViewModel productViewModel = Get.find();
+
   RxBool _cargando = false.obs;
   final controlador = Get.find<CambioEstadoProductos>();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    RxBool isFrecuencia = true.obs;
+    RxString fabricanteFrecuencia = ''.obs;
     final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -58,7 +61,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           Container(
             width: size.width,
             child: SingleChildScrollView(
-              child: _body(context),
+              child: _body(context, isFrecuencia, fabricanteFrecuencia),
             ),
           ),
           //antiguo boton de agregar al carrito
@@ -67,16 +70,23 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
             child: Obx(() => AbsorbPointer(
                   absorbing: _cargando.value,
                   child: BotonAgregarCarrito(
-                      color: HexColor("#42B39C"),
+                      color: isFrecuencia.value
+                          ? ConstantesColores.azul_aguamarina_botones
+                          : ConstantesColores.gris_sku,
                       height: 40,
                       width: 190,
                       onTap: () async {
                         onBlockBoubleClick();
-                        await _cargarPedido(
-                            widget.historico.numeroDoc!.toString(),
-                            widget.providerDatos);
+                        if (isFrecuencia.value) {
+                          await _cargarPedido(
+                              widget.historico.numeroDoc!.toString(),
+                              widget.providerDatos);
+                        } else {
+                          productViewModel.iniciarModal(
+                              context, fabricanteFrecuencia.value);
+                        }
                       },
-                      text: "Agregar al carrito"),
+                      text: "Agregar al carrito ${fabricanteFrecuencia.value}"),
                 )),
           ),
         ],
@@ -84,7 +94,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, RxBool isFrecuencia,
+      RxString fabricanteFrecuencia) {
     final size = MediaQuery.of(context).size;
 
     return Column(children: [
@@ -120,7 +131,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
       ),
       Column(
         children: [
-          _grupoComercial(size, widget.historico.numeroDoc),
+          _grupoComercial(size, widget.historico.numeroDoc, isFrecuencia,
+              fabricanteFrecuencia),
           Container(
             width: size.width * 0.9,
             margin: const EdgeInsets.only(top: 8.0),
@@ -155,26 +167,48 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     );
   }
 
-  Widget _grupoComercial(size, numeroDocumento) {
+  Widget _grupoComercial(size, numeroDocumento, RxBool isFrecuencia,
+      RxString fabricanteFrecuencia) {
     return FutureBuilder<List<Historico>>(
         future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
         builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.hasData) {
             var grupos = snapshot.data;
             return Column(
-              children: [
-                for (int i = 0; i < grupos!.length; i++)
-                  AnimatedContainerCard(
-                    grupo: grupos[i].fabricante!,
-                    numeroDoc: numeroDocumento,
-                    ordenCompra: grupos[i].ordenCompra.toString(),
-                  ),
-                _separador(size),
-              ],
+              children: _cargarContainer(grupos, size, numeroDocumento,
+                  isFrecuencia, fabricanteFrecuencia),
             );
           }
           return CircularProgressIndicator();
         });
+  }
+
+  _cargarContainer(List<Historico>? grupos, size, numeroDocumento,
+      RxBool isFrecuencia, RxString fabricanteFrecuencia) {
+    List<Widget> contenido = [];
+    for (int i = 0; i < grupos!.length; i++) {
+      if (prefs.paisUsuario == 'CR') {
+        repetirOrdenViewModel.validarFrecuenciaPedidoRapido(
+            numeroDocumento,
+            grupos[i].fabricante!,
+            isFrecuencia,
+            productViewModel,
+            fabricanteFrecuencia);
+      }
+
+      contenido.add(
+        AnimatedContainerCard(
+          grupo: grupos[i].fabricante!,
+          numeroDoc: numeroDocumento,
+          ordenCompra: grupos[i].ordenCompra.toString(),
+        ),
+      );
+      contenido.add(
+        _separador(size),
+      );
+    }
+
+    return contenido;
   }
 
   _cargarPedido(String numeroDoc, providerDatos) async {
