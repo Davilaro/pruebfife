@@ -44,23 +44,25 @@ class Fabricantes {
   String? restrictivo;
 
   factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
-        empresa: json["empresa"],
-        icono: json["ico"],
-        tipofabricante: json["tipofabricante"],
-        codIndirecto: json["codIndirecto"],
-        pedidominimo: json["pedidominimo"],
-        nombrecomercial: json["nombrecomercial"],
-        estado: json["Estado"],
+        empresa: json["empresa"] == null ? '' : json["empresa"],
+        icono: json["ico"] == null ? '' : json["ico"],
+        tipofabricante:
+            json["tipofabricante"] == null ? '' : json["tipofabricante"],
+        codIndirecto: json["codIndirecto"] == null ? '' : json["codIndirecto"],
+        pedidominimo: json["pedidominimo"] == null ? 0 : json["pedidominimo"],
+        nombrecomercial:
+            json["nombrecomercial"] == null ? '' : json["nombrecomercial"],
+        estado: json["Estado"] == null ? '' : json["Estado"],
+        topeMinimo: json["topeMinimo"] == null ? 0 : json["topeMinimo"],
+        nitCliente: json["NitCliente"] == null ? '' : json["NitCliente"],
+        razonSocial: json["RazonSocial"] == null ? '' : json["RazonSocial"],
+        restrictivo: json['restrictivo'] == null ? '0' : json['restrictivo'],
         hora: json["hora"],
         montoMinimoFrecuencia: json["montominimofrecuencia"],
         montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
-        topeMinimo: json["topeMinimo"],
-        nitCliente: json["NitCliente"],
-        razonSocial: json["RazonSocial"],
         restrictivoFrecuencia: json["restrictivofrecuencia"],
         restrictivoNoFrecuencia: json["restrictivonofrecuencia"],
         diaVisita: json["diavisita"],
-        restrictivo: json['restrictivo'] == null ? '0' : json['restrictivo'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,6 +77,10 @@ class Fabricantes {
         "NitCliente": nitCliente,
         "montominimofrecuencia": montoMinimoFrecuencia,
         "montominimonofrecuencia": montoMinimoNoFrecuencia,
-        "RazonSocial": razonSocial
+        "RazonSocial": razonSocial,
+        "diavisita" : diaVisita,
+        "restrictivonofrecuencia" : restrictivoNoFrecuencia,
+        "restrictivofrecuencia" : restrictivoFrecuencia,
+        "hora" : hora
       };
 }

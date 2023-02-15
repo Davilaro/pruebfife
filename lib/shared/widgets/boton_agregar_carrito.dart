@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 
 class BotonAgregarCarrito extends StatelessWidget {
+  final Function()? onTap;
   final String text;
   final double height;
   final double width;
   final Color color;
   final Color? colortext;
-  final Function()? onTap;
-  const BotonAgregarCarrito({
-    Key? key,
-    this.colortext = Colors.white,
-    required this.height,
-    required this.width,
-    required this.color,
-    required this.onTap,
-    required this.text,
-  }) : super(key: key);
+  final double borderRadio;
+  const BotonAgregarCarrito(
+      {Key? key,
+      this.colortext = Colors.white,
+      required this.height,
+      required this.width,
+      required this.color,
+      required this.onTap,
+      required this.text,
+      this.borderRadio = 20})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,8 @@ class BotonAgregarCarrito extends StatelessWidget {
       margin: EdgeInsets.only(top: 20, bottom: 10),
       height: height,
       width: width,
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+          color: color, borderRadius: BorderRadius.circular(borderRadio)),
       child: MaterialButton(
         onPressed: onTap,
         child: Center(

@@ -138,26 +138,41 @@ class _SimpleCardCondicionesEntregaState
                     ),
                     Flexible(
                       child: Container(
+                          padding: EdgeInsets.only(right: 25),
                           child: FutureBuilder<dynamic>(
-                        future: DBProviderHelper.db
-                            .consultarCondicionEntrega(fabricante),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.hasData) {
-                            var condicionEntrega = snapshot.data!;
+                            future: DBProviderHelper.db
+                                .consultarCondicionEntrega(fabricante),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                var condicionEntrega = snapshot.data!;
 
-                            return Text(mensajeCard(
-                                fabricante,
-                                cartProvider.getListaFabricante[fabricante]
-                                    ["precioFinal"],
-                                value["preciominimo"],
-                                value["topeMinimo"],
-                                condicionEntrega,
-                                value["isFrecuencia"]));
-                          }
-                          return CircularProgressIndicator();
-                        },
-                      )),
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    prefs.paisUsuario == 'CR'
+                                        ? Text(
+                                            'Estimado cliente',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : Container(),
+                                    Text(mensajeCard(
+                                        fabricante,
+                                        cartProvider
+                                                .getListaFabricante[fabricante]
+                                            ["precioFinal"],
+                                        value["preciominimo"],
+                                        value["topeMinimo"],
+                                        condicionEntrega,
+                                        value["isFrecuencia"]
+                                        )),
+                                  ],
+                                );
+                              }
+                              return CircularProgressIndicator();
+                            },
+                          )),
                     ),
                   ],
                 ),
@@ -183,24 +198,26 @@ class _SimpleCardCondicionesEntregaState
     // DateTime horaActual = new DateFormat("HH:mm:ss")
     //     .parse(hora + ":" + minuto.toString() + ":" + segundo.toString());
 
-    if (isFrecuencia == true) {
+    if (prefs.paisUsuario == 'CR') {
       return condicionEntrega.texto1;
     } else {
-      if (valorPedido > (precioMinimo)) {
-        return "Tu pedido será entregado en el siguiente día habil";
+      if (isFrecuencia == true) {
+        return condicionEntrega.texto1;
+      } else {
+        if (valorPedido > (precioMinimo)) {
+          return "Tu pedido será entregado en el siguiente día habil";
+        }
+
+        return condicionEntrega.texto2;
       }
-
-      return condicionEntrega.texto2;
     }
-
-    // else if (fabricante.toUpperCase() == "NUTRESA") {
-    //   return valorPedido < (topeMinimo * 1.19)
+    // if (prefs.paisUsuario == 'CR') {
+    //   return condicionEntrega.texto1;
+    // } else {
+    //   return horaActual.isBefore(hourRes)
     //       ? condicionEntrega.mensaje1
-    //       : "Tu pedido será entregado el siguiente día hábil.";
+    //       : condicionEntrega.mensaje2;
     // }
-    // return horaActual.isBefore(hourRes)
-    //     ? condicionEntrega.mensaje1
-    //     : condicionEntrega.mensaje2;
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,

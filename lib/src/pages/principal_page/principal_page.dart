@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
@@ -34,7 +35,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/db_provider_helper.dart';
 
 final prefs = new Preferencias();
 
@@ -47,6 +47,7 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   final controllerEncuesta = Get.put(EncuestaControllers());
+  final productViewModel = Get.find<ProductoViewModel>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
@@ -393,10 +394,10 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void _cargarLista() async {
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
+    productViewModel.cargarCondicionEntrega();
   }
 
   void onClickVerMas(String ubicacion, provider) async {
-    // List resData = await DBProvider.db.consultarSecciones();
     for (var i = 0; i < cargoConfirmar.seccionesDinamicas.length; i++) {
       if (cargoConfirmar.seccionesDinamicas[i].descripcion.toLowerCase() ==
           ubicacion.toLowerCase()) {
@@ -418,10 +419,5 @@ class _PrincipalPageState extends State<PrincipalPage> {
         break;
       }
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

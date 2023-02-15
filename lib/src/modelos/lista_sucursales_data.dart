@@ -26,6 +26,7 @@ class ListaSucursalesData {
       this.codigonutresa,
       this.codigozenu,
       this.codigopozuelo,
+      this.codigoalpina,
       this.pais,
       this.codigoUnicoPideky,
       this.bloqueado,
@@ -44,6 +45,7 @@ class ListaSucursalesData {
   String? codigozenu;
   String? codigomeals;
   String? codigopozuelo;
+  String? codigoalpina;
   String? pais;
   String? bloqueado;
   String? codigopadrepideky;
@@ -63,6 +65,7 @@ class ListaSucursalesData {
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
         codigopozuelo: json["codigopozuelo"],
+        codigoalpina: json["codigoalpina"],
         codigoUnicoPideky: json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"],
         codigopadrepideky:
@@ -71,7 +74,7 @@ class ListaSucursalesData {
         fabricantes: List<Fabricantes>.from(
           json["fabricantes"].map((x) => Fabricantes.fromJson(x)),
         ),
-        sucursal: json["sucursal"],
+        sucursal: json["Sucursal"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,10 +90,11 @@ class ListaSucursalesData {
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
         "codigopozuelo": codigopozuelo,
+        "codigoalpina": codigoalpina,
         "Pais": pais,
         "CodigoUnicoPideky": codigoUnicoPideky,
         "Bloqueado": bloqueado,
         "CodigoPadrePideky": codigopadrepideky,
-        "sucursal": sucursal
+        "Sucursal": sucursal
       };
 }

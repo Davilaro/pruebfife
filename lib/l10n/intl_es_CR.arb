@@ -5,10 +5,14 @@
     "activate_user_for_buy":"para comprar en Pideky y ver los datos de tu negocio debes tener una cuenta activa",
     "activate_your_user":"Registrate!",
     "authorize_processing_personal_data":"Autorizo el tratamiento de mis datos personales",
+    "accept":"Aceptar",
+    "cancel":"Cancelar",
 
     "catalog":"Categorías",
     "categories_for_you": "categorias destacadas ",
     "cell_phone_number": "número de celular",
+    
+    "delivery_days": "Recuerda que puedes realizar el pedido: {diasEntrega}",
 
     "email_address":"correo electrónico.",
     "enter_your_master_code":"Ingresa tu código maestro para realizar el registro manual",
