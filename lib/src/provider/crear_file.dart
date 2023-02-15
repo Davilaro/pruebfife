@@ -51,12 +51,12 @@ class AppUtil {
 
   Future<bool> downloadZip(
       String usuario,
-      String cliente,
+      // String cliente,
       String sucursal,
-      codigonutresa,
-      codigozenu,
-      codigomeals,
-      codigopadrepideky,
+      // codigonutresa,
+      // codigozenu,
+      // codigomeals,
+      // codigopadrepideky,
       generico) async {
     try {
       String archivo = '';
@@ -67,14 +67,14 @@ class AppUtil {
 
       File zippedFile = await _downloadFile(
           usuario,
-          cliente,
+          // cliente,
           sucursal,
           _localZipFileName,
           archivo,
-          codigonutresa,
-          codigozenu,
-          codigomeals,
-          codigopadrepideky,
+          // codigonutresa,
+          // codigozenu,
+          // codigomeals,
+          // codigopadrepideky,
           generico);
       var estado = await unarchiveAndSave(zippedFile, archivo);
       if (estado) {
@@ -90,14 +90,14 @@ class AppUtil {
 
   Future<File> _downloadFile(
       String usuario,
-      String cliente,
+      // String cliente,
       String sucursal,
       String fileName,
       String dir,
-      String codigonutresa,
-      String codigozenu,
-      String codigomeals,
-      String codigopadrepideky,
+      // String codigonutresa,
+      // String codigozenu,
+      // String codigomeals,
+      // String codigopadrepideky,
       bool generico) async {
     String url = "";
     var req;
@@ -105,8 +105,10 @@ class AppUtil {
     if (generico) {
       url = Constantes().urlBaseGenerico + 'sync/Db/Generico/db.zip';
     } else {
-      url = Constantes().urlBase +
-          'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
+      // url = Constantes().urlBase +
+      //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
+      url =
+          Constantes().urlBase + 'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
     }
 
     print('url : $url');

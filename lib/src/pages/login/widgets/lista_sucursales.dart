@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
@@ -9,6 +7,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -209,25 +208,24 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   _mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
-    print('hola res ${jsonEncode(elemento.codigoalpina)}');
-    prefs.usuarioRazonSocial = elemento.razonsocial;
-    prefs.codCliente = elemento.codigo;
-    prefs.codTienda = 'nutresa';
-    prefs.codigonutresa = elemento.codigonutresa;
-    prefs.codigozenu = elemento.codigozenu;
-    prefs.codigomeals = elemento.codigomeals;
-    prefs.codigopozuelo = elemento.codigopozuelo;
-    prefs.codigoalpina = elemento.codigoalpina;
-    prefs.codigopadrepideky = elemento.codigopadrepideky;
-    prefs.paisUsuario = elemento.pais;
-    prefs.sucursal = elemento.sucursal;
-    prefs.ciudad = elemento.ciudad;
+    // prefs.usuarioRazonSocial = elemento.razonsocial;
+    // prefs.codCliente = elemento.codigo;
+    // prefs.codTienda = 'nutresa';
+    // prefs.codigonutresa = elemento.codigonutresa;
+    // prefs.codigozenu = elemento.codigozenu;
+    // prefs.codigomeals = elemento.codigomeals;
+    // prefs.codigopozuelo = elemento.codigopozuelo;
+    // prefs.codigoalpina = elemento.codigoalpina;
+    // prefs.codigopadrepideky = elemento.codigopadrepideky;
+    // prefs.paisUsuario = elemento.pais;
+    // prefs.sucursal = elemento.sucursal;
+    // prefs.ciudad = elemento.ciudad;
 
-    S.load(elemento.pais == 'CR'
-        ? Locale('es', elemento.pais)
-        : elemento.pais == 'CO'
-            ? Locale('es', 'CO')
-            : Locale('es', 'CO'));
+    // S.load(elemento.pais == 'CR'
+    //     ? Locale('es', elemento.pais)
+    //     : elemento.pais == 'CO'
+    //         ? Locale('es', 'CO')
+    //         : Locale('es', 'CO'));
 
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
@@ -235,9 +233,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
     await pr.show();
-    await cargarInformacion(provider);
+    await cargarInformacion(provider, elemento);
+    await _cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
-      UxcamTagueo().validarTipoUsario();
+      UxcamTagueo().validarTipoUsuario();
     }
     await pr.hide();
 
@@ -245,7 +244,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     Navigator.pushReplacementNamed(context, 'tab_opciones');
   }
 
-  Future<void> cargarInformacion(DatosListas provider) async {
+  Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
     opcionesAppBard!.selectOptionMenu = 0;
@@ -255,15 +254,38 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     PedidoEmart.listaProductos = new Map();
     PedidoEmart.listaValoresPedidoAgregados = new Map();
 
-    var cargo = await AppUtil.appUtil.downloadZip(
-        usuariLogin!,
-        prefs.codCliente,
-        prefs.sucursal,
-        prefs.codigonutresa,
-        prefs.codigozenu,
-        prefs.codigomeals,
-        prefs.codigopadrepideky,
-        false);
+    await AppUtil.appUtil.downloadZip(usuariLogin!, elemento.sucursal, false);
+    // var cargo = await AppUtil.appUtil.downloadZip(
+    //     usuariLogin!,
+    //     prefs.codCliente,
+    //     prefs.sucursal,
+    //     prefs.codigonutresa,
+    //     prefs.codigozenu,
+    //     prefs.codigomeals,
+    //     prefs.codigopadrepideky,
+    //     false);
     await AppUtil.appUtil.abrirBases();
+  }
+
+  _cargarDataUsuario(sucursal) async {
+    List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+
+    prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
+    prefs.codCliente = datosCliente[0].codigo;
+    prefs.codTienda = 'nutresa';
+    prefs.codigonutresa = datosCliente[0].codigonutresa;
+    prefs.codigozenu = datosCliente[0].codigozenu;
+    prefs.codigomeals = datosCliente[0].codigomeals;
+    prefs.codigopozuelo = datosCliente[0].codigopozuelo;
+    prefs.codigoalpina = datosCliente[0].codigoalpina;
+    prefs.paisUsuario = datosCliente[0].pais;
+    prefs.sucursal = sucursal;
+    prefs.ciudad = datosCliente[0].ciudad;
+
+    S.load(datosCliente[0].pais == 'CR'
+        ? Locale('es', datosCliente[0].pais)
+        : datosCliente[0].pais == 'CO'
+            ? Locale('es', 'CO')
+            : Locale('es', 'CO'));
   }
 }

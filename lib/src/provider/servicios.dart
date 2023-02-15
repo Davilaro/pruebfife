@@ -350,6 +350,8 @@ class Servicies {
     String datos = "{\"ListaDetalle\" :[";
 
     for (var i = 0; i < listaPedido.length; i++) {
+      print(
+          'hola prueba ${listaPedido[i].codigoFabricante} ----- ${listaPedido[i].nitFabricante}');
       datos += jsonEncode(<String, dynamic>{
         "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
@@ -358,8 +360,9 @@ class Servicies {
         "CodigoProveedor": 123,
         "DescripcionParam1": listaPedido[i].fabricante,
         "DescripcionParam2": listaPedido[i].codigocliente,
-        "DescripcionParam3": usuarioLogin,
-        "descripcionparam5": prefs.codigopadrepideky,
+        "DescripcionParam3": listaPedido[i].nitFabricante,
+        "descripcionparam5": listaPedido[i]
+            .codigoFabricante, // colocar el codigo del fabricante de sucursales
         "FechaMovil": '$fechaPedido',
         "Iva": listaPedido[i].iva,
         "Observacion": 'Prueba',

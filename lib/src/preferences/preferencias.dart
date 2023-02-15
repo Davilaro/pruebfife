@@ -159,14 +159,6 @@ class Preferencias {
     _prefs.setString('codigoalpina', value);
   }
 
-  get codigopadrepideky {
-    return _prefs.getString('codigopadrepideky') ?? '';
-  }
-
-  set codigopadrepideky(dynamic value) {
-    _prefs.setString('codigopadrepideky', value);
-  }
-
   get codigoUnicoPideky {
     return _prefs.getString("codigounicopideky") ?? "";
   }

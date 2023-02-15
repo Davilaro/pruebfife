@@ -96,7 +96,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                       referencia: "Solo en el domicilio"),
                                   SimpleCardOne(
                                       texto: "Forma de Pago",
-                                      referencia: data[i].condicion_pago),
+                                      referencia: data[i].condicionPago),
                                   SimpleCardGroups(texto: "Total a facturar"),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
@@ -196,6 +196,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           iva: PedidoEmart.listaProductos![key]!.iva,
           precio: PedidoEmart.listaProductos![key]!.precio,
           fabricante: PedidoEmart.listaProductos![key]!.fabricante,
+          codigoFabricante: PedidoEmart.listaProductos![key]!.codigoFabricante,
+          nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
           codCliente: prefs.codCliente,
           tipoFabricante: directo,
           codProveedor: 1,

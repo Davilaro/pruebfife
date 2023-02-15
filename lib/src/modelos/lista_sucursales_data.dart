@@ -30,7 +30,6 @@ class ListaSucursalesData {
       this.pais,
       this.codigoUnicoPideky,
       this.bloqueado,
-      this.codigopadrepideky,
       this.sucursal});
 
   String? codigo;
@@ -48,7 +47,6 @@ class ListaSucursalesData {
   String? codigoalpina;
   String? pais;
   String? bloqueado;
-  String? codigopadrepideky;
   String? codigoUnicoPideky;
   String? sucursal;
 
@@ -68,8 +66,6 @@ class ListaSucursalesData {
         codigoalpina: json["codigoalpina"],
         codigoUnicoPideky: json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"],
-        codigopadrepideky:
-            json["CodigoPadrePideky"] == null ? "" : json["CodigoPadrePideky"],
         pais: json["Pais"] == null ? "" : json["Pais"],
         fabricantes: List<Fabricantes>.from(
           json["fabricantes"].map((x) => Fabricantes.fromJson(x)),
@@ -94,7 +90,6 @@ class ListaSucursalesData {
         "Pais": pais,
         "CodigoUnicoPideky": codigoUnicoPideky,
         "Bloqueado": bloqueado,
-        "CodigoPadrePideky": codigopadrepideky,
         "Sucursal": sucursal
       };
 }

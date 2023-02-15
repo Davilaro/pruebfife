@@ -8,7 +8,7 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 class UxcamTagueo {
-  void validarTipoUsario() async {
+  void validarTipoUsuario() async {
     Preferencias prefs = Preferencias();
     DateTime now = DateTime.now();
     String typeUser = 'Inactivo';
