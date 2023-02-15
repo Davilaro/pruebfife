@@ -13,9 +13,13 @@ class CondicionesEntrega {
     required this.hora,
     required this.mensaje1,
     required this.mensaje2,
-    this.texto1,
-    this.texto2,
+    required this.texto1,
+    required this.texto2,
     required this.pedidominimo,
+    required this.diasEntrega,
+    required this.diaVisita,
+    this.montoMinimoFrecuencia,
+    this.montoMinimoNoFrecuencia,
   });
 
   String fabricante;
@@ -23,9 +27,13 @@ class CondicionesEntrega {
   String hora;
   String mensaje1;
   String mensaje2;
-  String? texto1;
-  String? texto2;
+  String texto1;
+  String texto2;
   double pedidominimo;
+  int? montoMinimoFrecuencia;
+  int? montoMinimoNoFrecuencia;
+  String diaVisita;
+  int diasEntrega;
 
   factory CondicionesEntrega.fromJson(Map<String, dynamic> json) =>
       CondicionesEntrega(
@@ -37,6 +45,10 @@ class CondicionesEntrega {
         texto1: json["Texto1"] == null ? '' : json["Texto1"],
         texto2: json["Texto2"] == null ? '' : json["Texto2"],
         pedidominimo: json["pedidominimo"],
+        montoMinimoFrecuencia: json["montominimofrecuencia"],
+        montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
+        diaVisita: json["DiaVisita"],
+        diasEntrega: json["DiasEntrega"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +60,9 @@ class CondicionesEntrega {
         "Texto1": texto1,
         "Texto2": texto2,
         "pedidominimo": pedidominimo,
+        "montominimofrecuencia": montoMinimoFrecuencia,
+        "montominimonofrecuencia": montoMinimoNoFrecuencia,
+        "DiaVisita": diaVisita,
+        "DiasEntrega": diasEntrega,
       };
 }

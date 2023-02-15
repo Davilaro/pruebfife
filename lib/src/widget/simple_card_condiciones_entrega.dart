@@ -3,6 +3,7 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -163,7 +164,9 @@ class _SimpleCardCondicionesEntregaState
                                             ["precioFinal"],
                                         value["preciominimo"],
                                         value["topeMinimo"],
-                                        condicionEntrega)),
+                                        condicionEntrega,
+                                        value["isFrecuencia"]
+                                        )),
                                   ],
                                 );
                               }
@@ -184,29 +187,37 @@ class _SimpleCardCondicionesEntregaState
   }
 
   String mensajeCard(String fabricante, double valorPedido, double precioMinimo,
-      double topeMinimo, condicionEntrega) {
-    DateTime now = new DateTime.now();
+      double topeMinimo, condicionEntrega, isFrecuencia) {
+    // DateTime now = new DateTime.now();
 
-    String hora = now.hour.toString();
-    String minuto = now.minute.toString();
-    String segundo = now.second.toString();
+    // String hora = now.hour.toString();
+    // String minuto = now.minute.toString();
+    // String segundo = now.second.toString();
 
-    DateTime hourRes = new DateFormat("HH:mm:ss").parse(condicionEntrega.hora);
-    DateTime horaActual = new DateFormat("HH:mm:ss")
-        .parse(hora + ":" + minuto.toString() + ":" + segundo.toString());
+    // DateTime hourRes = new DateFormat("HH:mm:ss").parse(condicionEntrega.hora);
+    // DateTime horaActual = new DateFormat("HH:mm:ss")
+    //     .parse(hora + ":" + minuto.toString() + ":" + segundo.toString());
 
-    if (fabricante.toUpperCase() == "MEALS") {
-      return valorPedido < (topeMinimo * 1.19)
-          ? condicionEntrega.mensaje1
-          : "Tu pedido será entregado el siguiente día hábil.";
-    }
     if (prefs.paisUsuario == 'CR') {
       return condicionEntrega.texto1;
     } else {
-      return horaActual.isBefore(hourRes)
-          ? condicionEntrega.mensaje1
-          : condicionEntrega.mensaje2;
+      if (isFrecuencia == true) {
+        return condicionEntrega.texto1;
+      } else {
+        if (valorPedido > (precioMinimo)) {
+          return "Tu pedido será entregado en el siguiente día habil";
+        }
+
+        return condicionEntrega.texto2;
+      }
     }
+    // if (prefs.paisUsuario == 'CR') {
+    //   return condicionEntrega.texto1;
+    // } else {
+    //   return horaActual.isBefore(hourRes)
+    //       ? condicionEntrega.mensaje1
+    //       : condicionEntrega.mensaje2;
+    // }
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,

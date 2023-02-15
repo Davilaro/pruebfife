@@ -1,10 +1,10 @@
-import 'dart:convert';
-
+import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.Dart";
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PedidoEmart {
   static RxString cantItems = "0".obs;
@@ -77,9 +77,23 @@ class PedidoEmart {
     groups.forEach((key, value) {
       double precio = 0;
       double topeMinimo = 0;
+      int montoMinimoFrecuencia = 0;
+      int montoMinimoNoFrecuencia = 0;
+      int restrictivoNoFrecuencia = 0;
+      int restrictivoFrecuencia = 0;
+      bool isFrecuencia = false;
       double precioProductos = 0;
       String icon = '';
+      String horaFabricante = '';
       String restrictivo = '';
+      String diasFrecuencia = "";
+      List<String> listaDiasFrecuencia = [];
+      List diasAgrupadosPorFabricante = [];
+      DateTime now = new DateTime.now();
+      String hora = now.hour.toString();
+      String minuto = now.minute.toString();
+      String segundo = now.second.toString();
+
       for (int i = 0; i < value.length; i++) {
         precioProductos =
             precioProductos + (value[i].cantidad! * value[i].precio!);
@@ -88,10 +102,57 @@ class PedidoEmart {
       for (int j = 0; j < listaFabricante!.length; j++) {
         if (listaFabricante![j].empresa == key) {
           icon = listaFabricante![j].icono;
+          horaFabricante = listaFabricante![j].hora;
+          diasFrecuencia = listaFabricante![j].diaVisita;
           precio = listaFabricante![j].pedidominimo ?? 0;
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
+          montoMinimoFrecuencia =
+              listaFabricante![j].montoMinimoFrecuencia ?? 0;
+          montoMinimoNoFrecuencia =
+              listaFabricante![j].montoMinimoNoFrecuencia ?? 0;
+          restrictivoFrecuencia =
+              listaFabricante![j].restrictivoFrecuencia ?? 0;
+          restrictivoNoFrecuencia =
+              listaFabricante![j].restrictivoNoFrecuencia ?? 0;
           restrictivo = listaFabricante![j].restrictivo;
         }
+      }
+
+      DateTime hourRes = new DateFormat("HH:mm:ss").parse(horaFabricante);
+      DateTime horaActual = new DateFormat("HH:mm:ss")
+          .parse(hora + ":" + minuto.toString() + ":" + segundo.toString());
+
+      listaDiasFrecuencia = diasFrecuencia.split("-");
+      listaDiasFrecuencia.forEach((e) {
+        switch (e) {
+          case "L":
+            diasAgrupadosPorFabricante.add("lunes");
+            break;
+          case "M":
+            diasAgrupadosPorFabricante.add("martes");
+            break;
+          case "W":
+            diasAgrupadosPorFabricante.add("miercoles");
+            break;
+          case "J":
+            diasAgrupadosPorFabricante.add("jueves");
+            break;
+          case "V":
+            diasAgrupadosPorFabricante.add("viernes");
+            break;
+          case "S":
+            diasAgrupadosPorFabricante.add("sabado");
+            break;
+        }
+      });
+
+      if (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
+          horaActual.isBefore(hourRes)) {
+        isFrecuencia = true;
+        precio = montoMinimoFrecuencia.toDouble();
+      } else {
+        isFrecuencia = false;
+        precio = montoMinimoNoFrecuencia.toDouble();
       }
 
       listaProductosPorFabricante!.putIfAbsent(
@@ -102,7 +163,11 @@ class PedidoEmart {
                 'imagen': icon,
                 'preciominimo': precio,
                 'precioProducto': precioProductos,
+                "diasVisita": diasAgrupadosPorFabricante,
                 'topeMinimo': topeMinimo,
+                'isFrecuencia': isFrecuencia,
+                'restrictivofrecuencia': restrictivoFrecuencia,
+                'restrictivonofrecuencia': restrictivoNoFrecuencia,
                 'restrictivo': restrictivo,
               });
     });

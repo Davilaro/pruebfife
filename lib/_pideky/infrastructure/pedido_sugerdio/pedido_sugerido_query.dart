@@ -11,11 +11,10 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
 
     try {
       var sql = await db.rawQuery('''
-        SELECT  CASE S.negocio WHEN 'AGCO' THEN 'NUTRESA' WHEN 'ADML' THEN 'MEALS' WHEN 'AANN' THEN 'ZENU' WHEN 'AFPZ' THEN 'POZUELO' END Negocio, S.Codigo, P.Nombre,
+        SELECT   S.negocio  Negocio, S.Codigo, P.Nombre,
         round(((P.precio - (P.precio * ifnull(tmp.descuento,0) / 100))) +
         (P.precio - (P.precio * ifnull(tmp.descuento,0) / 100)) * P.iva /100,0) precio, S.Cantidad FROM pedidoSugerido S INNER JOIN Producto P
-        ON P.Codigo = S.Codigo AND ((P.fabricante = 'NUTRESA' AND S.negocio = 'AGCO') OR (P.fabricante = 'ZENU' AND S.negocio = 'AANN') OR (P.fabricante = 'MEALS' AND S.negocio = 'ADML') OR
-        (P.fabricante = 'POZUELO' AND S.negocio = 'AFPZ'))
+        ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(P.codigo) identificador,*
         from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material

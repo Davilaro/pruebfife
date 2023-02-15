@@ -17,6 +17,12 @@ class Fabricantes {
       this.estado,
       this.topeMinimo,
       this.nitCliente,
+      this.montoMinimoFrecuencia,
+      this.montoMinimoNoFrecuencia,
+      this.restrictivoFrecuencia,
+      this.restrictivoNoFrecuencia,
+      this.hora,
+      required this.diaVisita,
       this.razonSocial});
 
   String? empresa;
@@ -26,7 +32,13 @@ class Fabricantes {
   double? pedidominimo;
   String? nombrecomercial;
   String? estado;
+  String? hora;
   double? topeMinimo;
+  int? montoMinimoFrecuencia;
+  int? montoMinimoNoFrecuencia;
+  int? restrictivoFrecuencia;
+  int? restrictivoNoFrecuencia;
+  String diaVisita;
   String? nitCliente;
   String? razonSocial;
   String? restrictivo;
@@ -45,6 +57,12 @@ class Fabricantes {
         nitCliente: json["NitCliente"] == null ? '' : json["NitCliente"],
         razonSocial: json["RazonSocial"] == null ? '' : json["RazonSocial"],
         restrictivo: json['restrictivo'] == null ? '0' : json['restrictivo'],
+        hora: json["hora"],
+        montoMinimoFrecuencia: json["montominimofrecuencia"],
+        montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
+        restrictivoFrecuencia: json["restrictivofrecuencia"],
+        restrictivoNoFrecuencia: json["restrictivonofrecuencia"],
+        diaVisita: json["diavisita"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -57,6 +75,12 @@ class Fabricantes {
         "Estado": estado,
         "topeMinimo": topeMinimo,
         "NitCliente": nitCliente,
-        "RazonSocial": razonSocial
+        "montominimofrecuencia": montoMinimoFrecuencia,
+        "montominimonofrecuencia": montoMinimoNoFrecuencia,
+        "RazonSocial": razonSocial,
+        "diavisita" : diaVisita,
+        "restrictivonofrecuencia" : restrictivoNoFrecuencia,
+        "restrictivofrecuencia" : restrictivoFrecuencia,
+        "hora" : hora
       };
 }

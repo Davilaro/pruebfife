@@ -191,6 +191,14 @@ class Preferencias {
     _prefs.setString("ciudad", value);
   }
 
+  get diaActual {
+    return _prefs.getString("diaactual") ?? "";
+  }
+
+  set diaActual(dynamic value) {
+    _prefs.setString("diaactual", value);
+  }
+
   clear() async {
     await _prefs.clear();
   }

@@ -251,9 +251,11 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                         visible: isValid.value,
                                         child: SvgPicture.asset(
                                           'assets/image/alerta_pedido_inferio.svg',
-                                          color: value['restrictivo'] == "0"
-                                              ? HexColor("#42B39C")
-                                              : Colors.red,
+                                          color:
+                                              value['restrictivofrecuencia'] ==
+                                                      0
+                                                  ? HexColor("#42B39C")
+                                                  : Colors.red,
                                         ),
                                       )),
                                   Expanded(
@@ -272,11 +274,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                 .getFormat()
                                                 .currencySymbol,
                                             value["iva"],
-                                            value['restrictivo']),
+                                            value['restrictivo'],
+                                            value['restrictivofrecuencia'],
+                                            value['restrictivonofrecuencia'],
+                                            value["diasVisita"],
+                                            value["isFrecuencia"]),
                                         style: TextStyle(
-                                            color: value['restrictivo'] == "0"
-                                                ? Colors.black.withOpacity(.7)
-                                                : Colors.red,
+                                            color:
+                                                value['restrictivofrecuencia'] ==
+                                                        0
+                                                    ? Colors.black
+                                                        .withOpacity(.7)
+                                                    : Colors.red,
                                             fontWeight: FontWeight.bold),
                                       )),
                                     ),
@@ -708,8 +717,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (PedidoEmart.listaProductosPorFabricante![fabricante]["restrictivo"] ==
-          '1') {
+      if (PedidoEmart.listaProductosPorFabricante![fabricante]
+              ["restrictivofrecuencia"] ==
+          1) {
         if (value['precioProducto'] > 0.0) {
           if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
               PedidoEmart.listaProductosPorFabricante![fabricante]
@@ -1085,10 +1095,21 @@ class _CarritoComprasState extends State<CarritoCompras> {
       double topeMinimo,
       String currentSymbol,
       double iva,
-      String restrictivo) {
+      String restrictivo,
+      int restrictivoFrecuencia,
+      int restrictivoNoFrecuencia,
+      List diasVisita,
+      bool isFrecuencia) {
     // var calcular = topeMinimo * 1.19;
 
-    if (restrictivo == '0') {
+    String diasSinComa;
+    String diasTemp = "";
+    diasVisita.forEach((element) {
+      diasTemp += "$element, ";
+    });
+    diasSinComa = diasTemp.substring(0, diasTemp.length - 2);
+
+    if (restrictivoFrecuencia == 0) {
       if (valorPedido < precioMinimo) {
         isValid.value = true;
         return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de ' +
@@ -1097,10 +1118,19 @@ class _CarritoComprasState extends State<CarritoCompras> {
       isValid.value = true;
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
-      if (valorPedido < precioMinimo) {
-        isValid.value = true;
-        return 'El pedido no cumple con el mínimo valor que establece el proveedor de ' +
-            productoViewModel.getCurrency(precioMinimo);
+      if (isFrecuencia == true) {
+        if (valorPedido < precioMinimo) {
+          isValid.value = true;
+          return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
+              productoViewModel.getCurrency(precioMinimo);
+        }
+      } else {
+        if (valorPedido < precioMinimo) {
+          isValid.value = false;
+          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
+        } else {
+          return "Tu pedido será entregado el siguiente día hábil.";
+        }
       }
       isValid.value = false;
       return "";

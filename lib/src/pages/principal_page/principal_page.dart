@@ -32,7 +32,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 
 final prefs = new Preferencias();
 
@@ -66,6 +68,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
     _cargarLista();
+    prefs.diaActual = DateFormat.EEEE().format(DateTime.now());
   }
 
   @override
