@@ -61,12 +61,16 @@ class _ListaSucursalesState extends State<ListaSucursales> {
           child: Column(
             children: [
               _campoTexto(context),
-              Padding(
+              Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: _cargarDatos(context, args.listaEmpresas, provider),
-                ),
+                child: SingleChildScrollView(
+                    child: Column(
+                        children: _cargarDatos(
+                            context, args.listaEmpresas, provider))),
+                // child: ListView(
+                //   shrinkWrap: true,
+                //   children: _cargarDatos(context, args.listaEmpresas, provider),
+                // ),
               ),
             ],
           ),

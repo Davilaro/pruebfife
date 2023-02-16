@@ -67,6 +67,7 @@ class Servicies {
       Constantes().urlPrincipal +
           'notificacion/leerNotificaciones?nit=${nit}&sucursal=${nit}',
     );
+    print('url notificaciones $url');
     final reponse = await http.get(url);
     final res = json.decode(reponse.body);
 

@@ -938,16 +938,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
         PedidoEmart.listaProductos!.forEach((codigo, producto) {
           if (producto.fabricante == fabricante) {
             setState(() {
-              PedidoEmart.listaControllersPedido![codigo]!.text = "1";
+              PedidoEmart.listaControllersPedido![codigo]!.text = "0";
               PedidoEmart.registrarValoresPedido(producto, '1', false);
               PedidoEmart.calcularPrecioPorFabricante();
-              MetodosLLenarValores().calcularValorTotal(cartProvider);
             });
           }
         });
       }
     });
     PedidoEmart.iniciarProductosPorFabricante();
+    MetodosLLenarValores().calcularValorTotal(cartProvider);
     if (_verificarCantidadGrupos() > 0) {
       _irConfigurarPedido();
     }
