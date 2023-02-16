@@ -87,6 +87,7 @@ class PedidoEmart {
       String horaFabricante = '';
       String restrictivo = '';
       String diasFrecuencia = "";
+      String texto1 = "";
       List<String> listaDiasFrecuencia = [];
       List diasAgrupadosPorFabricante = [];
       DateTime now = new DateTime.now();
@@ -103,6 +104,7 @@ class PedidoEmart {
         if (listaFabricante![j].empresa == key) {
           icon = listaFabricante![j].icono;
           horaFabricante = listaFabricante![j].hora;
+          texto1 = listaFabricante![j].texto1 ?? "";
           diasFrecuencia = listaFabricante![j].diaVisita;
           precio = listaFabricante![j].pedidominimo ?? 0;
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
@@ -169,6 +171,7 @@ class PedidoEmart {
                 'restrictivofrecuencia': restrictivoFrecuencia,
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
                 'restrictivo': restrictivo,
+                'texto1': texto1
               });
     });
   }

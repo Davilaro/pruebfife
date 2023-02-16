@@ -331,7 +331,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       WHERE fabricante = f.empresa) as varchar) as diavisita,cast((SELECT RestrictivoFrecuencia FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as INT) as restrictivofrecuencia ,cast((SELECT RestrictivoNoFrecuencia FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as INT) as restrictivonofrecuencia, cast((SELECT hora FROM CondicionesEntrega 
-      WHERE fabricante = f.empresa) as varchar) as hora
+      WHERE fabricante = f.empresa) as varchar) as hora, cast((SELECT Texto1 FROM CondicionesEntrega 
+      WHERE fabricante = f.empresa) as varchar) as texto1
       FROM Fabricante f
       GROUP BY f.empresa
       ORDER BY f.orden ASC

@@ -251,11 +251,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                         visible: isValid.value,
                                         child: SvgPicture.asset(
                                           'assets/image/alerta_pedido_inferio.svg',
-                                          color:
-                                              value['restrictivofrecuencia'] ==
-                                                      0
-                                                  ? HexColor("#42B39C")
-                                                  : Colors.red,
+                                          color: value['restrictivofrecuencia'] ==
+                                                          0 &&
+                                                      value['isFrecuencia'] ==
+                                                          true ||
+                                                  value['restrictivonofrecuencia'] ==
+                                                          0 &&
+                                                      value['isFrecuencia'] ==
+                                                          false
+                                              ? HexColor("#42B39C")
+                                              : Colors.red,
                                         ),
                                       )),
                                   Expanded(
@@ -278,14 +283,19 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             value['restrictivofrecuencia'],
                                             value['restrictivonofrecuencia'],
                                             value["diasVisita"],
-                                            value["isFrecuencia"]),
+                                            value["isFrecuencia"],
+                                            value["texto1"]),
                                         style: TextStyle(
-                                            color:
-                                                value['restrictivofrecuencia'] ==
-                                                        0
-                                                    ? Colors.black
-                                                        .withOpacity(.7)
-                                                    : Colors.red,
+                                            color: value['restrictivofrecuencia'] ==
+                                                            0 &&
+                                                        value['isFrecuencia'] ==
+                                                            true ||
+                                                    value['restrictivonofrecuencia'] ==
+                                                            0 &&
+                                                        value['isFrecuencia'] ==
+                                                            false
+                                                ? Colors.black.withOpacity(.7)
+                                                : Colors.red,
                                             fontWeight: FontWeight.bold),
                                       )),
                                     ),
@@ -718,8 +728,17 @@ class _CarritoComprasState extends State<CarritoCompras> {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (PedidoEmart.listaProductosPorFabricante![fabricante]
-              ["restrictivofrecuencia"] ==
-          1) {
+                      ["restrictivofrecuencia"] ==
+                  1 &&
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ['isFrecuencia'] ==
+                  true ||
+          PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ["restrictivonofrecuencia"] ==
+                  1 &&
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ['isFrecuencia'] ==
+                  false) {
         if (value['precioProducto'] > 0.0) {
           if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
               PedidoEmart.listaProductosPorFabricante![fabricante]
@@ -1099,7 +1118,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
       int restrictivoFrecuencia,
       int restrictivoNoFrecuencia,
       List diasVisita,
-      bool isFrecuencia) {
+      bool isFrecuencia,
+      String texto1) {
     // var calcular = topeMinimo * 1.19;
 
     String diasSinComa;
@@ -1109,11 +1129,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
     });
     diasSinComa = diasTemp.substring(0, diasTemp.length - 2);
 
-    if (restrictivoFrecuencia == 0) {
+    if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
       if (valorPedido < precioMinimo) {
         isValid.value = true;
-        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de ' +
-            productoViewModel.getCurrency(precioMinimo);
+        return texto1;
       }
       isValid.value = true;
       return "Tu pedido será entregado el siguiente día hábil.";
@@ -1126,7 +1145,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
         }
       } else {
         if (valorPedido < precioMinimo) {
-          isValid.value = false;
+          isValid.value = true;
           return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
         } else {
           return "Tu pedido será entregado el siguiente día hábil.";
