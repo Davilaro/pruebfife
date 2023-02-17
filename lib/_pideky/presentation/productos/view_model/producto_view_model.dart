@@ -20,7 +20,7 @@ class ProductoViewModel extends GetxController {
     "W": "Miércoles",
     "J": "Jueves",
     "V": "Viernes",
-    "S": "Sabado",
+    "S": "Sábado",
     "D": "Domingo"
   };
 
@@ -105,7 +105,7 @@ class ProductoViewModel extends GetxController {
       if (diasCondicion.length == 2) {
         for (var i = 0; i < diasCondicion.length; i++) {
           i == 0
-              ? listDias = "${listSemana[diasCondicion[i]].toString()} y "
+              ? listDias = "${listSemana[diasCondicion[i]].toString()} y"
               : listDias += " ${listSemana[diasCondicion[i]].toString()}.";
         }
         print("estoy aca 2");
