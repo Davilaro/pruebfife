@@ -3,7 +3,9 @@ import 'package:emart/_pideky/domain/condicion_entrega/service/condicion_entrega
 import 'package:emart/_pideky/infrastructure/condicion_entrega/condicion_entrega_sqlite.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/custom_modal.dart';
+import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,7 @@ class ProductoViewModel extends GetxController {
     "D": "Domingo"
   };
 
-  List listCondicionEntrega = [];
+  RxList listCondicionEntrega = [].obs;
 
   String getCurrency(dynamic valor) {
     NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
@@ -47,7 +49,14 @@ class ProductoViewModel extends GetxController {
   }
 
   void cargarCondicionEntrega() async {
-    listCondicionEntrega =
+    PedidoEmart.listaFabricante =
+        await DBProvider.db.consultarFricanteGeneral();
+    getCondicionEntrega();
+    print('cargamos condiciones');
+  }
+
+  void getCondicionEntrega() async {
+    listCondicionEntrega.value =
         await condicionEntregaService.consultarCondicionEntrega();
   }
 
@@ -55,7 +64,7 @@ class ProductoViewModel extends GetxController {
     var diaLocal = DateFormat.EEEE().format(DateTime.now());
     var listDias = [];
 
-    CondicionEntrega condicionEntrega = listCondicionEntrega
+    CondicionEntrega condicionEntrega = listCondicionEntrega.value
         .firstWhere((element) => element.fabricante == fabricante);
     var diasCondicion = condicionEntrega.diaVisita?.split('-');
     listDias = trasformarDias(diasCondicion);
@@ -90,7 +99,7 @@ class ProductoViewModel extends GetxController {
 
   String getListaDiasSemana(String fabricante) {
     try {
-      CondicionEntrega condicionEntrega = listCondicionEntrega
+      CondicionEntrega condicionEntrega = listCondicionEntrega.value
           .firstWhere((element) => element.fabricante == fabricante);
       var diasCondicion = condicionEntrega.diaVisita?.split('-');
 

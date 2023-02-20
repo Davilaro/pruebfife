@@ -35,7 +35,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
 final prefs = new Preferencias();
 
 bool limpiar = false;
@@ -67,7 +66,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         "Footer", "Home", "", "", "Home", 'PrincipalPage');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Inicio');
-    _cargarLista();
+    productViewModel.cargarCondicionEntrega();
     prefs.diaActual = DateFormat.EEEE().format(DateTime.now());
   }
 
@@ -389,12 +388,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
         ),
       ),
     );
-  }
-
-  void _cargarLista() async {
-    PedidoEmart.listaFabricante =
-        await DBProvider.db.consultarFricanteGeneral();
-    productViewModel.cargarCondicionEntrega();
   }
 
   void onClickVerMas(String ubicacion, provider) async {
