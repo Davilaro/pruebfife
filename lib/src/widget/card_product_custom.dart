@@ -145,7 +145,8 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                 0, 0, 10, 0),
                                             alignment: Alignment.topLeft,
                                             child: AutoSizeText(
-                                              typeCurrency,
+                                              productViewModel.getCurrency(
+                                                  widget.producto.precio),
                                               minFontSize: 15,
                                               maxFontSize: 18,
                                               textAlign: TextAlign.left,
