@@ -106,10 +106,6 @@ class ProductoViewModel extends GetxController {
       String listDias = '';
       if (diasCondicion!.length == 1) {
         listDias = "${listSemana[diasCondicion[0]].toString()}.";
-        // diasCondicion.forEach((element) {
-        //   listDias += "${listSemana[element].toString()}, ";
-        // });
-        print("estoy aca 1");
       }
       if (diasCondicion.length == 2) {
         for (var i = 0; i < diasCondicion.length; i++) {
@@ -117,19 +113,13 @@ class ProductoViewModel extends GetxController {
               ? listDias = "${listSemana[diasCondicion[i]].toString()} y"
               : listDias += " ${listSemana[diasCondicion[i]].toString()}.";
         }
-        print("estoy aca 2");
-        // diasCondicion.forEach((element) {
-        //   listDias += "${listSemana[element].toString()}, ";
-        // });
       }
       if (diasCondicion.length > 2) {
-        print("estoy aca 3");
         for (var i = 0; i < diasCondicion.length; i++) {
-          if (i == diasCondicion.length - 2) {
-            listDias += "${listSemana[diasCondicion[i]].toString()} y ";
-          }
           if (i == diasCondicion.length - 1) {
-            listDias += "${listSemana[diasCondicion[i]].toString()}.";
+            listDias += " y ${listSemana[diasCondicion[i]].toString()}.";
+          } else if (i == diasCondicion.length - 2) {
+            listDias += "${listSemana[diasCondicion[i]].toString()} ";
           } else {
             listDias += "${listSemana[diasCondicion[i]].toString()}, ";
           }
