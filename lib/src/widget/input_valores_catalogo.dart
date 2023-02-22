@@ -39,7 +39,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
   bool isProductoEnOferta = false;
-  RxBool isProductoNuevo = false.obs;
+  RxBool isNewProduct = false.obs;
+  RxBool isPromoProduct = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +52,20 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         future: DBProvider.db
             .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          bool isNewProduct =
-              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
-          bool isPromoProduct =
-              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
-                      widget.isCategoriaPromos) ||
-                  isProductoEnOferta;
           if (snapshot.data == widget.element.codigo) {
             isProductoEnOferta = true;
           } else {
             isProductoEnOferta = false;
           }
+          isNewProduct.value =
+              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
+          isPromoProduct.value =
+              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
+                      widget.isCategoriaPromos) ||
+                  isProductoEnOferta;
+
           bool isAgotado = constrollerProductos.validarAgotado(widget.element);
-          return CardProductCustom(
+          return Obx(() => CardProductCustom(
               producto: widget.element,
               cartProvider: cartProvider,
               isProductoEnOferta: isProductoEnOferta,
@@ -73,13 +75,13 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
                   UxcamTagueo().seeDetailProduct(widget.element, widget.index,
-                      '', isAgotado, isNewProduct, isPromoProduct);
+                      '', isAgotado, isNewProduct.value, isPromoProduct.value);
                 }
                 detalleProducto(widget.element, cartProvider);
               },
               isAgotadoLabel: isAgotado,
-              isVisibleLabelPromo: isPromoProduct,
-              isVisibleLabelNuevo: isNewProduct);
+              isVisibleLabelPromo: isPromoProduct.value,
+              isVisibleLabelNuevo: isNewProduct.value));
         },
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
@@ -70,6 +72,7 @@ class BannnerControllers extends GetxController {
     } else if (banner.tipoSeccion == 'Proveedor') {
       resBusqueda =
           await DBProvider.db.consultarFricante(banner.seccion.toString());
+      print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {
       resBusqueda =
@@ -141,7 +144,7 @@ class BannnerControllers extends GetxController {
                   nombreCategoria: proveedor.nombrecomercial!,
                   img: proveedor.icono,
                   locacionFiltro: "proveedor",
-                  codigoProveedor: "",
+                  codigoProveedor: proveedor.empresa.toString(),
                 )));
   }
 
