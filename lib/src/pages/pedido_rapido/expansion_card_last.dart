@@ -86,7 +86,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
                               context, fabricanteFrecuencia.value);
                         }
                       },
-                      text: "Agregar al carrito ${fabricanteFrecuencia.value}"),
+                      text: "Agregar al carrito"),
                 )),
           ),
         ],
