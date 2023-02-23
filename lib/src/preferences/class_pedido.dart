@@ -134,7 +134,7 @@ class PedidoEmart {
             diasAgrupadosPorFabricante.add("martes");
             break;
           case "W":
-            diasAgrupadosPorFabricante.add("miercoles");
+            diasAgrupadosPorFabricante.add("miércoles");
             break;
           case "J":
             diasAgrupadosPorFabricante.add("jueves");
@@ -143,7 +143,7 @@ class PedidoEmart {
             diasAgrupadosPorFabricante.add("viernes");
             break;
           case "S":
-            diasAgrupadosPorFabricante.add("sabado");
+            diasAgrupadosPorFabricante.add("sábado");
             break;
         }
       });
