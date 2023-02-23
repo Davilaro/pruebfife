@@ -265,8 +265,11 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                               fontSize: size.width * 0.04,
                               fontFamily: 'RoundedMplus1c')),
                       TextSpan(
-                        text:
-                            'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${cargarResultado(cartProvider)}',
+                        text: PedidoEmart.listaProductosPorFabricante![widget
+                                    .productos.fabricante]["preciominimo"] ==
+                                0
+                            ? ""
+                            : 'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${cargarResultado(cartProvider)}',
                         style: TextStyle(
                             color: ConstantesColores.rojo_letra,
                             fontSize: size.width * 0.04,

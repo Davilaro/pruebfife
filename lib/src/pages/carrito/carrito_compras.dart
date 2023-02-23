@@ -1138,12 +1138,20 @@ class _CarritoComprasState extends State<CarritoCompras> {
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
       if (isFrecuencia == true) {
+        if (precioMinimo == 0) {
+          isValid.value = false;
+          return "";
+        }
         if (valorPedido < precioMinimo) {
           isValid.value = true;
           return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
               productoViewModel.getCurrency(precioMinimo);
         }
       } else {
+        if (precioMinimo == 0) {
+          isValid.value = false;
+          return "";
+        }
         if (valorPedido < precioMinimo) {
           isValid.value = true;
           return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
