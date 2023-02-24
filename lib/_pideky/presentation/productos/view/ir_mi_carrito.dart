@@ -407,8 +407,12 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                       fontSize: size.width * 0.04,
                                       fontFamily: 'RoundedMplus1c')),
                               TextSpan(
-                                  text:
-                                      'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.',
+                                  text: PedidoEmart.listaProductosPorFabricante![
+                                                  widget.productos.fabricante]
+                                              ["preciominimo"] ==
+                                          0
+                                      ? ""
+                                      : 'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.',
                                   style: TextStyle(
                                       color: ConstantesColores.rojo_letra,
                                       fontSize: size.width * 0.04,

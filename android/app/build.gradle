@@ -54,7 +54,7 @@ android {
         multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 40
+        versionCode 42
         versionName '1.4.5'
     }
 
