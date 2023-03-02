@@ -5,6 +5,8 @@ class Pedido {
     this.precio,
     this.iva,
     this.fabricante,
+    this.codigoFabricante,
+    this.nitFabricante,
     this.codCliente,
     this.tipoFabricante,
     this.codProveedor,
@@ -19,6 +21,8 @@ class Pedido {
   double? precio;
   int? iva;
   String? fabricante;
+  String? codigoFabricante;
+  String? nitFabricante;
   String? codCliente;
   String? tipoFabricante;
   int? codProveedor;

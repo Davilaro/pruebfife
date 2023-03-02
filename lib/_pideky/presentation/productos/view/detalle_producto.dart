@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -11,24 +13,26 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dialog_details_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
-
-import '../../widget/acciones_carrito_bart.dart';
 
 class DetalleProducto extends StatefulWidget {
   final Producto productos;
   final double tamano;
+  final bool isFrecuencia;
 
   const DetalleProducto(
-      {Key? key, required this.productos, required this.tamano})
+      {Key? key,
+      required this.productos,
+      required this.tamano,
+      required this.isFrecuencia})
       : super(key: key);
 
   @override
@@ -36,13 +40,13 @@ class DetalleProducto extends StatefulWidget {
 }
 
 class _DetalleProductoState extends State<DetalleProducto> {
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+  final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final constrollerProductos = Get.find<ControllerProductos>();
+
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
   bool isAgotado = false;
-
-  final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  final constrollerProductos = Get.find<ControllerProductos>();
 
   @override
   void initState() {
@@ -62,13 +66,6 @@ class _DetalleProductoState extends State<DetalleProducto> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
 
     _controllerCantidadProducto.text = isAgotado
         ? '0'
@@ -121,14 +118,12 @@ class _DetalleProductoState extends State<DetalleProducto> {
               width: double.infinity,
               child: Stack(children: [
                 InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => DialogDetailsImage(
-                            Constantes().urlImgProductos +
-                                '${widget.productos.codigo}.png',
-                            '${widget.productos.nombre}'));
-                  },
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => DialogDetailsImage(
+                          Constantes().urlImgProductos +
+                              '${widget.productos.codigo}.png',
+                          '${widget.productos.nombre}')),
                   child: Align(
                     alignment: Alignment.center,
                     child: PinchZoomImage(
@@ -190,16 +185,12 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                       alignment: Alignment.topLeft,
                                       child: AutoSizeText(
-                                        '${format.currencySymbol}' +
-                                            formatNumber
-                                                .format(widget.productos.precio)
-                                                .replaceAll(',00', ''),
+                                        productViewModel.getCurrency(
+                                            widget.productos.precio),
                                         textAlign: TextAlign.left,
-                                        // minFontSize: 17,
                                         presetFontSizes: [17, 15],
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            // fontSize: 18,
                                             color: Colors.red),
                                       ),
                                     )),
@@ -210,14 +201,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    '${format.currencySymbol}' +
-                                        formatNumber
-                                            .format(
-                                                widget.productos.descuento != 0
-                                                    ? widget
-                                                        .productos.precioinicial
-                                                    : widget.productos.precio)
-                                            .replaceAll(',00', ''),
+                                    productViewModel.getCurrency(
+                                        widget.productos.descuento != 0
+                                            ? widget.productos.precioinicial
+                                            : widget.productos.precio),
                                     textAlign: TextAlign.left,
                                     style: widget.productos.descuento != 0
                                         ? TextStyle(
@@ -359,23 +346,22 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
-          InkWell(
-            onTap: () {
-              llenarCarrito(widget.productos, cartProvider);
-            },
-            child: Visibility(
-              visible: !isAgotado,
-              child: Container(
-                height: widget.tamano * 0.1,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                  child: Image.asset(
-                    "assets/image/agregar_al_carrito_btn.png",
-                  ),
-                ),
-              ),
+          Visibility(
+            visible: !isAgotado,
+            child: BotonAgregarCarrito(
+              onTap: widget.isFrecuencia
+                  ? () => llenarCarrito(widget.productos, cartProvider)
+                  : () => productViewModel.iniciarModal(
+                      context, widget.productos.fabricante),
+              width: Get.width * 0.9,
+              height: widget.tamano * 0.08,
+              color: widget.isFrecuencia
+                  ? ConstantesColores.azul_aguamarina_botones
+                  : ConstantesColores.gris_sku,
+              text: 'Agregar al carrito ',
+              borderRadio: 30,
             ),
-          ),
+          )
         ],
       ),
     );

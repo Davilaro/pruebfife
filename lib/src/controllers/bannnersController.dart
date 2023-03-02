@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/bannner.dart';
@@ -8,7 +11,6 @@ import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
-import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -70,6 +72,7 @@ class BannnerControllers extends GetxController {
     } else if (banner.tipoSeccion == 'Proveedor') {
       resBusqueda =
           await DBProvider.db.consultarFricante(banner.seccion.toString());
+      print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {
       resBusqueda =
@@ -141,7 +144,7 @@ class BannnerControllers extends GetxController {
                   nombreCategoria: proveedor.nombrecomercial!,
                   img: proveedor.icono,
                   locacionFiltro: "proveedor",
-                  codigoProveedor: "",
+                  codigoProveedor: proveedor.empresa.toString(),
                 )));
   }
 

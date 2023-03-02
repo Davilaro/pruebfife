@@ -127,7 +127,7 @@ class DatosListas extends ChangeNotifier {
             _listaHistoricosTemp.add(_listaHistoricos[i]);
           }
         } catch (e) {
-          print(e);
+          print('-----Error datos lista provider $e');
         }
       }
       return _listaHistoricosTemp;

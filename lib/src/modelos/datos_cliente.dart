@@ -15,8 +15,19 @@ class DatosCliente {
     this.ciudad,
     this.telefono,
     this.telefonoWhatsapp,
-    this.condicion_pago,
+    this.condicionPago,
+    this.codigoUnicoPideky,
     this.pais,
+    this.codigomeals,
+    this.codigonutresa,
+    this.codigozenu,
+    this.codigopozuelo,
+    this.codigoalpina,
+    this.nitNutresa,
+    this.nitZenu,
+    this.nitMeals,
+    this.nitPozuelo,
+    this.nitAlpina,
   });
 
   String? codigo;
@@ -27,20 +38,48 @@ class DatosCliente {
   String? ciudad;
   String? telefono;
   String? telefonoWhatsapp;
-  String? condicion_pago;
+  String? condicionPago;
+  String? codigoUnicoPideky;
   String? pais;
 
+  String? codigonutresa;
+  String? codigozenu;
+  String? codigomeals;
+  String? codigopozuelo;
+  String? codigoalpina;
+  String? nitNutresa;
+  String? nitZenu;
+  String? nitMeals;
+  String? nitPozuelo;
+  String? nitAlpina;
+
   factory DatosCliente.fromJson(Map<String, dynamic> json) => DatosCliente(
-        codigo: json["codigo"],
-        nombre: json["nombre"],
-        razonsocial: json["razonsocial"],
-        nit: json["nit"],
-        direccion: json["direccion"],
-        ciudad: json["ciudad"],
-        telefono: json["telefono"],
-        telefonoWhatsapp: json["telefonowhatsapp"],
-        condicion_pago: json["condicion_pago"],
-        pais: json["Pais"]
+        codigo: json["codigo"] == null ? '' : json['codigo'],
+        nombre: json["nombre"] == null ? '' : json['nombre'],
+        razonsocial: json["razonsocial"] == null ? '' : json['razonsocial'],
+        nit: json["nit"] == null ? '' : json['nit'],
+        direccion: json["direccion"] == null ? '' : json['direccion'],
+        ciudad: json["ciudad"] == null ? '' : json['ciudad'],
+        telefono: json["telefono"] == null ? '' : json['telefono'],
+        telefonoWhatsapp:
+            json["telefonowhatsapp"] == null ? '' : json['telefonowhatsapp'],
+        condicionPago:
+            json["condicion_pago"] == null ? '' : json['condicion_pago'],
+        codigoUnicoPideky:
+            json["CodigoUnicoPideky"] == null ? '' : json['CodigoUnicoPideky'],
+        pais: json["Pais"] == null ? 'CO' : json['Pais'],
+        codigomeals: json["codigomeals"] == null ? '' : json['codigomeals'],
+        codigonutresa:
+            json["codigonutresa"] == null ? '' : json['codigonutresa'],
+        codigozenu: json["codigozenu"] == null ? '' : json['codigozenu'],
+        codigopozuelo:
+            json["codigopozuelo"] == null ? '' : json['codigopozuelo'],
+        codigoalpina: json["codigoalpina"] == null ? '' : json['codigoalpina'],
+        nitNutresa: json["NitNutresa"] == null ? '' : json['NitNutresa'],
+        nitZenu: json["NitZenu"] == null ? '' : json['NitZenu'],
+        nitMeals: json["NitMeals"] == null ? '' : json['NitMeals'],
+        nitPozuelo: json["NitPozuelo"] == null ? '' : json['NitPozuelo'],
+        nitAlpina: json["NitAlpina"] == null ? '' : json['NitAlpina'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,7 +91,17 @@ class DatosCliente {
         "ciudad": ciudad,
         "telefono": telefono,
         "telefonowhatsapp": telefonoWhatsapp,
-        "condicion_pago": condicion_pago,
-        "Pais" : pais
+        "condicion_pago": condicionPago,
+        "Pais": pais,
+        "codigomeals": codigomeals,
+        "codigonutresa": codigonutresa,
+        "codigozenu": codigozenu,
+        "codigopozuelo": codigopozuelo,
+        "codigoalpina": codigoalpina,
+        "NitNutresa": nitNutresa,
+        "NitZenu": nitZenu,
+        "NitMeals": nitMeals,
+        "NitPozuelo": nitPozuelo,
+        "NitAlpina": nitAlpina,
       };
 }

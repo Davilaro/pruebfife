@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -8,20 +11,22 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_card.dart';
 import 'package:emart/src/widget/dialog_details_image.dart';
-import 'package:emart/src/pages/productos/ir_mi_carrito.dart';
+import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
+
+final prefs = new Preferencias();
 
 class DetalleProductoSearch extends StatefulWidget {
   final Producto producto;
@@ -39,14 +44,13 @@ class DetalleProductoSearch extends StatefulWidget {
 }
 
 class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productViewModel = Get.find();
+  final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final constrollerProductos = Get.find<ControllerProductos>();
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
 
   bool isAgotado = false;
-
-  final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  final constrollerProductos = Get.find<ControllerProductos>();
 
   @override
   void initState() {
@@ -70,14 +74,12 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final cartProvider = Provider.of<CarroModelo>(context);
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+    bool isFrecuencia = prefs.paisUsuario == 'CR'
+        ? productViewModel
+            .validarFrecuencia(widget.producto.fabricante.toString())
+        : true;
 
     _controllerCantidadProducto.text = isAgotado
         ? '0'
@@ -88,9 +90,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
-        title: Text(
-          '',
-        ),
+        title: TituloPideky(size: size),
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
@@ -192,11 +192,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                 EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             alignment: Alignment.topLeft,
                                             child: AutoSizeText(
-                                              '${format.currencySymbol}' +
-                                                  formatNumber
-                                                      .format(widget
-                                                          .producto.precio)
-                                                      .replaceAll(',00', ''),
+                                              productViewModel.getCurrency(
+                                                  widget.producto.precio),
                                               textAlign: TextAlign.left,
                                               presetFontSizes: [17, 15],
                                               style: TextStyle(
@@ -213,15 +210,11 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                             EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         alignment: Alignment.topLeft,
                                         child: AutoSizeText(
-                                          '${format.currencySymbol}' +
-                                              formatNumber
-                                                  .format(widget.producto
-                                                              .descuento !=
-                                                          0
-                                                      ? widget.producto
-                                                          .precioinicial
-                                                      : widget.producto.precio)
-                                                  .replaceAll(',00', ''),
+                                          productViewModel.getCurrency(
+                                              widget.producto.descuento != 0
+                                                  ? widget
+                                                      .producto.precioinicial
+                                                  : widget.producto.precio),
                                           textAlign: TextAlign.left,
                                           style: widget.producto.descuento != 0
                                               ? TextStyle(
@@ -369,24 +362,40 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                       ],
                     ),
                   ),
+                  // Visibility(
+                  //   visible: !isAgotado,
+                  //   child: InkWell(
+                  //     onTap: () {
+                  //       llenarCarrito(widget.producto, cartProvider);
+                  //     },
+                  //     child: Container(
+                  //       margin: EdgeInsets.only(top: 40),
+                  //       height: widget.tamano * 0.1,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                  //         child: Image.asset(
+                  //           "assets/image/agregar_al_carrito_btn.png",
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Visibility(
                     visible: !isAgotado,
-                    child: InkWell(
-                      onTap: () {
-                        llenarCarrito(widget.producto, cartProvider);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(top: 40),
-                        height: widget.tamano * 0.1,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
-                          child: Image.asset(
-                            "assets/image/agregar_al_carrito_btn.png",
-                          ),
-                        ),
-                      ),
+                    child: BotonAgregarCarrito(
+                      onTap: isFrecuencia
+                          ? () => llenarCarrito(widget.producto, cartProvider)
+                          : () => productViewModel.iniciarModal(
+                              context, widget.producto.fabricante),
+                      width: Get.width * 0.8,
+                      height: widget.tamano * 0.06,
+                      color: isFrecuencia
+                          ? ConstantesColores.azul_aguamarina_botones
+                          : ConstantesColores.gris_sku,
+                      text: 'Agregar al carrito ',
+                      borderRadio: 30,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -466,8 +475,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
               builder: (context) => IrMiCarrito(
                   productos: widget.producto,
                   tamano: retornarTamano(cartProvider) * 1.5)));
-
-      // Navigator.of(context).pop();
     }
   }
 

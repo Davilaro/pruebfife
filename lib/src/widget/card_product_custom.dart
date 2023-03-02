@@ -1,13 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/generated/l10n.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class CardProductCustom extends StatefulWidget {
   final Producto producto;
@@ -38,18 +37,14 @@ class CardProductCustom extends StatefulWidget {
 }
 
 class _CardProductCustomState extends State<CardProductCustom> {
+  ProductoViewModel productViewModel = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    var locale = Intl().locale;
-
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
-    NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
-
-    print('moneda $format --- ${locale}');
+    var typeCurrency = productViewModel.getCurrency(
+        widget.producto.descuento != 0
+            ? widget.producto.precioinicial
+            : widget.producto.precio);
     return Card(
         shape: RoundedRectangleBorder(
             side: new BorderSide(color: Colors.white),
@@ -150,11 +145,8 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                 0, 0, 10, 0),
                                             alignment: Alignment.topLeft,
                                             child: AutoSizeText(
-                                              '${format.currencySymbol}' +
-                                                  formatNumber
-                                                      .format(widget
-                                                          .producto.precio)
-                                                      .replaceAll(',00', ''),
+                                              productViewModel.getCurrency(
+                                                  widget.producto.precio),
                                               minFontSize: 15,
                                               maxFontSize: 18,
                                               textAlign: TextAlign.left,
@@ -172,15 +164,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                             EdgeInsets.fromLTRB(0, 0, 10, 0),
                                         alignment: Alignment.topLeft,
                                         child: AutoSizeText(
-                                          '${format.currencySymbol}' +
-                                              formatNumber
-                                                  .format(widget.producto
-                                                              .descuento !=
-                                                          0
-                                                      ? widget.producto
-                                                          .precioinicial
-                                                      : widget.producto.precio)
-                                                  .replaceAll(',00', ''),
+                                          typeCurrency,
                                           minFontSize: 10,
                                           textAlign: TextAlign.left,
                                           style: widget.producto.descuento != 0
@@ -294,4 +278,20 @@ class _CardProductCustomState extends State<CardProductCustom> {
           ),
         ));
   }
+
+  // String _definirMoneda() {
+  //   var locale = Intl().locale;
+  //   NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+
+  //   var format = locale.toString() != 'es_CO'
+  //       ? locale.toString() == 'es_CR'
+  //           ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+  //           : NumberFormat.simpleCurrency(locale: locale.toString())
+  //       : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+
+  //   var valor = '${format.currencySymbol}' +
+  //       formatNumber.format().replaceAll(',00', '');
+
+  //   return valor;
+  // }
 }

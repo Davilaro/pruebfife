@@ -98,7 +98,7 @@ class _TerminosState extends State<Terminos> {
 
   cargarArchivo() async {
     try {
-      urlTerminos = await DBProvider.db.consultarDocumentoLegal('Autorización');
+      urlTerminos = await DBProvider.db.consultarDocumentoLegal('Términos');
       setState(() {});
     } catch (e) {
       print('Error al cagar archivos $e');

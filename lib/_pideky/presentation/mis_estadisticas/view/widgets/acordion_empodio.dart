@@ -50,7 +50,7 @@ class AcordionEmpodio extends StatelessWidget {
                     color: ConstantesColores.gris_textos),
               ),
             ),
-            //Empodio
+            //Imagen del Empodio
             Empodio(
                 lista: lista, tipo: tipo!, imgSubCategoria: imgSubCategoria),
             for (var index = 0; index < lista.length; index++)
@@ -111,19 +111,20 @@ class AcordionEmpodio extends StatelessWidget {
                                         width: Get.width * 0.12),
                               ),
                               //Descripcion
-                              Container(
-                                width: Get.width * 0.28,
-                                margin: EdgeInsets.only(left: 10),
-                                child: AutoSizeText(
-                                  tipo == 'marcas'
-                                      ? ''
-                                      : lista[index].descripcion,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: ConstantesColores.azul_precio),
+                              Visibility(
+                                visible: tipo != 'marcas',
+                                child: Container(
+                                  width: Get.width * 0.28,
+                                  margin: EdgeInsets.only(left: 10),
+                                  child: AutoSizeText(
+                                    lista[index].descripcion,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: ConstantesColores.azul_precio),
+                                  ),
                                 ),
                               ),
                             ],

@@ -408,7 +408,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
       context: context2,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        bool isChequet = true;
+        bool isChequet = false;
         bool isChequet1 = false;
         var destino = this.val == 1 ? "SMS" : "correo electrónico";
         return WillPopScope(
@@ -455,7 +455,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                             child: Text(
-                              'Por favor ingresa el código de ${S.current.activate}, enviado por $destino',
+                              S.current.please_enter_the_code(
+                                  S.current.activate, destino),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -483,36 +484,37 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                                       EdgeInsets.fromLTRB(10, 0, 10, 0)),
                             ),
                           ),
-                          // Container(
-                          //   margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(20),
-                          //     color: HexColor("#E4E3EC"),
-                          //   ),
-                          //   child: Row(
-                          //     children: [
-                          //       Checkbox(
-                          //         value: isChequet,
-                          //         shape: CircleBorder(),
-                          //         checkColor: Colors.purple,
-                          //         onChanged: (bool? value) {
-                          //           setState(() {
-                          //             isChequet = value!;
-                          //           });
-                          //         },
-                          //       ),
-                          //       Expanded(
-                          //           child: Text(
-                          //         'Acepto política de privacidad',
-                          //         textAlign: TextAlign.left,
-                          //         style: TextStyle(
-                          //             fontSize: 12,
-                          //             color:
-                          //                 HexColor(Colores().color_azul_letra)),
-                          //       )),
-                          //     ],
-                          //   ),
-                          // ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: HexColor("#E4E3EC"),
+                            ),
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: isChequet,
+                                  shape: CircleBorder(),
+                                  checkColor: Colors.purple,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      isChequet = value!;
+                                    });
+                                  },
+                                ),
+                                Expanded(
+                                    //Acepto términos y condiciones
+                                    child: Text(
+                                  S.current.accept_terms_conditions,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color:
+                                          HexColor(Colores().color_azul_letra)),
+                                )),
+                              ],
+                            ),
+                          ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
                             decoration: BoxDecoration(
@@ -533,8 +535,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                        // 'Acepto política de tratamiento de datos',
-                                        'Acepto los términos y condiciones y autorizo el tratamiento de mis datos personales',
+                                        // 'Autorizo el tratamiento de mis datos personales',
+                                        S.current
+                                            .authorize_processing_personal_data,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontSize: 12,
@@ -577,8 +580,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
   _btnEnviarCodigo(BuildContext context, bool estado, bool estado2) {
     if (_controllerCodigo.text == '') {
-      mostrarAlert(
-          context, 'El Codigo de Verificación no puede estar vacio', null);
+      // El código de verificacion no puede estar vació
+      mostrarAlert(context, S.current.verification_code_cannot_empty, null);
     } else {
       if (estado && estado2) {
         //FIREBASE: Llamamos el evento code_received
@@ -587,20 +590,11 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
         _cargandoCodigoVerificacion(
             widget.codigoRespuesta, _controllerCodigo.text, estado, estado2);
       } else {
-        mostrarAlert(context, 'Se debe aceptar las politicas', null);
+        // Se debe aceptar las políticas
+        mostrarAlert(context, S.current.policies_accepted, null);
       }
     }
   }
-
-  /*_btnEnviarCodigo(BuildContext context, bool estado) {
-    if (_controllerCodigo.text == '') {
-      mostrarAlert(
-          context, 'El Codigo de Verificación no puede estar vacio');
-    } else {
-      _cargandoCodigoVerificacion(
-          widget.codigoRespuesta, _controllerCodigo.text);
-    }
-  }*/
 
   void _cargandoCodigoVerificacion(
       int codigo, String codVerificado, bool estado, bool estado2) async {

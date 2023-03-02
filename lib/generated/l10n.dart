@@ -50,21 +50,81 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Not to be missed by `
-  String get imperdible {
+  /// `I accept terms and conditions`
+  String get accept_terms_conditions {
     return Intl.message(
-      'Not to be missed by ',
-      name: 'imperdible',
+      'I accept terms and conditions',
+      name: 'accept_terms_conditions',
       desc: '',
       args: [],
     );
   }
 
-  /// `Home`
-  String get home {
+  /// `the activation`
+  String get activate {
     return Intl.message(
-      'Home',
-      name: 'home',
+      'the activation',
+      name: 'activate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account registration`
+  String get activate_user {
+    return Intl.message(
+      'Account registration',
+      name: 'activate_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to buy on Pideky and view your business data you must activate your account`
+  String get activate_user_for_buy {
+    return Intl.message(
+      'to buy on Pideky and view your business data you must activate your account',
+      name: 'activate_user_for_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activate your account!`
+  String get activate_your_user {
+    return Intl.message(
+      'Activate your account!',
+      name: 'activate_your_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I authorize the processing of my personal data`
+  String get authorize_processing_personal_data {
+    return Intl.message(
+      'I authorize the processing of my personal data',
+      name: 'authorize_processing_personal_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accept`
+  String get accept {
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
       desc: '',
       args: [],
     );
@@ -80,71 +140,11 @@ class S {
     );
   }
 
-  /// `Suggested Order`
-  String get suggested_order {
+  /// `Featured categories for you `
+  String get categories_for_you {
     return Intl.message(
-      'Suggested Order',
-      name: 'suggested_order',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `History`
-  String get history {
-    return Intl.message(
-      'History',
-      name: 'history',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `My Business`
-  String get my_business {
-    return Intl.message(
-      'My Business',
-      name: 'my_business',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Nit without verification digit`
-  String get login_placeholder {
-    return Intl.message(
-      'Nit without verification digit',
-      name: 'login_placeholder',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Welcome to Pideky!`
-  String get welcome_pideky {
-    return Intl.message(
-      'Welcome to Pideky!',
-      name: 'welcome_pideky',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Before you can enjoy our shopping experience you must become active.`
-  String get secod_welcome_pideky {
-    return Intl.message(
-      'Before you can enjoy our shopping experience you must become active.',
-      name: 'secod_welcome_pideky',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `You wish to activate yourself with your`
-  String get get_active_with_your {
-    return Intl.message(
-      'You wish to activate yourself with your',
-      name: 'get_active_with_your',
+      'Featured categories for you ',
+      name: 'categories_for_you',
       desc: '',
       args: [],
     );
@@ -160,33 +160,13 @@ class S {
     );
   }
 
-  /// `or via `
-  String get or_via_text_message {
+  /// `Remember that you can place your order: {diasEntrega}`
+  String delivery_days(Object diasEntrega) {
     return Intl.message(
-      'or via ',
-      name: 'or_via_text_message',
+      'Remember that you can place your order: $diasEntrega',
+      name: 'delivery_days',
       desc: '',
-      args: [],
-    );
-  }
-
-  /// `text message.`
-  String get text_message {
-    return Intl.message(
-      'text message.',
-      name: 'text_message',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Or sign up with your email address `
-  String get text_your_email_address {
-    return Intl.message(
-      'Or sign up with your email address ',
-      name: 'text_your_email_address',
-      desc: '',
-      args: [],
+      args: [diasEntrega],
     );
   }
 
@@ -200,11 +180,111 @@ class S {
     );
   }
 
-  /// `Register`
-  String get register {
+  /// `Enter your master code for manual activation`
+  String get enter_your_master_code {
     return Intl.message(
-      'Register',
-      name: 'register',
+      'Enter your master code for manual activation',
+      name: 'enter_your_master_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error getting code`
+  String get error_code {
+    return Intl.message(
+      'Error getting code',
+      name: 'error_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error obtaining information`
+  String get error_information {
+    return Intl.message(
+      'Error obtaining information',
+      name: 'error_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You wish to activate yourself with your`
+  String get get_active_with_your {
+    return Intl.message(
+      'You wish to activate yourself with your',
+      name: 'get_active_with_your',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History`
+  String get history {
+    return Intl.message(
+      'History',
+      name: 'history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get home {
+    return Intl.message(
+      'Home',
+      name: 'home',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I accept privacy policy`
+  String get i_accept_privacy_policy {
+    return Intl.message(
+      'I accept privacy policy',
+      name: 'i_accept_privacy_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I accept the data processing policy`
+  String get i_accept_processing_policy {
+    return Intl.message(
+      'I accept the data processing policy',
+      name: 'i_accept_processing_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not to be missed by `
+  String get imperdible {
+    return Intl.message(
+      'Not to be missed by ',
+      name: 'imperdible',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading branches`
+  String get loading_branches {
+    return Intl.message(
+      'Loading branches',
+      name: 'loading_branches',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nit without verification digit`
+  String get login_placeholder {
+    return Intl.message(
+      'Nit without verification digit',
+      name: 'login_placeholder',
       desc: '',
       args: [],
     );
@@ -240,26 +320,6 @@ class S {
     );
   }
 
-  /// `Or do you want to go to the `
-  String get you_want_to_go {
-    return Intl.message(
-      'Or do you want to go to the ',
-      name: 'you_want_to_go',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter your master code for manual activation`
-  String get enter_your_master_code {
-    return Intl.message(
-      'Enter your master code for manual activation',
-      name: 'enter_your_master_code',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Master code`
   String get master_code {
     return Intl.message(
@@ -270,101 +330,21 @@ class S {
     );
   }
 
-  /// `to buy on Pideky and view your business data you must activate your account`
-  String get activate_user_for_buy {
+  /// `My Business`
+  String get my_business {
     return Intl.message(
-      'to buy on Pideky and view your business data you must activate your account',
-      name: 'activate_user_for_buy',
+      'My Business',
+      name: 'my_business',
       desc: '',
       args: [],
     );
   }
 
-  /// `Activate your account!`
-  String get activate_your_user {
+  /// `or via `
+  String get or_via_text_message {
     return Intl.message(
-      'Activate your account!',
-      name: 'activate_your_user',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Account registration`
-  String get activate_user {
-    return Intl.message(
-      'Account registration',
-      name: 'activate_user',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `the activation`
-  String get activate {
-    return Intl.message(
-      'the activation',
-      name: 'activate',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter the activation code, sent by {destino} to your selected number:`
-  String please_enter_activation_cod(Object destino) {
-    return Intl.message(
-      'Please enter the activation code, sent by $destino to your selected number:',
-      name: 'please_enter_activation_cod',
-      desc: '',
-      args: [destino],
-    );
-  }
-
-  /// `I accept privacy policy`
-  String get i_accept_privacy_policy {
-    return Intl.message(
-      'I accept privacy policy',
-      name: 'i_accept_privacy_policy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `I accept the data processing policy`
-  String get i_accept_processing_policy {
-    return Intl.message(
-      'I accept the data processing policy',
-      name: 'i_accept_processing_policy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `We are validating the code to activate your account.`
-  String get we_validating_code_activate {
-    return Intl.message(
-      'We are validating the code to activate your account.',
-      name: 'we_validating_code_activate',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The verification code is incorrect, \nplease check it and try again.`
-  String get the_verification_code_incorrect {
-    return Intl.message(
-      'The verification code is incorrect, \nplease check it and try again.',
-      name: 'the_verification_code_incorrect',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Registration Successful!`
-  String get registration_successful {
-    return Intl.message(
-      'Registration Successful!',
-      name: 'registration_successful',
+      'or via ',
+      name: 'or_via_text_message',
       desc: '',
       args: [],
     );
@@ -380,11 +360,131 @@ class S {
     );
   }
 
-  /// `Loading branches`
-  String get loading_branches {
+  /// `Please enter the activation code, sent by {destino} to your selected number:`
+  String please_enter_activation_cod(Object destino) {
     return Intl.message(
-      'Loading branches',
-      name: 'loading_branches',
+      'Please enter the activation code, sent by $destino to your selected number:',
+      name: 'please_enter_activation_cod',
+      desc: '',
+      args: [destino],
+    );
+  }
+
+  /// `Please enter the code from {activate}, sent by {destino}`
+  String please_enter_the_code(Object activate, Object destino) {
+    return Intl.message(
+      'Please enter the code from $activate, sent by $destino',
+      name: 'please_enter_the_code',
+      desc: '',
+      args: [activate, destino],
+    );
+  }
+
+  /// `Policies must be accepted`
+  String get policies_accepted {
+    return Intl.message(
+      'Policies must be accepted',
+      name: 'policies_accepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get register {
+    return Intl.message(
+      'Register',
+      name: 'register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration Successful!`
+  String get registration_successful {
+    return Intl.message(
+      'Registration Successful!',
+      name: 'registration_successful',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Before you can enjoy our shopping experience you must become active.`
+  String get secod_welcome_pideky {
+    return Intl.message(
+      'Before you can enjoy our shopping experience you must become active.',
+      name: 'secod_welcome_pideky',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suggested Order`
+  String get suggested_order {
+    return Intl.message(
+      'Suggested Order',
+      name: 'suggested_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `These products will be delivered according to the supplier's itinerary.`
+  String get terms_of_delivery {
+    return Intl.message(
+      'These products will be delivered according to the supplier\'s itinerary.',
+      name: 'terms_of_delivery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `text message.`
+  String get text_message {
+    return Intl.message(
+      'text message.',
+      name: 'text_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SMS`
+  String get text_sms {
+    return Intl.message(
+      'SMS',
+      name: 'text_sms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Or sign up with your email address `
+  String get text_your_email_address {
+    return Intl.message(
+      'Or sign up with your email address ',
+      name: 'text_your_email_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The email does not comply with the format`
+  String get the_email_does_not {
+    return Intl.message(
+      'The email does not comply with the format',
+      name: 'the_email_does_not',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The verification code is incorrect, \nplease check it and try again.`
+  String get the_verification_code_incorrect {
+    return Intl.message(
+      'The verification code is incorrect, \nplease check it and try again.',
+      name: 'the_verification_code_incorrect',
       desc: '',
       args: [],
     );
@@ -410,61 +510,41 @@ class S {
     );
   }
 
-  /// `Error getting code`
-  String get error_code {
+  /// `The verification code cannot be empty`
+  String get verification_code_cannot_empty {
     return Intl.message(
-      'Error getting code',
-      name: 'error_code',
+      'The verification code cannot be empty',
+      name: 'verification_code_cannot_empty',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error obtaining information`
-  String get error_information {
+  /// `We are validating the code to activate your account.`
+  String get we_validating_code_activate {
     return Intl.message(
-      'Error obtaining information',
-      name: 'error_information',
+      'We are validating the code to activate your account.',
+      name: 'we_validating_code_activate',
       desc: '',
       args: [],
     );
   }
 
-  /// `The email does not comply with the format`
-  String get the_email_does_not {
+  /// `Welcome to Pideky!`
+  String get welcome_pideky {
     return Intl.message(
-      'The email does not comply with the format',
-      name: 'the_email_does_not',
+      'Welcome to Pideky!',
+      name: 'welcome_pideky',
       desc: '',
       args: [],
     );
   }
 
-  /// `SMS`
-  String get text_sms {
+  /// `Or do you want to go to the `
+  String get you_want_to_go {
     return Intl.message(
-      'SMS',
-      name: 'text_sms',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Featured categories for you `
-  String get categories_for_you {
-    return Intl.message(
-      'Featured categories for you ',
-      name: 'categories_for_you',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `These products will be delivered according to the supplier's itinerary.`
-  String get terms_of_delivery {
-    return Intl.message(
-      'These products will be delivered according to the supplier\'s itinerary.',
-      name: 'terms_of_delivery',
+      'Or do you want to go to the ',
+      name: 'you_want_to_go',
       desc: '',
       args: [],
     );

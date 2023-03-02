@@ -26,10 +26,11 @@ class ListaSucursalesData {
       this.codigonutresa,
       this.codigozenu,
       this.codigopozuelo,
+      this.codigoalpina,
       this.pais,
       this.codigoUnicoPideky,
       this.bloqueado,
-      this.codigopadrepideky});
+      this.sucursal});
 
   String? codigo;
   String? nombre;
@@ -43,10 +44,11 @@ class ListaSucursalesData {
   String? codigozenu;
   String? codigomeals;
   String? codigopozuelo;
+  String? codigoalpina;
   String? pais;
   String? bloqueado;
-  String? codigopadrepideky;
   String? codigoUnicoPideky;
+  String? sucursal;
 
   factory ListaSucursalesData.fromJson(Map<String, dynamic> json) =>
       ListaSucursalesData(
@@ -61,13 +63,14 @@ class ListaSucursalesData {
         codigonutresa: json["codigonutresa"],
         codigozenu: json["codigozenu"],
         codigopozuelo: json["codigopozuelo"],
+        codigoalpina: json["codigoalpina"],
         codigoUnicoPideky: json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"],
-        codigopadrepideky:
-            json["CodigoPadrePideky"] == null ? "" : json["CodigoPadrePideky"],
         pais: json["Pais"] == null ? "" : json["Pais"],
         fabricantes: List<Fabricantes>.from(
-            json["fabricantes"].map((x) => Fabricantes.fromJson(x))),
+          json["fabricantes"].map((x) => Fabricantes.fromJson(x)),
+        ),
+        sucursal: json["Sucursal"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,9 +86,10 @@ class ListaSucursalesData {
         "codigonutresa": codigonutresa,
         "codigozenu": codigozenu,
         "codigopozuelo": codigopozuelo,
+        "codigoalpina": codigoalpina,
         "Pais": pais,
         "CodigoUnicoPideky": codigoUnicoPideky,
         "Bloqueado": bloqueado,
-        "CodigoPadrePideky": codigopadrepideky,
+        "Sucursal": sucursal
       };
 }

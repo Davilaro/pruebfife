@@ -12,7 +12,6 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -52,17 +51,20 @@ class _SplashState extends State<Splash> {
   Future<void> _descarcarDB() async {
     var cargo = false;
     if (prefs.usurioLogin == null) {
-      cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-          '10360653', '10426885', '10847893', '', true);
+      // cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
+      //     prefs.sucursal, '10360653', '10426885', '10847893', '', true);
+      cargo =
+          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = -1;
       if (res && cargo) {
         Get.off(() => TabOpciones());
       }
     } else if (prefs.usurioLogin == -1) {
-      cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-          '10360653', '10426885', '10847893', '', true);
-
+      // cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
+      //     prefs.sucursal, '10360653', '10426885', '10847893', '', true);
+      cargo =
+          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = -1;
       if (res && cargo) {
@@ -78,14 +80,17 @@ class _SplashState extends State<Splash> {
 
       await Servicies()
           .registrarToken(divace[2], plataforma, prefs.usurioLoginCedula);
-      cargo = await AppUtil.appUtil.downloadZip(
-          prefs.usurioLoginCedula,
-          prefs.codCliente,
-          prefs.codigonutresa,
-          prefs.codigozenu,
-          prefs.codigomeals,
-          prefs.codigopadrepideky,
-          false);
+      // cargo = await AppUtil.appUtil.downloadZip(
+      //     prefs.usurioLoginCedula,
+      //     prefs.codCliente,
+      //     prefs.sucursal,
+      //     prefs.codigonutresa,
+      //     prefs.codigozenu,
+      //     prefs.codigomeals,
+      //     prefs.codigopadrepideky,
+      //     false);
+      cargo = await AppUtil.appUtil
+          .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
       var res = await AppUtil.appUtil.abrirBases();
       prefs.usurioLogin = 1;
       PedidoSugeridoController.userLog.value = 1;
@@ -96,9 +101,9 @@ class _SplashState extends State<Splash> {
               : prefs.paisUsuario == 'CO'
                   ? Locale('es', 'CO')
                   : Locale('es', 'CO'));
-          UxcamTagueo().validarTipoUsario();
+          UxcamTagueo().validarTipoUsuario();
         }
-        print('hola pais ${Intl.defaultLocale}');
+
         Navigator.pushReplacementNamed(
           context,
           'tab_opciones',

@@ -151,12 +151,12 @@ class Preferencias {
     _prefs.setString('codigopozuelo', value);
   }
 
-  get codigopadrepideky {
-    return _prefs.getString('codigopadrepideky') ?? '';
+  get codigoalpina {
+    return _prefs.getString('codigoalpina') ?? '';
   }
 
-  set codigopadrepideky(dynamic value) {
-    _prefs.setString('codigopadrepideky', value);
+  set codigoalpina(dynamic value) {
+    _prefs.setString('codigoalpina', value);
   }
 
   get codigoUnicoPideky {
@@ -165,6 +165,30 @@ class Preferencias {
 
   set codigoUnicoPideky(dynamic value) {
     _prefs.setString("codigounicopideky", value);
+  }
+
+  get sucursal {
+    return _prefs.getString("sucursal") ?? "";
+  }
+
+  set sucursal(dynamic value) {
+    _prefs.setString("sucursal", value);
+  }
+
+  get ciudad {
+    return _prefs.getString("ciudad") ?? "";
+  }
+
+  set ciudad(dynamic value) {
+    _prefs.setString("ciudad", value);
+  }
+
+  get diaActual {
+    return _prefs.getString("diaactual") ?? "";
+  }
+
+  set diaActual(dynamic value) {
+    _prefs.setString("diaactual", value);
   }
 
   clear() async {

@@ -21,8 +21,8 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
-  //NOTIFICAICONES PARA HUAWEI
   //injectDependencies();
+  _validarKeyUXCam();
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
@@ -30,6 +30,17 @@ Future<void> main() async {
   await prefs.initPrefs();
 
   runApp(MyApp());
+}
+
+_validarKeyUXCam() async {
+  FlutterUxcam.optIntoSchematicRecordings();
+  if (Constantes().titulo == 'QA') {
+    FlutterUxcam.startWithKey("s7xvg23hmx7ttcv");
+  } else {
+    FlutterUxcam.startWithKey("l0uak7nx63mtp1i");
+  }
+  FlutterUxcam.setAutomaticScreenNameTagging(false);
+  await PushNotificationServer.initializeApp();
 }
 
 class MyApp extends StatefulWidget {
@@ -61,8 +72,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    _validarKeyUXCam();
-    // Intl.defaultLocale = 'es_CO';
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -82,11 +91,6 @@ class _MyAppState extends State<MyApp> {
               S.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
-            // supportedLocales: [
-            //   const Locale('en', ''), // English,
-            //   const Locale('es', 'CO'), // español,
-            //   const Locale('es', 'CR'),
-            // ],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',
@@ -100,16 +104,5 @@ class _MyAppState extends State<MyApp> {
             routes: getRutas(),
           ),
         ));
-  }
-
-  _validarKeyUXCam() async {
-    FlutterUxcam.optIntoSchematicRecordings();
-    if (Constantes().titulo == 'QA') {
-      FlutterUxcam.startWithKey("s7xvg23hmx7ttcv");
-    } else {
-      FlutterUxcam.startWithKey("l0uak7nx63mtp1i");
-    }
-    FlutterUxcam.setAutomaticScreenNameTagging(false);
-    await PushNotificationServer.initializeApp();
   }
 }

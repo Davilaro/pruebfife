@@ -92,6 +92,7 @@ class PedidoSugeridoController extends GetxController
                 'nombrecomercial': nombreComercial
               });
     });
+    // update();
   }
 
   void mapearProductos(List<PedidoSugeridoModel> lista) {
@@ -102,9 +103,6 @@ class PedidoSugeridoController extends GetxController
 
   Future getListaFabricantes() async {
     listaFabricante.value = await DBProvider.db.consultarFricante("");
-    // listaFabricante.forEach((element) {
-    //   print(element.nombrecomercial);
-    // });
   }
 
   initController() async {

@@ -8,7 +8,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProviderHelper.db.baseAbierta;
 
     final sql = await db.rawQuery('''
-      SELECT * FROM Producto where codigo='$producto' limit 1
+      SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo='$producto' limit 1
     ''');
 
     return Producto.fromJson(sql.first);
@@ -18,7 +18,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT * FROM Producto
+      SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
     ''');
 
       return sql.map((e) => Producto.fromJson(e)).toList();
@@ -33,7 +33,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     try {
       final sql = await db.rawQuery('''
        
-        SELECT p.codigo , p.nombre , 
+        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -46,7 +46,8 @@ class ProductoRepositorySqlite extends IProductoRepository {
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-        FROM Producto p
+        FROM Producto p 
+       JOIN fabricante f ON p.fabricante = f.empresa 
         inner join Ofertas pn ON p.codigo = pn.codigo
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
@@ -86,7 +87,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 2) {
         query = '''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -102,7 +103,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -118,7 +119,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     ''';
       } else if (tipo == 3) {
         query = '''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -134,7 +135,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -149,7 +150,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        ''';
       } else if (tipo == 4) {
         query = '''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -165,7 +166,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -180,7 +181,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ''';
       } else if (tipo == 5) {
         query = '''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -196,7 +197,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -212,7 +213,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
         query = '''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -228,7 +229,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
           ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -245,7 +246,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ''';
       } else {
         query = '''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -261,7 +262,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -310,7 +311,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipoProducto == 2) {
         sql = await db.rawQuery('''
-        SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
         p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
@@ -322,7 +323,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-        FROM Producto p
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
@@ -339,7 +340,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     ''');
       } else {
         sql = await db.rawQuery('''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
       p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -352,7 +353,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
        ,activopromocion, activoprodnuevo
-      FROM Producto p
+      FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
       left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
       from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
@@ -365,7 +366,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
       $consulta
       UNION 
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
       p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -378,7 +379,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-      FROM Producto p left join Ofertas pn ON p.codigo = pn.codigo left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+      FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join Ofertas pn ON p.codigo = pn.codigo left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
       select count(p.codigo) identificador,* 
       from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
       ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -411,7 +412,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
       List<Map> sql = await db.rawQuery('''
-       SELECT p.codigo , p.nombre , round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+       SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
         p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
@@ -420,7 +421,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
-        FROM Producto p
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select count(p.codigo) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
@@ -475,7 +476,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 5) {
         sql = await db.rawQuery('''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -491,7 +492,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -514,7 +515,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 1) {
         //tipo 1 para imperdibles
         sql = await db.rawQuery('''
-  SELECT p.codigo , p.nombre , 
+  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -530,7 +531,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -553,7 +554,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 3) {
         //tipo 3 para marca e imperdible
         sql = await db.rawQuery('''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -569,7 +570,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -595,7 +596,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         String date = DateTime.now().toString();
 
         sql = await db.rawQuery('''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -611,7 +612,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
           ,activopromocion, activoprodnuevo
-         FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+         FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -631,7 +632,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 4) {
         //tipo 4 para marca  y promo
         sql = await db.rawQuery('''
-       SELECT p.codigo , p.nombre , 
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -647,7 +648,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -666,7 +667,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
       } else {
         sql = await db.rawQuery('''
- SELECT p.codigo , p.nombre , 
+ SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -682,7 +683,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
         ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -726,7 +727,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 1) {
         //tipo 1 para filtrar solo por marca, categoria y subcategoria
         sql = await db.rawQuery('''
-            SELECT p.codigo , p.nombre , 
+            SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -742,7 +743,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -763,7 +764,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         //tipo 2 para productos mas vendidos
       } else if (tipo == 2) {
         sql = await db.rawQuery('''
-         SELECT p.codigo , p.nombre , 
+         SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -779,7 +780,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
           ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
@@ -802,7 +803,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       } else {
         //tipo 3 para imperdibles marcas, categorias y subc
         sql = await db.rawQuery('''
-      SELECT p.codigo , p.nombre , 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
         p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
@@ -818,7 +819,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
 substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
          ,activopromocion, activoprodnuevo
-        FROM Producto p left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
         select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo

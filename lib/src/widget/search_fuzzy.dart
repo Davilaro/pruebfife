@@ -1,9 +1,9 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_search.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/productos/detalle_producto_search.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -15,6 +15,7 @@ import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/soporte.dart';
+import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -88,7 +89,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
-        title: titulo_pideky(size: size),
+        title: TituloPideky(size: size),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
           child: Container(
@@ -359,54 +360,5 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
             runFilter(value);
           },
         ));
-  }
-}
-
-class titulo_pideky extends StatelessWidget {
-  const titulo_pideky({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.translationValues(-10.0, 3.0, 0.0),
-      child: Container(
-          height: 30,
-          width: size.width * 0.3,
-          child: SvgPicture.asset('assets/image/pp_bar.svg', fit: BoxFit.fill)),
-    );
-  }
-}
-
-class titulo_pideky_carrito extends StatelessWidget {
-  const titulo_pideky_carrito({
-    Key? key,
-    required this.widget,
-    required this.size,
-  }) : super(key: key);
-
-  final Size size;
-  final Widget widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.translationValues(-10.0, 3.0, 0.0),
-      child: GestureDetector(
-        child: Container(
-            height: 30,
-            width: size.width * 0.3,
-            child:
-                SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
-        onTap: () => {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              'tab_opciones', (Route<dynamic> route) => false),
-        },
-      ),
-    );
   }
 }

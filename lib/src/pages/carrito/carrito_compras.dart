@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
@@ -27,7 +28,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
 late ProgressDialog pr;
@@ -45,7 +45,9 @@ class CarritoCompras extends StatefulWidget {
 
 class _CarritoComprasState extends State<CarritoCompras> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  ProductoViewModel productoViewModel = Get.find();
   late final cartProvider = Provider.of<CarroModelo>(context);
+
   @override
   void initState() {
     super.initState();
@@ -62,13 +64,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
     FlutterUxcam.tagScreenName('ShoppingCartPage');
 
     final size = MediaQuery.of(context).size;
-    var locale = Intl().locale;
-    var format = locale.toString() != 'es_CO'
-        ? locale.toString() == 'es_CR'
-            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
-            : NumberFormat.simpleCurrency(locale: locale.toString())
-        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
-    NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -132,10 +127,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                            'Total: ${format.currencySymbol}' +
-                                formatNumber
-                                    .format(cartProvider.getTotal)
-                                    .replaceAll(',00', ''),
+                            'Total: ${productoViewModel.getCurrency(cartProvider.getTotal)}',
                             style: disenoValores()),
                         SizedBox(
                           height: 20,
@@ -156,9 +148,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _cargarWidgetDinamicoAcordeon(
-                                context, cartProvider, format)
-                            .toList()),
+                        children:
+                            _cargarWidgetDinamicoAcordeon(context, cartProvider)
+                                .toList()),
                   ),
                 ),
               ),
@@ -173,12 +165,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
       fontSize: 15.0, color: HexColor("#43398E"), fontWeight: FontWeight.bold);
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
-      BuildContext context1, CarroModelo cartProvider, NumberFormat format) {
+      BuildContext context1, CarroModelo cartProvider) {
     List<Widget> listaWidget = [];
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      print(fabricante);
-      print(value);
       if (value['precioProducto'] == 0.0) {
       } else {
         listaWidget.add(
@@ -193,7 +183,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                       value["expanded"] = false;
                     }
                   });
-
                   value["expanded"] = !status;
                   cargarDeNuevo = false;
                 });
@@ -229,13 +218,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
                               child: Text(
                                   cartProvider.getListaFabricante[fabricante] ==
                                           null
-                                      ? '${format.currencySymbol}: 0'
-                                      : '${format.currencySymbol}' +
-                                          formatNumber
-                                              .format(cartProvider
-                                                      .getListaFabricante[
-                                                  fabricante]["precioFinal"])
-                                              .replaceAll(',00', ''),
+                                      ? '${productoViewModel.getFormat().currencySymbol}: 0'
+                                      : productoViewModel.getCurrency(
+                                          cartProvider.getListaFabricante[
+                                              fabricante]["precioFinal"]),
                                   style: TextStyle(
                                       color: ConstantesColores.azul_precio,
                                       fontSize: 20,
@@ -265,10 +251,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                         visible: isValid.value,
                                         child: SvgPicture.asset(
                                           'assets/image/alerta_pedido_inferio.svg',
-                                          // color: fabricante.toUpperCase() == "MEALS"
-                                          //     ? HexColor("#42B39C")
-                                          //     : Colors.red,
-                                          color: value['restrictivo'] == "0"
+                                          color: value['restrictivofrecuencia'] ==
+                                                          0 &&
+                                                      value['isFrecuencia'] ==
+                                                          true ||
+                                                  value['restrictivonofrecuencia'] ==
+                                                          0 &&
+                                                      value['isFrecuencia'] ==
+                                                          false
                                               ? HexColor("#42B39C")
                                               : Colors.red,
                                         ),
@@ -285,15 +275,25 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                 fabricante]["precioFinal"],
                                             value["preciominimo"],
                                             value["topeMinimo"],
-                                            format.currencySymbol,
+                                            productoViewModel
+                                                .getFormat()
+                                                .currencySymbol,
                                             value["iva"],
-                                            value['restrictivo']),
+                                            value['restrictivo'],
+                                            value['restrictivofrecuencia'],
+                                            value['restrictivonofrecuencia'],
+                                            value["diasVisita"],
+                                            value["isFrecuencia"],
+                                            value["texto1"]),
                                         style: TextStyle(
-                                            // color: fabricante.toUpperCase() ==
-                                            //         "MEALS"
-                                            //     ? Colors.black.withOpacity(.7)
-                                            //     : Colors.red,
-                                            color: value['restrictivo'] == "0"
+                                            color: value['restrictivofrecuencia'] ==
+                                                            0 &&
+                                                        value['isFrecuencia'] ==
+                                                            true ||
+                                                    value['restrictivonofrecuencia'] ==
+                                                            0 &&
+                                                        value['isFrecuencia'] ==
+                                                            false
                                                 ? Colors.black.withOpacity(.7)
                                                 : Colors.red,
                                             fontWeight: FontWeight.bold),
@@ -321,7 +321,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                               fabricante,
                                               context,
                                               cartProvider,
-                                              format,
                                               value["preciominimo"])
                                           .toList(),
                                     ),
@@ -347,7 +346,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
-      BuildContext context, CarroModelo cartProvider, format, precioMinimo) {
+      BuildContext context, CarroModelo cartProvider, precioMinimo) {
     List<Widget> result = [];
     List<Producto> listTag = [];
 
@@ -455,20 +454,31 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     child: FittedBox(
                       fit: BoxFit.cover,
                       child: Text(
-                        '${format.currencySymbol}' +
-                            formatNumber
-                                .format(product.productos.descuento != 0
-                                    ? (toInt(PedidoEmart
-                                            .listaControllersPedido![
-                                                product.codigo]!
-                                            .text) *
-                                        product.productos.precio)
-                                    : (toInt(PedidoEmart
-                                            .listaControllersPedido![
-                                                product.codigo]!
-                                            .text) *
-                                        product.productos.preciodescuento))
-                                .replaceAll(',00', ''),
+                        productoViewModel.getCurrency(product
+                                    .productos.descuento !=
+                                0
+                            ? (toInt(PedidoEmart
+                                    .listaControllersPedido![product.codigo]!
+                                    .text) *
+                                product.productos.precio)
+                            : (toInt(PedidoEmart
+                                    .listaControllersPedido![product.codigo]!
+                                    .text) *
+                                product.productos.preciodescuento)),
+                        // '${format.currencySymbol}' +
+                        //     formatNumber
+                        //         .format(product.productos.descuento != 0
+                        //             ? (toInt(PedidoEmart
+                        //                     .listaControllersPedido![
+                        //                         product.codigo]!
+                        //                     .text) *
+                        //                 product.productos.precio)
+                        //             : (toInt(PedidoEmart
+                        //                     .listaControllersPedido![
+                        //                         product.codigo]!
+                        //                     .text) *
+                        //                 product.productos.preciodescuento))
+                        //         .replaceAll(',00', ''),
                         style: disenoValores(),
                       ),
                     ),
@@ -592,19 +602,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         fabricante, cartProvider, listProductos, precioMinimo);
                     //FIREBASE: Llamamos el evento delete_cart
                     TagueoFirebase().sendAnalityticDeleteCart("2", "Delete");
-                    setState(() {
-                      PedidoEmart.listaProductos!.forEach((key, value) {
-                        if (value.fabricante == fabricante) {
-                          PedidoEmart.listaControllersPedido![value.codigo]!
-                              .text = "0";
-                          PedidoEmart.registrarValoresPedido(value, "1", false);
-                          cargarDeNuevo = true;
-                        }
-                      });
-                      PedidoEmart.iniciarProductosPorFabricante();
+                    PedidoEmart.listaProductos!.forEach((key, value) {
+                      if (value.fabricante == fabricante) {
+                        PedidoEmart
+                            .listaControllersPedido![value.codigo]!.text = "0";
+                        PedidoEmart.registrarValoresPedido(value, "1", false);
+                        cargarDeNuevo = true;
+                      }
                     });
+                    PedidoEmart.iniciarProductosPorFabricante();
                     cargoConfirmar.mapaHistoricos
                         .updateAll((key, value) => value = false);
+                    MetodosLLenarValores().calcularValorTotal(cartProvider);
                   },
                   child: Text(
                     'Aceptar',
@@ -627,7 +636,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       PedidoEmart.iniciarProductosPorFabricante();
     }
     MetodosLLenarValores().calcularValorTotal(cartProvider);
-    print('Estamos bien');
+
     setState(() {});
   }
 
@@ -711,15 +720,25 @@ class _CarritoComprasState extends State<CarritoCompras> {
             Get.height * 0.25);
       }
     } catch (error) {
-      print("CARRITO ERROR! $error");
+      print("---CARRITO ERROR! $error");
     }
   }
 
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (PedidoEmart.listaProductosPorFabricante![fabricante]["restrictivo"] ==
-          '1') {
+      if (PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ["restrictivofrecuencia"] ==
+                  1 &&
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ['isFrecuencia'] ==
+                  true ||
+          PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ["restrictivonofrecuencia"] ==
+                  1 &&
+              PedidoEmart.listaProductosPorFabricante![fabricante]
+                      ['isFrecuencia'] ==
+                  false) {
         if (value['precioProducto'] > 0.0) {
           if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
               PedidoEmart.listaProductosPorFabricante![fabricante]
@@ -938,16 +957,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
         PedidoEmart.listaProductos!.forEach((codigo, producto) {
           if (producto.fabricante == fabricante) {
             setState(() {
-              PedidoEmart.listaControllersPedido![codigo]!.text = "1";
+              PedidoEmart.listaControllersPedido![codigo]!.text = "0";
               PedidoEmart.registrarValoresPedido(producto, '1', false);
               PedidoEmart.calcularPrecioPorFabricante();
-              MetodosLLenarValores().calcularValorTotal(cartProvider);
             });
           }
         });
       }
     });
     PedidoEmart.iniciarProductosPorFabricante();
+    MetodosLLenarValores().calcularValorTotal(cartProvider);
     if (_verificarCantidadGrupos() > 0) {
       _irConfigurarPedido();
     }
@@ -1095,22 +1114,50 @@ class _CarritoComprasState extends State<CarritoCompras> {
       double topeMinimo,
       String currentSymbol,
       double iva,
-      String restrictivo) {
+      String restrictivo,
+      int restrictivoFrecuencia,
+      int restrictivoNoFrecuencia,
+      List diasVisita,
+      bool isFrecuencia,
+      String texto1) {
     // var calcular = topeMinimo * 1.19;
 
-    if (restrictivo == '0') {
+    String diasSinComa;
+    String diasTemp = "";
+    diasVisita.forEach((element) {
+      diasTemp += "$element, ";
+    });
+    diasSinComa = diasTemp.substring(0, diasTemp.length - 2);
+
+    if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
       if (valorPedido < precioMinimo) {
         isValid.value = true;
-        return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de $currentSymbol' +
-            formatNumber.format(precioMinimo).replaceAll(',00', '');
+        return texto1;
       }
       isValid.value = true;
       return "Tu pedido será entregado el siguiente día hábil.";
     } else {
-      if (valorPedido < precioMinimo) {
-        isValid.value = true;
-        return 'El pedido no cumple con el mínimo valor que establece el proveedor de $currentSymbol' +
-            formatNumber.format(precioMinimo).replaceAll(',00', '');
+      if (isFrecuencia == true) {
+        if (precioMinimo == 0) {
+          isValid.value = false;
+          return "";
+        }
+        if (valorPedido < precioMinimo) {
+          isValid.value = true;
+          return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
+              productoViewModel.getCurrency(precioMinimo);
+        }
+      } else {
+        if (precioMinimo == 0) {
+          isValid.value = false;
+          return "";
+        }
+        if (valorPedido < precioMinimo) {
+          isValid.value = true;
+          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
+        } else {
+          return "Tu pedido será entregado el siguiente día hábil.";
+        }
       }
       isValid.value = false;
       return "";

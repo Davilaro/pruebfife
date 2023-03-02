@@ -21,6 +21,8 @@ class Producto {
       required this.volumen,
       required this.iva,
       this.fabricante,
+      this.codigoFabricante,
+      this.nitFabricante,
       this.cantidad = 0,
       required this.nombrecomercial,
       this.codigocliente,
@@ -47,6 +49,8 @@ class Producto {
   int volumen;
   int iva;
   String? fabricante;
+  String? codigoFabricante;
+  String? nitFabricante;
   int cantidad = 0;
   String nombrecomercial;
   String? codigocliente;
@@ -74,6 +78,10 @@ class Producto {
         volumen: json["volumen"] == null ? 0 : json["volumen"],
         iva: json["iva"] == null ? 0 : json["iva"],
         fabricante: json["fabricante"] == null ? '' : json["fabricante"],
+        codigoFabricante:
+            json["codigoFabricante"] == null ? '' : json["codigoFabricante"],
+        nitFabricante:
+            json["nitFabricante"] == null ? '' : json["nitFabricante"],
         cantidad: json["cantidad"] == null ? 0 : json["cantidad"],
         nombrecomercial: json["nombrecomercial"],
         codigocliente: json["codigocliente"],
@@ -102,6 +110,10 @@ class Producto {
         volumen: json["volumen"] == null ? 0 : json["volumen"],
         iva: json["iva"] == null ? 0 : json["iva"],
         fabricante: json["fabricante"] == null ? '' : json["fabricante"],
+        codigoFabricante:
+            json["codigoFabricante"] == null ? '' : json["codigoFabricante"],
+        nitFabricante:
+            json["nitFabricante"] == null ? '' : json["nitFabricante"],
         cantidad: json["cantidad"] == null ? 0 : json["cantidad"],
         nombrecomercial: json["nombrecomercial"],
         codigocliente: json["codigocliente"],
@@ -135,6 +147,8 @@ class Producto {
         "volumen": volumen,
         "iva": iva,
         "fabricante": fabricante,
+        "codigoFabricante": codigoFabricante,
+        "nitFabricante": nitFabricante,
         "cantidad": cantidad,
         "nombrecomercial": nombrecomercial,
         "codigocliente": codigocliente,

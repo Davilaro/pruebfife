@@ -1,8 +1,8 @@
+import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/productos/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -13,10 +13,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
 final prefs = new Preferencias();
 
@@ -42,7 +39,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
   bool isProductoEnOferta = false;
-  RxBool isProductoNuevo = false.obs;
+  RxBool isNewProduct = false.obs;
+  RxBool isPromoProduct = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +52,20 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
         future: DBProvider.db
             .consultarProductoEnOfertaPorCodigo(widget.element.codigo),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          bool isNewProduct =
-              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
-          bool isPromoProduct =
-              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
-                      widget.isCategoriaPromos) ||
-                  isProductoEnOferta;
           if (snapshot.data == widget.element.codigo) {
             isProductoEnOferta = true;
           } else {
             isProductoEnOferta = false;
           }
+          isNewProduct.value =
+              widget.element.fechafinnuevo_1!.contains(RegExp(r'[0-9]'));
+          isPromoProduct.value =
+              (widget.element.fechafinpromocion_1!.contains(RegExp(r'[0-9]')) ||
+                      widget.isCategoriaPromos) ||
+                  isProductoEnOferta;
+
           bool isAgotado = constrollerProductos.validarAgotado(widget.element);
-          return CardProductCustom(
+          return Obx(() => CardProductCustom(
               producto: widget.element,
               cartProvider: cartProvider,
               isProductoEnOferta: isProductoEnOferta,
@@ -76,13 +75,13 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
                   UxcamTagueo().seeDetailProduct(widget.element, widget.index,
-                      '', isAgotado, isNewProduct, isPromoProduct);
+                      '', isAgotado, isNewProduct.value, isPromoProduct.value);
                 }
                 detalleProducto(widget.element, cartProvider);
               },
               isAgotadoLabel: isAgotado,
-              isVisibleLabelPromo: isPromoProduct,
-              isVisibleLabelNuevo: isNewProduct);
+              isVisibleLabelPromo: isPromoProduct.value,
+              isVisibleLabelNuevo: isNewProduct.value));
         },
       ),
     );

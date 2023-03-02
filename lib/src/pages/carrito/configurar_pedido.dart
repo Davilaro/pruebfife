@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
@@ -36,7 +37,8 @@ class ConfigurarPedido extends StatefulWidget {
 
 class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   final prefs = new Preferencias();
-  NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
+  ProductoViewModel productoViewModel = Get.find();
+
   late ProgressDialog pr;
   late BuildContext _context2;
   late CarroModelo cartProvider;
@@ -94,7 +96,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                       referencia: "Solo en el domicilio"),
                                   SimpleCardOne(
                                       texto: "Forma de Pago",
-                                      referencia: data[i].condicion_pago),
+                                      referencia: data[i].condicionPago),
                                   SimpleCardGroups(texto: "Total a facturar"),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
@@ -155,10 +157,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                'Total: ${format.currencySymbol}' +
-                    formatNumber
-                        .format(cartProvider.getTotal)
-                        .replaceAll(',00', ''),
+                'Total: ${productoViewModel.getCurrency(cartProvider.getTotal)}',
                 style: disenoValores()),
             Text(
               '* Este pedido tiene incluido el iva',
@@ -167,11 +166,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             cartProvider.getTotalAhorro - cartProvider.getTotal == 0
                 ? Container()
                 : Text(
-                    'Estás ahorrando: ${format.currencySymbol}' +
-                        formatNumber
-                            .format((cartProvider.getTotalAhorro -
-                                cartProvider.getTotal))
-                            .replaceAll(',00', ''),
+                    'Estás ahorrando: ${productoViewModel.getCurrency((cartProvider.getTotalAhorro - cartProvider.getTotal))}',
                     style: TextStyle(color: Colors.red[600]),
                   )
           ],
@@ -201,6 +196,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           iva: PedidoEmart.listaProductos![key]!.iva,
           precio: PedidoEmart.listaProductos![key]!.precio,
           fabricante: PedidoEmart.listaProductos![key]!.fabricante,
+          codigoFabricante: PedidoEmart.listaProductos![key]!.codigoFabricante,
+          nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
           codCliente: prefs.codCliente,
           tipoFabricante: directo,
           codProveedor: 1,

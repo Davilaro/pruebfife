@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -10,10 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
-import '../../_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
-import '../../_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
-import '../../_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
 import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
 
 class BotonActualizar extends StatefulWidget {
@@ -22,11 +19,13 @@ class BotonActualizar extends StatefulWidget {
 }
 
 RxBool isActualizando = false.obs;
+final productViewModel = Get.find<ProductoViewModel>();
 
 class _BotonActualizarState extends State<BotonActualizar> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
+
     final cargoConfirmar = Get.find<ControlBaseDatos>();
     return Visibility(
       visible: prefs.usurioLogin == 1,
@@ -68,12 +67,12 @@ Future<void> actualizarPagina(
       //pop dialog
     });
     if (provider.selectOptionMenu == 1) {
-      print("entro");
       cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
       cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
       provider.selectOptionMenu = 1;
       provider.setIsLocal = 0;
     }
+    productViewModel.cargarCondicionEntrega();
     Navigator.pushReplacementNamed(
       context,
       'tab_opciones',
