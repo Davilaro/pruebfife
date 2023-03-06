@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -68,6 +69,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
 
+                          // cargarLista();
+
                           setState(() {
                             initState();
                             (context as Element).reassemble();
@@ -90,8 +93,10 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   List<Widget> _cargarMarcas(
       List<dynamic> result, BuildContext context, CarroModelo provider) {
     final List<Widget> opciones = [];
-
+    PaintingBinding.instance!.imageCache?.clear();
     for (var element in result) {
+      RxString icon = element.ico.toString().obs;
+
       final widgetTemp = GestureDetector(
         onTap: () => {
           //Firebase: Llamamos el evento select_content
@@ -111,14 +116,20 @@ class _MarcasWidgetState extends State<MarcasWidget> {
             margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
             alignment: Alignment.center,
             color: Colors.white,
-            child: CachedNetworkImage(
-              imageUrl: element.ico,
-              placeholder: (context, url) =>
-                  Image.asset('assets/image/jar-loading.gif'),
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/image/logo_login.png'),
-              fit: BoxFit.fill,
-            ),
+            child: Obx(() => Image.network(
+                  icon.value,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Image.asset('assets/image/logo_login.png'),
+                  fit: BoxFit.fill,
+                )),
+            // child: CachedNetworkImage(
+            //   imageUrl: element.ico,
+            //   placeholder: (context, url) =>
+            //       Image.asset('assets/image/jar-loading.gif'),
+            //   errorWidget: (context, url, error) =>
+            //       Image.asset('assets/image/logo_login.png'),
+            //   fit: BoxFit.fill,
+            // ),
           ),
         ),
       );

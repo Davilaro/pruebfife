@@ -309,6 +309,7 @@ class DBProviderHelper {
           ? sql.map((e) => DatosCliente.fromJson(e)).toList()
           : [];
     } catch (e) {
+      print('Error al consultar sucursal $e');
       return [];
     }
   }
