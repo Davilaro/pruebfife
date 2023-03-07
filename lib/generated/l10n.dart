@@ -130,6 +130,16 @@ class S {
     );
   }
 
+  /// `Confirm country`
+  String get confirm_country {
+    return Intl.message(
+      'Confirm country',
+      name: 'confirm_country',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Catalog`
   String get catalog {
     return Intl.message(

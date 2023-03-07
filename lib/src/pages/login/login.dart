@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
-import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/validacion.dart';
@@ -9,7 +8,6 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/pages/login/widgets/bienvenido.dart';
@@ -17,14 +15,11 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
-
-import '../../provider/db_provider_helper.dart';
 
 final TextEditingController _controllerUser = TextEditingController();
 final TextEditingController _controllerCorreo = TextEditingController();

@@ -1,12 +1,10 @@
-import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 
 class BotonAgregarCarrito extends StatelessWidget {
   final Function()? onTap;
   final String text;
   final double height;
-  final double width;
+  final double? width;
   final Color color;
   final Color? colortext;
   final double borderRadio;
@@ -14,7 +12,7 @@ class BotonAgregarCarrito extends StatelessWidget {
       {Key? key,
       this.colortext = Colors.white,
       required this.height,
-      required this.width,
+      this.width = 800,
       required this.color,
       required this.onTap,
       required this.text,
