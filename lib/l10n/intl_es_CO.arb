@@ -6,14 +6,17 @@
     "activate_your_user": "Activa tu cuenta!",
     "authorize_processing_personal_data":"Autorizo el tratamiento de mis datos personales",
     "accept":"Aceptar",
+    "address": "Dirección: {direccion}",
+
     "cancel":"Cancelar",
     "confirm_country":"Confirmar país",
-
     "catalog":"Catálogo",
     "categories_for_you": "categorias destacadas para tí ",
     "cell_phone_number": "número de celular",
+    "ccup_code_copied": "Código CCUP copiado",
 
     "delivery_days": "Recuerda que puedes realizar el pedido: {diasEntrega}",
+    "delete_account": "Eliminar cuenta",
 
     "email_address": "correo electrónico",
     "enter_your_master_code": "Ingresa tu código maestro para realizar la activación manual",
@@ -31,12 +34,18 @@
 
     "loading_branches": "Cargando sucursales",
     "login_placeholder": "Nit sin dígito de verificación",
+    "log_out": "Cerrar sesión",
 
     "manual_activation": "Activación manual",
     "manual_activation_subtitle":"la activacion manual",
     "manual_registration":"registro manual",
     "master_code": "Código maestro",
     "my_business":"Mi Negocio",
+    "my_account": "Mi cuenta",
+    "my_suppliers":"Mis proveedores",
+    "my_vendors":"Mis vendedores",
+    "my_statistics":"Mis estadísticas",
+    "my_nequi_payments":"Mis Pagos Nequi",
 
     "or_via_text_message": " o a través de un ",
 
@@ -44,6 +53,7 @@
     "please_enter_activation_cod": "Por favor ingresa el código de activación, enviado por {destino} a tu número seleccionado:",
     "please_enter_the_code":"Por favor ingresa el código de {activate}, enviado por {destino}",
     "policies_accepted":"Se debe aceptar las políticas",
+    "policy_and_data_processing": "Política y tratamiento de datos",
 
     "register": "Registrarse",
     "registration_successful": "¡Registro Exitoso!",
@@ -57,14 +67,17 @@
     "text_your_email_address": "O actívate con tu ",
     "the_email_does_not":"El email no cumple con el formato",
     "the_verification_code_incorrect": "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente.",
+    "terms_conditions":"Términos y condiciones",
 
     "unable_send_text_message":"No fue posible enviar el mensaje de texto {e}",
     "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",
 
     "verification_code_cannot_empty":"El código de verificación no puede estar vacío",
+    "version": "Versión",
 
     "we_validating_code_activate": "Estamos validando el código para activar tu cuenta.",
     "welcome_pideky": "¡Bienvenido a Pideky!",
-    
+    "whatsApp_number": "Número WhatsApp:{telefono}",
+
     "you_want_to_go":"O deseas ir al "
 }

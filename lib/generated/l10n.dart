@@ -120,6 +120,16 @@ class S {
     );
   }
 
+  /// `Address: {direccion}`
+  String address(Object direccion) {
+    return Intl.message(
+      'Address: $direccion',
+      name: 'address',
+      desc: '',
+      args: [direccion],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(
@@ -170,6 +180,16 @@ class S {
     );
   }
 
+  /// `CCUP code copied`
+  String get ccup_code_copied {
+    return Intl.message(
+      'CCUP code copied',
+      name: 'ccup_code_copied',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Remember that you can place your order: {diasEntrega}`
   String delivery_days(Object diasEntrega) {
     return Intl.message(
@@ -177,6 +197,16 @@ class S {
       name: 'delivery_days',
       desc: '',
       args: [diasEntrega],
+    );
+  }
+
+  /// `Delete account`
+  String get delete_account {
+    return Intl.message(
+      'Delete account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
     );
   }
 
@@ -300,6 +330,16 @@ class S {
     );
   }
 
+  /// `Log out`
+  String get log_out {
+    return Intl.message(
+      'Log out',
+      name: 'log_out',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Manual registration`
   String get manual_activation {
     return Intl.message(
@@ -350,6 +390,56 @@ class S {
     );
   }
 
+  /// `My account`
+  String get my_account {
+    return Intl.message(
+      'My account',
+      name: 'my_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My suppliers`
+  String get my_suppliers {
+    return Intl.message(
+      'My suppliers',
+      name: 'my_suppliers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My vendors`
+  String get my_vendors {
+    return Intl.message(
+      'My vendors',
+      name: 'my_vendors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Statistics`
+  String get my_statistics {
+    return Intl.message(
+      'My Statistics',
+      name: 'my_statistics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Nequi Payments`
+  String get my_nequi_payments {
+    return Intl.message(
+      'My Nequi Payments',
+      name: 'my_nequi_payments',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `or via `
   String get or_via_text_message {
     return Intl.message(
@@ -395,6 +485,16 @@ class S {
     return Intl.message(
       'Policies must be accepted',
       name: 'policies_accepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Policy and data processing`
+  String get policy_and_data_processing {
+    return Intl.message(
+      'Policy and data processing',
+      name: 'policy_and_data_processing',
       desc: '',
       args: [],
     );
@@ -500,6 +600,16 @@ class S {
     );
   }
 
+  /// `Terms and conditions`
+  String get terms_conditions {
+    return Intl.message(
+      'Terms and conditions',
+      name: 'terms_conditions',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Unable to send text message {e}`
   String unable_send_text_message(Object e) {
     return Intl.message(
@@ -530,6 +640,16 @@ class S {
     );
   }
 
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `We are validating the code to activate your account.`
   String get we_validating_code_activate {
     return Intl.message(
@@ -547,6 +667,16 @@ class S {
       name: 'welcome_pideky',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `WhatsApp Number:{telefono}`
+  String whatsApp_number(Object telefono) {
+    return Intl.message(
+      'WhatsApp Number:$telefono',
+      name: 'whatsApp_number',
+      desc: '',
+      args: [telefono],
     );
   }
 

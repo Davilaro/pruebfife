@@ -1,10 +1,4 @@
-// To parse this JSON data, do
-//
-//     final pedidoSugerido = pedidoSugeridoFromJson(jsonString);
-
 import 'dart:convert';
-
-import 'package:intl/intl.dart';
 
 PagosNequiModel pedidoSugeridoFromJson(String str) =>
     PagosNequiModel.fromJson(json.decode(str));
