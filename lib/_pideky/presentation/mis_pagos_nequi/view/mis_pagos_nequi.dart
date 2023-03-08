@@ -1,5 +1,3 @@
-import 'package:emart/_pideky/domain/pagos_nequi/service/pagos_nequi_service.dart';
-import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/widgets/acordion_pagos_pendientes.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/widgets/acordion_pagos_realizados.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/widgets/card_micuenta.dart';

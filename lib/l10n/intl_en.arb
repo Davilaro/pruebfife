@@ -6,14 +6,17 @@
     "activate_your_user":"Activate your account!",
     "authorize_processing_personal_data":"I authorize the processing of my personal data",
     "accept":"Accept",
+    "address": "Address: {direccion}",
+
     "cancel":"Cancel",
     "confirm_country":"Confirm country",
-
     "catalog":"Catalog",
     "categories_for_you" : "Featured categories for you ",
     "cell_phone_number": "cell phone number",
+    "ccup_code_copied": "CCUP code copied",
 
     "delivery_days": "Remember that you can place your order: {diasEntrega}",
+    "delete_account": "Delete account",
 
     "email_address":"email address",
     "enter_your_master_code":"Enter your master code for manual activation",
@@ -30,13 +33,19 @@
     "imperdible":"Not to be missed by ",
 
     "loading_branches": "Loading branches",
-    "login_placeholder":"Nit without verification digit",
+    "login_placeholder": "Nit without verification digit",
+    "log_out": "Log out",
 
     "manual_activation":"Manual registration",
     "manual_activation_subtitle":"the manual registration",
     "manual_registration":"manual registration",
     "master_code":"Master code",
     "my_business":"My Business",
+    "my_account": "My account",
+    "my_suppliers":"My suppliers",
+    "my_vendors":"My vendors",
+    "my_statistics":"My Statistics",
+    "my_nequi_payments":"My Nequi Payments",
 
     "or_via_text_message":"or via ",
 
@@ -44,6 +53,7 @@
     "please_enter_activation_cod":"Please enter the activation code, sent by {destino} to your selected number:",
     "please_enter_the_code":"Please enter the code from {activate}, sent by {destino}",
     "policies_accepted":"Policies must be accepted",
+    "policy_and_data_processing": "Policy and data processing",
 
     "register": "Register",
     "registration_successful":"Registration Successful!",
@@ -57,15 +67,18 @@
     "text_your_email_address": "Or sign up with your email address ",
     "the_email_does_not":"The email does not comply with the format",
     "the_verification_code_incorrect":"The verification code is incorrect, \nplease check it and try again.",
+    "terms_conditions":"Terms and conditions",
 
     "unable_send_text_message":"Unable to send text message {e}",
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
 
     "verification_code_cannot_empty":"The verification code cannot be empty",
+    "version": "Version",
 
     "we_validating_code_activate":"We are validating the code to activate your account.",
     "welcome_pideky":"Welcome to Pideky!",
-    
+    "whatsApp_number": "WhatsApp Number:{telefono}",
+
     "you_want_to_go":"Or do you want to go to the "
 
 }
