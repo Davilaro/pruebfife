@@ -162,7 +162,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
       color: seleccion == element.sucursal ? Colors.white : Colors.black);
 
   Widget valoresSubTitulo(dynamic element, bool color) {
-    print('soy el ${element.sucursal}');
     return Container(
       height: Get.height * 0.2,
       width: double.infinity,

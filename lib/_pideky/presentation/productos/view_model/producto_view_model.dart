@@ -69,8 +69,8 @@ class ProductoViewModel extends GetxController {
     var diasCondicion = condicionEntrega.diaVisita?.split('-');
     listDias = trasformarDias(diasCondicion);
 
-    print(
-        'soy res ${condicionEntrega.semana} --- $fabricante ----- ${diaLocal.capitalize}  ----$diasCondicion ----${listDias.toList()} ---- ${listDias.contains(diaLocal.capitalize)}');
+    // print(
+    //     'soy res ${condicionEntrega.semana} --- $fabricante ----- ${diaLocal.capitalize}  ----$diasCondicion ----${listDias.toList()} ---- ${listDias.contains(diaLocal.capitalize)}');
 
     return condicionEntrega.semana == 1 &&
         listDias.contains(diaLocal.capitalize);

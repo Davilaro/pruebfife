@@ -55,6 +55,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("categorias destacadas "),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
+        "confirm_country":
+            MessageLookupByLibrary.simpleMessage("Confirmar país"),
         "delivery_days": m0,
         "email_address":
             MessageLookupByLibrary.simpleMessage("correo electrónico."),
