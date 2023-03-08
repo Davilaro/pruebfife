@@ -20,19 +20,23 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es_CO';
 
-  static String m0(diasEntrega) =>
+  static String m0(direccion) => "Dirección: ${direccion}";
+
+  static String m1(diasEntrega) =>
       "Recuerda que puedes realizar el pedido: ${diasEntrega}";
 
-  static String m1(destino) =>
+  static String m2(destino) =>
       "Por favor ingresa el código de activación, enviado por ${destino} a tu número seleccionado:";
 
-  static String m2(activate, destino) =>
+  static String m3(activate, destino) =>
       "Por favor ingresa el código de ${activate}, enviado por ${destino}";
 
-  static String m3(e) => "No fue posible enviar el mensaje de texto ${e}";
+  static String m4(e) => "No fue posible enviar el mensaje de texto ${e}";
 
-  static String m4(e) =>
+  static String m5(e) =>
       "No fue posible enviar el mensaje, por favor intente nuevamente ${e}";
+
+  static String m6(telefono) => "Número WhatsApp:${telefono}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -45,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "para comprar en Pideky y ver los datos de tu negocio debes activar tu cuenta"),
         "activate_your_user":
             MessageLookupByLibrary.simpleMessage("Activa tu cuenta!"),
+        "address": m0,
         "authorize_processing_personal_data":
             MessageLookupByLibrary.simpleMessage(
                 "Autorizo el tratamiento de mis datos personales"),
@@ -52,11 +57,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
             "categorias destacadas para tí "),
+        "ccup_code_copied":
+            MessageLookupByLibrary.simpleMessage("Código CCUP copiado"),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
         "confirm_country":
             MessageLookupByLibrary.simpleMessage("Confirmar país"),
-        "delivery_days": m0,
+        "delete_account":
+            MessageLookupByLibrary.simpleMessage("Eliminar cuenta"),
+        "delivery_days": m1,
         "email_address":
             MessageLookupByLibrary.simpleMessage("correo electrónico"),
         "enter_your_master_code": MessageLookupByLibrary.simpleMessage(
@@ -76,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "imperdible": MessageLookupByLibrary.simpleMessage("Imperdibles para "),
         "loading_branches":
             MessageLookupByLibrary.simpleMessage("Cargando sucursales"),
+        "log_out": MessageLookupByLibrary.simpleMessage("Cerrar sesión"),
         "login_placeholder": MessageLookupByLibrary.simpleMessage(
             "Nit sin dígito de verificación"),
         "manual_activation":
@@ -85,16 +95,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "manual_registration":
             MessageLookupByLibrary.simpleMessage("registro manual"),
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),
+        "my_account": MessageLookupByLibrary.simpleMessage("Mi cuenta"),
         "my_business": MessageLookupByLibrary.simpleMessage("Mi Negocio"),
+        "my_nequi_payments":
+            MessageLookupByLibrary.simpleMessage("Mis Pagos Nequi"),
+        "my_statistics":
+            MessageLookupByLibrary.simpleMessage("Mis estadísticas"),
+        "my_suppliers": MessageLookupByLibrary.simpleMessage("Mis proveedores"),
+        "my_vendors": MessageLookupByLibrary.simpleMessage("Mis vendedores"),
         "or_via_text_message":
             MessageLookupByLibrary.simpleMessage(" o a través de un "),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
-        "please_enter_activation_cod": m1,
-        "please_enter_the_code": m2,
+        "please_enter_activation_cod": m2,
+        "please_enter_the_code": m3,
         "policies_accepted": MessageLookupByLibrary.simpleMessage(
             "Se debe aceptar las políticas"),
+        "policy_and_data_processing": MessageLookupByLibrary.simpleMessage(
+            "Política y tratamiento de datos"),
         "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
         "registration_successful":
             MessageLookupByLibrary.simpleMessage("¡Registro Exitoso!"),
@@ -102,6 +121,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Antes de disfrutar nuestra experiencia de compra debes activarte."),
         "suggested_order":
             MessageLookupByLibrary.simpleMessage("Pedido Sugerido"),
+        "terms_conditions":
+            MessageLookupByLibrary.simpleMessage("Términos y condiciones"),
         "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
             "Estos productos serán entregados según el itinerario del proveedor"),
         "text_message":
@@ -113,14 +134,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "El email no cumple con el formato"),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
-        "unable_send_text_message": m3,
-        "unable_send_text_message2": m4,
+        "unable_send_text_message": m4,
+        "unable_send_text_message2": m5,
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(
             "El código de verificación no puede estar vacío"),
+        "version": MessageLookupByLibrary.simpleMessage("Versión"),
         "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
             "Estamos validando el código para activar tu cuenta."),
         "welcome_pideky":
             MessageLookupByLibrary.simpleMessage("¡Bienvenido a Pideky!"),
+        "whatsApp_number": m6,
         "you_want_to_go":
             MessageLookupByLibrary.simpleMessage("O deseas ir al ")
       };
