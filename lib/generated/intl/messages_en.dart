@@ -64,6 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("cell phone number"),
         "confirm_country":
             MessageLookupByLibrary.simpleMessage("Confirm country"),
+        "country_confirmation":
+            MessageLookupByLibrary.simpleMessage("Country confirmation"),
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Delete account"),
         "delivery_days": m1,

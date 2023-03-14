@@ -32,14 +32,16 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
       appBar: AppBar(
-        titleSpacing: 50,
         elevation: 0,
         backgroundColor: HexColor('#f7f7f7'),
-        title: Text(
-          S.current.confirm_country,
-          style: TextStyle(
-              color: ConstantesColores.azul_precio,
-              fontWeight: FontWeight.bold),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
+            S.current.country_confirmation,
+            style: TextStyle(
+                color: ConstantesColores.azul_precio,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: Container(

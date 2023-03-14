@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -10,7 +8,6 @@ import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/src/modelos/marcas.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/modelos/tablas_borrar.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -97,7 +94,7 @@ class DBProviderHelper {
     } else {
       path = join(await androidPaht + '/Temp.db');
     }
-
+    print('Lugar de carpeta temp' + path);
     //Crear la base de datos
     return await openDatabase(path, onOpen: (tmp) {});
   }

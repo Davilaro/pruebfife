@@ -150,6 +150,16 @@ class S {
     );
   }
 
+  /// `Country confirmation`
+  String get country_confirmation {
+    return Intl.message(
+      'Country confirmation',
+      name: 'country_confirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Catalog`
   String get catalog {
     return Intl.message(
