@@ -4,6 +4,7 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/widgets/card_mic
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -75,6 +76,8 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
                   width: Get.width * 0.85,
                   color: ConstantesColores.azul_aguamarina_botones,
                   onTap: () {
+                    //UXCam: Llamamos el evento clickSoport
+                    UxcamTagueo().clickSoport();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

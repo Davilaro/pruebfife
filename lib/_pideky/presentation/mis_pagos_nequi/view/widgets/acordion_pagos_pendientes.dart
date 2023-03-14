@@ -15,6 +15,8 @@ class AcordionPagosPendientes extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<MisPagosNequiController>();
     return Acordion(
+        section: "MisPagosNequi",
+        sectionName: "pagosPendientes",
         elevation: 0,
         margin: 0,
         title: Text(

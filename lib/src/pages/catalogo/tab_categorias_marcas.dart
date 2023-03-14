@@ -56,32 +56,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
           color: Colors.white,
           child: Scaffold(
             backgroundColor: ConstantesColores.color_fondo_gris,
-            appBar: AppBar(
-              title: TituloPideky(size: size),
-              leading: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-                child: new IconButton(
-                  icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-                  onPressed: () => {
-                    //UXCam: Llamamos el evento clickSoport
-                    UxcamTagueo().clickSoport(),
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Soporte(
-                                numEmpresa: 1,
-                              )),
-                    ),
-                  },
-                ),
-              ),
-              elevation: 0,
-              actions: <Widget>[
-                BotonActualizar(),
-                AccionNotificacion(),
-                AccionesBartCarrito(esCarrito: false),
-              ],
-            ),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Column(

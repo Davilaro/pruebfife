@@ -116,6 +116,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           child: Column(
                             children: [
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Productos",
                                   titulo: 'Mi top 3 de productos',
                                   lista: viewModel.listTopProductos.value,
                                   subTitulo:
@@ -130,6 +132,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Marcas",
                                   titulo: 'Mi top 3 de marcas',
                                   lista: viewModel.listTopMarcas.value,
                                   subTitulo:
@@ -144,6 +148,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Subcategorias",
                                   titulo: 'Mi top 3 de subcategorías',
                                   lista: viewModel.listTopSubCategorias,
                                   subTitulo:

@@ -1,5 +1,4 @@
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +10,8 @@ import '../../view_model/mis_pagos_nequi_controller.dart';
 List<Widget> listaPagosPendientesFecha(BuildContext context) {
   final controller = Get.find<MisPagosNequiController>();
   List<Widget> lista = [];
-  var outputFormat = DateFormat("dd/MM/yy HH:mm");
-  var inputFormat = DateFormat("yyyy-MM-dd HH:mm");
+  var outputFormat = DateFormat("dd/MM/yy");
+  var inputFormat = DateFormat("yyyy-MM-dd");
 
   if (controller.listaPagosPendientes.isNotEmpty) {
     controller.listaPagosPendientes.forEach((element) {

@@ -75,35 +75,6 @@ class _MiNegocioState extends State<MiNegocio> {
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: TituloPideky(size: size),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-          child: Container(
-            width: 100,
-            child: new IconButton(
-              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-              onPressed: () => {
-                //UXCam: Llamamos el evento clickSoport
-                UxcamTagueo().clickSoport(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Soporte(
-                            numEmpresa: 1,
-                          )),
-                ),
-              },
-            ),
-          ),
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          BotonActualizar(),
-          AccionNotificacion(),
-          AccionesBartCarrito(esCarrito: false),
-        ],
-      ),
       body: RefreshIndicator(
         color: ConstantesColores.azul_precio,
         backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),

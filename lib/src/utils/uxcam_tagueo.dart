@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -5,7 +7,10 @@ import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/widget/search_fuzzy.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 
 class UxcamTagueo {
   Preferencias prefs = Preferencias();
@@ -68,6 +73,23 @@ class UxcamTagueo {
   void selectSeccion(String name) {
     FlutterUxcam.logEventWithProperties("clickHeader",
         {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+  }
+
+  void selectDropDown(String sectionName, String section) {
+    FlutterUxcam.logEventWithProperties("selectDropDown", {
+      "sectionName": sectionName,
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
+  }
+
+  void selectSectionPedidoSugerido(String section) {
+    FlutterUxcam.logEventWithProperties("selectSectionPedidoSugerido", {
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
   }
 
   void sendActivationCode(String metodo, String estado) {
@@ -312,6 +334,39 @@ class UxcamTagueo {
         "total": cartProvider.getTotal,
         "City": prefs.ciudad,
         "Country": prefs.paisUsuario
+      });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
+  void addToCartSuggestedOrder(listaProductosPedidos, fabricante) {
+    final viewModel = Get.find<PedidoSugeridoController>();
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var subTotal = viewModel.listaProductosPorFabricante[fabricante]
+            ["precioProductos"];
+
+        var productIndividual = {
+          "product": "${producto.nombre}",
+          "quantity": "${producto.cantidad}",
+          "provider": "$fabricante",
+          "price": "$subTotal",
+          "City": "${prefs.ciudad}",
+          "Country": "${prefs.paisUsuario}"
+        };
+
+        print("productos $productIndividual");
+        return productIndividual;
+      }).toList();
+      print(
+        "productosss  $listProductos",
+      );
+
+      FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario,
+        "products": listProductos,
       });
     } catch (e) {
       print('Error tagueo confirmOrder $e');

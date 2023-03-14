@@ -8,7 +8,6 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_butt
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import '../../../../src/utils/util.dart';
-import 'widgets/appbarr_pedido_sugerido.dart';
 import 'widgets/body_pedido_sugerido.dart';
 
 class PedidoSugeridoPage extends StatefulWidget {
@@ -33,14 +32,10 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
-        appBar: PreferredSize(
-            preferredSize: Size(double.infinity, kToolbarHeight),
-            child: AppBarPedidoSugerido(size: size)),
         body: Container(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),

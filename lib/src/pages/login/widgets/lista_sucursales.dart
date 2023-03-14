@@ -126,7 +126,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               colorSeleccion = true;
               seleccion = element.sucursal;
             }),
-            _mostrarCategorias(context, element, provider)
+            mostrarCategorias(context, element, provider)
           },
           title: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
@@ -209,7 +209,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     );
   }
 
-  _mostrarCategorias(
+  mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
@@ -237,7 +237,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
     await pr.show();
     await cargarInformacion(provider, elemento);
-    await _cargarDataUsuario(elemento.sucursal);
+    await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
@@ -270,7 +270,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     await AppUtil.appUtil.abrirBases();
   }
 
-  _cargarDataUsuario(sucursal) async {
+  cargarDataUsuario(sucursal) async {
     List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
 
     prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
