@@ -156,7 +156,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'select_item', parameters: {
         "item_list_id": producto.marca,
         "item_list_name": producto.marca,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR SELECT_ITEM $e');
@@ -187,7 +187,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'add_to_cart', parameters: {
         "currency": "COP",
         "value": total,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR ADD_TO_CART $e');
@@ -220,7 +220,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'remove_from_cart', parameters: {
         "currency": "COP",
         "value": totalOrden,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR REMOVE_FROM_CART $e');
@@ -267,7 +267,7 @@ class TagueoFirebase {
       };
       await _analytics.logEvent(name: 'view_item', parameters: {
         "currency": "COP",
-        "items": [data],
+        "items": '${[data]}',
         "value": producto.precio * totalOrden
       });
     } catch (e) {
@@ -309,7 +309,7 @@ class TagueoFirebase {
         await _analytics.logEvent(name: 'view_cart', parameters: {
           "currency": "COP",
           "value": cartProvider.getTotal,
-          "items": productos,
+          "items": '$productos',
         });
       }
     } catch (e) {
@@ -352,7 +352,7 @@ class TagueoFirebase {
         "coupon": "",
         "shipping": 0,
         "tax": iva,
-        "items": [...listProductos],
+        "items": '${[...listProductos]}',
       });
     } catch (e) {
       print('ERROR PURCHARSE $e');
@@ -389,7 +389,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'view_item_list', parameters: {
         "item_list_id": location,
         "item_list_name": location,
-        "items": data.toList(),
+        "items": '${data.toList()}',
       });
     } catch (e) {
       print('ERROR VIEW_ITEM_LIST $e');
