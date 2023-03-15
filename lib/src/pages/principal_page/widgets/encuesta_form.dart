@@ -7,6 +7,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
+import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -157,20 +158,13 @@ class _EncuestaFormState extends State<EncuestaForm> {
                     margin: EdgeInsets.only(top: 20),
                     width: Get.width * 0.5,
                     height: Get.height * 0.04,
-                    child: RaisedButton(
-                      onPressed: () {
-                        _validarInformacion(context, widget.encuesta);
-                      },
-                      child: Text(
-                        'Enviar',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      textColor: Colors.white,
-                      color: ConstantesColores.agua_marina,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
+                    child: CustomButton(
+                      onPressed: () =>
+                          _validarInformacion(context, widget.encuesta),
+                      text: 'Enviar',
+                      sizeText: 15,
+                      backgroundColor: ConstantesColores.agua_marina,
+                      borderRadio: 20,
                     ),
                   ),
                 ],

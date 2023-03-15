@@ -37,7 +37,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
   RxBool isProductoEnOferta = false.obs;
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       dynamic responseOferta = await DBProvider.db
           .consultarProductoEnOfertaPorCodigo(widget.productos.codigo);
       if (responseOferta == widget.productos.codigo) {

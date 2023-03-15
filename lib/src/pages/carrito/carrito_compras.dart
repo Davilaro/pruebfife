@@ -53,7 +53,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     super.initState();
     cargarDeNuevo = false;
     PedidoEmart.iniciarProductosPorFabricante();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       MetodosLLenarValores().calcularValorTotal(cartProvider);
     });
   }

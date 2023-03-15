@@ -3,16 +3,15 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 
 class TagueoFirebase {
-  static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   Future<void> sendAnalitytics(String user) async {
     await _analytics.logEvent(name: 'login', parameters: {"user_id": user});
-    await _analytics.setUserId(user);
+    await _analytics.setUserId(id: user);
   }
 
   Future<void> sendAnalityticSelectContent(
@@ -157,7 +156,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'select_item', parameters: {
         "item_list_id": producto.marca,
         "item_list_name": producto.marca,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR SELECT_ITEM $e');
@@ -188,7 +187,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'add_to_cart', parameters: {
         "currency": "COP",
         "value": total,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR ADD_TO_CART $e');
@@ -221,7 +220,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'remove_from_cart', parameters: {
         "currency": "COP",
         "value": totalOrden,
-        "items": [data],
+        "items": '${[data]}',
       });
     } catch (e) {
       print('ERROR REMOVE_FROM_CART $e');
@@ -268,7 +267,7 @@ class TagueoFirebase {
       };
       await _analytics.logEvent(name: 'view_item', parameters: {
         "currency": "COP",
-        "items": [data],
+        "items": '${[data]}',
         "value": producto.precio * totalOrden
       });
     } catch (e) {
@@ -310,7 +309,7 @@ class TagueoFirebase {
         await _analytics.logEvent(name: 'view_cart', parameters: {
           "currency": "COP",
           "value": cartProvider.getTotal,
-          "items": productos,
+          "items": '$productos',
         });
       }
     } catch (e) {
@@ -353,7 +352,7 @@ class TagueoFirebase {
         "coupon": "",
         "shipping": 0,
         "tax": iva,
-        "items": [...listProductos],
+        "items": '${[...listProductos]}',
       });
     } catch (e) {
       print('ERROR PURCHARSE $e');
@@ -390,7 +389,7 @@ class TagueoFirebase {
       await _analytics.logEvent(name: 'view_item_list', parameters: {
         "item_list_id": location,
         "item_list_name": location,
-        "items": data.toList(),
+        "items": '${data.toList()}',
       });
     } catch (e) {
       print('ERROR VIEW_ITEM_LIST $e');

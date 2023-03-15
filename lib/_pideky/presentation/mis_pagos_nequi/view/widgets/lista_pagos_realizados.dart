@@ -11,11 +11,12 @@ List<Widget> listaPagosRealizadosFecha(BuildContext context) {
   final controller = Get.find<MisPagosNequiController>();
   List<Widget> lista = [];
   var outputFormat = DateFormat("dd/MM/yy HH:mm");
-  var inputFormat = DateFormat("yyyy-MM-dd HH:mm");
+  var inputFormat = DateFormat("yyyy-MM-dd");
 
   if (controller.listaPagosRealizados.isNotEmpty) {
     controller.listaPagosRealizados.forEach((element) {
-      var fecha = inputFormat.parse(element.fechaPago);
+      var fecha = inputFormat.parse('2022-11-30');
+
       String fechaFinal = outputFormat.format(fecha);
       lista.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 7),
