@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -197,22 +198,30 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                 child: Container(
                                   width: Get.width * 0.8,
                                   height: Get.height * 0.05,
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      confirmarFiltro(context);
-                                    },
-                                    child: Text(
-                                      'Filtrar',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textColor: Colors.white,
-                                    color: ConstantesColores.agua_marina,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
+                                  child: CustomButton(
+                                    onPressed: () => confirmarFiltro(context),
+                                    text: 'Filtrar',
+                                    sizeText: 18,
+                                    backgroundColor:
+                                        ConstantesColores.agua_marina,
+                                    borderRadio: 20,
                                   ),
+                                  // child: RaisedButton(
+                                  //   onPressed: () {
+                                  //     confirmarFiltro(context);
+                                  //   },
+                                  //   child: Text(
+                                  //     'Filtrar',
+                                  //     style: TextStyle(
+                                  //         fontSize: 18,
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  //   textColor: Colors.white,
+                                  //   color: ConstantesColores.agua_marina,
+                                  //   shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.circular(20.0),
+                                  //   ),
+                                  // ),
                                 ),
                               ),
                             )
@@ -353,8 +362,9 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   }
 
   Widget iconLimpiarFiltro() {
-    return OutlineButton(
-      borderSide: BorderSide(style: BorderStyle.none),
+    return OutlinedButton(
+      style:
+          OutlinedButton.styleFrom(side: BorderSide(color: Colors.transparent)),
       onPressed: () => limpiarFiltro(),
       child: Row(
         children: [

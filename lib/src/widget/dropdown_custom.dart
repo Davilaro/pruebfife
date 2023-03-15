@@ -87,6 +87,7 @@ class DropDownCustom extends FormField<String> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: TextFormField(
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           controller: state._effectiveController,
                           decoration: effectiveDecoration.copyWith(
                               errorText: field.errorText),
@@ -95,7 +96,6 @@ class DropDownCustom extends FormField<String> {
                           textAlign: TextAlign.left,
                           autofocus: false,
                           obscureText: false,
-                          maxLengthEnforced: true,
                           maxLines: 1,
                           onChanged: onChanged == null ? null : onChanged,
                           validator: (String? newValue) {

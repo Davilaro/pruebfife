@@ -14,7 +14,8 @@ List<Widget> listaPagosRealizadosFecha(BuildContext context) {
 
   if (controller.listaPagosRealizados.isNotEmpty) {
     controller.listaPagosRealizados.forEach((element) {
-      var fecha = inputFormat.parse(element.fechaPago);
+      var fecha = inputFormat.parse('2022-11-30');
+
       String fechaFinal = outputFormat.format(fecha);
       lista.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 7),

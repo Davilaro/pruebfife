@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -93,7 +90,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   List<Widget> _cargarMarcas(
       List<dynamic> result, BuildContext context, CarroModelo provider) {
     final List<Widget> opciones = [];
-    PaintingBinding.instance!.imageCache?.clear();
+    PaintingBinding.instance.imageCache.clear();
     for (var element in result) {
       RxString icon = element.ico.toString().obs;
 
