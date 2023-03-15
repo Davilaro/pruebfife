@@ -9,6 +9,7 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -79,8 +80,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                         onPressed: () {
                           widget.drawerKey.currentState!.openEndDrawer();
                         },
-                        icon: ImageIcon(AssetImage(
-                            "assets/icon/icono_cerrar_ventana.png"))),
+                        icon: SvgPicture.asset(
+                            'assets/icon/Icono_cerrar_ventana.svg')),
                   ],
                 ),
                 Container(
