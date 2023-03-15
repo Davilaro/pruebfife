@@ -1,6 +1,7 @@
 import 'package:emart/src/modelos/notificaciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -65,21 +66,28 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                   ],
                 ),
               )),
-          Container(
+          CustomButton(
+            onPressed: () => Get.back(),
             width: Get.width * 0.8,
-            child: FlatButton(
-                child: new Text(
-                  "Cerrar",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                color: ConstantesColores.agua_marina,
-                textColor: Colors.white,
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0))),
+            text: "Cerrar",
+            backgroundColor: ConstantesColores.agua_marina,
+            borderRadio: 30,
           )
+          // Container(
+          //   width: Get.width * 0.8,
+          //   child: FlatButton(
+          //       child: new Text(
+          //         "Cerrar",
+          //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //       ),
+          //       onPressed: () {
+          //         Navigator.of(context).pop();
+          //       },
+          //       color: ConstantesColores.agua_marina,
+          //       textColor: Colors.white,
+          //       shape: new RoundedRectangleBorder(
+          //           borderRadius: new BorderRadius.circular(30.0))),
+          // )
         ],
       ),
     );

@@ -3,16 +3,15 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 
 class TagueoFirebase {
-  static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   Future<void> sendAnalitytics(String user) async {
     await _analytics.logEvent(name: 'login', parameters: {"user_id": user});
-    await _analytics.setUserId(user);
+    await _analytics.setUserId(id: user);
   }
 
   Future<void> sendAnalityticSelectContent(

@@ -4,8 +4,8 @@ import 'package:hexcolor/hexcolor.dart';
 
 class IconoLimpiarFiltro {
   Widget iconLimpiarFiltro(Function()? onpressed) {
-    return OutlineButton(
-      borderSide: BorderSide(style: BorderStyle.none),
+    return TextButton(
+      // borderSide: BorderSide(style: BorderStyle.none),
       onPressed: onpressed,
       child: Row(
         children: [
