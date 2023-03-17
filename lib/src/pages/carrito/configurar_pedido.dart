@@ -214,7 +214,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     });
 
     showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
-
+    print('productos pedido ${listaProductosPedidos.length}');
     await _dialogPedidoRegistrado(listaProductosPedidos, size);
   }
 
@@ -241,6 +241,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       //FIREBASE: Llamamos el evento purchase
       TagueoFirebase().sendAnalityticsPurchase(
           cartProvider.getTotal, listaProductosPedidos, numDoc);
+      print('si entramos aca');
       //UXCam: Llamamos el evento confirmOrder
       UxcamTagueo().confirmOrder(listaProductosPedidos, cartProvider);
       cartProvider.guardarValorCompra = 0;

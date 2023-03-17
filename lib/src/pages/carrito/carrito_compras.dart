@@ -26,7 +26,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
 
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
@@ -64,6 +63,14 @@ class _CarritoComprasState extends State<CarritoCompras> {
     FlutterUxcam.tagScreenName('ShoppingCartPage');
 
     final size = MediaQuery.of(context).size;
+    PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) {
+      if (value == true) {
+        print(
+            'hola producto $key  --- ${PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)} --- ${PedidoEmart.listaProductos![key]!.precio}');
+      }
+    });
+    // print(
+    //     'estos es ${PedidoEmart.listaValoresPedidoAgregados?.}');
 
     return WillPopScope(
       onWillPop: () async => false,

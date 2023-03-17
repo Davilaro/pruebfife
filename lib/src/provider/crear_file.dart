@@ -6,6 +6,7 @@ import 'package:device_info/device_info.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -153,6 +154,7 @@ class AppUtil {
   Future<bool> abrirBases() async {
     await DBProvider.db.database;
     await DBProviderHelper.db.database;
+    await DBProviderHelper.db.temp;
     return true;
   }
 
@@ -180,17 +182,22 @@ class AppUtil {
 
   Future<void> eliminarCarpeta() async {
     try {
-      await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      // await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
       // await DBProviderHelper.db.cerrarBases();
       // await DBProvider.db.cerrarBases();
 
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       var release = androidInfo.version.release;
-      Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      // Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      final dbFileTemp = File('${await androidPaht}/DB7001.db');
+      final dbFileTemp2 = File('${await androidPaht}/Temp.db');
 
-      await appDocDirectory.delete(recursive: true);
+      await dbFileTemp.delete();
+      print(
+          'lugar hola temporal existe ${await dbFileTemp2.exists()} --- ${await androidPaht}');
+      // await appDocDirectory.delete(recursive: true);
     } catch (e) {
-      print('error al cerrar las bases de datos $e');
+      print('error al eliminar las bases de datos $e');
     }
   }
 }

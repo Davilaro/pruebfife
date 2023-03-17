@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:emart/_pideky/domain/condicion_entrega/model/condicionEntrega.dart';
 import 'package:emart/_pideky/domain/condicion_entrega/service/condicion_entrega_service.dart';
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/condicion_entrega/condicion_entrega_sqlite.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/custom_modal.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +21,7 @@ import 'package:intl/intl.dart';
 class ProductoViewModel extends GetxController {
   CondicionEntregaService condicionEntregaService =
       CondicionEntregaService(CondicionEntregaRepositorySqlite());
+  ProductoService productService = ProductoService(ProductoRepositorySqlite());
 
   var listSemana = {
     "L": "Lunes",
@@ -68,9 +75,6 @@ class ProductoViewModel extends GetxController {
         .firstWhere((element) => element.fabricante == fabricante);
     var diasCondicion = condicionEntrega.diaVisita?.split('-');
     listDias = trasformarDias(diasCondicion);
-
-    // print(
-    //     'soy res ${condicionEntrega.semana} --- $fabricante ----- ${diaLocal.capitalize}  ----$diasCondicion ----${listDias.toList()} ---- ${listDias.contains(diaLocal.capitalize)}');
 
     return condicionEntrega.semana == 1 &&
         listDias.contains(diaLocal.capitalize);
@@ -140,6 +144,66 @@ class ProductoViewModel extends GetxController {
     });
 
     return listDias;
+  }
+
+  void insertarPedidoTemporal() async {
+    List<Producto> listPedidoTemp =
+        await productService.consultarPedidoTemporal();
+    print('hola res de pedido ${listPedidoTemp.length}');
+    // listPedidoTemp.forEach((element) {
+    //   PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) {
+    //     print(
+    //         'ejecuto ${element.codigo} ---- $key -----${key.contains(element.codigo.toString())}');
+    //     if (value) {
+    //       if (element.codigo.contains(key.toString())) {
+    //         print('ejecuto el update ${element.codigo}');
+    //       } else {
+    //         // print('ejecuto el insert ${element.codigo}');
+    //       }
+    //     }
+    //   });
+    // });
+    PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) async {
+      if (value == true) {
+        if (listPedidoTemp.isNotEmpty) {
+          print('entre');
+          var getPedido = listPedidoTemp
+              .firstWhere((element) => key.contains(element.codigo));
+          if (getPedido != null) {
+            if (int.parse(
+                    PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
+                        .toString()) >
+                0) {
+              if (int.parse(PedidoEmart.obtenerValor(
+                          PedidoEmart.listaProductos![key]!)
+                      .toString()) !=
+                  getPedido.cantidad) {
+                print('ejecuto el update de ${getPedido.codigo}');
+                return;
+              }
+            } else {
+              print('ejecuto el delete de ${getPedido.codigo}');
+              return;
+            }
+            print('ejecuto el delete de ${getPedido.codigo}');
+            return;
+          }
+        }
+        print('ejecuto el insert 2 de ${key}');
+        await productService.insertPedidoTemp(
+            key,
+            int.parse(
+                PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
+                    .toString()));
+
+        //     // await DBProviderHelper.db.insertPedidoTemp(
+        //     //     key,
+        //     //     int.parse(
+        //     //         PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
+        //     //             .toString()));
+        //   }
+      }
+    });
   }
 
   static ProductoViewModel get findOrInitialize {

@@ -844,4 +844,55 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       return [];
     }
   }
+
+  Future<dynamic> insertPedidoTemp(String codPedido, int cantidad) async {
+    final db = await DBProviderHelper.db.tempAbierta;
+    try {
+      await db.rawInsert('INSERT INTO pedido VALUES($codPedido,$cantidad)');
+      print('se inserto $codPedido---- $cantidad');
+      return true;
+    } catch (e) {
+      print('fallo insertar en tabla pedido temporal $e');
+      return false;
+    }
+  }
+
+  Future<dynamic> modificarPedidoTemp(String codPedido, int cantidad) async {
+    final db = await DBProviderHelper.db.tempAbierta;
+    try {
+      await db.rawUpdate(
+          'UPDATE pedido SET cantidad = ? WHERE codigo_producto = ?',
+          [cantidad, codPedido]);
+      return true;
+    } catch (e) {
+      print('fallo modificar en tabla pedido temporal $e');
+      return false;
+    }
+  }
+
+  Future<dynamic> eliminarPedidoTemp(String codPedido) async {
+    final db = await DBProviderHelper.db.tempAbierta;
+    try {
+      await db.rawDelete(
+          'DELETE FROM pedido WHERE codigo_producto = ?', ['$codPedido']);
+      return true;
+    } catch (e) {
+      print('fallo eliminar en tabla pedido temporal $e');
+      return false;
+    }
+  }
+
+  Future<List<Producto>> consultarPedidoTemporal() async {
+    final db = await DBProviderHelper.db.tempAbierta;
+    try {
+      final sql = await db.rawQuery('''
+      SELECT codigo_producto codigo, cantidad FROM pedido  
+    ''');
+
+      return sql.map((e) => Producto.fromJson2(e)).toList();
+    } catch (e) {
+      print('fallo consulta en tabla pedido temporal $e');
+      return [];
+    }
+  }
 }

@@ -66,4 +66,16 @@ class ProductoService {
           String? codigoMarca) async =>
       await productoRepository.cargarProductosFiltroCategoria(codigoCategoria,
           tipo, precioMinimo, precioMaximo, codigoSubCategoria, codigoMarca);
+
+  Future<dynamic> insertPedidoTemp(String codPedido, int cantidad) async =>
+      await productoRepository.insertPedidoTemp(codPedido, cantidad);
+
+  Future<dynamic> modificarPedidoTemp(String codPedido, int cantidad) async =>
+      await productoRepository.modificarPedidoTemp(codPedido, cantidad);
+
+  Future<dynamic> eliminarPedidoTemp(String codPedido) async =>
+      await productoRepository.eliminarPedidoTemp(codPedido);
+
+  Future<List<Producto>> consultarPedidoTemporal() async =>
+      await productoRepository.consultarPedidoTemporal();
 }

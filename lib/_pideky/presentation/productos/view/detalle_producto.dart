@@ -417,6 +417,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
       //UXCam: Llamamos el evento addToCart
       UxcamTagueo()
           .addToCart(producto, int.parse(_controllerCantidadProducto.text));
+      productViewModel.insertarPedidoTemporal();
       setState(() {});
     }
   }

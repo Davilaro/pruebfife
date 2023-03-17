@@ -30,6 +30,7 @@ class DBProviderHelper {
       _database = null;
     }
     if (_temp != null) {
+      print('cerre helper temp');
       await _temp!.close();
       _temp = null;
     }
@@ -41,6 +42,14 @@ class DBProviderHelper {
     _database = await initDB();
 
     return _database!;
+  }
+
+  Future<Database> get temp async {
+    if (_temp != null) await _temp!.close();
+
+    _temp = await initDBTemp();
+
+    return _temp!;
   }
 
   Future<Database> get baseAbierta async {
@@ -65,15 +74,6 @@ class DBProviderHelper {
     return _temp!;
   }
 
-  Future<Database> get temp async {
-    if (_temp != null) {
-      await _temp!.close();
-    }
-
-    _temp = await initDBTemp();
-    return _temp!;
-  }
-
   Future<Database> initDB() async {
     //String ruta = '/Users/victormanuelgarcihurtado/Library/Developer/CoreSimulator/Devices/F3F3BF8A-646D-46B0-84A2-14DC53F4D5C0/data/Containers/Data/Application/290165B1-F0A9-455D-A958-78A14DD96449/Documents/sdcard/EAGLE/DataBase.db';
     String path = '';
@@ -92,11 +92,17 @@ class DBProviderHelper {
     if (Platform.isIOS) {
       path = join(await iosPaht + '/Temp.db');
     } else {
-      path = join(await androidPaht + '/Temp.db');
+      path = join(await androidPaht + 'Temp.db');
     }
-    print('Lugar de carpeta temp' + path);
+    print('Lugar de carpeta temp ' + path);
     //Crear la base de datos
-    return await openDatabase(path, onOpen: (tmp) {});
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: ((db, version) => db.execute(
+          'CREATE TABLE pedido (codigo_producto varchar(10), cantidad int)')),
+      onOpen: (tmp) {},
+    );
   }
 
   Future<dynamic> consultarExistenciaModulo(codigoCliente, codigoModulo) async {
