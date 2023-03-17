@@ -342,6 +342,7 @@ class UxcamTagueo {
 
   void addToCartSuggestedOrder(listaProductosPedidos, fabricante) {
     final viewModel = Get.find<PedidoSugeridoController>();
+
     try {
       final listProductos = listaProductosPedidos.map((producto) {
         var subTotal = viewModel.listaProductosPorFabricante[fabricante]
@@ -366,7 +367,7 @@ class UxcamTagueo {
       FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
         "City": prefs.ciudad,
         "Country": prefs.paisUsuario,
-        "products": listProductos,
+        "products": "${[listProductos]}",
       });
     } catch (e) {
       print('Error tagueo confirmOrder $e');
