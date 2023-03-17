@@ -13,6 +13,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/animated_container_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -216,6 +217,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     List<Historico> datosDetalle =
         await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
     cargarCadaProducto(datosDetalle);
+    UxcamTagueo().addToCartRepeatdOrder(datosDetalle);
     await PedidoEmart.iniciarProductosPorFabricante();
     onBlockBoubleClick();
     // pasarCarrito(providerDatos, ordenCompra, estado);

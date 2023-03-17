@@ -5,16 +5,11 @@ import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
 import 'package:emart/src/pages/catalogo/widgets/fabricantes.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/pages/catalogo/widgets/marcas.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 
 class TabCategoriaMarca extends StatefulWidget {
@@ -39,13 +34,14 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('CategoriesTabs');
     // cargarData();
   }
 
   @override
   Widget build(BuildContext context) {
     constrollerProductos.getAgotados();
-    final size = MediaQuery.of(context).size;
 
     final selectedColor = Colors.yellow;
 

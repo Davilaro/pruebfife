@@ -367,7 +367,35 @@ class UxcamTagueo {
       FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
         "City": prefs.ciudad,
         "Country": prefs.paisUsuario,
-        "products": "${[listProductos]}",
+        "products": "${[...listProductos]}",
+      });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
+  void addToCartRepeatdOrder(listaProductosPedidos) {
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var productIndividual = {
+          "product": "${producto.nombreProducto}",
+          "quantity": "${producto.cantidad}",
+          "provider": "${producto.fabricante}",
+          "City": "${prefs.ciudad}",
+          "Country": "${prefs.paisUsuario}"
+        };
+
+        print("repetir orden $productIndividual");
+        return productIndividual;
+      }).toList();
+      print(
+        "productosss  $listProductos",
+      );
+
+      FlutterUxcam.logEventWithProperties("addToCartRepeatOrder", {
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario,
+        "products": "${[...listProductos]}",
       });
     } catch (e) {
       print('Error tagueo confirmOrder $e');

@@ -29,7 +29,7 @@ class NewAppBar extends StatelessWidget {
           null;
       },
       child: Container(
-        color: Color(0xfff7f7f7),
+        color: ConstantesColores.color_fondo_gris,
         child: Column(
           children: [
             Row(
@@ -73,7 +73,7 @@ class NewAppBar extends StatelessWidget {
               ],
             ),
             Divider(
-              color: ConstantesColores.gris_oscuro,
+              color: ConstantesColores.gris_textos,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 5),

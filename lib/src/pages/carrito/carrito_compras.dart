@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -26,7 +28,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
 
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
@@ -51,6 +52,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ShoppingCart');
     cargarDeNuevo = false;
     PedidoEmart.iniciarProductosPorFabricante();
     WidgetsBinding.instance.addPostFrameCallback((_) {

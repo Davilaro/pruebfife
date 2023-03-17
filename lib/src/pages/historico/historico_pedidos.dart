@@ -5,17 +5,12 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/expansion_card.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../widget/acciones_carrito_bart.dart';
 import '../../widget/dounser.dart';
 import 'package:get/get.dart';
 
@@ -39,6 +34,8 @@ class _HistoricoPedidosState extends State<HistoricoPedidos> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('HistoricalPage');
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
         "Footer", "Historico", "", "", "Historico", 'MainActivity');

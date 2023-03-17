@@ -24,7 +24,6 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/pages/historico/historico_pedidos.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
