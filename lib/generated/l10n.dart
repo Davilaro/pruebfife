@@ -200,6 +200,16 @@ class S {
     );
   }
 
+  /// `Code could not be generated`
+  String get code_could_not_be_generated {
+    return Intl.message(
+      'Code could not be generated',
+      name: 'code_could_not_be_generated',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Remember that you can place your order: {diasEntrega}`
   String delivery_days(Object diasEntrega) {
     return Intl.message(
@@ -255,6 +265,26 @@ class S {
     return Intl.message(
       'Error obtaining information',
       name: 'error_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error validating the user`
+  String get error_validating_the_user {
+    return Intl.message(
+      'Error validating the user',
+      name: 'error_validating_the_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your Nit`
+  String get enter_your_nit {
+    return Intl.message(
+      'Enter your Nit',
+      name: 'enter_your_nit',
       desc: '',
       args: [],
     );
@@ -345,6 +375,16 @@ class S {
     return Intl.message(
       'Log out',
       name: 'log_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logging in`
+  String get logging_in {
+    return Intl.message(
+      'Logging in',
+      name: 'logging_in',
       desc: '',
       args: [],
     );
@@ -620,6 +660,16 @@ class S {
     );
   }
 
+  /// `The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on `
+  String get the_nit_entered_is_not_registered {
+    return Intl.message(
+      'The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ',
+      name: 'the_nit_entered_is_not_registered',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Unable to send text message {e}`
   String unable_send_text_message(Object e) {
     return Intl.message(
@@ -660,6 +710,16 @@ class S {
     );
   }
 
+  /// `Validating information`
+  String get validating_information {
+    return Intl.message(
+      'Validating information',
+      name: 'validating_information',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `We are validating the code to activate your account.`
   String get we_validating_code_activate {
     return Intl.message(
@@ -687,6 +747,26 @@ class S {
       name: 'whatsApp_number',
       desc: '',
       args: [telefono],
+    );
+  }
+
+  /// `WhatsApp`
+  String get whatsApp {
+    return Intl.message(
+      'WhatsApp',
+      name: 'whatsApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WhatsApp not installed`
+  String get whatsApp_not_installed {
+    return Intl.message(
+      'WhatsApp not installed',
+      name: 'whatsApp_not_installed',
+      desc: '',
+      args: [],
     );
   }
 

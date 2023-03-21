@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:device_info/device_info.dart';
 import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 
 class AppUtil {
   static String? _appUtil;
+  final prefs = new Preferencias();
 
   static final AppUtil appUtil = AppUtil._();
   AppUtil._();
@@ -102,17 +104,19 @@ class AppUtil {
     String url = "";
     var req;
     var file;
-    if (generico) {
-      url = Constantes().urlBaseGenerico + 'sync/Db/Generico/db.zip';
-    } else {
-      // url = Constantes().urlBase +
-      //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
-      url =
-          Constantes().urlBase + 'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
-    }
-
-    print('url : $url');
     try {
+      if (generico) {
+        url = Constantes().urlBaseGenerico +
+            'Sync/DB/${prefs.paisUsuario}/db.zip';
+      } else {
+        // url = Constantes().urlBase +
+        //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
+        url = Constantes().urlBase +
+            'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
+      }
+
+      print('url : $url');
+
       req = await http.Client().get(Uri.parse(url));
       file = File('$dir$fileName');
     } catch (e) {
@@ -130,6 +134,7 @@ class AppUtil {
     var archive = ZipDecoder().decodeBytes(bytes);
     for (var file in archive) {
       var fileName = '$dir${file.name}';
+      print('hola res $fileName');
       if (file.isFile) {
         var outFile = File(fileName);
         outFile = await outFile.create(recursive: true);
@@ -161,8 +166,8 @@ class AppUtil {
     datosPersonas.forEach((element) async {
       DateTime now = new DateTime.now();
       String fecha = DateFormat('yyyyMMddkkmm').format(now);
-      String
-          URL = /*Constantes().urlApi +*/ "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
+      String URL = /*Constantes().urlApi +*/
+          "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
 
       var request = http.MultipartRequest('POST', Uri.parse(URL));
 
@@ -180,7 +185,7 @@ class AppUtil {
 
   Future<void> eliminarCarpeta() async {
     try {
-      await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      // await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
       // await DBProviderHelper.db.cerrarBases();
       // await DBProvider.db.cerrarBases();
 

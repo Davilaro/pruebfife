@@ -61,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Código CCUP copiado"),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("número de celular"),
+        "code_could_not_be_generated": MessageLookupByLibrary.simpleMessage(
+            "No se pudo generar el código"),
         "confirm_country":
             MessageLookupByLibrary.simpleMessage("Confirmar país"),
         "country_confirmation":
@@ -72,10 +74,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("correo electrónico"),
         "enter_your_master_code": MessageLookupByLibrary.simpleMessage(
             "Ingresa tu código maestro para realizar la activación manual"),
+        "enter_your_nit":
+            MessageLookupByLibrary.simpleMessage("Ingresa tu Nit"),
         "error_code":
             MessageLookupByLibrary.simpleMessage("Error obteniendo código"),
         "error_information": MessageLookupByLibrary.simpleMessage(
             "Error al obtener información"),
+        "error_validating_the_user":
+            MessageLookupByLibrary.simpleMessage("Error al validar el usuario"),
         "get_active_with_your":
             MessageLookupByLibrary.simpleMessage("Deseas activarte con tu"),
         "history": MessageLookupByLibrary.simpleMessage("Histórico"),
@@ -88,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "loading_branches":
             MessageLookupByLibrary.simpleMessage("Cargando sucursales"),
         "log_out": MessageLookupByLibrary.simpleMessage("Cerrar sesión"),
+        "logging_in": MessageLookupByLibrary.simpleMessage("Iniciando sesión"),
         "login_placeholder": MessageLookupByLibrary.simpleMessage(
             "Nit sin dígito de verificación"),
         "manual_activation":
@@ -134,10 +141,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("O actívate con tu "),
         "the_email_does_not": MessageLookupByLibrary.simpleMessage(
             "El email no cumple con el formato"),
+        "the_nit_entered_is_not_registered": MessageLookupByLibrary.simpleMessage(
+            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en "),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
         "unable_send_text_message": m4,
         "unable_send_text_message2": m5,
+        "validating_information":
+            MessageLookupByLibrary.simpleMessage("Validando información"),
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(
             "El código de verificación no puede estar vacío"),
         "version": MessageLookupByLibrary.simpleMessage("Versión"),
@@ -145,6 +156,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Estamos validando el código para activar tu cuenta."),
         "welcome_pideky":
             MessageLookupByLibrary.simpleMessage("¡Bienvenido a Pideky!"),
+        "whatsApp": MessageLookupByLibrary.simpleMessage("WhatsApp"),
+        "whatsApp_not_installed":
+            MessageLookupByLibrary.simpleMessage("WhatsApp no instalado"),
         "whatsApp_number": m6,
         "you_want_to_go":
             MessageLookupByLibrary.simpleMessage("O deseas ir al ")
