@@ -189,14 +189,12 @@ class ProductoViewModel extends GetxController {
       print('ejecuto el insert 2 de ${codigoProducto}');
       await productService.insertPedidoTemp(codigoProducto, cantidadNueva);
     } catch (e) {
-      print("ESTE es el erro $e");
+      print("Error en insertar pedido temporal $e");
     }
   }
 
-  void eliminarProductoTemporal(String codProducto) async {
-    print('ejecuto el delete 1 de ${codProducto}');
-    await productService.eliminarPedidoTemp(codProducto);
-  }
+  void eliminarProductoTemporal(String codProducto) async =>
+      await productService.eliminarPedidoTemp(codProducto);
 
   cargarTemporal() async {
     try {
@@ -213,69 +211,9 @@ class ProductoViewModel extends GetxController {
             producto, element.cantidad.toString(), true);
       });
     } catch (e) {
-      print('paso un error $e');
+      print('paso un error en cargarTemporal $e');
     }
   }
-
-  // void insertarPedidoTemporal(String codigoProducto) async {
-  //   List<Producto> listPedidoTemp =
-  //       await productService.consultarPedidoTemporal();
-  //   print('hola res de pedido ${listPedidoTemp.length}');
-
-  //   PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) async {
-  //     try {
-  //       var cantidadNueva = int.parse(
-  //           PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
-  //               .toString());
-  //       if (value == true) {
-  //         if (listPedidoTemp.isNotEmpty) {
-  //           var getPedido;
-  //           print('entre');
-
-  //           for (var element in listPedidoTemp) {
-  //             if (key.contains(element.codigo)) {
-  //               print(
-  //                   'esto encontro $key --- ${element.codigo} -- ${element.cantidad}');
-  //               getPedido = element;
-  //               break;
-  //             }
-  //           }
-  //           if (getPedido != null) {
-  //             print('Get pedido trajo ${getPedido.codigo}');
-  //             if (cantidadNueva != getPedido.cantidad) {
-  //               if (cantidadNueva > 0) {
-  //                 if (cantidadNueva != getPedido.cantidad) {
-  //                   print('ejecuto el update de ${getPedido.codigo}');
-  //                   await productService.modificarPedidoTemp(
-  //                       key, cantidadNueva);
-  //                   return;
-  //                 }
-  //               } else {
-  //                 print('ejecuto el delete 1 de ${getPedido.codigo}');
-  //                 await productService.eliminarPedidoTemp(key);
-  //                 return;
-  //               }
-  //             }
-
-  //             print('no ejecutamos nada');
-  //             return;
-  //           }
-  //         }
-  //         print('ejecuto el insert 2 de ${key}');
-  //         await productService.insertPedidoTemp(key, cantidadNueva);
-
-  //         //     // await DBProviderHelper.db.insertPedidoTemp(
-  //         //     //     key,
-  //         //     //     int.parse(
-  //         //     //         PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
-  //         //     //             .toString()));
-  //         //   }
-  //       }
-  //     } catch (e) {
-  //       print("ESTE es el erro $e");
-  //     }
-  //   });
-  // }
 
   eliminarBDTemporal() async =>
       await DBProviderHelper.db.eliminarBasesDeDatosTemporal();

@@ -873,8 +873,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   Future<dynamic> eliminarPedidoTemp(String codPedido) async {
     final db = await DBProviderHelper.db.tempAbierta;
     try {
-      await db.rawDelete(
-          'DELETE FROM pedido WHERE codigo_producto = ?', ['$codPedido']);
+      await db
+          .rawDelete('DELETE FROM pedido WHERE codigo_producto = $codPedido');
       return true;
     } catch (e) {
       print('fallo eliminar en tabla pedido temporal $e');
