@@ -3,7 +3,7 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/provider/crear_file.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,6 +43,9 @@ class ConfirmacionPaisViewModel {
   confirmarPais(String pais) async {
     prefs.paisUsuario = pais;
     S.load(Locale('es', pais));
-    Get.off(() => TabOpciones());
+    await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
+    var res = await AppUtil.appUtil.abrirBases();
+    prefs.usurioLogin = -1;
+    if (res) Get.off(() => TabOpciones());
   }
 }

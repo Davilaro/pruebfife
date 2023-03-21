@@ -7,6 +7,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
@@ -89,13 +90,17 @@ List<Widget> acordionDinamico(BuildContext context) {
 
 _validarFrecuencia(isFrecuencia, value, controller,
     ProductoViewModel productViewModel, context) async {
-  final db = ProductoRepositorySqlite();
-  if (isFrecuencia) {
-    value.forEach((prod) async {
-      Producto producto = await db.consultarDatosProducto(prod.codigo);
-      controller.llenarCarrito(producto, prod.cantidad);
-    });
+  if (prefs.usurioLogin == 1) {
+    final db = ProductoRepositorySqlite();
+    if (isFrecuencia) {
+      value.forEach((prod) async {
+        Producto producto = await db.consultarDatosProducto(prod.codigo);
+        controller.llenarCarrito(producto, prod.cantidad);
+      });
+    } else {
+      productViewModel.iniciarModal(context, value[0].negocio);
+    }
   } else {
-    productViewModel.iniciarModal(context, value[0].negocio);
+    Get.off(Login());
   }
 }

@@ -15,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 
 class AppUtil {
   static String? _appUtil;
+  final prefs = new Preferencias();
 
   static final AppUtil appUtil = AppUtil._();
   AppUtil._();
@@ -104,17 +105,19 @@ class AppUtil {
     String url = "";
     var req;
     var file;
-    if (generico) {
-      url = Constantes().urlBaseGenerico + 'sync/Db/Generico/db.zip';
-    } else {
-      // url = Constantes().urlBase +
-      //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
-      url =
-          Constantes().urlBase + 'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
-    }
-
-    print('url : $url');
     try {
+      if (generico) {
+        url = Constantes().urlBaseGenerico +
+            'Sync/DB/${prefs.paisUsuario}/db.zip';
+      } else {
+        // url = Constantes().urlBase +
+        //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
+        url = Constantes().urlBase +
+            'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
+      }
+
+      print('url : $url');
+
       req = await http.Client().get(Uri.parse(url));
       file = File('$dir$fileName');
     } catch (e) {
@@ -132,6 +135,7 @@ class AppUtil {
     var archive = ZipDecoder().decodeBytes(bytes);
     for (var file in archive) {
       var fileName = '$dir${file.name}';
+      print('hola res $fileName');
       if (file.isFile) {
         var outFile = File(fileName);
         outFile = await outFile.create(recursive: true);

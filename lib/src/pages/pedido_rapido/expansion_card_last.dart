@@ -5,6 +5,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/historico.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -213,15 +214,19 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   _cargarPedido(String numeroDoc, providerDatos) async {
     //if (estado) {
-    List<Historico> datosDetalle =
-        await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
-    cargarCadaProducto(datosDetalle);
-    await PedidoEmart.iniciarProductosPorFabricante();
-    onBlockBoubleClick();
-    // pasarCarrito(providerDatos, ordenCompra, estado);
-    //}
-    actualizarEstadoPedido(widget.providerDatos, numeroDoc);
-    calcularValorTotal(widget.cartProvider);
+    if (prefs.usurioLogin == 1) {
+      List<Historico> datosDetalle =
+          await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
+      cargarCadaProducto(datosDetalle);
+      await PedidoEmart.iniciarProductosPorFabricante();
+      onBlockBoubleClick();
+      // pasarCarrito(providerDatos, ordenCompra, estado);
+      //}
+      actualizarEstadoPedido(widget.providerDatos, numeroDoc);
+      calcularValorTotal(widget.cartProvider);
+    } else {
+      Get.off(Login());
+    }
   }
 
   // menos(String prop, int cantidad, String numeroDoc) async {
