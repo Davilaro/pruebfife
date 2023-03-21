@@ -23,7 +23,6 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/pages/historico/historico_pedidos.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +44,7 @@ class _TabOpcionesState extends State<TabOpciones>
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
+  ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final catalogSearchViewModel = Get.put(ControllerHistorico());
@@ -131,8 +131,9 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaControllersPedido!.putIfAbsent(
             listaProductos[i].codigo, () => TextEditingController());
       }
-
+      await productViewModel.cargarTemporal();
       String? token = PushNotificationServer.token as String;
+
       print('Token: $token');
       setState(() {});
     } catch (e) {

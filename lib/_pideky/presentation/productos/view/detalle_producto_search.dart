@@ -468,7 +468,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
       //FIREBASE: Llamamos el evento add_to_cart
       TagueoFirebase().sendAnalityticAddToCart(
           producto, int.parse(_controllerCantidadProducto.text));
-
+      //insertamos el producto en la temporal
+      productViewModel.insertarPedidoTemporal(widget.producto.codigo);
       Navigator.push(
           context,
           MaterialPageRoute(

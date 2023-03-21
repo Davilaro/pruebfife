@@ -9,7 +9,6 @@ import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/src/modelos/marcaFiltro.dart';
 import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/multimedia.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/modelos/respuesta.dart';
 import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/modelos/vendedor.dart';

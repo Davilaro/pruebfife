@@ -83,6 +83,7 @@ class _SplashState extends State<Splash> {
       cargo = await AppUtil.appUtil
           .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
       var res = await AppUtil.appUtil.abrirBases();
+
       prefs.usurioLogin = 1;
       PedidoSugeridoController.userLog.value = 1;
       if (res && cargo) {

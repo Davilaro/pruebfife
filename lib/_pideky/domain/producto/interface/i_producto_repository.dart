@@ -43,4 +43,12 @@ abstract class IProductoRepository {
       double precioMaximo,
       String? codigoSubCategoria,
       String? codigoMarca);
+
+  Future<dynamic> insertPedidoTemp(String codPedido, int cantidad);
+
+  Future<dynamic> modificarPedidoTemp(String codPedido, int cantidad);
+
+  Future<dynamic> eliminarPedidoTemp(String codPedido);
+
+  Future<List<Producto>> consultarPedidoTemporal();
 }
