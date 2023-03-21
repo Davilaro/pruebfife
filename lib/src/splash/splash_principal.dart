@@ -52,13 +52,13 @@ class _SplashState extends State<Splash> {
   Future<void> _descarcarDB() async {
     var cargo = false;
     if (prefs.usurioLogin == null || prefs.paisUsuario == null) {
-      cargo =
-          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-      var res = await AppUtil.appUtil.abrirBases();
-      prefs.usurioLogin = -1;
-      if (res && cargo) {
-        Get.off(() => ConfirmacionPais());
-      }
+      // cargo =
+      //     await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
+      // var res = await AppUtil.appUtil.abrirBases();
+      // prefs.usurioLogin = -1;
+      // if (cargo) {
+      Get.off(() => ConfirmacionPais());
+      // }
     } else if (prefs.usurioLogin == -1) {
       cargo =
           await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
@@ -83,6 +83,7 @@ class _SplashState extends State<Splash> {
       cargo = await AppUtil.appUtil
           .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
       var res = await AppUtil.appUtil.abrirBases();
+
       prefs.usurioLogin = 1;
       PedidoSugeridoController.userLog.value = 1;
       if (res && cargo) {

@@ -15,6 +15,7 @@
     "categories_for_you" : "Featured categories for you ",
     "cell_phone_number": "cell phone number",
     "ccup_code_copied": "CCUP code copied",
+    "code_could_not_be_generated":"Code could not be generated",
 
     "delivery_days": "Remember that you can place your order: {diasEntrega}",
     "delete_account": "Delete account",
@@ -23,6 +24,8 @@
     "enter_your_master_code":"Enter your master code for manual activation",
     "error_code": "Error getting code",
     "error_information": "Error obtaining information",
+    "error_validating_the_user":"Error validating the user",
+    "enter_your_nit": "Enter your Nit",
 
     "get_active_with_your": "You wish to activate yourself with your",
 
@@ -36,6 +39,7 @@
     "loading_branches": "Loading branches",
     "login_placeholder": "Nit without verification digit",
     "log_out": "Log out",
+    "logging_in":"Logging in",
 
     "manual_activation":"Manual registration",
     "manual_activation_subtitle":"the manual registration",
@@ -69,16 +73,20 @@
     "the_email_does_not":"The email does not comply with the format",
     "the_verification_code_incorrect":"The verification code is incorrect, \nplease check it and try again.",
     "terms_conditions":"Terms and conditions",
+    "the_nit_entered_is_not_registered":"The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ",
 
     "unable_send_text_message":"Unable to send text message {e}",
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
 
     "verification_code_cannot_empty":"The verification code cannot be empty",
     "version": "Version",
+    "validating_information": "Validating information",
 
     "we_validating_code_activate":"We are validating the code to activate your account.",
     "welcome_pideky":"Welcome to Pideky!",
     "whatsApp_number": "WhatsApp Number:{telefono}",
+    "whatsApp": "WhatsApp",
+    "whatsApp_not_installed":"WhatsApp not installed",
 
     "you_want_to_go":"Or do you want to go to the "
 

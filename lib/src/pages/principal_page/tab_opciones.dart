@@ -47,6 +47,7 @@ class _TabOpcionesState extends State<TabOpciones>
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
+  ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final catalogSearchViewModel = Get.put(ControllerHistorico());
@@ -140,8 +141,9 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaControllersPedido!.putIfAbsent(
             listaProductos[i].codigo, () => TextEditingController());
       }
-
+      await productViewModel.cargarTemporal();
       String? token = PushNotificationServer.token as String;
+
       print('Token: $token');
       setState(() {});
     } catch (e) {
