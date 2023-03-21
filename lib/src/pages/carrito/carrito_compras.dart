@@ -63,14 +63,12 @@ class _CarritoComprasState extends State<CarritoCompras> {
     FlutterUxcam.tagScreenName('ShoppingCartPage');
 
     final size = MediaQuery.of(context).size;
-    PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) {
-      if (value == true) {
-        print(
-            'hola producto $key  --- ${PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)} --- ${PedidoEmart.listaProductos![key]!.precio}');
-      }
-    });
-    // print(
-    //     'estos es ${PedidoEmart.listaValoresPedidoAgregados?.}');
+    // PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) {
+    //   if (value == true) {
+    //     print(
+    //         'hola producto $key  --- ${PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)} --- ${PedidoEmart.listaProductos![key]!.precio}');
+    //   }
+    // });
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -247,7 +245,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                             visible: getVisibilityMessage(
                                 fabricante,
                                 cartProvider.getListaFabricante[fabricante]
-                                    ["precioFinal"],
+                                    ?["precioFinal"],
                                 value["preciominimo"],
                                 value["topeMinimo"]),
                             child: Container(
@@ -614,6 +612,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         PedidoEmart
                             .listaControllersPedido![value.codigo]!.text = "0";
                         PedidoEmart.registrarValoresPedido(value, "1", false);
+                        //eliminamos el pedido de la temporal
+                        productoViewModel
+                            .eliminarProductoTemporal(value.codigo);
                         cargarDeNuevo = true;
                       }
                     });
@@ -662,7 +663,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
           PedidoEmart.registrarValoresPedido(producto, '$valoSuma', true);
         });
       }
-
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
       MetodosLLenarValores().calcularValorTotal(cartProvider);
     }
   }
@@ -679,6 +680,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
         PedidoEmart.registrarValoresPedido(producto, '1', false);
         cargarDeNuevo = true;
         PedidoEmart.iniciarProductosPorFabricante();
+        // eliminar producto de la temporal
+        productoViewModel.eliminarProductoTemporal(producto.codigo);
         setState(() {});
       } else {
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
@@ -688,6 +691,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
         //UXCam: Llamamos el evento removeToCart
         UxcamTagueo()
             .removeToCart(producto, valorResta, cartProvider, precioMinimo);
+        // modificar producto de la temporal
+        productoViewModel.insertarPedidoTemporal(producto.codigo);
       }
     }
     //FIREBASE: Llamamos el evento remove_from_cart

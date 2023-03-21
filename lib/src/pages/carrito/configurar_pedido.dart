@@ -249,6 +249,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       PedidoEmart.cantItems.value = '0';
       controladorCambioEstadoProductos.mapaHistoricos
           .updateAll((key, value) => value = false);
+      productoViewModel.eliminarBDTemporal();
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

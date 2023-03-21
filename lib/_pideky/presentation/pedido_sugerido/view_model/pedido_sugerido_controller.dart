@@ -7,6 +7,7 @@ import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_que
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,6 +49,8 @@ class PedidoSugeridoController extends GetxController
     if (producto.codigo != "") {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
+      //insertar producto en la temporal
+      productViewModel.insertarPedidoTemporal(producto.codigo);
       if (controlador.mapaHistoricos.containsKey(prefs.codClienteLogueado)) {
         controlador.mapaHistoricos
             .update(prefs.codClienteLogueado, (value) => true);

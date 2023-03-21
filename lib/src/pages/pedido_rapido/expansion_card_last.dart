@@ -282,6 +282,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
         }
       });
+      productViewModel.insertarPedidoTemporal(producto.codigo);
     }
   }
 

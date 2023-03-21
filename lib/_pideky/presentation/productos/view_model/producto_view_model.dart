@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:emart/_pideky/domain/condicion_entrega/model/condicionEntrega.dart';
 import 'package:emart/_pideky/domain/condicion_entrega/service/condicion_entrega_service.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -146,65 +144,141 @@ class ProductoViewModel extends GetxController {
     return listDias;
   }
 
-  void insertarPedidoTemporal() async {
+  void insertarPedidoTemporal(String codigoProducto) async {
     List<Producto> listPedidoTemp =
         await productService.consultarPedidoTemporal();
     print('hola res de pedido ${listPedidoTemp.length}');
-    // listPedidoTemp.forEach((element) {
-    //   PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) {
-    //     print(
-    //         'ejecuto ${element.codigo} ---- $key -----${key.contains(element.codigo.toString())}');
-    //     if (value) {
-    //       if (element.codigo.contains(key.toString())) {
-    //         print('ejecuto el update ${element.codigo}');
-    //       } else {
-    //         // print('ejecuto el insert ${element.codigo}');
-    //       }
-    //     }
-    //   });
-    // });
-    PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) async {
-      if (value == true) {
-        if (listPedidoTemp.isNotEmpty) {
-          print('entre');
-          var getPedido = listPedidoTemp
-              .firstWhere((element) => key.contains(element.codigo));
-          if (getPedido != null) {
-            if (int.parse(
-                    PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
-                        .toString()) >
-                0) {
-              if (int.parse(PedidoEmart.obtenerValor(
-                          PedidoEmart.listaProductos![key]!)
-                      .toString()) !=
-                  getPedido.cantidad) {
+
+    try {
+      var cantidadNueva = int.parse(
+          PedidoEmart.obtenerValor(PedidoEmart.listaProductos![codigoProducto]!)
+              .toString());
+
+      if (listPedidoTemp.isNotEmpty) {
+        var getPedido;
+        print('entre');
+
+        for (var element in listPedidoTemp) {
+          if (codigoProducto.contains(element.codigo)) {
+            print(
+                'esto encontro $codigoProducto --- ${element.codigo} -- ${element.cantidad}');
+            getPedido = element;
+            break;
+          }
+        }
+        if (getPedido != null) {
+          print('Get pedido trajo ${getPedido.codigo}');
+          if (cantidadNueva != getPedido.cantidad) {
+            if (cantidadNueva > 0) {
+              if (cantidadNueva != getPedido.cantidad) {
                 print('ejecuto el update de ${getPedido.codigo}');
+                await productService.modificarPedidoTemp(
+                    codigoProducto, cantidadNueva);
                 return;
               }
             } else {
-              print('ejecuto el delete de ${getPedido.codigo}');
+              print('ejecuto el delete 1 de ${getPedido.codigo}');
+              eliminarProductoTemporal(codigoProducto);
               return;
             }
-            print('ejecuto el delete de ${getPedido.codigo}');
-            return;
           }
+          print('no ejecutamos nada');
+          return;
         }
-        print('ejecuto el insert 2 de ${key}');
-        await productService.insertPedidoTemp(
-            key,
-            int.parse(
-                PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
-                    .toString()));
-
-        //     // await DBProviderHelper.db.insertPedidoTemp(
-        //     //     key,
-        //     //     int.parse(
-        //     //         PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
-        //     //             .toString()));
-        //   }
       }
-    });
+      print('ejecuto el insert 2 de ${codigoProducto}');
+      await productService.insertPedidoTemp(codigoProducto, cantidadNueva);
+    } catch (e) {
+      print("ESTE es el erro $e");
+    }
   }
+
+  void eliminarProductoTemporal(String codProducto) async {
+    print('ejecuto el delete 1 de ${codProducto}');
+    await productService.eliminarPedidoTemp(codProducto);
+  }
+
+  cargarTemporal() async {
+    try {
+      print('si entre a la temporal');
+      List<Producto> listPedidoTemp =
+          await productService.consultarPedidoTemporal();
+      listPedidoTemp.forEach((element) async {
+        Producto producto =
+            await productService.consultarDatosProducto(element.codigo);
+        print('si entre a la temporal ${producto.codigo}');
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+            element.cantidad.toString();
+        PedidoEmart.registrarValoresPedido(
+            producto, element.cantidad.toString(), true);
+      });
+    } catch (e) {
+      print('paso un error $e');
+    }
+  }
+
+  // void insertarPedidoTemporal(String codigoProducto) async {
+  //   List<Producto> listPedidoTemp =
+  //       await productService.consultarPedidoTemporal();
+  //   print('hola res de pedido ${listPedidoTemp.length}');
+
+  //   PedidoEmart.listaValoresPedidoAgregados?.forEach((key, value) async {
+  //     try {
+  //       var cantidadNueva = int.parse(
+  //           PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
+  //               .toString());
+  //       if (value == true) {
+  //         if (listPedidoTemp.isNotEmpty) {
+  //           var getPedido;
+  //           print('entre');
+
+  //           for (var element in listPedidoTemp) {
+  //             if (key.contains(element.codigo)) {
+  //               print(
+  //                   'esto encontro $key --- ${element.codigo} -- ${element.cantidad}');
+  //               getPedido = element;
+  //               break;
+  //             }
+  //           }
+  //           if (getPedido != null) {
+  //             print('Get pedido trajo ${getPedido.codigo}');
+  //             if (cantidadNueva != getPedido.cantidad) {
+  //               if (cantidadNueva > 0) {
+  //                 if (cantidadNueva != getPedido.cantidad) {
+  //                   print('ejecuto el update de ${getPedido.codigo}');
+  //                   await productService.modificarPedidoTemp(
+  //                       key, cantidadNueva);
+  //                   return;
+  //                 }
+  //               } else {
+  //                 print('ejecuto el delete 1 de ${getPedido.codigo}');
+  //                 await productService.eliminarPedidoTemp(key);
+  //                 return;
+  //               }
+  //             }
+
+  //             print('no ejecutamos nada');
+  //             return;
+  //           }
+  //         }
+  //         print('ejecuto el insert 2 de ${key}');
+  //         await productService.insertPedidoTemp(key, cantidadNueva);
+
+  //         //     // await DBProviderHelper.db.insertPedidoTemp(
+  //         //     //     key,
+  //         //     //     int.parse(
+  //         //     //         PedidoEmart.obtenerValor(PedidoEmart.listaProductos![key]!)
+  //         //     //             .toString()));
+  //         //   }
+  //       }
+  //     } catch (e) {
+  //       print("ESTE es el erro $e");
+  //     }
+  //   });
+  // }
+
+  eliminarBDTemporal() async =>
+      await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
 
   static ProductoViewModel get findOrInitialize {
     try {

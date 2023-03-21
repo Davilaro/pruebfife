@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:device_info/device_info.dart';
 import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/util.dart';
@@ -163,8 +164,8 @@ class AppUtil {
     datosPersonas.forEach((element) async {
       DateTime now = new DateTime.now();
       String fecha = DateFormat('yyyyMMddkkmm').format(now);
-      String
-          URL = /*Constantes().urlApi +*/ "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
+      String URL = /*Constantes().urlApi +*/
+          "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
 
       var request = http.MultipartRequest('POST', Uri.parse(URL));
 
@@ -182,7 +183,10 @@ class AppUtil {
 
   Future<void> eliminarCarpeta() async {
     try {
-      // await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      final prefs = new Preferencias();
+      if (prefs.usurioLogin == -1) {
+        await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      }
       // await DBProviderHelper.db.cerrarBases();
       // await DBProvider.db.cerrarBases();
 
