@@ -24,7 +24,7 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
           ? sql.map((e) => PedidoSugeridoModel.fromJson(e)).toList()
           : [];
     } catch (err) {
-      print('----Error consulta obtenerPedidoSugerido');
+      print('----Error consulta obtenerPedidoSugerido $err');
       return [];
     }
   }

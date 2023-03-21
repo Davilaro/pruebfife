@@ -8,10 +8,13 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/pages/login/widgets/bienvenido.dart';
+import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -20,9 +23,9 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final TextEditingController _controllerUser = TextEditingController();
-final TextEditingController _controllerCorreo = TextEditingController();
 
 late ProgressDialog pr;
 late ProgressDialog prValidar;
@@ -59,7 +62,6 @@ class Login extends StatefulWidget {
       print('Failed to get platform version');
     }
 
-    //if (!mounted) return;
     return [deviceName, deviceVersion, identifier];
   }
 }
@@ -140,7 +142,7 @@ class _LoginState extends State<Login> {
             ),
           ),
           Text(
-            'Versión ${Constantes().titulo}: $version',
+            '${S.current.version} ${Constantes().titulo}: $version',
             style: TextStyle(color: Colors.black),
           ),
         ],
@@ -190,7 +192,7 @@ class _LoginState extends State<Login> {
 
   _logicaBoton(BuildContext context, DatosListas provider) async {
     if (_controllerUser.text == '') {
-      mostrarAlert(context, 'Ingresa tu NIT', null);
+      mostrarAlert(context, S.current.enter_your_nit, null);
     } else {
       //FIREBASE: Llamamos el evento login
       TagueoFirebase().sendAnalitytics(_controllerUser.text);
@@ -200,7 +202,8 @@ class _LoginState extends State<Login> {
       String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
 
       prValidar = ProgressDialog(context);
-      prValidar.style(message: 'Validando información');
+      //message: Validando información
+      prValidar.style(message: S.current.validating_information);
       prValidar = ProgressDialog(context,
           type: ProgressDialogType.Normal,
           isDismissible: false,
@@ -215,7 +218,8 @@ class _LoginState extends State<Login> {
 
   _diloagCargando(BuildContext context) async {
     pr = ProgressDialog(context);
-    pr.style(message: 'Iniciando sesión');
+    //message: Iniciando sesión
+    pr.style(message: S.current.logging_in);
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
 
@@ -224,40 +228,64 @@ class _LoginState extends State<Login> {
     await pr.hide();
   }
 
-  Future _login(BuildContext context, String nit) async {
-    _diloagCargando(context);
-  }
-
   Future loguin(BuildContext context, String nit) async {
-    List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
-    respuesta.forEach((element) {
-      if (element.bloqueado == "1") {
-        Navigator.pushReplacementNamed(context, "inicio_compra");
-        return mostrarAlert(
-            context,
-            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte",
-            null);
+    try {
+      List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
+      respuesta.forEach((element) {
+        if (element.bloqueado == "1") {
+          Navigator.pushReplacementNamed(context, "inicio_compra");
+          return mostrarAlertCustomWidget(
+              context, cargarLinkWhatssap(context), null);
+        }
+      });
+      prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
+
+      prefs.codClienteLogueado = nit;
+      // ignore: unnecessary_statements
+      PedidoSugeridoController.userLog.value = 1;
+
+      if (respuesta.length > 0) {
+        await pr.hide();
+        Navigator.pushReplacementNamed(
+          context,
+          'listaSucursale',
+          arguments: ScreenArguments(respuesta, _controllerUser.text),
+        );
+      } else {
+        await pr.hide();
+        mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
+        return false;
       }
-    });
-    prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
-
-    prefs.codClienteLogueado = nit;
-    // ignore: unnecessary_statements
-    PedidoSugeridoController.userLog.value = 1;
-
-    if (respuesta.length > 0) {
+    } catch (e) {
+      print('Error retorno login $e');
       await pr.hide();
-
-      Navigator.pushReplacementNamed(
-        context,
-        'listaSucursale',
-        arguments: ScreenArguments(respuesta, _controllerUser.text),
-      );
-    } else {
-      await pr.hide();
-      mostrarAlert(context, 'Error al obtener información', null);
+      //message: Error al obtener información
+      mostrarAlert(context, S.current.error_information, null);
       return false;
     }
+  }
+
+  Widget cargarLinkWhatssap(context) {
+    return Column(
+      children: [
+        //message: El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en
+        Text(
+          S.current.the_nit_entered_is_not_registered,
+          textAlign: TextAlign.center,
+        ),
+        GestureDetector(
+          onTap: () => lanzarWhatssap(context),
+          child: Text(
+            S.current.whatsApp, //message: WhatsApp
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: HexColor(Colores().color_azul_letra),
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   final border = const OutlineInputBorder(
@@ -265,27 +293,6 @@ class _LoginState extends State<Login> {
       borderSide: BorderSide(
         color: Colors.black,
       ));
-
-  _campoTextoCorreo(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: TextField(
-          controller: _controllerCorreo,
-          style: TextStyle(color: HexColor("#41398D"), fontSize: 15),
-          decoration: InputDecoration(
-            fillColor: HexColor("#41398D"),
-            hintText: 'ejemplo@☼gmail.com',
-            hintStyle: TextStyle(
-              color: HexColor("#41398D"),
-            ),
-          )),
-    );
-  }
 
   Future _validarInformacion(
       BuildContext context, divace, String plataforma, String text) async {
@@ -295,27 +302,24 @@ class _LoginState extends State<Login> {
 
     if (respues == null) {
       await prValidar.hide();
-      mostrarAlert(contextPrincipal, 'Error al validar el usuario', null);
+      //message: Error al validar el usuario
+      mostrarAlert(contextPrincipal, S.current.error_validating_the_user, null);
       return;
     }
 
     if (respues.codigo == null) {
       await prValidar.hide();
-      mostrarAlert(context, 'Error obteniendo información', null);
+      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
     } else if (respues.codigo == -1) {
       await prValidar.hide();
-      mostrarAlert(
-          context,
-          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
-          null);
+      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
-      mostrarAlert(
-          context,
-          'El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contacta a soporte',
-          null);
+
+      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
     } else if (respues.codigo == 0) {
-      mostrarAlert(context, 'No se pudo generar el código', null);
+      //message: No se pudo generar el código
+      mostrarAlert(context, S.current.code_could_not_be_generated, null);
     } else if (respues.activo == 0) {
       await prValidar.hide();
 
@@ -338,13 +342,37 @@ class _LoginState extends State<Login> {
     }
   }
 
-  TextStyle diseno_dialog_titulos() =>
-      TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]);
-
   void _cargarVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     setState(() {});
+  }
+}
+
+Future<void> lanzarWhatssap(context) async {
+  var lineaSoporte = await DBProviderHelper.db.cargarTelefotosSoporte(3);
+  var whatappurlIos =
+      "https://wa.me/+${lineaSoporte[1].telefono}?text=${Uri.parse("Hola")}";
+
+  //UXCam: Llamamos el evento selectSoport
+  UxcamTagueo().selectSoport('Soporte Whatssap');
+  try {
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunch(whatappurlIos)) {
+        await launch(whatappurlIos, forceSafariVC: false);
+      } else {
+        //message: whatsapp no instalado
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text(S.current.whatsApp_not_installed)));
+      }
+    } else {
+      // android , web
+      await launch(
+          'https://api.whatsapp.com/send?phone=+${lineaSoporte[1].telefono}');
+    }
+  } catch (e) {
+    print(e);
   }
 }
 

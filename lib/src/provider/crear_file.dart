@@ -185,7 +185,7 @@ class AppUtil {
 
   Future<void> eliminarCarpeta() async {
     try {
-      await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      // await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
       // await DBProviderHelper.db.cerrarBases();
       // await DBProvider.db.cerrarBases();
 
