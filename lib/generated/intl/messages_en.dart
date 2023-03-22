@@ -64,8 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("cell phone number"),
         "code_could_not_be_generated":
             MessageLookupByLibrary.simpleMessage("Code could not be generated"),
-        "confirm_country":
-            MessageLookupByLibrary.simpleMessage("Confirm country"),
+        "confirm_country": MessageLookupByLibrary.simpleMessage(
+            "Please confirm the country where your business is located."),
         "country_confirmation":
             MessageLookupByLibrary.simpleMessage("Country confirmation"),
         "delete_account":

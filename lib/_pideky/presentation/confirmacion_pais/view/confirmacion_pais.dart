@@ -57,9 +57,11 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
                     width: Get.width * 0.5,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 15),
+                    margin: EdgeInsets.only(top: 25),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: AutoSizeText(
                       S.current.confirm_country,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20,
                           color: ConstantesColores.azul_precio,

@@ -9,7 +9,7 @@
     "address": "Dirección: {direccion}",
 
     "cancel":"Cancelar",
-    "confirm_country":"Confirmar país",
+    "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",
     "country_confirmation":"Confirmación país",
     "catalog":"Catálogo",
     "categories_for_you": "categorias destacadas para tí ",
