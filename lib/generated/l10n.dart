@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Confirm country`
+  /// `Please confirm the country where your business is located.`
   String get confirm_country {
     return Intl.message(
-      'Confirm country',
+      'Please confirm the country where your business is located.',
       name: 'confirm_country',
       desc: '',
       args: [],
