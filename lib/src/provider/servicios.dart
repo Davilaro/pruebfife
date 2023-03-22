@@ -387,7 +387,8 @@ class Servicies {
 
       url = Uri.parse(
           '${Constantes().urlPrincipal}Pedido?codigo=nutresa&codUsuario=$usuarioLogin');
-      print(url);
+      print("url pedido $url");
+      print("datos pedido $datos");
 
       final response = await http.post(url,
           headers: <String, String>{
@@ -396,7 +397,9 @@ class Servicies {
           body: datos);
 
       if (response.statusCode == 200) {
-        return ValidarPedido.fromJson(jsonDecode(response.body));
+        var res = ValidarPedido.fromJson(jsonDecode(response.body));
+        print('respuesta ${res.mensaje}');
+        return res;
       } else {
         throw Exception('Failed');
       }
