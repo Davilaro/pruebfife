@@ -1,5 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -231,6 +232,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
 
   mostrarCategorias(BuildContext context, dynamic elemento,
       DatosListas provider, cartProvider) async {
+    final providerCar = Provider.of<OpcionesBard>(context, listen: false);
+    final productViewModel = Get.find<ProductoViewModel>();
     pr = ProgressDialog(context);
     pr.style(message: 'Cambiando sucursal');
     pr = ProgressDialog(context,
@@ -244,7 +247,10 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
       UxcamTagueo().validarTipoUsuario();
     }
     await pr.hide();
-    vaciarCarrito(cartProvider);
+    productViewModel.eliminarBDTemporal();
+    providerCar.selectOptionMenu = 0;
+    providerCar.setNumeroClickCarrito = 0;
+    PedidoEmart.cantItems.value = '0';
 
     setState(() {});
     Navigator.pushReplacementNamed(context, 'tab_opciones');
@@ -296,19 +302,5 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
             : Locale('es', 'CO'));
   }
 
-  vaciarCarrito(cartProvider) {
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoController>();
-    final controllerNequi = Get.find<MisPagosNequiController>();
-    controllerPedidoSugerido.clearList();
-    controllerPedidoSugerido.initController();
-    controllerNequi.initData();
-    PedidoEmart.listaProductos!.forEach((key, value) {
-      PedidoEmart.listaControllersPedido![value.codigo]!.text = "0";
-      PedidoEmart.registrarValoresPedido(value, "1", false);
-    });
-    PedidoEmart.cantItems.value = "0";
-    PedidoEmart.iniciarProductosPorFabricante();
-    cargoConfirmar.mapaHistoricos.updateAll((key, value) => value = false);
-    MetodosLLenarValores().calcularValorTotal(cartProvider);
-  }
+
 }
