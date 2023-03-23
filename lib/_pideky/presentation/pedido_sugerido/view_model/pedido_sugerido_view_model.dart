@@ -4,12 +4,10 @@ import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart'
 import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
-import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
