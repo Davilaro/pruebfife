@@ -63,10 +63,18 @@ class Servicies {
   }
 
   Future<List<dynamic>> getListaNotificaciones(String nit) async {
-    final url = Uri.parse(
-      Constantes().urlPrincipal +
-          'notificacion/leerNotificaciones?nit=${nit}&sucursal=${nit}',
-    );
+    final Uri url;
+    if (prefs.usurioLogin == -1) {
+      url = Uri.parse(
+        Constantes().urlPrincipal + 'notificacion/leerNotificacionesGenerica',
+      );
+    } else {
+      url = Uri.parse(
+        Constantes().urlPrincipal +
+            'notificacion/leerNotificaciones?nit=${nit}&sucursal=${nit}',
+      );
+    }
+
     print('url notificaciones $url');
     final reponse = await http.get(url);
     final res = json.decode(reponse.body);
