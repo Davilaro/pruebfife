@@ -66,16 +66,21 @@ class ProductoViewModel extends GetxController {
   }
 
   bool validarFrecuencia(String fabricante) {
-    var diaLocal = DateFormat.EEEE().format(DateTime.now());
+    DateTime now = DateTime.now();
+
+    var diaLocal = DateFormat.EEEE().format(now);
     var listDias = [];
 
     CondicionEntrega condicionEntrega = listCondicionEntrega.value
         .firstWhere((element) => element.fabricante == fabricante);
     var diasCondicion = condicionEntrega.diaVisita?.split('-');
     listDias = trasformarDias(diasCondicion);
+    String horaLocal = DateFormat('HH').format(now);
+    var horaMaxFrecuencia = condicionEntrega.hora?.split(':');
 
     return condicionEntrega.semana == 1 &&
-        listDias.contains(diaLocal.capitalize);
+        listDias.contains(diaLocal.capitalize) &&
+        int.parse(horaLocal) < int.parse(horaMaxFrecuencia![0]);
   }
 
   void abrirModal(context, listDias) {
@@ -147,7 +152,6 @@ class ProductoViewModel extends GetxController {
   void insertarPedidoTemporal(String codigoProducto) async {
     List<Producto> listPedidoTemp =
         await productService.consultarPedidoTemporal();
-    print('hola res de pedido ${listPedidoTemp.length}');
 
     try {
       var cantidadNueva = int.parse(
@@ -156,37 +160,31 @@ class ProductoViewModel extends GetxController {
 
       if (listPedidoTemp.isNotEmpty) {
         var getPedido;
-        print('entre');
 
         for (var element in listPedidoTemp) {
           if (codigoProducto.contains(element.codigo)) {
-            print(
-                'esto encontro $codigoProducto --- ${element.codigo} -- ${element.cantidad}');
             getPedido = element;
             break;
           }
         }
         if (getPedido != null) {
-          print('Get pedido trajo ${getPedido.codigo}');
           if (cantidadNueva != getPedido.cantidad) {
             if (cantidadNueva > 0) {
               if (cantidadNueva != getPedido.cantidad) {
-                print('ejecuto el update de ${getPedido.codigo}');
                 await productService.modificarPedidoTemp(
                     codigoProducto, cantidadNueva);
                 return;
               }
             } else {
-              print('ejecuto el delete 1 de ${getPedido.codigo}');
               eliminarProductoTemporal(codigoProducto);
               return;
             }
           }
-          print('no ejecutamos nada');
+
           return;
         }
       }
-      print('ejecuto el insert 2 de ${codigoProducto}');
+
       await productService.insertPedidoTemp(codigoProducto, cantidadNueva);
     } catch (e) {
       print("Error en insertar pedido temporal $e");
@@ -198,13 +196,12 @@ class ProductoViewModel extends GetxController {
 
   cargarTemporal() async {
     try {
-      print('si entre a la temporal');
       List<Producto> listPedidoTemp =
           await productService.consultarPedidoTemporal();
       listPedidoTemp.forEach((element) async {
         Producto producto =
             await productService.consultarDatosProducto(element.codigo);
-        print('si entre a la temporal ${producto.codigo}');
+
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
             element.cantidad.toString();
         PedidoEmart.registrarValoresPedido(

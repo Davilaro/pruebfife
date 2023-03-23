@@ -6,6 +6,7 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -598,21 +600,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         fabricante, cartProvider, listProductos, precioMinimo);
                     //FIREBASE: Llamamos el evento delete_cart
                     TagueoFirebase().sendAnalityticDeleteCart("2", "Delete");
-                    PedidoEmart.listaProductos!.forEach((key, value) {
-                      if (value.fabricante == fabricante) {
-                        PedidoEmart
-                            .listaControllersPedido![value.codigo]!.text = "0";
-                        PedidoEmart.registrarValoresPedido(value, "1", false);
-                        //eliminamos el pedido de la temporal
-                        productoViewModel
-                            .eliminarProductoTemporal(value.codigo);
-                        cargarDeNuevo = true;
-                      }
-                    });
-                    PedidoEmart.iniciarProductosPorFabricante();
-                    cargoConfirmar.mapaHistoricos
-                        .updateAll((key, value) => value = false);
-                    MetodosLLenarValores().calcularValorTotal(cartProvider);
+                    vaciarProductosFabricante(fabricante);
                   },
                   child: Text(
                     'Aceptar',
@@ -621,6 +609,21 @@ class _CarritoComprasState extends State<CarritoCompras> {
             ],
           );
         });
+  }
+
+  vaciarProductosFabricante(String fabricante) {
+    PedidoEmart.listaProductos!.forEach((key, value) {
+      if (value.fabricante == fabricante) {
+        PedidoEmart.listaControllersPedido![value.codigo]!.text = "0";
+        PedidoEmart.registrarValoresPedido(value, "1", false);
+        //eliminamos el pedido de la temporal
+        productoViewModel.eliminarProductoTemporal(value.codigo);
+        cargarDeNuevo = true;
+      }
+    });
+    PedidoEmart.iniciarProductosPorFabricante();
+    cargoConfirmar.mapaHistoricos.updateAll((key, value) => value = false);
+    MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
   editarCantidad(dynamic producto, CarroModelo cartProvider, String cantidad) {
@@ -694,12 +697,25 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
   _configurarPedido(size, CarroModelo cartProvider) {
     try {
+      bool isFrecuencia =
+          prefs.paisUsuario == 'CR' ? validarFrecuencia() : true;
+
       String fabricantes = _validarPedidosMinimos(cartProvider);
       if (_verificarCantidadGrupos() > 0) {
         if (fabricantes == "") {
-          //UXCam: Llamamos el evento clickPlaceOrder
-          UxcamTagueo().clickPlaceOrder(cartProvider);
-          _irConfigurarPedido();
+          if (isFrecuencia) {
+            //UXCam: Llamamos el evento clickPlaceOrder
+            UxcamTagueo().clickPlaceOrder(cartProvider);
+            _irConfigurarPedido();
+          } else {
+            PedidoEmart.listaProductosPorFabricante!
+                .forEach((fabricante, value) {
+              if (value['precioProducto'] != 0.0) {
+                vaciarProductosFabricante(fabricante);
+              }
+            });
+            productoViewModel.eliminarBDTemporal();
+          }
         } else {
           if (_verificarCantidadGrupos() == fabricantes.split(",").length) {
             showLoaderDialog(
@@ -725,6 +741,19 @@ class _CarritoComprasState extends State<CarritoCompras> {
     } catch (error) {
       print("---CARRITO ERROR! $error");
     }
+  }
+
+  bool validarFrecuencia() {
+    var res = true;
+    PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
+      if (value['precioProducto'] != 0.0) {
+        if (!productoViewModel.validarFrecuencia(fabricante)) {
+          productoViewModel.iniciarModal(context, fabricante);
+          res = false;
+        }
+      }
+    });
+    return res;
   }
 
   String _validarPedidosMinimos(CarroModelo cartProvider) {
