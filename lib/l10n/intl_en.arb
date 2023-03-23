@@ -8,6 +8,8 @@
     "accept":"Accept",
     "address": "Address: {direccion}",
 
+    "bottom_alert_drawer" : "Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.",
+    
     "cancel":"Cancel",
     "confirm_country":"Please confirm the country where your business is located.",
     "country_confirmation":"Country confirmation",
@@ -67,6 +69,7 @@
     "suggested_order":"Suggested Order",
 
     "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary.",
+    "text_change_of_branch" : "You have successfully changed the branch for which you will place your orders!",
     "text_message": "text message.",
     "text_sms":"SMS",
     "text_your_email_address": "Or sign up with your email address ",
@@ -77,6 +80,7 @@
 
     "unable_send_text_message":"Unable to send text message {e}",
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
+    "upper_text_drawer" : "Choose the branch or point of sale for which you wish to see the products available and place your orders.",
 
     "verification_code_cannot_empty":"The verification code cannot be empty",
     "version": "Version",

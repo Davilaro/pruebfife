@@ -665,7 +665,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                         Container(
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Text(
-                            'Se ha realizado correctamente el registro de tu cuenta pideky a continuación selecciona una sucursal para comenzar a realizar todos pedidos.',
+                            'Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar tus pedidos.',
                             textAlign: TextAlign.center,
                           ),
                         ),

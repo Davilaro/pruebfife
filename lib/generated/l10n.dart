@@ -130,6 +130,16 @@ class S {
     );
   }
 
+  /// `Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.`
+  String get bottom_alert_drawer {
+    return Intl.message(
+      'Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.',
+      name: 'bottom_alert_drawer',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(
@@ -600,6 +610,16 @@ class S {
     );
   }
 
+  /// `You have successfully changed the branch for which you will place your orders!`
+  String get text_change_of_branch {
+    return Intl.message(
+      'You have successfully changed the branch for which you will place your orders!',
+      name: 'text_change_of_branch',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `text message.`
   String get text_message {
     return Intl.message(
@@ -687,6 +707,16 @@ class S {
       name: 'unable_send_text_message2',
       desc: '',
       args: [e],
+    );
+  }
+
+  /// `Choose the branch or point of sale for which you wish to see the products available and place your orders.`
+  String get upper_text_drawer {
+    return Intl.message(
+      'Choose the branch or point of sale for which you wish to see the products available and place your orders.',
+      name: 'upper_text_drawer',
+      desc: '',
+      args: [],
     );
   }
 

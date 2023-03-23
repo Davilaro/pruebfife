@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../../shared/widgets/acordion.dart';
 import '../../../../../src/preferences/cont_colores.dart';
-import '../../view_model/mis_pagos_nequi_controller.dart';
+import '../../view_model/mis_pagos_nequi_view_model.dart';
 
 class CardMicuenta extends StatelessWidget {
   const CardMicuenta({
@@ -11,7 +11,7 @@ class CardMicuenta extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final MisPagosNequiController controller;
+  final MisPagosNequiViewModel controller;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +42,7 @@ class CardMicuenta extends StatelessWidget {
               ),
               Obx(() => Text(
                     "Celular ${controller.numeroCelular.value}",
-                    style: TextStyle(
-                        color: ConstantesColores.gris_textos),
+                    style: TextStyle(color: ConstantesColores.gris_textos),
                   )),
             ],
           ),

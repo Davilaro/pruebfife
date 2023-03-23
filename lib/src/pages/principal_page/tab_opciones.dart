@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -28,6 +29,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
 
+import '../../../shared/widgets/new_app_bar.dart';
+
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
 
@@ -50,6 +53,7 @@ class _TabOpcionesState extends State<TabOpciones>
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
+  final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -79,6 +83,14 @@ class _TabOpcionesState extends State<TabOpciones>
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
+          key: drawerKey,
+          drawer: DrawerSucursales(drawerKey),
+          appBar: PreferredSize(
+            preferredSize: prefs.usurioLogin == 1
+                ? const Size.fromHeight(118)
+                : const Size.fromHeight(70),
+            child: SafeArea(child: NewAppBar(drawerKey)),
+          ),
           body: GestureDetector(
               onTap: () {
                 FocusScope.of(context).requestFocus(new FocusNode());

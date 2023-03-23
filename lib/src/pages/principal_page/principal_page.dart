@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -10,25 +12,18 @@ import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/search_fuzzy.dart';
-import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
 import 'package:emart/src/widget/reproduct_video.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -51,6 +46,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
+  final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final viewModelNequi = Get.find<MisPagosNequiViewModel>();
 
   var nombreTienda = prefs.usuarioRazonSocial;
 
@@ -76,35 +73,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
     final provider = Provider.of<OpcionesBard>(context);
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: TituloPideky(size: size),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-          child: Container(
-            width: 100,
-            child: new IconButton(
-              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-              onPressed: () => {
-                //UXCam: Llamamos el evento clickSoport
-                UxcamTagueo().clickSoport(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Soporte(
-                            numEmpresa: 1,
-                          )),
-                ),
-              },
-            ),
-          ),
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          BotonActualizar(),
-          AccionNotificacion(),
-          AccionesBartCarrito(esCarrito: false),
-        ],
-      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());

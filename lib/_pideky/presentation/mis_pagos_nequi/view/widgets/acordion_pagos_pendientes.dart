@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,8 +13,10 @@ class AcordionPagosPendientes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MisPagosNequiController>();
+    final controller = Get.find<MisPagosNequiViewModel>();
     return Acordion(
+        section: "MisPagosNequi",
+        sectionName: "pagosPendientes",
         elevation: 0,
         margin: 0,
         title: Text(

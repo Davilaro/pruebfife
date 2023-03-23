@@ -3,13 +3,14 @@
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ final prefs = new Preferencias();
 List<Widget> acordionDinamico(BuildContext context) {
   ProductoViewModel productViewModel = Get.find();
 
-  final controller = Get.find<PedidoSugeridoController>();
+  final controller = Get.find<PedidoSugeridoViewModel>();
   List<Widget> lista = [];
   lista.clear();
 
@@ -29,6 +30,9 @@ List<Widget> acordionDinamico(BuildContext context) {
     lista.add(
       Container(
           child: Acordion(
+              section: "PedidoSugerido",
+              sectionName:
+                  "${controller.listaProductosPorFabricante[fabricante]["nombrecomercial"]}",
               elevation: 0,
               title: Container(
                 width: MediaQuery.of(context).size.width / 4,
@@ -71,8 +75,14 @@ List<Widget> acordionDinamico(BuildContext context) {
                               height: 40,
                               width: 190,
                               onTap: () async {
-                                _validarFrecuencia(isFrecuencia, value["items"],
-                                    controller, productViewModel, context);
+                                UxcamTagueo().addToCartSuggestedOrder(
+                                    value["items"], fabricante);
+                                await _validarFrecuencia(
+                                    isFrecuencia,
+                                    value["items"],
+                                    controller,
+                                    productViewModel,
+                                    context);
                               },
                               text: 'Agregar al carrito',
                             )
@@ -95,7 +105,7 @@ _validarFrecuencia(isFrecuencia, value, controller,
     if (isFrecuencia) {
       value.forEach((prod) async {
         Producto producto = await db.consultarDatosProducto(prod.codigo);
-        controller.llenarCarrito(producto, prod.cantidad);
+        controller.llenarCarrito(producto, prod.cantidad, context);
       });
     } else {
       productViewModel.iniciarModal(context, value[0].negocio);

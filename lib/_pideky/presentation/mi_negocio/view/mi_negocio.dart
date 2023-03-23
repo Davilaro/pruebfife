@@ -18,14 +18,8 @@ import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -75,35 +69,6 @@ class _MiNegocioState extends State<MiNegocio> {
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: TituloPideky(size: size),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-          child: Container(
-            width: 100,
-            child: new IconButton(
-              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-              onPressed: () => {
-                //UXCam: Llamamos el evento clickSoport
-                UxcamTagueo().clickSoport(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Soporte(
-                            numEmpresa: 1,
-                          )),
-                ),
-              },
-            ),
-          ),
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          BotonActualizar(),
-          AccionNotificacion(),
-          AccionesBartCarrito(esCarrito: false),
-        ],
-      ),
       body: RefreshIndicator(
         color: ConstantesColores.azul_precio,
         backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),

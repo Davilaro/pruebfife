@@ -5,16 +5,11 @@ import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
 import 'package:emart/src/pages/catalogo/widgets/fabricantes.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/pages/catalogo/widgets/marcas.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 
 class TabCategoriaMarca extends StatefulWidget {
@@ -39,13 +34,14 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('CategoriesTabs');
     // cargarData();
   }
 
   @override
   Widget build(BuildContext context) {
     constrollerProductos.getAgotados();
-    final size = MediaQuery.of(context).size;
 
     final selectedColor = Colors.yellow;
 
@@ -56,32 +52,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
           color: Colors.white,
           child: Scaffold(
             backgroundColor: ConstantesColores.color_fondo_gris,
-            appBar: AppBar(
-              title: TituloPideky(size: size),
-              leading: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-                child: new IconButton(
-                  icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-                  onPressed: () => {
-                    //UXCam: Llamamos el evento clickSoport
-                    UxcamTagueo().clickSoport(),
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Soporte(
-                                numEmpresa: 1,
-                              )),
-                    ),
-                  },
-                ),
-              ),
-              elevation: 0,
-              actions: <Widget>[
-                BotonActualizar(),
-                AccionNotificacion(),
-                AccionesBartCarrito(esCarrito: false),
-              ],
-            ),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Column(
