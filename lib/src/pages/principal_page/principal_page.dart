@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -46,8 +46,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
-  final viewModelPedidoSugerido = Get.find<PedidoSugeridoController>();
-  final viewModelNequi = Get.find<MisPagosNequiController>();
+  final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final viewModelNequi = Get.find<MisPagosNequiViewModel>();
 
   var nombreTienda = prefs.usuarioRazonSocial;
 

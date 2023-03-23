@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../view_model/mis_pagos_nequi_controller.dart';
+import '../../view_model/mis_pagos_nequi_view_model.dart';
 
 List<Widget> listaPagosPendientesFecha(BuildContext context) {
-  final controller = Get.find<MisPagosNequiController>();
+  final controller = Get.find<MisPagosNequiViewModel>();
   List<Widget> lista = [];
   var outputFormat = DateFormat("dd/MM/yy");
 
@@ -30,7 +30,7 @@ List<Widget> listaPagosPendientesFecha(BuildContext context) {
 }
 
 List<Widget> listaPagosPendientesValor(BuildContext context) {
-  final controller = Get.find<MisPagosNequiController>();
+  final controller = Get.find<MisPagosNequiViewModel>();
   ProductoViewModel productViewModel = Get.find();
 
   List<Widget> lista = [];

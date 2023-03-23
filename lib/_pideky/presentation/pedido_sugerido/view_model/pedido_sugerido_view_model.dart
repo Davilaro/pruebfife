@@ -17,11 +17,11 @@ import 'package:provider/provider.dart';
 import '../../../../src/controllers/cambio_estado_pedido.dart';
 import '../../../../src/preferences/class_pedido.dart';
 
-class PedidoSugeridoController extends GetxController
+class PedidoSugeridoViewModel extends GetxController
     with GetSingleTickerProviderStateMixin {
   PedidoSugeridoServicio pedidoSugerido;
 
-  PedidoSugeridoController(this.pedidoSugerido);
+  PedidoSugeridoViewModel(this.pedidoSugerido);
   //controlador de botones superiores
   late TabController controller;
   RxInt tabActual = 0.obs;
@@ -129,13 +129,13 @@ class PedidoSugeridoController extends GetxController
     controller.dispose();
   }
 
-  static PedidoSugeridoController get findOrInitialize {
+  static PedidoSugeridoViewModel get findOrInitialize {
     try {
-      return Get.find<PedidoSugeridoController>();
+      return Get.find<PedidoSugeridoViewModel>();
     } catch (e) {
-      Get.put(PedidoSugeridoController(
+      Get.put(PedidoSugeridoViewModel(
           PedidoSugeridoServicio(PedidoSugeridoQuery())));
-      return Get.find<PedidoSugeridoController>();
+      return Get.find<PedidoSugeridoViewModel>();
     }
   }
 }

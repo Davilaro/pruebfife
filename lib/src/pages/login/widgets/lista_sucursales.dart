@@ -17,8 +17,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
-import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 
 final prefs = new Preferencias();
 late ProgressDialog pr;
@@ -251,8 +251,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoController>();
-    final controllerNequi = Get.find<MisPagosNequiController>();
+    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+    final controllerNequi = Get.find<MisPagosNequiViewModel>();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
     opcionesAppBard!.selectOptionMenu = 0;

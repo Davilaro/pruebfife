@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 List<Widget> listaPagosRealizadosFecha(BuildContext context) {
-  final controller = Get.find<MisPagosNequiController>();
+  final controller = Get.find<MisPagosNequiViewModel>();
   List<Widget> lista = [];
   var outputFormat = DateFormat("dd/MM/yy");
 
@@ -30,7 +30,7 @@ List<Widget> listaPagosRealizadosFecha(BuildContext context) {
 }
 
 List<Widget> listaPagosRealizadosValor(BuildContext context) {
-  final controller = Get.find<MisPagosNequiController>();
+  final controller = Get.find<MisPagosNequiViewModel>();
   ProductoViewModel productViewModel = Get.find();
 
   List<Widget> lista = [];

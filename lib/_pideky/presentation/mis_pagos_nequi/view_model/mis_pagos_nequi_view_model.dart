@@ -3,9 +3,9 @@ import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sql
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:get/get.dart';
 
-class MisPagosNequiController extends GetxController {
+class MisPagosNequiViewModel extends GetxController {
   PagosNequiService pagosNequiService;
-  MisPagosNequiController(this.pagosNequiService);
+  MisPagosNequiViewModel(this.pagosNequiService);
 
   RxString numeroCelular = "".obs;
   RxList listaPagosRealizados = [].obs;
@@ -40,13 +40,12 @@ class MisPagosNequiController extends GetxController {
     obtenerPagosNequi();
   }
 
-  static MisPagosNequiController get findOrInitialize {
+  static MisPagosNequiViewModel get findOrInitialize {
     try {
-      return Get.find<MisPagosNequiController>();
+      return Get.find<MisPagosNequiViewModel>();
     } catch (e) {
-      Get.put(
-          MisPagosNequiController(PagosNequiService(MisPagosNequiSqlite())));
-      return Get.find<MisPagosNequiController>();
+      Get.put(MisPagosNequiViewModel(PagosNequiService(MisPagosNequiSqlite())));
+      return Get.find<MisPagosNequiViewModel>();
     }
   }
 

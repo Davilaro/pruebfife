@@ -3,7 +3,7 @@
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
@@ -19,7 +19,7 @@ final prefs = new Preferencias();
 List<Widget> acordionDinamico(BuildContext context) {
   ProductoViewModel productViewModel = Get.find();
 
-  final controller = Get.find<PedidoSugeridoController>();
+  final controller = Get.find<PedidoSugeridoViewModel>();
   List<Widget> lista = [];
   lista.clear();
 

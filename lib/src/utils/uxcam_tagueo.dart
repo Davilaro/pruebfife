@@ -1,5 +1,5 @@
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -341,7 +341,7 @@ class UxcamTagueo {
   }
 
   void addToCartSuggestedOrder(listaProductosPedidos, fabricante) {
-    final viewModel = Get.find<PedidoSugeridoController>();
+    final viewModel = Get.find<PedidoSugeridoViewModel>();
 
     try {
       final listProductos = listaProductosPedidos.map((producto) {

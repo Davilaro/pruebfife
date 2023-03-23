@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../../shared/widgets/acordion.dart';
 import '../../../../../src/preferences/cont_colores.dart';
-import '../../view_model/mis_pagos_nequi_controller.dart';
+import '../../view_model/mis_pagos_nequi_view_model.dart';
 import 'lista_pagos_realizados.dart';
 
 class AcordionPagosRealizados extends StatelessWidget {
@@ -13,7 +13,7 @@ class AcordionPagosRealizados extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MisPagosNequiController>();
+    final controller = Get.find<MisPagosNequiViewModel>();
     return Acordion(
         section: "MisPagosNequi",
         sectionName: "pagosRealizados",

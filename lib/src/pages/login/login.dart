@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/modelos/validacion.dart';
@@ -245,7 +245,7 @@ class _LoginState extends State<Login> {
 
       prefs.codClienteLogueado = nit;
       // ignore: unnecessary_statements
-      PedidoSugeridoController.userLog.value = 1;
+      PedidoSugeridoViewModel.userLog.value = 1;
 
       if (respuesta.length > 0) {
         await pr.hide();

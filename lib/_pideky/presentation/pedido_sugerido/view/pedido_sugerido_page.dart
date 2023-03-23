@@ -6,7 +6,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_buttons.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import '../../../../src/utils/util.dart';
 import 'widgets/body_pedido_sugerido.dart';
@@ -19,7 +19,7 @@ class PedidoSugeridoPage extends StatefulWidget {
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
-  final controller = Get.find<PedidoSugeridoController>();
+  final controller = Get.find<PedidoSugeridoViewModel>();
   final prefs = Preferencias();
   @override
   void initState() {
