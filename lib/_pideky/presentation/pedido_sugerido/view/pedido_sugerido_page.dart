@@ -1,3 +1,4 @@
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -19,14 +20,19 @@ class PedidoSugeridoPage extends StatefulWidget {
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   final controller = Get.find<PedidoSugeridoController>();
+  final prefs = Preferencias();
   @override
   void initState() {
     validarVersionActual(context);
-    controller.initController();
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('SuggestedOrderPage');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Sugerido');
+    if (prefs.usurioLogin == -1) {
+      controller.clearList();
+      controller.initController();
+    }
+
     super.initState();
   }
 

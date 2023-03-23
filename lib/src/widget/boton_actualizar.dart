@@ -57,7 +57,6 @@ Future<void> actualizarPagina(
   isActualizando.value = false;
   controllerPedidoSugerido.clearList();
   controllerPedidoSugerido.initController();
-  controllerNequi.clearList();
   controllerNequi.initData();
   if (isActualizando.value == false) {
     Navigator.pop(context);

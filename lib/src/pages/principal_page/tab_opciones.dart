@@ -86,7 +86,9 @@ class _TabOpcionesState extends State<TabOpciones>
           key: drawerKey,
           drawer: DrawerSucursales(drawerKey),
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(118),
+            preferredSize: prefs.usurioLogin == 1
+                ? const Size.fromHeight(118)
+                : const Size.fromHeight(70),
             child: SafeArea(child: NewAppBar(drawerKey)),
           ),
           body: GestureDetector(

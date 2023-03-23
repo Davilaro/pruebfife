@@ -27,7 +27,6 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
   @override
   void initState() {
     super.initState();
-    controller.clearList();
     controller.initData();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('MyNequiPaymentsPage');

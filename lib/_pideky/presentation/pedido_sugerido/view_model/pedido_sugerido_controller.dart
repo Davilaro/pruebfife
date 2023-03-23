@@ -54,12 +54,6 @@ class PedidoSugeridoController extends GetxController
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
       MetodosLLenarValores().calcularValorTotal(cartProvider);
-      // if (controlador.mapaHistoricos.containsKey(prefs.codClienteLogueado)) {
-      //   controlador.mapaHistoricos
-      //       .update(prefs.codClienteLogueado, (value) => true);
-      // } else {
-      //   controlador.mapaHistoricos.addAll({prefs.codClienteLogueado: true});
-      // }
     }
 
     update();
@@ -125,6 +119,8 @@ class PedidoSugeridoController extends GetxController
   void onInit() {
     super.onInit();
     controller = TabController(length: 2, vsync: this, initialIndex: 0);
+    clearList();
+    initController();
   }
 
   @override

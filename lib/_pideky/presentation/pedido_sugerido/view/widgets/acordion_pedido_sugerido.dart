@@ -77,8 +77,12 @@ List<Widget> acordionDinamico(BuildContext context) {
                               onTap: () async {
                                 UxcamTagueo().addToCartSuggestedOrder(
                                     value["items"], fabricante);
-                                await _validarFrecuencia(isFrecuencia, value["items"],
-                                    controller, productViewModel, context);
+                                await _validarFrecuencia(
+                                    isFrecuencia,
+                                    value["items"],
+                                    controller,
+                                    productViewModel,
+                                    context);
                               },
                               text: 'Agregar al carrito',
                             )
@@ -101,7 +105,7 @@ _validarFrecuencia(isFrecuencia, value, controller,
     if (isFrecuencia) {
       value.forEach((prod) async {
         Producto producto = await db.consultarDatosProducto(prod.codigo);
-        controller.llenarCarrito(producto, prod.cantidad);
+        controller.llenarCarrito(producto, prod.cantidad, context);
       });
     } else {
       productViewModel.iniciarModal(context, value[0].negocio);

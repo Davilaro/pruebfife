@@ -60,9 +60,6 @@ modalCerrarSesion(context, size, provider) {
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
-          controllerPedidoSugerido.clearList();
-          controllerNequi.clearList();
-          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;
@@ -193,9 +190,6 @@ modalEliminarUsuario(context, size, provider) {
           await Servicies().deleteAccount();
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
-          controllerPedidoSugerido.clearList();
-          controllerNequi.clearList();
-          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;

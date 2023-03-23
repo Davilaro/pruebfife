@@ -30,7 +30,7 @@ class BodyPedidoSugerido extends StatelessWidget {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   // ignore: unrelated_type_equality_checks
-                  child: Obx(() => PedidoSugeridoController.userLog.value != -1
+                  child: Obx(() => PedidoSugeridoController.userLog.value == 1
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,

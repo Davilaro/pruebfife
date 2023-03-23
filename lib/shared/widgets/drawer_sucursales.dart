@@ -8,6 +8,7 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -67,34 +68,40 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                 Row(
                   children: [
                     Expanded(
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Tus sucursales",
-                              style: TextStyle(
-                                  color: ConstantesColores.azul_precio,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ))),
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 15, top: 30),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Tus sucursales",
+                            style: TextStyle(
+                                color: ConstantesColores.azul_precio,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    )),
                     IconButton(
                         onPressed: () {
                           widget.drawerKey.currentState!.openEndDrawer();
                         },
-                        icon: SvgPicture.asset(
-                            'assets/icon/Icono_cerrar_ventana.svg')),
+                        icon: Icon(
+                          Icons.close,
+                          size: 35,
+                          color: ConstantesColores.azul_precio,
+                        )),
                   ],
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   child: Text(
-                    "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos.",
+                    S.current.upper_text_drawer,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        fontSize: 18, color: ConstantesColores.gris_oscuro),
+                        fontSize: 16, color: ConstantesColores.gris_oscuro),
                   ),
                 ),
                 Divider(
-                  color: ConstantesColores.gris_oscuro,
+                  color: Colors.black26,
                 ),
               ],
             ),
@@ -113,11 +120,11 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                               context, sucursal, provider, cartProvider),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
+                                horizontal: 20, vertical: 10),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
+                                      BorderRadius.all(Radius.circular(18)),
                                   color: Colors.white),
                               child: Row(
                                 mainAxisAlignment:
@@ -138,16 +145,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 15),
-                                          ),
-                                          Text(
-                                            "Nombre: ${sucursal.razonsocial.toString()}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                          Text(
-                                            "Teléfono: ${sucursal.telefono.toString()}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
                                           ),
                                           Text(
                                             "Dirección: ${sucursal.direccion.toString()}",
@@ -185,10 +182,46 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                     ),
                   );
                 }
-                return CircularProgressIndicator(
-                  color: ConstantesColores.agua_marina,
-                );
+                return Expanded(
+                    child: Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: ConstantesColores.agua_marina,
+                  ),
+                ));
               },
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: FractionallySizedBox(
+                  widthFactor: 0.87,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                        color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 18),
+                      child: Column(children: [
+                        Image.asset(
+                          'assets/image/alerta_img.png',
+                          height: 50,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          S.current.bottom_alert_drawer,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: ConstantesColores.gris_oscuro),
+                        )
+                      ]),
+                    ),
+                  ),
+                )),
+            SizedBox(
+              height: 15,
             )
           ],
         ),
@@ -215,9 +248,18 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
 
     setState(() {});
     Navigator.pushReplacementNamed(context, 'tab_opciones');
+    mostrarAlertCustomWidget(
+        context,
+        Text(
+          S.current.text_change_of_branch,
+          textAlign: TextAlign.center,
+        ),
+        SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+    prefs.direccionSucursal = datosCliente[0].direccion;
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
     opcionesAppBard!.selectOptionMenu = 0;
@@ -259,7 +301,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     final controllerNequi = Get.find<MisPagosNequiController>();
     controllerPedidoSugerido.clearList();
     controllerPedidoSugerido.initController();
-    controllerNequi.clearList();
     controllerNequi.initData();
     PedidoEmart.listaProductos!.forEach((key, value) {
       PedidoEmart.listaControllersPedido![value.codigo]!.text = "0";

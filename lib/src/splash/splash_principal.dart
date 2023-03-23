@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/login.dart';
@@ -22,11 +23,14 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  final viewModelPedidoSugerido = Get.find<PedidoSugeridoController>();
+  final viewModelNequi = Get.find<MisPagosNequiController>();
   final prefs = new Preferencias();
 
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration(milliseconds: 1000), () {
       executeAfterBuild(context);
     });
@@ -100,6 +104,9 @@ class _SplashState extends State<Splash> {
           context,
           'tab_opciones',
         );
+        viewModelNequi.initData();
+        viewModelPedidoSugerido.clearList();
+        viewModelPedidoSugerido.initController();
       }
     }
   }

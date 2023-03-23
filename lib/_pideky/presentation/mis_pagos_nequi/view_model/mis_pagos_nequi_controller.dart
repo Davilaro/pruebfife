@@ -15,9 +15,9 @@ class MisPagosNequiController extends GetxController {
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
-    if(listaPagos.length != 0) {
+    if (listaPagos.length != 0) {
       numeroCelular.value =
-        listaPagos.first.celular != "" ? listaPagos.first.celular : "";
+          listaPagos.first.celular != "" ? listaPagos.first.celular : "";
     }
     agruparListas(listaPagos);
 
@@ -38,11 +38,6 @@ class MisPagosNequiController extends GetxController {
     listaPagosPendientes.clear();
     listaPagosRealizados.clear();
     obtenerPagosNequi();
-  }
-
-  clearList() {
-    listaPagosPendientes.clear();
-    listaPagosRealizados.clear();
   }
 
   static MisPagosNequiController get findOrInitialize {

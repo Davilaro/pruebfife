@@ -8,6 +8,9 @@
     "accept":"Aceptar",
     "address": "Dirección: {direccion}",
 
+    "bottom_alert_drawer" : "¡Recuerda! si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar compras",
+    
+
     "cancel":"Cancelar",
     "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",
     "country_confirmation":"Confirmación país",
@@ -66,6 +69,7 @@
     "secod_welcome_pideky": "Antes de disfrutar nuestra experiencia de compra debes activarte.",
     "suggested_order":"Pedido Sugerido",
 
+    "text_change_of_branch" : "¡Has cambiado con éxito la sucursal para la cual realizarás tus pedidos!",
     "terms_of_delivery" : "Estos productos serán entregados según el itinerario del proveedor",
     "text_message": "mensaje de texto.",
     "text_sms":"SMS",
@@ -77,6 +81,7 @@
 
     "unable_send_text_message":"No fue posible enviar el mensaje de texto {e}",
     "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",
+    "upper_text_drawer" : "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos.",
 
     "verification_code_cannot_empty":"El código de verificación no puede estar vacío",
     "version": "Versión",

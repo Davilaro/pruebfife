@@ -53,6 +53,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "authorize_processing_personal_data":
             MessageLookupByLibrary.simpleMessage(
                 "Autorizo el tratamiento de mis datos personales"),
+        "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
+            "¡Recuerda! si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar compras"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
@@ -134,6 +136,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Términos y condiciones"),
         "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
             "Estos productos serán entregados según el itinerario del proveedor"),
+        "text_change_of_branch": MessageLookupByLibrary.simpleMessage(
+            "¡Has cambiado con éxito la sucursal para la cual realizarás tus pedidos!"),
         "text_message":
             MessageLookupByLibrary.simpleMessage("mensaje de texto."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
@@ -147,6 +151,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
         "unable_send_text_message": m4,
         "unable_send_text_message2": m5,
+        "upper_text_drawer": MessageLookupByLibrary.simpleMessage(
+            "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos."),
         "validating_information":
             MessageLookupByLibrary.simpleMessage("Validando información"),
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(

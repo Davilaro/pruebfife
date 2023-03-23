@@ -17,6 +17,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+
 final prefs = new Preferencias();
 late ProgressDialog pr;
 late String? usuariLogin;
@@ -248,6 +251,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final controllerPedidoSugerido = Get.find<PedidoSugeridoController>();
+    final controllerNequi = Get.find<MisPagosNequiController>();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
     opcionesAppBard!.selectOptionMenu = 0;
@@ -268,6 +273,9 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     prefs.codigopadrepideky,
     //     false);
     await AppUtil.appUtil.abrirBases();
+    controllerPedidoSugerido.clearList();
+    controllerPedidoSugerido.initController();
+    controllerNequi.initData();
   }
 
   cargarDataUsuario(sucursal) async {
@@ -284,6 +292,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.paisUsuario = datosCliente[0].pais;
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
+    prefs.direccionSucursal = datosCliente[0].direccion;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)
