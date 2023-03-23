@@ -11,7 +11,6 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +42,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('RepeatOrder');
     validarVersionActual(context);
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(

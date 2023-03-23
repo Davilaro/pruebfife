@@ -14,6 +14,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ProductDetail');
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     PedidoEmart.cambioVista.value = 1;
   }

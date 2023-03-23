@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
+import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 
 class ConfirmacionPaisViewModel {

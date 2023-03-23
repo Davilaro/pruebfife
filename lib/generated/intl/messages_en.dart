@@ -54,6 +54,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "authorize_processing_personal_data":
             MessageLookupByLibrary.simpleMessage(
                 "I authorize the processing of my personal data"),
+        "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
+            "Remember! if you have products added to your cart and you choose a new branch, you will have to shop again."),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
@@ -133,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Terms and conditions"),
         "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
             "These products will be delivered according to the supplier\'s itinerary."),
+        "text_change_of_branch": MessageLookupByLibrary.simpleMessage(
+            "You have successfully changed the branch for which you will place your orders!"),
         "text_message": MessageLookupByLibrary.simpleMessage("text message."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
         "text_your_email_address": MessageLookupByLibrary.simpleMessage(
@@ -145,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "The verification code is incorrect, \nplease check it and try again."),
         "unable_send_text_message": m4,
         "unable_send_text_message2": m5,
+        "upper_text_drawer": MessageLookupByLibrary.simpleMessage(
+            "Choose the branch or point of sale for which you wish to see the products available and place your orders."),
         "validating_information":
             MessageLookupByLibrary.simpleMessage("Validating information"),
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(

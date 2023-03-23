@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AcordionEmpodio extends StatelessWidget {
-  String? titulo, subTitulo, tipo;
+  String? titulo, subTitulo, tipo, section, sectionName;
   List lista;
 
   List imgSubCategoria = [
@@ -17,13 +17,21 @@ class AcordionEmpodio extends StatelessWidget {
     'assets/image/Corazon.png',
     'assets/image/estrella.png'
   ];
-  AcordionEmpodio(
-      {Key? key, this.titulo, required this.lista, this.subTitulo, this.tipo})
-      : super(key: key);
+  AcordionEmpodio({
+    Key? key,
+    this.titulo,
+    required this.lista,
+    this.subTitulo,
+    this.section,
+    this.sectionName,
+    this.tipo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Acordion(
+      section: section,
+      sectionName: sectionName,
       title: Text(
         titulo!,
         style: TextStyle(

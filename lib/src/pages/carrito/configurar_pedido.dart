@@ -228,6 +228,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
     ValidarPedido validar = await Servicies().enviarPedido(
         listaProductosPedidos, prefs.codClienteLogueado, fechaPedido, numDoc);
+    print("estado pedido ${validar.estado}");
 
     if (validar.estado == 'OK') {
       PedidoEmart.listaValoresPedido!.forEach((key, value) {

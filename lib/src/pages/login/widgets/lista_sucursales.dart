@@ -17,6 +17,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+
 final prefs = new Preferencias();
 late ProgressDialog pr;
 late String? usuariLogin;
@@ -126,7 +129,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               colorSeleccion = true;
               seleccion = element.sucursal;
             }),
-            _mostrarCategorias(context, element, provider)
+            mostrarCategorias(context, element, provider)
           },
           title: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
@@ -209,7 +212,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     );
   }
 
-  _mostrarCategorias(
+  mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
@@ -237,7 +240,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
     await pr.show();
     await cargarInformacion(provider, elemento);
-    await _cargarDataUsuario(elemento.sucursal);
+    await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
@@ -248,6 +251,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+    final controllerNequi = Get.find<MisPagosNequiViewModel>();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
     opcionesAppBard!.selectOptionMenu = 0;
@@ -268,9 +273,12 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     prefs.codigopadrepideky,
     //     false);
     await AppUtil.appUtil.abrirBases();
+    controllerPedidoSugerido.clearList();
+    controllerPedidoSugerido.initController();
+    controllerNequi.initData();
   }
 
-  _cargarDataUsuario(sucursal) async {
+  cargarDataUsuario(sucursal) async {
     List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
 
     prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
@@ -284,6 +292,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.paisUsuario = datosCliente[0].pais;
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
+    prefs.direccionSucursal = datosCliente[0].direccion;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)

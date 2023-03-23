@@ -1,5 +1,4 @@
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
-import 'package:emart/src/modelos/historico.dart';
 import 'package:get/get.dart';
 
 import '../../../provider/db_provider_helper.dart';
