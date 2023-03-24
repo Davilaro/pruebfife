@@ -220,6 +220,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
+      UxcamTagueo().addToCartRepeatdOrder(datosDetalle);
       onBlockBoubleClick();
       // pasarCarrito(providerDatos, ordenCompra, estado);
       //}
