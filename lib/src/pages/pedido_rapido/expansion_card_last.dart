@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../../utils/uxcam_tagueo.dart';
+
 final prefs = new Preferencias();
 const double _kPanelHeaderCollapsedHeight = 80.0;
 const double _kPanelHeaderExpandedHeight = 80.0;
