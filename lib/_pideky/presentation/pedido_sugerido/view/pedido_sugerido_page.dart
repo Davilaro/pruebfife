@@ -1,3 +1,4 @@
+import 'package:emart/shared/widgets/top_buttons.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:get/get.dart';
 
-import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_buttons.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import '../../../../src/utils/util.dart';
@@ -47,7 +47,13 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Column(
               children: [
-                TopButtons(),
+                TopButtons(
+                    controllerViewModel: controller,
+                    onTap: (index) {
+                      UxcamTagueo().selectSectionPedidoSugerido(
+                          controller.titulosSeccion[index]);
+                      controller.cambiarTab(index);
+                    }),
                 BodyPedidoSugerido(controller: controller)
               ],
             ),
