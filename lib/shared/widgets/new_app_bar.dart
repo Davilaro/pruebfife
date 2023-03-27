@@ -2,13 +2,11 @@
 
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../src/modelos/datos_cliente.dart';
 import '../../src/utils/uxcam_tagueo.dart';
 import '../../src/widget/acciones_carrito_bart.dart';
 import '../../src/widget/boton_actualizar.dart';

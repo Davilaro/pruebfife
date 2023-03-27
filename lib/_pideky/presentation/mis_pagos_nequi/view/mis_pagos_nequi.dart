@@ -75,8 +75,8 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
                   width: Get.width * 0.85,
                   color: ConstantesColores.azul_aguamarina_botones,
                   onTap: () {
-                    //UXCam: Llamamos el evento clickSoport
-                    UxcamTagueo().clickSoport();
+                    //UXCam: Llamamos el evento selectSoport
+                    UxcamTagueo().selectSoport('Soporte nequi');
                     Navigator.push(
                       context,
                       MaterialPageRoute(

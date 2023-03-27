@@ -146,7 +146,8 @@ class ControllerHistorico extends GetxController {
         value: ''));
     for (int i = 2021; i <= 2050; i++) {
       menuItems.add(DropdownMenuItem(
-          child: Text('$i',
+          child: AutoSizeText('$i',
+              maxLines: 1,
               style: TextStyle(
                   color: ConstantesColores.azul_precio,
                   fontSize: 13,

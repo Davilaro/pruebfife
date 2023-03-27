@@ -14,13 +14,12 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/animated_container_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../../widget/animated_container_card.dart';
+import '../../utils/uxcam_tagueo.dart';
 
 final prefs = new Preferencias();
 const double _kPanelHeaderCollapsedHeight = 80.0;
@@ -220,13 +219,14 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
+      UxcamTagueo().addToCartRepeatdOrder(datosDetalle);
       onBlockBoubleClick();
       // pasarCarrito(providerDatos, ordenCompra, estado);
       //}
       actualizarEstadoPedido(widget.providerDatos, numeroDoc);
       calcularValorTotal(widget.cartProvider);
     } else {
-      Get.off(Login());
+      Get.to(Login());
     }
   }
 
