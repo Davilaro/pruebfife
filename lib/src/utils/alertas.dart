@@ -4,6 +4,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 void mostrarAlert(
@@ -195,7 +196,7 @@ void mostrarAlertCustomWidget(
                             child: Container(),
                           ),
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () => Get.back(),
                             child: Icon(
                               Icons.cancel,
                               color: ConstantesColores.verde,
