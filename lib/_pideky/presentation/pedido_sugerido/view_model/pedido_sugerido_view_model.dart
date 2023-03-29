@@ -21,7 +21,7 @@ class PedidoSugeridoViewModel extends GetxController
 
   PedidoSugeridoViewModel(this.pedidoSugerido);
   //controlador de botones superiores
-  late TabController controller;
+  late TabController tabController;
   RxInt tabActual = 0.obs;
   final List titulosSeccion = ["Pedido Sugerido", "Repetir Orden"];
 
@@ -106,7 +106,7 @@ class PedidoSugeridoViewModel extends GetxController
   initController() async {
     await getListaFabricantes();
     await getListaProductosSugeridos();
-    print("se volvieron a cargar los datos de pedido suerido ---------------");
+    print("se volvieron a cargar los datos de pedido sugerido ---------------");
   }
 
   clearList() {
@@ -116,7 +116,7 @@ class PedidoSugeridoViewModel extends GetxController
   @override
   void onInit() {
     super.onInit();
-    controller = TabController(length: 2, vsync: this, initialIndex: 0);
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     clearList();
     initController();
   }
@@ -124,7 +124,7 @@ class PedidoSugeridoViewModel extends GetxController
   @override
   void onClose() {
     super.onClose();
-    controller.dispose();
+    tabController.dispose();
   }
 
   static PedidoSugeridoViewModel get findOrInitialize {

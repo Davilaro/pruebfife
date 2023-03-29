@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "i_accept_processing_policy": MessageLookupByLibrary.simpleMessage(
             "Acepto política de tratamiento de datos"),
         "imperdible": MessageLookupByLibrary.simpleMessage("Imperdibles para "),
+        "in_this_section_you_will": MessageLookupByLibrary.simpleMessage(
+            "En esta sección encontrarás el historial de tus compras en Pideky."),
         "loading_branches":
             MessageLookupByLibrary.simpleMessage("Cargando sucursales"),
         "log_out": MessageLookupByLibrary.simpleMessage("Cerrar sesión"),
@@ -111,6 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_business": MessageLookupByLibrary.simpleMessage("Mi Negocio"),
         "my_nequi_payments":
             MessageLookupByLibrary.simpleMessage("Mis Pagos Nequi"),
+        "my_orders": MessageLookupByLibrary.simpleMessage("Mis pedidos"),
         "my_statistics":
             MessageLookupByLibrary.simpleMessage("Mis estadísticas"),
         "my_suppliers": MessageLookupByLibrary.simpleMessage("Mis proveedores"),
@@ -159,6 +162,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(
             "El código de verificación no puede estar vacío"),
         "version": MessageLookupByLibrary.simpleMessage("Versión"),
+        "we_have_a_suggested": MessageLookupByLibrary.simpleMessage(
+            "Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio."),
         "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
             "Estamos validando el código para registrar tu cuenta."),
         "welcome_pideky":

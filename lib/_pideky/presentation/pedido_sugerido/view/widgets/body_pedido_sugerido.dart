@@ -3,6 +3,7 @@
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/acordion_pedido_sugerido.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_text.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -23,7 +24,7 @@ class BodyPedidoSugerido extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Expanded(
-          child: TabBarView(controller: controller.controller, children: [
+          child: TabBarView(controller: controller.tabController, children: [
         SingleChildScrollView(
           child: Column(
             children: [
@@ -34,10 +35,14 @@ class BodyPedidoSugerido extends StatelessWidget {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [TopText(), ...acordionDinamico(context)],
+                          children: [
+                            TopText(message: S.current.we_have_a_suggested),
+                            ...acordionDinamico(context)
+                          ],
                         )
                       : Container(
-                          child: TopText(),
+                          child:
+                              TopText(message: S.current.we_have_a_suggested),
                         ))),
             ],
           ),

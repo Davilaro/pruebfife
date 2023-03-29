@@ -7,7 +7,7 @@ import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
-import 'package:emart/src/modelos/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';

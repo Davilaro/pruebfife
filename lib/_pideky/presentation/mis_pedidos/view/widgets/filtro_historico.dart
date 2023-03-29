@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/custom_button.dart';
@@ -10,7 +9,8 @@ import 'package:hexcolor/hexcolor.dart';
 // final controlerHistorico = Get.find<ControllerHistorico>();
 
 class FiltroHistorico extends StatefulWidget {
-  final ControllerHistorico controlerFiltro;
+  // final ControllerHistorico controlerFiltro;
+  final controlerFiltro;
 
   FiltroHistorico({Key? key, required this.controlerFiltro}) : super(key: key);
 

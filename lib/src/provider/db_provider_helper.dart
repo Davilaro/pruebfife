@@ -6,7 +6,7 @@ import 'package:emart/src/modelos/linea_atencion.dart';
 import 'package:emart/src/modelos/nombre_comercial.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/sugerido.dart';
-import 'package:emart/src/modelos/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/tablas_borrar.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -151,6 +151,7 @@ class DBProviderHelper {
 
   Future<List<Historico>> consultarHistoricos(
       String filtro, String fechaInicio, String fechaFin) async {
+    //TODO: Queda pendiente borrar esta funcion
     var fechaInicioFor = fechaInicio;
     var fechaFinFor = fechaFin;
     var isFormat = false;

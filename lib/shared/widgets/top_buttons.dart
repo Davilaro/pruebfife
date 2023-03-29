@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class TopButtons extends StatelessWidget {
   final controllerViewModel;
-  Function(int)? onTap;
+  final Function(int)? onTap;
   TopButtons({required this.controllerViewModel, required this.onTap});
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class TopButtons extends StatelessWidget {
           indicatorColor: Colors.transparent,
           unselectedLabelColor: Colors.black,
           isScrollable: false,
-          controller: controllerViewModel.controller,
+          controller: controllerViewModel.tabController,
           onTap: onTap,
           tabs: List.generate(
               2,

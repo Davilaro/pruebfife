@@ -37,6 +37,7 @@
     "i_accept_privacy_policy": "Acepto política de privacidad",
     "i_accept_processing_policy": "Acepto política de tratamiento de datos",
     "imperdible":"Imperdibles para ",
+    "in_this_section_you_will":"En esta sección encontrarás el historial de tus compras en Pideky.",
 
     "loading_branches": "Cargando sucursales",
     "login_placeholder":"Número de identificación",
@@ -53,6 +54,7 @@
     "my_vendors":"Mis vendedores",
     "my_statistics":"Mis estadísticas",
     "my_nequi_payments":"Mis Pagos Nequi",
+    "my_orders":"Mis pedidos",
 
     "or_via_text_message":" o a través de un ",
 
@@ -91,6 +93,7 @@
     "whatsApp_number": "Número WhatsApp:{telefono}",
     "whatsApp": "WhatsApp",
     "whatsApp_not_installed":"WhatsApp no instalado",
+    "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
     
     "you_want_to_go":"O deseas ir al "
 

@@ -1,10 +1,11 @@
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/shared/widgets/top_buttons.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../src/preferences/cont_colores.dart';
+import '../../../../src/preferences/cont_colores.dart';
 
 class MisPedidosPage extends StatefulWidget {
   @override
@@ -27,12 +28,12 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
                 TopButtons(
                   controllerViewModel: misPedidosViewModel,
                   onTap: (index) {
-                    UxcamTagueo().selectSectionPedidoSugerido(
-                        misPedidosViewModel.titulosSeccion[index]);
+                    // UxcamTagueo().selectSectionPedidoSugerido(
+                    //     misPedidosViewModel.titulosSeccion[index]);
                     misPedidosViewModel.cambiarTab(index);
                   },
                 ),
-                // BodyPedidoSugerido(controller: controller)
+                BodyMisPedidos(misPedidosViewModel: misPedidosViewModel)
               ],
             ),
           ),

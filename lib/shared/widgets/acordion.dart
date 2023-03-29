@@ -40,25 +40,21 @@ class Acordion extends StatefulWidget {
 class _EstadoAcordion extends State<Acordion> {
   bool _mostrarContenido = false;
 
-  enviarDatosUxcam(String sectionName, String section) {
-    print("vamos bien 2");
-    UxcamTagueo().selectDropDown(sectionName, section);
-  }
+  enviarDatosUxcam(String sectionName, String section) =>
+      UxcamTagueo().selectDropDown(sectionName, section);
 
   ejecutarOnPress() {
     try {
       if (_mostrarContenido == false &&
           widget.sectionName != null &&
-          widget.section != null) {
-        print("entramos if");
+          widget.section != null)
         enviarDatosUxcam(widget.sectionName!, widget.section!);
-      }
+
       widget.estado == 'Activo' || widget.estado == null
           ? setState(() {
               _mostrarContenido = !_mostrarContenido;
             })
           : null;
-      print("vamos bien");
     } catch (e) {
       print("fallo onpress acordion $e");
     }
@@ -125,27 +121,6 @@ class _EstadoAcordion extends State<Acordion> {
                             ),
                             color: ConstantesColores.agua_marina,
                             onPressed: ejecutarOnPress,
-                            // onPressed: () {
-                            //   if (widget.onPress == null) {
-                            //     widget.estado == 'Activo' ||
-                            //             widget.estado == null
-                            //         ? setState(() {
-                            //             _mostrarContenido = !_mostrarContenido;
-                            //           })
-                            //         : null;
-                            //   } else {
-                            //     if (_mostrarContenido == false) {
-                            //       print("entre");
-                            //       widget.onPress;
-                            //       setState(() {
-                            //         _mostrarContenido = !_mostrarContenido;
-                            //       });
-                            //     } else {
-                            //       setState(() {
-                            //         _mostrarContenido = !_mostrarContenido;
-                            //       });
-                            //     }
-                            //   }
                           )
                         : Container(),
                   ],

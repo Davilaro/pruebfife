@@ -19,7 +19,7 @@ class PedidoSugeridoPage extends StatefulWidget {
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
-  final controller = Get.find<PedidoSugeridoViewModel>();
+  final pedidoSugeridoViewModel = Get.find<PedidoSugeridoViewModel>();
   final prefs = Preferencias();
   @override
   void initState() {
@@ -29,8 +29,8 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Sugerido');
     if (prefs.usurioLogin == -1) {
-      controller.clearList();
-      controller.initController();
+      pedidoSugeridoViewModel.clearList();
+      pedidoSugeridoViewModel.initController();
     }
 
     super.initState();
@@ -48,13 +48,13 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
             child: Column(
               children: [
                 TopButtons(
-                    controllerViewModel: controller,
+                    controllerViewModel: pedidoSugeridoViewModel,
                     onTap: (index) {
                       UxcamTagueo().selectSectionPedidoSugerido(
-                          controller.titulosSeccion[index]);
-                      controller.cambiarTab(index);
+                          pedidoSugeridoViewModel.titulosSeccion[index]);
+                      pedidoSugeridoViewModel.cambiarTab(index);
                     }),
-                BodyPedidoSugerido(controller: controller)
+                BodyPedidoSugerido(controller: pedidoSugeridoViewModel)
               ],
             ),
           ),

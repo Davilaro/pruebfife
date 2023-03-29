@@ -2,7 +2,7 @@
 
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/filtro_historico.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -62,6 +62,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     CarroModelo cartProvider = Provider.of<CarroModelo>(context);
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
         body: Container(
       color: ConstantesColores.color_fondo_gris,
