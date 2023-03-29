@@ -273,7 +273,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     prefs.codigopadrepideky,
     //     false);
     await AppUtil.appUtil.abrirBases();
-    controllerPedidoSugerido.clearList();
     controllerPedidoSugerido.initController();
     controllerNequi.initData();
   }

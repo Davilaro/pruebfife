@@ -55,7 +55,6 @@ Future<void> actualizarPagina(
   }
   await LogicaActualizar().actualizarDB();
   isActualizando.value = false;
-  controllerPedidoSugerido.clearList();
   controllerPedidoSugerido.initController();
   controllerNequi.initData();
   if (isActualizando.value == false) {

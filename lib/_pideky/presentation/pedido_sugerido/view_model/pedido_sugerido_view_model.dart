@@ -104,20 +104,18 @@ class PedidoSugeridoViewModel extends GetxController
   }
 
   initController() async {
+    listaProductosPorFabricante.clear();
     await getListaFabricantes();
     await getListaProductosSugeridos();
     print("se volvieron a cargar los datos de pedido suerido ---------------");
   }
 
-  clearList() {
-    listaProductosPorFabricante.clear();
-  }
+ 
 
   @override
   void onInit() {
     super.onInit();
     controller = TabController(length: 2, vsync: this, initialIndex: 0);
-    clearList();
     initController();
   }
 

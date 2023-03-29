@@ -15,6 +15,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import '../../generated/l10n.dart';
 import '../../src/controllers/cambio_estado_pedido.dart';
 import '../../src/provider/carrito_provider.dart';
@@ -279,6 +281,11 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
 
   cargarDataUsuario(sucursal) async {
     List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+    final controllerNequi = Get.find<MisPagosNequiViewModel>();
+
+    controllerPedidoSugerido.initController();
+    controllerNequi.initData();
 
     prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
     prefs.codCliente = datosCliente[0].codigo;
@@ -298,6 +305,4 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
             ? Locale('es', 'CO')
             : Locale('es', 'CO'));
   }
-
-
 }

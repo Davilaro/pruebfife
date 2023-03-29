@@ -105,7 +105,6 @@ class _SplashState extends State<Splash> {
           'tab_opciones',
         );
         viewModelNequi.initData();
-        viewModelPedidoSugerido.clearList();
         viewModelPedidoSugerido.initController();
       }
     }
