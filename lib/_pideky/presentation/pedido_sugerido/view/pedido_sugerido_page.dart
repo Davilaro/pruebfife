@@ -29,7 +29,6 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Sugerido');
     if (prefs.usurioLogin == -1) {
-      pedidoSugeridoViewModel.clearList();
       pedidoSugeridoViewModel.initController();
     }
 
