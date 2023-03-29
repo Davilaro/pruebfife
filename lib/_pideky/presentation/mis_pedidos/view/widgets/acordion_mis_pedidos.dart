@@ -1,17 +1,23 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AcordionMisPedidos extends StatelessWidget {
-  var historico;
-  Widget contend;
-  AcordionMisPedidos({required this.historico, required this.contend});
+  final Widget contend;
+  final String? titulo;
+  final String? supTitulo;
+  final String? precio;
+  final String? fecha;
+  AcordionMisPedidos(
+      {required this.contend,
+      this.titulo = '',
+      this.supTitulo = '',
+      this.precio = '',
+      this.fecha = ''});
 
-  ProductoViewModel productViewModel = Get.find();
-  MisPedidosViewModel misPedidosViewModel = Get.find();
+  final MisPedidosViewModel misPedidosViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,6 @@ class AcordionMisPedidos extends StatelessWidget {
       child: Card(
         color: Colors.white,
         margin: EdgeInsets.symmetric(vertical: 10),
-        // elevation: widget.elevation,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
@@ -58,7 +63,7 @@ class AcordionMisPedidos extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
                           child: AutoSizeText(
-                            "Orden Pideky:",
+                            titulo.toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -70,7 +75,7 @@ class AcordionMisPedidos extends StatelessWidget {
                             top: 3,
                           ),
                           child: AutoSizeText(
-                            productViewModel.getCurrency(historico.precio),
+                            precio.toString(),
                             textAlign: TextAlign.right,
                             style: TextStyle(
                                 fontSize: 15,
@@ -84,14 +89,14 @@ class AcordionMisPedidos extends StatelessWidget {
                       children: [
                         Container(),
                         AutoSizeText(
-                          historico.numeroDoc,
+                          supTitulo.toString(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
                               color: ConstantesColores.azul_precio),
                         ),
                         AutoSizeText(
-                          '${historico.fechaTrans} ${misPedidosViewModel.tranformarHora(historico.horaTrans)}',
+                          fecha.toString(),
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 13,

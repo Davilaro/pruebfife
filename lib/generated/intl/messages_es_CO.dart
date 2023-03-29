@@ -93,6 +93,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "i_accept_processing_policy": MessageLookupByLibrary.simpleMessage(
             "Acepto política de tratamiento de datos"),
         "imperdible": MessageLookupByLibrary.simpleMessage("Imperdibles para "),
+        "in_this_section_the_status": MessageLookupByLibrary.simpleMessage(
+            "En esta sección encontrarás el estado de tus pedidos pendientes por entregar y podrás hacer seguimiento."),
         "in_this_section_you_will": MessageLookupByLibrary.simpleMessage(
             "En esta sección encontrarás el historial de tus compras en Pideky."),
         "loading_branches":

@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-// final controlerHistorico = Get.find<ControllerHistorico>();
-
 class FiltroHistorico extends StatefulWidget {
-  // final ControllerHistorico controlerFiltro;
   final controlerFiltro;
 
   FiltroHistorico({Key? key, required this.controlerFiltro}) : super(key: key);
@@ -206,22 +203,6 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                         ConstantesColores.agua_marina,
                                     borderRadio: 20,
                                   ),
-                                  // child: RaisedButton(
-                                  //   onPressed: () {
-                                  //     confirmarFiltro(context);
-                                  //   },
-                                  //   child: Text(
-                                  //     'Filtrar',
-                                  //     style: TextStyle(
-                                  //         fontSize: 18,
-                                  //         fontWeight: FontWeight.bold),
-                                  //   ),
-                                  //   textColor: Colors.white,
-                                  //   color: ConstantesColores.agua_marina,
-                                  //   shape: RoundedRectangleBorder(
-                                  //     borderRadius: BorderRadius.circular(20.0),
-                                  //   ),
-                                  // ),
                                 ),
                               ),
                             )
@@ -326,7 +307,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       var num2 = fechaFin.replaceAll('-', '');
       if (toInt(num1) < toInt(num2)) {
         if (await widget.controlerFiltro
-            .validarHistoricoFiltro(context, fechaInicial, fechaFin)) {
+            .validarFiltro(context, fechaInicial, fechaFin)) {
           mensajeInformativo.value = '';
           widget.controlerFiltro.setFechaInicial(fechaInicial);
           widget.controlerFiltro.setFechaFinal(fechaFin);

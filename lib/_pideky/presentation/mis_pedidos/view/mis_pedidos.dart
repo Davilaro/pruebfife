@@ -28,8 +28,9 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
                 TopButtons(
                   controllerViewModel: misPedidosViewModel,
                   onTap: (index) {
-                    // UxcamTagueo().selectSectionPedidoSugerido(
-                    //     misPedidosViewModel.titulosSeccion[index]);
+                    //UXCam: Llamamos el evento selectSectionMisPedidos
+                    UxcamTagueo().selectSectionMisPedidos(
+                        misPedidosViewModel.titulosSeccion[index]);
                     misPedidosViewModel.cambiarTab(index);
                   },
                 ),

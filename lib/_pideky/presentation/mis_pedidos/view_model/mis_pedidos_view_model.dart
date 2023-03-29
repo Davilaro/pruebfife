@@ -1,15 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/service/mis_pedidos_service.dart';
 import 'package:emart/_pideky/infrastructure/mis_pedidos/mis_pedidos_query.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/acordion_mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/container_acordion.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/detalle_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
-import 'package:emart/src/widget/animated_container_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class MisPedidosViewModel extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -19,8 +18,6 @@ class MisPedidosViewModel extends GetxController
 
   late TabController tabController;
 
-  // RxList listaHistorico = [].obs;
-  RxMap listaProductosPorFabricante = {}.obs;
   RxInt tabActual = 0.obs;
   final List titulosSeccion = ["Histórico", "En tránsito"];
 
@@ -35,7 +32,11 @@ class MisPedidosViewModel extends GetxController
     fechaFinal.value = val;
   }
 
-  void cambiarTab(int estado) => this.tabActual.value = estado;
+  void cambiarTab(int estado) {
+    fechaInicial = '-1'.obs;
+    fechaFinal = '-1'.obs;
+    this.tabActual.value = estado;
+  }
 
   @override
   void onInit() {
@@ -49,29 +50,17 @@ class MisPedidosViewModel extends GetxController
     fechaInicial = '-1'.obs;
     fechaFinal = '-1'.obs;
     await getHistorico('-1', '-1', '-1');
-    // await getGrupoFabricantes();
   }
 
   getHistorico(filtro, fechaInicial, fechafin) async => await misPedidosService
       .consultarHistoricos(filtro, fechaInicial, fechafin);
 
+  getSeguimintoPedido(filtro, fechaInicial, fechafin) async =>
+      await misPedidosService.consultarSeguimientoPedido(
+          filtro, fechaInicial, fechafin);
+
   getGrupoFabricantes(numeroDoc) async =>
       await misPedidosService.consultarGrupoHistorico(numeroDoc);
-
-  cargarTargetas(List listaHistoricos) {
-    try {
-      List<Widget> list = [];
-      listaHistoricos.forEach((element) {
-        list.add(AcordionMisPedidos(
-            historico: element,
-            contend: cargarContendHistorico(element.numeroDoc)));
-      });
-      return list;
-    } catch (e) {
-      print('Error en el body historico $e');
-      return [];
-    }
-  }
 
   cargarContendHistorico(numeroDoc) {
     return Column(children: [
@@ -79,13 +68,47 @@ class MisPedidosViewModel extends GetxController
           future: misPedidosService.consultarGrupoHistorico(numeroDoc),
           builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
             if (snapshot.hasData) {
-              var grupos = snapshot.data;
+              var listaGrupoHistorico = snapshot.data;
               return Column(
                 children: [
-                  for (int i = 0; i < grupos!.length; i++)
+                  for (int i = 0; i < listaGrupoHistorico!.length; i++)
                     ContainerAcordion(
-                        historico: grupos[i],
-                        isVisibleSeparador: grupos.length - 1 != i),
+                        imagen: listaGrupoHistorico[i].icoFabricante.toString(),
+                        titulo:
+                            'No.pedido ${listaGrupoHistorico[i].ordenCompra.toString()}',
+                        onPressedLink: () => Get.to(() => DetallePedidoPage(
+                            historico: listaGrupoHistorico[i])),
+                        tituloOnPressed: 'Ver detalle',
+                        isVisibleSeparador:
+                            listaGrupoHistorico.length - 1 != i),
+                ],
+              );
+            }
+            return CircularProgressIndicator();
+          })
+    ]);
+  }
+
+  cargarContendSeguimientoPedido(numeroDoc) {
+    return Column(children: [
+      FutureBuilder<List<SeguimientoPedido>>(
+          future: misPedidosService.consultarGrupoSeguimientoPedido(numeroDoc),
+          builder: (context, AsyncSnapshot<List<SeguimientoPedido>> snapshot) {
+            if (snapshot.hasData) {
+              var listaSeguimientoPedido = snapshot.data;
+              print('res ${listaSeguimientoPedido?.length}');
+              return Column(
+                children: [
+                  for (int i = 0; i < listaSeguimientoPedido!.length; i++)
+                    ContainerAcordion(
+                        imagen:
+                            listaSeguimientoPedido[i].icoFabricante.toString(),
+                        titulo:
+                            'No.pedido ${listaSeguimientoPedido[i].consecutivo.toString()}',
+                        onPressedLink: () => null,
+                        tituloOnPressed: 'Hacer seguimiento',
+                        isVisibleSeparador:
+                            listaSeguimientoPedido.length - 1 != i),
                 ],
               );
             }
@@ -101,11 +124,10 @@ class MisPedidosViewModel extends GetxController
     return horaNew;
   }
 
-  validarHistoricoFiltro(
+  validarFiltro(
       BuildContext context, String fechaInicial, String fechaFin) async {
     var res = await getHistorico('-1', fechaInicial, fechaFin);
-    print(
-        'hola rs ${res.length} ------- $fechaInicial ------------- $fechaFin');
+
     if (res.length > 0) {
       return true;
     } else {

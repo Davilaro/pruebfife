@@ -1,15 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ControllerHistorico extends GetxController {
+class TransitoViewModel extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+
   RxString fechaInicial = '-1'.obs;
   RxString fechaFinal = '-1'.obs;
-  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
   void setFechaInicial(String val) {
     fechaInicial.value = val;
@@ -19,9 +20,19 @@ class ControllerHistorico extends GetxController {
     fechaFinal.value = val;
   }
 
-  void inicializarController() {
-    fechaInicial = '-1'.obs;
-    fechaFinal = '-1'.obs;
+  validarFiltro(
+      BuildContext context, String fechaInicial, String fechaFin) async {
+    var res = await misPedidosViewModel.getSeguimintoPedido(
+        '-1', fechaInicial, fechaFin);
+    print(
+        'hola rs ${res.length} ------- $fechaInicial ------------- $fechaFin');
+    if (res.length > 0) {
+      return true;
+    } else {
+      String mensaje = 'No encontramos registros para esas fechas';
+      mostrarAlert(context, mensaje, null);
+      return false;
+    }
   }
 
   ///CARGAR ITEMS DORPDOWN
@@ -88,48 +99,37 @@ class ControllerHistorico extends GetxController {
     return menuItems;
   }
 
-  validarFiltro(
-      BuildContext context, String fechaInicial, String fechaFin) async {
-    var res =
-        await misPedidosViewModel.getHistorico('-1', fechaInicial, fechaFin);
-    if (res.length > 0) {
-      return true;
-    } else {
-      String mensaje = 'No encontramos registros para esas fechas';
-      mostrarAlert(context, mensaje, null);
-      return false;
-    }
-  }
-
   ///CARGAR ITEMS DORPDOWN
   List<DropdownMenuItem<String>> getDropdownItemsMes() {
     List<DropdownMenuItem<String>> menuItems = [];
-    menuItems.add(DropdownMenuItem(child: textCustomation('Mes'), value: ''));
     menuItems.add(DropdownMenuItem(
-      child: textCustomation('Enero'),
+        child: misPedidosViewModel.textCustomation('Mes'), value: ''));
+    menuItems.add(DropdownMenuItem(
+      child: misPedidosViewModel.textCustomation('Enero'),
       value: '1',
     ));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Febrero'), value: '2'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Marzo'), value: '3'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Abril'), value: '4'));
-    menuItems.add(DropdownMenuItem(child: textCustomation('Mayo'), value: '5'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Junio'), value: '6'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Julio'), value: '7'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Agosto'), value: '8'));
-    menuItems.add(
-        DropdownMenuItem(child: textCustomation('Septiembre'), value: '9'));
-    menuItems
-        .add(DropdownMenuItem(child: textCustomation('Octubre'), value: '10'));
-    menuItems.add(
-        DropdownMenuItem(child: textCustomation('Noviembre'), value: '11'));
-    menuItems.add(
-        DropdownMenuItem(child: textCustomation('Diciembre'), value: '12'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Febrero'), value: '2'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Marzo'), value: '3'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Abril'), value: '4'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Mayo'), value: '5'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Junio'), value: '6'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Julio'), value: '7'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Agosto'), value: '8'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Septiembre'), value: '9'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Octubre'), value: '10'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Noviembre'), value: '11'));
+    menuItems.add(DropdownMenuItem(
+        child: misPedidosViewModel.textCustomation('Diciembre'), value: '12'));
 
     return menuItems;
   }
@@ -160,15 +160,12 @@ class ControllerHistorico extends GetxController {
     return menuItems;
   }
 
-  textCustomation(String texto) {
-    return AutoSizeText(
-      texto.substring(0, 3),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-          color: ConstantesColores.azul_precio,
-          fontSize: 13,
-          fontWeight: FontWeight.bold),
-    );
+  static TransitoViewModel get findOrInitialize {
+    try {
+      return Get.find<TransitoViewModel>();
+    } catch (e) {
+      Get.put(TransitoViewModel());
+      return Get.find<TransitoViewModel>();
+    }
   }
 }

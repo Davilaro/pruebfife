@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "I accept the data processing policy"),
         "imperdible":
             MessageLookupByLibrary.simpleMessage("Not to be missed by "),
+        "in_this_section_the_status": MessageLookupByLibrary.simpleMessage(
+            "In this section you will find the status of your pending orders, and you will be able to track them."),
         "in_this_section_you_will": MessageLookupByLibrary.simpleMessage(
             "In this section you will find the history of your purchases in Pideky."),
         "loading_branches":

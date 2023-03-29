@@ -1,7 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/detalle_pedido.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,9 +6,17 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ContainerAcordion extends StatelessWidget {
-  final Historico historico;
   final bool isVisibleSeparador;
-  ContainerAcordion({required this.historico, this.isVisibleSeparador = false});
+  final String imagen;
+  final String titulo;
+  final void Function()? onPressedLink;
+  final String tituloOnPressed;
+  ContainerAcordion(
+      {this.isVisibleSeparador = false,
+      required this.imagen,
+      required this.titulo,
+      this.onPressedLink,
+      required this.tituloOnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class ContainerAcordion extends StatelessWidget {
                   margin: EdgeInsets.only(right: 5),
                   child: CachedNetworkImage(
                     height: Get.height * 0.05,
-                    imageUrl: historico.icoFabricante!,
+                    imageUrl: imagen,
                     placeholder: (context, url) =>
                         Image.asset('assets/image/jar-loading.gif'),
                     errorWidget: (context, url, error) => Image.asset(
@@ -43,7 +48,7 @@ class ContainerAcordion extends StatelessWidget {
                   width: Get.width * 0.42,
                   margin: EdgeInsets.only(left: 10),
                   child: AutoSizeText(
-                    'No.pedido ${historico.ordenCompra.toString()}',
+                    titulo,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -62,10 +67,9 @@ class ContainerAcordion extends StatelessWidget {
           Container(
               width: Get.width * 0.25,
               child: TextButton(
-                  onPressed: () =>
-                      Get.to(() => DetallePedidoPage(historico: historico)),
+                  onPressed: onPressedLink,
                   child: Text(
-                    'Ver detalle',
+                    tituloOnPressed,
                     style: TextStyle(
                         color: ConstantesColores.agua_marina,
                         fontSize: 14.0,

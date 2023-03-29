@@ -204,7 +204,11 @@ class _HomePageBody extends StatelessWidget {
         return PedidoSugeridoPage();
 
       case 3:
-        return MisPedidosPage();
+        {
+          //UXCam: Llamamos el evento selectFooter
+          UxcamTagueo().selectFooter('Mis pedidos');
+          return MisPedidosPage();
+        }
 
       case 4:
         return MiNegocio();

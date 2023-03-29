@@ -92,6 +92,14 @@ class UxcamTagueo {
     });
   }
 
+  void selectSectionMisPedidos(String section) {
+    FlutterUxcam.logEventWithProperties("selectSectionMisPedidos", {
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
+  }
+
   void sendActivationCode(String metodo, String estado) {
     FlutterUxcam.logEventWithProperties("sendActivationCode", {
       "method_sent": metodo,

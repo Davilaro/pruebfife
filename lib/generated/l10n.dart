@@ -370,6 +370,16 @@ class S {
     );
   }
 
+  /// `In this section you will find the status of your pending orders, and you will be able to track them.`
+  String get in_this_section_the_status {
+    return Intl.message(
+      'In this section you will find the status of your pending orders, and you will be able to track them.',
+      name: 'in_this_section_the_status',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Loading branches`
   String get loading_branches {
     return Intl.message(
