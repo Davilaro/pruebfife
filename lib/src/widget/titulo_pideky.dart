@@ -14,7 +14,7 @@ class TituloPideky extends StatelessWidget {
     return Transform(
       transform: Matrix4.translationValues(-10.0, 3.0, 0.0),
       child: Container(
-          height: 35,
+          height: 33,
           width: size.width * 0.3,
           child:
               SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
