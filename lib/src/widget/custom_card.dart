@@ -10,9 +10,9 @@ class CustomCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(0),
   }) : super(key: key);
   final Widget? body;
-  Color color = Colors.white;
-  double borderRadius;
-  EdgeInsets padding;
+  final Color color;
+  final double borderRadius;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {

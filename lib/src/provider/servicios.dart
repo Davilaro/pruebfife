@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
@@ -24,7 +22,6 @@ import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -314,26 +311,6 @@ class Servicies {
     } catch (e) {
       return null;
     }
-  }
-
-  Future<dynamic> getAccesosRapidos(
-      String codEmpresa, String codCliente) async {
-    final url;
-
-    try {
-      url = Uri.parse(Constantes().urlPrincipal +
-          'accesorapido?origen=$codEmpresa&cliente=$codCliente');
-      print(url);
-      final response = await http.get(url);
-
-      final res = json.decode(response.body);
-
-      return res.isNotEmpty
-          ? res.map((valor) => AccesosRapido.fromJson(valor)).toList()
-          : null;
-    } catch (e) {}
-
-    return [];
   }
 
   Future<dynamic> getHistoricoPedido(

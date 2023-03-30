@@ -9,10 +9,10 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AcordionEmpodio extends StatelessWidget {
-  String? titulo, subTitulo, tipo, section, sectionName;
-  List lista;
+  final String? titulo, subTitulo, tipo, section, sectionName;
+  final List lista;
 
-  List imgSubCategoria = [
+  final List imgSubCategoria = [
     'assets/image/corona.png',
     'assets/image/Corazon.png',
     'assets/image/estrella.png'

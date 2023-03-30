@@ -1,6 +1,5 @@
 import 'package:emart/_pideky/domain/estadistica/service/estadistica_service.dart';
 import 'package:emart/_pideky/infrastructure/mis_estadisticas/mis_estadisticas_sqlite.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:get/get.dart';
 
 class MisEstadisticasViewModel extends GetxController {
@@ -39,6 +38,4 @@ class MisEstadisticasViewModel extends GetxController {
       return Get.find<MisEstadisticasViewModel>();
     }
   }
-
-  
 }

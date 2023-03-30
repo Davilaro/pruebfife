@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Colores {
   String color_morado_claro = '#E4E3EC';
   String color_azul_letra = '#59539B';

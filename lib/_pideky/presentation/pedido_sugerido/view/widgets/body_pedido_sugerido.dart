@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/acordion_pedido_sugerido.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_text.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TopText extends StatelessWidget {
-  String message;
+  final String message;
   TopText({
     Key? key,
     required this.message,
