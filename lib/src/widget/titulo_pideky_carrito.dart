@@ -17,7 +17,7 @@ class TituloPidekyCarrito extends StatelessWidget {
       transform: Matrix4.translationValues(-10.0, 3.0, 0.0),
       child: GestureDetector(
         child: Container(
-            height: 33,
+            height: size.width * 0.078,
             width: size.width * 0.3,
             child:
                 SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
