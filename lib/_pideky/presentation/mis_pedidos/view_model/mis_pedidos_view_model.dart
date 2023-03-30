@@ -5,6 +5,7 @@ import 'package:emart/_pideky/domain/mis_pedidos/service/mis_pedidos_service.dar
 import 'package:emart/_pideky/infrastructure/mis_pedidos/mis_pedidos_query.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/container_acordion.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/detalle_pedido.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/seguiminto_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
@@ -89,10 +90,11 @@ class MisPedidosViewModel extends GetxController
     ]);
   }
 
-  cargarContendSeguimientoPedido(numeroDoc) {
+  cargarContendSeguimientoPedido(pedido) {
     return Column(children: [
       FutureBuilder<List<SeguimientoPedido>>(
-          future: misPedidosService.consultarGrupoSeguimientoPedido(numeroDoc),
+          future: misPedidosService
+              .consultarGrupoSeguimientoPedido(pedido.numeroDoc),
           builder: (context, AsyncSnapshot<List<SeguimientoPedido>> snapshot) {
             if (snapshot.hasData) {
               var listaSeguimientoPedido = snapshot.data;
@@ -105,7 +107,8 @@ class MisPedidosViewModel extends GetxController
                             listaSeguimientoPedido[i].icoFabricante.toString(),
                         titulo:
                             'No.pedido ${listaSeguimientoPedido[i].consecutivo.toString()}',
-                        onPressedLink: () => null,
+                        onPressedLink: () =>
+                            Get.to(() => SeguimientoPedidoPage(pedido: pedido)),
                         tituloOnPressed: 'Hacer seguimiento',
                         isVisibleSeparador:
                             listaSeguimientoPedido.length - 1 != i),

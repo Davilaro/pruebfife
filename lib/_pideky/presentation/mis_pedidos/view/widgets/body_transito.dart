@@ -51,16 +51,16 @@ class _BodyTransitoState extends State<BodyTransito> {
                         itemCount: listaSeguimientoPedido.length,
                         itemBuilder: (BuildContext context, int index) =>
                             AcordionMisPedidos(
-                                titulo:
-                                    "Orden Pideky ${listaSeguimientoPedido[index].numeroDoc}",
+                                titulo: "Orden Pideky:",
+                                supTitulo:
+                                    listaSeguimientoPedido[index].numeroDoc,
                                 precio: productViewModel.getCurrency(
                                     listaSeguimientoPedido[index].precio),
                                 fecha:
                                     '${listaSeguimientoPedido[index].fechaServidor} ${misPedidosViewModel.tranformarHora(listaSeguimientoPedido[index].horaTrans)}',
                                 contend: misPedidosViewModel
                                     .cargarContendSeguimientoPedido(
-                                        listaSeguimientoPedido[index]
-                                            .numeroDoc))),
+                                        listaSeguimientoPedido[index]))),
                   );
                 }
                 return Container();

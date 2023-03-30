@@ -127,6 +127,84 @@ class DetallePedidoPage extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Container(
+                            color: Color.fromARGB(20, 186, 183, 183),
+                            margin: EdgeInsets.only(top: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                    child: AutoSizeText(
+                                      '#',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: ConstantesColores.gris_textos,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: AutoSizeText(
+                                      'SKU',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: ConstantesColores.gris_textos,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    child: AutoSizeText(
+                                      'Producto',
+                                      maxLines: 1,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: ConstantesColores.gris_textos,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: AutoSizeText(
+                                      'Cantidad',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: ConstantesColores.gris_textos,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: AutoSizeText(
+                                      'Precio',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: ConstantesColores.gris_textos,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           for (int i = 0; i < detalles!.length; i++)
                             Container(
                               color: Color.fromARGB(20, 186, 183, 183),
@@ -137,14 +215,18 @@ class DetallePedidoPage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
-                                    child: AutoSizeText(
-                                      '${i + 1}',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: ConstantesColores.gris_textos,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      child: AutoSizeText(
+                                        '${i + 1}',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: ConstantesColores.gris_textos,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -166,6 +248,7 @@ class DetallePedidoPage extends StatelessWidget {
                                     child: Container(
                                       child: AutoSizeText(
                                         detalles[i].nombreProducto,
+                                        maxLines: 1,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 13,
