@@ -60,7 +60,8 @@ class _BodyTransitoState extends State<BodyTransito> {
                                     '${listaSeguimientoPedido[index].fechaServidor} ${misPedidosViewModel.tranformarHora(listaSeguimientoPedido[index].horaTrans)}',
                                 contend: misPedidosViewModel
                                     .cargarContendSeguimientoPedido(
-                                        listaSeguimientoPedido[index]))),
+                                        listaSeguimientoPedido[index]
+                                            .numeroDoc))),
                   );
                 }
                 return Container();

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
@@ -24,6 +25,7 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -357,6 +359,7 @@ class Servicies {
   Future<dynamic> enviarPedido(List<Pedido> listaPedido, String usuarioLogin,
       String fechaPedido, String numDoc) async {
     String datos = "{\"ListaDetalle\" :[";
+    final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
       print(
@@ -382,7 +385,9 @@ class Servicies {
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
         "Param1": listaPedido[i].descuento!
       });
-      await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
+      await misPedidosViewModel.misPedidosService
+          .guardarSeguimientoPedido(listaPedido[i], numDoc);
+      // await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
       if (i < listaPedido.length - 1) {
         datos += ",";
       }

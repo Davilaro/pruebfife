@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/domain/mis_pedidos/interface/i_mis_pedidos_repository.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
+import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 
 class MisPedidosQuery extends IMisPedidosRepository {
@@ -88,6 +89,23 @@ class MisPedidosQuery extends IMisPedidosRepository {
     }
   }
 
+  Future<List<Historico>> consultarDetalleGrupo(
+      String numeroDoc, String fabricante) async {
+    final db = await DBProviderHelper.db.baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
+      SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,
+       p.fabricante from Historico h inner join producto p on p.codigo=h.codigoref  
+       where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' 
+       GROUP BY h.fabricante,h.codigoref
+    ''');
+
+      return sql.map((e) => Historico.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<SeguimientoPedido>> consultarSeguimientoPedido(
       String filtro, String fechaInicio, String fechaFin) async {
     var fechaInicioFor = fechaInicio;
@@ -141,7 +159,9 @@ class MisPedidosQuery extends IMisPedidosRepository {
 
     try {
       String query = '''
-        SELECT s.NumeroDoc, s.proveedor fabricante, s.consecutivo, f.ico  
+        SELECT s.NumeroDoc, s.proveedor fabricante, s.consecutivo, f.ico, 
+        MAX(substr(s.fechaServidor, 1, 2) || '/' || substr(s.fechaServidor, 4, 2) || '/' || substr(s.fechaServidor, 7, 4)) as fechaServidor, 
+        MAX(substr(s.fechaServidor,11, 6)) as horatrans, sum(s.precio) as precio, s.estado     
         from SeguimientoPedido s LEFT JOIN fabricante f ON s.proveedor = f.empresa 
         where NumeroDoc='$numeroDoc' GROUP BY fabricante
       ''';
@@ -151,6 +171,28 @@ class MisPedidosQuery extends IMisPedidosRepository {
     } catch (e) {
       print('-----Error consultarGrupoSeguimientoPedido $e');
       return [];
+    }
+  }
+
+  Future<void> guardarSeguimientoPedido(Pedido miPedido, String numDoc) async {
+    final db = await DBProviderHelper.db.baseAbierta;
+
+    try {
+      DateTime now = new DateTime.now();
+      var fechaActual = now.day.toString() +
+          '/' +
+          '${now.month.toString().length > 1 ? now.month : '0${now.month}'}' +
+          '/' +
+          now.year.toString() +
+          ' ${now.hour}:${now.minute}:${now.second}';
+
+      var query = '''
+        INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}', null,${miPedido.precio},'$fechaActual',1)
+      ''';
+      // log(query);
+      await db.rawInsert(query);
+    } catch (e) {
+      print('ERROR CONSULTA guardarSeguimientoPedido $e');
     }
   }
 }

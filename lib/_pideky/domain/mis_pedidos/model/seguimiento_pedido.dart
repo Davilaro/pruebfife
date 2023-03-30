@@ -26,19 +26,20 @@ class SeguimientoPedido {
   String? fabricante;
   String? icoFabricante;
 
-  bool? estado;
+  int? estado;
 
   factory SeguimientoPedido.fromJson(Map<String, dynamic> json) =>
       SeguimientoPedido(
-          numeroDoc: json["NumeroDoc"] == null ? "" : json["NumeroDoc"],
-          consecutivo: json["consecutivo"] == null ? "" : json["consecutivo"],
-          precio: json["precio"] == null ? 0 : json["precio"],
-          fechaServidor:
-              json["fechaServidor"] == null ? "" : json["fechaServidor"],
-          horaTrans: json["horatrans"] == null ? "" : json["horatrans"],
-          fabricante: json["fabricante"] == null ? "" : json["fabricante"],
-          icoFabricante: json["ico"] == null ? "" : json["ico"],
-          estado: true);
+        numeroDoc: json["NumeroDoc"] == null ? "" : json["NumeroDoc"],
+        consecutivo: json["consecutivo"] == null ? "" : json["consecutivo"],
+        precio: json["precio"] == null ? 0 : json["precio"],
+        fechaServidor:
+            json["fechaServidor"] == null ? "" : json["fechaServidor"],
+        horaTrans: json["horatrans"] == null ? "" : json["horatrans"],
+        fabricante: json["fabricante"] == null ? "" : json["fabricante"],
+        icoFabricante: json["ico"] == null ? "" : json["ico"],
+        estado: json["estado"] == null ? 1 : json["estado"],
+      );
 
   Map<String, dynamic> toJson() => {
         "numero_doc": numeroDoc,

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/fila_circular.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
@@ -9,6 +10,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -20,8 +22,8 @@ class SeguimientoPedidoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RxInt _index = 0.obs;
-
+    //Se define el nombre de la pantalla para UXCAM
+    FlutterUxcam.tagScreenName('OrdertrackingPage');
     return Scaffold(
         backgroundColor: HexColor('#eeeeee'),
         appBar: AppBar(
@@ -32,7 +34,7 @@ class SeguimientoPedidoPage extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            'Seguiminto del pedido',
+            'Seguimiento del pedido',
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold),
@@ -45,7 +47,6 @@ class SeguimientoPedidoPage extends StatelessWidget {
             child: Card(
               color: Colors.white,
               margin: EdgeInsets.symmetric(vertical: 10),
-              // elevation: widget.elevation,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0)),
               child: Padding(
@@ -66,7 +67,7 @@ class SeguimientoPedidoPage extends StatelessWidget {
                               margin: EdgeInsets.only(right: 5),
                               child: CachedNetworkImage(
                                 height: Get.height * 0.05,
-                                imageUrl: pedido.icoFabricante!,
+                                imageUrl: pedido.icoFabricante.toString(),
                                 placeholder: (context, url) =>
                                     Image.asset('assets/image/jar-loading.gif'),
                                 errorWidget: (context, url, error) =>
@@ -121,25 +122,39 @@ class SeguimientoPedidoPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        RowCirculo(),
+                        Container(
+                            margin: EdgeInsets.only(top: 30),
+                            child: FilaCircular(
+                                titulo: 'Pedido recibido',
+                                isActivo: pedido.estado! >= 1)),
                         Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 18),
                           child: Dash(
                               direction: Axis.vertical,
                               length: 70,
                               dashLength: 5,
                               dashColor: ConstantesColores.agua_marina),
                         ),
-                        RowCirculo(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: FilaCircular(
+                              titulo: 'Pedido en proceso',
+                              isActivo: pedido.estado! >= 2),
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 18),
                           child: Dash(
                               direction: Axis.vertical,
                               length: 70,
                               dashLength: 5,
                               dashColor: ConstantesColores.agua_marina),
                         ),
-                        RowCirculo(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: FilaCircular(
+                              titulo: 'Pedido en tránsito',
+                              isActivo: pedido.estado! == 3),
+                        ),
                         Container(
                           margin:
                               EdgeInsets.symmetric(vertical: Get.height * 0.1),
@@ -158,7 +173,7 @@ class SeguimientoPedidoPage extends StatelessWidget {
                                           )),
                                 );
                               },
-                              text: 'Reportat novedad'),
+                              text: 'Reportar novedad'),
                         ),
                       ],
                     ),
@@ -168,84 +183,5 @@ class SeguimientoPedidoPage extends StatelessWidget {
             ),
           ),
         ));
-  }
-
-  RowCirculo() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          //Borde externo
-          Expanded(
-            flex: 1,
-            child: Container(
-                padding: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
-                margin: EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Color.fromARGB(255, 147, 145, 145),
-                    width: 1,
-                  ),
-                ),
-                child: FittedBox(
-                    fit: BoxFit.contain,
-                    //color interno
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: ConstantesColores.agua_marina,
-                      ),
-                      padding: EdgeInsets.all(50),
-                    ))),
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              child: AutoSizeText(
-                'Pedido recibido',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: ConstantesColores.azul_precio,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              child: AutoSizeText(
-                'Producto',
-                maxLines: 1,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: ConstantesColores.gris_textos,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              color: Colors.red,
-              child: Container(
-                // height: Get.height * 0.2,
-                // width: Get.width * 0.2,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: new AssetImage('assets/icon/icon.png'),
-                      fit: BoxFit.fill),
-                ),
-                child: AutoSizeText(
-                    'hola ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

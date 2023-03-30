@@ -90,11 +90,10 @@ class MisPedidosViewModel extends GetxController
     ]);
   }
 
-  cargarContendSeguimientoPedido(pedido) {
+  cargarContendSeguimientoPedido(numeroDoc) {
     return Column(children: [
       FutureBuilder<List<SeguimientoPedido>>(
-          future: misPedidosService
-              .consultarGrupoSeguimientoPedido(pedido.numeroDoc),
+          future: misPedidosService.consultarGrupoSeguimientoPedido(numeroDoc),
           builder: (context, AsyncSnapshot<List<SeguimientoPedido>> snapshot) {
             if (snapshot.hasData) {
               var listaSeguimientoPedido = snapshot.data;
@@ -107,8 +106,8 @@ class MisPedidosViewModel extends GetxController
                             listaSeguimientoPedido[i].icoFabricante.toString(),
                         titulo:
                             'No.pedido ${listaSeguimientoPedido[i].consecutivo.toString()}',
-                        onPressedLink: () =>
-                            Get.to(() => SeguimientoPedidoPage(pedido: pedido)),
+                        onPressedLink: () => Get.to(() => SeguimientoPedidoPage(
+                            pedido: listaSeguimientoPedido[i])),
                         tituloOnPressed: 'Hacer seguimiento',
                         isVisibleSeparador:
                             listaSeguimientoPedido.length - 1 != i),

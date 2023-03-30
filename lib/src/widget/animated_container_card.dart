@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class AnimatedContainerCard extends StatefulWidget {
 }
 
 class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
+  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   bool _isExpanded = false;
 
   Widget _validarNumeroPedido(String? pedido) {
@@ -88,7 +90,7 @@ class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
             opacity: _isExpanded ? 1 : 0,
             child: _isExpanded
                 ? FutureBuilder<List<dynamic>>(
-                    future: DBProviderHelper.db
+                    future: misPedidosViewModel.misPedidosService
                         .consultarDetalleGrupo(widget.numeroDoc, widget.grupo),
                     builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                       if (snapshot.hasData) {

@@ -3,6 +3,7 @@ import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -24,7 +25,6 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
-import 'package:emart/src/pages/historico/historico_pedidos.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -123,13 +123,15 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaProductos = new Map();
         PedidoEmart.listaValoresPedidoAgregados = new Map();
       }
+      final misPedidosViewModel = Get.find<MisPedidosViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());
 
       providerDatos.guardarListaSugueridoHelper =
           await DBProviderHelper.db.consultarSugueridoHelper();
-      providerDatos.guardarListaHistoricosHelper =
-          await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
+      providerDatos.guardarListaHistoricosHelper = await misPedidosViewModel
+          .misPedidosService
+          .consultarHistoricos('-1', '-1', '-1');
 
       PedidoEmart.listaFabricante =
           await DBProvider.db.consultarFricanteGeneral();

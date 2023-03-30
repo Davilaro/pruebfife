@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_vi
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -16,6 +17,9 @@ class DetallePedidoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Se define el nombre de la pantalla para UXCAM
+    FlutterUxcam.tagScreenName('OrderDetailsPage');
+
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
       appBar: AppBar(
