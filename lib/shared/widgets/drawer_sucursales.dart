@@ -253,12 +253,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
 
     setState(() {});
     Navigator.pushReplacementNamed(context, 'tab_opciones');
-    mostrarAlertCustomWidget(
-        context,
-        Text(
-          S.current.text_change_of_branch,
-          textAlign: TextAlign.center,
-        ),
+    mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
 
