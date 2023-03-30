@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
-            "categorias destacadas para tí "),
+            "Categorias destacadas para tí "),
         "ccup_code_copied":
             MessageLookupByLibrary.simpleMessage("Código CCUP copiado"),
         "cell_phone_number":

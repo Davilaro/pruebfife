@@ -146,7 +146,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                           width: Get.width * 0.4,
                           margin: EdgeInsets.only(left: 10),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Align(

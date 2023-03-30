@@ -220,7 +220,7 @@ void mostrarAlertCustomWidget(
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: GestureDetector(
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => Get.back(),
                         child: Container(
                           height: 40,
                           width: double.infinity,

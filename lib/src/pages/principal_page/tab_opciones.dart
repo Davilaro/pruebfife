@@ -16,6 +16,7 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -84,6 +85,7 @@ class _TabOpcionesState extends State<TabOpciones>
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
+          backgroundColor: ConstantesColores.color_fondo_gris,
           key: drawerKey,
           drawer: DrawerSucursales(drawerKey),
           appBar: PreferredSize(
