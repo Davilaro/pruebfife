@@ -3,6 +3,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -60,6 +61,10 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
         appBar: AppBar(
           title: Text('Filtro',
               style: TextStyle(color: HexColor("#41398D"), fontSize: 27)),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
             onPressed: () => Navigator.of(context).pop(),

@@ -6,6 +6,7 @@ import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -64,6 +65,10 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
           title: TituloPidekyCarrito(
             size: size,
             widget: TabOpciones(),
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
           ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),

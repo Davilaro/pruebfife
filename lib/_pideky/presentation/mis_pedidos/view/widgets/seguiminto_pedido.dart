@@ -9,6 +9,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -27,11 +28,14 @@ class SeguimientoPedidoPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: HexColor('#eeeeee'),
         appBar: AppBar(
-          // backgroundColor: Colors.red,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios,
                 color: ConstantesColores.agua_marina),
             onPressed: () => Navigator.of(context).pop(),
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
           ),
           title: Text(
             'Seguimiento del pedido',
@@ -127,8 +131,8 @@ class SeguimientoPedidoPage extends StatelessWidget {
                             child: FilaCircular(
                                 titulo: 'Pedido recibido',
                                 isActivo: pedido.estado! >= 1)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18),
+                        Container(
+                          width: Get.width * 0.09,
                           child: Dash(
                               direction: Axis.vertical,
                               length: 70,
@@ -141,8 +145,8 @@ class SeguimientoPedidoPage extends StatelessWidget {
                               titulo: 'Pedido en proceso',
                               isActivo: pedido.estado! >= 2),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18),
+                        Container(
+                          width: Get.width * 0.09,
                           child: Dash(
                               direction: Axis.vertical,
                               length: 70,

@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_vi
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -27,6 +28,10 @@ class DetallePedidoPage extends StatelessWidget {
           icon: new Icon(Icons.arrow_back_ios,
               color: ConstantesColores.agua_marina),
           onPressed: () => Navigator.of(context).pop(),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
         ),
         title: Text(
           'Detalle del pedido',
@@ -158,6 +163,8 @@ class DetallePedidoPage extends StatelessWidget {
                                   child: Container(
                                     child: AutoSizeText(
                                       'SKU',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontSize: 12,
@@ -172,6 +179,7 @@ class DetallePedidoPage extends StatelessWidget {
                                     child: AutoSizeText(
                                       'Producto',
                                       maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontSize: 13,
@@ -186,6 +194,8 @@ class DetallePedidoPage extends StatelessWidget {
                                     child: AutoSizeText(
                                       'Cantidad',
                                       textAlign: TextAlign.left,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: ConstantesColores.gris_textos,
@@ -198,6 +208,8 @@ class DetallePedidoPage extends StatelessWidget {
                                   child: Container(
                                     child: AutoSizeText(
                                       'Precio',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontSize: 13,
@@ -226,6 +238,8 @@ class DetallePedidoPage extends StatelessWidget {
                                           EdgeInsets.symmetric(horizontal: 5),
                                       child: AutoSizeText(
                                         '${i + 1}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 13,
@@ -237,8 +251,11 @@ class DetallePedidoPage extends StatelessWidget {
                                   Expanded(
                                     flex: 2,
                                     child: Container(
+                                      padding: EdgeInsets.only(right: 2),
                                       child: AutoSizeText(
                                         detalles[i].codigoRef,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 12,
@@ -253,6 +270,7 @@ class DetallePedidoPage extends StatelessWidget {
                                       child: AutoSizeText(
                                         detalles[i].nombreProducto,
                                         maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 13,
@@ -267,6 +285,8 @@ class DetallePedidoPage extends StatelessWidget {
                                       child: AutoSizeText(
                                         detalles[i].cantidad.toString(),
                                         textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: ConstantesColores.gris_textos,
@@ -281,6 +301,8 @@ class DetallePedidoPage extends StatelessWidget {
                                         productViewModel
                                             .getCurrency(detalles[i].precio),
                                         textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: ConstantesColores.gris_textos,

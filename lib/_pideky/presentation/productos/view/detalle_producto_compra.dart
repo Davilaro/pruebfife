@@ -68,7 +68,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                             tamano: Get.height * 0.7,
                             isFrecuencia: isFrecuencia))
                     : Container(
-                        height: retornarTamanoPrincipal(cartProvider) * 1.1,
+                        height: Get.height * 0.9,
                         child: IrMiCarrito(
                             productos: PedidoEmart.listaProductos![
                                 cargoConfirmar.dato.value.codigo]!,

@@ -74,6 +74,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
         appBar: AppBar(
           title: Text('Haz tu pedido',
               style: TextStyle(color: HexColor("#41398D"))),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: new IconButton(
               icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
               onPressed: () => {

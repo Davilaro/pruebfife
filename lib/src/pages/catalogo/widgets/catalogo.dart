@@ -3,6 +3,7 @@ import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/catalogo_interno_generico.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -40,6 +41,10 @@ class _CatalogoPoductosState extends State<CatalogoPoductos> {
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
             onPressed: () => Navigator.of(context).pop(),
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
           ),
           title: Text(
             '${widget.nombreCategoria}',

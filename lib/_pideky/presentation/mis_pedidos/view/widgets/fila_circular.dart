@@ -70,6 +70,7 @@ class FilaCircular extends StatelessWidget {
                 child: AutoSizeText(
                   'Su pedido se esta alistando',
                   maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: ConstantesColores.azul_precio, fontSize: 12),
                 ),

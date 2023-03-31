@@ -80,6 +80,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
           'Producto',
           style: TextStyle(color: HexColor("#41398D")),
         ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),

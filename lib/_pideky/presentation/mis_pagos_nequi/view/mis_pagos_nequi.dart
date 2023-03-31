@@ -6,6 +6,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -42,6 +43,10 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
         ),
         elevation: 0,
         leading: new IconButton(
