@@ -13,13 +13,13 @@ class InitialBindings extends Bindings {
   @override
   void dependencies() {
     ControllerMultimedia.findOrInitialize;
+    MisPedidosViewModel.findOrInitialize;
+    TransitoViewModel.findOrInitialize;
     MiNegocioViewModel.findOrInitialize;
     MisEstadisticasViewModel.findOrInitialize;
     PedidoSugeridoViewModel.findOrInitialize;
     MisPagosNequiViewModel.findOrInitialize;
     ProductoViewModel.findOrInitialize;
     RepetirOrdenViewModel.findOrInitialize;
-    MisPedidosViewModel.findOrInitialize;
-    TransitoViewModel.findOrInitialize;
   }
 }
