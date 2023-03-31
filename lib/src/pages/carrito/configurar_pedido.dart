@@ -219,14 +219,13 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     });
 
     showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
-    print('productos pedido ${listaProductosPedidos.length}');
     await _dialogPedidoRegistrado(listaProductosPedidos, size);
   }
 
   _dialogPedidoRegistrado(listaProductosPedidos, size) async {
     final controladorCambioEstadoProductos = Get.find<CambioEstadoProductos>();
     DateTime now = DateTime.now();
-    String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
+    String fechaPedido = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     var numeroAleatorio = Random();
     String numDoc = DateFormat('yyyyMMddHHmmssSSS').format(now);
     numDoc += numeroAleatorio.nextInt(1000 - 1).toString();

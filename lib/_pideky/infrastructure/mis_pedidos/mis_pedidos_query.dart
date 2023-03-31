@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emart/_pideky/domain/mis_pedidos/interface/i_mis_pedidos_repository.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
@@ -184,12 +186,12 @@ class MisPedidosQuery extends IMisPedidosRepository {
           '${now.month.toString().length > 1 ? now.month : '0${now.month}'}' +
           '/' +
           now.year.toString() +
-          ' ${now.hour}:${now.minute}:${now.second}';
+          ' ${now.hour}:${now.minute.toString().length > 1 ? now.minute : '0${now.minute}'}:${now.second}';
 
       var query = '''
         INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}', null,${miPedido.precio},'$fechaActual',1)
       ''';
-      // log(query);
+      log(query);
       await db.rawInsert(query);
     } catch (e) {
       print('ERROR CONSULTA guardarSeguimientoPedido $e');
