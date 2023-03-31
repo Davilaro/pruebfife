@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               fontFamily: 'RoundedMplus1c',
               brightness: Brightness.light,
-              primarySwatch: Colors.blue,
+              primarySwatch: white,
               textSelectionTheme:
                   TextSelectionThemeData(cursorColor: Colors.black),
             ),
