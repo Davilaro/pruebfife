@@ -5,6 +5,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/shared/widgets/custom_drop_down.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -32,6 +33,10 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         backgroundColor: HexColor('#f7f7f7'),
         title: Padding(
