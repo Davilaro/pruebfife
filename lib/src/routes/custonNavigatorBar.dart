@@ -52,7 +52,7 @@ class CustonNavigatorBar extends StatelessWidget {
             icon: provider.selectOptionMenu == 3
                 ? SvgPicture.asset('assets/image/historico_img.svg')
                 : SvgPicture.asset('assets/image/historico_img_norm.svg'),
-            label: S.current.history,
+            label: S.current.my_orders,
           ),
           BottomNavigationBarItem(
             icon: provider.selectOptionMenu == 4

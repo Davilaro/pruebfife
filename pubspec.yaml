@@ -75,6 +75,7 @@ dependencies:
   firebase_messaging: ^14.2.5
   firebase_storage: null
   cloud_firestore_web: ^3.3.3
+  flutter_dash: ^1.0.0
 
 dev_dependencies:
   flutter_test:

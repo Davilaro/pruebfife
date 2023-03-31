@@ -1,9 +1,10 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
@@ -44,6 +45,7 @@ class ExpansionCardLast extends StatefulWidget {
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
+  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   RepetirOrdenViewModel repetirOrdenViewModel = Get.find();
   ProductoViewModel productViewModel = Get.find();
 
@@ -171,7 +173,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   Widget _grupoComercial(size, numeroDocumento, RxBool isFrecuencia,
       RxString fabricanteFrecuencia) {
     return FutureBuilder<List<Historico>>(
-        future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
+        future: misPedidosViewModel.misPedidosService
+            .consultarGrupoHistorico(numeroDocumento),
         builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.hasData) {
             var grupos = snapshot.data;

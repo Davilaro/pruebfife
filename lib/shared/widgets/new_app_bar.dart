@@ -5,6 +5,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../src/utils/uxcam_tagueo.dart';
@@ -14,7 +15,7 @@ import '../../src/widget/imagen_notification.dart';
 
 class NewAppBar extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey;
-  const NewAppBar(this.drawerKey);
+  NewAppBar(this.drawerKey);
 
   @override
   Widget build(BuildContext context) {

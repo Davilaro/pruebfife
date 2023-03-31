@@ -6,7 +6,6 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';

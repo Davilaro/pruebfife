@@ -1,3 +1,4 @@
+import 'package:emart/shared/widgets/top_buttons.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:get/get.dart';
 
-import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/top_buttons.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import '../../../../src/utils/util.dart';
@@ -19,7 +19,7 @@ class PedidoSugeridoPage extends StatefulWidget {
 }
 
 class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
-  final controller = Get.find<PedidoSugeridoViewModel>();
+  final pedidoSugeridoViewModel = Get.find<PedidoSugeridoViewModel>();
   final prefs = Preferencias();
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Sugerido');
     if (prefs.usurioLogin == -1) {
-      controller.initController();
+      pedidoSugeridoViewModel.initController();
     }
 
     super.initState();
@@ -46,8 +46,14 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Column(
               children: [
-                TopButtons(),
-                BodyPedidoSugerido(controller: controller)
+                TopButtons(
+                    controllerViewModel: pedidoSugeridoViewModel,
+                    onTap: (index) {
+                      UxcamTagueo().selectSectionPedidoSugerido(
+                          pedidoSugeridoViewModel.titulosSeccion[index]);
+                      pedidoSugeridoViewModel.cambiarTab(index);
+                    }),
+                BodyPedidoSugerido(controller: pedidoSugeridoViewModel)
               ],
             ),
           ),

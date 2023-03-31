@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:emart/src/modelos/acceso_rapido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
@@ -121,17 +118,6 @@ class DBProvider {
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
-      //   var query = '''
-
-      //   SELECT c.codigo, c.descripcion, c.ico2 as ico
-      //   FROM Categoria c
-      //   INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki
-      //   WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
-
-      //   GROUP BY p.categoriacodigopideki
-      //   ORDER BY c.orden ASC $isLimit
-
-      // ''';
       var query = ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
             FROM Categoria c 
             INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
@@ -227,28 +213,6 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
-          : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<dynamic> consultarAccesosRapidos() async {
-    final db = await baseAbierta;
-
-    try {
-      final sql = await db.rawQuery('''
-      
-      Select a.codigo, a.descripcion, a.ico, a.fabricante
-      from AccesosRapidos a
-      INNER JOIN Producto p ON a.codigo = p.marcacodigopideki
-      GROUP BY a.codigo 
-      ORDER BY p.orden ASC
-
-    ''');
-
-      return sql.isNotEmpty
-          ? sql.map((e) => AccesosRapido.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];

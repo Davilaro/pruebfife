@@ -360,6 +360,26 @@ class S {
     );
   }
 
+  /// `In this section you will find the history of your purchases in Pideky.`
+  String get in_this_section_you_will {
+    return Intl.message(
+      'In this section you will find the history of your purchases in Pideky.',
+      name: 'in_this_section_you_will',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In this section you will find the status of your pending orders, and you will be able to track them.`
+  String get in_this_section_the_status {
+    return Intl.message(
+      'In this section you will find the status of your pending orders, and you will be able to track them.',
+      name: 'in_this_section_the_status',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Loading branches`
   String get loading_branches {
     return Intl.message(
@@ -495,6 +515,16 @@ class S {
     return Intl.message(
       'My Nequi Payments',
       name: 'my_nequi_payments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My orders`
+  String get my_orders {
+    return Intl.message(
+      'My orders',
+      name: 'my_orders',
       desc: '',
       args: [],
     );
@@ -795,6 +825,16 @@ class S {
     return Intl.message(
       'WhatsApp not installed',
       name: 'whatsApp_not_installed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have a suggested order for you, so that you don't forget any product for your business.`
+  String get we_have_a_suggested {
+    return Intl.message(
+      'We have a suggested order for you, so that you don\'t forget any product for your business.',
+      name: 'we_have_a_suggested',
       desc: '',
       args: [],
     );

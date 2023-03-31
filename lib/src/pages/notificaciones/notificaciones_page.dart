@@ -3,6 +3,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,10 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                 ),
                 fontWeight: FontWeight.bold),
           ),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
         ),
         elevation: 0,
       ),

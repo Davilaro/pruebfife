@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TopText extends StatelessWidget {
-  const TopText({
+  final String message;
+  TopText({
     Key? key,
+    required this.message,
   }) : super(key: key);
 
   @override
@@ -13,7 +15,7 @@ class TopText extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: Text(
-        "Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
+        message,
         textAlign: TextAlign.start,
         style: TextStyle(
           height: 1.2,

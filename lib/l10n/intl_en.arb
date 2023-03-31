@@ -37,6 +37,8 @@
     "i_accept_privacy_policy": "I accept privacy policy",
     "i_accept_processing_policy": "I accept the data processing policy",
     "imperdible":"Not to be missed by ",
+    "in_this_section_you_will":"In this section you will find the history of your purchases in Pideky.",
+    "in_this_section_the_status" :"In this section you will find the status of your pending orders, and you will be able to track them.",
 
     "loading_branches": "Loading branches",
     "login_placeholder": "Nit without verification digit",
@@ -53,6 +55,7 @@
     "my_vendors":"My vendors",
     "my_statistics":"My Statistics",
     "my_nequi_payments":"My Nequi Payments",
+    "my_orders":"My orders",
 
     "or_via_text_message":"or via ",
 
@@ -91,6 +94,7 @@
     "whatsApp_number": "WhatsApp Number:{telefono}",
     "whatsApp": "WhatsApp",
     "whatsApp_not_installed":"WhatsApp not installed",
+    "we_have_a_suggested":"We have a suggested order for you, so that you don't forget any product for your business.",
 
     "you_want_to_go":"Or do you want to go to the "
 

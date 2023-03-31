@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
-import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';

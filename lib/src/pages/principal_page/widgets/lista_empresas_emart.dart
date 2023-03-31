@@ -1,5 +1,7 @@
 import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import '../../login/login.dart';
@@ -15,6 +17,10 @@ class ListaEmpresasEmart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Pideky'),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
       ),
       body: GridView.count(
           crossAxisCount: 3,

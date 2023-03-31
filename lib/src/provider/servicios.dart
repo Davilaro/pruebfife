@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
-import 'package:emart/src/modelos/acceso_rapido.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
-import 'package:emart/src/modelos/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
@@ -23,7 +22,7 @@ import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -314,26 +313,6 @@ class Servicies {
     }
   }
 
-  Future<dynamic> getAccesosRapidos(
-      String codEmpresa, String codCliente) async {
-    final url;
-
-    try {
-      url = Uri.parse(Constantes().urlPrincipal +
-          'accesorapido?origen=$codEmpresa&cliente=$codCliente');
-      print(url);
-      final response = await http.get(url);
-
-      final res = json.decode(response.body);
-
-      return res.isNotEmpty
-          ? res.map((valor) => AccesosRapido.fromJson(valor)).toList()
-          : null;
-    } catch (e) {}
-
-    return [];
-  }
-
   Future<dynamic> getHistoricoPedido(
       String codEmpresa, String codCliente) async {
     final url;
@@ -357,6 +336,7 @@ class Servicies {
   Future<dynamic> enviarPedido(List<Pedido> listaPedido, String usuarioLogin,
       String fechaPedido, String numDoc) async {
     String datos = "{\"ListaDetalle\" :[";
+    final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
       print(
@@ -382,7 +362,9 @@ class Servicies {
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
         "Param1": listaPedido[i].descuento!
       });
-      await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
+      await misPedidosViewModel.misPedidosService
+          .guardarSeguimientoPedido(listaPedido[i], numDoc);
+      // await DBProviderHelper.db.guardarHistorico(listaPedido[i], numDoc);
       if (i < listaPedido.length - 1) {
         datos += ",";
       }

@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CirculoPosicionEmpodio extends StatelessWidget {
-  Estadistica item;
-  String? posicion;
-  String? tipo;
-  String? imgSubCategoria;
+  final Estadistica item;
+  final String? posicion;
+  final String? tipo;
+  final String? imgSubCategoria;
 
   CirculoPosicionEmpodio(
       {Key? key,

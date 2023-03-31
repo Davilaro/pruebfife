@@ -11,6 +11,7 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -55,6 +56,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         title: Text('Seleccionar Sucursal'),
       ),

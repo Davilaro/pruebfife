@@ -91,6 +91,10 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: TituloPideky(size: size),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),

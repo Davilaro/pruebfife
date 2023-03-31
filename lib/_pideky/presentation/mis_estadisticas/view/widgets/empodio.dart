@@ -2,9 +2,9 @@ import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/circulo
 import 'package:flutter/cupertino.dart';
 
 class Empodio extends StatelessWidget {
-  List lista;
-  String tipo;
-  List? imgSubCategoria;
+  final List lista;
+  final String tipo;
+  final List? imgSubCategoria;
   Empodio(
       {Key? key, required this.lista, required this.tipo, this.imgSubCategoria})
       : super(key: key);

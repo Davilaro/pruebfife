@@ -1,12 +1,14 @@
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/input_lista_recomendado.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 final prefs = new Preferencias();
@@ -20,6 +22,10 @@ class Recomendados extends StatelessWidget {
         appBar: AppBar(
           title: SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill),
           elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           actions: <Widget>[
             BotonActualizar(),
             AccionesBartCarrito(esCarrito: false),

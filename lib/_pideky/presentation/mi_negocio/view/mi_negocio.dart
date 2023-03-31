@@ -82,7 +82,7 @@ class _MiNegocioState extends State<MiNegocio> {
           return Future<void>.delayed(const Duration(seconds: 3));
         },
         child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: FutureBuilder(
                 initialData: [],
                 future: DBProviderHelper.db.consultarDatosCliente(),

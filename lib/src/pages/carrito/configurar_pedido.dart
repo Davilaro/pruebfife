@@ -19,6 +19,7 @@ import 'package:emart/src/widget/simple_card_condiciones_entrega.dart';
 import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -62,6 +63,10 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           title: Text('Verifica tu pedido',
               style: TextStyle(
                   color: HexColor("#43398E"), fontWeight: FontWeight.bold)),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
             onPressed: () => Navigator.of(context).pop(),
@@ -214,14 +219,13 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     });
 
     showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
-    print('productos pedido ${listaProductosPedidos.length}');
     await _dialogPedidoRegistrado(listaProductosPedidos, size);
   }
 
   _dialogPedidoRegistrado(listaProductosPedidos, size) async {
     final controladorCambioEstadoProductos = Get.find<CambioEstadoProductos>();
     DateTime now = DateTime.now();
-    String fechaPedido = DateFormat('yyyy-MM-dd HH:mm').format(now);
+    String fechaPedido = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     var numeroAleatorio = Random();
     String numDoc = DateFormat('yyyyMMddHHmmssSSS').format(now);
     numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
