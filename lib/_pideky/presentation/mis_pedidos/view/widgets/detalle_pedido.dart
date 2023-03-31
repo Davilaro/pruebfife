@@ -60,7 +60,6 @@ class DetallePedidoPage extends StatelessWidget {
                   child: Card(
                     color: Colors.white,
                     margin: EdgeInsets.symmetric(vertical: 10),
-                    // elevation: widget.elevation,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
                     child: Padding(
@@ -174,7 +173,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 3,
+                                  flex: 2,
                                   child: Container(
                                     child: AutoSizeText(
                                       'Producto',

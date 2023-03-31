@@ -27,6 +27,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
@@ -56,7 +57,10 @@ class _TabOpcionesState extends State<TabOpciones>
 
   final bannerPut = Get.put(BannnerControllers());
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
-
+  SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle(
+    statusBarColor: ConstantesColores.color_fondo_gris,
+    statusBarIconBrightness: Brightness.dark,
+  );
   @override
   void initState() {
     super.initState();
@@ -84,28 +88,31 @@ class _TabOpcionesState extends State<TabOpciones>
     providerDatos = Provider.of<DatosListas>(context, listen: true);
     return WillPopScope(
         onWillPop: () async => false,
-        child: Scaffold(
-          backgroundColor: ConstantesColores.color_fondo_gris,
-          key: drawerKey,
-          drawer: DrawerSucursales(drawerKey),
-          appBar: PreferredSize(
-            preferredSize: prefs.usurioLogin == 1
-                ? const Size.fromHeight(118)
-                : const Size.fromHeight(70),
-            child: SafeArea(child: NewAppBar(drawerKey)),
-          ),
-          body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: _HomePageBody()),
-          bottomNavigationBar: Container(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
+        child: AnnotatedRegion(
+          value: _currentStyle,
+          child: Scaffold(
+            backgroundColor: ConstantesColores.color_fondo_gris,
+            key: drawerKey,
+            drawer: DrawerSucursales(drawerKey),
+            appBar: PreferredSize(
+              preferredSize: prefs.usurioLogin == 1
+                  ? const Size.fromHeight(118)
+                  : const Size.fromHeight(70),
+              child: SafeArea(child: NewAppBar(drawerKey)),
+            ),
+            body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child: _HomePageBody()),
+            bottomNavigationBar: Container(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+                child: CustonNavigatorBar(),
               ),
-              child: CustonNavigatorBar(),
             ),
           ),
         ));
