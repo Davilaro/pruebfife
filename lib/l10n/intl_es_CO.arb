@@ -19,6 +19,7 @@
     "cell_phone_number": "número de celular",
     "ccup_code_copied": "Código CCUP copiado",
     "code_could_not_be_generated":"No se pudo generar el código",
+    "choose_the_period_to_filter_your_orders": "Elige el periodo para filtrar tus pedidos",
 
     "delivery_days": "Recuerda que puedes realizar el pedido: {diasEntrega}",
     "delete_account": "Eliminar cuenta",
@@ -29,6 +30,8 @@
     "error_information": "Error al obtener información",
     "error_validating_the_user":"Error al validar el usuario",
     "enter_your_nit": "Ingresa tu Nit",
+
+    "filter": "Filtro",
 
     "get_active_with_your": "Deseas activarte con tu",
 
@@ -58,19 +61,30 @@
     "my_nequi_payments":"Mis Pagos Nequi",
     "my_orders":"Mis pedidos",
 
+    "no_information_to_display":"No hay información para mostrar",
+
     "or_via_text_message": " o a través de un ",
+    "order_pideky": "Orden Pideky",
+    "order_detail": "Detalle del pedido",
+    "order":"Pedido",
 
     "pideky_account_successfully_registered": "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos.",
     "please_enter_activation_cod": "Por favor ingresa el código de activación, enviado por {destino} a tu número seleccionado:",
     "please_enter_the_code":"Por favor ingresa el código de {activate}, enviado por {destino}",
     "policies_accepted":"Se debe aceptar las políticas",
     "policy_and_data_processing": "Política y tratamiento de datos",
+    "product":"Producto",
+    "price":"Precio",
+    "price_per_sales_unit": "Precio por unidad de venta",
+
+    "quantity": "Cantidad",
 
     "register": "Registrarse",
     "registration_successful": "¡Registro Exitoso!",
 
     "secod_welcome_pideky": "Antes de disfrutar nuestra experiencia de compra debes activarte.",
     "suggested_order":"Pedido Sugerido",
+    "start_date":"Fecha de inicio",
 
     "text_change_of_branch" : "¡Has cambiado con éxito la sucursal para la cual realizarás tus pedidos!",
     "terms_of_delivery" : "Estos productos serán entregados según el itinerario del proveedor",
@@ -97,5 +111,6 @@
     "whatsApp_not_installed":"WhatsApp no instalado",
     "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
 
-    "you_want_to_go":"O deseas ir al "
+    "you_want_to_go":"O deseas ir al ",
+    "your_order_is_being_prepared":"Su pedido se está alistando"
 }

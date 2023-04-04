@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/custom_button.dart';
@@ -59,7 +60,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         appBar: AppBar(
-          title: Text('Filtro',
+          title: Text(S.current.filter,
               style: TextStyle(color: HexColor("#41398D"), fontSize: 27)),
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: ConstantesColores.color_fondo_gris,
@@ -81,7 +82,8 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-                    child: Text('Elige el periodo para filtrar tus pedidos',
+                    child: Text(
+                        S.current.choose_the_period_to_filter_your_orders,
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -104,7 +106,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                 Container(
                                     margin: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 2),
-                                    child: Text('Fecha de inicio',
+                                    child: Text(S.current.start_date,
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,

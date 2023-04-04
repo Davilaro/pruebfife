@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -77,7 +78,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: Text(
-          'Producto',
+          S.current.product,
           style: TextStyle(color: HexColor("#41398D")),
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -229,7 +230,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                   child: Container(
                                     alignment: Alignment.topLeft,
                                     child: AutoSizeText(
-                                        'Precio por unidad de venta',
+                                        S.current.price_per_sales_unit,
                                         maxLines: 2,
                                         presetFontSizes: [15, 13],
                                         style: TextStyle(

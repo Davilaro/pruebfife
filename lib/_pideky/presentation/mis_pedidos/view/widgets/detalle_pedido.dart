@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +35,7 @@ class DetallePedidoPage extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark,
         ),
         title: Text(
-          'Detalle del pedido',
+          S.current.order_detail,
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
@@ -52,7 +53,7 @@ class DetallePedidoPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             default:
               if (snapshot.hasError) {
-                return Text('No hay informacion para mostrar');
+                return Text(S.current.no_information_to_display);
               } else {
                 var detalles = snapshot.data;
                 return Container(
@@ -94,7 +95,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 3),
                                     child: AutoSizeText(
-                                      "Pedido #${historico.ordenCompra}",
+                                      "${S.current.order} #${historico.ordenCompra}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17,
@@ -176,7 +177,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   flex: 2,
                                   child: Container(
                                     child: AutoSizeText(
-                                      'Producto',
+                                      S.current.product,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
@@ -191,7 +192,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   flex: 2,
                                   child: Container(
                                     child: AutoSizeText(
-                                      'Cantidad',
+                                      S.current.quantity,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -206,7 +207,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   flex: 2,
                                   child: Container(
                                     child: AutoSizeText(
-                                      'Precio',
+                                      S.current.price,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,

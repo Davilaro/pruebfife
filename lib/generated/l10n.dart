@@ -220,6 +220,16 @@ class S {
     );
   }
 
+  /// `Choose the period to filter your orders`
+  String get choose_the_period_to_filter_your_orders {
+    return Intl.message(
+      'Choose the period to filter your orders',
+      name: 'choose_the_period_to_filter_your_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Remember that you can place your order: {diasEntrega}`
   String delivery_days(Object diasEntrega) {
     return Intl.message(
@@ -295,6 +305,16 @@ class S {
     return Intl.message(
       'Enter your Nit',
       name: 'enter_your_nit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter`
+  String get filter {
+    return Intl.message(
+      'Filter',
+      name: 'filter',
       desc: '',
       args: [],
     );
@@ -530,11 +550,51 @@ class S {
     );
   }
 
+  /// `No information to display`
+  String get no_information_to_display {
+    return Intl.message(
+      'No information to display',
+      name: 'no_information_to_display',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `or via `
   String get or_via_text_message {
     return Intl.message(
       'or via ',
       name: 'or_via_text_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order Pideky`
+  String get order_pideky {
+    return Intl.message(
+      'Order Pideky',
+      name: 'order_pideky',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order detail`
+  String get order_detail {
+    return Intl.message(
+      'Order detail',
+      name: 'order_detail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order`
+  String get order {
+    return Intl.message(
+      'Order',
+      name: 'order',
       desc: '',
       args: [],
     );
@@ -590,6 +650,46 @@ class S {
     );
   }
 
+  /// `Product`
+  String get product {
+    return Intl.message(
+      'Product',
+      name: 'product',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get price {
+    return Intl.message(
+      'Price',
+      name: 'price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price per sales unit`
+  String get price_per_sales_unit {
+    return Intl.message(
+      'Price per sales unit',
+      name: 'price_per_sales_unit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get quantity {
+    return Intl.message(
+      'Quantity',
+      name: 'quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Register`
   String get register {
     return Intl.message(
@@ -625,6 +725,16 @@ class S {
     return Intl.message(
       'Suggested Order',
       name: 'suggested_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start date`
+  String get start_date {
+    return Intl.message(
+      'Start date',
+      name: 'start_date',
       desc: '',
       args: [],
     );
@@ -845,6 +955,16 @@ class S {
     return Intl.message(
       'Or do you want to go to the ',
       name: 'you_want_to_go',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is being prepared`
+  String get your_order_is_being_prepared {
+    return Intl.message(
+      'Your order is being prepared',
+      name: 'your_order_is_being_prepared',
       desc: '',
       args: [],
     );

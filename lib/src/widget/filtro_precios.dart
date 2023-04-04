@@ -1,3 +1,4 @@
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
@@ -45,7 +46,7 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
           statusBarColor: ConstantesColores.color_fondo_gris,
           statusBarIconBrightness: Brightness.dark,
         ),
-        title: Text('Producto',
+        title: Text(S.current.product,
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold)),

@@ -49,7 +49,7 @@ class _BodyHistoricoState extends State<BodyHistorico> {
                         itemCount: listaHistoricos.length,
                         itemBuilder: (BuildContext context, int index) =>
                             AcordionMisPedidos(
-                                titulo: "Orden Pideky:",
+                                titulo: "${S.current.order_pideky}:",
                                 supTitulo: listaHistoricos[index].numeroDoc,
                                 precio: productViewModel
                                     .getCurrency(listaHistoricos[index].precio),

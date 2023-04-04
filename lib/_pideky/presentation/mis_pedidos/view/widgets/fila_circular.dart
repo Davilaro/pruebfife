@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,7 +69,7 @@ class FilaCircular extends StatelessWidget {
                       fit: BoxFit.fill),
                 ),
                 child: AutoSizeText(
-                  'Su pedido se esta alistando',
+                  S.current.your_order_is_being_prepared,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

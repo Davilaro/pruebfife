@@ -64,6 +64,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("CCUP code copied"),
         "cell_phone_number":
             MessageLookupByLibrary.simpleMessage("cell phone number"),
+        "choose_the_period_to_filter_your_orders":
+            MessageLookupByLibrary.simpleMessage(
+                "Choose the period to filter your orders"),
         "code_could_not_be_generated":
             MessageLookupByLibrary.simpleMessage("Code could not be generated"),
         "confirm_country": MessageLookupByLibrary.simpleMessage(
@@ -84,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Error obtaining information"),
         "error_validating_the_user":
             MessageLookupByLibrary.simpleMessage("Error validating the user"),
+        "filter": MessageLookupByLibrary.simpleMessage("Filter"),
         "get_active_with_your": MessageLookupByLibrary.simpleMessage(
             "You wish to activate yourself with your"),
         "history": MessageLookupByLibrary.simpleMessage("History"),
@@ -119,7 +123,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_statistics": MessageLookupByLibrary.simpleMessage("My Statistics"),
         "my_suppliers": MessageLookupByLibrary.simpleMessage("My suppliers"),
         "my_vendors": MessageLookupByLibrary.simpleMessage("My vendors"),
+        "no_information_to_display":
+            MessageLookupByLibrary.simpleMessage("No information to display"),
         "or_via_text_message": MessageLookupByLibrary.simpleMessage("or via "),
+        "order": MessageLookupByLibrary.simpleMessage("Order"),
+        "order_detail": MessageLookupByLibrary.simpleMessage("Order detail"),
+        "order_pideky": MessageLookupByLibrary.simpleMessage("Order Pideky"),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Your Pideky account has been successfully registered, then select a branch to start placing orders."),
@@ -129,11 +138,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Policies must be accepted"),
         "policy_and_data_processing":
             MessageLookupByLibrary.simpleMessage("Policy and data processing"),
+        "price": MessageLookupByLibrary.simpleMessage("Price"),
+        "price_per_sales_unit":
+            MessageLookupByLibrary.simpleMessage("Price per sales unit"),
+        "product": MessageLookupByLibrary.simpleMessage("Product"),
+        "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "registration_successful":
             MessageLookupByLibrary.simpleMessage("Registration Successful!"),
         "secod_welcome_pideky": MessageLookupByLibrary.simpleMessage(
             "Before you can enjoy our shopping experience you must become active."),
+        "start_date": MessageLookupByLibrary.simpleMessage("Start date"),
         "suggested_order":
             MessageLookupByLibrary.simpleMessage("Suggested Order"),
         "terms_conditions":
@@ -171,7 +186,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp_not_installed":
             MessageLookupByLibrary.simpleMessage("WhatsApp not installed"),
         "whatsApp_number": m6,
-        "you_want_to_go":
-            MessageLookupByLibrary.simpleMessage("Or do you want to go to the ")
+        "you_want_to_go": MessageLookupByLibrary.simpleMessage(
+            "Or do you want to go to the "),
+        "your_order_is_being_prepared":
+            MessageLookupByLibrary.simpleMessage("Your order is being prepared")
       };
 }

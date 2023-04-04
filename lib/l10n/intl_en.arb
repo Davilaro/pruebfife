@@ -18,6 +18,7 @@
     "cell_phone_number": "cell phone number",
     "ccup_code_copied": "CCUP code copied",
     "code_could_not_be_generated":"Code could not be generated",
+    "choose_the_period_to_filter_your_orders": "Choose the period to filter your orders",
 
     "delivery_days": "Remember that you can place your order: {diasEntrega}",
     "delete_account": "Delete account",
@@ -28,6 +29,8 @@
     "error_information": "Error obtaining information",
     "error_validating_the_user":"Error validating the user",
     "enter_your_nit": "Enter your Nit",
+
+    "filter": "Filter",
 
     "get_active_with_your": "You wish to activate yourself with your",
 
@@ -57,19 +60,30 @@
     "my_nequi_payments":"My Nequi Payments",
     "my_orders":"My orders",
 
+    "no_information_to_display":"No information to display",
+
     "or_via_text_message":"or via ",
+    "order_pideky": "Order Pideky",
+    "order_detail": "Order detail",
+    "order":"Order",
 
     "pideky_account_successfully_registered": "Your Pideky account has been successfully registered, then select a branch to start placing orders.",
     "please_enter_activation_cod":"Please enter the activation code, sent by {destino} to your selected number:",
     "please_enter_the_code":"Please enter the code from {activate}, sent by {destino}",
     "policies_accepted":"Policies must be accepted",
     "policy_and_data_processing": "Policy and data processing",
+    "product":"Product",
+    "price":"Price",
+    "price_per_sales_unit": "Price per sales unit",
+
+    "quantity": "Quantity",
 
     "register": "Register",
     "registration_successful":"Registration Successful!",
 
     "secod_welcome_pideky":"Before you can enjoy our shopping experience you must become active.",
     "suggested_order":"Suggested Order",
+    "start_date":"Start date",
 
     "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary.",
     "text_change_of_branch" : "You have successfully changed the branch for which you will place your orders!",
@@ -96,6 +110,7 @@
     "whatsApp_not_installed":"WhatsApp not installed",
     "we_have_a_suggested":"We have a suggested order for you, so that you don't forget any product for your business.",
 
-    "you_want_to_go":"Or do you want to go to the "
+    "you_want_to_go":"Or do you want to go to the ",
+    "your_order_is_being_prepared":"Your order is being prepared"
 
 }

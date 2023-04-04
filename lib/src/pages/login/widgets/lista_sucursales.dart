@@ -117,7 +117,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final List<Widget> opciones = [];
 
     if (listaEmpresas.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaEmpresas.forEach((element) {

@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_search.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -286,7 +287,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
               builder: (context) => DetalleProductoSearch(
                     producto: producto,
                     tamano: Get.height * .8,
-                    title: title == '' ? 'Producto' : title,
+                    title: title == '' ? S.current.product : title,
                   )));
     }
     _controllerUser.text = "";

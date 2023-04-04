@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -49,7 +50,7 @@ class Recomendados extends StatelessWidget {
     final List<Widget> opciones = [];
 
     if (listaProductos.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaProductos.forEach((element) {

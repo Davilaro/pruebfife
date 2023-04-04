@@ -3,6 +3,7 @@ import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlit
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -128,7 +129,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     final List<Widget> opciones = [];
 
     if (listaProductos.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaProductos.forEach((element) {

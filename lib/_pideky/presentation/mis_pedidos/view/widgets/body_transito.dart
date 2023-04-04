@@ -51,7 +51,7 @@ class _BodyTransitoState extends State<BodyTransito> {
                         itemCount: listaSeguimientoPedido.length,
                         itemBuilder: (BuildContext context, int index) =>
                             AcordionMisPedidos(
-                                titulo: "Orden Pideky:",
+                                titulo: "${S.current.order_pideky}:",
                                 supTitulo:
                                     listaSeguimientoPedido[index].numeroDoc,
                                 precio: productViewModel.getCurrency(
