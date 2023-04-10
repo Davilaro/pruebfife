@@ -121,7 +121,6 @@ class MisPedidosViewModel extends GetxController
 
   tranformarHora(String horaOld) {
     var hora = int.parse(horaOld.substring(0, 3));
-
     var horaNew = '$horaOld ${hora > 11 ? 'pm' : 'am'}';
     return horaNew;
   }

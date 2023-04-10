@@ -23,9 +23,14 @@ class _BodyTransitoState extends State<BodyTransito> {
   String filtroSeguimientoPedido = "-1";
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('InTransitPage');
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -46,7 +51,8 @@ class _BodyTransitoState extends State<BodyTransito> {
                 if (snapshot.hasData) {
                   var listaSeguimientoPedido = snapshot.data;
                   return Container(
-                    height: Get.height * 0.55,
+                    height: Get.height * 0.53,
+                    color: Colors.red,
                     child: ListView.builder(
                         itemCount: listaSeguimientoPedido.length,
                         itemBuilder: (BuildContext context, int index) =>

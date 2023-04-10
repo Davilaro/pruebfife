@@ -17,7 +17,6 @@ List<Widget> gridItem(
   List<PedidoSugeridoModel> listTag = [];
 
   lista.forEach((producto) {
-    print(producto.codigo);
     final controller = Get.find<PedidoSugeridoViewModel>();
     PedidoSugeridoModel productos = controller.listaProductos[producto.codigo]!;
 

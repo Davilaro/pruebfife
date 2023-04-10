@@ -186,12 +186,12 @@ class MisPedidosQuery extends IMisPedidosRepository {
           '${now.month.toString().length > 1 ? now.month : '0${now.month}'}' +
           '/' +
           now.year.toString() +
-          ' ${now.hour}:${now.minute.toString().length > 1 ? now.minute : '0${now.minute}'}:${now.second}';
+          ' ${now.hour.toString().length > 1 ? now.hour : '0${now.hour}'}:${now.minute.toString().length > 1 ? now.minute : '0${now.minute}'}:${now.second}';
 
       var query = '''
         INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}', null,${miPedido.precio},'$fechaActual',1)
       ''';
-      log(query);
+      // log(query);
       await db.rawInsert(query);
     } catch (e) {
       print('ERROR CONSULTA guardarSeguimientoPedido $e');

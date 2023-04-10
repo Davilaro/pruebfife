@@ -57,7 +57,6 @@ class ProductoViewModel extends GetxController {
     PedidoEmart.listaFabricante =
         await DBProvider.db.consultarFricanteGeneral();
     getCondicionEntrega();
-    print('cargamos condiciones');
   }
 
   void getCondicionEntrega() async {

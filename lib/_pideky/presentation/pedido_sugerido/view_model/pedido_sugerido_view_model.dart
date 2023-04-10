@@ -59,7 +59,6 @@ class PedidoSugeridoViewModel extends GetxController
 
   Future getListaProductosSugeridos() async {
     final listaPedidoSugerido = await pedidoSugerido.obtenerPedidoSugerido();
-    print(listaPedidoSugerido);
     mapearProductos(listaPedidoSugerido);
     final groups = groupBy(listaPedidoSugerido, (PedidoSugeridoModel p) {
       return p.negocio;
@@ -107,7 +106,6 @@ class PedidoSugeridoViewModel extends GetxController
     listaProductosPorFabricante.clear();
     await getListaFabricantes();
     await getListaProductosSugeridos();
-    print("se volvieron a cargar los datos de pedido sugerido ---------------");
   }
 
   @override
