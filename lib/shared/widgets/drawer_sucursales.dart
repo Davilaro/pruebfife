@@ -2,6 +2,7 @@
 
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -250,9 +251,9 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     providerCar.selectOptionMenu = 0;
     providerCar.setNumeroClickCarrito = 0;
     PedidoEmart.cantItems.value = '0';
-
+    //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
-    Navigator.pushReplacementNamed(context, 'tab_opciones');
+    Get.offAll(() => TabOpciones());
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }

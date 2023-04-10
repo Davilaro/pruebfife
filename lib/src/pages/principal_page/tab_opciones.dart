@@ -57,6 +57,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
   final bannerPut = Get.put(BannnerControllers());
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
+  FocusNode _focusNode = FocusNode();
   SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle(
     statusBarColor: ConstantesColores.color_fondo_gris,
     statusBarIconBrightness: Brightness.dark,
@@ -64,6 +65,7 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
+    _focusNode.dispose();
     hasInternet = true;
     cargarSecciones();
     subscription = Connectivity()
