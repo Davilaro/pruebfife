@@ -190,7 +190,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                         _selecciona(size),
                         Container(
                           padding: EdgeInsets.only(bottom: 45),
-                          height: size.height * 0.62,
+                          height: size.height * 0.5,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),

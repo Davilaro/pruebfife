@@ -51,8 +51,7 @@ class _BodyTransitoState extends State<BodyTransito> {
                 if (snapshot.hasData) {
                   var listaSeguimientoPedido = snapshot.data;
                   return Container(
-                    height: Get.height * 0.53,
-                    color: Colors.red,
+                    height: Get.height * 0.5,
                     child: ListView.builder(
                         itemCount: listaSeguimientoPedido.length,
                         itemBuilder: (BuildContext context, int index) =>

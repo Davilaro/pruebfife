@@ -44,7 +44,7 @@ class _BodyHistoricoState extends State<BodyHistorico> {
                 if (snapshot.hasData) {
                   var listaHistoricos = snapshot.data;
                   return Container(
-                    height: Get.height * 0.55,
+                    height: Get.height * 0.5,
                     child: ListView.builder(
                         itemCount: listaHistoricos.length,
                         itemBuilder: (BuildContext context, int index) =>
