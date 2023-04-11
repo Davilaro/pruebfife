@@ -48,28 +48,34 @@ class _BodyTransitoState extends State<BodyTransito> {
                   transitoViewModel.fechaInicial.value,
                   transitoViewModel.fechaFinal.value),
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  var listaSeguimientoPedido = snapshot.data;
-                  return Container(
-                    height: Get.height * 0.5,
-                    child: ListView.builder(
-                        itemCount: listaSeguimientoPedido.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            AcordionMisPedidos(
-                                titulo: "${S.current.order_pideky}:",
-                                supTitulo:
-                                    listaSeguimientoPedido[index].numeroDoc,
-                                precio: productViewModel.getCurrency(
-                                    listaSeguimientoPedido[index].precio),
-                                fecha:
-                                    '${listaSeguimientoPedido[index].fechaServidor} ${misPedidosViewModel.tranformarHora(listaSeguimientoPedido[index].horaTrans)}',
-                                contend: misPedidosViewModel
-                                    .cargarContendSeguimientoPedido(
-                                        listaSeguimientoPedido[index]
-                                            .numeroDoc))),
-                  );
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return Text(S.current.no_information_to_display);
+                    } else {
+                      var listaSeguimientoPedido = snapshot.data;
+                      return Container(
+                        height: Get.height * 0.5,
+                        child: ListView.builder(
+                            itemCount: listaSeguimientoPedido.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                AcordionMisPedidos(
+                                    titulo: "${S.current.order_pideky}:",
+                                    supTitulo:
+                                        listaSeguimientoPedido[index].numeroDoc,
+                                    precio: productViewModel.getCurrency(
+                                        listaSeguimientoPedido[index].precio),
+                                    fecha:
+                                        '${listaSeguimientoPedido[index].fechaServidor} ${misPedidosViewModel.tranformarHora(listaSeguimientoPedido[index].horaTrans)}',
+                                    contend: misPedidosViewModel
+                                        .cargarContendSeguimientoPedido(
+                                            listaSeguimientoPedido[index]
+                                                .numeroDoc))),
+                      );
+                    }
                 }
-                return Container();
               }))
         ],
       ),

@@ -26,8 +26,8 @@ class MisPedidosService {
           filtro, fechaInicio, fechaFin);
 
   Future<List<SeguimientoPedido>> consultarGrupoSeguimientoPedido(
-          String numeroDoc) =>
-      misPedidosRepository.consultarGrupoSeguimientoPedido(numeroDoc);
+          String numeroDoc, int tipo) =>
+      misPedidosRepository.consultarGrupoSeguimientoPedido(numeroDoc, tipo);
 
   Future<void> guardarSeguimientoPedido(Pedido miPedido, String documento) =>
       misPedidosRepository.guardarSeguimientoPedido(miPedido, documento);

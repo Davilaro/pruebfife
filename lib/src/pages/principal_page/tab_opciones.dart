@@ -188,7 +188,6 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-
     final currenIndex = provider.selectOptionMenu;
 
     switch (currenIndex) {
@@ -208,6 +207,7 @@ class _HomePageBody extends StatelessWidget {
                 'MainActivity');
             //UXCam: Llamamos el evento selectFooter
             UxcamTagueo().selectFooter('${S.current.catalog}');
+
             onClickVerMas('Categorías', provider);
           }
           return TabCategoriaMarca();

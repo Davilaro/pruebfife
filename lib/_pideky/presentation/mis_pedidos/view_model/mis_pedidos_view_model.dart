@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/service/mis_pedidos_service.dart';
@@ -90,33 +91,58 @@ class MisPedidosViewModel extends GetxController
     ]);
   }
 
-  cargarContendSeguimientoPedido(numeroDoc) {
+  Future<List<SeguimientoPedido>> cargarListaSeguimientoPedido(
+          numeroDoc) async =>
+      await misPedidosService.consultarGrupoSeguimientoPedido(numeroDoc, 0);
+
+  Widget cargarContendSeguimientoPedido(numeroDoc) {
     return Column(children: [
       FutureBuilder<List<SeguimientoPedido>>(
-          future: misPedidosService.consultarGrupoSeguimientoPedido(numeroDoc),
+          future: cargarListaSeguimientoPedido(numeroDoc),
           builder: (context, AsyncSnapshot<List<SeguimientoPedido>> snapshot) {
-            if (snapshot.hasData) {
-              var listaSeguimientoPedido = snapshot.data;
-              print('res ${listaSeguimientoPedido?.length}');
-              return Column(
-                children: [
-                  for (int i = 0; i < listaSeguimientoPedido!.length; i++)
-                    ContainerAcordion(
-                        imagen:
-                            listaSeguimientoPedido[i].icoFabricante.toString(),
-                        titulo:
-                            'No.pedido ${listaSeguimientoPedido[i].consecutivo.toString()}',
-                        onPressedLink: () => Get.to(() => SeguimientoPedidoPage(
-                            pedido: listaSeguimientoPedido[i])),
-                        tituloOnPressed: 'Hacer seguimiento',
-                        isVisibleSeparador:
-                            listaSeguimientoPedido.length - 1 != i),
-                ],
-              );
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              default:
+                if (snapshot.hasError) {
+                  return Text('No se encontro informacion');
+                } else {
+                  var listaSeguimientoPedido = snapshot.data
+                      ?.groupListsBy((element) => element.fabricante);
+                  return Column(
+                    children: [
+                      ...listaSeguimientoPedido!.values.map((list) {
+                        var pedido = list.first;
+                        return ContainerAcordion(
+                            imagen: pedido.icoFabricante.toString(),
+                            titulo:
+                                'No.pedido ${pedido.consecutivo.toString()}',
+                            onPressedLink: () => Get.to(
+                                () => SeguimientoPedidoPage(listPedido: list)),
+                            tituloOnPressed: 'Hacer seguimiento',
+                            isVisibleSeparador: true);
+                      }).toList(),
+                    ],
+                  );
+                }
             }
-            return CircularProgressIndicator();
           })
     ]);
+  }
+
+  calculaTotalSeguimiento(List list) {
+    var total = 0.0;
+    try {
+      list.forEach((element) {
+        var res = double.parse(element.precio.toString()) *
+            double.parse(element.cantidad.toString());
+        total += res;
+      });
+
+      return total;
+    } catch (e) {
+      return total;
+    }
   }
 
   tranformarHora(String horaOld) {

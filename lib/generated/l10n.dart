@@ -130,10 +130,10 @@ class S {
     );
   }
 
-  /// `Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.`
+  /// `Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.`
   String get bottom_alert_drawer {
     return Intl.message(
-      'Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.',
+      'Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.',
       name: 'bottom_alert_drawer',
       desc: '',
       args: [],
@@ -750,10 +750,10 @@ class S {
     );
   }
 
-  /// `You have successfully changed the branch for which you will place your orders!`
+  /// `You have successfully changed the branch for which you will make your purchases!`
   String get text_change_of_branch {
     return Intl.message(
-      'You have successfully changed the branch for which you will place your orders!',
+      'You have successfully changed the branch for which you will make your purchases!',
       name: 'text_change_of_branch',
       desc: '',
       args: [],
@@ -965,6 +965,26 @@ class S {
     return Intl.message(
       'Your order is being prepared',
       name: 'your_order_is_being_prepared',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is checked in and ready to go on the road`
+  String get your_order_checked {
+    return Intl.message(
+      'Your order is checked in and ready to go on the road',
+      name: 'your_order_checked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is on its way and ready to be received`
+  String get your_order_is_ready {
+    return Intl.message(
+      'Your order is on its way and ready to be received',
+      name: 'your_order_is_ready',
       desc: '',
       args: [],
     );

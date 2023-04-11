@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "I authorize the processing of my personal data"),
         "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
-            "Remember! if you have products added to your cart and you choose a new branch, you will have to shop again."),
+            "Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase."),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
@@ -156,7 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
             "These products will be delivered according to the supplier\'s itinerary."),
         "text_change_of_branch": MessageLookupByLibrary.simpleMessage(
-            "You have successfully changed the branch for which you will place your orders!"),
+            "You have successfully changed the branch for which you will make your purchases!"),
         "text_message": MessageLookupByLibrary.simpleMessage("text message."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
         "text_your_email_address": MessageLookupByLibrary.simpleMessage(
@@ -188,7 +188,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp_number": m6,
         "you_want_to_go": MessageLookupByLibrary.simpleMessage(
             "Or do you want to go to the "),
-        "your_order_is_being_prepared":
-            MessageLookupByLibrary.simpleMessage("Your order is being prepared")
+        "your_order_checked": MessageLookupByLibrary.simpleMessage(
+            "Your order is checked in and ready to go on the road"),
+        "your_order_is_being_prepared": MessageLookupByLibrary.simpleMessage(
+            "Your order is being prepared"),
+        "your_order_is_ready": MessageLookupByLibrary.simpleMessage(
+            "Your order is on its way and ready to be received")
       };
 }

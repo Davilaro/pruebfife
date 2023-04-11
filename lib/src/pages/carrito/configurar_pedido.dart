@@ -231,8 +231,11 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
 
     ValidarPedido validar = await Servicies().enviarPedido(
-        listaProductosPedidos, prefs.codClienteLogueado, fechaPedido, numDoc);
-    print("estado pedido ${validar.estado}");
+        listaProductosPedidos,
+        prefs.codClienteLogueado,
+        fechaPedido,
+        numDoc,
+        cartProvider);
 
     if (validar.estado == 'OK') {
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
@@ -246,7 +249,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       //FIREBASE: Llamamos el evento purchase
       TagueoFirebase().sendAnalityticsPurchase(
           cartProvider.getTotal, listaProductosPedidos, numDoc);
-      print('si entramos aca');
       //UXCam: Llamamos el evento confirmOrder
       UxcamTagueo().confirmOrder(listaProductosPedidos, cartProvider);
       cartProvider.guardarValorCompra = 0;

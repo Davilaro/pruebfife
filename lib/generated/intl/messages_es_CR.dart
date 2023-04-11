@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Autorizo el tratamiento de mis datos personales"),
         "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
-            "¡Recuerda! si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar compras"),
+            "¡Recuerda!, si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar las compras."),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "catalog": MessageLookupByLibrary.simpleMessage("Categorías"),
         "categories_for_you":
@@ -159,7 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "terms_of_delivery": MessageLookupByLibrary.simpleMessage(
             "Tu pedido sera entregado en tu día normal de entrega"),
         "text_change_of_branch": MessageLookupByLibrary.simpleMessage(
-            "¡Has cambiado con éxito la sucursal para la cual realizarás tus pedidos!"),
+            "¡Has cambiado con éxito la sucursal para la cual realizarás tus compras!"),
         "text_message":
             MessageLookupByLibrary.simpleMessage("mensaje de texto."),
         "text_sms": MessageLookupByLibrary.simpleMessage("SMS"),
@@ -192,7 +192,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp_number": m6,
         "you_want_to_go":
             MessageLookupByLibrary.simpleMessage("O deseas ir al "),
+        "your_order_checked": MessageLookupByLibrary.simpleMessage(
+            "Tu pedido está facturado y listo para salir en ruta"),
         "your_order_is_being_prepared":
-            MessageLookupByLibrary.simpleMessage("Su pedido se está alistando")
+            MessageLookupByLibrary.simpleMessage("Tu pedido se está alistando"),
+        "your_order_is_ready": MessageLookupByLibrary.simpleMessage(
+            "Tu pedido está en camino y listo para ser recibido")
       };
 }

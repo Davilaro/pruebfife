@@ -8,7 +8,7 @@
     "accept":"Aceptar",
     "address": "Dirección: {direccion}",
 
-    "bottom_alert_drawer" : "¡Recuerda! si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar compras",
+    "bottom_alert_drawer" : "¡Recuerda!, si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar las compras.",
     
     "cancel":"Cancelar",
     "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",
@@ -86,7 +86,7 @@
     "start_date":"Fecha de inicio",
 
     "terms_of_delivery" : "Tu pedido sera entregado en tu día normal de entrega",
-    "text_change_of_branch" : "¡Has cambiado con éxito la sucursal para la cual realizarás tus pedidos!",
+    "text_change_of_branch" : "¡Has cambiado con éxito la sucursal para la cual realizarás tus compras!",
     "text_message": "mensaje de texto.",
     "text_sms":"SMS",
     "text_your_email_address": "O actívate con tu ",
@@ -111,6 +111,7 @@
     "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
     
     "you_want_to_go":"O deseas ir al ",
-    "your_order_is_being_prepared":"Su pedido se está alistando"
-
+    "your_order_is_being_prepared":"Tu pedido se está alistando",
+    "your_order_checked":"Tu pedido está facturado y listo para salir en ruta",
+    "your_order_is_ready": "Tu pedido está en camino y listo para ser recibido"
 }

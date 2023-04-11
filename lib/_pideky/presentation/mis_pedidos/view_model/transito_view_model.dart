@@ -24,8 +24,7 @@ class TransitoViewModel extends GetxController
       BuildContext context, String fechaInicial, String fechaFin) async {
     var res = await misPedidosViewModel.getSeguimintoPedido(
         '-1', fechaInicial, fechaFin);
-    print(
-        'hola rs ${res.length} ------- $fechaInicial ------------- $fechaFin');
+
     if (res.length > 0) {
       return true;
     } else {
