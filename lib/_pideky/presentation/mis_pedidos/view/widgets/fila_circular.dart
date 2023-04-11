@@ -1,13 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FilaCircular extends StatelessWidget {
   final String titulo;
+  final String subTitulo;
   final bool isActivo;
-  FilaCircular({required this.titulo, required this.isActivo});
+  final bool isActivoText;
+  FilaCircular(
+      {required this.titulo,
+      required this.subTitulo,
+      required this.isActivo,
+      required this.isActivoText});
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +63,10 @@ class FilaCircular extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Visibility(
-              visible: titulo == 'Pedido recibido',
+              visible: isActivoText,
               child: Container(
                 height: Get.height * 0.08,
-                padding: EdgeInsets.only(left: 32),
+                padding: EdgeInsets.only(left: 21),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -69,8 +74,8 @@ class FilaCircular extends StatelessWidget {
                       fit: BoxFit.fill),
                 ),
                 child: AutoSizeText(
-                  S.current.your_order_is_being_prepared,
-                  maxLines: 2,
+                  subTitulo,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: ConstantesColores.azul_precio, fontSize: 12),

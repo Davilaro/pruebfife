@@ -16,6 +16,9 @@ class SeguimientoPedido {
     this.fabricante,
     this.icoFabricante,
     this.estado,
+    this.nombreProducto,
+    this.codigoProducto,
+    this.cantidad,
   });
 
   String? numeroDoc;
@@ -25,6 +28,9 @@ class SeguimientoPedido {
   String? horaTrans;
   String? fabricante;
   String? icoFabricante;
+  String? nombreProducto;
+  String? codigoProducto;
+  int? cantidad;
 
   int? estado;
 
@@ -39,6 +45,10 @@ class SeguimientoPedido {
         fabricante: json["fabricante"] == null ? "" : json["fabricante"],
         icoFabricante: json["ico"] == null ? "" : json["ico"],
         estado: json["estado"] == null ? 1 : json["estado"],
+        nombreProducto: json["Nombre"] == null ? "" : json["Nombre"],
+        codigoProducto:
+            json["CodigoProducto"] == null ? "" : json["CodigoProducto"],
+        cantidad: json["Cantidad"] == null ? 0 : json["Cantidad"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +60,7 @@ class SeguimientoPedido {
         "fabricante": fabricante,
         "ico": icoFabricante,
         "estado": estado,
+        "Nombre": nombreProducto,
+        "Cantidad": cantidad,
       };
 }

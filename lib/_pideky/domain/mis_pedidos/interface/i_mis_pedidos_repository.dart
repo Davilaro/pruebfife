@@ -15,7 +15,7 @@ abstract class IMisPedidosRepository {
       String filtro, String fechaInicio, String fechaFin);
 
   Future<List<SeguimientoPedido>> consultarGrupoSeguimientoPedido(
-      String numeroDoc);
+      String numeroDoc, int tipo);
 
   Future<void> guardarSeguimientoPedido(Pedido miPedido, String documento);
 

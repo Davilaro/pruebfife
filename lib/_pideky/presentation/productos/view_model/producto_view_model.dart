@@ -134,7 +134,6 @@ class ProductoViewModel extends GetxController {
 
       return listDias;
     } catch (e) {
-      print('sin resultados $e');
       return '';
     }
   }

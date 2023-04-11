@@ -130,8 +130,8 @@ class MisPedidosQuery extends IMisPedidosRepository {
 
     try {
       String query =
-          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechaServidor, 1, 2) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 7, 4)) as fechaServidor, MAX(proveedor) fabricante, 
-            MAX(consecutivo) consecutivo, sum(precio) as precio, MAX(substr(fechaServidor,11, 6)) as horatrans FROM SeguimientoPedido 
+          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechaServidor, 1, 2) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 7, 4)) as fechaServidor, 
+            MAX(consecutivo) consecutivo, sum(precio*cantidad) as precio, MAX(substr(fechaServidor,11, 6)) as horatrans FROM SeguimientoPedido
             WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
             AND
             substr(fechaServidor, 7, 4) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 1, 2)
@@ -144,7 +144,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
             THEN substr(fechaServidor, 7, 4) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 1, 2)
             ELSE substr('$fechaFinFor', 7, 4) || '/' || substr('$fechaFinFor', 4, 2) || '/' || substr('$fechaFinFor', 1, 2) END
             GROUP BY NumeroDoc
-            ORDER BY cast(substr(fechaServidor, 7, 4) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 1, 2) as INT) DESC 
+            ORDER BY cast(substr(fechaServidor, 7, 4) || '/' || substr(fechaServidor, 4, 2) || '/' || substr(fechaServidor, 1, 2) as INT) DESC
         ''';
       // log(query);
       final sql = await db.rawQuery(query);
@@ -156,17 +156,18 @@ class MisPedidosQuery extends IMisPedidosRepository {
   }
 
   Future<List<SeguimientoPedido>> consultarGrupoSeguimientoPedido(
-      String numeroDoc) async {
+      String numeroDoc, int tipo) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
     try {
       String query = '''
-        SELECT s.NumeroDoc, s.proveedor fabricante, s.consecutivo, f.ico, 
-        MAX(substr(s.fechaServidor, 1, 2) || '/' || substr(s.fechaServidor, 4, 2) || '/' || substr(s.fechaServidor, 7, 4)) as fechaServidor, 
-        MAX(substr(s.fechaServidor,11, 6)) as horatrans, sum(s.precio) as precio, s.estado     
-        from SeguimientoPedido s LEFT JOIN fabricante f ON s.proveedor = f.empresa 
-        where NumeroDoc='$numeroDoc' GROUP BY fabricante
+        SELECT s.NumeroDoc, s.proveedor fabricante, s.Nombre, s.Cantidad, s.consecutivo, f.ico, 
+        substr(s.fechaServidor, 1, 2) || '/' || substr(s.fechaServidor, 4, 2) || '/' || substr(s.fechaServidor, 7, 4) as fechaServidor, 
+        substr(s.fechaServidor,11, 6) as horatrans, s.Precio as precio, s.CodigoProducto, s.estado     
+        from SeguimientoPedido s JOIN fabricante f ON s.proveedor = f.empresa 
+        where s.NumeroDoc='$numeroDoc'
       ''';
+
       final sql = await db.rawQuery(query);
       // log(query);
       return sql.map((e) => SeguimientoPedido.fromJson(e)).toList();
@@ -189,7 +190,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
           ' ${now.hour.toString().length > 1 ? now.hour : '0${now.hour}'}:${now.minute.toString().length > 1 ? now.minute : '0${now.minute}'}:${now.second}';
 
       var query = '''
-        INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}', null,${miPedido.precio},'$fechaActual',1)
+        INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}','${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.precio},${miPedido.cantidad},null,'$fechaActual',1)
       ''';
       // log(query);
       await db.rawInsert(query);

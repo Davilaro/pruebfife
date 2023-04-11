@@ -8,7 +8,7 @@
     "accept":"Accept",
     "address": "Address: {direccion}",
 
-    "bottom_alert_drawer" : "Remember! if you have products added to your cart and you choose a new branch, you will have to shop again.",
+    "bottom_alert_drawer" : "Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.",
     
     "cancel":"Cancel",
     "confirm_country":"Please confirm the country where your business is located.",
@@ -86,7 +86,7 @@
     "start_date":"Start date",
 
     "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary.",
-    "text_change_of_branch" : "You have successfully changed the branch for which you will place your orders!",
+    "text_change_of_branch" : "You have successfully changed the branch for which you will make your purchases!",
     "text_message": "text message.",
     "text_sms":"SMS",
     "text_your_email_address": "Or sign up with your email address ",
@@ -111,6 +111,7 @@
     "we_have_a_suggested":"We have a suggested order for you, so that you don't forget any product for your business.",
 
     "you_want_to_go":"Or do you want to go to the ",
-    "your_order_is_being_prepared":"Your order is being prepared"
-
+    "your_order_is_being_prepared":"Your order is being prepared",
+    "your_order_checked":"Your order is checked in and ready to go on the road",
+    "your_order_is_ready": "Your order is on its way and ready to be received"
 }

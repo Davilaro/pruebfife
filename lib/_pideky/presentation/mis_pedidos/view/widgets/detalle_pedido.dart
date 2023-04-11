@@ -193,7 +193,7 @@ class DetallePedidoPage extends StatelessWidget {
                                   child: Container(
                                     child: AutoSizeText(
                                       S.current.quantity,
-                                      textAlign: TextAlign.left,
+                                      textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(

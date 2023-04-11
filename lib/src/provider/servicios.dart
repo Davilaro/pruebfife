@@ -22,6 +22,7 @@ import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -334,13 +335,11 @@ class Servicies {
   }
 
   Future<dynamic> enviarPedido(List<Pedido> listaPedido, String usuarioLogin,
-      String fechaPedido, String numDoc) async {
+      String fechaPedido, String numDoc, CarroModelo cartProvider) async {
     String datos = "{\"ListaDetalle\" :[";
     final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
-      print(
-          'hola prueba ${listaPedido[i].codigoFabricante} ----- ${listaPedido[i].nitFabricante}');
       datos += jsonEncode(<String, dynamic>{
         "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
@@ -388,7 +387,7 @@ class Servicies {
 
       if (response.statusCode == 200) {
         var res = ValidarPedido.fromJson(jsonDecode(response.body));
-        print('respuesta ${res.mensaje}');
+
         return res;
       } else {
         throw Exception('Failed');
