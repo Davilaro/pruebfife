@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:emart/_pideky/domain/mis_pedidos/interface/i_mis_pedidos_repository.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
@@ -31,8 +29,8 @@ class MisPedidosQuery extends IMisPedidosRepository {
 
     try {
       String query =
-          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, MAX(fabricante)fabricante,
-       MAX(ordencompra)ordencompra, sum(precio) as precio, MAX(substr(fechatrans,11, 6)) as horatrans FROM Historico
+          '''   SELECT DISTINCT NumeroDoc, MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, 
+       MAX(ordencompra)ordencompra, sum(precio*cantidad) as precio, MAX(substr(fechatrans,11, 6)) as horatrans FROM Historico
       WHERE NumeroDoc LIKE CASE WHEN '$filtro'='-1' THEN NumeroDoc ELSE '%$filtro%' END
       AND
       substr(fechatrans, 7, 4) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 1, 2)

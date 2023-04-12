@@ -385,7 +385,8 @@ class SeguimientoPedidoPage extends StatelessWidget {
                                       child: Container(
                                         child: AutoSizeText(
                                           productViewModel.getCurrency(
-                                              listPedido[i].precio),
+                                              listPedido[i].precio! *
+                                                  listPedido[i].cantidad!),
                                           textAlign: TextAlign.left,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

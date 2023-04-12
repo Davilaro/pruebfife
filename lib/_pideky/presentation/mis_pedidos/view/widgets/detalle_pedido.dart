@@ -111,8 +111,10 @@ class DetallePedidoPage extends StatelessWidget {
                                           CrossAxisAlignment.end,
                                       children: [
                                         AutoSizeText(
-                                          productViewModel
-                                              .getCurrency(historico.precio),
+                                          productViewModel.getCurrency(
+                                              misPedidosViewModel
+                                                  .calculaTotalSeguimiento(
+                                                      detalles)),
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
                                               fontSize: 17,
@@ -298,8 +300,9 @@ class DetallePedidoPage extends StatelessWidget {
                                     flex: 2,
                                     child: Container(
                                       child: AutoSizeText(
-                                        productViewModel
-                                            .getCurrency(detalles[i].precio),
+                                        productViewModel.getCurrency(
+                                            detalles[i].precio *
+                                                detalles[i].cantidad),
                                         textAlign: TextAlign.left,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
