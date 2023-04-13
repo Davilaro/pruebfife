@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_vi
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/transito_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_multimedia.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class InitialBindings extends Bindings {
   @override
   void dependencies() {
     ControllerMultimedia.findOrInitialize;
+    ControlBaseDatos.findOrInitialize;
     MisPedidosViewModel.findOrInitialize;
     TransitoViewModel.findOrInitialize;
     MiNegocioViewModel.findOrInitialize;

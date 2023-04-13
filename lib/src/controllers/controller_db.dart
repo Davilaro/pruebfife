@@ -19,4 +19,13 @@ class ControlBaseDatos extends GetxController {
   void initControllertabController(TabController controller) {
     tabController = controller;
   }
+
+  static ControlBaseDatos get findOrInitialize {
+    try {
+      return Get.find<ControlBaseDatos>();
+    } catch (e) {
+      Get.put(ControlBaseDatos());
+      return Get.find<ControlBaseDatos>();
+    }
+  }
 }

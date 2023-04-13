@@ -259,8 +259,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
-    List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
-    prefs.direccionSucursal = datosCliente[0].direccion;
+    prefs.direccionSucursal = elemento.direccion;
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
     opcionesAppBard!.selectOptionMenu = 0;
