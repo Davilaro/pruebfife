@@ -111,7 +111,7 @@
     "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
     
     "you_want_to_go":"O deseas ir al ",
-    "your_order_is_being_prepared":"Tu pedido se está alistando",
-    "your_order_checked":"Tu pedido está facturado y listo para salir en ruta",
-    "your_order_is_ready": "Tu pedido está en camino y listo para ser recibido"
+    "our_system_has_received":"Nuestro sistema ha recibido tu solicitud.",
+    "your_order_checked":"Tu pedido está facturado y listo para salir en ruta.",
+    "your_order_is_ready": "Tu pedido está en camino, prepárate pare recibirlo."
 }

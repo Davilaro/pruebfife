@@ -960,30 +960,30 @@ class S {
     );
   }
 
-  /// `Your order is being prepared`
-  String get your_order_is_being_prepared {
+  /// `Our system has received your request.`
+  String get our_system_has_received {
     return Intl.message(
-      'Your order is being prepared',
-      name: 'your_order_is_being_prepared',
+      'Our system has received your request.',
+      name: 'our_system_has_received',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your order is checked in and ready to go on the road`
+  /// `Your order is checked in and ready to go on the road.`
   String get your_order_checked {
     return Intl.message(
-      'Your order is checked in and ready to go on the road',
+      'Your order is checked in and ready to go on the road.',
       name: 'your_order_checked',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your order is on its way and ready to be received`
+  /// `Your order is on its way, get ready to receive it.`
   String get your_order_is_ready {
     return Intl.message(
-      'Your order is on its way and ready to be received',
+      'Your order is on its way, get ready to receive it.',
       name: 'your_order_is_ready',
       desc: '',
       args: [],
