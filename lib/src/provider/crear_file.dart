@@ -52,15 +52,7 @@ class AppUtil {
     return _appUtil!;
   }
 
-  Future<bool> downloadZip(
-      String usuario,
-      // String cliente,
-      String sucursal,
-      // codigonutresa,
-      // codigozenu,
-      // codigomeals,
-      // codigopadrepideky,
-      generico) async {
+  Future<bool> downloadZip(String usuario, String sucursal, generico) async {
     try {
       String archivo = '';
 
@@ -69,39 +61,17 @@ class AppUtil {
       archivo = await crearFolderIos;
 
       File zippedFile = await _downloadFile(
-          usuario,
-          // cliente,
-          sucursal,
-          _localZipFileName,
-          archivo,
-          // codigonutresa,
-          // codigozenu,
-          // codigomeals,
-          // codigopadrepideky,
-          generico);
+          usuario, sucursal, _localZipFileName, archivo, generico);
       var estado = await unarchiveAndSave(zippedFile, archivo);
-      if (estado) {
-        return true;
-      }
+      return estado;
     } catch (ex) {
       print('Error en downloadZip ${ex.toString()}');
       return false;
     }
-
-    return false;
   }
 
-  Future<File> _downloadFile(
-      String usuario,
-      // String cliente,
-      String sucursal,
-      String fileName,
-      String dir,
-      // String codigonutresa,
-      // String codigozenu,
-      // String codigomeals,
-      // String codigopadrepideky,
-      bool generico) async {
+  Future<File> _downloadFile(String usuario, String sucursal, String fileName,
+      String dir, bool generico) async {
     String url = "";
     var req;
     var file;
@@ -110,8 +80,6 @@ class AppUtil {
         url = Constantes().urlBaseGenerico +
             'Sync/DB/${prefs.paisUsuario}/db.zip';
       } else {
-        // url = Constantes().urlBase +
-        //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
         url = Constantes().urlBase +
             'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
       }
@@ -166,8 +134,6 @@ class AppUtil {
   enviarNotificacion(String usuario, String titulo, String cuerpo,
       List<String> datosPersonas, String numDoc) async {
     datosPersonas.forEach((element) async {
-      DateTime now = new DateTime.now();
-      String fecha = DateFormat('yyyyMMddkkmm').format(now);
       String URL = /*Constantes().urlApi +*/
           "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
 
@@ -191,11 +157,9 @@ class AppUtil {
       if (prefs.usurioLogin == -1) {
         await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
       }
-      // await DBProviderHelper.db.cerrarBases();
-      // await DBProvider.db.cerrarBases();
 
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
-      var release = androidInfo.version.release;
+      await DeviceInfoPlugin().androidInfo;
+
       // Directory appDocDirectory = await getApplicationDocumentsDirectory();
       final dbFileTemp = File('${await androidPaht}/DB7001.db');
       final dbFileTemp2 = File('${await androidPaht}/Temp.db');
