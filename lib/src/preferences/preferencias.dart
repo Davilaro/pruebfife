@@ -191,6 +191,14 @@ class Preferencias {
     _prefs.setString("diaactual", value);
   }
 
+  get direccionSucursal {
+    return _prefs.getString("direccionsucursal") ?? "";
+  }
+
+  set direccionSucursal(dynamic value) {
+    _prefs.setString("direccionsucursal", value);
+  }
+
   clear() async {
     await _prefs.clear();
   }

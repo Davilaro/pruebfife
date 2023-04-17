@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedor
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_vendedores.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/mis_estadisticas.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/politicas_datos.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -17,14 +18,8 @@ import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -74,35 +69,6 @@ class _MiNegocioState extends State<MiNegocio> {
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: TituloPideky(size: size),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-          child: Container(
-            width: 100,
-            child: new IconButton(
-              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-              onPressed: () => {
-                //UXCam: Llamamos el evento clickSoport
-                UxcamTagueo().clickSoport(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Soporte(
-                            numEmpresa: 1,
-                          )),
-                ),
-              },
-            ),
-          ),
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          BotonActualizar(),
-          AccionNotificacion(),
-          AccionesBartCarrito(esCarrito: false),
-        ],
-      ),
       body: RefreshIndicator(
         color: ConstantesColores.azul_precio,
         backgroundColor: ConstantesColores.agua_marina.withOpacity(0.6),
@@ -116,7 +82,7 @@ class _MiNegocioState extends State<MiNegocio> {
           return Future<void>.delayed(const Duration(seconds: 3));
         },
         child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: FutureBuilder(
                 initialData: [],
                 future: DBProviderHelper.db.consultarDatosCliente(),
@@ -156,7 +122,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                                 margin:
                                                     EdgeInsets.only(bottom: 5),
                                                 child: Text(
-                                                  'Mi negocio',
+                                                  S.current.my_business,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: ConstantesColores
@@ -175,7 +141,9 @@ class _MiNegocioState extends State<MiNegocio> {
                                                         FontWeight.bold),
                                               ),
                                               Text(
-                                                'Dirección: ${sucursal.direccion.toString()}',
+                                                S.current.address(sucursal
+                                                    .direccion
+                                                    .toString()),
                                                 style: TextStyle(
                                                     fontSize: 11,
                                                     color: ConstantesColores
@@ -183,30 +151,58 @@ class _MiNegocioState extends State<MiNegocio> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              AutoSizeText(
-                                                'Número WhatsApp:$telefono',
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: ConstantesColores
-                                                        .gris_textos,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                              Row(
+                                                children: [
+                                                  AutoSizeText(
+                                                    S.current.whatsApp_number(
+                                                        telefono),
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: ConstantesColores
+                                                            .gris_textos,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () =>
+                                                        editarNumero(context),
+                                                    child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            bottom: 1,
+                                                            left: 18),
+                                                        child: Image.asset(
+                                                          'assets/icon/editar_perfil_img.png',
+                                                          width: 20,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 3),
+                                                child: GestureDetector(
+                                                  onTap: () async =>
+                                                      viewModel.copiarCCUP(
+                                                          sucursal
+                                                              .codigoUnicoPideky,
+                                                          context),
+                                                  child: AutoSizeText(
+                                                    'CCUP: ${sucursal.codigoUnicoPideky}',
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                        fontSize: 1,
+                                                        color: Color.fromARGB(
+                                                            255, 67, 66, 66),
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
                                       ])),
-                                  GestureDetector(
-                                    onTap: () => editarNumero(context),
-                                    child: Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: 1, left: 18),
-                                        child: Image.asset(
-                                          'assets/icon/editar_perfil_img.png',
-                                          width: 20,
-                                        )),
-                                  ),
                                 ],
                               ),
                             ),
@@ -217,7 +213,7 @@ class _MiNegocioState extends State<MiNegocio> {
                             Container(
                               margin: EdgeInsets.only(top: 10, bottom: 20),
                               child: Text(
-                                'Mi cuenta',
+                                S.current.my_account,
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: ConstantesColores.gris_textos,
@@ -249,7 +245,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Mis proveedores',
+                                              S.current.my_suppliers,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -298,7 +294,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Mis vendedores',
+                                              S.current.my_vendors,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -348,7 +344,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Mis estadísticas',
+                                              S.current.my_statistics,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -405,7 +401,8 @@ class _MiNegocioState extends State<MiNegocio> {
                                                       margin: EdgeInsets.only(
                                                           left: 10),
                                                       child: Text(
-                                                        'Mis Pagos Nequi',
+                                                        S.current
+                                                            .my_nequi_payments,
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             fontWeight:
@@ -442,7 +439,7 @@ class _MiNegocioState extends State<MiNegocio> {
                             Container(
                               margin: EdgeInsets.only(top: 5, bottom: 20),
                               child: Text(
-                                'Términos y condiciones',
+                                S.current.terms_conditions,
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: ConstantesColores.gris_textos,
@@ -478,7 +475,8 @@ class _MiNegocioState extends State<MiNegocio> {
                                             width: Get.width * 0.52,
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Política y tratamiento de datos',
+                                              S.current
+                                                  .policy_and_data_processing,
                                               maxLines: 2,
                                               style: TextStyle(
                                                   fontSize: 15,
@@ -530,7 +528,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                             width: Get.width * 0.52,
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
-                                              'Términos y condiciones',
+                                              S.current.terms_conditions,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
@@ -579,7 +577,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                                       context, size, provider)
                                             },
                                             child: Text(
-                                              "Cerrar sesión.",
+                                              S.current.log_out,
                                               style: TextStyle(
                                                   color: Colors.red,
                                                   fontSize: 15,
@@ -590,8 +588,8 @@ class _MiNegocioState extends State<MiNegocio> {
                                           ),
                                           Obx(() => Text(
                                                 Constantes().titulo == 'QA'
-                                                    ? 'Versión QA ${viewModel.version.value}'
-                                                    : 'Versión ${viewModel.version.value}',
+                                                    ? '${S.current.version} QA ${viewModel.version.value}'
+                                                    : '${S.current.version} ${viewModel.version.value}',
                                                 style: TextStyle(
                                                     color: ConstantesColores
                                                         .gris_textos,
@@ -619,7 +617,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                       width: 10,
                                     ),
                                     Text(
-                                      "Eliminar cuenta",
+                                      S.current.delete_account,
                                       style: TextStyle(
                                           color: ConstantesColores.gris_textos,
                                           fontSize: 13,

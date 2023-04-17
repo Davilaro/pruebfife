@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -91,6 +92,10 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: TituloPideky(size: size),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
@@ -234,7 +239,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                       Container(
                                         alignment: Alignment.topLeft,
                                         child: AutoSizeText(
-                                            'Precio por unidad de venta',
+                                            S.current.price_per_sales_unit,
                                             maxLines: 2,
                                             presetFontSizes: [15, 14],
                                             style: TextStyle(
@@ -468,7 +473,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
       //FIREBASE: Llamamos el evento add_to_cart
       TagueoFirebase().sendAnalityticAddToCart(
           producto, int.parse(_controllerCantidadProducto.text));
-
+      //insertamos el producto en la temporal
+      productViewModel.insertarPedidoTemporal(widget.producto.codigo);
       Navigator.push(
           context,
           MaterialPageRoute(

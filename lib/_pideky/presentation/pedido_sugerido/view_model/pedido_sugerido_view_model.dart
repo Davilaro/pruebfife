@@ -4,22 +4,24 @@ import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart'
 import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
-import 'package:emart/src/modelos/pedido.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../src/controllers/cambio_estado_pedido.dart';
 import '../../../../src/preferences/class_pedido.dart';
 
-class PedidoSugeridoController extends GetxController
+class PedidoSugeridoViewModel extends GetxController
     with GetSingleTickerProviderStateMixin {
   PedidoSugeridoServicio pedidoSugerido;
 
-  PedidoSugeridoController(this.pedidoSugerido);
+  PedidoSugeridoViewModel(this.pedidoSugerido);
   //controlador de botones superiores
-  late TabController controller;
+  late TabController tabController;
   RxInt tabActual = 0.obs;
   final List titulosSeccion = ["Pedido Sugerido", "Repetir Orden"];
 
@@ -44,16 +46,12 @@ class PedidoSugeridoController extends GetxController
     this.tabActual.value = estado;
   }
 
-  llenarCarrito(Producto producto, int cantidad) async {
+  llenarCarrito(Producto producto, int cantidad, context) async {
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     if (producto.codigo != "") {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
-      if (controlador.mapaHistoricos.containsKey(prefs.codClienteLogueado)) {
-        controlador.mapaHistoricos
-            .update(prefs.codClienteLogueado, (value) => true);
-      } else {
-        controlador.mapaHistoricos.addAll({prefs.codClienteLogueado: true});
-      }
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
     }
 
     update();
@@ -61,7 +59,6 @@ class PedidoSugeridoController extends GetxController
 
   Future getListaProductosSugeridos() async {
     final listaPedidoSugerido = await pedidoSugerido.obtenerPedidoSugerido();
-    print(listaPedidoSugerido);
     mapearProductos(listaPedidoSugerido);
     final groups = groupBy(listaPedidoSugerido, (PedidoSugeridoModel p) {
       return p.negocio;
@@ -106,34 +103,32 @@ class PedidoSugeridoController extends GetxController
   }
 
   initController() async {
+    listaProductosPorFabricante.clear();
     await getListaFabricantes();
     await getListaProductosSugeridos();
-    print("se volvieron a cargar los datos de pedido suerido ---------------");
-  }
-
-  clearList() {
-    listaProductosPorFabricante.clear();
   }
 
   @override
   void onInit() {
     super.onInit();
-    controller = TabController(length: 2, vsync: this, initialIndex: 0);
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+
+    initController();
   }
 
   @override
   void onClose() {
     super.onClose();
-    controller.dispose();
+    tabController.dispose();
   }
 
-  static PedidoSugeridoController get findOrInitialize {
+  static PedidoSugeridoViewModel get findOrInitialize {
     try {
-      return Get.find<PedidoSugeridoController>();
+      return Get.find<PedidoSugeridoViewModel>();
     } catch (e) {
-      Get.put(PedidoSugeridoController(
+      Get.put(PedidoSugeridoViewModel(
           PedidoSugeridoServicio(PedidoSugeridoQuery())));
-      return Get.find<PedidoSugeridoController>();
+      return Get.find<PedidoSugeridoViewModel>();
     }
   }
 }

@@ -1,4 +1,5 @@
-import 'dart:typed_data';
+
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -7,6 +8,7 @@ import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class MiNegocioViewModel extends GetxController {
@@ -92,5 +94,19 @@ class MiNegocioViewModel extends GetxController {
       Get.put(MiNegocioViewModel());
       return Get.find<MiNegocioViewModel>();
     }
+  }
+
+  copiarCCUP(String? codigoCCUP, BuildContext context) async {
+    return await Clipboard.setData(ClipboardData(text: codigoCCUP)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: ConstantesColores.agua_marina,
+          shape: RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(10.0)),
+          content: Text(
+            S.current.ccup_code_copied,
+            textAlign: TextAlign.center,
+          )));
+    });
   }
 }

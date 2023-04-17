@@ -2,7 +2,7 @@
 
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
-import 'package:emart/src/pages/historico/widgets/filtro_historico.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/filtro_historico.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -11,7 +11,6 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/column_table_car.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +42,8 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('RepeatOrder');
     validarVersionActual(context);
     //FIREBASE: Llamamos el evento select_content
     TagueoFirebase().sendAnalityticSelectContent(
@@ -61,6 +62,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
     CarroModelo cartProvider = Provider.of<CarroModelo>(context);
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
         body: Container(
       color: ConstantesColores.color_fondo_gris,
@@ -188,7 +190,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
                         _selecciona(size),
                         Container(
                           padding: EdgeInsets.only(bottom: 45),
-                          height: size.height * 0.62,
+                          height: size.height * 0.5,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),

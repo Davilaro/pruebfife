@@ -4,6 +4,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 void mostrarAlert(
@@ -33,7 +34,7 @@ void mostrarAlert(
                             child: Container(),
                           ),
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () => Get.back(),
                             child: Icon(
                               Icons.cancel,
                               color: ConstantesColores.verde,
@@ -60,7 +61,7 @@ void mostrarAlert(
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: GestureDetector(
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => Get.back(),
                         child: Container(
                           height: 40,
                           width: double.infinity,
@@ -163,6 +164,76 @@ void alertCustom(BuildContext context) {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 )),
+          ),
+        );
+      });
+}
+
+void mostrarAlertCustomWidget(
+  BuildContext context,
+  Widget mensaje,
+  Widget? icon,
+) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            content: Container(
+              constraints: BoxConstraints(
+                  minHeight: 200, minWidth: double.infinity, maxHeight: 350),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(),
+                          ),
+                          GestureDetector(
+                            onTap: () => Get.back(),
+                            child: Icon(
+                              Icons.cancel,
+                              color: ConstantesColores.verde,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      width: 50,
+                      child: icon != null
+                          ? icon
+                          : Image.asset('assets/image/alerta_img.png'),
+                    ),
+                    Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: mensaje),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: GestureDetector(
+                        onTap: () => Get.back(),
+                        child: Container(
+                          height: 40,
+                          width: double.infinity,
+                          child: Image.asset(
+                            "assets/image/btn_aceptar.png",
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ),
         );
       });

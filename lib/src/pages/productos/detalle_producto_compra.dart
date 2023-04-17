@@ -3,6 +3,7 @@ import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlit
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -14,6 +15,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +36,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   @override
   void initState() {
     super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ProductDetail');
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
     PedidoEmart.cambioVista.value = 1;
   }
@@ -127,7 +131,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     final List<Widget> opciones = [];
 
     if (listaProductos.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaProductos.forEach((element) {

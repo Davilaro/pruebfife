@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -41,7 +42,7 @@ class CategoriasCard extends StatelessWidget {
     final List<Widget> opciones = [];
 
     if (listaCategorias.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaCategorias.forEach((element) {

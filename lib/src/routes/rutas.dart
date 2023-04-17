@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/widgets/comprobar_sesion.dart';
@@ -17,6 +18,7 @@ Map<String, WidgetBuilder> getRutas() {
     'listaSucursale': (_) => ListaSucursales(),
     'tab_opciones': (_) => TabOpciones(),
     'splash': (_) => Splash(),
+    'confirmar_pais': (_) => ConfirmacionPais(),
     'detalle_compra_producto': (_) => CambiarDetalleCompra(),
     'inicio_compra': (_) => PrincipalPage(),
     'pedido_sugerido': (_) => PedidoSugeridoPage(),

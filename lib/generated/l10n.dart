@@ -120,11 +120,51 @@ class S {
     );
   }
 
+  /// `Address: {direccion}`
+  String address(Object direccion) {
+    return Intl.message(
+      'Address: $direccion',
+      name: 'address',
+      desc: '',
+      args: [direccion],
+    );
+  }
+
+  /// `Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.`
+  String get bottom_alert_drawer {
+    return Intl.message(
+      'Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.',
+      name: 'bottom_alert_drawer',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(
       'Cancel',
       name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please confirm the country where your business is located.`
+  String get confirm_country {
+    return Intl.message(
+      'Please confirm the country where your business is located.',
+      name: 'confirm_country',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country confirmation`
+  String get country_confirmation {
+    return Intl.message(
+      'Country confirmation',
+      name: 'country_confirmation',
       desc: '',
       args: [],
     );
@@ -160,6 +200,36 @@ class S {
     );
   }
 
+  /// `CCUP code copied`
+  String get ccup_code_copied {
+    return Intl.message(
+      'CCUP code copied',
+      name: 'ccup_code_copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code could not be generated`
+  String get code_could_not_be_generated {
+    return Intl.message(
+      'Code could not be generated',
+      name: 'code_could_not_be_generated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose the period to filter your orders`
+  String get choose_the_period_to_filter_your_orders {
+    return Intl.message(
+      'Choose the period to filter your orders',
+      name: 'choose_the_period_to_filter_your_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Remember that you can place your order: {diasEntrega}`
   String delivery_days(Object diasEntrega) {
     return Intl.message(
@@ -167,6 +237,16 @@ class S {
       name: 'delivery_days',
       desc: '',
       args: [diasEntrega],
+    );
+  }
+
+  /// `Delete account`
+  String get delete_account {
+    return Intl.message(
+      'Delete account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
     );
   }
 
@@ -205,6 +285,36 @@ class S {
     return Intl.message(
       'Error obtaining information',
       name: 'error_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error validating the user`
+  String get error_validating_the_user {
+    return Intl.message(
+      'Error validating the user',
+      name: 'error_validating_the_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your Nit`
+  String get enter_your_nit {
+    return Intl.message(
+      'Enter your Nit',
+      name: 'enter_your_nit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter`
+  String get filter {
+    return Intl.message(
+      'Filter',
+      name: 'filter',
       desc: '',
       args: [],
     );
@@ -270,6 +380,26 @@ class S {
     );
   }
 
+  /// `In this section you will find the history of your purchases in Pideky.`
+  String get in_this_section_you_will {
+    return Intl.message(
+      'In this section you will find the history of your purchases in Pideky.',
+      name: 'in_this_section_you_will',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In this section you will find the status of your pending orders, and you will be able to track them.`
+  String get in_this_section_the_status {
+    return Intl.message(
+      'In this section you will find the status of your pending orders, and you will be able to track them.',
+      name: 'in_this_section_the_status',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Loading branches`
   String get loading_branches {
     return Intl.message(
@@ -285,6 +415,26 @@ class S {
     return Intl.message(
       'Nit without verification digit',
       name: 'login_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log out`
+  String get log_out {
+    return Intl.message(
+      'Log out',
+      name: 'log_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logging in`
+  String get logging_in {
+    return Intl.message(
+      'Logging in',
+      name: 'logging_in',
       desc: '',
       args: [],
     );
@@ -340,11 +490,111 @@ class S {
     );
   }
 
+  /// `My account`
+  String get my_account {
+    return Intl.message(
+      'My account',
+      name: 'my_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My suppliers`
+  String get my_suppliers {
+    return Intl.message(
+      'My suppliers',
+      name: 'my_suppliers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My vendors`
+  String get my_vendors {
+    return Intl.message(
+      'My vendors',
+      name: 'my_vendors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Statistics`
+  String get my_statistics {
+    return Intl.message(
+      'My Statistics',
+      name: 'my_statistics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Nequi Payments`
+  String get my_nequi_payments {
+    return Intl.message(
+      'My Nequi Payments',
+      name: 'my_nequi_payments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My orders`
+  String get my_orders {
+    return Intl.message(
+      'My orders',
+      name: 'my_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No information to display`
+  String get no_information_to_display {
+    return Intl.message(
+      'No information to display',
+      name: 'no_information_to_display',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `or via `
   String get or_via_text_message {
     return Intl.message(
       'or via ',
       name: 'or_via_text_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order Pideky`
+  String get order_pideky {
+    return Intl.message(
+      'Order Pideky',
+      name: 'order_pideky',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order detail`
+  String get order_detail {
+    return Intl.message(
+      'Order detail',
+      name: 'order_detail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order`
+  String get order {
+    return Intl.message(
+      'Order',
+      name: 'order',
       desc: '',
       args: [],
     );
@@ -390,6 +640,56 @@ class S {
     );
   }
 
+  /// `Policy and data processing`
+  String get policy_and_data_processing {
+    return Intl.message(
+      'Policy and data processing',
+      name: 'policy_and_data_processing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product`
+  String get product {
+    return Intl.message(
+      'Product',
+      name: 'product',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get price {
+    return Intl.message(
+      'Price',
+      name: 'price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price per sales unit`
+  String get price_per_sales_unit {
+    return Intl.message(
+      'Price per sales unit',
+      name: 'price_per_sales_unit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get quantity {
+    return Intl.message(
+      'Quantity',
+      name: 'quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Register`
   String get register {
     return Intl.message(
@@ -430,11 +730,31 @@ class S {
     );
   }
 
+  /// `Start date`
+  String get start_date {
+    return Intl.message(
+      'Start date',
+      name: 'start_date',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `These products will be delivered according to the supplier's itinerary.`
   String get terms_of_delivery {
     return Intl.message(
       'These products will be delivered according to the supplier\'s itinerary.',
       name: 'terms_of_delivery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have successfully changed the branch for which you will make your purchases!`
+  String get text_change_of_branch {
+    return Intl.message(
+      'You have successfully changed the branch for which you will make your purchases!',
+      name: 'text_change_of_branch',
       desc: '',
       args: [],
     );
@@ -490,6 +810,26 @@ class S {
     );
   }
 
+  /// `Terms and conditions`
+  String get terms_conditions {
+    return Intl.message(
+      'Terms and conditions',
+      name: 'terms_conditions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on `
+  String get the_nit_entered_is_not_registered {
+    return Intl.message(
+      'The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ',
+      name: 'the_nit_entered_is_not_registered',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Unable to send text message {e}`
   String unable_send_text_message(Object e) {
     return Intl.message(
@@ -510,11 +850,41 @@ class S {
     );
   }
 
+  /// `Choose the branch or point of sale for which you wish to see the products available and place your orders.`
+  String get upper_text_drawer {
+    return Intl.message(
+      'Choose the branch or point of sale for which you wish to see the products available and place your orders.',
+      name: 'upper_text_drawer',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The verification code cannot be empty`
   String get verification_code_cannot_empty {
     return Intl.message(
       'The verification code cannot be empty',
       name: 'verification_code_cannot_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validating information`
+  String get validating_information {
+    return Intl.message(
+      'Validating information',
+      name: 'validating_information',
       desc: '',
       args: [],
     );
@@ -540,11 +910,81 @@ class S {
     );
   }
 
+  /// `WhatsApp Number:{telefono}`
+  String whatsApp_number(Object telefono) {
+    return Intl.message(
+      'WhatsApp Number:$telefono',
+      name: 'whatsApp_number',
+      desc: '',
+      args: [telefono],
+    );
+  }
+
+  /// `WhatsApp`
+  String get whatsApp {
+    return Intl.message(
+      'WhatsApp',
+      name: 'whatsApp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WhatsApp not installed`
+  String get whatsApp_not_installed {
+    return Intl.message(
+      'WhatsApp not installed',
+      name: 'whatsApp_not_installed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have a suggested order for you, so that you don't forget any product for your business.`
+  String get we_have_a_suggested {
+    return Intl.message(
+      'We have a suggested order for you, so that you don\'t forget any product for your business.',
+      name: 'we_have_a_suggested',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Or do you want to go to the `
   String get you_want_to_go {
     return Intl.message(
       'Or do you want to go to the ',
       name: 'you_want_to_go',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is being prepared`
+  String get your_order_is_being_prepared {
+    return Intl.message(
+      'Your order is being prepared',
+      name: 'your_order_is_being_prepared',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is checked in and ready to go on the road`
+  String get your_order_checked {
+    return Intl.message(
+      'Your order is checked in and ready to go on the road',
+      name: 'your_order_checked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order is on its way and ready to be received`
+  String get your_order_is_ready {
+    return Intl.message(
+      'Your order is on its way and ready to be received',
+      name: 'your_order_is_ready',
       desc: '',
       args: [],
     );

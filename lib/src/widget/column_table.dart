@@ -1,12 +1,12 @@
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -63,7 +63,7 @@ class _ColumnTableState extends State<ColumnTable> {
                             Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Cantidad: ${widget.sugerido.cantidad!.toString()}",
+                                "${S.current.quantity}: ${widget.sugerido.cantidad!.toString()}",
                                 style: TextStyle(fontSize: 11),
                               ),
                             ),

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 
 import 'package:emart/src/preferences/const.dart';
@@ -17,8 +17,7 @@ List<Widget> gridItem(
   List<PedidoSugeridoModel> listTag = [];
 
   lista.forEach((producto) {
-    print(producto.codigo);
-    final controller = Get.find<PedidoSugeridoController>();
+    final controller = Get.find<PedidoSugeridoViewModel>();
     PedidoSugeridoModel productos = controller.listaProductos[producto.codigo]!;
 
     if (producto.negocio == fabricante && producto.cantidad > 0) {

@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -71,7 +72,7 @@ class _ProductsCardState extends State<ProductsCard> {
       BuildContext context, List<dynamic> listaProductos, cartProvider) {
     final List<Widget> opciones = [];
     if (listaProductos.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
     for (var i = 0; i < listaProductos.length; i++) {
       var dateNow = DateTime(

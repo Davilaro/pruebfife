@@ -1,15 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emart/src/controllers/controller_historico.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-// final controlerHistorico = Get.find<ControllerHistorico>();
-
 class FiltroHistorico extends StatefulWidget {
-  final ControllerHistorico controlerFiltro;
+  final controlerFiltro;
 
   FiltroHistorico({Key? key, required this.controlerFiltro}) : super(key: key);
 
@@ -60,8 +60,12 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         appBar: AppBar(
-          title: Text('Filtro',
+          title: Text(S.current.filter,
               style: TextStyle(color: HexColor("#41398D"), fontSize: 27)),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ConstantesColores.color_fondo_gris,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
             onPressed: () => Navigator.of(context).pop(),
@@ -78,7 +82,8 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-                    child: Text('Elige el periodo para filtrar tus pedidos',
+                    child: Text(
+                        S.current.choose_the_period_to_filter_your_orders,
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -101,7 +106,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                 Container(
                                     margin: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 2),
-                                    child: Text('Fecha de inicio',
+                                    child: Text(S.current.start_date,
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -197,21 +202,13 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
                                 child: Container(
                                   width: Get.width * 0.8,
                                   height: Get.height * 0.05,
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      confirmarFiltro(context);
-                                    },
-                                    child: Text(
-                                      'Filtrar',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textColor: Colors.white,
-                                    color: ConstantesColores.agua_marina,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
+                                  child: CustomButton(
+                                    onPressed: () => confirmarFiltro(context),
+                                    text: 'Filtrar',
+                                    sizeText: 18,
+                                    backgroundColor:
+                                        ConstantesColores.agua_marina,
+                                    borderRadio: 20,
                                   ),
                                 ),
                               ),
@@ -317,7 +314,7 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
       var num2 = fechaFin.replaceAll('-', '');
       if (toInt(num1) < toInt(num2)) {
         if (await widget.controlerFiltro
-            .validarHistoricoFiltro(context, fechaInicial, fechaFin)) {
+            .validarFiltro(context, fechaInicial, fechaFin)) {
           mensajeInformativo.value = '';
           widget.controlerFiltro.setFechaInicial(fechaInicial);
           widget.controlerFiltro.setFechaFinal(fechaFin);
@@ -353,8 +350,9 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
   }
 
   Widget iconLimpiarFiltro() {
-    return OutlineButton(
-      borderSide: BorderSide(style: BorderStyle.none),
+    return OutlinedButton(
+      style:
+          OutlinedButton.styleFrom(side: BorderSide(color: Colors.transparent)),
       onPressed: () => limpiarFiltro(),
       child: Row(
         children: [

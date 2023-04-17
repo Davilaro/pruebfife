@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_controller.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -9,11 +9,11 @@ import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 
 final prefs = new Preferencias();
-final controllerNequi = Get.find<MisPagosNequiController>();
-final controllerPedidoSugerido = Get.find<PedidoSugeridoController>();
+final controllerNequi = Get.find<MisPagosNequiViewModel>();
+final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
@@ -60,9 +60,6 @@ modalCerrarSesion(context, size, provider) {
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
-          controllerPedidoSugerido.clearList();
-          controllerNequi.clearList();
-          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;
@@ -193,9 +190,6 @@ modalEliminarUsuario(context, size, provider) {
           await Servicies().deleteAccount();
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
-          controllerPedidoSugerido.clearList();
-          controllerNequi.clearList();
-          PedidoSugeridoController.userLog.value = -1;
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;

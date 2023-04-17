@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:device_info/device_info.dart';
 import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -13,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 
 class AppUtil {
   static String? _appUtil;
+  final prefs = new Preferencias();
 
   static final AppUtil appUtil = AppUtil._();
   AppUtil._();
@@ -102,17 +105,19 @@ class AppUtil {
     String url = "";
     var req;
     var file;
-    if (generico) {
-      url = Constantes().urlBaseGenerico + 'sync/Db/Generico/db.zip';
-    } else {
-      // url = Constantes().urlBase +
-      //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
-      url =
-          Constantes().urlBase + 'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
-    }
-
-    print('url : $url');
     try {
+      if (generico) {
+        url = Constantes().urlBaseGenerico +
+            'Sync/DB/${prefs.paisUsuario}/db.zip';
+      } else {
+        // url = Constantes().urlBase +
+        //     'CrearDB.aspx?nit=$usuario&cliente=$cliente&clientenutresa=$codigonutresa&clientezenu=$codigozenu&clientemeals=$codigomeals&codigopadrepideky=$codigopadrepideky&sucursal=$sucursal';
+        url = Constantes().urlBase +
+            'CrearDB.aspx?nit=$usuario&sucursal=$sucursal';
+      }
+
+      print('url : $url');
+
       req = await http.Client().get(Uri.parse(url));
       file = File('$dir$fileName');
     } catch (e) {
@@ -130,6 +135,7 @@ class AppUtil {
     var archive = ZipDecoder().decodeBytes(bytes);
     for (var file in archive) {
       var fileName = '$dir${file.name}';
+      print('hola res $fileName');
       if (file.isFile) {
         var outFile = File(fileName);
         outFile = await outFile.create(recursive: true);
@@ -153,6 +159,7 @@ class AppUtil {
   Future<bool> abrirBases() async {
     await DBProvider.db.database;
     await DBProviderHelper.db.database;
+    await DBProviderHelper.db.temp;
     return true;
   }
 
@@ -161,8 +168,8 @@ class AppUtil {
     datosPersonas.forEach((element) async {
       DateTime now = new DateTime.now();
       String fecha = DateFormat('yyyyMMddkkmm').format(now);
-      String
-          URL = /*Constantes().urlApi +*/ "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
+      String URL = /*Constantes().urlApi +*/
+          "to=$element&title=$titulo&body=$cuerpo&from=$usuario&doc=$numDoc";
 
       var request = http.MultipartRequest('POST', Uri.parse(URL));
 
@@ -180,17 +187,25 @@ class AppUtil {
 
   Future<void> eliminarCarpeta() async {
     try {
-      await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      final prefs = new Preferencias();
+      if (prefs.usurioLogin == -1) {
+        await DBProviderHelper.db.eliminarBasesDeDatosTemporal();
+      }
       // await DBProviderHelper.db.cerrarBases();
       // await DBProvider.db.cerrarBases();
 
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       var release = androidInfo.version.release;
-      Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      // Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      final dbFileTemp = File('${await androidPaht}/DB7001.db');
+      final dbFileTemp2 = File('${await androidPaht}/Temp.db');
 
-      await appDocDirectory.delete(recursive: true);
+      await dbFileTemp.delete();
+      print(
+          'lugar hola temporal existe ${await dbFileTemp2.exists()} --- ${await androidPaht}');
+      // await appDocDirectory.delete(recursive: true);
     } catch (e) {
-      print('error al cerrar las bases de datos $e');
+      print('error al eliminar las bases de datos $e');
     }
   }
 }

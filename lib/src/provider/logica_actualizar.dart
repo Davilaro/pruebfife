@@ -30,25 +30,29 @@ class LogicaActualizar {
   }
 
   _cargarDataUsuario() async {
-    List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
+    try {
+      List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
 
-    prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
-    prefs.codCliente = datosCliente[0].codigo;
-    prefs.codTienda = 'nutresa';
-    prefs.codigonutresa = datosCliente[0].codigonutresa;
-    prefs.codigozenu = datosCliente[0].codigozenu;
-    prefs.codigomeals = datosCliente[0].codigomeals;
-    prefs.codigopozuelo = datosCliente[0].codigopozuelo;
-    prefs.codigoalpina = datosCliente[0].codigoalpina;
-    prefs.paisUsuario = datosCliente[0].pais;
-    prefs.sucursal = prefs.sucursal;
-    prefs.ciudad = datosCliente[0].ciudad;
+      prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
+      prefs.codCliente = datosCliente[0].codigo;
+      prefs.codTienda = 'nutresa';
+      prefs.codigonutresa = datosCliente[0].codigonutresa;
+      prefs.codigozenu = datosCliente[0].codigozenu;
+      prefs.codigomeals = datosCliente[0].codigomeals;
+      prefs.codigopozuelo = datosCliente[0].codigopozuelo;
+      prefs.codigoalpina = datosCliente[0].codigoalpina;
+      prefs.paisUsuario = datosCliente[0].pais;
+      prefs.sucursal = prefs.sucursal;
+      prefs.ciudad = datosCliente[0].ciudad;
 
-    S.load(datosCliente[0].pais == 'CR'
-        ? Locale('es', datosCliente[0].pais)
-        : datosCliente[0].pais != 'CO'
-            ? Locale('es', 'CO')
-            : Locale('es', 'CO'));
-    print('vamos bien pais ${datosCliente[0].pais}');
+      S.load(datosCliente[0].pais == 'CR'
+          ? Locale('es', datosCliente[0].pais)
+          : datosCliente[0].pais != 'CO'
+              ? Locale('es', 'CO')
+              : Locale('es', 'CO'));
+      print('vamos bien pais ${datosCliente[0].pais}');
+    } catch (e) {
+      print('Error descagar data $e');
+    }
   }
 }

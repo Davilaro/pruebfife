@@ -128,7 +128,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                             //Precio producto
                             ConstrainedBox(
                               constraints:
-                                  BoxConstraints(maxHeight: 50, minHeight: 40),
+                                  BoxConstraints(maxHeight: 52, minHeight: 40),
                               child: Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),

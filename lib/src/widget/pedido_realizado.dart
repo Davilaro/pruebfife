@@ -131,35 +131,38 @@ class PedidoRealizado extends StatelessWidget {
                     color: Colors.white,
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
-                child: OutlineButton(
-                    onPressed: () => {_irSoporte(context)},
-                    child: Stack(
-                      alignment: Alignment.centerLeft,
-                      children: <Widget>[
-                        Icon(
-                          Icons.headphones_sharp,
-                          color: HexColor("#43398E"),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Preguntas e Inquietudes',
-                              style: TextStyle(
-                                color: HexColor("#43398E"),
-                              ),
+                child: OutlinedButton(
+                  onPressed: () => {_irSoporte(context)},
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: <Widget>[
+                      Icon(
+                        Icons.headphones_sharp,
+                        color: HexColor("#43398E"),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Preguntas e Inquietudes',
+                            style: TextStyle(
+                              color: HexColor("#43398E"),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    highlightedBorderColor: HexColor("#43398E"),
-                    color: HexColor("#43398E"),
-                    borderSide: new BorderSide(
-                      color: Colors.white,
-                    ),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10.0))),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.white)),
+                  // highlightedBorderColor: HexColor("#43398E"),
+                  // color: HexColor("#43398E"),
+                  // borderSide: new BorderSide(
+                  //   color: Colors.white,
+                  // ),
+                  // shape: new RoundedRectangleBorder(
+                  //     borderRadius: new BorderRadius.circular(10.0))
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -170,35 +173,38 @@ class PedidoRealizado extends StatelessWidget {
                     color: Colors.white,
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
-                child: OutlineButton(
-                    onPressed: () => {_irMenuPrincipal(context)},
-                    child: Stack(
-                      alignment: Alignment.centerLeft,
-                      children: <Widget>[
-                        Icon(
-                          Icons.supervised_user_circle_sharp,
-                          color: ConstantesColores.verde,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Aceptar',
-                              style: TextStyle(
-                                color: ConstantesColores.verde,
-                              ),
+                child: OutlinedButton(
+                  onPressed: () => {_irMenuPrincipal(context)},
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: <Widget>[
+                      Icon(
+                        Icons.supervised_user_circle_sharp,
+                        color: ConstantesColores.verde,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Aceptar',
+                            style: TextStyle(
+                              color: ConstantesColores.verde,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    highlightedBorderColor: ConstantesColores.verde,
-                    color: ConstantesColores.verde,
-                    borderSide: new BorderSide(
-                      color: Colors.white,
-                    ),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10.0))),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.transparent)),
+                  // highlightedBorderColor: ConstantesColores.verde,
+                  // color: ConstantesColores.verde,
+                  // borderSide: new BorderSide(
+                  //   color: Colors.white,
+                  // ),
+                  // shape: new RoundedRectangleBorder(
+                  //     borderRadius: new BorderRadius.circular(10.0))
+                ),
               )
             ],
           ),

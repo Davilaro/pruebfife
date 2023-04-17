@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_controller.dart';
+import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
+import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
@@ -21,11 +23,14 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final viewModelNequi = Get.find<MisPagosNequiViewModel>();
   final prefs = new Preferencias();
 
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration(milliseconds: 1000), () {
       executeAfterBuild(context);
     });
@@ -50,28 +55,26 @@ class _SplashState extends State<Splash> {
 
   Future<void> _descarcarDB() async {
     var cargo = false;
-    if (prefs.usurioLogin == null) {
-      // cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-      //     prefs.sucursal, '10360653', '10426885', '10847893', '', true);
-      cargo =
-          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-      var res = await AppUtil.appUtil.abrirBases();
-      prefs.usurioLogin = -1;
-      if (res && cargo) {
-        Get.off(() => TabOpciones());
-      }
+    if (prefs.usurioLogin == null || prefs.paisUsuario == null) {
+      // cargo =
+      //     await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
+      // var res = await AppUtil.appUtil.abrirBases();
+      // prefs.usurioLogin = -1;
+      // if (cargo) {
+      Get.off(() => ConfirmacionPais());
+      // }
     } else if (prefs.usurioLogin == -1) {
-      // cargo = await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
-      //     prefs.sucursal, '10360653', '10426885', '10847893', '', true);
       cargo =
           await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
       var res = await AppUtil.appUtil.abrirBases();
-      prefs.usurioLogin = -1;
+
       if (res && cargo) {
-        Navigator.pushReplacementNamed(
-          context,
-          'tab_opciones',
-        );
+        S.load(prefs.paisUsuario == 'CR'
+            ? Locale('es', prefs.paisUsuario)
+            : prefs.paisUsuario == 'CO'
+                ? Locale('es', 'CO')
+                : Locale('es', 'CO'));
+        Get.off(() => TabOpciones());
       }
     } else {
       final List<dynamic> divace = await Login.getDeviceDetails();
@@ -80,20 +83,13 @@ class _SplashState extends State<Splash> {
 
       await Servicies()
           .registrarToken(divace[2], plataforma, prefs.usurioLoginCedula);
-      // cargo = await AppUtil.appUtil.downloadZip(
-      //     prefs.usurioLoginCedula,
-      //     prefs.codCliente,
-      //     prefs.sucursal,
-      //     prefs.codigonutresa,
-      //     prefs.codigozenu,
-      //     prefs.codigomeals,
-      //     prefs.codigopadrepideky,
-      //     false);
+
       cargo = await AppUtil.appUtil
           .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
       var res = await AppUtil.appUtil.abrirBases();
+
       prefs.usurioLogin = 1;
-      PedidoSugeridoController.userLog.value = 1;
+      PedidoSugeridoViewModel.userLog.value = 1;
       if (res && cargo) {
         if (prefs.usurioLogin == 1) {
           S.load(prefs.paisUsuario == 'CR'
@@ -108,6 +104,8 @@ class _SplashState extends State<Splash> {
           context,
           'tab_opciones',
         );
+        viewModelNequi.initData();
+        viewModelPedidoSugerido.initController();
       }
     }
   }

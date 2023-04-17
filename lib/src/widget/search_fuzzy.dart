@@ -1,6 +1,9 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_search.dart';
+import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/drawer_sucursales.dart';
+import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -11,13 +14,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/acciones_carrito_bart.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
-import 'package:emart/src/widget/soporte.dart';
-import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -38,6 +35,7 @@ class SearchFuzzy extends StatefulWidget {
 }
 
 class _SearchFuzzyState extends State<SearchFuzzy> {
+  final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     cargarProductos();
@@ -83,39 +81,17 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final cargoConfirmar = Get.find<CambioEstadoProductos>();
     final cartProvider = Provider.of<CarroModelo>(context);
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: TituloPideky(size: size),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 2.0, 0, 0),
-          child: Container(
-            width: 100,
-            child: new IconButton(
-              icon: SvgPicture.asset('assets/image/boton_soporte.svg'),
-              onPressed: () => {
-                //UXCam: Llamamos el evento clickSoport
-                UxcamTagueo().clickSoport(),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Soporte(
-                            numEmpresa: 1,
-                          )),
-                ),
-              },
-            ),
-          ),
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          BotonActualizar(),
-          AccionNotificacion(),
-          AccionesBartCarrito(esCarrito: false),
-        ],
+      key: drawerKey,
+      drawer: DrawerSucursales(drawerKey),
+      appBar: PreferredSize(
+        preferredSize: prefs.usurioLogin == 1
+            ? const Size.fromHeight(118)
+            : const Size.fromHeight(70),
+        child: SafeArea(child: NewAppBar(drawerKey)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -131,7 +107,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
                         },
                         child: Icon(
                           Icons.arrow_back_ios_new,
-                          color: ConstantesColores.verde,
+                          color: ConstantesColores.agua_marina,
                           size: 30,
                         ),
                       ),
@@ -311,7 +287,7 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
               builder: (context) => DetalleProductoSearch(
                     producto: producto,
                     tamano: Get.height * .8,
-                    title: title == '' ? 'Producto' : title,
+                    title: title == '' ? S.current.product : title,
                   )));
     }
     _controllerUser.text = "";

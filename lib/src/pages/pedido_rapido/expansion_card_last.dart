@@ -1,10 +1,12 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/historico.dart';
+import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -18,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../../widget/animated_container_card.dart';
+import '../../utils/uxcam_tagueo.dart';
 
 final prefs = new Preferencias();
 const double _kPanelHeaderCollapsedHeight = 80.0;
@@ -43,6 +45,7 @@ class ExpansionCardLast extends StatefulWidget {
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
+  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   RepetirOrdenViewModel repetirOrdenViewModel = Get.find();
   ProductoViewModel productViewModel = Get.find();
 
@@ -170,7 +173,8 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   Widget _grupoComercial(size, numeroDocumento, RxBool isFrecuencia,
       RxString fabricanteFrecuencia) {
     return FutureBuilder<List<Historico>>(
-        future: DBProviderHelper.db.consultarGrupoHistorico(numeroDocumento),
+        future: misPedidosViewModel.misPedidosService
+            .consultarGrupoHistorico(numeroDocumento),
         builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.hasData) {
             var grupos = snapshot.data;
@@ -213,15 +217,20 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   _cargarPedido(String numeroDoc, providerDatos) async {
     //if (estado) {
-    List<Historico> datosDetalle =
-        await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
-    cargarCadaProducto(datosDetalle);
-    await PedidoEmart.iniciarProductosPorFabricante();
-    onBlockBoubleClick();
-    // pasarCarrito(providerDatos, ordenCompra, estado);
-    //}
-    actualizarEstadoPedido(widget.providerDatos, numeroDoc);
-    calcularValorTotal(widget.cartProvider);
+    if (prefs.usurioLogin == 1) {
+      List<Historico> datosDetalle =
+          await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
+      cargarCadaProducto(datosDetalle);
+      await PedidoEmart.iniciarProductosPorFabricante();
+      UxcamTagueo().addToCartRepeatdOrder(datosDetalle);
+      onBlockBoubleClick();
+      // pasarCarrito(providerDatos, ordenCompra, estado);
+      //}
+      actualizarEstadoPedido(widget.providerDatos, numeroDoc);
+      calcularValorTotal(widget.cartProvider);
+    } else {
+      Get.to(Login());
+    }
   }
 
   // menos(String prop, int cantidad, String numeroDoc) async {
@@ -282,6 +291,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
           controlador.mapaHistoricos.addAll({widget.historico.numeroDoc: true});
         }
       });
+      productViewModel.insertarPedidoTemporal(producto.codigo);
     }
   }
 

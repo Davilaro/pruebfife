@@ -6,18 +6,31 @@
     "activate_your_user":"Activate your account!",
     "authorize_processing_personal_data":"I authorize the processing of my personal data",
     "accept":"Accept",
-    "cancel":"Cancel",
+    "address": "Address: {direccion}",
 
+    "bottom_alert_drawer" : "Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.",
+    
+    "cancel":"Cancel",
+    "confirm_country":"Please confirm the country where your business is located.",
+    "country_confirmation":"Country confirmation",
     "catalog":"Catalog",
     "categories_for_you" : "Featured categories for you ",
     "cell_phone_number": "cell phone number",
+    "ccup_code_copied": "CCUP code copied",
+    "code_could_not_be_generated":"Code could not be generated",
+    "choose_the_period_to_filter_your_orders": "Choose the period to filter your orders",
 
     "delivery_days": "Remember that you can place your order: {diasEntrega}",
+    "delete_account": "Delete account",
 
     "email_address":"email address",
     "enter_your_master_code":"Enter your master code for manual activation",
     "error_code": "Error getting code",
     "error_information": "Error obtaining information",
+    "error_validating_the_user":"Error validating the user",
+    "enter_your_nit": "Enter your Nit",
+
+    "filter": "Filter",
 
     "get_active_with_your": "You wish to activate yourself with your",
 
@@ -27,44 +40,78 @@
     "i_accept_privacy_policy": "I accept privacy policy",
     "i_accept_processing_policy": "I accept the data processing policy",
     "imperdible":"Not to be missed by ",
+    "in_this_section_you_will":"In this section you will find the history of your purchases in Pideky.",
+    "in_this_section_the_status" :"In this section you will find the status of your pending orders, and you will be able to track them.",
 
     "loading_branches": "Loading branches",
-    "login_placeholder":"Nit without verification digit",
+    "login_placeholder": "Nit without verification digit",
+    "log_out": "Log out",
+    "logging_in":"Logging in",
 
     "manual_activation":"Manual registration",
     "manual_activation_subtitle":"the manual registration",
     "manual_registration":"manual registration",
     "master_code":"Master code",
     "my_business":"My Business",
+    "my_account": "My account",
+    "my_suppliers":"My suppliers",
+    "my_vendors":"My vendors",
+    "my_statistics":"My Statistics",
+    "my_nequi_payments":"My Nequi Payments",
+    "my_orders":"My orders",
+
+    "no_information_to_display":"No information to display",
 
     "or_via_text_message":"or via ",
+    "order_pideky": "Order Pideky",
+    "order_detail": "Order detail",
+    "order":"Order",
 
     "pideky_account_successfully_registered": "Your Pideky account has been successfully registered, then select a branch to start placing orders.",
     "please_enter_activation_cod":"Please enter the activation code, sent by {destino} to your selected number:",
     "please_enter_the_code":"Please enter the code from {activate}, sent by {destino}",
     "policies_accepted":"Policies must be accepted",
+    "policy_and_data_processing": "Policy and data processing",
+    "product":"Product",
+    "price":"Price",
+    "price_per_sales_unit": "Price per sales unit",
+
+    "quantity": "Quantity",
 
     "register": "Register",
     "registration_successful":"Registration Successful!",
 
     "secod_welcome_pideky":"Before you can enjoy our shopping experience you must become active.",
     "suggested_order":"Suggested Order",
+    "start_date":"Start date",
 
     "terms_of_delivery" : "These products will be delivered according to the supplier's itinerary.",
+    "text_change_of_branch" : "You have successfully changed the branch for which you will make your purchases!",
     "text_message": "text message.",
     "text_sms":"SMS",
     "text_your_email_address": "Or sign up with your email address ",
     "the_email_does_not":"The email does not comply with the format",
     "the_verification_code_incorrect":"The verification code is incorrect, \nplease check it and try again.",
+    "terms_conditions":"Terms and conditions",
+    "the_nit_entered_is_not_registered":"The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ",
 
     "unable_send_text_message":"Unable to send text message {e}",
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
+    "upper_text_drawer" : "Choose the branch or point of sale for which you wish to see the products available and place your orders.",
 
     "verification_code_cannot_empty":"The verification code cannot be empty",
+    "version": "Version",
+    "validating_information": "Validating information",
 
     "we_validating_code_activate":"We are validating the code to activate your account.",
     "welcome_pideky":"Welcome to Pideky!",
-    
-    "you_want_to_go":"Or do you want to go to the "
+    "whatsApp_number": "WhatsApp Number:{telefono}",
+    "whatsApp": "WhatsApp",
+    "whatsApp_not_installed":"WhatsApp not installed",
+    "we_have_a_suggested":"We have a suggested order for you, so that you don't forget any product for your business.",
 
+    "you_want_to_go":"Or do you want to go to the ",
+    "your_order_is_being_prepared":"Your order is being prepared",
+    "your_order_checked":"Your order is checked in and ready to go on the road",
+    "your_order_is_ready": "Your order is on its way and ready to be received"
 }

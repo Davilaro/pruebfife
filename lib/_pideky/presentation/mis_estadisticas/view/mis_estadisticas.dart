@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/acordion_empodio.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
@@ -7,6 +5,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -38,6 +37,10 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold)),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
@@ -118,6 +121,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                           child: Column(
                             children: [
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Productos",
                                   titulo: 'Mi top 3 de productos',
                                   lista: viewModel.listTopProductos.value,
                                   subTitulo:
@@ -132,6 +137,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Marcas",
                                   titulo: 'Mi top 3 de marcas',
                                   lista: viewModel.listTopMarcas.value,
                                   subTitulo:
@@ -146,6 +153,8 @@ class _MisEstadisticasState extends State<MisEstadisticas> {
                                 ),
                               ),
                               AcordionEmpodio(
+                                  section: "MisEstadisticas",
+                                  sectionName: "top3Subcategorias",
                                   titulo: 'Mi top 3 de subcategorías',
                                   lista: viewModel.listTopSubCategorias,
                                   subTitulo:

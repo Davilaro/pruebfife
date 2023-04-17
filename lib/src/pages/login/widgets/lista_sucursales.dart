@@ -11,11 +11,15 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 
 final prefs = new Preferencias();
 late ProgressDialog pr;
@@ -52,6 +56,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         elevation: 0,
         title: Text('Seleccionar Sucursal'),
       ),
@@ -109,7 +117,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final List<Widget> opciones = [];
 
     if (listaEmpresas.length == 0) {
-      return opciones..add(Text('No hay informacion para mostrar'));
+      return opciones..add(Text(S.current.no_information_to_display));
     }
 
     listaEmpresas.forEach((element) {
@@ -126,7 +134,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               colorSeleccion = true;
               seleccion = element.sucursal;
             }),
-            _mostrarCategorias(context, element, provider)
+            mostrarCategorias(context, element, provider)
           },
           title: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
@@ -162,7 +170,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
       color: seleccion == element.sucursal ? Colors.white : Colors.black);
 
   Widget valoresSubTitulo(dynamic element, bool color) {
-    print('soy el ${element.sucursal}');
     return Container(
       height: Get.height * 0.2,
       width: double.infinity,
@@ -210,7 +217,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     );
   }
 
-  _mostrarCategorias(
+  mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
@@ -238,7 +245,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
     await pr.show();
     await cargarInformacion(provider, elemento);
-    await _cargarDataUsuario(elemento.sucursal);
+    await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
@@ -249,6 +256,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+    final controllerNequi = Get.find<MisPagosNequiViewModel>();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
     opcionesAppBard!.selectOptionMenu = 0;
@@ -269,9 +278,11 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     prefs.codigopadrepideky,
     //     false);
     await AppUtil.appUtil.abrirBases();
+    controllerPedidoSugerido.initController();
+    controllerNequi.initData();
   }
 
-  _cargarDataUsuario(sucursal) async {
+  cargarDataUsuario(sucursal) async {
     List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
 
     prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
@@ -285,6 +296,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.paisUsuario = datosCliente[0].pais;
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
+    prefs.direccionSucursal = datosCliente[0].direccion;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)

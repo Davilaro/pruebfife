@@ -17,6 +17,7 @@ import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:emart/src/widget/titulo_pideky_carrito.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -88,6 +89,10 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
           widget: TabOpciones(),
           size: size,
         ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
           onPressed: () => Navigator.pop(context),
@@ -146,7 +151,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                           width: Get.width * 0.4,
                           margin: EdgeInsets.only(left: 10),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Align(

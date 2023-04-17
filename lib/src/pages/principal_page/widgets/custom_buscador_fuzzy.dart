@@ -18,6 +18,7 @@ import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -105,6 +106,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                         catalogSearchViewModel.setPrecioMinimo(0);
                         catalogSearchViewModel.setPrecioMaximo(100000);
                       }),
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: ConstantesColores.color_fondo_gris,
+                    statusBarIconBrightness: Brightness.dark,
+                  ),
                   title: Text(
                     '${widget.nombreCategoria}',
                     style: TextStyle(color: HexColor("#41398D")),

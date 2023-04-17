@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -6,11 +8,13 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 
 class UxcamTagueo {
   Preferencias prefs = Preferencias();
 
   void validarTipoUsuario() async {
+    final misPedidosViewModel = Get.find<MisPedidosViewModel>();
     DateTime now = DateTime.now();
     String typeUser = 'Inactivo';
 
@@ -44,7 +48,7 @@ class UxcamTagueo {
           '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
     }
 
-    dynamic resQuery = await DBProviderHelper.db
+    dynamic resQuery = await misPedidosViewModel.misPedidosService
         .consultarHistoricos("-1", fechaInicial, fechaFinal);
 
     // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
@@ -68,6 +72,31 @@ class UxcamTagueo {
   void selectSeccion(String name) {
     FlutterUxcam.logEventWithProperties("clickHeader",
         {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+  }
+
+  void selectDropDown(String sectionName, String section) {
+    FlutterUxcam.logEventWithProperties("selectDropDown", {
+      "sectionName": sectionName,
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
+  }
+
+  void selectSectionPedidoSugerido(String section) {
+    FlutterUxcam.logEventWithProperties("selectSectionPedidoSugerido", {
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
+  }
+
+  void selectSectionMisPedidos(String section) {
+    FlutterUxcam.logEventWithProperties("selectSectionMisPedidos", {
+      "section": section,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
   }
 
   void sendActivationCode(String metodo, String estado) {
@@ -312,6 +341,68 @@ class UxcamTagueo {
         "total": cartProvider.getTotal,
         "City": prefs.ciudad,
         "Country": prefs.paisUsuario
+      });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
+  void addToCartSuggestedOrder(listaProductosPedidos, fabricante) {
+    final viewModel = Get.find<PedidoSugeridoViewModel>();
+
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var subTotal = viewModel.listaProductosPorFabricante[fabricante]
+            ["precioProductos"];
+
+        var productIndividual = {
+          "product": "${producto.nombre}",
+          "quantity": "${producto.cantidad}",
+          "provider": "$fabricante",
+          "price": "$subTotal",
+          "City": "${prefs.ciudad}",
+          "Country": "${prefs.paisUsuario}"
+        };
+
+        print("productos $productIndividual");
+        return productIndividual;
+      }).toList();
+      print(
+        "productosss  $listProductos",
+      );
+
+      FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario,
+        "products": "${[...listProductos]}",
+      });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
+  void addToCartRepeatdOrder(listaProductosPedidos) {
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var productIndividual = {
+          "product": "${producto.nombreProducto}",
+          "quantity": "${producto.cantidad}",
+          "provider": "${producto.fabricante}",
+          "City": "${prefs.ciudad}",
+          "Country": "${prefs.paisUsuario}"
+        };
+
+        print("repetir orden $productIndividual");
+        return productIndividual;
+      }).toList();
+      print(
+        "productosss  $listProductos",
+      );
+
+      FlutterUxcam.logEventWithProperties("addToCartRepeatOrder", {
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario,
+        "products": "${[...listProductos]}",
       });
     } catch (e) {
       print('Error tagueo confirmOrder $e');

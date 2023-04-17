@@ -115,11 +115,15 @@ class Producto {
         nitFabricante:
             json["nitFabricante"] == null ? '' : json["nitFabricante"],
         cantidad: json["cantidad"] == null ? 0 : json["cantidad"],
-        nombrecomercial: json["nombrecomercial"],
-        codigocliente: json["codigocliente"],
-        descuento: json["descuento"],
-        preciodescuento: json["preciodescuento"],
-        precioinicial: json["precioinicial"],
+        nombrecomercial:
+            json["nombrecomercial"] == null ? '' : json["nombrecomercial"],
+        codigocliente:
+            json["codigocliente"] == null ? '' : json["codigocliente"],
+        descuento: json["descuento"] == null ? 0 : json["descuento"],
+        preciodescuento:
+            json["preciodescuento"] == null ? 0 : json["preciodescuento"],
+        precioinicial:
+            json["precioinicial"] == null ? 0 : json["precioinicial"],
         activopromocion:
             json["activopromocion"] == null ? 0 : json["activopromocion"],
         activoprodnuevo:

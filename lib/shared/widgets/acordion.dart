@@ -1,13 +1,16 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
+// ignore_for_file: import_of_legacy_library_into_null_safe, unnecessary_statements
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class Acordion extends StatefulWidget {
   final String? urlIcon;
+  final String? sectionName;
+  final String? section;
   final Widget contenido;
   final Widget? contenido2;
   final Widget title;
@@ -28,12 +31,35 @@ class Acordion extends StatefulWidget {
       this.contenido2,
       this.margin,
       this.paddingContenido,
-      this.paddingContenido2});
+      this.paddingContenido2,
+      this.sectionName,
+      this.section});
   _EstadoAcordion createState() => _EstadoAcordion();
 }
 
 class _EstadoAcordion extends State<Acordion> {
   bool _mostrarContenido = false;
+
+  enviarDatosUxcam(String sectionName, String section) =>
+      UxcamTagueo().selectDropDown(sectionName, section);
+
+  ejecutarOnPress() {
+    try {
+      if (_mostrarContenido == false &&
+          widget.sectionName != null &&
+          widget.section != null)
+        enviarDatosUxcam(widget.sectionName!, widget.section!);
+
+      widget.estado == 'Activo' || widget.estado == null
+          ? setState(() {
+              _mostrarContenido = !_mostrarContenido;
+            })
+          : null;
+    } catch (e) {
+      print("fallo onpress acordion $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -94,13 +120,7 @@ class _EstadoAcordion extends State<Acordion> {
                               size: 40,
                             ),
                             color: ConstantesColores.agua_marina,
-                            onPressed: () {
-                              widget.estado == 'Activo' || widget.estado == null
-                                  ? setState(() {
-                                      _mostrarContenido = !_mostrarContenido;
-                                    })
-                                  : null;
-                            },
+                            onPressed: ejecutarOnPress,
                           )
                         : Container(),
                   ],

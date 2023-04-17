@@ -1,10 +1,9 @@
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
-import 'package:emart/src/modelos/historico.dart';
 import 'package:get/get.dart';
 
-import '../../../provider/db_provider_helper.dart';
-
 class RepetirOrdenViewModel extends GetxController {
+  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   validarFrecuenciaPedidoRapido(
     numeroDocumento,
     String fabricante,
@@ -12,7 +11,7 @@ class RepetirOrdenViewModel extends GetxController {
     ProductoViewModel productViewModel,
     RxString fabricanteFrecuencia,
   ) async {
-    var res = await DBProviderHelper.db
+    var res = await misPedidosViewModel.misPedidosService
         .consultarDetalleGrupo(numeroDocumento, fabricante);
     fabricanteFrecuencia.value = res[0].fabricante.toString();
     isFrecuencia.value =

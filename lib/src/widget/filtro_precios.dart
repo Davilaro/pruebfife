@@ -1,3 +1,4 @@
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
@@ -7,6 +8,7 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +42,11 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
     final controlador = Get.find<ControlBaseDatos>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Producto',
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        title: Text(S.current.product,
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold)),

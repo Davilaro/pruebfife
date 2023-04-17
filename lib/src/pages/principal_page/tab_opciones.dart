@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -14,6 +17,7 @@ import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -21,13 +25,14 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
-import 'package:emart/src/pages/historico/historico_pedidos.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
+
+import '../../../shared/widgets/new_app_bar.dart';
 
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
@@ -45,15 +50,22 @@ class _TabOpcionesState extends State<TabOpciones>
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
+  ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
-
+  final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
+  FocusNode _focusNode = FocusNode();
+  SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle(
+    statusBarColor: ConstantesColores.color_fondo_gris,
+    statusBarIconBrightness: Brightness.dark,
+  );
   @override
   void initState() {
     super.initState();
+    _focusNode.dispose();
     hasInternet = true;
     cargarSecciones();
     subscription = Connectivity()
@@ -78,19 +90,31 @@ class _TabOpcionesState extends State<TabOpciones>
     providerDatos = Provider.of<DatosListas>(context, listen: true);
     return WillPopScope(
         onWillPop: () async => false,
-        child: Scaffold(
-          body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: _HomePageBody()),
-          bottomNavigationBar: Container(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
+        child: AnnotatedRegion(
+          value: _currentStyle,
+          child: Scaffold(
+            backgroundColor: ConstantesColores.color_fondo_gris,
+            key: drawerKey,
+            drawer: DrawerSucursales(drawerKey),
+            appBar: PreferredSize(
+              preferredSize: prefs.usurioLogin == 1
+                  ? const Size.fromHeight(118)
+                  : const Size.fromHeight(70),
+              child: SafeArea(child: NewAppBar(drawerKey)),
+            ),
+            body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child: _HomePageBody()),
+            bottomNavigationBar: Container(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+                child: CustonNavigatorBar(),
               ),
-              child: CustonNavigatorBar(),
             ),
           ),
         ));
@@ -108,13 +132,15 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaProductos = new Map();
         PedidoEmart.listaValoresPedidoAgregados = new Map();
       }
+      final misPedidosViewModel = Get.find<MisPedidosViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());
 
       providerDatos.guardarListaSugueridoHelper =
           await DBProviderHelper.db.consultarSugueridoHelper();
-      providerDatos.guardarListaHistoricosHelper =
-          await DBProviderHelper.db.consultarHistoricos('-1', '-1', '-1');
+      providerDatos.guardarListaHistoricosHelper = await misPedidosViewModel
+          .misPedidosService
+          .consultarHistoricos('-1', '-1', '-1');
 
       PedidoEmart.listaFabricante =
           await DBProvider.db.consultarFricanteGeneral();
@@ -131,8 +157,9 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaControllersPedido!.putIfAbsent(
             listaProductos[i].codigo, () => TextEditingController());
       }
-
+      await productViewModel.cargarTemporal();
       String? token = PushNotificationServer.token as String;
+
       print('Token: $token');
       setState(() {});
     } catch (e) {
@@ -161,7 +188,6 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-
     final currenIndex = provider.selectOptionMenu;
 
     switch (currenIndex) {
@@ -181,6 +207,7 @@ class _HomePageBody extends StatelessWidget {
                 'MainActivity');
             //UXCam: Llamamos el evento selectFooter
             UxcamTagueo().selectFooter('${S.current.catalog}');
+
             onClickVerMas('Categorías', provider);
           }
           return TabCategoriaMarca();
@@ -190,7 +217,11 @@ class _HomePageBody extends StatelessWidget {
         return PedidoSugeridoPage();
 
       case 3:
-        return HistoricoPedidos();
+        {
+          //UXCam: Llamamos el evento selectFooter
+          UxcamTagueo().selectFooter('Mis pedidos');
+          return MisPedidosPage();
+        }
 
       case 4:
         return MiNegocio();

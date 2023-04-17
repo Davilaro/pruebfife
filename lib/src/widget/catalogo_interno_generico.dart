@@ -3,7 +3,6 @@ import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlit
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/lista_productos_para_catalogo.dart';

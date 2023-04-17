@@ -7,8 +7,8 @@ class EstadisticasRepositorySqlite extends IEstadisticaRepository {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT t.nit codigo, t.marca descripcion, t.cantidad cantidad, t.CantidadP posicion, m.ico imagen
-FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion DESC, cantidad DESC
+      SELECT t.nit codigo, t.marca descripcion, t.cantidad cantidad, m.ico imagen
+FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by cantidad DESC 
     ''');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {
@@ -21,8 +21,8 @@ FROM TopMarcas t INNER JOIN marca m ON t.marca = m.descripcion order by posicion
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT nit codigo, subcategoria descripcion, cantidad cantidad, CantidadP posicion
-FROM TopSubcategorias order by posicion DESC, cantidad DESC
+      SELECT nit codigo, subcategoria descripcion, cantidad cantidad 
+FROM TopSubcategorias order by cantidad DESC 
     ''');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {
@@ -35,8 +35,8 @@ FROM TopSubcategorias order by posicion DESC, cantidad DESC
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT t.codigosku codigo, p.nombre descripcion, t.cantidad cantidad, t.cantidadP posicion  
-      FROM TopProductos t INNER JOIN Producto p ON t.codigosku = p.codigo order by posicion ASC
+      SELECT t.codigosku codigo, p.nombre descripcion, t.cantidad cantidad  
+      FROM TopProductos t INNER JOIN Producto p ON t.codigosku = p.codigo order by cantidad DESC
     ''');
       return sql.map((e) => Estadistica.fromJson(e)).toList();
     } catch (e) {

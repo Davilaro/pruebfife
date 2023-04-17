@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/estadistica/model/estadistica.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/widgets/empodio.dart';
 import 'package:emart/shared/widgets/acordion.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -10,21 +9,29 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AcordionEmpodio extends StatelessWidget {
-  String? titulo, subTitulo, tipo;
-  List lista;
+  final String? titulo, subTitulo, tipo, section, sectionName;
+  final List lista;
 
-  List imgSubCategoria = [
+  final List imgSubCategoria = [
     'assets/image/corona.png',
     'assets/image/Corazon.png',
     'assets/image/estrella.png'
   ];
-  AcordionEmpodio(
-      {Key? key, this.titulo, required this.lista, this.subTitulo, this.tipo})
-      : super(key: key);
+  AcordionEmpodio({
+    Key? key,
+    this.titulo,
+    required this.lista,
+    this.subTitulo,
+    this.section,
+    this.sectionName,
+    this.tipo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Acordion(
+      section: section,
+      sectionName: sectionName,
       title: Text(
         titulo!,
         style: TextStyle(
