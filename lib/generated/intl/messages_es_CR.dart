@@ -132,6 +132,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "order_detail":
             MessageLookupByLibrary.simpleMessage("Detalle del pedido"),
         "order_pideky": MessageLookupByLibrary.simpleMessage("Orden Pideky"),
+        "our_system_has_received": MessageLookupByLibrary.simpleMessage(
+            "Nuestro sistema ha recibido tu solicitud."),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
@@ -193,10 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_want_to_go":
             MessageLookupByLibrary.simpleMessage("O deseas ir al "),
         "your_order_checked": MessageLookupByLibrary.simpleMessage(
-            "Tu pedido está facturado y listo para salir en ruta"),
-        "your_order_is_being_prepared":
-            MessageLookupByLibrary.simpleMessage("Tu pedido se está alistando"),
+            "Tu pedido está facturado y listo para salir en ruta."),
         "your_order_is_ready": MessageLookupByLibrary.simpleMessage(
-            "Tu pedido está en camino y listo para ser recibido")
+            "Tu pedido está en camino, prepárate pare recibirlo.")
       };
 }

@@ -129,6 +129,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "order": MessageLookupByLibrary.simpleMessage("Order"),
         "order_detail": MessageLookupByLibrary.simpleMessage("Order detail"),
         "order_pideky": MessageLookupByLibrary.simpleMessage("Order Pideky"),
+        "our_system_has_received": MessageLookupByLibrary.simpleMessage(
+            "Our system has received your request."),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Your Pideky account has been successfully registered, then select a branch to start placing orders."),
@@ -189,10 +191,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_want_to_go": MessageLookupByLibrary.simpleMessage(
             "Or do you want to go to the "),
         "your_order_checked": MessageLookupByLibrary.simpleMessage(
-            "Your order is checked in and ready to go on the road"),
-        "your_order_is_being_prepared": MessageLookupByLibrary.simpleMessage(
-            "Your order is being prepared"),
+            "Your order is checked in and ready to go on the road."),
         "your_order_is_ready": MessageLookupByLibrary.simpleMessage(
-            "Your order is on its way and ready to be received")
+            "Your order is on its way, get ready to receive it.")
       };
 }

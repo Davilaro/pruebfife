@@ -55,9 +55,9 @@ android {
         applicationId "com.celuweb.pidekyapp"
         multiDexEnabled true
         minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 44
-        versionName '1.4.6'
+        targetSdkVersion 33
+        versionCode 45
+        versionName '1.4.7'
     }
 
     buildTypes {
