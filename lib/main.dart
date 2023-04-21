@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
@@ -16,32 +17,34 @@ import 'src/provider/permisos_handler.dart';
 import 'src/routes/rutas.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
-import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
+  InitialBindings();
+  final prefs = new Preferencias();
+  await prefs.initPrefs();
+  final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
   //injectDependencies();
-  _validarKeyUXCam();
+  //_validarKeyUXCam();
+  viewModelConfirmarPais.confirmarPais(prefs.paisUsuario);
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
-  final prefs = new Preferencias();
-  await prefs.initPrefs();
 
   runApp(MyApp());
 }
 
-_validarKeyUXCam() async {
-  FlutterUxcam.optIntoSchematicRecordings();
-  if (Constantes().titulo == 'QA') {
-    FlutterUxcam.startWithKey("s7xvg23hmx7ttcv");
-  } else {
-    FlutterUxcam.startWithKey("l0uak7nx63mtp1i");
-  }
-  FlutterUxcam.setAutomaticScreenNameTagging(false);
-  await PushNotificationServer.initializeApp();
-}
+// _validarKeyUXCam() async {
+//   FlutterUxcam.optIntoSchematicRecordings();
+//   if (Constantes().titulo == 'QA') {
+//     FlutterUxcam.startWithKey("s7xvg23hmx7ttcv");
+//   } else {
+//     FlutterUxcam.startWithKey("l0uak7nx63mtp1i");
+//   }
+//   FlutterUxcam.setAutomaticScreenNameTagging(false);
+//   await PushNotificationServer.initializeApp();
+// }
 
 class MyApp extends StatefulWidget {
   @override
