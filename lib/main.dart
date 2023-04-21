@@ -3,7 +3,6 @@ import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirma
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
-import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
