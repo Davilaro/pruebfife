@@ -560,6 +560,16 @@ class S {
     );
   }
 
+  /// `Number is incomplete or exceeds 10 characters.`
+  String get number_incomplete_or_exceeds {
+    return Intl.message(
+      'Number is incomplete or exceeds 10 characters.',
+      name: 'number_incomplete_or_exceeds',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `or via `
   String get or_via_text_message {
     return Intl.message(
@@ -825,6 +835,16 @@ class S {
     return Intl.message(
       'The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ',
       name: 'the_nit_entered_is_not_registered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The number entered is incorrect.`
+  String get the_number_is_incorrect {
+    return Intl.message(
+      'The number entered is incorrect.',
+      name: 'the_number_is_incorrect',
       desc: '',
       args: [],
     );

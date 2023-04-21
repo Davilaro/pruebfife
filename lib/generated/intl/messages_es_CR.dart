@@ -126,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_vendors": MessageLookupByLibrary.simpleMessage("Mis vendedores"),
         "no_information_to_display": MessageLookupByLibrary.simpleMessage(
             "No hay información para mostrar"),
+        "number_incomplete_or_exceeds": MessageLookupByLibrary.simpleMessage(
+            "El número está incompleto o supera los 10 caracteres."),
         "or_via_text_message":
             MessageLookupByLibrary.simpleMessage(" o a través de un "),
         "order": MessageLookupByLibrary.simpleMessage("Pedido"),
@@ -171,6 +173,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "El email no cumple con el formato"),
         "the_nit_entered_is_not_registered": MessageLookupByLibrary.simpleMessage(
             "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en "),
+        "the_number_is_incorrect": MessageLookupByLibrary.simpleMessage(
+            "El número ingresado es incorrecto."),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
         "unable_send_text_message": m4,
