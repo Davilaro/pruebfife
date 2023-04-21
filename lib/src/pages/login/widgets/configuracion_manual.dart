@@ -290,9 +290,14 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
             );
           });
     } else {
-      if (_controllerNumero.text.length != 10) {
-        mostrarAlert(context,
-            'El numero esta incompleto o supera los 10 caracteres', null);
+      if (_controllerNumero.text.length > 10 &&
+          _controllerNumero.text.length < 1) {
+        // messag: El número está incompleto o supera los 10 caracteres
+        mostrarAlert(context, S.current.number_incomplete_or_exceeds, null);
+      } else if (_controllerNumero.text[0] != '3' &&
+          prefs.paisUsuario == 'CO') {
+        // message: El número ingresado es incorrecto.
+        mostrarAlert(context, S.current.the_number_is_incorrect, null);
       } else {
         showDialog(
             context: context,
