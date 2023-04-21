@@ -1,5 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
@@ -234,6 +235,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
       DatosListas provider, cartProvider) async {
     final providerCar = Provider.of<OpcionesBard>(context, listen: false);
     final productViewModel = Get.find<ProductoViewModel>();
+    final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
     pr = ProgressDialog(context);
     pr.style(message: 'Cambiando sucursal');
     pr = ProgressDialog(context,
@@ -242,6 +244,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     await pr.show();
     await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
+    
 
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
@@ -253,6 +256,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     PedidoEmart.cantItems.value = '0';
     //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
+    confirmacionViewModel.confirmarPais(prefs.paisUsuario);
     Get.offAll(() => TabOpciones());
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
