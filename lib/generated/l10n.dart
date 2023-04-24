@@ -910,6 +910,26 @@ class S {
     );
   }
 
+  /// `Winners club Pideky`
+  String get winners_club {
+    return Intl.message(
+      'Winners club Pideky',
+      name: 'winners_club',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `En el club de Club de ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste`
+  String get winners_club_tittle {
+    return Intl.message(
+      'En el club de Club de ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste',
+      name: 'winners_club_tittle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `We are validating the code to activate your account.`
   String get we_validating_code_activate {
     return Intl.message(

@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/club_ganadores/view_mdel/club_ganadores_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
@@ -23,5 +24,6 @@ class InitialBindings extends Bindings {
     MisPagosNequiViewModel.findOrInitialize;
     ProductoViewModel.findOrInitialize;
     RepetirOrdenViewModel.findOrInitialize;
+    ClubGanadoresViewModel.findOrInitialize;
   }
 }

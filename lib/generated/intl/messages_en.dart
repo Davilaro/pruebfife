@@ -192,6 +192,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp_not_installed":
             MessageLookupByLibrary.simpleMessage("WhatsApp not installed"),
         "whatsApp_number": m6,
+        "winners_club":
+            MessageLookupByLibrary.simpleMessage("Winners club Pideky"),
+        "winners_club_tittle": MessageLookupByLibrary.simpleMessage(
+            "En el club de Club de ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste"),
         "you_want_to_go": MessageLookupByLibrary.simpleMessage(
             "Or do you want to go to the "),
         "your_order_checked": MessageLookupByLibrary.simpleMessage(
