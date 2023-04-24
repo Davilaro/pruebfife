@@ -290,14 +290,14 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
             );
           });
     } else {
-      if (_controllerNumero.text.length > 10 &&
-          _controllerNumero.text.length < 1) {
-        // messag: El número está incompleto o supera los 10 caracteres
-        mostrarAlert(context, S.current.number_incomplete_or_exceeds, null);
-      } else if (_controllerNumero.text[0] != '3' &&
-          prefs.paisUsuario == 'CO') {
+      if (_controllerNumero.text[0] != '3' && prefs.paisUsuario == 'CO') {
         // message: El número ingresado es incorrecto.
         mostrarAlert(context, S.current.the_number_is_incorrect, null);
+      } else if (_controllerNumero.text.length > 10 ||
+          _controllerNumero.text.length < 1 ||
+          _controllerNumero.text.length < 10) {
+        // messag: El número está incompleto o supera los 10 caracteres
+        mostrarAlert(context, S.current.number_incomplete_or_exceeds, null);
       } else {
         showDialog(
             context: context,
@@ -308,7 +308,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 content: Container(
                   height: 250,
+                  padding: EdgeInsets.only(top: 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 50,
