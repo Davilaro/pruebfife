@@ -85,7 +85,6 @@ class PedidoEmart {
       double precioProductos = 0;
       String icon = '';
       String horaFabricante = '';
-      String restrictivo = '';
       String diasFrecuencia = "";
       String texto1 = "";
       List<String> listaDiasFrecuencia = [];
@@ -106,7 +105,6 @@ class PedidoEmart {
           horaFabricante = listaFabricante![j].hora;
           texto1 = listaFabricante![j].texto1 ?? "";
           diasFrecuencia = listaFabricante![j].diaVisita;
-          precio = listaFabricante![j].pedidominimo ?? 0;
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
           montoMinimoFrecuencia =
               listaFabricante![j].montoMinimoFrecuencia ?? 0;
@@ -116,7 +114,6 @@ class PedidoEmart {
               listaFabricante![j].restrictivoFrecuencia ?? 0;
           restrictivoNoFrecuencia =
               listaFabricante![j].restrictivoNoFrecuencia ?? 0;
-          restrictivo = listaFabricante![j].restrictivo;
         }
       }
 
@@ -175,7 +172,6 @@ class PedidoEmart {
                 'isFrecuencia': isFrecuencia,
                 'restrictivofrecuencia': restrictivoFrecuencia,
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
-                'restrictivo': restrictivo,
                 'texto1': texto1
               });
     });

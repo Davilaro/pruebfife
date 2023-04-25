@@ -190,10 +190,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     double precioMinimo = 0;
     double valor = 0.7;
 
-    for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
-      if (PedidoEmart.listaFabricante![i].empresa == productos!.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
-    }
+    
 
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]
@@ -217,12 +214,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     double precioMinimo = 0;
     double valor = 0.6;
 
-    for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
-      if (PedidoEmart.listaFabricante![i].empresa == productos!.fabricante) {
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
-      }
-    }
-
+    
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]
                   ["precioFinal"] <

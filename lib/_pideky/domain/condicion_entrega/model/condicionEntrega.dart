@@ -11,12 +11,8 @@ class CondicionEntrega {
       {this.fabricante,
       this.tipo,
       this.hora,
-      this.mensaje1,
-      this.mensaje2,
-      this.pedidoMinimo,
       this.nombreComercial,
       this.topeminimo,
-      this.restrictivo,
       this.montoMinimoFrecuencia,
       this.montoMinimoNoFrecuencia,
       this.restrictivoFrecuencia,
@@ -30,12 +26,8 @@ class CondicionEntrega {
   String? fabricante;
   String? tipo;
   String? hora;
-  String? mensaje1;
-  String? mensaje2;
-  double? pedidoMinimo;
   String? nombreComercial;
   int? topeminimo;
-  String? restrictivo;
   int? montoMinimoFrecuencia;
   int? montoMinimoNoFrecuencia;
   int? restrictivoFrecuencia;
@@ -51,13 +43,9 @@ class CondicionEntrega {
         fabricante: json["fabricante"] == null ? '' : json["fabricante"],
         tipo: json["tipo"] == null ? '' : json["tipo"],
         hora: json["hora"] == null ? '' : json["hora"],
-        mensaje1: json["mensaje1"] == null ? '' : json["mensaje1"],
-        mensaje2: json["mensaje2"] == null ? '' : json["mensaje2"],
-        pedidoMinimo: json["pedidoMinimo"] == null ? 0.0 : json["pedidoMinimo"],
         nombreComercial:
             json["nombreComercial"] == null ? '' : json["nombreComercial"],
         topeminimo: json["topeminimo"] == null ? 0 : json["topeminimo"],
-        restrictivo: json["restrictivo"] == null ? '' : json["restrictivo"],
         montoMinimoFrecuencia: json["montoMinimoFrecuencia"] == null
             ? 0
             : json["montoMinimoFrecuencia"],
@@ -81,12 +69,8 @@ class CondicionEntrega {
         "fabricante": fabricante,
         "tipo": tipo,
         "hora": hora,
-        "mensaje1": mensaje1,
-        "mensaje2": mensaje2,
-        "pedidoMinimo": pedidoMinimo,
         "nombreComercial": nombreComercial,
         "topeminimo": topeminimo,
-        "restrictivo": restrictivo,
         "montoMinimoFrecuencia": montoMinimoFrecuencia,
         "montoMinimoNoFrecuencia": montoMinimoNoFrecuencia,
         "restrictivoFrecuencia": restrictivoFrecuencia,

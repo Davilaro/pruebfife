@@ -16,7 +16,6 @@ class ListaEmpresas {
     required this.url,
     required this.path,
     required this.imagen,
-    required this.pedidoMinimo,
     required this.maxPedidos,
     required this.textoInicial,
     required this.textoFinal,
@@ -41,7 +40,6 @@ class ListaEmpresas {
   String url;
   String path;
   String imagen;
-  int pedidoMinimo;
   int maxPedidos;
   String textoInicial;
   String textoFinal;
@@ -66,7 +64,6 @@ class ListaEmpresas {
         url: json["url"],
         path: json["path"],
         imagen: json["imagen"],
-        pedidoMinimo: json["pedido_minimo"],
         maxPedidos: json["max_pedidos"],
         textoInicial: json["texto_inicial"],
         textoFinal: json["texto_final"],
@@ -93,7 +90,6 @@ class ListaEmpresas {
         "url": url,
         "path": path,
         "imagen": imagen,
-        "pedido_minimo": pedidoMinimo,
         "max_pedidos": maxPedidos,
         "texto_inicial": textoInicial,
         "texto_final": textoFinal,

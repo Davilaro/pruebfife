@@ -71,11 +71,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                     ["precioFinal"] <
                 precioMinimo
             : false;
-        isRestrictivo = PedidoEmart.listaProductosPorFabricante![
-                    widget.productos.fabricante]["restrictivo"] ==
-                '1'
-            ? true
-            : false;
+        
       }
     } catch (e) {
       productoEncontrado = false;
