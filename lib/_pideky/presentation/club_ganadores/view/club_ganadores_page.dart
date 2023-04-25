@@ -158,8 +158,9 @@ class ClubGanadoresPage extends StatelessWidget {
                                   carouselController:
                                       clubGanadoresViewModel.carouselController,
                                   options: CarouselOptions(
+                                    initialPage: 0,
                                     autoPlay: true,
-                                    aspectRatio: 2.5,
+                                    aspectRatio: 3,
                                     viewportFraction: 0.8,
                                     autoPlayInterval: Duration(seconds: 5),
                                     autoPlayAnimationDuration:
