@@ -61,7 +61,7 @@
     "my_orders":"My orders",
 
     "no_information_to_display":"No information to display",
-    "number_incomplete_or_exceeds":"Number is incomplete or exceeds 10 characters.",
+    "number_incomplete_or_exceeds":"Number is incomplete or exceeds {cantidad} characters.",
 
     "or_via_text_message":"or via ",
     "order_pideky": "Order Pideky",
