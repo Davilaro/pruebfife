@@ -65,6 +65,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
     UxcamTagueo().selectFooter('Inicio');
     productViewModel.cargarCondicionEntrega();
     prefs.diaActual = DateFormat.EEEE().format(DateTime.now());
+    var tempDay = DateTime.now();
+    var formatDay = tempDay.add(Duration(days: 1));
+    var finalDay = DateFormat.EEEE().format(formatDay);
+    prefs.nextDay = finalDay;
+    print('next day : ${prefs.nextDay}');
   }
 
   @override

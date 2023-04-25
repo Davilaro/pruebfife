@@ -148,8 +148,13 @@ class PedidoEmart {
         }
       });
 
-      if (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
-          horaActual.isBefore(hourRes)) {
+      if ((diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
+              horaActual.isBefore(hourRes)) ||
+          (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
+              horaActual.isAfter(hourRes) &&
+              diasAgrupadosPorFabricante.contains(prefs.nextDay)) ||
+          (horaActual.isAfter(hourRes) &&
+              diasAgrupadosPorFabricante.contains(prefs.nextDay))) {
         isFrecuencia = true;
         precio = montoMinimoFrecuencia.toDouble();
       } else {
