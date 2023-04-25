@@ -26,7 +26,7 @@ Future<void> main() async {
   final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
   //injectDependencies();
   //_validarKeyUXCam();
-  viewModelConfirmarPais.confirmarPais(prefs.paisUsuario);
+  viewModelConfirmarPais.confirmarPais(prefs.paisUsuario, false);
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();

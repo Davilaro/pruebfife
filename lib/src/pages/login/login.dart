@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/validacion.dart';
@@ -20,6 +21,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
@@ -298,6 +300,7 @@ class _LoginState extends State<Login> {
 
   Future _validarInformacion(
       BuildContext context, divace, String plataforma, String text) async {
+    final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
     String? token = PushNotificationServer.token as String;
     Validacion respues =
         await Servicies().validarUsuariNuevo(text, divace, plataforma, token);
@@ -329,7 +332,7 @@ class _LoginState extends State<Login> {
       prefs.codActivacionLogin = respues.codigo;
       prefs.codClienteLogueado = _controllerUser.text;
       prefs.paisUsuario = respues.pais;
-
+      confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
       Navigator.push(
         context,
         MaterialPageRoute(

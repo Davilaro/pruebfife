@@ -43,7 +43,7 @@ class ConfirmacionPaisViewModel {
     });
   }
 
-  confirmarPais(String pais) async {
+  confirmarPais(String pais, bool isLogin) async {
     try {
       FlutterUxConfig config;
       prefs.paisUsuario = pais;
@@ -64,12 +64,13 @@ class ConfirmacionPaisViewModel {
       }
       FlutterUxcam.startWithConfiguration(config);
       PushNotificationServer.initializeApp();
-      if (prefs.usurioLogin == -1 || prefs.usurioLogin == null) {
-        await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-        var res = await AppUtil.appUtil.abrirBases();
-        if (res) Get.off(() => TabOpciones());
+      if (!isLogin) {
+        if (prefs.usurioLogin == -1 || prefs.usurioLogin == null) {
+          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
+          var res = await AppUtil.appUtil.abrirBases();
+          if (res) Get.off(() => TabOpciones());
+        }
       }
-
     } catch (e) {
       print("error uxcam $e");
     }
