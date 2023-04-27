@@ -920,10 +920,10 @@ class S {
     );
   }
 
-  /// `En el club de Club de ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste`
+  /// `En el Club de Ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste`
   String get winners_club_tittle {
     return Intl.message(
-      'En el club de Club de ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste',
+      'En el Club de Ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste',
       name: 'winners_club_tittle',
       desc: '',
       args: [],
