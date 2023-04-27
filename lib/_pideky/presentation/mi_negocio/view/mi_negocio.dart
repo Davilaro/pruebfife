@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/club_ganadores/view/club_ganadores_page.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/editarNumero.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/mis_pagos_nequi.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
@@ -345,6 +346,56 @@ class _MiNegocioState extends State<MiNegocio> {
                                             margin: EdgeInsets.only(left: 10),
                                             child: Text(
                                               S.current.my_statistics,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 30,
+                                      color: ConstantesColores.agua_marina,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1,
+                              color: HexColor('#EAE8F5'),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ClubGanadoresPage())),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 7),
+                                            child: Image.asset(
+                                              'assets/icon/Icon_club_ganadores.png',
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              S.current.winners_club,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),

@@ -191,6 +191,14 @@ class Preferencias {
     _prefs.setString("diaactual", value);
   }
 
+  get nextDay {
+    return _prefs.getString("nextday") ?? "";
+  }
+
+  set nextDay(dynamic value) {
+    _prefs.setString("nextday", value);
+  }
+
   get direccionSucursal {
     return _prefs.getString("direccionsucursal") ?? "";
   }

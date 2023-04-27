@@ -488,10 +488,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     double precioMinimo = 0;
     double valor = 0.7;
 
-    for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
-      if (PedidoEmart.listaFabricante![i].empresa == widget.producto.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo ?? 0;
-    }
+    
 
     try {
       if (cartProvider.getListaFabricante[widget.producto.fabricante]
@@ -516,10 +513,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     double precioMinimo = 0;
     double valor = 0.6;
 
-    for (int i = 0; i < PedidoEmart.listaFabricante!.length; i++) {
-      if (PedidoEmart.listaFabricante![i].empresa == widget.producto.fabricante)
-        precioMinimo = PedidoEmart.listaFabricante![i].pedidominimo;
-    }
+    
 
     try {
       if (cartProvider.getListaFabricante[widget.producto.fabricante]
