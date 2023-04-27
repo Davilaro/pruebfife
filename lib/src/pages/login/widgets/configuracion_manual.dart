@@ -290,14 +290,28 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
             );
           });
     } else {
-      if (_controllerNumero.text[0] != '3' && prefs.paisUsuario == 'CO') {
+      var condicionNumeroInicial = prefs.paisUsuario == 'CO'
+          ? _controllerNumero.text[0] != '3'
+          : _controllerNumero.text[0] != '6' &&
+              _controllerNumero.text[0] != '7' &&
+              _controllerNumero.text[0] != '8';
+      var condicionCantidadCaracteres = prefs.paisUsuario == 'CO'
+          ? _controllerNumero.text.length > 10 ||
+              _controllerNumero.text.length < 1 ||
+              _controllerNumero.text.length < 10
+          : _controllerNumero.text.length > 8 ||
+              _controllerNumero.text.length < 1 ||
+              _controllerNumero.text.length < 8;
+      if (condicionNumeroInicial) {
         // message: El número ingresado es incorrecto.
         mostrarAlert(context, S.current.the_number_is_incorrect, null);
-      } else if (_controllerNumero.text.length > 10 ||
-          _controllerNumero.text.length < 1 ||
-          _controllerNumero.text.length < 10) {
+      } else if (condicionCantidadCaracteres) {
         // messag: El número está incompleto o supera los 10 caracteres
-        mostrarAlert(context, S.current.number_incomplete_or_exceeds, null);
+        mostrarAlert(
+            context,
+            S.current.number_incomplete_or_exceeds(
+                prefs.paisUsuario == 'CO' ? 10 : 8),
+            null);
       } else {
         showDialog(
             context: context,

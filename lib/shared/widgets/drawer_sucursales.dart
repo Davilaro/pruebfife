@@ -244,7 +244,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     await pr.show();
     await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
-    
 
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
@@ -256,7 +255,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     PedidoEmart.cantItems.value = '0';
     //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
-    confirmacionViewModel.confirmarPais(prefs.paisUsuario);
+    confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
     Get.offAll(() => TabOpciones());
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));

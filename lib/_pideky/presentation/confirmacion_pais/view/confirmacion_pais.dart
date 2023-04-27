@@ -85,8 +85,8 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
             BotonAgregarCarrito(
                 height: Get.height * 0.06,
                 color: ConstantesColores.agua_marina,
-                onTap: () => confirmacionPaisViewModel
-                    .confirmarPais(itemSeleccionado.value),
+                onTap: () => confirmacionPaisViewModel.confirmarPais(
+                    itemSeleccionado.value, false),
                 text: S.current.accept)
           ],
         ),

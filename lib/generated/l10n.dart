@@ -560,13 +560,13 @@ class S {
     );
   }
 
-  /// `Number is incomplete or exceeds 10 characters.`
-  String get number_incomplete_or_exceeds {
+  /// `Number is incomplete or exceeds {cantidad} characters.`
+  String number_incomplete_or_exceeds(Object cantidad) {
     return Intl.message(
-      'Number is incomplete or exceeds 10 characters.',
+      'Number is incomplete or exceeds $cantidad characters.',
       name: 'number_incomplete_or_exceeds',
       desc: '',
-      args: [],
+      args: [cantidad],
     );
   }
 

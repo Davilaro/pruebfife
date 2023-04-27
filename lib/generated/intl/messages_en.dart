@@ -25,18 +25,21 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m1(diasEntrega) =>
       "Remember that you can place your order: ${diasEntrega}";
 
-  static String m2(destino) =>
+  static String m2(cantidad) =>
+      "Number is incomplete or exceeds ${cantidad} characters.";
+
+  static String m3(destino) =>
       "Please enter the activation code, sent by ${destino} to your selected number:";
 
-  static String m3(activate, destino) =>
+  static String m4(activate, destino) =>
       "Please enter the code from ${activate}, sent by ${destino}";
 
-  static String m4(e) => "Unable to send text message ${e}";
+  static String m5(e) => "Unable to send text message ${e}";
 
-  static String m5(e) =>
+  static String m6(e) =>
       "It was not possible to send the message, please try again ${e}";
 
-  static String m6(telefono) => "WhatsApp Number:${telefono}";
+  static String m7(telefono) => "WhatsApp Number:${telefono}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -125,8 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_vendors": MessageLookupByLibrary.simpleMessage("My vendors"),
         "no_information_to_display":
             MessageLookupByLibrary.simpleMessage("No information to display"),
-        "number_incomplete_or_exceeds": MessageLookupByLibrary.simpleMessage(
-            "Number is incomplete or exceeds 10 characters."),
+        "number_incomplete_or_exceeds": m2,
         "or_via_text_message": MessageLookupByLibrary.simpleMessage("or via "),
         "order": MessageLookupByLibrary.simpleMessage("Order"),
         "order_detail": MessageLookupByLibrary.simpleMessage("Order detail"),
@@ -136,8 +138,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Your Pideky account has been successfully registered, then select a branch to start placing orders."),
-        "please_enter_activation_cod": m2,
-        "please_enter_the_code": m3,
+        "please_enter_activation_cod": m3,
+        "please_enter_the_code": m4,
         "policies_accepted":
             MessageLookupByLibrary.simpleMessage("Policies must be accepted"),
         "policy_and_data_processing":
@@ -173,8 +175,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "The number entered is incorrect."),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "The verification code is incorrect, \nplease check it and try again."),
-        "unable_send_text_message": m4,
-        "unable_send_text_message2": m5,
+        "unable_send_text_message": m5,
+        "unable_send_text_message2": m6,
         "upper_text_drawer": MessageLookupByLibrary.simpleMessage(
             "Choose the branch or point of sale for which you wish to see the products available and place your orders."),
         "validating_information":
@@ -191,7 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp": MessageLookupByLibrary.simpleMessage("WhatsApp"),
         "whatsApp_not_installed":
             MessageLookupByLibrary.simpleMessage("WhatsApp not installed"),
-        "whatsApp_number": m6,
+        "whatsApp_number": m7,
         "winners_club":
             MessageLookupByLibrary.simpleMessage("Winners club Pideky"),
         "winners_club_tittle": MessageLookupByLibrary.simpleMessage(
