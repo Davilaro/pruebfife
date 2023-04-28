@@ -172,7 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "the_nit_entered_is_not_registered": MessageLookupByLibrary.simpleMessage(
             "The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on "),
         "the_number_is_incorrect": MessageLookupByLibrary.simpleMessage(
-            "The number entered is incorrect."),
+            "The number entered does not correspond to a cellular number."),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "The verification code is incorrect, \nplease check it and try again."),
         "unable_send_text_message": m5,

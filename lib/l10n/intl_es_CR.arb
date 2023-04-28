@@ -95,7 +95,7 @@
     "the_verification_code_incorrect":"El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente.",
     "terms_conditions":"Términos y condiciones",
     "the_nit_entered_is_not_registered": "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en ",
-    "the_number_is_incorrect": "El número ingresado es incorrecto.",
+    "the_number_is_incorrect": "El número ingresado no corresponde a un número celular.",
 
     "unable_send_text_message":"No fue posible enviar el mensaje de texto {e}",
     "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",

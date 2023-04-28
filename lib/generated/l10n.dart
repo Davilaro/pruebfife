@@ -840,10 +840,10 @@ class S {
     );
   }
 
-  /// `The number entered is incorrect.`
+  /// `The number entered does not correspond to a cellular number.`
   String get the_number_is_incorrect {
     return Intl.message(
-      'The number entered is incorrect.',
+      'The number entered does not correspond to a cellular number.',
       name: 'the_number_is_incorrect',
       desc: '',
       args: [],
