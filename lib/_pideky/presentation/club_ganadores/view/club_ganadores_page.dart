@@ -141,12 +141,13 @@ class ClubGanadoresPage extends StatelessWidget {
                                   items: lista
                                       .map(
                                         (element) => Container(
+                                          width: Get.width * 0.5,
                                           child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(10.0),
                                               child: Image.network(
                                                 element.url.toString(),
-                                                fit: BoxFit.fill,
+                                                fit: BoxFit.cover,
                                                 errorBuilder: (context, url,
                                                         error) =>
                                                     Image.asset(
@@ -161,11 +162,11 @@ class ClubGanadoresPage extends StatelessWidget {
                                     initialPage: 0,
                                     autoPlay: true,
                                     aspectRatio: 3,
-                                    viewportFraction: 0.8,
+                                    viewportFraction: 0.6,
                                     autoPlayInterval: Duration(seconds: 5),
                                     autoPlayAnimationDuration:
                                         Duration(milliseconds: 800),
-                                    enlargeCenterPage: true,
+                                    enlargeCenterPage: false,
                                     autoPlayCurve: Curves.fastOutSlowIn,
                                   )),
                               Padding(
