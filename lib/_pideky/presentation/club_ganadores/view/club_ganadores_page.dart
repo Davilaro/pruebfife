@@ -7,6 +7,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,8 @@ class ClubGanadoresPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final clubGanadoresViewModel = Get.find<ClubGanadoresViewModel>();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('WinnersClubPage');
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
