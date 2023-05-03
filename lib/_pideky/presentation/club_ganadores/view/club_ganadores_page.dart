@@ -79,29 +79,42 @@ class ClubGanadoresPage extends StatelessWidget {
                                 color: ConstantesColores.azul_precio),
                           ),
                           FutureBuilder(
-                            future: clubGanadoresViewModel.cargarPuntos(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              List<PuntosObtenidos> puntos = snapshot.data;
-                              if (snapshot.hasData) {
-                                var tempPunt = toInt(
-                                    puntos.first.puntosDisponibles.toString());
-                                NumberFormat formatNumber =
-                                    new NumberFormat("#,##0.00");
-                                var result = formatNumber
-                                    .format(tempPunt)
-                                    .replaceAll(',00', '');
-                                return Text(
-                                  result,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: ConstantesColores.azul_precio),
-                                );
-                              }
-                              return SizedBox.shrink();
-                            },
-                          )
+                              future: clubGanadoresViewModel.cargarPuntos(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  default:
+                                    if (snapshot.hasError) {
+                                      return Text(
+                                          S.current.no_information_to_display);
+                                    } else {
+                                      List<PuntosObtenidos> puntos =
+                                          snapshot.data;
+                                      print("data $puntos");
+                                      var tempPunt = toInt(puntos.length > 0
+                                          ? puntos.first.puntosDisponibles
+                                              .toString()
+                                          : "0");
+
+                                      NumberFormat formatNumber =
+                                          new NumberFormat("#,##0.00");
+                                      var result = formatNumber
+                                          .format(tempPunt)
+                                          .replaceAll(',00', '');
+                                      return Text(
+                                        result,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                ConstantesColores.azul_precio),
+                                      );
+                                    }
+                                }
+                              })
                         ],
                       ),
                       height: 250,
@@ -137,93 +150,104 @@ class ClubGanadoresPage extends StatelessWidget {
                           AsyncSnapshot<dynamic> snapshot) {
                         if (snapshot.hasData) {
                           List<ImagenPremios> lista = snapshot.data;
-                          return Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CarouselSlider(
-                                  items: lista
-                                      .map(
-                                        (element) => Container(
-                                          width: Get.width * 0.5,
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: Image.network(
-                                                element.url.toString(),
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, url,
-                                                        error) =>
-                                                    Image.asset(
-                                                        'assets/image/jar-loading.gif'),
-                                              )),
-                                        ),
-                                      )
-                                      .toList(),
-                                  carouselController:
-                                      clubGanadoresViewModel.carouselController,
-                                  options: CarouselOptions(
-                                    initialPage: 0,
-                                    autoPlay: true,
-                                    aspectRatio: 3,
-                                    viewportFraction: 0.6,
-                                    autoPlayInterval: Duration(seconds: 5),
-                                    autoPlayAnimationDuration:
-                                        Duration(milliseconds: 800),
-                                    enlargeCenterPage: false,
-                                    autoPlayCurve: Curves.fastOutSlowIn,
-                                  )),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                          return lista.isNotEmpty
+                              ? Stack(
+                                  alignment: Alignment.center,
                                   children: [
-                                    Container(
-                                      child: IconButton(
-                                          splashColor: Colors.transparent,
-                                          color: ConstantesColores.agua_marina,
-                                          onPressed: () {
+                                    CarouselSlider(
+                                        items: lista
+                                            .map(
+                                              (element) => Container(
+                                                width: Get.width * 0.5,
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    child: Image.network(
+                                                      element.url.toString(),
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                              url, error) =>
+                                                          Image.asset(
+                                                              'assets/image/jar-loading.gif'),
+                                                    )),
+                                              ),
+                                            )
+                                            .toList(),
+                                        carouselController:
                                             clubGanadoresViewModel
-                                                .carouselController
-                                                .previousPage(
-                                                    duration: Duration(
-                                                        milliseconds: 800));
-                                          },
-                                          icon: Icon(Icons
-                                              .arrow_back_ios_new_rounded)),
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: Colors.white.withOpacity(0.8)),
-                                    ),
-                                    Container(
-                                      child: IconButton(
-                                          splashColor: Colors.transparent,
-                                          color: ConstantesColores.agua_marina,
-                                          onPressed: () {
-                                            clubGanadoresViewModel
-                                                .carouselController
-                                                .nextPage(
-                                                    duration: Duration(
-                                                        milliseconds: 800));
-                                          },
-                                          icon: Icon(
-                                              Icons.arrow_forward_ios_rounded)),
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: Colors.white.withOpacity(0.8)),
-                                    ),
+                                                .carouselController,
+                                        options: CarouselOptions(
+                                          initialPage: 0,
+                                          autoPlay: true,
+                                          aspectRatio: 3,
+                                          viewportFraction: 0.6,
+                                          autoPlayInterval:
+                                              Duration(seconds: 5),
+                                          autoPlayAnimationDuration:
+                                              Duration(milliseconds: 800),
+                                          enlargeCenterPage: false,
+                                          autoPlayCurve: Curves.fastOutSlowIn,
+                                        )),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            child: IconButton(
+                                                splashColor: Colors.transparent,
+                                                color: ConstantesColores
+                                                    .agua_marina,
+                                                onPressed: () {
+                                                  clubGanadoresViewModel
+                                                      .carouselController
+                                                      .previousPage(
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  800));
+                                                },
+                                                icon: Icon(Icons
+                                                    .arrow_back_ios_new_rounded)),
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.white
+                                                    .withOpacity(0.8)),
+                                          ),
+                                          Container(
+                                            child: IconButton(
+                                                splashColor: Colors.transparent,
+                                                color: ConstantesColores
+                                                    .agua_marina,
+                                                onPressed: () {
+                                                  clubGanadoresViewModel
+                                                      .carouselController
+                                                      .nextPage(
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  800));
+                                                },
+                                                icon: Icon(Icons
+                                                    .arrow_forward_ios_rounded)),
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.white
+                                                    .withOpacity(0.8)),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
-                                ),
-                              )
-                            ],
-                          );
+                                )
+                              : SizedBox.shrink();
                         }
                         return SizedBox.shrink();
                       },

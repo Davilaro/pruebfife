@@ -19,8 +19,9 @@ class PuntosObtenidos {
 
   factory PuntosObtenidos.fromJson(Map<String, dynamic> json) =>
       PuntosObtenidos(
-        puntosDisponibles: json["PuntosDisponibles"],
-      );
+          puntosDisponibles: json["PuntosDisponibles"] == null
+              ? "0"
+              : json["PuntosDisponibles"]);
 
   Map<String, dynamic> toJson() => {
         "PuntosDisponibles": puntosDisponibles,
