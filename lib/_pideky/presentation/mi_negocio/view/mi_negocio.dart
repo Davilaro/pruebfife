@@ -394,6 +394,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                           ),
                                           Container(
                                             margin: EdgeInsets.only(left: 10),
+                                            width: Get.width * 0.475,
                                             child: Text(
                                               S.current.winners_club,
                                               style: TextStyle(

@@ -259,8 +259,9 @@ class ClubGanadoresPage extends StatelessWidget {
                 height: 15,
               ),
               BotonAgregarCarrito(
+                  borderRadio: 25,
                   width: Get.width * 0.85,
-                  height: 45,
+                  height: 50,
                   color: ConstantesColores.azul_aguamarina_botones,
                   onTap: () async {
                     clubGanadoresViewModel.launchUrl();
