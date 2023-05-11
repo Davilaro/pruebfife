@@ -159,18 +159,19 @@ class ClubGanadoresPage extends StatelessWidget {
                                             .map(
                                               (element) => Container(
                                                 width: Get.width * 0.5,
-                                                child: ClipRRect(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            10.0),
-                                                    child: Image.network(
-                                                      element.url.toString(),
-                                                      fit: BoxFit.cover,
-                                                      errorBuilder: (context,
-                                                              url, error) =>
-                                                          Image.asset(
-                                                              'assets/image/jar-loading.gif'),
-                                                    )),
+                                                            10)),
+                                                child: Image.network(
+                                                  element.url.toString(),
+                                                  fit: BoxFit.contain,
+                                                  errorBuilder: (context, url,
+                                                          error) =>
+                                                      Image.asset(
+                                                          'assets/image/jar-loading.gif'),
+                                                ),
                                               ),
                                             )
                                             .toList(),
