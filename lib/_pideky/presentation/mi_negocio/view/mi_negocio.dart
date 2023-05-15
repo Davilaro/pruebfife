@@ -367,56 +367,74 @@ class _MiNegocioState extends State<MiNegocio> {
                               thickness: 1,
                               color: HexColor('#EAE8F5'),
                             ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ClubGanadoresPage())),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 7),
-                                            child: Image.asset(
-                                              'assets/icon/Icon_club_ganadores.png',
-                                              alignment: Alignment.center,
-                                              width: 30,
+                            Obx(
+                              () => viewModel.pais.value == "CO"
+                                  ? Column(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ClubGanadoresPage())),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            right: 7),
+                                                        child: Image.asset(
+                                                          'assets/icon/Icon_club_ganadores.png',
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 30,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 10),
+                                                        width:
+                                                            Get.width * 0.475,
+                                                        child: Text(
+                                                          S.current
+                                                              .winners_club,
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: 30,
+                                                  color: ConstantesColores
+                                                      .agua_marina,
+                                                )
+                                              ],
                                             ),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            width: Get.width * 0.475,
-                                            child: Text(
-                                              S.current.winners_club,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                          color: HexColor('#EAE8F5'),
+                                        ),
+                                      ],
                                     )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
+                                  : SizedBox.shrink(),
                             ),
                             Obx(() => viewModel.pais.value == "CO"
                                 ? Column(
