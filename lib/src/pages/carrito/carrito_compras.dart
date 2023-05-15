@@ -1159,7 +1159,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
     diasVisita.forEach((element) {
       diasTemp += "$element, ";
     });
-    diasSinComa = diasTemp.substring(0, diasTemp.length - 2);
+    diasSinComa = diasTemp.substring(
+        0, diasTemp.length - 2 < 0 ? 0 : diasTemp.length - 2);
 
     if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
       if (valorPedido < precioMinimo) {
