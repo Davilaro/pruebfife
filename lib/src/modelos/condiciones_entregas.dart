@@ -11,11 +11,8 @@ class CondicionesEntrega {
     required this.fabricante,
     required this.tipo,
     required this.hora,
-    required this.mensaje1,
-    required this.mensaje2,
     required this.texto1,
     required this.texto2,
-    required this.pedidominimo,
     required this.diasEntrega,
     required this.diaVisita,
     this.montoMinimoFrecuencia,
@@ -25,11 +22,8 @@ class CondicionesEntrega {
   String fabricante;
   String tipo;
   String hora;
-  String mensaje1;
-  String mensaje2;
   String texto1;
   String texto2;
-  double pedidominimo;
   int? montoMinimoFrecuencia;
   int? montoMinimoNoFrecuencia;
   String diaVisita;
@@ -40,11 +34,8 @@ class CondicionesEntrega {
         fabricante: json["codigo"],
         tipo: json["descripcion"],
         hora: json["hora"],
-        mensaje1: json["mensaje1"],
-        mensaje2: json["mensaje2"],
         texto1: json["Texto1"] == null ? '' : json["Texto1"],
         texto2: json["Texto2"] == null ? '' : json["Texto2"],
-        pedidominimo: json["pedidominimo"],
         montoMinimoFrecuencia: json["montominimofrecuencia"],
         montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
         diaVisita: json["DiaVisita"],
@@ -55,11 +46,8 @@ class CondicionesEntrega {
         "fabricante": fabricante,
         "tipo": tipo,
         "hora": hora,
-        "mensaje1": mensaje1,
-        "mensaje2": mensaje2,
         "Texto1": texto1,
         "Texto2": texto2,
-        "pedidominimo": pedidominimo,
         "montominimofrecuencia": montoMinimoFrecuencia,
         "montominimonofrecuencia": montoMinimoNoFrecuencia,
         "DiaVisita": diaVisita,

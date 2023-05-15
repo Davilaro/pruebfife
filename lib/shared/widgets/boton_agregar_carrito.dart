@@ -22,6 +22,7 @@ class BotonAgregarCarrito extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       margin: EdgeInsets.only(top: 20, bottom: 10),
       height: height,
       width: width,
@@ -34,6 +35,7 @@ class BotonAgregarCarrito extends StatelessWidget {
             text,
             style: TextStyle(
                 color: colortext, fontWeight: FontWeight.bold, fontSize: 17),
+            textAlign: TextAlign.center,
           ),
         ),
       ),

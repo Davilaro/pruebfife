@@ -30,6 +30,7 @@ class UxcamTagueo {
     if (Constantes().titulo != 'QA') {
       if (datosCliente[0].nit == '4415415' ||
           datosCliente[0].nit == '4415416' ||
+          datosCliente[0].nit == '4415417' ||
           datosCliente[0].nit == '123123123') {
         FlutterUxcam.optOutOverall();
       }
@@ -175,11 +176,12 @@ class UxcamTagueo {
       if (isNewProduct) label = 'Nuevo';
       if (isPromoProduct) label = 'Promo';
       if (isAgotadoLabel) label = 'Agotado';
-
+      print('TAGUEO ADD SEEDETAULPRODUCTO');
       FlutterUxcam.logEventWithProperties("seeDetailProduct", {
         "name": element.nombrecomercial,
         "label": label,
         "category": element.marca,
+        "provider": element.fabricante,
         "price": element.precio,
         "discount": "$descuento%",
         "position": index,
@@ -214,6 +216,7 @@ class UxcamTagueo {
   void addToCart(Producto element, int cantidad) {
     try {
       // final total = element.precio * cantidad;
+      print('TAGUEO ADD TO CART');
       FlutterUxcam.logEventWithProperties("addToCart", {
         "name": element.nombrecomercial,
         "category": element.marca,

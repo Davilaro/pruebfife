@@ -289,7 +289,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                   .getFormat()
                                                   .currencySymbol,
                                               value["iva"],
-                                              value['restrictivo'],
                                               value['restrictivofrecuencia'],
                                               value['restrictivonofrecuencia'],
                                               value["diasVisita"],
@@ -1148,7 +1147,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
       double topeMinimo,
       String currentSymbol,
       double iva,
-      String restrictivo,
       int restrictivoFrecuencia,
       int restrictivoNoFrecuencia,
       List diasVisita,

@@ -61,6 +61,7 @@
     "my_orders":"My orders",
 
     "no_information_to_display":"No information to display",
+    "number_incomplete_or_exceeds":"Number is incomplete or exceeds {cantidad} characters.",
 
     "or_via_text_message":"or via ",
     "order_pideky": "Order Pideky",
@@ -94,6 +95,7 @@
     "the_verification_code_incorrect":"The verification code is incorrect, \nplease check it and try again.",
     "terms_conditions":"Terms and conditions",
     "the_nit_entered_is_not_registered":"The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ",
+    "the_number_is_incorrect": "The number entered does not correspond to a cellular number.",
 
     "unable_send_text_message":"Unable to send text message {e}",
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
@@ -103,6 +105,8 @@
     "version": "Version",
     "validating_information": "Validating information",
 
+    "winners_club" : "Winners club Pideky",
+    "winners_club_tittle" : "En el Club de Ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste",
     "we_validating_code_activate":"We are validating the code to activate your account.",
     "welcome_pideky":"Welcome to Pideky!",
     "whatsApp_number": "WhatsApp Number:{telefono}",
@@ -111,7 +115,7 @@
     "we_have_a_suggested":"We have a suggested order for you, so that you don't forget any product for your business.",
 
     "you_want_to_go":"Or do you want to go to the ",
-    "your_order_is_being_prepared":"Your order is being prepared",
-    "your_order_checked":"Your order is checked in and ready to go on the road",
-    "your_order_is_ready": "Your order is on its way and ready to be received"
+    "our_system_has_received":"Our system has received your request.",
+    "your_order_checked":"Your order is checked in and ready to go on the road.",
+    "your_order_is_ready": "Your order is on its way, get ready to receive it."
 }

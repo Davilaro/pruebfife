@@ -7,7 +7,7 @@ class CondicionEntregaRepositorySqlite extends ICondicionEntregaRepository {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final sql = await db.rawQuery('''
-      SELECT fabricante, tipo, hora, mensaje1, mensaje2, pedidominimo, nombrecomercial, topeminimo, restrictivo, 
+      SELECT fabricante, tipo, hora, nombrecomercial, topeminimo,
       montominimofrecuencia, montominimonoFrecuencia, restrictivofrecuencia, restrictivonofrecuencia, DiaVisita, 
       diasentrega, texto1, texto2, Semana FROM condicionesentrega 
     ''');

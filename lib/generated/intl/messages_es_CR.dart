@@ -25,18 +25,21 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m1(diasEntrega) =>
       "Recuerda que puedes realizar el pedido: ${diasEntrega}";
 
-  static String m2(destino) =>
+  static String m2(cantidad) =>
+      "El número está incompleto o supera los ${cantidad} caracteres.";
+
+  static String m3(destino) =>
       "Por favor ingresa el código de registro, enviado por ${destino} a tu número seleccionado:";
 
-  static String m3(activate, destino) =>
+  static String m4(activate, destino) =>
       "Por favor ingresa el código de ${activate}, enviado por ${destino}";
 
-  static String m4(e) => "No fue posible enviar el mensaje de texto ${e}";
+  static String m5(e) => "No fue posible enviar el mensaje de texto ${e}";
 
-  static String m5(e) =>
+  static String m6(e) =>
       "No fue posible enviar el mensaje, por favor intente nuevamente ${e}";
 
-  static String m6(telefono) => "Número WhatsApp:${telefono}";
+  static String m7(telefono) => "Número WhatsApp:${telefono}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -126,17 +129,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_vendors": MessageLookupByLibrary.simpleMessage("Mis vendedores"),
         "no_information_to_display": MessageLookupByLibrary.simpleMessage(
             "No hay información para mostrar"),
+        "number_incomplete_or_exceeds": m2,
         "or_via_text_message":
             MessageLookupByLibrary.simpleMessage(" o a través de un "),
         "order": MessageLookupByLibrary.simpleMessage("Pedido"),
         "order_detail":
             MessageLookupByLibrary.simpleMessage("Detalle del pedido"),
         "order_pideky": MessageLookupByLibrary.simpleMessage("Orden Pideky"),
+        "our_system_has_received": MessageLookupByLibrary.simpleMessage(
+            "Nuestro sistema ha recibido tu solicitud."),
         "pideky_account_successfully_registered":
             MessageLookupByLibrary.simpleMessage(
                 "Se ha realizado correctamente el registro de tu cuenta Pideky, a continuación selecciona una sucursal para comenzar a realizar pedidos."),
-        "please_enter_activation_cod": m2,
-        "please_enter_the_code": m3,
+        "please_enter_activation_cod": m3,
+        "please_enter_the_code": m4,
         "policies_accepted": MessageLookupByLibrary.simpleMessage(
             "Se debe aceptar las políticas"),
         "policy_and_data_processing": MessageLookupByLibrary.simpleMessage(
@@ -169,10 +175,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "El email no cumple con el formato"),
         "the_nit_entered_is_not_registered": MessageLookupByLibrary.simpleMessage(
             "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en "),
+        "the_number_is_incorrect": MessageLookupByLibrary.simpleMessage(
+            "El número ingresado no corresponde a un número celular."),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(
             "El código de verificación es incorrecto,\npor favor compruébelo e intente nuevamente."),
-        "unable_send_text_message": m4,
-        "unable_send_text_message2": m5,
+        "unable_send_text_message": m5,
+        "unable_send_text_message2": m6,
         "upper_text_drawer": MessageLookupByLibrary.simpleMessage(
             "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos."),
         "validating_information":
@@ -189,14 +197,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "whatsApp": MessageLookupByLibrary.simpleMessage("WhatsApp"),
         "whatsApp_not_installed":
             MessageLookupByLibrary.simpleMessage("WhatsApp no instalado"),
-        "whatsApp_number": m6,
+        "whatsApp_number": m7,
+        "winners_club":
+            MessageLookupByLibrary.simpleMessage("Club de ganadores Pideky"),
         "you_want_to_go":
             MessageLookupByLibrary.simpleMessage("O deseas ir al "),
         "your_order_checked": MessageLookupByLibrary.simpleMessage(
-            "Tu pedido está facturado y listo para salir en ruta"),
-        "your_order_is_being_prepared":
-            MessageLookupByLibrary.simpleMessage("Tu pedido se está alistando"),
+            "Tu pedido está facturado y listo para salir en ruta."),
         "your_order_is_ready": MessageLookupByLibrary.simpleMessage(
-            "Tu pedido está en camino y listo para ser recibido")
+            "Tu pedido está en camino, prepárate pare recibirlo.")
       };
 }

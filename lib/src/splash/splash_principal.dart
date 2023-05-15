@@ -14,6 +14,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
+import 'package:emart/src/utils/alertas.dart' as alert;
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -56,25 +57,34 @@ class _SplashState extends State<Splash> {
   Future<void> _descarcarDB() async {
     var cargo = false;
     if (prefs.usurioLogin == null || prefs.paisUsuario == null) {
-      // cargo =
-      //     await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-      // var res = await AppUtil.appUtil.abrirBases();
-      // prefs.usurioLogin = -1;
-      // if (cargo) {
       Get.off(() => ConfirmacionPais());
-      // }
     } else if (prefs.usurioLogin == -1) {
-      cargo =
-          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-      var res = await AppUtil.appUtil.abrirBases();
+      var res = false;
+      var contador = 0;
+      do {
+        if (contador > 3) {
+          cargo = false;
+          break;
+        } else {
+          cargo = await AppUtil.appUtil
+              .downloadZip('1006120026', prefs.sucursal, true);
+          contador++;
+        }
+      } while (!cargo);
 
-      if (res && cargo) {
-        S.load(prefs.paisUsuario == 'CR'
-            ? Locale('es', prefs.paisUsuario)
-            : prefs.paisUsuario == 'CO'
-                ? Locale('es', 'CO')
-                : Locale('es', 'CO'));
-        Get.off(() => TabOpciones());
+      if (!cargo && contador > 3) {
+        alert.mostrarAlert(
+            context, 'Imposible conectar con la Base de datos', null);
+      } else {
+        res = await AppUtil.appUtil.abrirBases();
+        if (res && cargo) {
+          S.load(prefs.paisUsuario == 'CR'
+              ? Locale('es', prefs.paisUsuario)
+              : prefs.paisUsuario == 'CO'
+                  ? Locale('es', 'CO')
+                  : Locale('es', 'CO'));
+          Get.off(() => TabOpciones());
+        }
       }
     } else {
       final List<dynamic> divace = await Login.getDeviceDetails();
@@ -83,29 +93,41 @@ class _SplashState extends State<Splash> {
 
       await Servicies()
           .registrarToken(divace[2], plataforma, prefs.usurioLoginCedula);
-
-      cargo = await AppUtil.appUtil
-          .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
-      var res = await AppUtil.appUtil.abrirBases();
-
-      prefs.usurioLogin = 1;
-      PedidoSugeridoViewModel.userLog.value = 1;
-      if (res && cargo) {
-        if (prefs.usurioLogin == 1) {
-          S.load(prefs.paisUsuario == 'CR'
-              ? Locale('es', prefs.paisUsuario)
-              : prefs.paisUsuario == 'CO'
-                  ? Locale('es', 'CO')
-                  : Locale('es', 'CO'));
-          UxcamTagueo().validarTipoUsuario();
+      var contador = 0;
+      do {
+        if (contador > 3) {
+          cargo = false;
+          break;
+        } else {
+          cargo = await AppUtil.appUtil
+              .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
+          contador++;
         }
+      } while (!cargo);
+      if (!cargo && contador > 3) {
+        alert.mostrarAlert(
+            context, 'Imposible conectar con la Base de datos', null);
+      } else {
+        var res = await AppUtil.appUtil.abrirBases();
 
-        Navigator.pushReplacementNamed(
-          context,
-          'tab_opciones',
-        );
-        viewModelNequi.initData();
-        viewModelPedidoSugerido.initController();
+        prefs.usurioLogin = 1;
+        PedidoSugeridoViewModel.userLog.value = 1;
+        if (res && cargo) {
+          if (prefs.usurioLogin == 1) {
+            S.load(prefs.paisUsuario == 'CR'
+                ? Locale('es', prefs.paisUsuario)
+                : prefs.paisUsuario == 'CO'
+                    ? Locale('es', 'CO')
+                    : Locale('es', 'CO'));
+            UxcamTagueo().validarTipoUsuario();
+          }
+          Navigator.pushReplacementNamed(
+            context,
+            'tab_opciones',
+          );
+          viewModelNequi.initData();
+          viewModelPedidoSugerido.initController();
+        }
       }
     }
   }

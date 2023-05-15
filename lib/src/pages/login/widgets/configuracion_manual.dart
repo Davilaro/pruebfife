@@ -290,9 +290,28 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
             );
           });
     } else {
-      if (_controllerNumero.text.length != 10) {
-        mostrarAlert(context,
-            'El numero esta incompleto o supera los 10 caracteres', null);
+      var condicionNumeroInicial = prefs.paisUsuario == 'CO'
+          ? _controllerNumero.text[0] != '3'
+          : _controllerNumero.text[0] != '6' &&
+              _controllerNumero.text[0] != '7' &&
+              _controllerNumero.text[0] != '8';
+      var condicionCantidadCaracteres = prefs.paisUsuario == 'CO'
+          ? _controllerNumero.text.length > 10 ||
+              _controllerNumero.text.length < 1 ||
+              _controllerNumero.text.length < 10
+          : _controllerNumero.text.length > 8 ||
+              _controllerNumero.text.length < 1 ||
+              _controllerNumero.text.length < 8;
+      if (condicionNumeroInicial) {
+        // message: El número ingresado es incorrecto.
+        mostrarAlert(context, S.current.the_number_is_incorrect, null);
+      } else if (condicionCantidadCaracteres) {
+        // messag: El número está incompleto o supera los 10 caracteres
+        mostrarAlert(
+            context,
+            S.current.number_incomplete_or_exceeds(
+                prefs.paisUsuario == 'CO' ? 10 : 8),
+            null);
       } else {
         showDialog(
             context: context,
@@ -303,7 +322,9 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 content: Container(
                   height: 250,
+                  padding: EdgeInsets.only(top: 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 50,

@@ -560,6 +560,16 @@ class S {
     );
   }
 
+  /// `Number is incomplete or exceeds {cantidad} characters.`
+  String number_incomplete_or_exceeds(Object cantidad) {
+    return Intl.message(
+      'Number is incomplete or exceeds $cantidad characters.',
+      name: 'number_incomplete_or_exceeds',
+      desc: '',
+      args: [cantidad],
+    );
+  }
+
   /// `or via `
   String get or_via_text_message {
     return Intl.message(
@@ -830,6 +840,16 @@ class S {
     );
   }
 
+  /// `The number entered does not correspond to a cellular number.`
+  String get the_number_is_incorrect {
+    return Intl.message(
+      'The number entered does not correspond to a cellular number.',
+      name: 'the_number_is_incorrect',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Unable to send text message {e}`
   String unable_send_text_message(Object e) {
     return Intl.message(
@@ -885,6 +905,26 @@ class S {
     return Intl.message(
       'Validating information',
       name: 'validating_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Winners club Pideky`
+  String get winners_club {
+    return Intl.message(
+      'Winners club Pideky',
+      name: 'winners_club',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `En el Club de Ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste`
+  String get winners_club_tittle {
+    return Intl.message(
+      'En el Club de Ganadores Pideky puedes ganar puntos en tus compras y redimir en lo que te guste',
+      name: 'winners_club_tittle',
       desc: '',
       args: [],
     );
@@ -960,30 +1000,30 @@ class S {
     );
   }
 
-  /// `Your order is being prepared`
-  String get your_order_is_being_prepared {
+  /// `Our system has received your request.`
+  String get our_system_has_received {
     return Intl.message(
-      'Your order is being prepared',
-      name: 'your_order_is_being_prepared',
+      'Our system has received your request.',
+      name: 'our_system_has_received',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your order is checked in and ready to go on the road`
+  /// `Your order is checked in and ready to go on the road.`
   String get your_order_checked {
     return Intl.message(
-      'Your order is checked in and ready to go on the road',
+      'Your order is checked in and ready to go on the road.',
       name: 'your_order_checked',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your order is on its way and ready to be received`
+  /// `Your order is on its way, get ready to receive it.`
   String get your_order_is_ready {
     return Intl.message(
-      'Your order is on its way and ready to be received',
+      'Your order is on its way, get ready to receive it.',
       name: 'your_order_is_ready',
       desc: '',
       args: [],

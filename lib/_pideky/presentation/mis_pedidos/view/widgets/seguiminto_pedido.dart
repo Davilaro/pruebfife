@@ -139,7 +139,7 @@ class SeguimientoPedidoPage extends StatelessWidget {
                                 child: FilaCircular(
                                     titulo: 'Pedido recibido',
                                     subTitulo:
-                                        S.current.your_order_is_being_prepared,
+                                        S.current.our_system_has_received,
                                     isActivo: listPedido[0].estado! >= 1,
                                     isActivoText: listPedido[0].estado == 1)),
                             Container(
