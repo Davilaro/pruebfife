@@ -106,7 +106,7 @@ class _FabricantesState extends State<Fabricantes> {
               element.nombrecomercial,
               element.nombrecomercial,
               "",
-              element.codIndirecto,
+              "-1",
               'ViewProviders'),
           //UXCam: Llamamos el evento seeProvider
           UxcamTagueo().seeProvider(element.nombrecomercial),
