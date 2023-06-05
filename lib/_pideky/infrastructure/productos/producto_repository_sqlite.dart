@@ -36,7 +36,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
         SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
@@ -89,7 +89,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -120,7 +120,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -150,7 +150,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -180,7 +180,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -211,7 +211,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -243,7 +243,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -306,7 +306,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         sql = await db.rawQuery('''
         SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_imperdible as orden, 0.0 as descuento, 
@@ -335,7 +335,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-      p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+       p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
        p.marcacodigopideki , 
       p.categoriacodigopideki , 
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
@@ -360,7 +360,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-      p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+       p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
        p.marcacodigopideki , 
       p.categoriacodigopideki , 
       p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
@@ -404,7 +404,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       List<Map> sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
@@ -468,7 +468,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
@@ -506,7 +506,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -544,7 +544,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
@@ -585,7 +585,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -619,7 +619,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -653,7 +653,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
@@ -712,7 +712,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
@@ -748,7 +748,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
@@ -786,7 +786,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad  , p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
