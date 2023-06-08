@@ -74,33 +74,37 @@ class UxcamTagueo {
   }
 
   void selectSeccion(String name) {
-    FlutterUxcam.logEventWithProperties("clickHeader",
-        {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("clickHeader",
+          {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void selectDropDown(String sectionName, String section) {
-    FlutterUxcam.logEventWithProperties("selectDropDown", {
-      "sectionName": sectionName,
-      "section": section,
-      "City": prefs.ciudad,
-      "Country": prefs.paisUsuario
-    });
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("selectDropDown", {
+        "sectionName": sectionName,
+        "section": section,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void selectSectionPedidoSugerido(String section) {
-    FlutterUxcam.logEventWithProperties("selectSectionPedidoSugerido", {
-      "section": section,
-      "City": prefs.ciudad,
-      "Country": prefs.paisUsuario
-    });
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("selectSectionPedidoSugerido", {
+        "section": section,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void selectSectionMisPedidos(String section) {
-    FlutterUxcam.logEventWithProperties("selectSectionMisPedidos", {
-      "section": section,
-      "City": prefs.ciudad,
-      "Country": prefs.paisUsuario
-    });
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("selectSectionMisPedidos", {
+        "section": section,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void sendActivationCode(String metodo, String estado) {
@@ -128,28 +132,34 @@ class UxcamTagueo {
   }
 
   void selectBanner(String name, String ubicacion) {
-    FlutterUxcam.logEventWithProperties("clickBanner", {
-      "name": name,
-      "location": ubicacion,
-      "City": prefs.ciudad,
-      "Country": prefs.paisUsuario
-    });
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("clickBanner", {
+        "name": name,
+        "location": ubicacion,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void search(String value) {
-    FlutterUxcam.logEventWithProperties("search",
-        {"search": value, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("search", {
+        "search": value,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void clickCarrito(provider, String ubicacion) {
     provider.agregarNumeroClickCarrito = 1;
 // FALTA AGREGAR CIUDAD Y PAIS
-    FlutterUxcam.logEventWithProperties("clickCarrito", {
-      "times": provider.getNumeroClickCarrito,
-      "location": ubicacion,
-      "City": prefs.ciudad,
-      "Country": prefs.paisUsuario
-    });
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("clickCarrito", {
+        "times": provider.getNumeroClickCarrito,
+        "location": ubicacion,
+        "City": prefs.ciudad,
+        "Country": prefs.paisUsuario
+      });
   }
 
   void seeMore(String name, provider) {
@@ -160,13 +170,13 @@ class UxcamTagueo {
       if (name == 'Promos') {
         provider.agregarNumeroClickVerPromos = 1;
       }
-
-      FlutterUxcam.logEventWithProperties("clickSeeMore", {
-        "name": name,
-        "times": provider.getNumeroClickCarrito,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("clickSeeMore", {
+          "name": name,
+          "times": provider.getNumeroClickCarrito,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo clickCarrito $e');
     }
@@ -184,54 +194,60 @@ class UxcamTagueo {
       if (isPromoProduct) label = 'Promo';
       if (isAgotadoLabel) label = 'Agotado';
       print('TAGUEO ADD SEEDETAULPRODUCTO');
-      FlutterUxcam.logEventWithProperties("seeDetailProduct", {
-        "name": element.nombrecomercial,
-        "label": label,
-        "category": element.marca,
-        "provider": element.fabricante,
-        "price": element.precio,
-        "discount": "$descuento%",
-        "position": index,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("seeDetailProduct", {
+          "name": element.nombrecomercial,
+          "label": label,
+          "category": element.marca,
+          "provider": element.fabricante,
+          "price": element.precio,
+          "discount": "$descuento%",
+          "position": index,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo seeDetailProduct $e');
     }
   }
 
   void seeCategory(String name) {
-    FlutterUxcam.logEventWithProperties("seeCategory",
-        {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("seeCategory",
+          {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void selectFooter(String name) {
-    FlutterUxcam.logEventWithProperties("selectFooter",
-        {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("selectFooter",
+          {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void seeBrand(String name) {
-    FlutterUxcam.logEventWithProperties("seeBrand",
-        {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("seeBrand",
+          {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void seeProvider(String name) {
-    FlutterUxcam.logEventWithProperties("seeProvider",
-        {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
+    if (prefs.usurioLogin == 1)
+      FlutterUxcam.logEventWithProperties("seeProvider",
+          {"name": name, "City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
 
   void addToCart(Producto element, int cantidad) {
     try {
       print('TAGUEO ADD TO CART');
-      FlutterUxcam.logEventWithProperties("addToCart", {
-        "name": element.nombrecomercial,
-        "category": element.marca,
-        "provider": element.fabricante,
-        "price": element.precio,
-        "quantity": cantidad,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("addToCart", {
+          "name": element.nombrecomercial,
+          "category": element.marca,
+          "provider": element.fabricante,
+          "price": element.precio,
+          "quantity": cantidad,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo addToCart $e');
     }
@@ -251,17 +267,17 @@ class UxcamTagueo {
           isSufficientAmount = 'Si';
         }
       }
-
-      FlutterUxcam.logEventWithProperties("removeToCart", {
-        "name": element.nombrecomercial,
-        "category": element.marca,
-        "provider": element.fabricante,
-        "price": element.precio,
-        "quantity": cantidad,
-        "sufficient_amount": isSufficientAmount,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("removeToCart", {
+          "name": element.nombrecomercial,
+          "category": element.marca,
+          "provider": element.fabricante,
+          "price": element.precio,
+          "quantity": cantidad,
+          "sufficient_amount": isSufficientAmount,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo removeToCart $e');
     }
@@ -292,12 +308,12 @@ class UxcamTagueo {
           });
         }
       });
-
-      FlutterUxcam.logEventWithProperties("emptyToCart", {
-        "products": productos,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("emptyToCart", {
+          "products": productos,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo emptyToCart $e');
     }
@@ -305,12 +321,13 @@ class UxcamTagueo {
 
   void clickAction(String accion, fabricantes) {
     try {
-      FlutterUxcam.logEventWithProperties("clickAction", {
-        "action": accion,
-        "providers": fabricantes,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("clickAction", {
+          "action": accion,
+          "providers": fabricantes,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo clickAction $e');
     }
@@ -342,14 +359,14 @@ class UxcamTagueo {
           "price": producto.precio,
         };
       }).toList();
-
-      FlutterUxcam.logEventWithProperties("confirmOrder", {
-        "screen": "Check out 2",
-        "products": [...listProductos],
-        "total": cartProvider.getTotal,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("confirmOrder", {
+          "screen": "Check out 2",
+          "products": [...listProductos],
+          "total": cartProvider.getTotal,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo confirmOrder $e');
     }
@@ -378,12 +395,12 @@ class UxcamTagueo {
       print(
         "productosss  $listProductos",
       );
-
-      FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario,
-        "products": "${[...listProductos]}",
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("addToCartSuggestedOrder", {
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario,
+          "products": "${[...listProductos]}",
+        });
     } catch (e) {
       print('Error tagueo confirmOrder $e');
     }
@@ -406,12 +423,12 @@ class UxcamTagueo {
       print(
         "productosss  $listProductos",
       );
-
-      FlutterUxcam.logEventWithProperties("addToCartRepeatOrder", {
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario,
-        "products": "${[...listProductos]}",
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("addToCartRepeatOrder", {
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario,
+          "products": "${[...listProductos]}",
+        });
     } catch (e) {
       print('Error tagueo confirmOrder $e');
     }
@@ -450,13 +467,13 @@ class UxcamTagueo {
           }
         }
       });
-
-      FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
-        "screen": 'Check out 1',
-        "items": listaProductos,
-        "City": prefs.ciudad,
-        "Country": prefs.paisUsuario
-      });
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("clickPlaceOrder", {
+          "screen": 'Check out 1',
+          "items": listaProductos,
+          "City": prefs.ciudad,
+          "Country": prefs.paisUsuario
+        });
     } catch (e) {
       print('Error tagueo clickPlaceOrder $e');
     }
@@ -464,10 +481,11 @@ class UxcamTagueo {
 
   void clickPlaceIndividualOrder(Map<String, Object?> productIndividual) {
     try {
-      FlutterUxcam.logEventWithProperties(
-        "clickPlaceIndividualOrder",
-        productIndividual,
-      );
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties(
+          "clickPlaceIndividualOrder",
+          productIndividual,
+        );
     } catch (e) {
       print('Error tagueo clickPlaceIndividualOrder $e');
     }
