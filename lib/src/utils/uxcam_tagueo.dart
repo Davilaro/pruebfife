@@ -41,31 +41,34 @@ class UxcamTagueo {
     if (now.month == 1) {
       fechaInicial = '${now.year - 1}-12-01';
       fechaFinal = '${now.year}-01-01';
-    }
-    if (now.month != 1) {
+    } else {
       fechaInicial =
           '${now.year}-${now.month.toString().length > 1 ? now.month == 10 ? '0${now.month - 1}' : now.month - 1 : '0${now.month - 1}'}-01';
       fechaFinal =
           '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
     }
+    try {
+      dynamic resQuery = await misPedidosViewModel.misPedidosService
+          .consultarHistoricos("-1", fechaInicial, fechaFinal);
 
-    dynamic resQuery = await misPedidosViewModel.misPedidosService
-        .consultarHistoricos("-1", fechaInicial, fechaFinal);
-
-    // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
-    if (resQuery.length == 1) {
-      typeUser = "Begginer";
-    }
-    if (resQuery.length >= 4) {
-      typeUser = "Digitalizado";
-    }
-    if (resQuery.length > 1 && resQuery.length <= 3) {
-      typeUser = "Progreso";
+      // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
+      if (resQuery.length == 1) {
+        typeUser = "Begginer";
+      } else if (resQuery.length >= 4) {
+        typeUser = "Digitalizado";
+      } else if (resQuery.length > 1 && resQuery.length <= 3) {
+        typeUser = "Progreso";
+      }
+    } catch (e) {
+      print('Evento validarTipoUsuario fallo peticion historico $e');
     }
 
     //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
+    FlutterUxcam.setUserProperty("nit_client", datosCliente[0].nit);
+    FlutterUxcam.setUserProperty("City", prefs.ciudad);
+    FlutterUxcam.setUserProperty("Country", prefs.paisUsuario);
     FlutterUxcam.logEventWithProperties(
         "sendLocation", {"City": prefs.ciudad, "Country": prefs.paisUsuario});
   }
@@ -140,9 +143,13 @@ class UxcamTagueo {
 
   void clickCarrito(provider, String ubicacion) {
     provider.agregarNumeroClickCarrito = 1;
-
-    FlutterUxcam.logEventWithProperties("clickCarrito",
-        {"times": provider.getNumeroClickCarrito, "location": ubicacion});
+// FALTA AGREGAR CIUDAD Y PAIS
+    FlutterUxcam.logEventWithProperties("clickCarrito", {
+      "times": provider.getNumeroClickCarrito,
+      "location": ubicacion,
+      "City": prefs.ciudad,
+      "Country": prefs.paisUsuario
+    });
   }
 
   void seeMore(String name, provider) {
@@ -215,7 +222,6 @@ class UxcamTagueo {
 
   void addToCart(Producto element, int cantidad) {
     try {
-      // final total = element.precio * cantidad;
       print('TAGUEO ADD TO CART');
       FlutterUxcam.logEventWithProperties("addToCart", {
         "name": element.nombrecomercial,
@@ -299,7 +305,6 @@ class UxcamTagueo {
 
   void clickAction(String accion, fabricantes) {
     try {
-      // final total = element.precio * cantidad;
       FlutterUxcam.logEventWithProperties("clickAction", {
         "action": accion,
         "providers": fabricantes,
