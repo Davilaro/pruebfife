@@ -12,7 +12,7 @@ List<Widget> listaPagosRealizadosFecha(BuildContext context) {
   var outputFormat = DateFormat("dd/MM/yy");
 
   if (controller.listaPagosRealizados.isNotEmpty) {
-    controller.listaPagosRealizados.forEach((element) {
+    controller.listaPagosRealizados.reversed.forEach((element) {
       var fecha = outputFormat.parse(element.fechaPago);
 
       String fechaFinal = outputFormat.format(fecha);
@@ -36,7 +36,7 @@ List<Widget> listaPagosRealizadosValor(BuildContext context) {
   List<Widget> lista = [];
 
   if (controller.listaPagosRealizados.isNotEmpty) {
-    controller.listaPagosRealizados.forEach((element) {
+    controller.listaPagosRealizados.reversed.forEach((element) {
       lista.add(Padding(
         padding: const EdgeInsets.only(top: 7, bottom: 7, left: 25),
         child: Text(

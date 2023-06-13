@@ -2,6 +2,7 @@ import 'package:emart/_pideky/domain/pagos_nequi/service/pagos_nequi_service.dar
 import 'package:emart/_pideky/infrastructure/mis_pagos_nequi/mis_pagos_nequi_sqlite.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MisPagosNequiViewModel extends GetxController {
   PagosNequiService pagosNequiService;
@@ -31,6 +32,16 @@ class MisPagosNequiViewModel extends GetxController {
       } else {
         listaPagosPendientes.add(element);
       }
+    });
+    listaPagosRealizados.sort((a, b) {
+      DateTime fechaA = DateFormat('dd/MM/yyyy').parse(a.fechaPago);
+      DateTime fechaB = DateFormat('dd/MM/yyyy').parse(b.fechaPago);
+      return fechaA.compareTo(fechaB);
+    });
+    listaPagosPendientes.sort((a, b) {
+      DateTime fechaA = DateFormat('dd/MM/yyyy').parse(a.fechaPago);
+      DateTime fechaB = DateFormat('dd/MM/yyyy').parse(b.fechaPago);
+      return fechaA.compareTo(fechaB);
     });
   }
 
