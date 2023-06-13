@@ -16,11 +16,13 @@ class MisPagosNequiViewModel extends GetxController {
 
   obtenerPagosNequi() async {
     listaPagos = await pagosNequiService.consultarPagosNequi();
-    if (listaPagos.length != 0) {
-      numeroCelular.value =
-          listaPagos.first.celular != "" ? listaPagos.first.celular : "";
-    }
+
     agruparListas(listaPagos);
+    listaPagos.sort((a, b) {
+      DateTime fechaA = DateFormat('dd/MM/yyyy').parse(a.fechaPago);
+      DateTime fechaB = DateFormat('dd/MM/yyyy').parse(b.fechaPago);
+      return fechaA.compareTo(fechaB);
+    });
 
     print(numeroCelular);
   }
@@ -33,6 +35,7 @@ class MisPagosNequiViewModel extends GetxController {
         listaPagosPendientes.add(element);
       }
     });
+    //ordena los la liste de manera descendente
     listaPagosRealizados.sort((a, b) {
       DateTime fechaA = DateFormat('dd/MM/yyyy').parse(a.fechaPago);
       DateTime fechaB = DateFormat('dd/MM/yyyy').parse(b.fechaPago);
@@ -43,6 +46,10 @@ class MisPagosNequiViewModel extends GetxController {
       DateTime fechaB = DateFormat('dd/MM/yyyy').parse(b.fechaPago);
       return fechaA.compareTo(fechaB);
     });
+    if (lista.length != 0) {
+      numeroCelular.value =
+          listaPagos.first.celular != "" ? listaPagos.first.celular : "";
+    }
   }
 
   initData() {
