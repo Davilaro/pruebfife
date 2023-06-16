@@ -16,6 +16,7 @@ class MisVendedores extends StatelessWidget {
     FlutterUxcam.tagScreenName('MyVendorsPage');
 
     return Scaffold(
+      backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: Text(
           'Mis vendedores',
@@ -37,96 +38,101 @@ class MisVendedores extends StatelessWidget {
           AccionesBartCarrito(esCarrito: true),
         ],
       ),
-      body: Container(
-        color: ConstantesColores.color_fondo_gris,
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        child: FutureBuilder(
-            future: DBProvider.db.cargarVendedores(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.hasData) {
-                var listaVendedores = cargarVendedores(snapshot.data);
-                return Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 40, bottom: 20),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Despliega las pestañas para ver la información de tus vendedores',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: ConstantesColores.gris_textos,
-                              fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: FutureBuilder(
+              future: DBProvider.db.cargarVendedores(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  var listaVendedores = cargarVendedores(snapshot.data);
+                  return Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 40, bottom: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            'Despliega las pestañas para ver la información de tus vendedores',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: ConstantesColores.gris_textos,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    for (int i = 0; i < listaVendedores.length; i++)
-                      Container(
-                        child: Acordion(
-                          urlIcon: listaVendedores[i]['icono'],
-                          title: Text(
-                            'Vendedores ${listaVendedores[i]['nombreComercial'].toString()}',
-                            style: TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.bold),
-                          ),
-                          contenido: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              children: [
-                                for (int j = 0;
-                                    j < listaVendedores[i]['vendedores'].length;
-                                    j++)
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: GestureDetector(
-                                      onTap: () => _cargarNumeroTelefono(
-                                          listaVendedores[i]['vendedores'][j]
-                                              ['telefono']),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              '${listaVendedores[i]['vendedores'][j]['vendedor']}',
-                                              style: TextStyle(
+                      for (int i = 0; i < listaVendedores.length; i++)
+                        Container(
+                          child: Acordion(
+                            urlIcon: listaVendedores[i]['icono'],
+                            title: Text(
+                              'Vendedores ${listaVendedores[i]['nombreComercial'].toString()}',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                            ),
+                            contenido: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  for (int j = 0;
+                                      j <
+                                          listaVendedores[i]['vendedores']
+                                              .length;
+                                      j++)
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      child: GestureDetector(
+                                        onTap: () => _cargarNumeroTelefono(
+                                            listaVendedores[i]['vendedores'][j]
+                                                ['telefono']),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                '${listaVendedores[i]['vendedores'][j]['vendedor']}',
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: ConstantesColores
+                                                        .gris_textos,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                '${listaVendedores[i]['vendedores'][j]['indicativo']} ${listaVendedores[i]['vendedores'][j]['telefono']}',
+                                                style: TextStyle(
                                                   fontSize: 13,
                                                   color: ConstantesColores
                                                       .gris_textos,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              '${listaVendedores[i]['vendedores'][j]['indicativo']} ${listaVendedores[i]['vendedores'][j]['telefono']}',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: ConstantesColores
-                                                    .gris_textos,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                  ],
-                );
-              }
-              return CircularProgressIndicator();
-            }),
+                        )
+                    ],
+                  );
+                }
+                return CircularProgressIndicator();
+              }),
+        ),
       ),
     );
   }
 
   List cargarVendedores(data) {
-    var listVendedores = [];
+    List<Map<String, dynamic>> listVendedores = [];
+    final Map<String, dynamic> mapFilter = {};
     for (var i = 0; i < data.length; i++) {
       List listTemporal = data;
       var res = [];
@@ -145,8 +151,18 @@ class MisVendedores extends StatelessWidget {
         "icono": item?.icono,
         "vendedores": res
       });
+      print("primer for");
     }
-    return listVendedores;
+
+    // este codigo de la linea 157 a la 163 se usa para filtrar los vendedores repetidos y que solo los muestre una vez
+    for (Map<String, dynamic> myMap in listVendedores) {
+      mapFilter[myMap['nombreComercial']] = myMap;
+    }
+    final List<Map<String, dynamic>> listFilter = mapFilter.keys
+        .map((key) => mapFilter[key] as Map<String, dynamic>)
+        .toList();
+
+    return listFilter;
   }
 
   _cargarNumeroTelefono(telefono) {
