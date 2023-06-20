@@ -202,8 +202,12 @@ class PedidoEmart {
             precio:
                 elemet.descuento == 0 ? elemet.precio : elemet.preciodescuento,
             cantidad: int.parse(obtenerValor(elemet)!),
+            descuento: ((elemet.descuento! *
+                    (elemet.precioinicial! *
+                        int.parse(obtenerValor(elemet)!))) /
+                100),
           );
-
+          print("descuento asignado ${productoAsignado.descuento}");
           listaAgrupar.add(productoAsignado);
         }
       }
@@ -215,8 +219,10 @@ class PedidoEmart {
 
     groups.forEach((key, value) {
       var precio = 0.0;
+      var descuento = 0.0;
       for (int i = 0; i < value.length; i++) {
         precio = precio + (value[i].cantidad! * value[i].precio!);
+        descuento += value[i].descuento ?? 0.0;
       }
 
       for (int j = 0; j < listaFabricante!.length; j++) {
@@ -227,6 +233,7 @@ class PedidoEmart {
           key!,
           () => {
                 'precioFinal': precio,
+                'descuento': descuento,
               });
     });
   }

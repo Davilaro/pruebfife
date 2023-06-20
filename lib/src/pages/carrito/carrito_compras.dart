@@ -26,6 +26,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -181,120 +182,93 @@ class _CarritoComprasState extends State<CarritoCompras> {
           listaWidget.add(
             Padding(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: CustomExpansionPanelList(
-                expansionCallback: (int i, bool status) {
-                  setState(() {
-                    PedidoEmart.listaProductosPorFabricante!
-                        .forEach((key, value) {
-                      if (key != fabricante) {
-                        value["expanded"] = false;
-                      }
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                child: CustomExpansionPanelList(
+                  expansionCallback: (int i, bool status) {
+                    setState(() {
+                      PedidoEmart.listaProductosPorFabricante!
+                          .forEach((key, value) {
+                        if (key != fabricante) {
+                          value["expanded"] = false;
+                        }
+                      });
+                      value["expanded"] = !status;
+                      cargarDeNuevo = false;
                     });
-                    value["expanded"] = !status;
-                    cargarDeNuevo = false;
-                  });
-                },
-                children: [
-                  ExpansionPanel(
-                    canTapOnHeader: true,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 70,
-                              width: 70,
-                              alignment: Alignment.center,
-                              child: CachedNetworkImage(
-                                  imageUrl:
-                                      PedidoEmart.listaProductosPorFabricante![
-                                          fabricante]["imagen"],
-                                  placeholder: (context, url) => Image.asset(
-                                      'assets/image/jar-loading.gif'),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                          'assets/image/logo_login.png'),
-                                  fit: BoxFit.cover),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                child: Text(
-                                    cartProvider.getListaFabricante[
-                                                fabricante] ==
-                                            null
-                                        ? '${productoViewModel.getFormat().currencySymbol}: 0'
-                                        : productoViewModel.getCurrency(
-                                            cartProvider.getListaFabricante[
-                                                fabricante]["precioFinal"]),
-                                    style: TextStyle(
-                                        color: ConstantesColores.azul_precio,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                      );
-                    },
-                    body: Container(
-                      constraints: BoxConstraints(
-                          minHeight: 50, maxWidth: double.infinity),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            Visibility(
-                              visible: getVisibilityMessage(
-                                  fabricante,
-                                  cartProvider.getListaFabricante[fabricante]
-                                      ["precioFinal"],
-                                  value["preciominimo"],
-                                  value["topeMinimo"]),
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(20, 2, 10, 2),
-                                child: Row(
-                                  children: [
-                                    Obx(() => Visibility(
-                                          visible: isValid.value,
-                                          child: SvgPicture.asset(
-                                            'assets/image/alerta_pedido_inferio.svg',
-                                            color: value['restrictivofrecuencia'] ==
-                                                            0 &&
-                                                        value['isFrecuencia'] ==
-                                                            true ||
-                                                    value['restrictivonofrecuencia'] ==
-                                                            0 &&
-                                                        value['isFrecuencia'] ==
-                                                            false
-                                                ? HexColor("#42B39C")
-                                                : Colors.red,
-                                          ),
-                                        )),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Center(
-                                            child: Text(
-                                          textAlertCompany(
-                                              fabricante,
+                  },
+                  children: [
+                    ExpansionPanel(
+                      canTapOnHeader: true,
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25))),
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 70,
+                                alignment: Alignment.center,
+                                child: CachedNetworkImage(
+                                    imageUrl: PedidoEmart
+                                            .listaProductosPorFabricante![
+                                        fabricante]["imagen"],
+                                    placeholder: (context, url) => Image.asset(
+                                        'assets/image/jar-loading.gif'),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                            'assets/image/logo_login.png'),
+                                    fit: BoxFit.cover),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: Text(
+                                      cartProvider.getListaFabricante[
+                                                  fabricante] ==
+                                              null
+                                          ? '${productoViewModel.getFormat().currencySymbol}: 0'
+                                          : productoViewModel.getCurrency(
                                               cartProvider.getListaFabricante[
-                                                  fabricante]["precioFinal"],
-                                              value["preciominimo"],
-                                              value["topeMinimo"],
-                                              productoViewModel
-                                                  .getFormat()
-                                                  .currencySymbol,
-                                              value["iva"],
-                                              value['restrictivofrecuencia'],
-                                              value['restrictivonofrecuencia'],
-                                              value["diasVisita"],
-                                              value["isFrecuencia"],
-                                              value["texto1"]),
-                                          style: TextStyle(
+                                                  fabricante]["precioFinal"]),
+                                      style: TextStyle(
+                                          color: ConstantesColores.azul_precio,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold))),
+                            ],
+                          ),
+                        );
+                      },
+                      body: Container(
+                        color: Colors.white,
+                        constraints: BoxConstraints(
+                            minHeight: 50, maxWidth: double.infinity),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              Visibility(
+                                visible: getVisibilityMessage(
+                                    fabricante,
+                                    cartProvider.getListaFabricante[fabricante]
+                                        ["precioFinal"],
+                                    value["preciominimo"],
+                                    value["topeMinimo"]),
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(20, 2, 10, 2),
+                                  child: Row(
+                                    children: [
+                                      Obx(() => Visibility(
+                                            visible: isValid.value,
+                                            child: SvgPicture.asset(
+                                              'assets/image/alerta_pedido_inferio.svg',
                                               color: value['restrictivofrecuencia'] ==
                                                               0 &&
                                                           value['isFrecuencia'] ==
@@ -303,48 +277,86 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                               0 &&
                                                           value['isFrecuencia'] ==
                                                               false
-                                                  ? Colors.black.withOpacity(.7)
+                                                  ? HexColor("#42B39C")
                                                   : Colors.red,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              constraints: BoxConstraints(
-                                  minHeight: 150,
-                                  maxHeight: 250,
-                                  maxWidth: double.infinity),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      child: Column(
-                                        children: this
-                                            .gridItem(
-                                                value["items"],
+                                            ),
+                                          )),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Center(
+                                              child: Text(
+                                            textAlertCompany(
                                                 fabricante,
-                                                context,
-                                                cartProvider,
-                                                value["preciominimo"])
-                                            .toList(),
+                                                cartProvider.getListaFabricante[
+                                                    fabricante]["precioFinal"],
+                                                value["preciominimo"],
+                                                value["topeMinimo"],
+                                                productoViewModel
+                                                    .getFormat()
+                                                    .currencySymbol,
+                                                value["iva"],
+                                                value['restrictivofrecuencia'],
+                                                value[
+                                                    'restrictivonofrecuencia'],
+                                                value["diasVisita"],
+                                                value["isFrecuencia"],
+                                                value["texto1"]),
+                                            style: TextStyle(
+                                                color: value['restrictivofrecuencia'] ==
+                                                                0 &&
+                                                            value['isFrecuencia'] ==
+                                                                true ||
+                                                        value['restrictivonofrecuencia'] ==
+                                                                0 &&
+                                                            value['isFrecuencia'] ==
+                                                                false
+                                                    ? Colors.black
+                                                        .withOpacity(.7)
+                                                    : Colors.red,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Container(
+                                constraints: BoxConstraints(
+                                    minHeight: 150,
+                                    maxHeight: 250,
+                                    maxWidth: double.infinity),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        child: Column(
+                                          children: this
+                                              .gridItem(
+                                                  value["items"],
+                                                  fabricante,
+                                                  context,
+                                                  cartProvider,
+                                                  value["preciominimo"])
+                                              .toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    isExpanded: cargarDeNuevo ? true : value["expanded"],
-                  )
-                ],
+                      isExpanded: cargarDeNuevo ? true : value["expanded"],
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -514,49 +526,104 @@ class _CarritoComprasState extends State<CarritoCompras> {
     ));
 
     result
-      ..add(Container(
-        height: 80,
-        width: double.infinity,
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: ImageButton(
-                children: <Widget>[],
-                width: 250,
-                height: 35,
-                paddingTop: 5,
-                pressedImage: Image.asset(
-                  "assets/image/seguir_comprando_btn_detalle-white.png",
-                ),
-                unpressedImage: Image.asset(
-                    "assets/image/seguir_comprando_btn_detalle-white.png"),
-                onTap: () async {
-                  PedidoEmart.cambioVista.value = 1;
-                  cartProvider.guardarCambiodevista = 1;
-                  Navigator.pop(context);
-                  List<Fabricantes> fabricanteSeleccionado =
-                      await DBProvider.db.consultarFricante(fabricante);
+      ..add(Stack(
+        children: [
+          Container(
+            height: 100,
+            color: ConstantesColores.azul_precio,
+          ),
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15))),
+          ),
+          Container(
+            height: 80,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15))),
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ImageButton(
+                  children: <Widget>[],
+                  width: 250,
+                  height: 35,
+                  paddingTop: 5,
+                  pressedImage: Image.asset(
+                    "assets/image/seguir_comprando_btn_detalle-white.png",
+                  ),
+                  unpressedImage: Image.asset(
+                      "assets/image/seguir_comprando_btn_detalle-white.png"),
+                  onTap: () async {
+                    PedidoEmart.cambioVista.value = 1;
+                    cartProvider.guardarCambiodevista = 1;
+                    Navigator.pop(context);
+                    List<Fabricantes> fabricanteSeleccionado =
+                        await DBProvider.db.consultarFricante(fabricante);
 
-                  _onClickCatalogo(
-                      fabricanteSeleccionado[0].empresa!,
-                      context,
-                      cartProvider,
-                      fabricanteSeleccionado[0].nombrecomercial!,
-                      fabricanteSeleccionado[0].icono!);
-                },
-              ),
-            )
-          ],
+                    _onClickCatalogo(
+                        fabricanteSeleccionado[0].empresa!,
+                        context,
+                        cartProvider,
+                        fabricanteSeleccionado[0].nombrecomercial!,
+                        fabricanteSeleccionado[0].icono!);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ));
+
+    result
+      ..add(Container(
+        height: 60,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+          color: ConstantesColores.azul_precio,
+        ),
+        child: Text(
+          getCurrency(cartProvider.getListaFabricante[fabricante]["descuento"]),
+          style: TextStyle(
+              fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ));
     //FIREBASE: Llamamos el evento view_cart
     TagueoFirebase()
         .sendAnalityticViewCart(cartProvider, listTag, 'CarritoCompras');
     return result;
+  }
+
+  String getCurrency(dynamic valor) {
+    NumberFormat formatNumber = new NumberFormat("#,##0", "es_AR");
+
+    var result = '${getFormat().currencySymbol}' +
+        formatNumber.format(valor).replaceAll(',00', '');
+
+    return result;
+  }
+
+  NumberFormat getFormat() {
+    var locale = Intl().locale;
+    var format = locale.toString() != 'es_CO'
+        ? locale.toString() == 'es_CR'
+            ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+            : NumberFormat.simpleCurrency(locale: locale.toString())
+        : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+
+    return format;
   }
 
   _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
