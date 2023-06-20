@@ -18,6 +18,7 @@ class MetodosLLenarValores {
           valorAhorro = valorAhorro +
               PedidoEmart.listaProductos![key]!.preciodescuento! *
                   int.parse(value);
+          print('descuento $valorAhorro');
           cantidad++;
         }
       }
