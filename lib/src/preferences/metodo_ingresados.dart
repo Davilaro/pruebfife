@@ -6,6 +6,7 @@ class MetodosLLenarValores {
   void calcularValorTotal(CarroModelo cartProvider) {
     double valorTotal = 0;
     double valorAhorro = 0;
+    double valorTotalAhorro = 0;
     int cantidad = 0;
 
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
@@ -15,6 +16,12 @@ class MetodosLLenarValores {
               ? PedidoEmart.listaProductos![key]!.precio
               : PedidoEmart.listaProductos![key]!.preciodescuento;
           valorTotal = valorTotal + precio! * int.parse(value);
+          valorTotalAhorro += (PedidoEmart.listaProductos![key]!.descuento! *
+              (PedidoEmart.listaProductos![key]!.precioinicial! *
+                  int.parse(PedidoEmart.obtenerValor(
+                      PedidoEmart.listaProductos![key]!)!)) /
+              100);
+
           valorAhorro = valorAhorro +
               PedidoEmart.listaProductos![key]!.preciodescuento! *
                   int.parse(value);
@@ -26,6 +33,7 @@ class MetodosLLenarValores {
     cartProvider.actualizarItems = cantidad;
     cartProvider.guardarValorCompra = valorTotal;
     cartProvider.guardarValorAhorro = valorAhorro;
+    cartProvider.setNuevoValorAhorro = valorTotalAhorro;
     PedidoEmart.calcularPrecioPorFabricante();
     cartProvider.actualizarListaFabricante =
         PedidoEmart.listaPrecioPorFabricante!;

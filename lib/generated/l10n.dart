@@ -880,6 +880,16 @@ class S {
     );
   }
 
+  /// `This is the value saved on this order`
+  String get value_saved_cart {
+    return Intl.message(
+      'This is the value saved on this order',
+      name: 'value_saved_cart',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The verification code cannot be empty`
   String get verification_code_cannot_empty {
     return Intl.message(

@@ -6,6 +6,7 @@ class CarroModelo extends ChangeNotifier {
   Map<String, dynamic> _listaValorFabricante = new Map();
   int _cambioVista = 0;
   double _precioAhorro = 0;
+  double _nuevoPrecioAhorro = 0;
 
   double get getTotal {
     return _precioTotal;
@@ -47,8 +48,17 @@ class CarroModelo extends ChangeNotifier {
     return _precioAhorro;
   }
 
+  double get getNuevoTotalAhorro {
+    return _nuevoPrecioAhorro;
+  }
+
   set guardarValorAhorro(double precio) {
     _precioAhorro = precio;
+    notifyListeners();
+  }
+
+  set setNuevoValorAhorro(double precio) {
+    _nuevoPrecioAhorro = precio;
     notifyListeners();
   }
 }
