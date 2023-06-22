@@ -309,14 +309,12 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
 void calcularValorTotal(cartProvider) {
   double valorTotal = 0;
-  double valorTotalAhorro = 0;
 
   int cantidad = 0;
 
   PedidoEmart.listaValoresPedido!.forEach((key, value) {
     if (value != "0" && PedidoEmart.listaValoresPedidoAgregados![key] == true) {
       double precio = PedidoEmart.listaProductos![key]!.precio;
-      valorTotalAhorro = PedidoEmart.listaProductos![key]!.descuento ?? 0.0;
       valorTotal = valorTotal + precio * int.parse(value);
       print("cantidad $value");
       cantidad++;
@@ -325,7 +323,6 @@ void calcularValorTotal(cartProvider) {
 
   cartProvider.actualizarItems = cantidad;
   cartProvider.guardarValorCompra = valorTotal;
-  cartProvider.setNuevoValorAhorro = valorTotalAhorro;
 
   PedidoEmart.calcularPrecioPorFabricante();
   cartProvider.actualizarListaFabricante =

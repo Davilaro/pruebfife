@@ -658,7 +658,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
           ),
         ],
       ));
-
+      
     result
       ..add(Container(
         height: 70,
