@@ -317,7 +317,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                       style: TextStyle(
                                           color: ConstantesColores.azul_precio,
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold))),
+                                          fontWeight: FontWeight.w500))),
                             ],
                           ),
                         );
@@ -459,9 +459,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
         listTag.add(productos);
         result
           ..add(Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 22),
             child: Container(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     width: size.width / 4,
@@ -577,7 +578,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     });
 
     result.add(Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
       child: InkWell(
         onTap: () {
           dialogVaciarCarrito(fabricante, cartProvider, value, precioMinimo);
