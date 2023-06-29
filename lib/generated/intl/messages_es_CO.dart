@@ -184,6 +184,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos."),
         "validating_information":
             MessageLookupByLibrary.simpleMessage("Validando información"),
+        "value_saved_cart": MessageLookupByLibrary.simpleMessage(
+            "Es el valor ahorrado en este pedido"),
         "verification_code_cannot_empty": MessageLookupByLibrary.simpleMessage(
             "El código de verificación no puede estar vacío"),
         "version": MessageLookupByLibrary.simpleMessage("Versión"),

@@ -7,6 +7,7 @@ class ProductoAsignado {
     this.fabricante,
     this.cantidad,
     this.precio,
+    this.descuento,
     this.productos,
   });
 
@@ -14,6 +15,7 @@ class ProductoAsignado {
   String? nombre;
   String? fabricante;
   double? precio;
+  double? descuento;
   int? cantidad;
   Producto? productos;
 

@@ -38,37 +38,40 @@ class CustomExpansionPanelList extends StatelessWidget {
           color: Colors.transparent,
         ));
 
-      final Row header = new Row(
-        children: <Widget>[
-          new Expanded(
-            child: new AnimatedContainer(
-              duration: animationDuration,
-              curve: Curves.fastOutSlowIn,
-              margin: _isChildExpanded(index)
-                  ? kExpandedEdgeInsets
-                  : EdgeInsets.zero,
-              child: new SizedBox(
-                height: _kPanelHeaderCollapsedHeight,
-                child: children[index].headerBuilder(
-                  context,
-                  children[index].isExpanded,
+      final Container header = Container(
+        color: Colors.white,
+        child: new Row(
+          children: <Widget>[
+            new Expanded(
+              child: new AnimatedContainer(
+                duration: animationDuration,
+                curve: Curves.fastOutSlowIn,
+                margin: _isChildExpanded(index)
+                    ? kExpandedEdgeInsets
+                    : EdgeInsets.zero,
+                child: new SizedBox(
+                  height: _kPanelHeaderCollapsedHeight,
+                  child: children[index].headerBuilder(
+                    context,
+                    children[index].isExpanded,
+                  ),
                 ),
               ),
             ),
-          ),
-          new Container(
-            margin: const EdgeInsetsDirectional.only(end: 8.0),
-            child: new ExpandIcon(
-              isExpanded: _isChildExpanded(index),
-              padding: const EdgeInsets.all(16.0),
-              color: ConstantesColores.verde,
-              onPressed: (bool isExpanded) {
-                if (expansionCallback != null)
-                  expansionCallback(index, isExpanded);
-              },
+            new Container(
+              margin: const EdgeInsetsDirectional.only(end: 8.0),
+              child: new ExpandIcon(
+                isExpanded: _isChildExpanded(index),
+                padding: const EdgeInsets.all(16.0),
+                color: ConstantesColores.verde,
+                onPressed: (bool isExpanded) {
+                  if (expansionCallback != null)
+                    expansionCallback(index, isExpanded);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
 
       double _radiusValue = _isChildExpanded(index) ? 10.0 : 12.0;

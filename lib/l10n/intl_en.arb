@@ -101,6 +101,7 @@
     "unable_send_text_message2":"It was not possible to send the message, please try again {e}",
     "upper_text_drawer" : "Choose the branch or point of sale for which you wish to see the products available and place your orders.",
 
+    "value_saved_cart" : "This is the value saved on this order",
     "verification_code_cannot_empty":"The verification code cannot be empty",
     "version": "Version",
     "validating_information": "Validating information",

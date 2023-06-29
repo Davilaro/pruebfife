@@ -102,6 +102,7 @@
     "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",
     "upper_text_drawer" : "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos.",
 
+    "value_saved_cart" : "Es el valor ahorrado en este pedido",
     "verification_code_cannot_empty":"El código de verificación no puede estar vacío",
     "version": "Versión",
     "validating_information": "Validando información",

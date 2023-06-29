@@ -279,8 +279,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ORDER BY p.orden ASC
          
         ''';
-        String resp = query.toString();
-        log(resp);
+        // String resp = query.toString();
+        // log(resp);
       }
 
       sql = await db.rawQuery(query);
