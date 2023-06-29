@@ -129,7 +129,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                   ),
                 ),
                 Container(
-                  height: Get.height * 0.21,
+                  height: cartProvider.getNuevoTotalAhorro != 0.0
+                      ? Get.height * 0.21
+                      : Get.height * 0.12,
                   child: Container(
                     width: Get.width,
                     alignment: Alignment.topLeft,
@@ -142,74 +144,79 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                 fontSize: 17.0,
                                 color: HexColor("#43398E"),
                                 fontWeight: FontWeight.w500)),
-                        Container(
-                          padding: EdgeInsets.only(top: 5),
-                          width: Get.width * 0.8,
-                          height: Get.height * 0.099,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            color: ConstantesColores.azul_precio,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Container(
-                                  width: 45.0,
-                                  height: 45.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: ConstantesColores
-                                        .azul_aguamarina_botones,
+                        Visibility(
+                          visible: cartProvider.getNuevoTotalAhorro == 0.0
+                              ? false
+                              : true,
+                          child: Container(
+                            padding: EdgeInsets.only(top: 5),
+                            width: Get.width * 0.8,
+                            height: Get.height * 0.099,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              color: ConstantesColores.azul_precio,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10.0,
                                   ),
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/icon/Icono_valor_ahorrado.png',
-                                      fit: BoxFit.cover,
-                                      width: 30,
+                                  Container(
+                                    width: 45.0,
+                                    height: 45.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10.0),
-                                Expanded(
-                                  child: Stack(children: [
-                                    Positioned(
-                                      right: -5,
-                                      bottom: -30,
+                                    child: Center(
                                       child: Image.asset(
-                                        'assets/icon/Icono_marca_de_agua.png',
-                                        width: 100.0,
-                                        height: 100.0,
+                                        'assets/icon/Icono_valor_ahorrado.png',
                                         fit: BoxFit.cover,
+                                        width: 30,
                                       ),
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${getCurrency(cartProvider.getNuevoTotalAhorro)}",
-                                          style: TextStyle(
-                                              fontSize: 15.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Stack(children: [
+                                      Positioned(
+                                        right: -5,
+                                        bottom: -30,
+                                        child: Image.asset(
+                                          'assets/icon/Icono_marca_de_agua.png',
+                                          width: 100.0,
+                                          height: 100.0,
+                                          fit: BoxFit.cover,
                                         ),
-                                        Text(
-                                          'Es el total del ahorrado en todos tus pedidos.',
-                                          style: TextStyle(
-                                              fontSize: 13.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ]),
-                                ),
-                              ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${getCurrency(cartProvider.getNuevoTotalAhorro)}",
+                                            style: TextStyle(
+                                                fontSize: 15.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Es el total del ahorrado en todos tus pedidos.',
+                                            style: TextStyle(
+                                                fontSize: 13.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -658,65 +665,68 @@ class _CarritoComprasState extends State<CarritoCompras> {
           ),
         ],
       ));
-      
+
     result
-      ..add(Container(
-        height: 70,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
+      ..add(Visibility(
+        visible: cartProvider.getNuevoTotalAhorro == 0.0 ? false : true,
+        child: Container(
+          height: 70,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+            color: ConstantesColores.azul_precio,
           ),
-          color: ConstantesColores.azul_precio,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: ConstantesColores.azul_aguamarina_botones,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/icon/Icono_valor_ahorrado.png',
-                      fit: BoxFit.cover,
-                      width: 30,
-                      color: Colors.white,
-                    ),
-                  )),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        getCurrency(cartProvider.getListaFabricante[fabricante]
-                            ["descuento"]),
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: ConstantesColores.azul_aguamarina_botones,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/icon/Icono_valor_ahorrado.png',
+                        fit: BoxFit.cover,
+                        width: 30,
+                        color: Colors.white,
                       ),
-                      Text(
-                        S.current.value_saved_cart,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
+                    )),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          getCurrency(cartProvider
+                              .getListaFabricante[fabricante]["descuento"]),
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          S.current.value_saved_cart,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ));
