@@ -668,7 +668,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
     result
       ..add(Visibility(
-        visible: cartProvider.getNuevoTotalAhorro == 0.0 ? false : true,
+        visible: cartProvider.getListaFabricante[fabricante]["descuento"] == 0.0
+            ? false
+            : true,
         child: Container(
           height: 70,
           width: double.infinity,
