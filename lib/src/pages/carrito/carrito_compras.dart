@@ -270,12 +270,12 @@ class _CarritoComprasState extends State<CarritoCompras> {
                 child: CustomExpansionPanelList(
                   expansionCallback: (int i, bool status) {
                     setState(() {
-                      PedidoEmart.listaProductosPorFabricante!
-                          .forEach((key, value) {
-                        if (key != fabricante) {
-                          value["expanded"] = false;
-                        }
-                      });
+                      // PedidoEmart.listaProductosPorFabricante!
+                      //     .forEach((key, value) {
+                      //   if (key != fabricante) {
+                      //     value["expanded"] = false;
+                      //   }
+                      // });
                       value["expanded"] = !status;
                       cargarDeNuevo = false;
                     });
