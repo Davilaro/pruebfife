@@ -187,7 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "The verification code cannot be empty"),
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "we_have_a_suggested": MessageLookupByLibrary.simpleMessage(
-            "We have a suggested order for you, so that you don\'t forget any product for your business."),
+            "We have a suggested order for you, so your business won\'t lack any product."),
         "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
             "We are validating the code to activate your account."),
         "welcome_pideky":

@@ -61,7 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(
-            "Categorias destacadas para tí "),
+            "Categorías destacadas para tí "),
         "ccup_code_copied":
             MessageLookupByLibrary.simpleMessage("Código CCUP copiado"),
         "cell_phone_number":
@@ -190,7 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "El código de verificación no puede estar vacío"),
         "version": MessageLookupByLibrary.simpleMessage("Versión"),
         "we_have_a_suggested": MessageLookupByLibrary.simpleMessage(
-            "Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio."),
+            "Tenemos un pedido sugerido para ti, así a tu negocio no le faltará ningún producto."),
         "we_validating_code_activate": MessageLookupByLibrary.simpleMessage(
             "Estamos validando el código para activar tu cuenta."),
         "welcome_pideky":

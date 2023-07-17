@@ -14,7 +14,7 @@
     "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",
     "country_confirmation":"Confirmación país",
     "catalog":"Categorías",
-    "categories_for_you": "Categorias destacadas ",
+    "categories_for_you": "Categorías destacadas ",
     "cell_phone_number": "número de celular",
     "ccup_code_copied": "Código CCUP copiado",
     "code_could_not_be_generated":"No se pudo generar el código",
@@ -113,7 +113,7 @@
     "whatsApp_number": "Número WhatsApp:{telefono}",
     "whatsApp": "WhatsApp",
     "whatsApp_not_installed":"WhatsApp no instalado",
-    "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
+    "we_have_a_suggested":"Tenemos un pedido sugerido para ti, así a tu negocio no le faltará ningún producto.",
     
     "you_want_to_go":"O deseas ir al ",
     "our_system_has_received":"Nuestro sistema ha recibido tu solicitud.",
