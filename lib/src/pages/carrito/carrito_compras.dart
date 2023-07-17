@@ -198,16 +198,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${getCurrency(cartProvider.getNuevoTotalAhorro)}",
+                                            'El total ahorrado en estos pedidos es:',
                                             style: TextStyle(
-                                                fontSize: 15.0,
+                                                fontSize: 13.5,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            'El total ahorrado en estos pedidos es',
+                                            "${getCurrency(cartProvider.getNuevoTotalAhorro)}",
                                             style: TextStyle(
-                                                fontSize: 13.0,
+                                                fontSize: 15.0,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
                                           ),
