@@ -1,5 +1,6 @@
 import 'package:emart/shared/widgets/top_buttons.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -23,6 +24,11 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   final prefs = Preferencias();
   @override
   void initState() {
+    if (prefs.usurioLogin == -1) {
+      Future.delayed(Duration(seconds: 0)).then((value) {
+        alertCustom(context);
+      });
+    }
     validarVersionActual(context);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('SuggestedOrderPage');
