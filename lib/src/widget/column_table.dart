@@ -141,6 +141,7 @@ class _ColumnTableState extends State<ColumnTable> {
         valorTotal = valorTotal + precio * int.parse(value);
         valorAhorro = valorAhorro +
             PedidoEmart.listaProductos![key]!.precio * int.parse(value);
+
         cantidad++;
       }
     });

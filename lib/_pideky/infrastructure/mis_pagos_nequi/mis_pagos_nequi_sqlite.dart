@@ -9,13 +9,13 @@ class MisPagosNequiSqlite extends IMisPagosNequi {
     final db = await DBProviderHelper.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery("""
-  SELECT * from PagosNequi
-""");
+      final sql = await db.rawQuery('''
+        SELECT CCUP, celular, fechaPago, valorPago, tipoPago FROM PagosNequi ORDER BY fechaPago ASC
+      ''');
 
       return sql.map((e) => PagosNequiModel.fromJson(e)).toList();
     } catch (e) {
-      print("---algo salio mal al consultar mis pagos nequi $e");
+      print('---algo salio mal al consultar mis pagos nequi $e');
       return [];
     }
   }

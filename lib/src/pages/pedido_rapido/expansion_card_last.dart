@@ -316,12 +316,14 @@ void calcularValorTotal(cartProvider) {
     if (value != "0" && PedidoEmart.listaValoresPedidoAgregados![key] == true) {
       double precio = PedidoEmart.listaProductos![key]!.precio;
       valorTotal = valorTotal + precio * int.parse(value);
+      print("cantidad $value");
       cantidad++;
     }
   });
 
   cartProvider.actualizarItems = cantidad;
   cartProvider.guardarValorCompra = valorTotal;
+
   PedidoEmart.calcularPrecioPorFabricante();
   cartProvider.actualizarListaFabricante =
       PedidoEmart.listaPrecioPorFabricante!;

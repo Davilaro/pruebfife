@@ -71,7 +71,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                     ["precioFinal"] <
                 precioMinimo
             : false;
-        
       }
     } catch (e) {
       productoEncontrado = false;

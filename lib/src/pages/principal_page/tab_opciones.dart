@@ -95,6 +95,7 @@ class _TabOpcionesState extends State<TabOpciones>
           child: Scaffold(
             backgroundColor: ConstantesColores.color_fondo_gris,
             key: drawerKey,
+            drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
             drawer: DrawerSucursales(drawerKey),
             appBar: PreferredSize(
               preferredSize: prefs.usurioLogin == 1

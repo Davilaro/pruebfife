@@ -880,6 +880,16 @@ class S {
     );
   }
 
+  /// `This is the value saved on this order`
+  String get value_saved_cart {
+    return Intl.message(
+      'This is the value saved on this order',
+      name: 'value_saved_cart',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The verification code cannot be empty`
   String get verification_code_cannot_empty {
     return Intl.message(
@@ -980,10 +990,10 @@ class S {
     );
   }
 
-  /// `We have a suggested order for you, so that you don't forget any product for your business.`
+  /// `We have a suggested order for you, so your business won't lack any product.`
   String get we_have_a_suggested {
     return Intl.message(
-      'We have a suggested order for you, so that you don\'t forget any product for your business.',
+      'We have a suggested order for you, so your business won\'t lack any product.',
       name: 'we_have_a_suggested',
       desc: '',
       args: [],

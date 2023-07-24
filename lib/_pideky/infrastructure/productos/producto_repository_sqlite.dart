@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -7,7 +9,8 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
-    final sql = await db.rawQuery('''
+    final sql = await db.rawQuery(
+        '''
       SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
     ''');
 
@@ -17,7 +20,8 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<List<Producto>> consultarProductos() async {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
     ''');
 
@@ -31,16 +35,16 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProvider.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
        
         SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
         0.0 as preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
@@ -86,17 +90,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 2) {
-        query = '''
+        query =
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2, 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -118,17 +122,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         
     ''';
       } else if (tipo == 3) {
-        query = '''
+        query =
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2, 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -149,17 +153,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
        ''';
       } else if (tipo == 4) {
-        query = '''
+        query =
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2, 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
@@ -180,17 +184,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else if (tipo == 5) {
-        query = '''
+        query =
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2, 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -212,17 +216,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ''';
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
-        query = '''
+        query =
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -245,17 +249,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else {
-        query = '''
+        query =
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float)  precioinicial 
@@ -275,6 +279,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ORDER BY p.orden ASC
          
         ''';
+        // String resp = query.toString();
+        // log(resp);
       }
 
       sql = await db.rawQuery(query);
@@ -310,14 +316,14 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipoProducto == 2) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
         SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_imperdible as orden, 0.0 as descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_imperdible as orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
         , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
@@ -339,15 +345,15 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
     ''');
       } else {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-      p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-      p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-      p.codIndirecto , p.marcacodigopideki , 
+       p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+       p.marcacodigopideki , 
       p.categoriacodigopideki , 
-      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
+      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
       , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
@@ -369,11 +375,10 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-      p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-      p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-      p.codIndirecto , p.marcacodigopideki , 
+       p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+       p.marcacodigopideki , 
       p.categoriacodigopideki , 
-      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
+      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden, cast(ifnull(tmp.descuento,0) as float) descuento, 
       round((p.precio - p.precio * ifnull(tmp.descuento,0) /100),0) preciodescuento,
       cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
 , substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
@@ -411,14 +416,14 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       List<Producto> lista = [];
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
-      List<Map> sql = await db.rawQuery('''
+      List<Map> sql = await db.rawQuery(
+          '''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, 0.0 as descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) as precioinicial
         FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
@@ -475,17 +480,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 5) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -514,17 +519,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 1) {
         //tipo 1 para imperdibles
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -553,17 +558,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 3) {
         //tipo 3 para marca e imperdible
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -595,17 +600,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         //tipo 6 para productos del dia
         String date = DateTime.now().toString();
 
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial
@@ -621,7 +626,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)>=$precioMinimo and round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo 
-        and CAST(p.fechatrans AS date) = CAST('$date' AS date)
         ORDER BY p.orden ASC
          
        ''');
@@ -631,17 +635,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 4) {
         //tipo 4 para marca  y promo
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -666,17 +670,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ? sql.map((e) => Producto.fromJson(e)).toList()
             : [];
       } else {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -726,17 +730,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 1) {
         //tipo 1 para filtrar solo por marca, categoria y subcategoria
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
             SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, cast(ifnull(tmp.descuento,0.0) as float) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -763,17 +767,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
         //tipo 2 para productos mas vendidos
       } else if (tipo == 2) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -802,17 +806,17 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
       } else {
         //tipo 3 para imperdibles marcas, categorias y subc
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
-        p.unidad , p.linea , p.marca , p.categoria , p.ean , p.peso , p.longitud , p.altura , 
-        p.ancho , p.volumen , p.iva , p.fabricante , p.categoriapideki , p.marcapideki , p.tipofabricante , 
-        p.codIndirecto , p.marcacodigopideki , 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
-        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.fechatrans, p.orden, ifnull(tmp.descuento,0.0) descuento, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, ifnull(tmp.descuento,0.0) descuento, 
            round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) preciodescuento,
         cast(round((p.precio +  ((p.precio*p.iva) /100)),0) as float) precioinicial 
@@ -885,7 +889,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   Future<List<Producto>> consultarPedidoTemporal() async {
     final db = await DBProviderHelper.db.tempAbierta;
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT codigo_producto codigo, cantidad FROM pedido  
     ''');
 

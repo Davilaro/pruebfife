@@ -9,7 +9,7 @@ class Fabricantes {
   Fabricantes(
       {this.empresa,
       this.icono,
-      this.codIndirecto,
+      // this.codIndirecto,
       this.tipofabricante,
       this.nombrecomercial,
       this.estado,
@@ -27,7 +27,7 @@ class Fabricantes {
   String? empresa;
   String? icono;
   String? tipofabricante;
-  String? codIndirecto;
+  // String? codIndirecto;
   String? nombrecomercial;
   String? estado;
   String? hora;
@@ -46,7 +46,7 @@ class Fabricantes {
       icono: json["ico"] == null ? '' : json["ico"],
       tipofabricante:
           json["tipofabricante"] == null ? '' : json["tipofabricante"],
-      codIndirecto: json["codIndirecto"] == null ? '' : json["codIndirecto"],
+      // codIndirecto: json["codIndirecto"] == null ? '' : json["codIndirecto"],
       nombrecomercial:
           json["nombrecomercial"] == null ? '' : json["nombrecomercial"],
       estado: json["Estado"] == null ? '' : json["Estado"],
@@ -65,7 +65,7 @@ class Fabricantes {
         "empresa": empresa,
         "ico": icono,
         "tipofabricante": tipofabricante,
-        "codIndirecto": codIndirecto,
+        // "codIndirecto": codIndirecto,
         "nombrecomercial": nombrecomercial,
         "Estado": estado,
         "topeMinimo": topeMinimo,

@@ -15,7 +15,7 @@
     "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",
     "country_confirmation":"Confirmación país",
     "catalog":"Catálogo",
-    "categories_for_you": "Categorias destacadas para tí ",
+    "categories_for_you": "Categorías destacadas para tí ",
     "cell_phone_number": "número de celular",
     "ccup_code_copied": "Código CCUP copiado",
     "code_could_not_be_generated":"No se pudo generar el código",
@@ -102,6 +102,7 @@
     "unable_send_text_message2":"No fue posible enviar el mensaje, por favor intente nuevamente {e}",
     "upper_text_drawer" : "Elige la sucursal o punto de venta para la cual deseas ver los productos disponibles y realizar tus pedidos.",
 
+    "value_saved_cart" : "Es el valor ahorrado en este pedido",
     "verification_code_cannot_empty":"El código de verificación no puede estar vacío",
     "version": "Versión",
     "validating_information": "Validando información",
@@ -113,7 +114,7 @@
     "whatsApp_number": "Número WhatsApp:{telefono}",
     "whatsApp": "WhatsApp",
     "whatsApp_not_installed":"WhatsApp no instalado",
-    "we_have_a_suggested":"Tenemos un pedido sugerido para ti, para que no olvides ningún producto para tu negocio.",
+    "we_have_a_suggested":"Tenemos un pedido sugerido para ti, así a tu negocio no le faltará ningún producto.",
 
     "you_want_to_go":"O deseas ir al ",
     "our_system_has_received":"Nuestro sistema ha recibido tu solicitud.",
