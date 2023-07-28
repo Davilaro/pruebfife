@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class BodyMisPedidos extends StatelessWidget {
   BodyMisPedidos({
     Key? key,
-    required this.misPedidosViewModel,
+    required this.misPedidosViewModel, 
   }) : super(key: key);
 
   final MisPedidosViewModel misPedidosViewModel;
@@ -20,16 +20,21 @@ class BodyMisPedidos extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Expanded(
-          child: TabBarView(
-              controller: misPedidosViewModel.tabController,
-              children: [
-            SingleChildScrollView(
-              child: BodyHistorico(),
-            ),
-            SingleChildScrollView(
-              child: BodyTransito(),
-            ),
-          ])),
+                  child: PageView(
+                    controller: misPedidosViewModel.pageController,
+                    onPageChanged: (index) {
+                      misPedidosViewModel.cambiarTab(index);
+                    },
+                    children: [
+                      SingleChildScrollView(
+                        child: BodyHistorico(),
+                      ),
+                      SingleChildScrollView(
+                        child: BodyTransito(),
+                      ),
+                    ],
+                  ),
+                )
     );
   }
 }

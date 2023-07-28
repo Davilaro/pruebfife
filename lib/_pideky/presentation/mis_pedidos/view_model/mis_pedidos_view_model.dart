@@ -19,6 +19,7 @@ class MisPedidosViewModel extends GetxController
   MisPedidosViewModel(this.misPedidosService);
 
   late TabController tabController;
+  late PageController pageController;
 
   RxInt tabActual = 0.obs;
   final List titulosSeccion = ["Histórico", "En tránsito"];
@@ -37,12 +38,15 @@ class MisPedidosViewModel extends GetxController
   void cambiarTab(int estado) {
     fechaInicial = '-1'.obs;
     fechaFinal = '-1'.obs;
+    pageController.animateToPage(estado,
+        duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
     this.tabActual.value = estado;
   }
 
   @override
   void onInit() {
     super.onInit();
+    pageController = PageController();
     tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     // clearList();
     initListasHistorico();

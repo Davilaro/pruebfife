@@ -1,4 +1,6 @@
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_historico.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_mis_pedidos.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_transito.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/shared/widgets/top_buttons.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -30,8 +32,9 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
   final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
+    final selectedColor = Colors.yellow;
+    return Obx(() => DefaultTabController(
+      length: misPedidosViewModel.titulosSeccion.length,
       child: Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Container(
@@ -39,21 +42,49 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Column(
               children: [
-                TopButtons(
-                  controllerViewModel: misPedidosViewModel,
-                  onTap: (index) {
-                    //UXCam: Llamamos el evento selectSectionMisPedidos
-                    UxcamTagueo().selectSectionMisPedidos(
-                        misPedidosViewModel.titulosSeccion[index]);
-                    misPedidosViewModel.cambiarTab(index);
-                  },
-                ),
+                TabBar(
+                    controller: misPedidosViewModel.tabController,
+                    labelPadding:
+                        EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                    indicatorColor: Colors.transparent,
+                    unselectedLabelColor: Colors.black,
+                    splashFactory: NoSplash.splashFactory,
+                    onTap: (index) {
+                      //     //UXCam: Llamamos el evento selectSectionMisPedidos
+                      UxcamTagueo().selectSectionMisPedidos(
+                          misPedidosViewModel.titulosSeccion[index]);
+                      misPedidosViewModel.cambiarTab(index);
+                    },
+                    tabs: List<Widget>.generate(
+                        misPedidosViewModel.titulosSeccion.length, (index) {
+                      return Tab(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: misPedidosViewModel.tabActual.value == index
+                                ? selectedColor
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              misPedidosViewModel.titulosSeccion[index],
+                              style: TextStyle(
+                                  color: ConstantesColores.azul_precio,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      );
+                    })),
                 BodyMisPedidos(misPedidosViewModel: misPedidosViewModel)
               ],
             ),
           ),
         ),
       ),
-    );
+    ));
   }
 }

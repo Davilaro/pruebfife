@@ -10,6 +10,7 @@ class OpcionesBard extends ChangeNotifier {
   int _numeroClickCarrito = 0;
   int _numeroClickVerImpedibles = 0;
   int _numeroClickVerPromos = 0;
+   final PageController _pageController = PageController();
 
   int get getNumeroClickVerImpedibles {
     return _numeroClickVerImpedibles;
@@ -68,6 +69,7 @@ class OpcionesBard extends ChangeNotifier {
 
   set selectOptionMenu(int valor) {
     this._selectMenuOption = valor;
+     final PageController _pageController = PageController();
     notifyListeners();
   }
 
