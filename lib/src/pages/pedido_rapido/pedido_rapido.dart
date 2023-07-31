@@ -231,7 +231,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
       padding: EdgeInsets.only(bottom: 20, top: 14),
       alignment: Alignment.center,
       child: Text(
-        "Seleccionar una de tus últimas órdenes para hacer un pedido rápido.",
+        "Selecciona una de tus últimas órdenes para hacer un pedido rápido.",
         textAlign: TextAlign.left,
         style: TextStyle(
           fontSize: 15,

@@ -86,7 +86,7 @@ List<Widget> gridItem(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "Can",
+                            "Cant",
                             style: TextStyle(
                                 color: ConstantesColores.azul_precio,
                                 fontWeight: FontWeight.w800,
