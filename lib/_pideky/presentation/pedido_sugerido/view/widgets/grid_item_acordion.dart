@@ -38,14 +38,14 @@ List<Widget> gridItem(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: CachedNetworkImage(
-                          height: size.height * 0.11,
+                          height: size.height * 0.1,
                           imageUrl: Constantes().urlImgProductos +
                               '${producto.codigo}.png',
                           placeholder: (context, url) =>
                               Image.asset('assets/image/jar-loading.gif'),
                           errorWidget: (context, url, error) => Image.asset(
                             'assets/image/logo_login.png',
-                            width: size.width * 0.35,
+                            width: size.width * 0.195,
                           ),
                           fit: BoxFit.fill,
                         ),
@@ -80,8 +80,9 @@ List<Widget> gridItem(
                         ),
                       ),
                     ),
+                    SizedBox(width: 18),
                     Container(
-                      padding: EdgeInsets.only(left: 20),
+                      // padding: EdgeInsets.only(left: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -105,30 +106,32 @@ List<Widget> gridItem(
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Total",
-                            style: TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 13),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Text(
-                            productViewModel.getCurrency(
-                                producto.cantidad * producto.precio),
-                            style: TextStyle(
-                                color: ConstantesColores.gris_textos,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11),
-                          ),
-                        ],
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Total",
+                              style: TextStyle(
+                                  color: ConstantesColores.azul_precio,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 13),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              productViewModel.getCurrency(
+                                  producto.cantidad * producto.precio),
+                              style: TextStyle(
+                                  color: ConstantesColores.gris_textos,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
