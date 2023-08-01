@@ -87,6 +87,8 @@ class PedidoEmart {
       String horaFabricante = '';
       String diasFrecuencia = "";
       String texto1 = "";
+      String texto2 = "";
+      int itinerario = 0;
       List<String> listaDiasFrecuencia = [];
       List diasAgrupadosPorFabricante = [];
       DateTime now = new DateTime.now();
@@ -104,6 +106,8 @@ class PedidoEmart {
           icon = listaFabricante![j].icono;
           horaFabricante = listaFabricante![j].hora;
           texto1 = listaFabricante![j].texto1 ?? "";
+          texto2 = listaFabricante![j].texto2 ?? "";
+          itinerario = listaFabricante![j].itinerario ?? 0;
           diasFrecuencia = listaFabricante![j].diaVisita;
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
           montoMinimoFrecuencia =
@@ -145,6 +149,8 @@ class PedidoEmart {
         }
       });
 
+      
+
       if ((diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
               horaActual.isBefore(hourRes)) ||
           (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
@@ -172,7 +178,9 @@ class PedidoEmart {
                 'isFrecuencia': isFrecuencia,
                 'restrictivofrecuencia': restrictivoFrecuencia,
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
-                'texto1': texto1
+                'texto1': texto1,
+                'texto2': texto2,
+                "itinerario" : itinerario
               });
     });
   }

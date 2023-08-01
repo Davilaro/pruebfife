@@ -43,6 +43,14 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   }
 
   @override
+  void dispose() {
+    pedidoSugeridoViewModel.tabActual.value = 0;
+    super.dispose();
+  }
+
+  
+
+  @override
   Widget build(BuildContext context) {
     final selectedColor = Colors.yellow;
     return Obx(() => DefaultTabController(

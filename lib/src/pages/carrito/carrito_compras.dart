@@ -396,7 +396,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                         'restrictivonofrecuencia'],
                                                     value["diasVisita"],
                                                     value["isFrecuencia"],
-                                                    value["texto1"]),
+                                                    value["texto1"],
+                                                    value["texto2"],
+                                                    value["itinerario"]),
                                                 style: TextStyle(
                                                     color: value['restrictivofrecuencia'] ==
                                                                     0 &&
@@ -1357,6 +1359,29 @@ class _CarritoComprasState extends State<CarritoCompras> {
     }
   }
 
+  int calcularDiasFaltantes(
+      List<String> diasSemana, diasEspecificos, String diaActual) {
+    // Obtener el índice del dia actual en la lista de días de la semana
+    int indexDiaActual = diasSemana.indexOf(diaActual);
+
+    // Inicializar el contador de dia faltantes
+    int diasFaltantes = 1;
+
+    // Recorrer la lista de días de la semana en orden para encontrar el proximo dia de visita
+    for (int i = 1; i <= diasSemana.length; i++) {
+      int indexSiguienteDia = (indexDiaActual + i) % diasSemana.length;
+      String siguienteDia = diasSemana[indexSiguienteDia];
+
+      if (diasEspecificos.contains(siguienteDia)) {
+        break;
+      } else {
+        diasFaltantes++;
+      }
+    }
+
+    return diasFaltantes + 1;
+  }
+
   String textAlertCompany(
       String fabricante,
       double valorPedido,
@@ -1368,50 +1393,72 @@ class _CarritoComprasState extends State<CarritoCompras> {
       int restrictivoNoFrecuencia,
       List diasVisita,
       bool isFrecuencia,
-      String texto1) {
+      String texto1,
+      String texto2,
+      int itinerario) {
     // var calcular = topeMinimo * 1.19;
 
+    late int diasFaltantes;
     String diasSinComa;
     String diasTemp = "";
+    List<String> diasDeLaSemana = [
+      'lunes',
+      'martes',
+      'miércoles',
+      'jueves',
+      'viernes',
+      'sábado',
+      'domingo'
+    ];
     diasVisita.forEach((element) {
       diasTemp += "$element, ";
     });
     diasSinComa = diasTemp.substring(
         0, diasTemp.length - 2 < 0 ? 0 : diasTemp.length - 2);
 
-    if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
-      if (valorPedido < precioMinimo) {
-        isValid.value = true;
-        return texto1;
-      }
-      isValid.value = true;
+    diasFaltantes =
+        calcularDiasFaltantes(diasDeLaSemana, diasVisita, prefs.diaActual);
+
+    if (itinerario == 1 && isFrecuencia == true) {
       return "Tu pedido será entregado el siguiente día hábil.";
+    } else if (itinerario == 1 && isFrecuencia == false) {
+      return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
     } else {
-      if (isFrecuencia == true) {
-        if (precioMinimo == 0) {
-          isValid.value = false;
-          return "";
-        }
+      if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
-          return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
-              productoViewModel.getCurrency(precioMinimo);
+          return texto1;
         }
+        isValid.value = true;
+        return "Tu pedido será entregado el siguiente día hábil.";
       } else {
-        if (precioMinimo == 0) {
-          isValid.value = false;
-          return "";
-        }
-        if (valorPedido < precioMinimo) {
-          isValid.value = true;
-          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
+        if (isFrecuencia == true) {
+          if (precioMinimo == 0) {
+            isValid.value = false;
+            return "";
+          }
+          if (valorPedido < precioMinimo) {
+            isValid.value = true;
+            return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
+                productoViewModel.getCurrency(precioMinimo);
+          }
         } else {
-          return "Tu pedido será entregado el siguiente día hábil.";
+          if (precioMinimo == 0) {
+            isValid.value = false;
+            return "";
+          }
+          if (valorPedido < precioMinimo) {
+            isValid.value = true;
+            return "$texto2 $diasSinComa.";
+          } else {
+            return "Tu pedido será entregado el siguiente día hábil.";
+          }
         }
+        isValid.value = false;
+        return "";
       }
-      isValid.value = false;
-      return "";
     }
+
     // if (fabricante.toUpperCase() == "MEALS") {
     //   if (valorPedido < (topeMinimo * 1.19)) {
     //     return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +

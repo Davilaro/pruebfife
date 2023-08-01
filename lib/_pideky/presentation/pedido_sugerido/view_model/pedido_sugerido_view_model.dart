@@ -124,6 +124,7 @@ class PedidoSugeridoViewModel extends GetxController
   void onClose() {
     super.onClose();
     tabController.dispose();
+    pageController.dispose();
   }
 
   static PedidoSugeridoViewModel get findOrInitialize {

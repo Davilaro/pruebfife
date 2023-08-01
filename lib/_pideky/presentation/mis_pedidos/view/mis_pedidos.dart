@@ -1,8 +1,7 @@
-import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_historico.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_mis_pedidos.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_transito.dart';
+
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/shared/widgets/top_buttons.dart';
+
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -19,6 +18,8 @@ class MisPedidosPage extends StatefulWidget {
 }
 
 class _MisPedidosPageState extends State<MisPedidosPage> {
+
+  
   @override
   void initState() {
     if (prefs.usurioLogin == -1) {
@@ -29,62 +30,70 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    misPedidosViewModel.tabActual.value = 0;
+    super.dispose();
+  }
+  
+
   final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   @override
   Widget build(BuildContext context) {
     final selectedColor = Colors.yellow;
     return Obx(() => DefaultTabController(
-      length: misPedidosViewModel.titulosSeccion.length,
-      child: Scaffold(
-        backgroundColor: ConstantesColores.color_fondo_gris,
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Column(
-              children: [
-                TabBar(
-                    controller: misPedidosViewModel.tabController,
-                    labelPadding:
-                        EdgeInsets.only(left: 20, right: 20, bottom: 15),
-                    indicatorColor: Colors.transparent,
-                    unselectedLabelColor: Colors.black,
-                    splashFactory: NoSplash.splashFactory,
-                    onTap: (index) {
-                      //     //UXCam: Llamamos el evento selectSectionMisPedidos
-                      UxcamTagueo().selectSectionMisPedidos(
-                          misPedidosViewModel.titulosSeccion[index]);
-                      misPedidosViewModel.cambiarTab(index);
-                    },
-                    tabs: List<Widget>.generate(
-                        misPedidosViewModel.titulosSeccion.length, (index) {
-                      return Tab(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: misPedidosViewModel.tabActual.value == index
-                                ? selectedColor
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              misPedidosViewModel.titulosSeccion[index],
-                              style: TextStyle(
-                                  color: ConstantesColores.azul_precio,
-                                  fontWeight: FontWeight.bold),
+          length: misPedidosViewModel.titulosSeccion.length,
+          child: Scaffold(
+            backgroundColor: ConstantesColores.color_fondo_gris,
+            body: Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Column(
+                  children: [
+                    TabBar(
+                        controller: misPedidosViewModel.tabController,
+                        labelPadding:
+                            EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                        indicatorColor: Colors.transparent,
+                        unselectedLabelColor: Colors.black,
+                        splashFactory: NoSplash.splashFactory,
+                        onTap: (index) {
+                          //     //UXCam: Llamamos el evento selectSectionMisPedidos
+                          UxcamTagueo().selectSectionMisPedidos(
+                              misPedidosViewModel.titulosSeccion[index]);
+                          misPedidosViewModel.cambiarTab(index);
+                        },
+                        tabs: List<Widget>.generate(
+                            misPedidosViewModel.titulosSeccion.length, (index) {
+                          return Tab(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color:
+                                    misPedidosViewModel.tabActual.value == index
+                                        ? selectedColor
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  misPedidosViewModel.titulosSeccion[index],
+                                  style: TextStyle(
+                                      color: ConstantesColores.azul_precio,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    })),
-                BodyMisPedidos(misPedidosViewModel: misPedidosViewModel)
-              ],
+                          );
+                        })),
+                    BodyMisPedidos(misPedidosViewModel: misPedidosViewModel)
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }
