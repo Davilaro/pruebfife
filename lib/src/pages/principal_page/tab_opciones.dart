@@ -32,6 +32,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
 
+import '../../../shared/widgets/card_notification_push_in_app_slide_up.dart';
 import '../../../shared/widgets/new_app_bar.dart';
 
 final prefs = new Preferencias();
@@ -103,11 +104,16 @@ class _TabOpcionesState extends State<TabOpciones>
                   : const Size.fromHeight(70),
               child: SafeArea(child: NewAppBar(drawerKey)),
             ),
-            body: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                },
-                child: _HomePageBody()),
+            body: Stack(
+              children: [
+                  GestureDetector(
+                    onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: _HomePageBody(),
+                  ),
+                   CardNotificationPushInAppSlideUp(),
+           ] ),
             bottomNavigationBar: Container(
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
