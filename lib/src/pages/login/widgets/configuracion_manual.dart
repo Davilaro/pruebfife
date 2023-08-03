@@ -18,7 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 final TextEditingController _controllerCorreo = TextEditingController();
 final TextEditingController _controllerCodigo = TextEditingController();
@@ -374,7 +374,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando SMS');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(context2!, 'TELEFONO', dropdownValue);
@@ -390,7 +390,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando Correo');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(context2!, 'CORREO',
@@ -623,7 +623,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     prEnviarCodigo.style(
         message: 'Estamos validando el código para activar tu cuenta.');
     prEnviarCodigo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await prEnviarCodigo.show();
     await enviarCodigoVerificacion(
@@ -720,7 +720,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando sucursales');
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await loguin(context);

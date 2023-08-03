@@ -146,10 +146,10 @@ class PedidoEmart {
           case "S":
             diasAgrupadosPorFabricante.add("sábado");
             break;
+          default:
+            diasAgrupadosPorFabricante.add("");
         }
       });
-
-      
 
       if ((diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
               horaActual.isBefore(hourRes)) ||
@@ -180,7 +180,7 @@ class PedidoEmart {
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
                 'texto1': texto1,
                 'texto2': texto2,
-                "itinerario" : itinerario
+                "itinerario": itinerario
               });
     });
   }

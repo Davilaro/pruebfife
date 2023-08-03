@@ -15,7 +15,7 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
@@ -237,9 +237,15 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     final productViewModel = Get.find<ProductoViewModel>();
     final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
     pr = ProgressDialog(context);
-    pr.style(message: 'Cambiando sucursal');
+    pr.style(
+        message: 'Cambiando sucursal',
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await cargarInformacion(provider, elemento);
