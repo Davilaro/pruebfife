@@ -23,9 +23,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -209,7 +209,7 @@ class _LoginState extends State<Login> {
       //message: Validando información
       prValidar.style(message: S.current.validating_information);
       prValidar = ProgressDialog(context,
-          type: ProgressDialogType.Normal,
+          type: ProgressDialogType.normal,
           isDismissible: false,
           showLogs: true);
 
@@ -225,7 +225,7 @@ class _LoginState extends State<Login> {
     //message: Iniciando sesión
     pr.style(message: S.current.logging_in);
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await loguin(context, _controllerUser.text);

@@ -27,7 +27,8 @@ dependencies:
     sdk: flutter
   flutter_uxcam: ^2.3.0
   shared_preferences: ^2.0.17
-  progress_dialog: ^1.2.4
+  #progress_dialog: ^1.2.4
+  progress_dialog_null_safe: ^1.0.7
   http: ^0.13.1
   cached_network_image: ^3.2.3
   toggle_switch: ^2.0.1

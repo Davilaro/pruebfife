@@ -17,8 +17,8 @@ import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 final TextEditingController _controllerCorreoMsm = TextEditingController();
 final TextEditingController _controllerCodigo = TextEditingController();
@@ -389,7 +389,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando MS');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(context2!, 'TELEFONO', dropdownValue);
@@ -483,7 +483,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando Correo');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(
@@ -696,7 +696,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCodigo = ProgressDialog(context);
     prEnviarCodigo.style(message: S.current.we_validating_code_activate);
     prEnviarCodigo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await prEnviarCodigo.show();
     await enviarCodigoVerificacion(context, codigo, codVerificado);
@@ -778,7 +778,7 @@ class _BienvenidoState extends State<Bienvenido> {
     pr = ProgressDialog(context);
     pr.style(message: S.current.loading_branches);
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await loguin(context);

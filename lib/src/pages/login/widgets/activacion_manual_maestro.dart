@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class ConfiguracionMamualMaestr extends StatefulWidget {
   @override
@@ -172,7 +172,7 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
       prEnviarCorreo = ProgressDialog(_contex_dos);
       prEnviarCorreo.style(message: 'Verificando cuenta');
       prEnviarCorreo = ProgressDialog(_contex_dos,
-          type: ProgressDialogType.Normal,
+          type: ProgressDialogType.normal,
           isDismissible: false,
           showLogs: true);
 
