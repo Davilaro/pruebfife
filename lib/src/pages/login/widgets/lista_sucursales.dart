@@ -237,7 +237,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     : elemento.pais == 'CO'
     //         ? Locale('es', 'CO')
     //         : Locale('es', 'CO'));
-    Get.showSnackbar(GetSnackBar(forwardAnimationCurve: Curves.easeOut,));
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
