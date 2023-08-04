@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-NotificationPushInAppSlideUpp notificationPushInAppFromJson(String str) => NotificationPushInAppSlideUpp.fromJson(json.decode(str));
+NotificationPushInAppSlideUpp notificationPushInAppSlideUpFromJson(String str) => NotificationPushInAppSlideUpp.fromJson(json.decode(str));
 
-String notificationPushInAppToJson(NotificationPushInAppSlideUpp data) => json.encode(data.toJson());
+String notificationPushInAppSlideUpToJson(NotificationPushInAppSlideUpp data) => json.encode(data.toJson());
 
 class NotificationPushInAppSlideUpp {
   NotificationPushInAppSlideUpp(

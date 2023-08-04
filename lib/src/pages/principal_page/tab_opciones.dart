@@ -7,6 +7,7 @@ import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_vi
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -31,9 +32,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
-
-import '../../../shared/widgets/card_notification_push_in_app_slide_up.dart';
 import '../../../shared/widgets/new_app_bar.dart';
+import '../../../shared/widgets/notification_push_in_app.dart';
 
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
@@ -66,6 +66,9 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showPushInAppAndSlideUpSnackbar();
+    });
     _focusNode.dispose();
     hasInternet = true;
     cargarSecciones();
@@ -81,8 +84,22 @@ class _TabOpcionesState extends State<TabOpciones>
     setState(() {});
   }
 
+  void showPushInAppAndSlideUpSnackbar() {
+    if (prefs.validarNotificacion == true && prefs.usurioLogin == 1) {
+      // Get.dialog(NotificationPushInApp());
+      showDialog(
+          context: context,
+          builder: (_) {
+            return NotificationPushInApp();
+          });
+
+      ScaffoldMessenger.of(context).showSnackBar(slideUpNotification(context));
+    }
+  }
+
   dispose() {
     subscription.cancel();
+    prefs.validarNotificacion = false;
     super.dispose();
   }
 
@@ -104,16 +121,12 @@ class _TabOpcionesState extends State<TabOpciones>
                   : const Size.fromHeight(70),
               child: SafeArea(child: NewAppBar(drawerKey)),
             ),
-            body: Stack(
-              children: [
-                  GestureDetector(
-                    onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  },
-                  child: _HomePageBody(),
-                  ),
-                   CardNotificationPushInAppSlideUp(),
-           ] ),
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: _HomePageBody(),
+            ),
             bottomNavigationBar: Container(
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -195,47 +208,98 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-    final currenIndex = provider.selectOptionMenu;
 
-    switch (currenIndex) {
-      case 0:
-        return PrincipalPage();
+    return PageView(
+      physics: NeverScrollableScrollPhysics(),
+      controller: provider.pageController,
+      onPageChanged: (int) {
+        switch (provider.selectOptionMenu) {
+          case 0:
+            return UxcamTagueo().selectFooter('Principal Page');
 
-      case 1:
-        {
-          if (provider.getIisLocal != 0) {
-            //FIREBASE: Llamamos el evento select_content
-            TagueoFirebase().sendAnalityticSelectContent(
-                "Footer",
-                "${S.current.catalog}",
-                "",
-                "",
-                "${S.current.catalog}",
-                'MainActivity');
-            //UXCam: Llamamos el evento selectFooter
-            UxcamTagueo().selectFooter('${S.current.catalog}');
+          case 1:
+            {
+              if (provider.getIisLocal != 0) {
+                //FIREBASE: Llamamos el evento select_content
+                TagueoFirebase().sendAnalityticSelectContent(
+                    "Footer",
+                    "${S.current.catalog}",
+                    "",
+                    "",
+                    "${S.current.catalog}",
+                    'MainActivity');
+                //UXCam: Llamamos el evento selectFooter
+                UxcamTagueo().selectFooter('${S.current.catalog}');
 
-            onClickVerMas('Categorías', provider);
-          }
-          return TabCategoriaMarca();
+                onClickVerMas('Categorías', provider);
+              }
+              return UxcamTagueo().selectFooter('Tab Categoria Marca');
+            }
+
+          case 2:
+            return UxcamTagueo().selectFooter('Pedido Sugerido Page');
+
+          case 3:
+            {
+              //UXCam: Llamamos el evento selectFooter
+              return UxcamTagueo().selectFooter('Mis Pedidos');
+            }
+
+          case 4:
+            return UxcamTagueo().selectFooter('Mi Negocio');
+
+          default:
+            return UxcamTagueo().selectFooter('Principal Page');
         }
+      },
+      children: [
+        PrincipalPage(),
+        TabCategoriaMarca(),
+        PedidoSugeridoPage(),
+        MisPedidosPage(),
+        MiNegocio()
+      ],
+    );
 
-      case 2:
-        return PedidoSugeridoPage();
+    //   switch (currenIndex) {
+    //     case 0:
+    //       return PrincipalPage();
 
-      case 3:
-        {
-          //UXCam: Llamamos el evento selectFooter
-          UxcamTagueo().selectFooter('Mis pedidos');
-          return MisPedidosPage();
-        }
+    //     case 1:
+    //       {
+    //         if (provider.getIisLocal != 0) {
+    //           //FIREBASE: Llamamos el evento select_content
+    //           TagueoFirebase().sendAnalityticSelectContent(
+    //               "Footer",
+    //               "${S.current.catalog}",
+    //               "",
+    //               "",
+    //               "${S.current.catalog}",
+    //               'MainActivity');
+    //           //UXCam: Llamamos el evento selectFooter
+    //           UxcamTagueo().selectFooter('${S.current.catalog}');
 
-      case 4:
-        return MiNegocio();
+    //           onClickVerMas('Categorías', provider);
+    //         }
+    //         return TabCategoriaMarca();
+    //       }
 
-      default:
-        return Text('Prueba'); //PrincipalPage();
-    }
+    //     case 2:
+    //       return PedidoSugeridoPage();
+
+    //     case 3:
+    //       {
+    //         //UXCam: Llamamos el evento selectFooter
+    //         UxcamTagueo().selectFooter('Mis pedidos');
+    //         return MisPedidosPage();
+    //       }
+
+    //     case 4:
+    //       return MiNegocio();
+
+    //     default:
+    //       return Text('Prueba'); //PrincipalPage();
+    //   }
   }
 
   void onClickVerMas(String ubicacion, provider) {
@@ -243,7 +307,7 @@ class _HomePageBody extends StatelessWidget {
       if (cargoConfirmar.seccionesDinamicas[i].descripcion.toLowerCase() ==
           ubicacion.toLowerCase()) {
         if (provider.selectOptionMenu != 1) {
-          provider.selectOptionMenu = 1;
+          provider.paginaActual = 1;
           provider.setIsLocal = 0;
         }
         cargoConfirmar.tabController.index = i;

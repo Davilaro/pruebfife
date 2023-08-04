@@ -30,7 +30,8 @@ Future<void> main() async {
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
-
+  prefs.validarNotificacion = true;
+  print("init notificacion ${prefs.validarNotificacion}");
   runApp(MyApp());
 }
 

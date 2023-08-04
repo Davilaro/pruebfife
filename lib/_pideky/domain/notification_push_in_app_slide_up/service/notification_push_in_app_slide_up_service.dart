@@ -2,7 +2,7 @@ import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/interface
 import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/model/notification_push_in_app_slide_up.dart';
 
 class NotificationPushInAppSlideUpService {
-  final INotificationPushInAppRepository notificationPushInAppRepository;
+  final INotificationPushInAppSlideUpRepository notificationPushInAppRepository;
 
   NotificationPushInAppSlideUpService(this.notificationPushInAppRepository);
 
