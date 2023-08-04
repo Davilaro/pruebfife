@@ -66,9 +66,13 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showPushInAppAndSlideUpSnackbar();
-    });
+    // if (prefs.usurioLogin == 1) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     showSlideUpSnackbar();
+    //     showPushInApp();
+    //   });
+    // }
+
     _focusNode.dispose();
     hasInternet = true;
     cargarSecciones();
@@ -84,17 +88,19 @@ class _TabOpcionesState extends State<TabOpciones>
     setState(() {});
   }
 
-  void showPushInAppAndSlideUpSnackbar() {
-    if (prefs.validarNotificacion == true && prefs.usurioLogin == 1) {
-      // Get.dialog(NotificationPushInApp());
-      showDialog(
-          context: context,
-          builder: (_) {
-            return NotificationPushInApp();
-          });
+  void showSlideUpSnackbar() {
+    //Get.dialog(NotificationPushInApp());
 
-      ScaffoldMessenger.of(context).showSnackBar(slideUpNotification(context));
-    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return WillPopScope(
+              onWillPop: () async => false, child: NotificationPushInApp());
+        });
+  }
+
+  void showPushInApp() {
+    ScaffoldMessenger.of(context).showSnackBar(slideUpNotification(context));
   }
 
   dispose() {
