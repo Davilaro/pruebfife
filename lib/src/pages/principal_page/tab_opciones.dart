@@ -66,12 +66,12 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
-    // if (prefs.usurioLogin == 1) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     showSlideUpSnackbar();
-    //     showPushInApp();
-    //   });
-    // }
+    if (prefs.usurioLogin == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showSlideUpSnackbar();
+        showPushInApp();
+      });
+    }
 
     _focusNode.dispose();
     hasInternet = true;
@@ -89,8 +89,6 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   void showSlideUpSnackbar() {
-    //Get.dialog(NotificationPushInApp());
-
     showDialog(
         context: context,
         builder: (BuildContext context) {

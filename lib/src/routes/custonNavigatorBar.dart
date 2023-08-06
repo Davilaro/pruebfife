@@ -12,7 +12,6 @@ class CustonNavigatorBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-    final cargoConfirmar = Get.find<ControlBaseDatos>();
 
     return BottomNavigationBar(
         backgroundColor: colorItems(),
