@@ -54,6 +54,7 @@ class _TabOpcionesState extends State<TabOpciones>
   ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final disposeController = OpcionesBard();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
@@ -63,6 +64,7 @@ class _TabOpcionesState extends State<TabOpciones>
     statusBarColor: ConstantesColores.color_fondo_gris,
     statusBarIconBrightness: Brightness.dark,
   );
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +77,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
     _focusNode.dispose();
     hasInternet = true;
+
     cargarSecciones();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -102,8 +105,10 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   dispose() {
+    disposeController.pageController.dispose();
     subscription.cancel();
     prefs.validarNotificacion = false;
+
     super.dispose();
   }
 
@@ -214,7 +219,6 @@ class _HomePageBody extends StatelessWidget {
     final provider = Provider.of<OpcionesBard>(context);
 
     return PageView(
-      physics: NeverScrollableScrollPhysics(),
       controller: provider.pageController,
       onPageChanged: (int) {
         switch (provider.selectOptionMenu) {

@@ -1,7 +1,5 @@
-import 'package:emart/generated/l10n.dart';
+
 import 'package:emart/src/controllers/controller_db.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

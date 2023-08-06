@@ -83,7 +83,7 @@ class _SplashState extends State<Splash> {
               : prefs.paisUsuario == 'CO'
                   ? Locale('es', 'CO')
                   : Locale('es', 'CO'));
-          Get.off(() => TabOpciones());
+          Get.offAll(() => TabOpciones());
         }
       }
     } else {
