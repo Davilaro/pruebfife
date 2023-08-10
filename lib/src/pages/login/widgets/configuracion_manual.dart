@@ -660,7 +660,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     }
   }
 
-  void _mensajeDeBienvenida(BuildContext context) {
+  Future<void> _mensajeDeBienvenida(BuildContext context) async {
     showDialog(
         context: context,
         barrierDismissible: false,
