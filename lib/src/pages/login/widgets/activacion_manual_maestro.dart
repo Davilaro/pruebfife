@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
+
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/pages/login/widgets/activacion_manual_novedad.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
