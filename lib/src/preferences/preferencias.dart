@@ -206,6 +206,7 @@ class Preferencias {
   set direccionSucursal(dynamic value) {
     _prefs.setString("direccionsucursal", value);
   }
+
   get validarNotificacion {
     return _prefs.getBool("validarNotificacion") ?? false;
   }
@@ -213,6 +214,7 @@ class Preferencias {
   set validarNotificacion(dynamic value) {
     _prefs.setBool("validarNotificacion", value);
   }
+
 
   clear() async {
     await _prefs.clear();

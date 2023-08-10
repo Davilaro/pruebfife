@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
@@ -100,8 +101,11 @@ class _TabOpcionesState extends State<TabOpciones>
         });
   }
 
-  void showPushInApp() {
-    ScaffoldMessenger.of(context).showSnackBar(slideUpNotification(context));
+  void showPushInApp() async {
+    await Future.delayed(
+        Duration(milliseconds: 4600),
+        () => ScaffoldMessenger.of(context)
+            .showSnackBar(slideUpNotification(context)));
   }
 
   dispose() {
@@ -217,7 +221,6 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-
     return PageView(
       controller: provider.pageController,
       onPageChanged: (int) {
