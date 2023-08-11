@@ -15,6 +15,7 @@ import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
+import 'package:emart/src/controllers/notifiactionsControllers.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
@@ -55,6 +56,8 @@ class _TabOpcionesState extends State<TabOpciones>
   ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final disposeController = OpcionesBard();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
@@ -70,6 +73,7 @@ class _TabOpcionesState extends State<TabOpciones>
   void initState() {
     super.initState();
     if (prefs.usurioLogin == 1) {
+      controllerNotificaciones.getSlideUpAndPushInUpByDataBase();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showSlideUpSnackbar();
         showPushInApp();
@@ -103,9 +107,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
   void showPushInApp() async {
     await Future.delayed(
-        Duration(milliseconds: 4600),
-        () => ScaffoldMessenger.of(context)
-            .showSnackBar(slideUpNotification(context)));
+        Duration(milliseconds: 4600), () => showSlideUpNotification(context));
   }
 
   dispose() {

@@ -1,56 +1,67 @@
+// To parse this JSON data, do
+//
+//     final notificationPushInAppSlideUpp = notificationPushInAppSlideUppFromJson(jsonString);
+
 import 'dart:convert';
 
-NotificationPushInAppSlideUpp notificationPushInAppSlideUpFromJson(String str) => NotificationPushInAppSlideUpp.fromJson(json.decode(str));
+NotificationPushInAppSlideUpModel notificationPushInAppSlideUppFromJson(
+        String str) =>
+    NotificationPushInAppSlideUpModel.fromJson(json.decode(str));
 
-String notificationPushInAppSlideUpToJson(NotificationPushInAppSlideUpp data) => json.encode(data.toJson());
+String notificationPushInAppSlideUppToJson(
+        NotificationPushInAppSlideUpModel data) =>
+    json.encode(data.toJson());
 
-class NotificationPushInAppSlideUpp {
-  NotificationPushInAppSlideUpp(
-      {this.fabricante,
-      this.idNotification,
-      this.link,
-      this.empresa,
-      this.nombrecomercial,
-      this.tipofabricante,
-      this.notificationName,
-      this.seccion,
-      this.subSeccion,
-      this.tipoSeccion});
+class NotificationPushInAppSlideUpModel {
+  String? imageUrl;
+  String? descripcion;
+  String? ubicacion;
+  String? categoriaUbicacion;
+  String? subCategoriaUbicacion;
+  String? redireccion;
+  String? categoriaRedireccion;
+  String? subCategoriaRedireccion;
 
-  String? fabricante;
-  int? idNotification;
-  String? link;
-  String? empresa;
-  String? tipofabricante;
-  String? nombrecomercial;
-  String? notificationName;
-  String? seccion;
-  String? subSeccion;
-  String? tipoSeccion;
+  NotificationPushInAppSlideUpModel({
+    this.imageUrl,
+    this.descripcion,
+    this.ubicacion,
+    this.categoriaUbicacion,
+    this.subCategoriaUbicacion,
+    this.redireccion,
+    this.categoriaRedireccion,
+    this.subCategoriaRedireccion,
+  });
 
-  factory NotificationPushInAppSlideUpp.fromJson(Map<String, dynamic> json) => NotificationPushInAppSlideUpp(
-        fabricante: json["fabricante"],
-        idNotification: json["Id"],
-        link: json["Ico"],
-        empresa: json["empresa"],
-        tipofabricante: json["tipofabricante"],
-        nombrecomercial: json["nombrecomercial"],
-        notificationName: json["nombrenotificacion"],
-        tipoSeccion: json["tipoSeccion"],
-        seccion: json["seccion"],
-        subSeccion: json["subSeccion"],
+  factory NotificationPushInAppSlideUpModel.fromJson(
+          Map<String, dynamic> json) =>
+      NotificationPushInAppSlideUpModel(
+        imageUrl: json["imageUrl"] == null ? "" : json["imageUrl"],
+        descripcion: json["descripcion"] == null ? "" : json["descripcion"],
+        ubicacion: json["ubicacion"] == null ? "" : json["ubicacion"],
+        categoriaUbicacion: json["categoriaUbicacion"] == null
+            ? ""
+            : json["categoriaUbicacion"],
+        subCategoriaUbicacion: json["subCategoriaUbicacion"] == null
+            ? ""
+            : json["subCategoriaUbicacion"],
+        redireccion: json["redireccion"] == null ? "" : json["redireccion"],
+        categoriaRedireccion: json["categoriaRedireccion"] == null
+            ? ""
+            : json["categoriaRedireccion"],
+        subCategoriaRedireccion: json["subCategoriaRedireccion"] == null
+            ? ""
+            : json["subCategoriaRedireccion"],
       );
 
   Map<String, dynamic> toJson() => {
-        "fabricante": fabricante,
-        "Id": idNotification,
-        "Ico": link,
-        "tipofabricante": tipofabricante,
-        "empresa": empresa,
-        "nombrecomercial": nombrecomercial,
-        "nombrenotificacion": notificationName,
-        "tipoSeccion": tipoSeccion,
-        "seccion": seccion,
-        "subSeccion": subSeccion
+        "imageUrl": imageUrl,
+        "descripcion": descripcion,
+        "ubicacion": ubicacion,
+        "categoriaUbicacion": categoriaUbicacion,
+        "subCategoriaUbicacion": subCategoriaUbicacion,
+        "redireccion": redireccion,
+        "categoriaRedireccion": categoriaRedireccion,
+        "subCategoriaRedireccion": subCategoriaRedireccion,
       };
 }

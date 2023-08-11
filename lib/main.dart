@@ -31,7 +31,6 @@ Future<void> main() async {
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
   prefs.validarNotificacion = true;
-  print("init notificacion ${prefs.validarNotificacion}");
   runApp(MyApp());
 }
 
