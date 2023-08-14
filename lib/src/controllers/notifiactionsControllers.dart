@@ -13,15 +13,17 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   get listPushInUp => _listPushInUp;
 
   getSlideUpAndPushInUpByDataBase() async {
+    print("me ejecute");
     var listSlideUpsTemp =
         await notificacionesService.consultNotificationsSlideUp();
-    // var listPushInUpsTemp =
-    //     await notificacionesService.consultNotificationPushInApp();
+    var listPushInUpsTemp =
+        await notificacionesService.consultNotificationPushInApp();
 
     _listSlideUps.assignAll(listSlideUpsTemp);
-    // _listPushInUp.assignAll(listPushInUpsTemp);
-    _listSlideUps.forEach((element) => print("lista ${element.ubicacion}"));
+    _listPushInUp.assignAll(listPushInUpsTemp);
+    _listPushInUp.forEach((element) => print("lista ${element.ubicacion}"));
     print("lista slide ${_listSlideUps.length}");
+    print("lista push ${_listPushInUp.length}");
   }
 
   static NotificationsSlideUpAndPushInUpControllers get findOrInitialize {
@@ -32,5 +34,4 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       return Get.find<NotificationsSlideUpAndPushInUpControllers>();
     }
   }
-
 }

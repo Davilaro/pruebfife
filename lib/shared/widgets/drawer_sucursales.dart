@@ -262,6 +262,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
     confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
+    prefs.validarNotificacion = true;
     Get.offAll(() => TabOpciones());
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));

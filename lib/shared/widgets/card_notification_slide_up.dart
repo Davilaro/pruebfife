@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/notifiactionsControllers.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 
 void showSlideUpNotification(context) {
   final provider = Provider.of<OpcionesBard>(context, listen: false);
+
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
       provider.selectOptionMenu = 2;
@@ -15,34 +17,37 @@ void showSlideUpNotification(context) {
     snackPosition: SnackPosition.BOTTOM,
     backgroundColor: Colors.grey.shade400,
     borderRadius: 15,
-    messageText: Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.0),
-            bottomLeft: Radius.circular(12.0),
+    messageText:
+        FutureBuilder(builder: (context, AsyncSnapshot<dynamic> snapshot) {
+      return Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              bottomLeft: Radius.circular(12.0),
+            ),
+            child: Image.asset(
+              'assets/image/slide_up_tosh_prueba.png',
+              height: MediaQuery.of(context).size.height * 0.1,
+              fit: BoxFit.cover,
+            ),
           ),
-          child: Image.asset(
-            'assets/image/slide_up_tosh_prueba.png',
-            height: MediaQuery.of(context).size.height * 0.1,
-            fit: BoxFit.cover,
+          SizedBox(width: 10),
+          Flexible(
+            child: Text(
+              '¡Lleva tu negocio al siguiente nivel! pide galletas Tosh con 15% de descuento, Pide aquí ...',
+              style: TextStyle(color: Colors.black, fontSize: 12),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        SizedBox(width: 10),
-        Flexible(
-          child: Text(
-            '¡Lleva tu negocio al siguiente nivel! pide galletas Tosh con 15% de descuento, Pide aquí ...',
-            style: TextStyle(color: Colors.black, fontSize: 12),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Icon(Icons.arrow_forward_ios, color: Colors.white),
-        SizedBox(
-          width: 15,
-        )
-      ],
-    ),
+          Icon(Icons.arrow_forward_ios, color: Colors.white),
+          SizedBox(
+            width: 15,
+          )
+        ],
+      );
+    }),
     margin: EdgeInsets.symmetric(horizontal: 24, vertical: 65),
     padding: EdgeInsets.all(0.0),
     isDismissible: false,

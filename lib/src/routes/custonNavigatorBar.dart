@@ -20,8 +20,6 @@ class CustonNavigatorBar extends StatelessWidget {
         elevation: 0,
         currentIndex: provider.selectOptionMenu,
         onTap: (int i) {
-          // provider.selectOptionMenu = i;
-          // provider.opcionesTabBar(context, provider, i);
           if (i == 1) {
             cargoConfirmar.tabController.index = 0;
             cargoConfirmar.cargoBaseDatos(0);
@@ -30,6 +28,7 @@ class CustonNavigatorBar extends StatelessWidget {
             provider.setIsLocal = 1;
             provider.selectOptionMenu = i;
           }
+          prefs.validarNotificacion = false;
           Get.offAll(() => TabOpciones());
         },
         type: BottomNavigationBarType.fixed,

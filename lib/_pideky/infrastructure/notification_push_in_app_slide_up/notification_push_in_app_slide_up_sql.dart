@@ -8,7 +8,23 @@ class NotificationPushInUpAndSlideUpSql
   @override
   Future<List<NotificationPushInAppSlideUpModel>>
       consultNotificationPushInApp() async {
-    throw UnimplementedError();
+    final db = await dataBase.baseAbierta;
+
+    try {
+      var sql = await db.rawQuery("""
+      select p.Link as imageUrl, p.Ubicacion as ubicacion, p.CategoriaUbicacion as categoriaUbicacion, 
+      p.SubCategoriaUbicacion as subCategoriaUbicacion, p.Redireccion as redireccion, p.CategoriaRedireccion as categoriaRedireccion,
+      p.SubCategoriaRedireccion as subCategoriaRedireccion  from PushInApp p
+      """);
+      return sql.isNotEmpty
+          ? sql
+              .map((e) => NotificationPushInAppSlideUpModel.fromJson(e))
+              .toList()
+          : [];
+    } catch (e) {
+      print('----Error consulta notificacines $e');
+      return [];
+    }
   }
 
   @override
@@ -17,8 +33,7 @@ class NotificationPushInUpAndSlideUpSql
     final db = await dataBase.baseAbierta;
 
     try {
-      var sql = await db.rawQuery(
-          """
+      var sql = await db.rawQuery("""
       select s.Link as imageUrl, s.Texto as descripcion, s.Ubicacion as ubicacion, s.CategoriaUbicacion as categoriaUbicacion, 
       s.SubCategoriaUbicacion as subCategoriaUbicacion, s.Redireccion as redireccion, s.CategoriaRedireccion as categoriaRedireccion,
       s.SubCategoriaRedireccion as subCategoriaRedireccion  from SlideUp s
