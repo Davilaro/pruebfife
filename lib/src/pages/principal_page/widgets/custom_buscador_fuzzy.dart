@@ -23,6 +23,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CustomBuscardorFuzzy extends StatefulWidget {

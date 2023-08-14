@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
@@ -18,6 +17,7 @@ import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/controllers/notifiactionsControllers.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
+import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -72,13 +72,14 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
-    if (prefs.usurioLogin == 1) {
-      controllerNotificaciones.getSlideUpAndPushInUpByDataBase();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showSlideUpSnackbar();
-        showPushInApp();
-      });
-    }
+
+    // if (prefs.usurioLogin == 1 && prefs.validarNotificacion == true) {
+    //   controllerNotificaciones.getSlideUpAndPushInUpByDataBase();
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     showSlideUpSnackbar();
+    //     showPushInApp();
+    //   });
+    // }
 
     _focusNode.dispose();
     hasInternet = true;
@@ -111,10 +112,8 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   dispose() {
-    disposeController.pageController.dispose();
     subscription.cancel();
     prefs.validarNotificacion = false;
-
     super.dispose();
   }
 
@@ -213,6 +212,7 @@ class _TabOpcionesState extends State<TabOpciones>
     _tabControllerTemplate.addListener(() {
       cargoControllerBase.cargoBaseDatos(_tabControllerTemplate.index);
     });
+
     cargoControllerBase.initControllertabController(_tabControllerTemplate);
   }
 }
@@ -223,96 +223,97 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-    return PageView(
-      controller: provider.pageController,
-      onPageChanged: (int) {
-        switch (provider.selectOptionMenu) {
-          case 0:
-            return UxcamTagueo().selectFooter('Principal Page');
+    final currenIndex = provider.selectOptionMenu;
+    //PageView(
+    //   controller: provider.pageController,
+    //   onPageChanged: (int) {
+    //     switch (provider.selectOptionMenu) {
+    //       case 0:
+    //         return UxcamTagueo().selectFooter('Principal Page');
 
-          case 1:
-            {
-              if (provider.getIisLocal != 0) {
-                //FIREBASE: Llamamos el evento select_content
-                TagueoFirebase().sendAnalityticSelectContent(
-                    "Footer",
-                    "${S.current.catalog}",
-                    "",
-                    "",
-                    "${S.current.catalog}",
-                    'MainActivity');
-                //UXCam: Llamamos el evento selectFooter
-                UxcamTagueo().selectFooter('${S.current.catalog}');
+    //       case 1:
+    //         {
+    //           if (provider.getIisLocal != 0) {
+    //             //FIREBASE: Llamamos el evento select_content
+    //             TagueoFirebase().sendAnalityticSelectContent(
+    //                 "Footer",
+    //                 "${S.current.catalog}",
+    //                 "",
+    //                 "",
+    //                 "${S.current.catalog}",
+    //                 'MainActivity');
+    //             //UXCam: Llamamos el evento selectFooter
+    //             UxcamTagueo().selectFooter('${S.current.catalog}');
 
-                onClickVerMas('Categorías', provider);
-              }
-              return UxcamTagueo().selectFooter('Tab Categoria Marca');
-            }
-
-          case 2:
-            return UxcamTagueo().selectFooter('Pedido Sugerido Page');
-
-          case 3:
-            {
-              //UXCam: Llamamos el evento selectFooter
-              return UxcamTagueo().selectFooter('Mis Pedidos');
-            }
-
-          case 4:
-            return UxcamTagueo().selectFooter('Mi Negocio');
-
-          default:
-            return UxcamTagueo().selectFooter('Principal Page');
-        }
-      },
-      children: [
-        PrincipalPage(),
-        TabCategoriaMarca(),
-        PedidoSugeridoPage(),
-        MisPedidosPage(),
-        MiNegocio()
-      ],
-    );
-
-    //   switch (currenIndex) {
-    //     case 0:
-    //       return PrincipalPage();
-
-    //     case 1:
-    //       {
-    //         if (provider.getIisLocal != 0) {
-    //           //FIREBASE: Llamamos el evento select_content
-    //           TagueoFirebase().sendAnalityticSelectContent(
-    //               "Footer",
-    //               "${S.current.catalog}",
-    //               "",
-    //               "",
-    //               "${S.current.catalog}",
-    //               'MainActivity');
-    //           //UXCam: Llamamos el evento selectFooter
-    //           UxcamTagueo().selectFooter('${S.current.catalog}');
-
-    //           onClickVerMas('Categorías', provider);
+    //             onClickVerMas('Categorías', provider);
+    //           }
+    //           return UxcamTagueo().selectFooter('Tab Categoria Marca');
     //         }
-    //         return TabCategoriaMarca();
-    //       }
 
-    //     case 2:
-    //       return PedidoSugeridoPage();
+    //       case 2:
+    //         return UxcamTagueo().selectFooter('Pedido Sugerido Page');
 
-    //     case 3:
-    //       {
-    //         //UXCam: Llamamos el evento selectFooter
-    //         UxcamTagueo().selectFooter('Mis pedidos');
-    //         return MisPedidosPage();
-    //       }
+    //       case 3:
+    //         {
+    //           //UXCam: Llamamos el evento selectFooter
+    //           return UxcamTagueo().selectFooter('Mis Pedidos');
+    //         }
 
-    //     case 4:
-    //       return MiNegocio();
+    //       case 4:
+    //         return UxcamTagueo().selectFooter('Mi Negocio');
 
-    //     default:
-    //       return Text('Prueba'); //PrincipalPage();
-    //   }
+    //       default:
+    //         return UxcamTagueo().selectFooter('Principal Page');
+    //     }
+    //   },
+    //   children: [
+    //     PrincipalPage(),
+    //     TabCategoriaMarca(),
+    //     PedidoSugeridoPage(),
+    //     MisPedidosPage(),
+    //     MiNegocio(),
+    //   ],
+    // );
+
+    switch (currenIndex) {
+      case 0:
+        return PrincipalPage();
+
+      case 1:
+        {
+          if (provider.getIisLocal != 0) {
+            //FIREBASE: Llamamos el evento select_content
+            TagueoFirebase().sendAnalityticSelectContent(
+                "Footer",
+                "${S.current.catalog}",
+                "",
+                "",
+                "${S.current.catalog}",
+                'MainActivity');
+            //UXCam: Llamamos el evento selectFooter
+            UxcamTagueo().selectFooter('${S.current.catalog}');
+
+            onClickVerMas('Categorías', provider);
+          }
+          return TabCategoriaMarca();
+        }
+
+      case 2:
+        return PedidoSugeridoPage();
+
+      case 3:
+        {
+          //UXCam: Llamamos el evento selectFooter
+          UxcamTagueo().selectFooter('Mis pedidos');
+          return MisPedidosPage();
+        }
+
+      case 4:
+        return MiNegocio();
+
+      default:
+        return Text('Prueba'); //PrincipalPage();
+    }
   }
 
   void onClickVerMas(String ubicacion, provider) {
