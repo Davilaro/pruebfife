@@ -315,6 +315,62 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     return valor;
   }
 
+  int calcularDiasFaltantes(
+      List<String> diasSemana, diasEspecificos, String diaActual) {
+    // Obtener el índice del dia actual en la lista de días de la semana
+    int indexDiaActual = diasSemana.indexOf(diaActual);
+
+    // Inicializar el contador de dia faltantes
+    int diasFaltantes = 1;
+
+    // Recorrer la lista de días de la semana en orden para encontrar el proximo dia de visita
+    for (int i = 1; i <= diasSemana.length; i++) {
+      int indexSiguienteDia = (indexDiaActual + i) % diasSemana.length;
+      String siguienteDia = diasSemana[indexSiguienteDia];
+
+      if (diasEspecificos.contains(siguienteDia)) {
+        break;
+      } else {
+        diasFaltantes++;
+      }
+    }
+
+    return diasFaltantes + 1;
+  }
+
+  String validarTextoInformativo(CarroModelo cartProvider) {
+    print(
+        'itinerario ${PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]['itinerario']}');
+    List<String> diasDeLaSemana = [
+      'lunes',
+      'martes',
+      'miércoles',
+      'jueves',
+      'viernes',
+      'sábado',
+      'domingo'
+    ];
+    late int diasFaltantes;
+    late String textoReturn;
+    if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+                ['itinerario'] ==
+            1 &&
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+                ['isFrecuencia'] ==
+            false) {
+      diasFaltantes = calcularDiasFaltantes(
+          diasDeLaSemana,
+          PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+              ['diasVisita'],
+          prefs.diaActual);
+      return textoReturn =
+          "    Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
+    }
+    textoReturn =
+        'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.';
+    return textoReturn;
+  }
+
   String cargarResultadoPedido(CarroModelo cartProvider) {
     double precio = 0;
 
@@ -407,12 +463,15 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                       fontSize: size.width * 0.04,
                                       fontFamily: 'RoundedMplus1c')),
                               TextSpan(
-                                  text: PedidoEmart.listaProductosPorFabricante![
-                                                  widget.productos.fabricante]
-                                              ["preciominimo"] ==
-                                          0
-                                      ? ""
-                                      : 'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.',
+                                  text:
+                                      PedidoEmart.listaProductosPorFabricante![
+                                                      widget
+                                                          .productos.fabricante]
+                                                  ["preciominimo"] ==
+                                              0
+                                          ? ""
+                                          : validarTextoInformativo(
+                                              cartProvider),
                                   style: TextStyle(
                                       color: ConstantesColores.rojo_letra,
                                       fontSize: size.width * 0.04,

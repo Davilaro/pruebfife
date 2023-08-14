@@ -979,18 +979,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (PedidoEmart.listaProductosPorFabricante![fabricante]
+      if ((PedidoEmart.listaProductosPorFabricante![fabricante]
                       ["restrictivofrecuencia"] ==
                   1 &&
               PedidoEmart.listaProductosPorFabricante![fabricante]
                       ['isFrecuencia'] ==
-                  true ||
-          PedidoEmart.listaProductosPorFabricante![fabricante]
+                  true) ||
+          (PedidoEmart.listaProductosPorFabricante![fabricante]
                       ["restrictivonofrecuencia"] ==
                   1 &&
               PedidoEmart.listaProductosPorFabricante![fabricante]
                       ['isFrecuencia'] ==
-                  false) {
+                  false)) {
         if (value['precioProducto'] > 0.0) {
           if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
               PedidoEmart.listaProductosPorFabricante![fabricante]
