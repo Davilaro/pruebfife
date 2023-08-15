@@ -158,15 +158,17 @@ class _SimpleCardCondicionesEntregaState
                                           )
                                         : Container(),
                                     Text(mensajeCard(
-                                        fabricante,
-                                        cartProvider
-                                                .getListaFabricante[fabricante]
-                                            ["precioFinal"],
-                                        value["preciominimo"],
-                                        value["topeMinimo"],
-                                        condicionEntrega,
-                                        value["isFrecuencia"]
-                                        )),
+                                      fabricante,
+                                      cartProvider
+                                              .getListaFabricante[fabricante]
+                                          ["precioFinal"],
+                                      value["preciominimo"],
+                                      value["topeMinimo"],
+                                      condicionEntrega,
+                                      value["isFrecuencia"],
+                                      value["diasVisita"],
+                                      value["itinerario"],
+                                    )),
                                   ],
                                 );
                               }
@@ -186,8 +188,51 @@ class _SimpleCardCondicionesEntregaState
     return listaWidget;
   }
 
-  String mensajeCard(String fabricante, double valorPedido, double precioMinimo,
-      double topeMinimo, condicionEntrega, isFrecuencia) {
+  int calcularDiasFaltantes(
+      List<String> diasSemana, diasEspecificos, String diaActual) {
+    // Obtener el índice del dia actual en la lista de días de la semana
+    int indexDiaActual = diasSemana.indexOf(diaActual);
+
+    // Inicializar el contador de dia faltantes
+    int diasFaltantes = 1;
+
+    // Recorrer la lista de días de la semana en orden para encontrar el proximo dia de visita
+    for (int i = 1; i <= diasSemana.length; i++) {
+      int indexSiguienteDia = (indexDiaActual + i) % diasSemana.length;
+      String siguienteDia = diasSemana[indexSiguienteDia];
+
+      if (diasEspecificos.contains(siguienteDia)) {
+        break;
+      } else {
+        diasFaltantes++;
+      }
+    }
+
+    return diasFaltantes + 1;
+  }
+
+  String mensajeCard(
+      String fabricante,
+      double valorPedido,
+      double precioMinimo,
+      double topeMinimo,
+      condicionEntrega,
+      isFrecuencia,
+      diasVisita,
+      itinerario) {
+    late int diasFaltantes;
+    List<String> diasDeLaSemana = [
+      'lunes',
+      'martes',
+      'miércoles',
+      'jueves',
+      'viernes',
+      'sábado',
+      'domingo'
+    ];
+
+    diasFaltantes =
+        calcularDiasFaltantes(diasDeLaSemana, diasVisita, prefs.diaActual);
     // DateTime now = new DateTime.now();
 
     // String hora = now.hour.toString();
@@ -201,8 +246,10 @@ class _SimpleCardCondicionesEntregaState
     if (prefs.paisUsuario == 'CR') {
       return condicionEntrega.texto1;
     } else {
-      if (isFrecuencia == true) {
+      if (itinerario == 1 && isFrecuencia == true) {
         return condicionEntrega.texto1;
+      } else if (itinerario == 1 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
       } else {
         if (valorPedido > (precioMinimo)) {
           return "Tu pedido será entregado en el siguiente día habil";
