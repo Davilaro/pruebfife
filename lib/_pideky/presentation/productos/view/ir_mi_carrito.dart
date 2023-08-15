@@ -315,8 +315,8 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     return valor;
   }
 
-  int calcularDiasFaltantes(
-      List<String> diasSemana, diasEspecificos, String diaActual) {
+  int calcularDiasFaltantes(List<String> diasSemana, diasEspecificos,
+      String diaActual, int diasEntrega) {
     // Obtener el índice del dia actual en la lista de días de la semana
     int indexDiaActual = diasSemana.indexOf(diaActual);
 
@@ -335,12 +335,10 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
       }
     }
 
-    return diasFaltantes + 1;
+    return diasFaltantes + diasEntrega;
   }
 
   String validarTextoInformativo(CarroModelo cartProvider) {
-    print(
-        'itinerario ${PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]['itinerario']}');
     List<String> diasDeLaSemana = [
       'lunes',
       'martes',
@@ -348,26 +346,46 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
       'jueves',
       'viernes',
       'sábado',
-      'domingo'
     ];
     late int diasFaltantes;
     late String textoReturn;
-    if (PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-                ['itinerario'] ==
-            1 &&
+    var diasEntrega =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-                ['isFrecuencia'] ==
-            false) {
-      diasFaltantes = calcularDiasFaltantes(
-          diasDeLaSemana,
-          PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
-              ['diasVisita'],
-          prefs.diaActual);
-      return textoReturn =
-          "    Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
+            ['diasEntrega'];
+    var diasVisita =
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+            ['diasVisita'];
+    bool frecuencia =
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+            ['isFrecuencia'];
+    int itinerario =
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+            ['itinerario'];
+    double precioMinimo =
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+            ['preciominimo'];
+
+    if (itinerario == 1) {
+      if (frecuencia == false) {
+        diasFaltantes = calcularDiasFaltantes(
+            diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
+        return textoReturn =
+            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
+      } else if (frecuencia == true && precioMinimo == 0) {
+        return textoReturn = "";
+      }
+    } else {
+      if (frecuencia == false) {
+        return textoReturn =
+            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+      } else if (frecuencia == true && precioMinimo == 0) {
+        return textoReturn = "";
+      } else {
+        return textoReturn =
+            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+      }
     }
-    textoReturn =
-        'Recuerda que tu pedido de ${_nombreFabricante(widget.productos.fabricante)} debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado el próximo día hábil.';
+    textoReturn = '';
     return textoReturn;
   }
 
@@ -463,15 +481,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                       fontSize: size.width * 0.04,
                                       fontFamily: 'RoundedMplus1c')),
                               TextSpan(
-                                  text:
-                                      PedidoEmart.listaProductosPorFabricante![
-                                                      widget
-                                                          .productos.fabricante]
-                                                  ["preciominimo"] ==
-                                              0
-                                          ? ""
-                                          : validarTextoInformativo(
-                                              cartProvider),
+                                  text: validarTextoInformativo(cartProvider),
                                   style: TextStyle(
                                       color: ConstantesColores.rojo_letra,
                                       fontSize: size.width * 0.04,
