@@ -81,6 +81,7 @@ class PedidoEmart {
       int montoMinimoNoFrecuencia = 0;
       int restrictivoNoFrecuencia = 0;
       int restrictivoFrecuencia = 0;
+      int diasEntrega = 0;
       bool isFrecuencia = false;
       double precioProductos = 0;
       String icon = '';
@@ -105,6 +106,7 @@ class PedidoEmart {
         if (listaFabricante![j].empresa == key) {
           icon = listaFabricante![j].icono;
           horaFabricante = listaFabricante![j].hora;
+          diasEntrega = listaFabricante![j].diasEntrega;
           texto1 = listaFabricante![j].texto1 ?? "";
           texto2 = listaFabricante![j].texto2 ?? "";
           itinerario = listaFabricante![j].itinerario ?? 0;
@@ -180,7 +182,8 @@ class PedidoEmart {
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
                 'texto1': texto1,
                 'texto2': texto2,
-                "itinerario": itinerario
+                "itinerario": itinerario,
+                'diasEntrega': diasEntrega
               });
     });
   }

@@ -24,7 +24,7 @@ class SimpleCardCondicionesEntrega extends StatefulWidget {
 
 class _SimpleCardCondicionesEntregaState
     extends State<SimpleCardCondicionesEntrega> {
-  bool _isExpanded = false;
+  bool _isExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +168,7 @@ class _SimpleCardCondicionesEntregaState
                                       value["isFrecuencia"],
                                       value["diasVisita"],
                                       value["itinerario"],
+                                      value["diasEntrega"],
                                     )),
                                   ],
                                 );
@@ -188,8 +189,8 @@ class _SimpleCardCondicionesEntregaState
     return listaWidget;
   }
 
-  int calcularDiasFaltantes(
-      List<String> diasSemana, diasEspecificos, String diaActual) {
+  int calcularDiasFaltantes(List<String> diasSemana, diasEspecificos,
+      String diaActual, int diasEntrega) {
     // Obtener el índice del dia actual en la lista de días de la semana
     int indexDiaActual = diasSemana.indexOf(diaActual);
 
@@ -208,7 +209,7 @@ class _SimpleCardCondicionesEntregaState
       }
     }
 
-    return diasFaltantes + 1;
+    return diasFaltantes + diasEntrega;
   }
 
   String mensajeCard(
@@ -219,7 +220,8 @@ class _SimpleCardCondicionesEntregaState
       condicionEntrega,
       isFrecuencia,
       diasVisita,
-      itinerario) {
+      itinerario,
+      int diasEntrega) {
     late int diasFaltantes;
     List<String> diasDeLaSemana = [
       'lunes',
@@ -228,11 +230,10 @@ class _SimpleCardCondicionesEntregaState
       'jueves',
       'viernes',
       'sábado',
-      'domingo'
     ];
 
-    diasFaltantes =
-        calcularDiasFaltantes(diasDeLaSemana, diasVisita, prefs.diaActual);
+    diasFaltantes = calcularDiasFaltantes(
+        diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
     // DateTime now = new DateTime.now();
 
     // String hora = now.hour.toString();
@@ -247,15 +248,15 @@ class _SimpleCardCondicionesEntregaState
       return condicionEntrega.texto1;
     } else {
       if (itinerario == 1 && isFrecuencia == true) {
-        return condicionEntrega.texto1;
+        return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
       } else if (itinerario == 1 && isFrecuencia == false) {
         return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
       } else {
         if (valorPedido > (precioMinimo)) {
-          return "Tu pedido será entregado en el siguiente día habil";
+          return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
         }
 
-        return condicionEntrega.texto2;
+        return "";
       }
     }
     // if (prefs.paisUsuario == 'CR') {
