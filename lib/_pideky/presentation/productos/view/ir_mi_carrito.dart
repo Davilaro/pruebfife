@@ -412,6 +412,8 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
 
   bool cargarResultadoPedidoCondicion(CarroModelo cartProvider) {
     double valor = 0.0;
+    print(
+        "precio minimo ${PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]["preciominimo"]}");
 
     if (PedidoEmart.listaProductosPorFabricante!.length > 0) {
       double topeMinimo =
@@ -518,8 +520,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                         height: Get.height * 0.1,
                         padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                         child: Center(
-                          child: Text(
-                              'Tu pedido será entregado el siguiente día hábil.',
+                          child: Text('Has agregado un producto al carrito. ',
                               style: TextStyle(
                                   color: ConstantesColores.gris_oscuro,
                                   fontSize: size.width * 0.04,
