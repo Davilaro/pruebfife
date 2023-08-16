@@ -202,7 +202,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                         )),
                   ),
                   Padding(
-                      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                       child: Container(
                         width: 240,
                         height: 50,
@@ -269,7 +269,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
                                     .productos.fabricante]["preciominimo"] ==
                                 0
                             ? ""
-                            : 'Recuerda que el pedido mínimo para ${_nombreFabricante(widget.productos.fabricante)} es de ${cargarResultado(cartProvider)}',
+                            : validarTextoInformativo(cartProvider),
                         style: TextStyle(
                             color: ConstantesColores.rojo_letra,
                             fontSize: size.width * 0.04,
@@ -452,13 +452,12 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         ? Container(
             padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Container(
-                height: widget.tamano * 0.2,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
                 child: Center(
                   child: Row(
                     children: [

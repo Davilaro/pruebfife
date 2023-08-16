@@ -1388,7 +1388,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       if (precioMinimo != 0) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
-          return 'Recuerda que tú pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}.';
+          return 'Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}.';
         }
       }
       isValid.value = false;
@@ -1397,7 +1397,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       if (restrictivoFrecuencia == 0 && isFrecuencia == false) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
-          return 'Recuerda que tú pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}';
+          return 'Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}';
         }
         isValid.value = false;
         return "";
@@ -1409,7 +1409,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
           }
           if (valorPedido < precioMinimo) {
             isValid.value = true;
-            return "Recuerda que tú pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}";
+            return "Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}";
           }
         } else {
           if (precioMinimo == 0) {
