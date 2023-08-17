@@ -366,6 +366,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
             ['preciominimo'];
 
     if (itinerario == 1) {
+      print("frecuencia actual$frecuencia");
       if (frecuencia == false) {
         diasFaltantes = calcularDiasFaltantes(
             diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
@@ -377,7 +378,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         diasFaltantes = calcularDiasFaltantes(
             diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
         return "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
-        
       }
     } else {
       if (frecuencia == false) {

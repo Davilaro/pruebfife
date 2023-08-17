@@ -148,11 +148,14 @@ class PedidoEmart {
           case "S":
             diasAgrupadosPorFabricante.add("sábado");
             break;
-          default:
-            diasAgrupadosPorFabricante.add("");
         }
       });
-
+      if (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
+          horaActual.isAfter(hourRes)) {
+        prefs.diaActual = prefs.nextDay;
+      } else {
+        prefs.diaActual = DateFormat.EEEE().format(DateTime.now());
+      }
       if ((diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
               horaActual.isBefore(hourRes)) ||
           (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
