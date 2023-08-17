@@ -1,14 +1,11 @@
 // ignore_for_file: unnecessary_statements
 
-import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../../src/utils/uxcam_tagueo.dart';
 import '../../src/widget/acciones_carrito_bart.dart';

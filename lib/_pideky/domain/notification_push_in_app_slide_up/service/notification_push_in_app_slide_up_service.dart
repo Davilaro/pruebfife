@@ -7,12 +7,12 @@ class NotificationPushInAppSlideUpService {
   NotificationPushInAppSlideUpService(this.notificationPushInAppRepository);
 
   Future<List<NotificationPushInAppSlideUpModel>>
-      consultNotificationsSlideUp() {
-    return notificationPushInAppRepository.consultNotificationsSlideUp();
+      consultNotificationsSlideUp(String ubicacion) {
+    return notificationPushInAppRepository.consultNotificationsSlideUp(ubicacion);
   }
 
   Future<List<NotificationPushInAppSlideUpModel>>
-      consultNotificationPushInApp() {
-    return notificationPushInAppRepository.consultNotificationPushInApp();
+      consultNotificationPushInApp(String ubicacion) {
+    return notificationPushInAppRepository.consultNotificationPushInApp(ubicacion);
   }
 }

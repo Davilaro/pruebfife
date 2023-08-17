@@ -2,7 +2,8 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 
 class NotificationPushInApp extends StatefulWidget {
-  const NotificationPushInApp();
+  const NotificationPushInApp(this.data);
+  final data;
 
   @override
   _NotificationPushInAppState createState() => _NotificationPushInAppState();
@@ -51,58 +52,57 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
         animation: _fadeAnimation,
         builder: (context, child) {
           return Opacity(
-            opacity: _fadeAnimation.value,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            'assets/image/push_in_app_prueba.png',
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            width: MediaQuery.of(context).size.height * 0.47,
-                            fit: BoxFit.cover,
+              opacity: _fadeAnimation.value,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              widget.data.imageUrl,
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              width: MediaQuery.of(context).size.height * 0.47,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 100,
-                    right: 1,
-                    child: GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          cerrado = true;
-                        });
-                        _animationController.reverse();
-                        await Future.delayed(Duration(milliseconds: 300), () {
-                          Navigator.of(context).pop();
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          size: 25,
-                          color: Colors.white,
+                    Positioned(
+                      top: 100,
+                      right: 1,
+                      child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            cerrado = true;
+                          });
+                          _animationController.reverse();
+                          await Future.delayed(Duration(milliseconds: 300), () {
+                            Navigator.of(context).pop();
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            size: 25,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          );
+                  ],
+                ),
+              ));
         });
   }
 }

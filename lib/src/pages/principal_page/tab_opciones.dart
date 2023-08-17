@@ -17,7 +17,7 @@ import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/controllers/notifiactionsControllers.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
@@ -71,12 +71,11 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
+    print("notificacion ${prefs.validarNotificacion}");
     if (prefs.usurioLogin == 1 && prefs.validarNotificacion == true) {
-      controllerNotificaciones.getSlideUpAndPushInUpByDataBase();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (controllerNotificaciones.listSlideUps.length > 0)
-          showSlideUpSnackbar();
-        if (controllerNotificaciones.listPushInUp.length > 0) showPushInApp();
+        showSlideUp();
+        showPushInUp();
       });
     }
 
@@ -96,18 +95,28 @@ class _TabOpcionesState extends State<TabOpciones>
     setState(() {});
   }
 
-  void showSlideUpSnackbar() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return WillPopScope(
-              onWillPop: () async => false, child: NotificationPushInApp());
-        });
+  void showPushInUp() async {
+    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WillPopScope(
+                onWillPop: () async => false,
+                child: NotificationPushInApp(
+                    controllerNotificaciones.listPushInUpHome.first));
+          });
+    }
   }
 
-  void showPushInApp() async {
-    await Future.delayed(
-        Duration(milliseconds: 4600), () => showSlideUpNotification(context));
+  void showSlideUp() async {
+    await controllerNotificaciones.getSlideUpByDataBaseHome("Home");
+    if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
+      await Future.delayed(
+          Duration(milliseconds: 4600),
+          () => showSlideUpNotification(
+              context, controllerNotificaciones.listSlideUpHome.first));
+    }
   }
 
   dispose() {
