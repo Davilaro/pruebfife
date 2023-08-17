@@ -377,7 +377,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     } else {
       if (frecuencia == false) {
         return textoReturn =
-            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en 1 día hábil.";
       } else if (frecuencia == true && precioMinimo == 0) {
         return textoReturn = "";
       } else {

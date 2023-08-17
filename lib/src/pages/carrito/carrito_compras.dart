@@ -1394,7 +1394,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
       isValid.value = false;
       return "";
     } else {
-      if (restrictivoFrecuencia == 0 && isFrecuencia == false) {
+      if (restrictivoFrecuencia == 0 && isFrecuencia == false ||
+          restrictivoNoFrecuencia == 0 && isFrecuencia == false) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
           return 'Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}';
