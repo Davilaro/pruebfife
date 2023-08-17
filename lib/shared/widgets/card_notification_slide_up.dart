@@ -17,7 +17,7 @@ void showSlideUpNotification(context, data) {
     backgroundColor: Colors.grey.shade400,
     borderRadius: 15,
     messageText: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ClipRRect(
           borderRadius: BorderRadius.only(
@@ -34,7 +34,7 @@ void showSlideUpNotification(context, data) {
           ),
         ),
         SizedBox(width: 10),
-        Flexible(
+        Expanded(
           child: Text(
             data.descripcion,
             style: TextStyle(color: Colors.black, fontSize: 12),
@@ -42,7 +42,10 @@ void showSlideUpNotification(context, data) {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Expanded(child: Icon(Icons.arrow_forward_ios, color: Colors.white)),
+        Icon(Icons.arrow_forward_ios, color: Colors.white),
+        SizedBox(
+          width: 10,
+        )
       ],
     ),
     margin: EdgeInsets.symmetric(horizontal: 24, vertical: 65),
