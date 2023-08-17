@@ -373,6 +373,11 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
             "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
       } else if (frecuencia == true && precioMinimo == 0) {
         return textoReturn = "";
+      } else if (frecuencia == true && precioMinimo != 0) {
+        diasFaltantes = calcularDiasFaltantes(
+            diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
+        return "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
+        
       }
     } else {
       if (frecuencia == false) {
