@@ -65,6 +65,7 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
+    print("dia actual ${prefs.diaActual}");
     _focusNode.dispose();
     hasInternet = true;
     cargarSecciones();

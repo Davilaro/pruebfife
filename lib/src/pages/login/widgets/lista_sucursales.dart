@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
@@ -237,11 +237,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     : elemento.pais == 'CO'
     //         ? Locale('es', 'CO')
     //         : Locale('es', 'CO'));
-
     pr = ProgressDialog(context);
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await cargarInformacion(provider, elemento);

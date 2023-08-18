@@ -292,10 +292,12 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       WHERE fabricante = f.empresa) as INT) as restrictivofrecuencia ,cast((SELECT RestrictivoNoFrecuencia FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as INT) as restrictivonofrecuencia, cast((SELECT hora FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as varchar) as hora, cast((SELECT Texto1 FROM CondicionesEntrega 
-      WHERE fabricante = f.empresa) as varchar) as texto1
+      WHERE fabricante = f.empresa) as varchar) as texto1, cast((SELECT Texto2 FROM CondicionesEntrega 
+      WHERE fabricante = f.empresa) as varchar) as texto2, cast((SELECT Itinerario FROM CondicionesEntrega 
+      WHERE fabricante = f.empresa) as INT) as itinerario,
+	    cast((SELECT DiasEntrega FROM CondicionesEntrega 
+      WHERE fabricante = f.empresa) as INT) as diasEntrega
       FROM Fabricante f
-      GROUP BY f.empresa
-      ORDER BY f.orden ASC
       ''';
       final sql = await db.rawQuery(query);
 

@@ -19,9 +19,12 @@ class Fabricantes {
       this.montoMinimoNoFrecuencia,
       this.restrictivoFrecuencia,
       this.restrictivoNoFrecuencia,
+      this.itinerario,
       this.hora,
       this.texto1,
-      required this.diaVisita,
+      this.texto2,
+      this.diaVisita,
+      required this.diasEntrega,
       this.razonSocial});
 
   String? empresa;
@@ -36,8 +39,11 @@ class Fabricantes {
   int? montoMinimoNoFrecuencia;
   int? restrictivoFrecuencia;
   int? restrictivoNoFrecuencia;
+  int? itinerario;
   String? texto1;
-  String diaVisita;
+  String? texto2;
+  String? diaVisita;
+  int diasEntrega;
   String? nitCliente;
   String? razonSocial;
 
@@ -58,8 +64,11 @@ class Fabricantes {
       montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
       restrictivoFrecuencia: json["restrictivofrecuencia"],
       restrictivoNoFrecuencia: json["restrictivonofrecuencia"],
-      diaVisita: json["diavisita"],
-      texto1: json["texto1"]);
+      diaVisita: json["diavisita"] == null ? "" : json["diavisita"],
+      texto1: json["texto1"],
+      texto2: json["texto2"],
+      itinerario: json["itinerario"],
+      diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"]);
 
   Map<String, dynamic> toJson() => {
         "empresa": empresa,
@@ -78,5 +87,8 @@ class Fabricantes {
         "restrictivofrecuencia": restrictivoFrecuencia,
         "hora": hora,
         "texto1": texto1,
+        "texto2": texto2,
+        "itinerario": itinerario,
+        "diaEntrega": diasEntrega
       };
 }

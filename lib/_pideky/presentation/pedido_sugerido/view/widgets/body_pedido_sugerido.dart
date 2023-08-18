@@ -19,34 +19,30 @@ class BodyPedidoSugerido extends StatelessWidget {
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('SuggestedOrderPage');
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Expanded(
-          child: TabBarView(controller: controller.tabController, children: [
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  // ignore: unrelated_type_equality_checks
-                  child: Obx(() => PedidoSugeridoViewModel.userLog.value == 1
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TopText(message: S.current.we_have_a_suggested),
-                            ...acordionDinamico(context)
-                          ],
-                        )
-                      : Container(
-                          child:
-                              TopText(message: S.current.we_have_a_suggested),
-                        ))),
-            ],
-          ),
-        ),
-        PedidoRapido()
-      ])),
-    );
+    return 
+      SingleChildScrollView(
+    child: Column(
+      children: [
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            // ignore: unrelated_type_equality_checks
+            child: Obx(() => PedidoSugeridoViewModel.userLog.value == 1
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TopText(message: S.current.we_have_a_suggested),
+                      ...acordionDinamico(context)
+                    ],
+                  )
+                : Container(
+                    child:
+                        TopText(message: S.current.we_have_a_suggested),
+                  ))),
+      ],
+    ),
+      );
+      
+    
   }
 }

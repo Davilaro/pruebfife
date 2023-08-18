@@ -24,7 +24,7 @@ class SimpleCardCondicionesEntrega extends StatefulWidget {
 
 class _SimpleCardCondicionesEntregaState
     extends State<SimpleCardCondicionesEntrega> {
-  bool _isExpanded = false;
+  bool _isExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -165,8 +165,11 @@ class _SimpleCardCondicionesEntregaState
                                         value["preciominimo"],
                                         value["topeMinimo"],
                                         condicionEntrega,
-                                        value["isFrecuencia"]
-                                        )),
+                                        value["isFrecuencia"],
+                                        value["diasVisita"],
+                                        value["itinerario"],
+                                        value["diasEntrega"],
+                                        value['restrictivonofrecuencia'])),
                                   ],
                                 );
                               }
@@ -186,8 +189,52 @@ class _SimpleCardCondicionesEntregaState
     return listaWidget;
   }
 
-  String mensajeCard(String fabricante, double valorPedido, double precioMinimo,
-      double topeMinimo, condicionEntrega, isFrecuencia) {
+  int calcularDiasFaltantes(List<String> diasSemana, diasEspecificos,
+      String diaActual, int diasEntrega) {
+    // Obtener el índice del dia actual en la lista de días de la semana
+    int indexDiaActual = diasSemana.indexOf(diaActual);
+
+    // Inicializar el contador de dia faltantes
+    int diasFaltantes = 1;
+
+    // Recorrer la lista de días de la semana en orden para encontrar el proximo dia de visita
+    for (int i = 1; i <= diasSemana.length; i++) {
+      int indexSiguienteDia = (indexDiaActual + i) % diasSemana.length;
+      String siguienteDia = diasSemana[indexSiguienteDia];
+
+      if (diasEspecificos.contains(siguienteDia)) {
+        break;
+      } else {
+        diasFaltantes++;
+      }
+    }
+
+    return diasFaltantes + diasEntrega;
+  }
+
+  String mensajeCard(
+      String fabricante,
+      double valorPedido,
+      double precioMinimo,
+      double topeMinimo,
+      condicionEntrega,
+      isFrecuencia,
+      diasVisita,
+      itinerario,
+      int diasEntrega,
+      restrictivoNoFrecuiencia) {
+    late int diasFaltantes;
+    List<String> diasDeLaSemana = [
+      'lunes',
+      'martes',
+      'miércoles',
+      'jueves',
+      'viernes',
+      'sábado',
+    ];
+
+    diasFaltantes = calcularDiasFaltantes(
+        diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
     // DateTime now = new DateTime.now();
 
     // String hora = now.hour.toString();
@@ -201,14 +248,20 @@ class _SimpleCardCondicionesEntregaState
     if (prefs.paisUsuario == 'CR') {
       return condicionEntrega.texto1;
     } else {
-      if (isFrecuencia == true) {
-        return condicionEntrega.texto1;
+      if (itinerario == 1 && isFrecuencia == true) {
+        return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+      } else if (itinerario == 1 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
+      } else if (restrictivoNoFrecuiencia == 0 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
+      } else if (restrictivoNoFrecuiencia != 0 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
       } else {
         if (valorPedido > (precioMinimo)) {
-          return "Tu pedido será entregado en el siguiente día habil";
+          return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
         }
 
-        return condicionEntrega.texto2;
+        return "";
       }
     }
     // if (prefs.paisUsuario == 'CR') {

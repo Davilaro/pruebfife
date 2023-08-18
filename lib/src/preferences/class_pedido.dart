@@ -81,12 +81,15 @@ class PedidoEmart {
       int montoMinimoNoFrecuencia = 0;
       int restrictivoNoFrecuencia = 0;
       int restrictivoFrecuencia = 0;
+      int diasEntrega = 0;
       bool isFrecuencia = false;
       double precioProductos = 0;
       String icon = '';
       String horaFabricante = '';
       String diasFrecuencia = "";
       String texto1 = "";
+      String texto2 = "";
+      int itinerario = 0;
       List<String> listaDiasFrecuencia = [];
       List diasAgrupadosPorFabricante = [];
       DateTime now = new DateTime.now();
@@ -103,7 +106,10 @@ class PedidoEmart {
         if (listaFabricante![j].empresa == key) {
           icon = listaFabricante![j].icono;
           horaFabricante = listaFabricante![j].hora;
+          diasEntrega = listaFabricante![j].diasEntrega;
           texto1 = listaFabricante![j].texto1 ?? "";
+          texto2 = listaFabricante![j].texto2 ?? "";
+          itinerario = listaFabricante![j].itinerario ?? 0;
           diasFrecuencia = listaFabricante![j].diaVisita;
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
           montoMinimoFrecuencia =
@@ -144,7 +150,12 @@ class PedidoEmart {
             break;
         }
       });
-
+      if (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
+          horaActual.isAfter(hourRes)) {
+        prefs.diaActual = prefs.nextDay;
+      } else {
+        prefs.diaActual = DateFormat.EEEE().format(DateTime.now());
+      }
       if ((diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
               horaActual.isBefore(hourRes)) ||
           (diasAgrupadosPorFabricante.contains(prefs.diaActual) &&
@@ -172,7 +183,10 @@ class PedidoEmart {
                 'isFrecuencia': isFrecuencia,
                 'restrictivofrecuencia': restrictivoFrecuencia,
                 'restrictivonofrecuencia': restrictivoNoFrecuencia,
-                'texto1': texto1
+                'texto1': texto1,
+                'texto2': texto2,
+                "itinerario": itinerario,
+                'diasEntrega': diasEntrega
               });
     });
   }

@@ -28,7 +28,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
 bool cargarDeNuevo = false;
@@ -380,23 +380,25 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                               child: Center(
                                                   child: Text(
                                                 textAlertCompany(
-                                                    fabricante,
-                                                    cartProvider.getListaFabricante[
-                                                            fabricante]
-                                                        ["precioFinal"],
-                                                    value["preciominimo"],
-                                                    value["topeMinimo"],
-                                                    productoViewModel
-                                                        .getFormat()
-                                                        .currencySymbol,
-                                                    value["iva"],
-                                                    value[
-                                                        'restrictivofrecuencia'],
-                                                    value[
-                                                        'restrictivonofrecuencia'],
-                                                    value["diasVisita"],
-                                                    value["isFrecuencia"],
-                                                    value["texto1"]),
+                                                  fabricante,
+                                                  cartProvider
+                                                          .getListaFabricante[
+                                                      fabricante]["precioFinal"],
+                                                  value["preciominimo"],
+                                                  productoViewModel
+                                                      .getFormat()
+                                                      .currencySymbol,
+                                                  value["iva"],
+                                                  value[
+                                                      'restrictivofrecuencia'],
+                                                  value[
+                                                      'restrictivonofrecuencia'],
+                                                  value["diasVisita"],
+                                                  value["isFrecuencia"],
+                                                  value["texto1"],
+                                                  value["texto2"],
+                                                  value["itinerario"],
+                                                ),
                                                 style: TextStyle(
                                                     color: value['restrictivofrecuencia'] ==
                                                                     0 &&
@@ -977,18 +979,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
   String _validarPedidosMinimos(CarroModelo cartProvider) {
     String listaFabricantesSinPedidoMinimo = "";
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      if (PedidoEmart.listaProductosPorFabricante![fabricante]
+      if ((PedidoEmart.listaProductosPorFabricante![fabricante]
                       ["restrictivofrecuencia"] ==
                   1 &&
               PedidoEmart.listaProductosPorFabricante![fabricante]
                       ['isFrecuencia'] ==
-                  true ||
-          PedidoEmart.listaProductosPorFabricante![fabricante]
+                  true) ||
+          (PedidoEmart.listaProductosPorFabricante![fabricante]
                       ["restrictivonofrecuencia"] ==
                   1 &&
               PedidoEmart.listaProductosPorFabricante![fabricante]
                       ['isFrecuencia'] ==
-                  false) {
+                  false)) {
         if (value['precioProducto'] > 0.0) {
           if (cartProvider.getListaFabricante[fabricante]["precioFinal"] <
               PedidoEmart.listaProductosPorFabricante![fabricante]
@@ -1358,60 +1360,73 @@ class _CarritoComprasState extends State<CarritoCompras> {
   }
 
   String textAlertCompany(
-      String fabricante,
-      double valorPedido,
-      double precioMinimo,
-      double topeMinimo,
-      String currentSymbol,
-      double iva,
-      int restrictivoFrecuencia,
-      int restrictivoNoFrecuencia,
-      List diasVisita,
-      bool isFrecuencia,
-      String texto1) {
+    String fabricante,
+    double valorPedido,
+    double precioMinimo,
+    String currentSymbol,
+    double iva,
+    int restrictivoFrecuencia,
+    int restrictivoNoFrecuencia,
+    List diasVisita,
+    bool isFrecuencia,
+    String texto1,
+    String texto2,
+    int itinerario,
+  ) {
     // var calcular = topeMinimo * 1.19;
 
     String diasSinComa;
     String diasTemp = "";
+
     diasVisita.forEach((element) {
       diasTemp += "$element, ";
     });
     diasSinComa = diasTemp.substring(
         0, diasTemp.length - 2 < 0 ? 0 : diasTemp.length - 2);
 
-    if (restrictivoFrecuencia == 0 && isFrecuencia == true) {
-      if (valorPedido < precioMinimo) {
-        isValid.value = true;
-        return texto1;
-      }
-      isValid.value = true;
-      return "Tu pedido será entregado el siguiente día hábil.";
-    } else {
-      if (isFrecuencia == true) {
-        if (precioMinimo == 0) {
-          isValid.value = false;
-          return "";
-        }
+    if (itinerario == 1) {
+      if (precioMinimo != 0) {
         if (valorPedido < precioMinimo) {
           isValid.value = true;
-          return 'Para que tu pedido sea entregado debes cumplir una compra mínima de ' +
-              productoViewModel.getCurrency(precioMinimo);
-        }
-      } else {
-        if (precioMinimo == 0) {
-          isValid.value = false;
-          return "";
-        }
-        if (valorPedido < precioMinimo) {
-          isValid.value = true;
-          return "El pedido será entregado en 1 día hábil si cumples con una compra mínima de ${productoViewModel.getCurrency(precioMinimo)}, de lo contrario, deberás hacer tu pedido los días asignados que son los $diasSinComa.";
-        } else {
-          return "Tu pedido será entregado el siguiente día hábil.";
+          return 'Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}.';
         }
       }
       isValid.value = false;
       return "";
+    } else {
+      if (restrictivoFrecuencia == 0 && isFrecuencia == false ||
+          restrictivoNoFrecuencia == 0 && isFrecuencia == false) {
+        if (valorPedido < precioMinimo) {
+          isValid.value = true;
+          return 'Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}';
+        }
+        isValid.value = false;
+        return "";
+      } else {
+        if (isFrecuencia == true) {
+          if (precioMinimo == 0) {
+            isValid.value = false;
+            return "";
+          }
+          if (valorPedido < precioMinimo) {
+            isValid.value = true;
+            return "Recuerda que tu pedido mínimo  debe ser superior a ${productoViewModel.getCurrency(precioMinimo)}";
+          }
+        } else {
+          if (precioMinimo == 0) {
+            isValid.value = false;
+            return "";
+          }
+          if (valorPedido < precioMinimo) {
+            isValid.value = true;
+            return "$texto2 $diasSinComa.";
+          }
+        }
+        isValid.value = false;
+        return "";
+      }
     }
+
     // if (fabricante.toUpperCase() == "MEALS") {
     //   if (valorPedido < (topeMinimo * 1.19)) {
     //     return 'Si deseas que tu pedido sea entregado el siguiente día hábil realiza una compra mínima de : $currentSymbol ' +

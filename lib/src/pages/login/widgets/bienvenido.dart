@@ -17,8 +17,8 @@ import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 final TextEditingController _controllerCorreoMsm = TextEditingController();
 final TextEditingController _controllerCodigo = TextEditingController();
@@ -33,6 +33,7 @@ late ProgressDialog prValidar;
 late ProgressDialog prEnviarCodigo;
 final prefs = new Preferencias();
 late BuildContext contextPrincipal;
+late bool isChecked1 = false;
 late bool isChecked = false;
 
 var htmlNumeroCel = """ 
@@ -389,7 +390,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando MS');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(context2!, 'TELEFONO', dropdownValue);
@@ -483,7 +484,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCorreo = ProgressDialog(context2!);
     prEnviarCorreo.style(message: 'Enviando Correo');
     prEnviarCorreo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: true, showLogs: true);
 
     await prEnviarCorreo.show();
     await enviarCodigoActivacion(
@@ -526,7 +527,7 @@ class _BienvenidoState extends State<Bienvenido> {
       context: context2,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        bool isChequet = false;
+        bool isChequet2 = false;
         bool isChequet1 = false;
         var destino =
             this.val == 1 ? S.current.text_sms : S.current.email_address;
@@ -600,12 +601,12 @@ class _BienvenidoState extends State<Bienvenido> {
                         child: Row(
                           children: [
                             Checkbox(
-                              value: isChequet,
+                              value: isChequet2,
                               shape: CircleBorder(),
                               checkColor: Colors.purple,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  isChequet = value!;
+                                  isChequet2 = value!;
                                 });
                               },
                             ),
@@ -661,7 +662,8 @@ class _BienvenidoState extends State<Bienvenido> {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () => _btnEnviarCodigo(context, isChequet),
+                        onTap: () =>
+                            _btnEnviarCodigo(context, isChequet2, isChequet1),
                         child: Container(
                           height: 40,
                           width: double.infinity,
@@ -681,14 +683,18 @@ class _BienvenidoState extends State<Bienvenido> {
     );
   }
 
-  _btnEnviarCodigo(BuildContext context, bool estado) {
+  _btnEnviarCodigo(BuildContext context, bool estado1, bool estado2) {
     if (_controllerCodigo.text == '') {
-      // mostrarAlert(context, 'El Codigo de Verificación no puede estar vacio', 'Alerta');
-    } else {
+      mostrarAlert(
+          context, 'El Codigo de Verificación no puede estar vacio', null);
+    } else if (estado1 == true && estado2 == true) {
       //FIREBASE: Llamamos el evento code_received
       TagueoFirebase()
           .sendAnalityticsActivationCodeReceived(_controllerCodigo.text);
       _cargandoCodigoVerificacion(codigoRespuesta, _controllerCodigo.text);
+    } else {
+      // Se debe aceptar las políticas
+      mostrarAlert(context, S.current.policies_accepted, null);
     }
   }
 
@@ -696,7 +702,7 @@ class _BienvenidoState extends State<Bienvenido> {
     prEnviarCodigo = ProgressDialog(context);
     prEnviarCodigo.style(message: S.current.we_validating_code_activate);
     prEnviarCodigo = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await prEnviarCodigo.show();
     await enviarCodigoVerificacion(context, codigo, codVerificado);
@@ -712,7 +718,8 @@ class _BienvenidoState extends State<Bienvenido> {
       //FIREBASE: Llamamos el evento code_succes
       TagueoFirebase().sendAnalityticsActivationCodeSucces("OK");
       await prEnviarCodigo.hide();
-      _mensajeDeBienvenida(context2!);
+      await Servicies().loadDataTermsAndConditions();
+      await _mensajeDeBienvenida(context2!);
     } else {
       //FIREBASE: Llamamos el evento activation_code_error
       TagueoFirebase().sendAnalityticsActivationCodeError("ERROR");
@@ -721,7 +728,7 @@ class _BienvenidoState extends State<Bienvenido> {
     }
   }
 
-  void _mensajeDeBienvenida(BuildContext context) {
+  Future<void>  _mensajeDeBienvenida(BuildContext context) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -778,7 +785,7 @@ class _BienvenidoState extends State<Bienvenido> {
     pr = ProgressDialog(context);
     pr.style(message: S.current.loading_branches);
     pr = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
     await loguin(context);

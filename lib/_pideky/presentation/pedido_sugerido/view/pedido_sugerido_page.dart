@@ -1,4 +1,5 @@
 import 'package:emart/shared/widgets/top_buttons.dart';
+import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -42,29 +43,84 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   }
 
   @override
+  void dispose() {
+    pedidoSugeridoViewModel.tabActual.value = 0;
+    super.dispose();
+  }
+
+  
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: ConstantesColores.color_fondo_gris,
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Column(
-              children: [
-                TopButtons(
-                    controllerViewModel: pedidoSugeridoViewModel,
-                    onTap: (index) {
-                      UxcamTagueo().selectSectionPedidoSugerido(
-                          pedidoSugeridoViewModel.titulosSeccion[index]);
-                      pedidoSugeridoViewModel.cambiarTab(index);
-                    }),
-                BodyPedidoSugerido(controller: pedidoSugeridoViewModel)
-              ],
+    final selectedColor = Colors.yellow;
+    return Obx(() => DefaultTabController(
+          length: pedidoSugeridoViewModel.titulosSeccion.length,
+          child: Scaffold(
+            backgroundColor: ConstantesColores.color_fondo_gris,
+            body: Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Column(
+                  children: [
+                    TabBar(
+                        controller: pedidoSugeridoViewModel.tabController,
+                        labelPadding:
+                            EdgeInsets.only(left: 20, right: 20, bottom: 15),
+                        indicatorColor: Colors.transparent,
+                        unselectedLabelColor: Colors.black,
+                        splashFactory: NoSplash.splashFactory,
+                        
+                        onTap: (index) {
+                          //UXCam: Llamamos el evento selectSectionPedidoSugerido
+                          UxcamTagueo().selectSectionPedidoSugerido(
+                              pedidoSugeridoViewModel.titulosSeccion[index]);
+                          pedidoSugeridoViewModel.cambiarTab(index);
+                        },
+                        tabs: List<Widget>.generate(
+                            pedidoSugeridoViewModel.titulosSeccion.length,
+                            (index) {
+                          return Tab(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color:
+                                    pedidoSugeridoViewModel.tabActual.value ==
+                                            index
+                                        ? selectedColor
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  pedidoSugeridoViewModel.titulosSeccion[index],
+                                  style: TextStyle(
+                                      color: ConstantesColores.azul_precio,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          );
+                        })),
+                    Expanded(
+                      child: PageView(
+                        controller: pedidoSugeridoViewModel.pageController,
+                        onPageChanged: (index) {
+                          pedidoSugeridoViewModel.cambiarTab(index);
+                        },
+                        children: [
+                          BodyPedidoSugerido(
+                              controller: pedidoSugeridoViewModel),
+                          PedidoRapido()
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

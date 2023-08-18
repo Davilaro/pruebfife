@@ -22,6 +22,7 @@ class PedidoSugeridoViewModel extends GetxController
   PedidoSugeridoViewModel(this.pedidoSugerido);
   //controlador de botones superiores
   late TabController tabController;
+  late PageController pageController;
   RxInt tabActual = 0.obs;
   final List titulosSeccion = ["Pedido Sugerido", "Repetir Orden"];
 
@@ -43,6 +44,8 @@ class PedidoSugeridoViewModel extends GetxController
   RxBool isValid = false.obs;
 
   void cambiarTab(int estado) {
+    pageController.animateToPage(estado,
+        duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
     this.tabActual.value = estado;
   }
 
@@ -111,6 +114,7 @@ class PedidoSugeridoViewModel extends GetxController
   @override
   void onInit() {
     super.onInit();
+    pageController = PageController();
     tabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
     initController();
@@ -120,6 +124,7 @@ class PedidoSugeridoViewModel extends GetxController
   void onClose() {
     super.onClose();
     tabController.dispose();
+    pageController.dispose();
   }
 
   static PedidoSugeridoViewModel get findOrInitialize {
