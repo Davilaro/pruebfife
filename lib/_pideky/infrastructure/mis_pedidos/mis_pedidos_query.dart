@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emart/_pideky/domain/mis_pedidos/interface/i_mis_pedidos_repository.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/seguimiento_pedido.dart';
@@ -57,11 +59,12 @@ class MisPedidosQuery extends IMisPedidosRepository {
     final db = await DBProviderHelper.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      String query = '''
         SELECT h.NumeroDoc, h.fabricante, h.ordencompra ordencompra, f.ico, sum(precio) as precio 
         from Historico h LEFT JOIN fabricante f ON h.fabricante = f.nombrecomercial 
         where NumeroDoc='$numeroDoc' GROUP BY fabricante
-      ''');
+      ''';
+      final sql = await db.rawQuery(query);
 
       return sql.map((e) => Historico.fromJson(e)).toList();
     } catch (e) {
