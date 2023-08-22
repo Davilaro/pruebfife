@@ -158,18 +158,18 @@ class _SimpleCardCondicionesEntregaState
                                           )
                                         : Container(),
                                     Text(mensajeCard(
-                                      fabricante,
-                                      cartProvider
-                                              .getListaFabricante[fabricante]
-                                          ["precioFinal"],
-                                      value["preciominimo"],
-                                      value["topeMinimo"],
-                                      condicionEntrega,
-                                      value["isFrecuencia"],
-                                      value["diasVisita"],
-                                      value["itinerario"],
-                                      value["diasEntrega"],
-                                    )),
+                                        fabricante,
+                                        cartProvider
+                                                .getListaFabricante[fabricante]
+                                            ["precioFinal"],
+                                        value["preciominimo"],
+                                        value["topeMinimo"],
+                                        condicionEntrega,
+                                        value["isFrecuencia"],
+                                        value["diasVisita"],
+                                        value["itinerario"],
+                                        value["diasEntrega"],
+                                        value['restrictivonofrecuencia'])),
                                   ],
                                 );
                               }
@@ -221,7 +221,8 @@ class _SimpleCardCondicionesEntregaState
       isFrecuencia,
       diasVisita,
       itinerario,
-      int diasEntrega) {
+      int diasEntrega,
+      restrictivoNoFrecuiencia) {
     late int diasFaltantes;
     List<String> diasDeLaSemana = [
       'lunes',
@@ -251,6 +252,10 @@ class _SimpleCardCondicionesEntregaState
         return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
       } else if (itinerario == 1 && isFrecuencia == false) {
         return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
+      } else if (restrictivoNoFrecuiencia == 0 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
+      } else if (restrictivoNoFrecuiencia != 0 && isFrecuencia == false) {
+        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
       } else {
         if (valorPedido > (precioMinimo)) {
           return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";

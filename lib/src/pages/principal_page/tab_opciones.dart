@@ -79,6 +79,7 @@ class _TabOpcionesState extends State<TabOpciones>
       });
     }
 
+    print("dia actual ${prefs.diaActual}");
     _focusNode.dispose();
     hasInternet = true;
 
