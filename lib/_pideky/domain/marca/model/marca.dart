@@ -1,12 +1,11 @@
-
 import 'dart:convert';
 
-Marcas marcasFromJson(String str) => Marcas.fromJson(json.decode(str));
+Marca marcasFromJson(String str) => Marca.fromJson(json.decode(str));
 
-String marcasToJson(Marcas data) => json.encode(data.toJson());
+String marcasToJson(Marca data) => json.encode(data.toJson());
 
-class Marcas {
-    Marcas({
+class Marca {
+    Marca({
         required this.codigo,
         required this.titulo,
         required this.ico,
@@ -16,7 +15,7 @@ class Marcas {
     String titulo;
     String ico;
 
-    factory Marcas.fromJson(Map<String, dynamic> json) => Marcas(
+    factory Marca.fromJson(Map<String, dynamic> json) => Marca(
         codigo: json["codigo"],
         titulo: json["descripcion"],
         ico: json["ico"],

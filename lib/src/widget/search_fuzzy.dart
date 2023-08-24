@@ -1,4 +1,7 @@
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_search.dart';
 import 'package:emart/generated/l10n.dart';
@@ -22,9 +25,14 @@ import 'package:provider/provider.dart';
 
 final prefs = new Preferencias();
 final TextEditingController _controllerUser = TextEditingController();
+
 RxList<Producto> listaProducto = <Producto>[].obs;
+RxList<Marca> listaMarcas = <Marca>[].obs;
+
 RxString searchInput = "".obs;
+
 List<Producto> listaAllProducts = [];
+List<Marca> listaAllMarcas = [];
 RxList<String> listaRecientes = <String>[].obs;
 
 class SearchFuzzy extends StatefulWidget {
@@ -46,21 +54,30 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
   void dispose() {
     listaAllProducts = [];
     listaProducto.value = [];
+    listaMarcas.value = [];
     super.dispose();
   }
 
   void cargarProductos() async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
+
+    MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
+
     listaAllProducts = await productService.cargarProductosFiltro('', "");
+    listaAllMarcas = await marcaService.getAllMarcas();
   }
 
   void runFilter(String enteredKeyword) {
     if (enteredKeyword.isEmpty) {
       listaProducto.value = [];
+      listaMarcas.value = [];
     } else {
       List listaAux = [];
+
       listaProducto.value = [];
+      listaMarcas.value = [];
+
       listaAllProducts.forEach((element) {
         if (element.codigo
             .toLowerCase()
@@ -69,6 +86,16 @@ class _SearchFuzzyState extends State<SearchFuzzy> {
         }
         listaAux.add(element.nombre);
       });
+
+      listaAllMarcas.forEach((element) {
+        if (element.titulo
+            .toLowerCase()
+            .contains(enteredKeyword.toLowerCase())) {
+          listaMarcas.add(element);
+        }
+        listaAux.add(element.titulo);
+      });
+
       final fuse = Fuzzy(listaAux);
       final result = fuse.search(enteredKeyword);
 

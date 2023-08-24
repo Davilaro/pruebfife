@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/src/modelos/marcaFiltro.dart';
-import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/modelos/respuesta.dart';
 import 'package:emart/src/modelos/seccion.dart';
@@ -106,7 +106,7 @@ class DBProvider {
     ''');
       }
 
-      return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
+      return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
     } catch (e) {
       return [];
     }
@@ -531,7 +531,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
          (select marcacodigopideki from producto where fabricante = '$fabricante')
     ''');
 
-      return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
+      return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
     } catch (e) {
       return [];
     }

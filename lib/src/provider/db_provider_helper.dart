@@ -1,16 +1,13 @@
-import 'dart:developer';
 import 'dart:io';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/linea_atencion.dart';
 import 'package:emart/src/modelos/nombre_comercial.dart';
-import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/sugerido.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
-import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/tablas_borrar.dart';
-import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:sqflite/sqflite.dart';
@@ -134,20 +131,6 @@ class DBProviderHelper {
     listaTablas.forEach((element) async {
       await temp.delete('${element.tblName}');
     });
-  }
-
-  Future<dynamic> consultarMarcas() async {
-    final db = await baseAbierta;
-    try {
-      final sql = await db.rawQuery('''
-      SELECT codigo, descripcion, ico  
-      FROM Marca
-    ''');
-
-      return sql.isEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
-    } catch (e) {
-      return [];
-    }
   }
 
   Future<List<Historico>> consultarDetallePedido(String numeroDoc) async {

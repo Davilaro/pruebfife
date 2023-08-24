@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
@@ -10,7 +11,6 @@ import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
-import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/notificaciones.dart';
 import 'package:emart/src/modelos/novedades_registro.dart';
 import 'package:emart/src/modelos/pedido.dart';
@@ -160,7 +160,7 @@ class Servicies {
       final res = json.decode(response.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Marcas.fromJson(valor)).toList()
+          ? res.map((valor) => Marca.fromJson(valor)).toList()
           : [];
     } catch (e) {}
 
