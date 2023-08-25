@@ -10,51 +10,6 @@ import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
 import 'touch_id_page.dart';
 
-// class TermsAndConditionsPage extends StatelessWidget {
-//   const TermsAndConditionsPage();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         backgroundColor: ConstantesColores.color_fondo_gris,
-//         body: Container(
-//             padding: EdgeInsets.only(top: 120, left: 30, right: 30),
-//             child: Column(
-
-//               children: [
-//               Image(
-//                 image:
-//                     AssetImage('assets/image/Icon_Terminos_y_condiciones.png'),
-//                 fit: BoxFit.contain,
-//               ),
-//               SizedBox(height: 50),
-//               Text('Términos y condiciones ',
-//                   style: TextStyle(
-//                       color: HexColor("#41398D"),
-//                       fontSize: 20,
-//                       fontWeight: FontWeight.bold)),
-//               TextButtonWithUnderline(
-//                 text: "Acepto Términos y condiciones?",
-//                 onPressed: () {},
-//                 textColor: HexColor("#41398D"),
-//                 textSize: 16.0,
-//               ),
-//               TextButtonWithUnderline(
-//                 text: "Autorizo tratamiento de mis datos \n personales",
-//                 onPressed: () {},
-//                 textColor: HexColor("#41398D"),
-//                 textSize: 16.0,
-//               ),
-//               BotonAgregarCarrito(
-//                   borderRadio: 35,
-//                   height: Get.height * 0.06,
-//                   color: ConstantesColores.empodio_verde,
-//                   onTap: () {},
-//                   text: "Aceptar"),
-//             ])));
-//   }
-// }
-
 class TermsAndConditionsPage extends StatefulWidget {
   const TermsAndConditionsPage();
 

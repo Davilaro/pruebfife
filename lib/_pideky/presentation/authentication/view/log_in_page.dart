@@ -130,7 +130,7 @@ class LogInPage extends StatelessWidget {
                               'assets/image/Icon_incorrecto.svg',
                             ));
                       else
-                        Get.to(UpdatePasswordPage());
+                        Get.to(() => UpdatePasswordPage());
                         showPopup(context, 'Ingreso correcto',
                           SvgPicture.asset('assets/image/Icon_correcto.svg'));
                     },
@@ -206,98 +206,6 @@ class LogInPage extends StatelessWidget {
                         color: ConstantesColores.gris_sku,
                         fontSize: 15,
                         fontWeight: FontWeight.w400))
-
-                //===========Prueba con la hu de notificaciones Slide up =======
-
-                // Card(
-                //   color: Colors.grey.shade400,
-                //   margin: EdgeInsets.symmetric(
-                //     horizontal: 0.01,
-                //   ),
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.all(Radius.circular(15)),
-                //   ),
-                //   child: SizedBox(
-                //     width: MediaQuery.of(context).size.width * 3.8,
-                //     height: MediaQuery.of(context).size.height * 0.12,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children: [
-                //         ClipRRect(
-                //           borderRadius: BorderRadius.only(
-                //             topLeft: Radius.circular(12.0),
-                //             bottomLeft: Radius.circular(12.0),
-                //           ),
-                //           child: Image.asset(
-                //             'assets/image/slide_up_tosh_prueba.png',
-                //             // height: MediaQuery.of(context).size.height * 0.1,
-                //             fit: BoxFit.cover,
-                //           ),
-                //         ),
-                //         Flexible(
-                //           child: Padding(
-                //             padding: EdgeInsets.only(top: 15, left: 20, bottom: 20),
-                //             child: Text(
-                //               '¡Lleva tu negocio al siguiente nivel! pide galletas Tosh con 15% de descuento, Pide aquí ...',
-                //               style: TextStyle(fontSize: 12, color: Colors.black),
-                //               maxLines: 3,
-                //               overflow: TextOverflow.ellipsis,
-                //             ),
-                //           ),
-                //         ),
-                //         IconButton(
-                //           icon: Icon(
-                //             Icons.arrow_forward_ios,
-                //             color: Colors.white,
-                //           ),
-                //           onPressed: () {
-                //             // Get.showSnackbar(GetSnackBar(
-                //             //   duration: Duration(seconds: 10),
-                //             //   snackPosition: SnackPosition.BOTTOM,
-                //             //   backgroundColor: Colors.grey.shade400,
-                //             //   borderRadius: 15,
-                //             //   //  maxWidth: MediaQuery.of(context).size.width - 40,
-                //             //   messageText: Row(
-                //             //     children: [
-                //             //       ClipRRect(
-                //             //         borderRadius: BorderRadius.only(
-                //             //           topLeft: Radius.circular(12.0),
-                //             //           bottomLeft: Radius.circular(12.0),
-                //             //         ),
-                //             //         child: Image.asset(
-                //             //           'assets/image/slide_up_tosh_prueba.png',
-                //             //           height:
-                //             //               MediaQuery.of(context).size.height * 0.1,
-                //             //           fit: BoxFit.cover,
-                //             //         ),
-                //             //       ),
-                //             //       SizedBox(width: 10),
-                //             //       Flexible(
-                //             //         child: Text(
-                //             //           '¡Lleva tu negocio al siguiente nivel  ! pide galletas Tosh con 15% de descuento, Pide aquí ...',
-                //             //           style: TextStyle(
-                //             //               color: Colors.black, fontSize: 12),
-                //             //           maxLines: 3,
-                //             //           overflow: TextOverflow.ellipsis,
-                //             //         ),
-                //             //       ),
-                //             //       Icon(Icons.arrow_forward_ios,
-                //             //           color: Colors.white),
-                //             //     ],
-                //             //   ),
-
-                //             //   margin: EdgeInsets.symmetric(horizontal: 24),
-                //             //   padding: EdgeInsets.all(1),
-                //             //   // colorText: Colors.transparent,
-                //             //   forwardAnimationCurve: Curves.easeOutBack,
-                //             //   reverseAnimationCurve: Curves.ease,
-                //             // ));
-                //           },
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
