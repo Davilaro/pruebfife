@@ -12,7 +12,7 @@ class CustonNavigatorBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-    final cargoConfirmar = Get.find<ControlBaseDatos>();
+    //final cargoConfirmar = Get.find<ControlBaseDatos>();
     return BottomNavigationBar(
         backgroundColor: colorItems(),
         selectedItemColor: Colors.white,
@@ -20,16 +20,16 @@ class CustonNavigatorBar extends StatelessWidget {
         elevation: 0,
         currentIndex: provider.selectOptionMenu,
         onTap: (int i) {
-          if (i == 1) {
-            cargoConfirmar.tabController.index = 0;
-            cargoConfirmar.cargoBaseDatos(0);
-            provider.selectOptionMenu = 1;
-          } else if (i != provider.selectOptionMenu) {
-            provider.setIsLocal = 1;
-            provider.selectOptionMenu = i;
-          }
-          prefs.validarNotificacion = false;
-          Get.offAll(() => TabOpciones());
+          print("indice $i");
+          // if (i == 1) {
+          //   cargoConfirmar.tabController.index = 0;
+          //   cargoConfirmar.cargoBaseDatos(0);
+          //   provider.selectOptionMenu = 1;
+          // } else if (i != provider.selectOptionMenu) {
+          //   provider.setIsLocal = 1;
+          //   provider.selectOptionMenu = i;
+          // }
+          provider.selectOptionMenu = i;
         },
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 10.0,

@@ -207,13 +207,7 @@ class Preferencias {
     _prefs.setString("direccionsucursal", value);
   }
 
-  get validarNotificacion {
-    return _prefs.getBool("validarNotificacion") ?? false;
-  }
 
-  set validarNotificacion(dynamic value) {
-    _prefs.setBool("validarNotificacion", value);
-  }
 
 
   clear() async {

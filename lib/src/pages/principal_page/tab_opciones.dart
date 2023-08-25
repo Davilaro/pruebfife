@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+
 import '../../../shared/widgets/new_app_bar.dart';
 import '../../../shared/widgets/notification_push_in_app.dart';
 import 'dart:async';
@@ -52,6 +54,7 @@ class _TabOpcionesState extends State<TabOpciones>
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
+  final MiNegocioViewModel viewModelNegocio = Get.find();
   ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
@@ -71,19 +74,12 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
-    print("notificacion ${prefs.validarNotificacion}");
-    if (prefs.usurioLogin == 1 && prefs.validarNotificacion == true) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showSlideUp();
-        showPushInUp();
-      });
-    }
 
-    print("dia actual ${prefs.diaActual}");
     _focusNode.dispose();
     hasInternet = true;
 
     cargarSecciones();
+    viewModelNegocio.cargarArchivos(prefs);
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -94,30 +90,6 @@ class _TabOpcionesState extends State<TabOpciones>
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
     setState(() {});
-  }
-
-  void showPushInUp() async {
-    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return WillPopScope(
-                onWillPop: () async => false,
-                child: NotificationPushInApp(
-                    controllerNotificaciones.listPushInUpHome.first));
-          });
-    }
-  }
-
-  void showSlideUp() async {
-    await controllerNotificaciones.getSlideUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
-      await Future.delayed(
-          Duration(milliseconds: 4600),
-          () => showSlideUpNotification(
-              context, controllerNotificaciones.listSlideUpHome.first));
-    }
   }
 
   dispose() {
@@ -227,51 +199,102 @@ class _TabOpcionesState extends State<TabOpciones>
 
 class _HomePageBody extends StatelessWidget {
   final cargoConfirmar = Get.find<ControlBaseDatos>();
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
     final currenIndex = provider.selectOptionMenu;
 
-    switch (currenIndex) {
-      case 0:
-        return PrincipalPage();
+    return PageView(
+      controller: provider.pageController,
+      physics: NeverScrollableScrollPhysics(),
+      onPageChanged: (value) {
+        switch (currenIndex) {
+          case 0:
+            return UxcamTagueo().selectFooter('Principal Page');
 
-      case 1:
-        {
-          if (provider.getIisLocal != 0) {
-            //FIREBASE: Llamamos el evento select_content
-            TagueoFirebase().sendAnalityticSelectContent(
-                "Footer",
-                "${S.current.catalog}",
-                "",
-                "",
-                "${S.current.catalog}",
-                'MainActivity');
-            //UXCam: Llamamos el evento selectFooter
-            UxcamTagueo().selectFooter('${S.current.catalog}');
+          case 1:
+            {
+              if (provider.getIisLocal != 0) {
+                //FIREBASE: Llamamos el evento select_content
+                TagueoFirebase().sendAnalityticSelectContent(
+                    "Footer",
+                    "${S.current.catalog}",
+                    "",
+                    "",
+                    "${S.current.catalog}",
+                    'MainActivity');
+                //UXCam: Llamamos el evento selectFooter
+                UxcamTagueo().selectFooter('${S.current.catalog}');
 
-            onClickVerMas('Categorías', provider);
-          }
-          return TabCategoriaMarca();
+                onClickVerMas('Categorías', provider);
+              }
+              return UxcamTagueo().selectFooter('Tab Categoria Marca');
+            }
+
+          case 2:
+            return UxcamTagueo().selectFooter('Pedido Sugerido');
+
+          case 3:
+            {
+              //UXCam: Llamamos el evento selectFooter
+              return UxcamTagueo().selectFooter('Mis pedidos');
+            }
+
+          case 4:
+            return UxcamTagueo().selectFooter('Mis Negocio');
         }
+      },
+      children: [
+        PrincipalPage(),
+        TabCategoriaMarca(),
+        PedidoSugeridoPage(),
+        MisPedidosPage(),
+        MiNegocio()
+      ],
+    );
 
-      case 2:
-        return PedidoSugeridoPage();
+    // switch (currenIndex) {
+    //   case 0:
+    //     return PrincipalPage();
 
-      case 3:
-        {
-          //UXCam: Llamamos el evento selectFooter
-          UxcamTagueo().selectFooter('Mis pedidos');
-          return MisPedidosPage();
-        }
+    //   case 1:
+    //     {
+    //       if (provider.getIisLocal != 0) {
+    //         //FIREBASE: Llamamos el evento select_content
+    //         TagueoFirebase().sendAnalityticSelectContent(
+    //             "Footer",
+    //             "${S.current.catalog}",
+    //             "",
+    //             "",
+    //             "${S.current.catalog}",
+    //             'MainActivity');
+    //         //UXCam: Llamamos el evento selectFooter
+    //         UxcamTagueo().selectFooter('${S.current.catalog}');
 
-      case 4:
-        return MiNegocio();
+    //         onClickVerMas('Categorías', provider);
+    //       }
+    //       return TabCategoriaMarca();
+    //     }
 
-      default:
-        return Text('Prueba'); //PrincipalPage();
-    }
+    //   case 2:
+    //     return PedidoSugeridoPage();
+
+    //   case 3:
+    //     {
+    //       //UXCam: Llamamos el evento selectFooter
+    //       UxcamTagueo().selectFooter('Mis pedidos');
+    //       return MisPedidosPage();
+    //     }
+
+    //   case 4:
+    //     return MiNegocio();
+
+    //   default:
+    //     return Text('Prueba'); //PrincipalPage();
+    // }
   }
 
   void onClickVerMas(String ubicacion, provider) {

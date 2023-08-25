@@ -39,6 +39,7 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    contextPrincipal = context;
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('LogoPidekyPage');
     return Scaffold(

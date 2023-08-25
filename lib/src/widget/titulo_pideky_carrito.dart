@@ -1,6 +1,8 @@
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class TituloPidekyCarrito extends StatelessWidget {
   const TituloPidekyCarrito({
@@ -14,7 +16,7 @@ class TituloPidekyCarrito extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prefs = Preferencias();
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
     return Transform(
       transform: Matrix4.translationValues(-10.0, 3.0, 0.0),
       child: GestureDetector(
@@ -24,7 +26,7 @@ class TituloPidekyCarrito extends StatelessWidget {
             child:
                 SvgPicture.asset('assets/image/app_bar.svg', fit: BoxFit.fill)),
         onTap: () => {
-          prefs.validarNotificacion = false,
+          provider.selectOptionMenu = 0,
           Navigator.of(context).pushNamedAndRemoveUntil(
               'tab_opciones', (Route<dynamic> route) => false),
         },

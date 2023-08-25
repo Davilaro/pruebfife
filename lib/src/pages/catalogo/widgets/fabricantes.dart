@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -144,6 +145,10 @@ class _FabricantesState extends State<Fabricantes> {
 
   _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
       String nombre, String icono) async {
+    final controllerNotificaciones =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    controllerNotificaciones.llenarMapSlideUp(nombre);
+    controllerNotificaciones.llenarMapPushInUp(nombre);
     Navigator.push(
         context,
         MaterialPageRoute(

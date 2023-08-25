@@ -1,4 +1,5 @@
 import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -56,6 +57,8 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final selectedColor = ConstantesColores.azul_precio;
+    final controllerNotificaciones =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
 
     return DefaultTabController(
       length: this.widget.listaCategorias.length,
@@ -72,7 +75,7 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
           ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Get.back(),
           ),
           elevation: 0,
           actions: <Widget>[
@@ -157,6 +160,11 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                     controller: _tabController,
                     children: List<Widget>.generate(
                         this.widget.listaCategorias.length, (index) {
+                      controllerNotificaciones.llenarMapPushInUp(
+                          widget.listaCategorias[index].descripcion);
+                      controllerNotificaciones.llenarMapSlideUp(
+                          widget.listaCategorias[index].descripcion);
+
                       return Container(
                         child: CustomBuscardorFuzzy(
                           codCategoria: widget.listaCategorias[index].codigo,
@@ -167,6 +175,8 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                           isVisibilityAppBar: false,
                           locacionFiltro: "categoria",
                           codigoProveedor: "",
+                          descripcionCategoria:
+                              this.widget.listaCategorias[index].descripcion,
                         ),
                       );
                     }),

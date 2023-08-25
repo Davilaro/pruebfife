@@ -13,6 +13,8 @@ String notificationPushInAppSlideUppToJson(
     json.encode(data.toJson());
 
 class NotificationPushInAppSlideUpModel {
+  String? fabricante;
+  String? nombreComercial;
   String? imageUrl;
   String? descripcion;
   String? ubicacion;
@@ -23,6 +25,8 @@ class NotificationPushInAppSlideUpModel {
   String? subCategoriaRedireccion;
 
   NotificationPushInAppSlideUpModel({
+    this.fabricante,
+    this.nombreComercial,
     this.imageUrl,
     this.descripcion,
     this.ubicacion,
@@ -36,6 +40,9 @@ class NotificationPushInAppSlideUpModel {
   factory NotificationPushInAppSlideUpModel.fromJson(
           Map<String, dynamic> json) =>
       NotificationPushInAppSlideUpModel(
+        fabricante: json["empresa"] == null ? "" : json["empresa"],
+        nombreComercial:
+            json["nombreComercial"] == null ? "" : json["nombreComercial"],
         imageUrl: json["imageUrl"] == null ? "" : json["imageUrl"],
         descripcion: json["descripcion"] == null ? "" : json["descripcion"],
         ubicacion: json["ubicacion"] == null ? "" : json["ubicacion"],
@@ -55,6 +62,8 @@ class NotificationPushInAppSlideUpModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "empresa": fabricante,
+        "nombreComercial": nombreComercial,
         "imageUrl": imageUrl,
         "descripcion": descripcion,
         "ubicacion": ubicacion,
