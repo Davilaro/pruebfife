@@ -1,6 +1,6 @@
 import 'package:emart/_pideky/presentation/authentication/view/register_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/update_password_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/update_password_send_sms.dart';
+import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/shared/widgets/checkBox_remember_credentials.dart';
 import 'package:emart/shared/widgets/popups.dart';
@@ -107,7 +107,7 @@ class LogInPage extends StatelessWidget {
                   child: TextButtonWithUnderline(
                     text: "¿Olvidaste tu contraseña?",
                     onPressed: () {
-                      Get.to(UpdatePasswordSendSMS());
+                      Get.to(() => ConfirmIdentitySelectMethodPage());
                     },
                     textColor: HexColor("#41398D"),
                     textSize: 15.0,
@@ -130,7 +130,7 @@ class LogInPage extends StatelessWidget {
                               'assets/image/Icon_incorrecto.svg',
                             ));
                       else
-                        Get.to(() => UpdatePasswordPage());
+                        Get.to(() => CreatePasswordPage());
                         showPopup(context, 'Ingreso correcto',
                           SvgPicture.asset('assets/image/Icon_correcto.svg'));
                     },

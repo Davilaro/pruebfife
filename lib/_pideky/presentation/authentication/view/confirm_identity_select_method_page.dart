@@ -1,15 +1,14 @@
-import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_page_one.dart';
+import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/restore_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
-class UpdatePasswordSendSMS extends StatelessWidget {
-  const UpdatePasswordSendSMS();
+class ConfirmIdentitySelectMethodPage extends StatelessWidget {
+  const ConfirmIdentitySelectMethodPage();
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +39,13 @@ class UpdatePasswordSendSMS extends StatelessWidget {
                   height: Get.height * 0.06,
                   color: ConstantesColores.empodio_verde,
                   onTap: () {
-                    Get.to(ConfirmIdentityPageOne());
+                    Get.to(() => ConfirmIdentitySendSMSPage());
                   },
                   text: "Enviar mensaje de texto"),
               TextButtonWithUnderline(
                 text: "Probar otro metodo",
                 onPressed: () {
-                  Get.to(RestorePasswordPage());
+                  Get.to(() => RestorePasswordPage());
                 },
                 textColor: HexColor("#41398D"),
                 textSize: 18.0,

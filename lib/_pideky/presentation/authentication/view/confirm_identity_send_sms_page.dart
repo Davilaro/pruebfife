@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'confirm_identity_page_two.dart';
+import 'confirm_identity_enter_code_page.dart';
 
-class ConfirmIdentityPageOne extends StatelessWidget {
-  ConfirmIdentityPageOne({Key? key}) : super(key: key);
+class ConfirmIdentitySendSMSPage extends StatelessWidget {
+  ConfirmIdentitySendSMSPage({Key? key}) : super(key: key);
 
   final TextEditingController _controllerCellPhoneNumber =
       TextEditingController();
@@ -50,15 +50,15 @@ class ConfirmIdentityPageOne extends StatelessWidget {
                 height: Get.height * 0.06,
                 color: ConstantesColores.empodio_verde,
                 onTap: () {
-                  // TODO consumo servicio envio sms
-                  Get.to(ConfirmIdentityPageTwo());
+                  
+                  Get.to(() => ConfirmIdentityEnterCodePage());
                 },
                 text: "Enviar SMS"),
                 
             TextButtonWithUnderline(
               text: "Probar otro método",
               onPressed: () {
-               Get.to(RestorePasswordPage());
+               Get.to(() => RestorePasswordPage());
               },
               textColor: HexColor("#41398D"),
               textSize: 18.0,

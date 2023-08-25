@@ -1,25 +1,21 @@
-import 'package:emart/_pideky/presentation/authentication/view/terms_and_conditions_page.dart';
-import 'package:emart/src/utils/alertas.dart';
+import 'package:emart/_pideky/presentation/authentication/view/accept_terms_and_conditions_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-
-import '../../../../generated/l10n.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/custom_textFormField.dart';
 import '../../../../shared/widgets/password_requirements_text.dart';
-//import '../../../../shared/widgets/password_strength_indicator.dart';
 import '../../../../shared/widgets/popups.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'cell_phone_number_update_page.dart';
 
-class UpdatePasswordPage extends StatefulWidget {
+
+class CreatePasswordPage extends StatefulWidget {
   @override
-  State<UpdatePasswordPage> createState() => _UpdatePasswordPageState();
+  State<CreatePasswordPage> createState() => _CreatePasswordPage();
 }
 
-class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
+class _CreatePasswordPage extends State<CreatePasswordPage> {
   // final TextEditingController _controllerNewPassword = TextEditingController();
   final TextEditingController _controllerConfirmPassword =
       TextEditingController();
@@ -217,7 +213,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                         onTap: () {
                            final isValid = _formkey.currentState!.validate();
                            if (!isValid) return;
-                          Get.to(TermsAndConditionsPage());
+                          Get.to(() => TermsAndConditionsPage());
                           showPopup(
                               context,
                               'Contraseña actualizada',

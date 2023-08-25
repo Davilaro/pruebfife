@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/authentication/view/update_password_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,7 @@ import '../../../../shared/widgets/popups.dart';
 import '../../../../shared/widgets/radio_button.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'terms_and_conditions_page.dart';
+
 
 class RestorePasswordPage extends StatelessWidget {
   const RestorePasswordPage();
@@ -56,7 +56,7 @@ class RestorePasswordPage extends StatelessWidget {
                   height: Get.height * 0.06,
                   color: ConstantesColores.empodio_verde,
                   onTap: () {
-                    Get.to(UpdatePasswordPage());
+                    Get.to(() => CreatePasswordPage());
 
                     showPopup(
                           context,

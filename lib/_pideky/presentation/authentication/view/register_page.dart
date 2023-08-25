@@ -1,10 +1,7 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/_pideky/presentation/authentication/view/touch_id_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/update_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/cust_drop_down_register.dart';
 import '../../../../shared/widgets/custom_textFormField.dart';

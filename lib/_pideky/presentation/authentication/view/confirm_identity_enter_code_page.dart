@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/authentication/view/update_password_send_sms.dart';
+import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,11 +8,11 @@ import '../../../../shared/widgets/custom_textFormField.dart';
 import '../../../../shared/widgets/popups.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'update_password_page.dart';
+import 'create_password_page.dart';
 
 
-class ConfirmIdentityPageTwo extends StatelessWidget {
-  ConfirmIdentityPageTwo({Key? key}) : super(key: key);
+class ConfirmIdentityEnterCodePage extends StatelessWidget {
+  ConfirmIdentityEnterCodePage({Key? key}) : super(key: key);
 
   final TextEditingController _controllerCellPhoneNumber =
       TextEditingController();
@@ -78,7 +78,7 @@ class ConfirmIdentityPageTwo extends StatelessWidget {
                 color: ConstantesColores.empodio_verde,
                 onTap: () {
                  
-                  Get.to(UpdatePasswordPage());
+                  Get.to(() => CreatePasswordPage());
 
                    showPopup(
                           context,
@@ -91,7 +91,7 @@ class ConfirmIdentityPageTwo extends StatelessWidget {
                 TextButtonWithUnderline(
               text: "Enviar otro código",
               onPressed: () {
-                Get.to(UpdatePasswordSendSMS());
+                Get.to(() => ConfirmIdentitySelectMethodPage());
                 
               },
               textColor: HexColor("#41398D"),
