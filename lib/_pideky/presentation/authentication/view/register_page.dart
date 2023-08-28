@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/authentication/view/touch_id_page.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -16,15 +17,17 @@ class RegisterPage extends StatelessWidget {
   // final TextEditingController _controllerNit = TextEditingController();
   // final TextEditingController _controllerTelephone = TextEditingController();
   // final TextEditingController _controllerAdress = TextEditingController();
+  final ValidationForms _validationForms = Get.put(ValidationForms());
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   List<DropdownMenuItem<String>>? items;
   String? value;
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String bussinesName = '';
-  String customerName = '';
-  String businessAddress = '';
-  String nit = '';
-  String cellPhoneNumber = '';
+  //final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  // String bussinesName = '';
+  // String customerName = '';
+  // String businessAddress = '';
+  // String nit = '';
+  // String cellPhoneNumber = '';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,8 @@ class RegisterPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(top: 10, left: 19, right: 19),
             child: Form(
-              key: _formkey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formkey,
               child: Column(
                 children: [
                   Text('Quiero ser cliente Pideky',
@@ -80,12 +84,17 @@ class RegisterPage extends StatelessWidget {
                       borderRadius: 35,
                       prefixIcon: Image.asset('assets/icon/Icon_negocio.png'),
                       // icon: Icons.business_rounded,
-                      onChanged: (value) => bussinesName = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Campo requerido';
-                        if (value.trim().isEmpty) return 'Campo requerido';
-                      }),
+                      onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty
+                      // validator: (value) {
+                      //   if (value == null || value.isEmpty)
+                      //     return 'Campo requerido';
+                      //   if (value.trim().isEmpty) return 'Campo requerido';
+                      // }
+                      ),
                   SizedBox(height: 20.0),
                   Container(
                     padding: EdgeInsets.only(left: 15.0),
@@ -106,12 +115,12 @@ class RegisterPage extends StatelessWidget {
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
                       prefixIcon: Image.asset('assets/icon/Icon_cliente.png'),
-                      onChanged: (value) => customerName = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Campo requerido';
-                        if (value.trim().isEmpty) return 'Campo requerido';
-                      }),
+                      onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty
+                      ),
                   SizedBox(height: 20.0),
                   Container(
                     padding: EdgeInsets.only(left: 15.0),
@@ -133,12 +142,12 @@ class RegisterPage extends StatelessWidget {
                       borderRadius: 35,
                       prefixIcon:
                           Image.asset('assets/icon/Icon_ubicación_negocio.png'),
-                      onChanged: (value) => businessAddress = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Campo requerido';
-                        if (value.trim().isEmpty) return 'Campo requerido';
-                      }),
+                      onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty
+                      ),
                   SizedBox(height: 20.0),
                   Container(
                     padding: EdgeInsets.only(left: 15.0),
@@ -179,14 +188,11 @@ class RegisterPage extends StatelessWidget {
                     backgroundColor: HexColor("#E4E3EC"),
                     textColor: HexColor("#41398D"),
                     borderRadius: 35,
-                    onChanged: (value) => nit = value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Campo requerido';
-                      if (value.trim().isEmpty) return 'Campo requerido';
-                      if (value.length <= 9)
-                        return 'El nit debe tener 9 dígitos';
-                    },
+                    onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty
                   ),
                   SizedBox(height: 20.0),
                   Container(
@@ -209,24 +215,23 @@ class RegisterPage extends StatelessWidget {
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
                       prefixIcon: Image.asset('assets/icon/Icon_telefono.png'),
-                      onChanged: (value) => nit = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Campo requerido';
-                        if (value.trim().isEmpty) return 'Campo requerido';
-                        if (value.length < 10)
-                          return 'El número de celular debe tener 10 dígitos';
-                      }),
+                      onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty
+                      ),
                   SizedBox(height: 20.0),
                   BotonAgregarCarrito(
                       borderRadio: 35,
                       height: Get.height * 0.06,
                       color: ConstantesColores.empodio_verde,
                       onTap: () {
-                        final isValid = _formkey.currentState!.validate();
-                        if (!isValid) 
-                        showPopupSuccessfulregistration(context);
-                       else Get.to(TouchIdPage());
+                        final isValid = formkey.currentState!.validate();
+                        if (!isValid)
+                          showPopupSuccessfulregistration(context);
+                        else
+                          Get.to(TouchIdPage());
                       },
                       text: "Comenzar"),
                   SizedBox(height: 10.0),

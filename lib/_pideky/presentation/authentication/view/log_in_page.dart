@@ -1,9 +1,11 @@
 import 'package:emart/_pideky/presentation/authentication/view/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/touch_id_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
-import 'package:emart/shared/widgets/checkBox_remember_credentials.dart';
+import 'package:emart/shared/widgets/custom_checkBox.dart';
 import 'package:emart/shared/widgets/popups.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,11 +18,12 @@ class LogInPage extends StatelessWidget {
   LogInPage({Key? key}) : super(key: key);
 
   //final TextEditingController _controllerUserName = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  //final TextEditingController _controllerPassword = TextEditingController();
+  final ValidationForms _validationForms = Get.put(ValidationForms());
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  String username = '';
-  String password = '';
+ // String username = '';
+ // String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,8 @@ class LogInPage extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 80),
           child: Form(
-            key: _formkey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formkey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,28 +59,32 @@ class LogInPage extends StatelessWidget {
                 SizedBox(height: 35.0),
 
                 CustomTextFormField(
-                  // controller: _controllerUserName,
-                  hintText: 'Ingresa el usuario que te asignamos',
-                  hintStyle: TextStyle(color: ConstantesColores.gris_sku),
-                  backgroundColor: HexColor("#E4E3EC"),
-                  textColor: HexColor("#41398D"),
-                  borderRadius: 35,
-                  icon: Icons.perm_identity,
-                  prefixIcon: Image.asset('assets/icon/Icon_usuario.png'),
-                  onChanged: (value) => username = value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Campo requerido';
-                    if (value.trim().isEmpty) return 'Campo requerido';
-                    if (value.length < 6)
-                      return 'Usuario debe tener más de 6 caracteres';
-                  },
-                ),
+                    // controller: _controllerUserName,
+                    hintText: 'Ingresa el usuario que te asignamos',
+                    hintStyle: TextStyle(color: ConstantesColores.gris_sku),
+                    backgroundColor: HexColor("#E4E3EC"),
+                    textColor: HexColor("#41398D"),
+                    borderRadius: 35,
+                    icon: Icons.perm_identity,
+                    prefixIcon: Image.asset('assets/icon/Icon_usuario.png'),
+                    onChanged: (value) {
+                      _validationForms.userName.value = value;
+                      _validationForms.userInteracted.value = true; // Marca como interactuado
+                    },
+                    validator:  _validationForms.validateTextFieldNullorEmpty
+                    //(value) {
+                    //   if (value == null || value.isEmpty)
+                    //     return 'Campo requerido';
+                    //   if (value.trim().isEmpty) return 'Campo requerido';
+                    //   if (value.length < 6)
+                    //     return 'Usuario debe tener más de 6 caracteres';
+                    // },
+                    ),
 
                 SizedBox(height: 15.0),
 
                 CustomTextFormField(
-                  controller: _controllerPassword,
+                  // controller: _controllerPassword,
                   obscureText: true,
                   hintText: 'Ingresa la contraseña que te asignamos',
                   hintStyle: TextStyle(color: ConstantesColores.gris_sku),
@@ -85,20 +93,26 @@ class LogInPage extends StatelessWidget {
                   borderRadius: 35,
                   icon: Icons.key,
                   prefixIcon: Image.asset('assets/icon/Icon_contraseña.png'),
-                  onChanged: (value) => password = value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Campo requerido';
-                    if (value.trim().isEmpty) return 'Campo requerido';
-                    final passwordRegExp = RegExp(
-                        //r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])(?!.*[\W_]).{8,}$'
-                        //r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
-                        r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-                    if (!passwordRegExp.hasMatch(value))
-                      return 'No es una contraseña válida';
+                  onChanged: (value) {
+                      _validationForms.password.value = value;
+                      _validationForms.userInteracted.value = true; // Marca como interactuado
+                    },
+                 // onChanged: (value) => password = value,
 
-                    return null;
-                  },
+                 validator: _validationForms.validatePassword
+                  // validator: (value) {
+                  //   if (value == null || value.isEmpty)
+                  //     return 'Campo requerido';
+                  //   if (value.trim().isEmpty) return 'Campo requerido';
+                  //   final passwordRegExp = RegExp(
+                  //       //r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])(?!.*[\W_]).{8,}$'
+                  //       //r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
+                  //       r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
+                  //   if (!passwordRegExp.hasMatch(value))
+                  //     return 'No es una contraseña válida';
+
+                  //   return null;
+                  // },
                 ),
 
                 Container(
@@ -114,25 +128,55 @@ class LogInPage extends StatelessWidget {
                   ),
                 ),
 
-                CheckBoxRememberCredentials(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Recuérdame la próxima vez',
+                      style: TextStyle(
+                        color: ConstantesColores.gris_sku,
+                      ),
+                    ),
+                    CustomCheckBox(),
+                  ],
+                ),
 
                 BotonAgregarCarrito(
                     borderRadio: 35,
                     height: Get.height * 0.06,
                     color: ConstantesColores.empodio_verde,
                     onTap: () {
-                      final isValid = _formkey.currentState!.validate();
-                      if (!isValid)
-                        showPopup(
-                            context,
-                            'Usuario y/o contraseña incorrecto',
-                            SvgPicture.asset(
-                              'assets/image/Icon_incorrecto.svg',
-                            ));
-                      else
+                      final isValid = formkey.currentState!.validate();
+                      if (isValid) {
+                        
                         Get.to(() => CreatePasswordPage());
-                        showPopup(context, 'Ingreso correcto',
-                          SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                        showPopup(
+                          context,
+                          'Ingreso correcto',
+                          SvgPicture.asset('assets/image/Icon_correcto.svg'),
+                        );
+                      } else {
+                        
+                        showPopup(
+                          context,
+                          'Usuario y/o contraseña incorrecto',
+                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+                        );
+                      }
+                      // },
+
+                      // final isValid = formkey.currentState!.validate();
+                      // if (!isValid)
+                      //   showPopup(
+                      //       context,
+                      //       'Usuario y/o contraseña incorrecto',
+                      //       SvgPicture.asset(
+                      //         'assets/image/Icon_incorrecto.svg',
+                      //       ));
+                      // else
+                      //   Get.to(() => CreatePasswordPage());
+                      // showPopup(context, 'Ingreso correcto',
+                      //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
                     },
                     text: "Ingresar"),
 
@@ -186,23 +230,31 @@ class LogInPage extends StatelessWidget {
                 TextButtonWithUnderline(
                   text: "Quiero ser cliente Pideky",
                   onPressed: () {
-                    
                     Get.to(() => RegisterPage());
                   },
                   textColor: HexColor("#41398D"),
                   textSize: 18.0,
                 ),
-                SizedBox(height: 10,),
-                  Container(
-                   height: 70,
-                    child: Image(
-                      image: AssetImage('assets/image/Icon_touch_ID.png'),
-                      fit: BoxFit.contain,
-                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => TouchIdPage());
+                  },
+                  child: Container(
+                      height: 70,
+                      child: Image(
+                        image: AssetImage('assets/image/Icon_touch_ID.png'),
+                        fit: BoxFit.contain,
+                      )),
+                ),
 
-                    SizedBox(height: 10,),
-                    Text('Ingresar con Touch ID',
-                        style: TextStyle(
+                SizedBox(
+                  height: 10,
+                ),
+                Text('Ingresar con Touch ID',
+                    style: TextStyle(
                         color: ConstantesColores.gris_sku,
                         fontSize: 15,
                         fontWeight: FontWeight.w400))
