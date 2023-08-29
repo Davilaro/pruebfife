@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 class SearchFuzzyView extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
-  SearchFuzzyViewModel searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
   @override

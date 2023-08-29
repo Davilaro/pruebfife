@@ -1,28 +1,25 @@
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/resultados_buscador_general/view/resultado_buscador_general.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/_pideky/presentation/resultados_buscador_general/view_model/resultado_buscador_general_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class CampoTexto extends StatelessWidget {
-  CampoTexto();
+class CampoTextoResultado extends StatelessWidget {
+  CampoTextoResultado();
 
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 50,
-        width: Get.width * 0.86,
+        width: Get.width * 0.8,
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         decoration: BoxDecoration(
           color: HexColor("#E4E3EC"),
           borderRadius: BorderRadius.circular(30),
         ),
         child: TextField(
-          controller: searchFuzzyViewModel.controllerUser,
+          controller: resultadoBuscadorGeneralVm.controllerUser,
           style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
           decoration: InputDecoration(
             fillColor: HexColor("#41398D"),
@@ -37,15 +34,14 @@ class CampoTexto extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    searchFuzzyViewModel
-                        .runFilter(searchFuzzyViewModel.controllerUser.text);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ResultadoBuscadorGeneral(
-                                  allresultados: searchFuzzyViewModel
-                                      .allResultados,
-                                )));
+                    // resultadoBuscadorGeneralVm
+                    //     .runFilter(resultadoBuscadorGeneralVm.controllerUser.text);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => ResultadoBuscadorGeneral(
+                    //               nombreCategoria: 'cosito',
+                    //             )));
                   },
                   icon: Icon(
                     Icons.search,
@@ -56,12 +52,7 @@ class CampoTexto extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
           ),
           onChanged: (value) {
-            searchFuzzyViewModel.searchInput.value = value;
-            //FIREBASE: Llamamos el evento search
-            TagueoFirebase().sendAnalityticsSearch(value);
-            //UXCam: Llamamos el evento search
-            UxcamTagueo().search(value);
-            searchFuzzyViewModel.runFilter(value);
+            resultadoBuscadorGeneralVm.searchInput.value = value;
           },
         ));
   }
