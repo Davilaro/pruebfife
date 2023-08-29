@@ -7,23 +7,23 @@ String marcasToJson(Marca data) => json.encode(data.toJson());
 class Marca {
     Marca({
         required this.codigo,
-        required this.titulo,
+        required this.nombre,
         required this.ico,
     });
 
     String codigo;
-    String titulo;
+    String nombre;
     String ico;
 
     factory Marca.fromJson(Map<String, dynamic> json) => Marca(
         codigo: json["codigo"],
-        titulo: json["descripcion"],
+        nombre: json["descripcion"],
         ico: json["ico"],
     );
 
     Map<String, dynamic> toJson() => {
         "codigo": codigo,
-        "descripcion": titulo,
+        "descripcion": nombre,
         "ico" : ico,
     };
 }

@@ -13,7 +13,7 @@ import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+// import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -210,13 +210,13 @@ class _FabricantesState extends State<Fabricantes> {
         listaAllFabricantes.forEach((element) {
           listaAux.add(element.nombrecomercial);
         });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
-        listaFabricante.value = [];
-        result
-            .map((r) => listaFabricante.add(listaAllFabricantes
-                .firstWhere((element) => element.nombrecomercial == r.item)))
-            .forEach(print);
+        // final fuse = Fuzzy(listaAux);
+        // final result = fuse.search(controllerSearch.text);
+        // listaFabricante.value = [];
+        // result
+        //     .map((r) => listaFabricante.add(listaAllFabricantes
+        //         .firstWhere((element) => element.nombrecomercial == r.item)))
+        //     .forEach(print);
       }
     }
   }

@@ -11,7 +11,7 @@ import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+// import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -221,13 +221,13 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
         listaAllCategorias.forEach((element) {
           listaAux.add(element.descripcion);
         });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
-        listaCategoria.value = [];
-        result
-            .map((r) => listaCategoria.add(listaAllCategorias
-                .firstWhere((element) => element.descripcion == r.item)))
-            .forEach(print);
+        // final fuse = Fuzzy(listaAux);
+        // final result = fuse.search(controllerSearch.text);
+        // listaCategoria.value = [];
+        // result
+        //     .map((r) => listaCategoria.add(listaAllCategorias
+        //         .firstWhere((element) => element.descripcion == r.item)))
+        //     .forEach(print);
       }
     }
   }

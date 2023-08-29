@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/src/classes/uiUtil.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -13,7 +14,8 @@ import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
+// import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -185,12 +187,28 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         }
         listaAux.add(element.nombre);
       });
-      final fuse = Fuzzy(listaAux);
-      final result = fuse.search(_controllerSearch.text);
-      result
-          .map((r) => listaProducto.add(listaAllProducts
-              .firstWhere((element) => element.nombre == r.item)))
-          .forEach(print);
+      final result = extractTop(
+        limit: 10,
+        query: _controllerSearch.text,
+        choices: listaAllProducts.map((element) => element.nombre!).toList(),
+        cutoff: 10,
+      );
+
+      // result.forEach((element) {
+      //   if (element == listaAllProducts.nombre) {
+      //     listaProducto.add(listaAllProducts[element.index]);
+      //   }
+      // });
+
+      // result.forEach((element) {
+      //   print(element.choice);
+      // });
+      // final fuse = Fuzzy(listaAux);
+      // final result = fuse.search(_controllerSearch.text);
+      // result
+      //     .map((r) => listaProducto.add(listaAllProducts
+      //         .firstWhere((element) => element.nombre == r.item)))
+      //     .forEach(print);
     }
   }
 

@@ -79,39 +79,6 @@ class DBProvider {
     }
   }
 
-  Future<dynamic> consultarMarcas(String buscar) async {
-    final db = await baseAbierta;
-
-    try {
-      var sql = await db.rawQuery('''
-      
-      SELECT m.codigo, m.descripcion, m.ico  
-      FROM Marca m
-      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
-      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '%$buscar%'
-      GROUP BY p.marcacodigopideki 
-      ORDER BY m.orden ASC 
-       
-    ''');
-      if (sql.length > 1) {
-        sql = await db.rawQuery('''
-      
-      SELECT m.codigo, m.descripcion, m.ico  
-      FROM Marca m
-      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
-      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '$buscar'
-      GROUP BY p.marcacodigopideki 
-      ORDER BY m.orden ASC 
-       
-    ''');
-      }
-
-      return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
   Future<dynamic> consultarCategorias(String buscar, int limit) async {
     final db = await baseAbierta;
 

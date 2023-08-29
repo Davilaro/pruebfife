@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
@@ -13,7 +14,6 @@ import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -338,7 +338,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SearchFuzzy()));
+              context, MaterialPageRoute(builder: (context) => SearchFuzzyView()));
         },
         child: TextField(
           enabled: false,

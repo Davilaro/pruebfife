@@ -8,5 +8,7 @@ class MarcaService {
 
   Future<List<Marca>> getAllMarcas() async =>
       await marcaRepository.getAllMarcas();
+  Future<List<Marca>> consultaMarcas(String buscar) async =>
+      await marcaRepository.consultarMarcas(buscar);
 
 }

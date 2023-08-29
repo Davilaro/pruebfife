@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+// import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -384,12 +384,12 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         }
         listaAux.add(element.nombre);
       });
-      final fuse = Fuzzy(listaAux);
-      final result = fuse.search(enteredKeyword);
-      result
-          .map((r) => listaProducto.add(listaAllProducts
-              .firstWhere((element) => element.nombre == r.item)))
-          .forEach(print);
+      // final fuse = Fuzzy(listaAux);
+      // final result = fuse.search(enteredKeyword);
+      // result
+      //     .map((r) => listaProducto.add(listaAllProducts
+      //         .firstWhere((element) => element.nombre == r.item)))
+      //     .forEach(print);
     }
   }
 

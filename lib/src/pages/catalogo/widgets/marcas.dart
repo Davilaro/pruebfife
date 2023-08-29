@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -8,7 +10,7 @@ import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+// import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   RxList<dynamic> listaMarca = <dynamic>[].obs;
   List<dynamic> listaAllMarcas = [];
   final TextEditingController controllerSearch = TextEditingController();
+
+  MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   @override
   void initState() {
@@ -179,7 +183,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   }
 
   void cargarLista() async {
-    listaAllMarcas = await DBProvider.db.consultarMarcas(controllerSearch.text);
+    listaAllMarcas = await marcaService.consultaMarcas(controllerSearch.text);
     listaMarca.value = listaAllMarcas;
   }
 
@@ -196,13 +200,13 @@ class _MarcasWidgetState extends State<MarcasWidget> {
         listaAllMarcas.forEach((element) {
           listaAux.add(element.titulo);
         });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
-        listaMarca.value = [];
-        result
-            .map((r) => listaMarca.add(listaAllMarcas
-                .firstWhere((element) => element.titulo == r.item)))
-            .forEach(print);
+        // final fuse = Fuzzy(listaAux);
+        // final result = fuse.search(controllerSearch.text);
+        // listaMarca.value = [];
+        // result
+        //     .map((r) => listaMarca.add(listaAllMarcas
+        //         .firstWhere((element) => element.titulo == r.item)))
+        //     .forEach(print);
       }
     }
   }

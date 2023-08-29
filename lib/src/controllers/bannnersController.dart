@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -25,6 +27,8 @@ class BannnerControllers extends GetxController {
   RxBool isVisitBanner = false.obs;
 
   List<dynamic> listaBanners = [].obs;
+
+  MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   void cambiarSubCategoria(int value) {
     inicialControllerSubCategoria.value = value;
@@ -76,7 +80,7 @@ class BannnerControllers extends GetxController {
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {
       resBusqueda =
-          await DBProvider.db.consultarMarcas(banner.seccion.toString());
+          await marcaService.consultaMarcas(banner.seccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
     } else {
       Navigator.push(
@@ -123,7 +127,7 @@ class BannnerControllers extends GetxController {
                   codCategoria: marca.codigo,
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
-                  nombreCategoria: marca.titulo,
+                  nombreCategoria: marca.nombre,
                   isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
