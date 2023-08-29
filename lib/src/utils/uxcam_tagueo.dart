@@ -49,18 +49,26 @@ class UxcamTagueo {
           '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
     }
     try {
+      // dynamic resQuery = await misPedidosViewModel.misPedidosService
+      //     .consultarHistoricos("-1", fechaInicial, fechaFinal);
       dynamic resQuery = await misPedidosViewModel.misPedidosService
           .consultarHistoricos("-1", fechaInicial, fechaFinal);
+      List auxiliar = [];
+      for (var i = 0; i < resQuery.length; i++) {
+        if (!auxiliar.contains(resQuery[i].fechaTrans)) {
+          auxiliar.add(resQuery[i].fechaTrans);
+        }
+      }
 
       // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
-      if (resQuery.length == 1) {
+      if (auxiliar.length == 1) {
         typeUser = "Begginer";
-      } else if (resQuery.length >= 4) {
+      } else if (auxiliar.length >= 4) {
         typeUser = "Digitalizado";
-      } else if (resQuery.length > 1 && resQuery.length <= 3) {
+      } else if (auxiliar.length > 1 && auxiliar.length <= 3) {
         typeUser = "Progreso";
       }
-      numeroOrdenes = resQuery.length;
+      numeroOrdenes = auxiliar.length;
     } catch (e) {
       print('Evento validarTipoUsuario fallo peticion historico $e');
     }
