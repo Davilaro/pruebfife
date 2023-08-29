@@ -3,7 +3,6 @@ import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dar
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -13,7 +12,7 @@ import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-// import 'package:fuzzy/fuzzy.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -210,13 +209,18 @@ class _FabricantesState extends State<Fabricantes> {
         listaAllFabricantes.forEach((element) {
           listaAux.add(element.nombrecomercial);
         });
-        // final fuse = Fuzzy(listaAux);
-        // final result = fuse.search(controllerSearch.text);
-        // listaFabricante.value = [];
-        // result
-        //     .map((r) => listaFabricante.add(listaAllFabricantes
-        //         .firstWhere((element) => element.nombrecomercial == r.item)))
-        //     .forEach(print);
+        
+        final result = extractTop(
+        limit: 10,
+        query: controllerSearch.text,
+        choices: listaAllFabricantes.map((element) => element.nombre).toList(),
+        cutoff: 10,
+      );
+        listaFabricante.value = [];
+        result
+            .map((r) => listaFabricante.add(listaAllFabricantes
+                .firstWhere((element) => element.nombrecomercial == r.choice)))
+            .forEach(print);
       }
     }
   }

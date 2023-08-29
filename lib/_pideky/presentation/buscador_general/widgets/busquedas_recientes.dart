@@ -84,8 +84,8 @@ class BusquedasRecientes extends StatelessWidget {
                                       .listaRecientes[index].nombre
                                   : searchFuzzyViewModel.listaRecientes[index]
                                           is Marca
-                                      ? searchFuzzyViewModel
-                                          .listaRecientes[index].nombre
+                                      ? '${searchFuzzyViewModel
+                                          .listaRecientes[index].nombre}/marca'
                                       : searchFuzzyViewModel
                                                   .listaRecientes[index]
                                               is Categorias
@@ -94,9 +94,9 @@ class BusquedasRecientes extends StatelessWidget {
                                           : searchFuzzyViewModel
                                                       .listaRecientes[index]
                                                   is Fabricantes
-                                              ? searchFuzzyViewModel
+                                              ? '${searchFuzzyViewModel
                                                   .listaRecientes[index]
-                                                  .nombrecomercial
+                                                  .nombrecomercial}/proveedor'
                                               : 'Error',
                               minFontSize: 12,
                               style: TextStyle(

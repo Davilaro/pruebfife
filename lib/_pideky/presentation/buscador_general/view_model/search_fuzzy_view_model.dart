@@ -93,17 +93,17 @@ class SearchFuzzyViewModel extends GetxController {
               }
             }
             if (value[i] is Marca) {
-              if ((value[i] as Marca).nombre == element.choice) {
+              if ((value[i] as Marca).nombre == element.choice && !allResultados.contains(value[i])) {
                 allResultados.add(value[i]);
               }
             }
             if (value[i] is Categorias) {
-              if ((value[i] as Categorias).descripcion == element.choice) {
+              if ((value[i] as Categorias).descripcion == element.choice ) {
                 allResultados.add(value[i]);
               }
             }
             if (value[i] is Fabricantes) {
-              if ((value[i] as Fabricantes).nombrecomercial == element.choice) {
+              if ((value[i] as Fabricantes).nombrecomercial == element.choice && !allResultados.contains(value[i])) {
                 allResultados.add(value[i]);
               }
             }
@@ -111,11 +111,9 @@ class SearchFuzzyViewModel extends GetxController {
         });
       });
 
-      for (var i = 0; i < allResultados.length; i++) {
-        print(allResultados[i]);
-      }
     }
   }
+
 
   //funcion para llenar un lista de strings con los nombres de lista en el value de mapListas
   List<String> llenarLista() {

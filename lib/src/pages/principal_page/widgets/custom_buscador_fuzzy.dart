@@ -6,7 +6,6 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -21,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-// import 'package:fuzzy/fuzzy.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -384,12 +383,16 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         }
         listaAux.add(element.nombre);
       });
-      // final fuse = Fuzzy(listaAux);
-      // final result = fuse.search(enteredKeyword);
-      // result
-      //     .map((r) => listaProducto.add(listaAllProducts
-      //         .firstWhere((element) => element.nombre == r.item)))
-      //     .forEach(print);
+      final result = extractTop(
+        limit: 10,
+        query: _controllerSearch.text,
+        choices: listaAllProducts.map((element) => element.nombre).toList(),
+        cutoff: 10,
+      );
+      result
+          .map((r) => listaProducto.add(listaAllProducts
+              .firstWhere((element) => element.nombre == r.choice)))
+          .forEach(print);
     }
   }
 

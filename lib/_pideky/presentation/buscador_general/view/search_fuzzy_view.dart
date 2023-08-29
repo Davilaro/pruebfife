@@ -165,10 +165,10 @@ class SearchFuzzyView extends StatelessWidget {
                                                                         .allResultados[
                                                                     position]
                                                                 is Marca
-                                                            ? searchFuzzyViewModel
+                                                            ? '${searchFuzzyViewModel
                                                                 .allResultados[
                                                                     position]
-                                                                .nombre
+                                                                .nombre}/marca'
                                                             : searchFuzzyViewModel
                                                                             .allResultados[
                                                                         position]
@@ -181,10 +181,10 @@ class SearchFuzzyView extends StatelessWidget {
                                                                             .allResultados[
                                                                         position]
                                                                     is Fabricantes
-                                                                    ? searchFuzzyViewModel
+                                                                    ? '${searchFuzzyViewModel
                                                                         .allResultados[
                                                                             position]
-                                                                        .nombrecomercial
+                                                                        .nombrecomercial}/proveedor'
                                                                     : 'Error',
                                                     minFontSize: 12,
                                                     style: TextStyle(
