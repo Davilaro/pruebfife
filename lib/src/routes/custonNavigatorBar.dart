@@ -1,5 +1,10 @@
+import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
+import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
+import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +13,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CustonNavigatorBar extends StatelessWidget {
+class CustomNavigatonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context);
-    //final cargoConfirmar = Get.find<ControlBaseDatos>();
+    final cargoConfirmar = Get.find<ControlBaseDatos>();
     return BottomNavigationBar(
         backgroundColor: colorItems(),
         selectedItemColor: Colors.white,
@@ -20,15 +25,15 @@ class CustonNavigatorBar extends StatelessWidget {
         elevation: 0,
         currentIndex: provider.selectOptionMenu,
         onTap: (int i) {
-          print("indice $i");
-          // if (i == 1) {
-          //   cargoConfirmar.tabController.index = 0;
-          //   cargoConfirmar.cargoBaseDatos(0);
-          //   provider.selectOptionMenu = 1;
-          // } else if (i != provider.selectOptionMenu) {
-          //   provider.setIsLocal = 1;
-          //   provider.selectOptionMenu = i;
-          // }
+          if (i == 1) {
+            cargoConfirmar.tabController.index = 0;
+            cargoConfirmar.cargoBaseDatos(0);
+            provider.selectOptionMenu = 1;
+          } else if (i != provider.selectOptionMenu) {
+            provider.setIsLocal = 1;
+            provider.selectOptionMenu = i;
+          }
+
           provider.selectOptionMenu = i;
         },
         type: BottomNavigationBarType.fixed,
@@ -67,9 +72,6 @@ class CustonNavigatorBar extends StatelessWidget {
           ),
         ]);
   }
-
-  TextStyle diseno_letra() =>
-      TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold);
 
   HexColor colorItems() => HexColor("#43398E");
 }

@@ -60,7 +60,6 @@ class _TabOpcionesState extends State<TabOpciones>
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
-  final disposeController = OpcionesBard();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
@@ -100,6 +99,8 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   Widget build(BuildContext context) {
     providerDatos = Provider.of<DatosListas>(context, listen: true);
+    final provider = Provider.of<OpcionesBard>(context, listen: true);
+
     return WillPopScope(
         onWillPop: () async => false,
         child: AnnotatedRegion(
@@ -119,7 +120,9 @@ class _TabOpcionesState extends State<TabOpciones>
               onTap: () {
                 FocusScope.of(context).requestFocus(new FocusNode());
               },
-              child: _HomePageBody(),
+              child: _HomePageBody(
+                provider: provider,
+              ),
             ),
             bottomNavigationBar: Container(
               child: ClipRRect(
@@ -127,7 +130,7 @@ class _TabOpcionesState extends State<TabOpciones>
                   topLeft: Radius.circular(30.0),
                   topRight: Radius.circular(30.0),
                 ),
-                child: CustonNavigatorBar(),
+                child: CustomNavigatonBar(),
               ),
             ),
           ),
@@ -198,13 +201,15 @@ class _TabOpcionesState extends State<TabOpciones>
 }
 
 class _HomePageBody extends StatelessWidget {
+  final provider;
   final cargoConfirmar = Get.find<ControlBaseDatos>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
 
+  _HomePageBody({Key? key, required this.provider}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OpcionesBard>(context);
     final currenIndex = provider.selectOptionMenu;
 
     return PageView(

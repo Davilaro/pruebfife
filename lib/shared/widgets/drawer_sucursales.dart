@@ -266,6 +266,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
 
     Get.offAll(() => TabOpciones());
+    opcionesAppBard!.selectOptionMenu = 0;
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
@@ -277,7 +278,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     prefs.direccionSucursal = elemento.direccion;
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();

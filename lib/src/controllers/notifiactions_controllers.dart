@@ -77,7 +77,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           if (notificationTemp.subCategoriaUbicacion == nombreCategoria) {
             validacionMostrarSlideUp[nombreCategoria] = false;
             closeSlideUp.value = true;
-            await Future.delayed(Duration(milliseconds: 100),
+            await Future.delayed(Duration(milliseconds: 300),
                 () => showSlideUpNotification(context, notificationTemp, ""));
           }
         }
@@ -88,7 +88,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           if (notificationTemp.subCategoriaUbicacion == nombreCategoria) {
             validacionMostrarSlideUp[nombreCategoria] = false;
             closeSlideUp.value = true;
-            await Future.delayed(Duration(milliseconds: 100),
+            await Future.delayed(Duration(milliseconds: 300),
                 () => showSlideUpNotification(context, notificationTemp, ""));
           }
         }
@@ -99,7 +99,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           if (notificationTemp.subCategoriaUbicacion == nombreCategoria) {
             validacionMostrarSlideUp[nombreCategoria] = false;
             closeSlideUp.value = true;
-            await Future.delayed(Duration(milliseconds: 100),
+            await Future.delayed(Duration(milliseconds: 300),
                 () => showSlideUpNotification(context, notificationTemp, ""));
           }
         }

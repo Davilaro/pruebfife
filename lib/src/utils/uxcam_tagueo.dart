@@ -20,6 +20,7 @@ class UxcamTagueo {
 
     String fechaInicial = '';
     String fechaFinal = '';
+    var numeroOrdenes = 0;
 
     var datosCliente = await DBProviderHelper.db.consultarDatosCliente();
     //se define el nombre del usuarios nit + nombre
@@ -59,6 +60,7 @@ class UxcamTagueo {
       } else if (resQuery.length > 1 && resQuery.length <= 3) {
         typeUser = "Progreso";
       }
+      numeroOrdenes = resQuery.length;
     } catch (e) {
       print('Evento validarTipoUsuario fallo peticion historico $e');
     }
@@ -66,6 +68,7 @@ class UxcamTagueo {
     //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
+    FlutterUxcam.setUserProperty("number_of_orders", numeroOrdenes.toString());
     FlutterUxcam.setUserProperty("nit_client", datosCliente[0].nit);
     FlutterUxcam.setUserProperty("City", prefs.ciudad);
     FlutterUxcam.setUserProperty("Country", prefs.paisUsuario);

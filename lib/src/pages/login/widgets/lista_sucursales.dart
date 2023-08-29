@@ -255,6 +255,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     setState(() {});
 
     Get.offAll(() => TabOpciones());
+    opcionesAppBard!.selectOptionMenu = 0;
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
@@ -265,7 +266,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     notificationController.resetMaps();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();
