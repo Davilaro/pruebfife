@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,8 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
 
   final TextEditingController _controllerCellPhoneNumber =
       TextEditingController();
+
+      final ValidationForms _validationForms = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,7 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                 )),
             SizedBox(height: 35.0),
             CustomTextFormField(
+              errorMessage: 'dsf',
               controller: _controllerCellPhoneNumber,
               keyboardType: TextInputType.number,
               hintText: 'Ingrese su código ',
@@ -57,7 +61,10 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
               backgroundColor: Colors.white,
               textColor: HexColor("#41398D"),
               borderRadius: 35,
-              onChanged: (value) {},
+              onChanged: (value) {
+                _validationForms.confirmationCode.value = value;
+              },
+              validator: _validationForms.validateTextFieldNullorEmpty,
             ),
 
             SizedBox(height: 10.0),
@@ -78,14 +85,16 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                 color: ConstantesColores.empodio_verde,
                 onTap: () {
                  
+                final  isValid = _validationForms.confirmationCode.isNotEmpty;
+                
+                if (isValid) {
                   Get.to(() => CreatePasswordPage());
-
-                   showPopup(
-                          context,
-                          'Confirmación de \n identidad correcto',
-                          SvgPicture.asset('assets/image/Icon_correcto.svg'));
-                 
-                },
+                  showPopup(
+                      context,
+                      'Confirmación de \n identidad correcto',
+                      SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                }
+              },
                 text: "Aceptar"),
 
                 TextButtonWithUnderline(
