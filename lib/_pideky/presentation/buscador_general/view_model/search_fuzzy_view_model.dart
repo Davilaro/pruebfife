@@ -62,6 +62,7 @@ class SearchFuzzyViewModel extends GetxController {
   }
 
   void runFilter(String enteredKeyword) {
+    
     if (enteredKeyword.isEmpty) {
       allResultados.value = [];
       result = [];

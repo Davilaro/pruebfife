@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/resultados_buscador_general/view_model/resultado_buscador_general_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ class CampoTextoResultado extends StatelessWidget {
   CampoTextoResultado();
 
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
+  final searchFuzzyViewModel= Get.put(SearchFuzzyViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class CampoTextoResultado extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: TextField(
-          controller: resultadoBuscadorGeneralVm.controllerUser,
+          controller: searchFuzzyViewModel.controllerUser,
           style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
           decoration: InputDecoration(
             fillColor: HexColor("#41398D"),
@@ -52,7 +54,8 @@ class CampoTextoResultado extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
           ),
           onChanged: (value) {
-            resultadoBuscadorGeneralVm.searchInput.value = value;
+            searchFuzzyViewModel.searchInput.value = value;
+            searchFuzzyViewModel.runFilter(value);
           },
         ));
   }
