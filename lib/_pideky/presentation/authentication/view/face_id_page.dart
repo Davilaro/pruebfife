@@ -8,16 +8,15 @@ import 'package:local_auth/local_auth.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/popups.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'face_id_page.dart';
 
-class TouchIdPage extends StatefulWidget {
-  const TouchIdPage();
+class FaceIdPage extends StatefulWidget {
+  const FaceIdPage();
 
   @override
-  State<TouchIdPage> createState() => _TouchIdPageState();
+  State<FaceIdPage> createState() => _FaceIdPageState();
 }
 
-class _TouchIdPageState extends State<TouchIdPage> {
+class _FaceIdPageState extends State<FaceIdPage> {
   // bool authenticated = false;
 
   late final LocalAuthentication auth;
@@ -45,18 +44,18 @@ class _TouchIdPageState extends State<TouchIdPage> {
                 const Text('This devices is not supported'),
               Container(
                   child: Image(
-                image: AssetImage('assets/image/Icon_touch_ID.png'),
+                image: AssetImage('assets/image/Image_face_ID.png'),
                 fit: BoxFit.contain,
               )),
-              SizedBox(height: 50),
-              Text('Touch ID',
+              SizedBox(height: 30),
+              Text('Face ID',
                   style: TextStyle(
                       color: HexColor("#41398D"),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
+                      fontSize: 25,
+                      fontWeight: FontWeight.w900)),
               SizedBox(height: 15.0),
               Text(
-                  "Para ingresar más rápido la próxima vez puedes configurar tu huella",
+                  "Para ingresar más rápido la próxima vez puedes configurar tu rostro",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: ConstantesColores.gris_sku,
@@ -71,20 +70,19 @@ class _TouchIdPageState extends State<TouchIdPage> {
                   _getAvaliableBiometrics(); // () async {
                   _authenticate();
 
-                  showPopup(context, 'Touch ID activado',
+                  showPopup(context, 'Face ID activado',
                       SvgPicture.asset('assets/image/Icon_correcto.svg'));
 
                   showPopupSuccessfulregistration(context);
-                  showPopupUnrecognizedfingerprint(context, 'Huella no reconocida',
-                  Image(image: AssetImage('assets/image/Icon_touch_ID.png'),
-                  fit: BoxFit.contain,
-                ) );
+                  showPopupUnrecognizedfingerprint(
+                      context,
+                      'Rostro no reconocido',
+                      SvgPicture.asset('assets/image/face_ID.svg'));
                 },
-                text: "Usar Touch ID",
+                text: "Usar Face ID",
               ),
               TextButton(
                   onPressed: () {
-                    Get.to(() => FaceIdPage());
                     //Get.back();
                   },
                   child: Text('Cancelar',

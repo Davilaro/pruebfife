@@ -45,7 +45,7 @@ class RegisterPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(top: 10, left: 19, right: 19),
             child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+             // autovalidateMode: AutovalidateMode.onUserInteraction,
               key: formkey,
               child: Column(
                 children: [
@@ -116,7 +116,7 @@ class RegisterPage extends StatelessWidget {
                       borderRadius: 35,
                       prefixIcon: Image.asset('assets/icon/Icon_cliente.png'),
                       onChanged: (value) {
-                        _validationForms.bussinesName.value = value;
+                        _validationForms.customerName.value = value;
                         _validationForms.userInteracted.value = true;
                       },
                       validator: _validationForms.validateTextFieldNullorEmpty
@@ -143,7 +143,7 @@ class RegisterPage extends StatelessWidget {
                       prefixIcon:
                           Image.asset('assets/icon/Icon_ubicación_negocio.png'),
                       onChanged: (value) {
-                        _validationForms.bussinesName.value = value;
+                        _validationForms.businessAddress.value = value;
                         _validationForms.userInteracted.value = true;
                       },
                       validator: _validationForms.validateTextFieldNullorEmpty
@@ -189,7 +189,7 @@ class RegisterPage extends StatelessWidget {
                     textColor: HexColor("#41398D"),
                     borderRadius: 35,
                     onChanged: (value) {
-                        _validationForms.bussinesName.value = value;
+                        _validationForms.nit.value = value;
                         _validationForms.userInteracted.value = true;
                       },
                       validator: _validationForms.validateTextFieldNullorEmpty
@@ -216,7 +216,7 @@ class RegisterPage extends StatelessWidget {
                       borderRadius: 35,
                       prefixIcon: Image.asset('assets/icon/Icon_telefono.png'),
                       onChanged: (value) {
-                        _validationForms.bussinesName.value = value;
+                        _validationForms.cellPhoneNumber.value = value;
                         _validationForms.userInteracted.value = true;
                       },
                       validator: _validationForms.validateTextFieldNullorEmpty

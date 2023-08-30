@@ -152,8 +152,8 @@ void showPopupFindClientCode(
 
 void showPopupUnrecognizedfingerprint(
   BuildContext context,
-  // String mensaje,
-  //Widget? icon,
+   String mensaje,
+  Widget? icon,
 ) {
   showDialog(
       context: context,
@@ -167,12 +167,14 @@ void showPopupUnrecognizedfingerprint(
             child: Column(
               children: [
                 Container(
-                    child: Image(
+                    child: icon != null
+                    ? icon 
+                    : Image(
                   image: AssetImage('assets/image/Icon_touch_ID.png'),
                   fit: BoxFit.contain,
                 )),
                 SizedBox(height: 20),
-                Text('Huella no reconocida',
+                Text(mensaje,
                     style: TextStyle(
                         color: HexColor("#41398D"),
                         fontSize: 20,

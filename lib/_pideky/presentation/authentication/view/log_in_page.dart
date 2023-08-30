@@ -69,7 +69,7 @@ class LogInPage extends StatelessWidget {
                     prefixIcon: Image.asset('assets/icon/Icon_usuario.png'),
                     onChanged: (value) {
                       _validationForms.userName.value = value;
-                      _validationForms.userInteracted.value = true; // Marca como interactuado
+                      _validationForms.userInteracted2.value = true; // Marca como interactuado
                     },
                     validator:  _validationForms.validateTextFieldNullorEmpty
                     //(value) {

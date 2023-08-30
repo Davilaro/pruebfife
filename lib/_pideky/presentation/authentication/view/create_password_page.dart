@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/authentication/view/accept_terms_and_conditions_page.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -9,71 +10,9 @@ import '../../../../shared/widgets/password_requirements_text.dart';
 import '../../../../shared/widgets/popups.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
-
-class CreatePasswordPage extends StatefulWidget {
-  @override
-  State<CreatePasswordPage> createState() => _CreatePasswordPage();
-}
-
-class _CreatePasswordPage extends State<CreatePasswordPage> {
-  // final TextEditingController _controllerNewPassword = TextEditingController();
-  final TextEditingController _controllerConfirmPassword =
-      TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
-  late String _password;
-  String password = '';
-
-  double _strength = 0;
-
-  RegExp passwordRegExp =
-      RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-
-  String _displayText = '';
-
-  bool _passwordsMatch = false;
-
-  void _checkPassword(String value) {
-    _password = value.trim();
-
-    if (_password.isEmpty) {
-      setState(() {
-        _strength = 0;
-        _displayText = '';
-      });
-    } else if (_password.length < 6) {
-      setState(() {
-        _strength = 1 / 4;
-        _displayText = 'débil';
-      });
-    } else if (_password.length < 8) {
-      setState(() {
-        _strength = 2 / 4;
-        _displayText = 'Medio';
-      });
-    } else {
-      if (!passwordRegExp.hasMatch(_password)) {
-        setState(() {
-          // Password length >= 8
-          // But doesn't contain both letter and digit characters
-          _strength = 3 / 4;
-          _displayText = 'Fuerte';
-        });
-      } else {
-        // Password length >= 8
-        // Password contains both letter and digit characters
-        setState(() {
-          _strength = 1;
-          _displayText = 'Fuerte';
-        });
-      }
-    }
-  }
-
-  void _comparePasswords(String value) {
-    _passwordsMatch = value == password;
-    setState(() {});
-  }
+class CreatePasswordPage extends StatelessWidget {
+  final ValidationForms _validationForms = Get.put(ValidationForms());
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +24,8 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
           child: SingleChildScrollView(
             child: Center(
               child: Form(
-                key: _formkey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: formkey,
                 child: Column(
                   children: [
                     Text('Nueva contraseña',
@@ -121,19 +61,11 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
                       obscureText: true,
+                      validator: _validationForms.validatePassword,
                       onChanged: (value) {
-                        password = value;
-                        _checkPassword(value);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Campo requerido';
-                        if (value.trim().isEmpty) return 'Campo requerido';
-                        final passwordRegExp = RegExp(
-                            r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-                        if (!passwordRegExp.hasMatch(value))
-                          return 'No es una contraseña válida';
-                        return null;
+                        _validationForms.tagCheckPassword(value);
+                        _validationForms.createPassword.value = value;
+                        _validationForms.userInteracted.value = true;
                       },
                     ),
                     SizedBox(height: 20.0),
@@ -145,30 +77,35 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
                           borderRadius: BorderRadius.circular(20),
                           color: ConstantesColores.azul_precio,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinearProgressIndicator(
-                            value: _strength,
-                            backgroundColor: ConstantesColores.azul_precio,
-                            color: _strength <= 1 / 4
-                                ? Colors.white
-                                : _strength == 2 / 4
-                                    ? Colors.white
-                                    : _strength == 3 / 4
-                                        ? Colors.white
-                                        : Colors.white,
-                            minHeight: 10,
+                        child: Obx(
+                          () => ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinearProgressIndicator(
+                              value: _validationForms.strength.value,
+                              backgroundColor: ConstantesColores.azul_precio,
+                              color: _validationForms.strength <= 1 / 4
+                                  ? Colors.white
+                                  : _validationForms.strength.value == 2 / 4
+                                      ? Colors.white
+                                      : _validationForms.strength.value == 3 / 4
+                                          ? Colors.white
+                                          : Colors.white,
+                              minHeight: 10,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      child: Text(
-                        _displayText,
-                        style: const TextStyle(fontSize: 18),
+                    Obx(
+                      () => Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        child: Text(
+                          _validationForms.displayText.value,
+                          style: TextStyle(
+                              fontSize: 18, color: ConstantesColores.gris_sku),
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0),
@@ -184,24 +121,25 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
                     ),
                     SizedBox(height: 10.0),
                     CustomTextFormField(
-                        controller: _controllerConfirmPassword,
                         hintText: 'Ingresa su nueva contraseña',
-                        hintStyle:
-                            TextStyle(color: ConstantesColores.gris_sku),
+                        hintStyle: TextStyle(color: ConstantesColores.gris_sku),
                         backgroundColor: HexColor("#E4E3EC"),
                         textColor: HexColor("#41398D"),
                         borderRadius: 35,
                         obscureText: true,
-                        onChanged: _comparePasswords),
+                        onChanged: _validationForms.comparePasswords),
                     Container(
                       alignment: Alignment.centerRight,
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       width: double.infinity,
-                      child: Text(
-                        _passwordsMatch
-                            ? 'Coincide'
-                            : ' No coinciden',
-                        style: TextStyle(fontSize: 18),
+                      child: Obx(
+                        () => Text(
+                          _validationForms.passwordsMatch.value
+                              ? 'Coincide'
+                              : '',
+                          style: TextStyle(
+                              fontSize: 18, color: ConstantesColores.gris_sku),
+                        ),
                       ),
                     ),
                     SizedBox(height: 40.0),
@@ -211,8 +149,8 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
                         height: Get.height * 0.06,
                         color: ConstantesColores.empodio_verde,
                         onTap: () {
-                           final isValid = _formkey.currentState!.validate();
-                           if (!isValid) return;
+                          final isValid = formkey.currentState!.validate();
+                          if (!isValid) return;
                           Get.to(() => TermsAndConditionsPage());
                           showPopup(
                               context,
@@ -220,9 +158,6 @@ class _CreatePasswordPage extends State<CreatePasswordPage> {
                               SvgPicture.asset(
                                 'assets/image/Icon_correcto.svg',
                               ));
-
-                          // print('$password');
-                          // Get.to(HomeScreen());
                         },
                         text: "Actualizar contraseña"),
                     SizedBox(height: 10.0),
