@@ -18,10 +18,9 @@ class MisPedidosPage extends StatefulWidget {
 }
 
 class _MisPedidosPageState extends State<MisPedidosPage> {
-
-  
   @override
   void initState() {
+    misPedidosViewModel.tabActual.value = 0;
     if (prefs.usurioLogin == -1) {
       Future.delayed(Duration(seconds: 0)).then((value) {
         alertCustom(context);
@@ -29,13 +28,6 @@ class _MisPedidosPageState extends State<MisPedidosPage> {
     }
     super.initState();
   }
-
-  @override
-  void dispose() {
-    misPedidosViewModel.tabActual.value = 0;
-    super.dispose();
-  }
-  
 
   final misPedidosViewModel = Get.find<MisPedidosViewModel>();
   @override

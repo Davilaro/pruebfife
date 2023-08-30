@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/bannner.dart';
@@ -113,8 +114,7 @@ class DBProvider {
 
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
-
-      final sql = await db.rawQuery('''
+      var query = '''
       
       SELECT c.codigo, c.descripcion, c.ico2 as ico
       FROM CategoriaDestacada c
@@ -123,8 +123,9 @@ class DBProvider {
       GROUP BY p.categoriacodigopideki
       ORDER BY c.orden ASC $isLimit 
       
-    ''');
-
+    ''';
+      final sql = await db.rawQuery(query);
+      
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
           : [];
@@ -150,8 +151,8 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
       WHERE s.cod_categoria = '$buscar' 
       GROUP BY p.subcategoriaId2 ORDER by s.orden ASC
 ''';
-      final sql = await db.rawQuery(query);
 
+      final sql = await db.rawQuery(query);
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
           : [];

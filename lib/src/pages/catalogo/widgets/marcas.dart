@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -47,6 +48,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
+
     final Debouncer onSearchDebouncer =
         new Debouncer(delay: new Duration(milliseconds: 500));
 
@@ -140,8 +142,16 @@ class _MarcasWidgetState extends State<MarcasWidget> {
     return opciones;
   }
 
-  _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
-      String nombre) {
+  _onClickCatalogo(
+    String codigo,
+    BuildContext context,
+    CarroModelo provider,
+    String nombre,
+  ) {
+    final controllerNotificaciones =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    controllerNotificaciones.llenarMapPushInUp(nombre);
+    controllerNotificaciones.llenarMapSlideUp(nombre);
     Navigator.push(
         context,
         MaterialPageRoute(

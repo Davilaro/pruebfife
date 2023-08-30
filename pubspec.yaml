@@ -77,6 +77,7 @@ dependencies:
   firebase_storage: null
   cloud_firestore_web: ^3.3.3
   flutter_dash: ^1.0.0
+  animated_snack_bar: ^0.3.1
 
 dev_dependencies:
   flutter_test:

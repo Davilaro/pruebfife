@@ -14,12 +14,14 @@ import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:fuzzywuzzy/model/extracted_result.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class SearchFuzzyViewModel extends GetxController {
   final prefs = new Preferencias();
@@ -46,6 +48,7 @@ class SearchFuzzyViewModel extends GetxController {
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   List<ExtractedResult<String>> result = [];
+  
 
   void initState() {
     cargarSugerencias();

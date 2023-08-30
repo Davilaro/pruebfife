@@ -9,6 +9,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_multimedia.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:get/get.dart';
 
@@ -26,5 +27,6 @@ class InitialBindings extends Bindings {
     ProductoViewModel.findOrInitialize;
     RepetirOrdenViewModel.findOrInitialize;
     ClubGanadoresViewModel.findOrInitialize;
+    NotificationsSlideUpAndPushInUpControllers.findOrInitialize;
   }
 }
