@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -91,6 +91,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                                   widget.ubicacion);
                             });
                             notificationController.onTapPushInUp.value = true;
+                            UxcamTagueo().onTapPushInUp(false);
                             Navigator.of(context).pop();
                           },
                           child: Center(
@@ -132,6 +133,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                           await Future.delayed(Duration(milliseconds: 300), () {
                             Navigator.of(context).pop();
                           });
+                           UxcamTagueo().onTapPushInUp(true);
                           notificationController.closePushInUp.value = true;
                         },
                         child: Container(

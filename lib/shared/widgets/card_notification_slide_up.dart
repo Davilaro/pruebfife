@@ -3,6 +3,7 @@ import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ void showSlideUpNotification(context, data, ubicacion) {
         prefs,
         ubicacion,
       );
+      UxcamTagueo().onTapSlideUp(true);
       Get.back();
     },
     duration: Duration(minutes: 2),

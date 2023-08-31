@@ -519,4 +519,33 @@ class UxcamTagueo {
       print('Error tagueo clickPlaceIndividualOrder $e');
     }
   }
+
+  void onTapSlideUp(close) {
+    try {
+      if (prefs.usurioLogin == 1) {
+        FlutterUxcam.logEventWithProperties("onTapSlideUp", {
+          "close" : close,
+          "navegation" : true,
+          "City": prefs.ciudad ?? "",
+          "Country": prefs.paisUsuario ?? "CO"
+        });
+      }
+    } catch (e) {
+      print('Error tagueo onTapSlideUp $e');
+    }
+  }
+  void onTapPushInUp(close) {
+    try {
+      if (prefs.usurioLogin == 1) {
+        FlutterUxcam.logEventWithProperties("onTapPushInUp", {
+          "close" : close,
+          "navegation" : close == true? false : true,
+          "City": prefs.ciudad ?? "",
+          "Country": prefs.paisUsuario ?? "CO"
+        });
+      }
+    } catch (e) {
+      print('Error tagueo onTapPushInUp $e');
+    }
+  }
 }
