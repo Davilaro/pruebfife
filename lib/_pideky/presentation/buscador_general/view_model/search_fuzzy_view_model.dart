@@ -14,14 +14,12 @@ import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:fuzzywuzzy/model/extracted_result.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class SearchFuzzyViewModel extends GetxController {
   final prefs = new Preferencias();
@@ -48,7 +46,12 @@ class SearchFuzzyViewModel extends GetxController {
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   List<ExtractedResult<String>> result = [];
-  
+
+  @override
+  void onInit() {
+    initState();
+    super.onInit();
+  }
 
   void initState() {
     cargarSugerencias();
@@ -65,7 +68,6 @@ class SearchFuzzyViewModel extends GetxController {
   }
 
   void runFilter(String enteredKeyword) {
-    
     if (enteredKeyword.isEmpty) {
       allResultados.value = [];
       result = [];
@@ -97,27 +99,27 @@ class SearchFuzzyViewModel extends GetxController {
               }
             }
             if (value[i] is Marca) {
-              if ((value[i] as Marca).nombre == element.choice && !allResultados.contains(value[i])) {
+              if ((value[i] as Marca).nombre == element.choice &&
+                  !allResultados.contains(value[i])) {
                 allResultados.add(value[i]);
               }
             }
             if (value[i] is Categorias) {
-              if ((value[i] as Categorias).descripcion == element.choice ) {
+              if ((value[i] as Categorias).descripcion == element.choice) {
                 allResultados.add(value[i]);
               }
             }
             if (value[i] is Fabricantes) {
-              if ((value[i] as Fabricantes).nombrecomercial == element.choice && !allResultados.contains(value[i])) {
+              if ((value[i] as Fabricantes).nombrecomercial == element.choice &&
+                  !allResultados.contains(value[i])) {
                 allResultados.add(value[i]);
               }
             }
           }
         });
       });
-
     }
   }
-
 
   //funcion para llenar un lista de strings con los nombres de lista en el value de mapListas
   List<String> llenarLista() {
@@ -145,22 +147,20 @@ class SearchFuzzyViewModel extends GetxController {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     }
     if (object is Marca) {
-   
       Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CustomBuscardorFuzzy(
-                  codCategoria: object.codigo,
-                  numEmpresa: 'nutresa',
-                  tipoCategoria: 3,
-                  nombreCategoria: object.nombre,
-                  isActiveBanner: false,
-                  locacionFiltro: "marca",
-                  codigoProveedor: "",
-                )));
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: object.codigo,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 3,
+                    nombreCategoria: object.nombre,
+                    isActiveBanner: false,
+                    locacionFiltro: "marca",
+                    codigoProveedor: "",
+                  )));
     }
     if (object is Categorias) {
-
       final List<dynamic> listaSubCategorias =
           await DBProvider.db.consultarCategoriasSubCategorias(object.codigo);
 
@@ -174,25 +174,24 @@ class SearchFuzzyViewModel extends GetxController {
     }
     if (object is Fabricantes) {
       Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CustomBuscardorFuzzy(
-                  codCategoria: object.empresa,
-                  numEmpresa: 'nutresa',
-                  tipoCategoria: 4,
-                  nombreCategoria: object.nombrecomercial,
-                  img: object.icono,
-                  locacionFiltro: "proveedor",
-                  codigoProveedor: object.empresa.toString(),
-                )));
-    } 
-    if(object is Producto ){
+          context,
+          MaterialPageRoute(
+              builder: (context) => CustomBuscardorFuzzy(
+                    codCategoria: object.empresa,
+                    numEmpresa: 'nutresa',
+                    tipoCategoria: 4,
+                    nombreCategoria: object.nombrecomercial,
+                    img: object.icono,
+                    locacionFiltro: "proveedor",
+                    codigoProveedor: object.empresa.toString(),
+                  )));
+    }
+    if (object is Producto) {
       PedidoEmart.inicializarValoresFabricante();
       cartProvider.actualizarListaFabricante =
           PedidoEmart.listaPrecioPorFabricante!;
       //validar que este en la lista de productos
-      cargoConfirmar
-          .cambiarValoresEditex(PedidoEmart.obtenerValor(object));
+      cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(object));
       cargoConfirmar.cargarProductoNuevo(
           ProductoCambiante.m(object.nombre, object.codigo), 1);
       cartProvider.guardarCambiodevista = 1;
@@ -206,7 +205,6 @@ class SearchFuzzyViewModel extends GetxController {
                     tamano: Get.height * .8,
                     title: title == '' ? S.current.product : title,
                   )));
-
     }
     controllerUser.text = "";
     searchInput.value = "";

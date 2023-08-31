@@ -35,6 +35,7 @@ class InputValoresCatalogo extends StatefulWidget {
   State<InputValoresCatalogo> createState() => _InputValoresCatalogoState();
 }
 
+
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
@@ -44,6 +45,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
 
   @override
   Widget build(BuildContext context) {
+
     final cartProvider = Provider.of<CarroModelo>(context);
 
     return FittedBox(

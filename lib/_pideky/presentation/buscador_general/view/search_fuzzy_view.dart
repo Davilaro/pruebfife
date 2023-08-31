@@ -20,11 +20,13 @@ class SearchFuzzyView extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
   @override
   Widget build(BuildContext context) {
-    searchFuzzyViewModel.initState();
+
+
     final cartProvider = Provider.of<CarroModelo>(context);
 
     return Scaffold(
@@ -64,9 +66,9 @@ class SearchFuzzyView extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(10),
               child: Obx(() => Text(
-                  searchFuzzyViewModel.searchInput.isEmpty
+                  searchFuzzyViewModel.searchInput.value.isEmpty
                       ? 'Estás buscando en todas las secciones'
-                      : 'Estás buscando "${searchFuzzyViewModel.searchInput}" en todas las secciones',
+                      : 'Estás buscando "${searchFuzzyViewModel.searchInput.value}" en todas las secciones',
                   style: TextStyle(
                       color: Colors.black.withOpacity(.5),
                       fontSize: 13,
@@ -78,12 +80,12 @@ class SearchFuzzyView extends StatelessWidget {
               child: Column(
                 children: [
                   Obx(
-                    () => searchFuzzyViewModel.allResultados.isNotEmpty
+                    () => searchFuzzyViewModel.allResultados.value.isNotEmpty
                         ? Container(
                             height: 300,
                             child: ListView.builder(
                               itemCount:
-                                  searchFuzzyViewModel.allResultados.length,
+                                  searchFuzzyViewModel.allResultados.value.length,
                               itemBuilder:
                                   (BuildContext context, int position) {
                                 return Column(
@@ -92,7 +94,7 @@ class SearchFuzzyView extends StatelessWidget {
                                       onTap: () {
                                         searchFuzzyViewModel.logicaSeleccion(
                                             searchFuzzyViewModel
-                                                .allResultados[position],
+                                                .allResultados.value[position],
                                             cargoConfirmar,
                                             cartProvider,
                                             context);
@@ -111,36 +113,36 @@ class SearchFuzzyView extends StatelessWidget {
                                                   height: Get.height * 0.1,
                                                   child: Image.network(
                                                     searchFuzzyViewModel
-                                                                    .allResultados[
+                                                                    .allResultados.value[
                                                                 position]
                                                             is Producto
                                                         ? Constantes()
                                                                 .urlImgProductos +
                                                             '${searchFuzzyViewModel
-                                                                    .allResultados[
+                                                                    .allResultados.value[
                                                                 position].codigo}.png'
                                                         : searchFuzzyViewModel
-                                                                        .allResultados[
+                                                                        .allResultados.value[
                                                                     position]
                                                                 is Marca
                                                             ? searchFuzzyViewModel
-                                                                .allResultados[
+                                                                .allResultados.value[
                                                                     position]
                                                                 .ico
                                                             : searchFuzzyViewModel
-                                                                            .allResultados[
+                                                                            .allResultados.value[
                                                                         position]
                                                                     is Categorias
                                                                 ? searchFuzzyViewModel
-                                                                    .allResultados[
+                                                                    .allResultados.value[
                                                                         position]
                                                                     .ico
                                                                 : searchFuzzyViewModel
-                                                                            .allResultados[
+                                                                            .allResultados.value[
                                                                         position]
                                                                     is Fabricantes
                                                                     ? searchFuzzyViewModel
-                                                                        .allResultados[
+                                                                        .allResultados.value[
                                                                             position]
                                                                         .icono
                                                                     : 'Error',
@@ -154,35 +156,35 @@ class SearchFuzzyView extends StatelessWidget {
                                                   width: Get.width * 0.5,
                                                   child: AutoSizeText(
                                                     searchFuzzyViewModel
-                                                                    .allResultados[
+                                                                    .allResultados.value[
                                                                 position]
                                                             is Producto
                                                         ? searchFuzzyViewModel
-                                                            .allResultados[
+                                                            .allResultados.value[
                                                                 position]
                                                             .nombre
                                                         : searchFuzzyViewModel
-                                                                        .allResultados[
+                                                                        .allResultados.value[
                                                                     position]
                                                                 is Marca
                                                             ? '${searchFuzzyViewModel
-                                                                .allResultados[
+                                                                .allResultados.value[
                                                                     position]
                                                                 .nombre}/marca'
                                                             : searchFuzzyViewModel
-                                                                            .allResultados[
+                                                                            .allResultados.value[
                                                                         position]
                                                                     is Categorias
                                                                 ? searchFuzzyViewModel
-                                                                    .allResultados[
+                                                                    .allResultados.value[
                                                                         position]
                                                                     .descripcion
                                                                 : searchFuzzyViewModel
-                                                                            .allResultados[
+                                                                            .allResultados.value[
                                                                         position]
                                                                     is Fabricantes
                                                                     ? '${searchFuzzyViewModel
-                                                                        .allResultados[
+                                                                        .allResultados.value[
                                                                             position]
                                                                         .nombrecomercial}/proveedor'
                                                                     : 'Error',
