@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -13,9 +12,6 @@ import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/f
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/routes/custonNavigatorBar.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -31,9 +27,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/provider.dart';
 
 class CustomBuscardorFuzzy extends StatefulWidget {
   final String? codCategoria;
@@ -110,8 +104,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OpcionesBard>(context);
-    final cargoConfirmar = Get.find<ControlBaseDatos>();
     super.didUpdateWidget(super.widget);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');

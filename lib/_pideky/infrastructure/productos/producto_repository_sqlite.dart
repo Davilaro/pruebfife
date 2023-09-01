@@ -9,8 +9,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
-    final sql = await db.rawQuery(
-        '''
+    final sql = await db.rawQuery('''
       SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
     ''');
 
@@ -20,8 +19,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<List<Producto>> consultarProductos() async {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
       SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
     ''');
 
@@ -35,8 +33,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProvider.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
        
         SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
@@ -90,8 +87,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 2) {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -122,8 +118,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         
     ''';
       } else if (tipo == 3) {
-        query =
-            '''
+        query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -153,8 +148,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
        ''';
       } else if (tipo == 4) {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
        round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -184,8 +178,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else if (tipo == 5) {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -216,8 +209,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ''';
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
-        query =
-            '''
+        query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -249,8 +241,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else {
-        query =
-            '''
+        query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -307,6 +298,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
+      final query;
       final sql;
       String? consulta;
       if (codigoMarca != "" && codigoMarca != null) {
@@ -316,9 +308,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipoProducto == 2) {
-        sql = await db.rawQuery(
-            '''
-        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
+        query = '''
+        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
@@ -343,11 +334,12 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         $consulta
         ORDER BY pn.orden_imperdible ASC $isLimit 
          
-    ''');
+    ''';
+
+        sql = await db.rawQuery(query);
       } else {
-        sql = await db.rawQuery(
-            '''
-      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
+        query = '''
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
        p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
@@ -372,7 +364,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)<=$precioMaximo
       $consulta
       UNION 
-      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
      round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
        p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
@@ -396,9 +388,11 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       
       ORDER BY pn.orden_oferta ASC
          
-     ''');
-      }
+     ''';
 
+        sql = await db.rawQuery(query);
+      }
+      //log(sql);
       return sql.isNotEmpty
           ? sql.map((e) => Producto.fromJson(e)).toList()
           : [];
@@ -416,8 +410,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       List<Producto> lista = [];
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
-      List<Map> sql = await db.rawQuery(
-          '''
+      List<Map> sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio  , 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
@@ -480,8 +473,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 5) {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -519,8 +511,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 1) {
         //tipo 1 para imperdibles
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -558,8 +549,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 3) {
         //tipo 3 para marca e imperdible
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -600,8 +590,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         //tipo 6 para productos del dia
         String date = DateTime.now().toString();
 
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -635,8 +624,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 4) {
         //tipo 4 para marca  y promo
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -670,8 +658,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ? sql.map((e) => Producto.fromJson(e)).toList()
             : [];
       } else {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -730,8 +717,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 1) {
         //tipo 1 para filtrar solo por marca, categoria y subcategoria
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
             SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
@@ -767,8 +753,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
         //tipo 2 para productos mas vendidos
       } else if (tipo == 2) {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -806,8 +791,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
       } else {
         //tipo 3 para imperdibles marcas, categorias y subc
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
@@ -889,8 +873,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   Future<List<Producto>> consultarPedidoTemporal() async {
     final db = await DBProviderHelper.db.tempAbierta;
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
       SELECT codigo_producto codigo, cantidad FROM pedido  
     ''');
 

@@ -238,3 +238,60 @@ void mostrarAlertCustomWidget(
         );
       });
 }
+
+void mostrarAlertCartera(
+  BuildContext context,
+  String mensaje,
+  Widget? icon,
+) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            content: Container(
+              constraints: BoxConstraints(
+                  minHeight: 200, minWidth: double.infinity, maxHeight: 300),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    icon != null
+                        ? icon
+                        : Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.red,
+                            size: 80.0,
+                          ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Text(
+                        '$mensaje',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: GestureDetector(
+                        onTap: () => Get.back(),
+                        child: Container(
+                          height: 40,
+                          width: double.infinity,
+                          child: Image.asset(
+                            "assets/image/btn_aceptar.png",
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+}

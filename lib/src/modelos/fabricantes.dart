@@ -24,6 +24,7 @@ class Fabricantes {
       this.texto1,
       this.texto2,
       this.diaVisita,
+      this.bloqueoCartera,
       required this.diasEntrega,
       this.razonSocial});
 
@@ -40,6 +41,7 @@ class Fabricantes {
   int? restrictivoFrecuencia;
   int? restrictivoNoFrecuencia;
   int? itinerario;
+  int? bloqueoCartera;
   String? texto1;
   String? texto2;
   String? diaVisita;
@@ -68,6 +70,7 @@ class Fabricantes {
       texto1: json["texto1"],
       texto2: json["texto2"],
       itinerario: json["itinerario"],
+      bloqueoCartera: json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"]);
 
   Map<String, dynamic> toJson() => {
