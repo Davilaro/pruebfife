@@ -5,6 +5,7 @@ import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,7 +29,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
     resultadoBuscadorGeneralVm.listaProductos.refresh();
 
     return Scaffold(
-      backgroundColor: ConstantesColores.color_fondo_gris,
       key: drawerKey,
       drawerEnableOpenDragGesture:
           resultadoBuscadorGeneralVm.prefs.usurioLogin == 1 ? true : false,
@@ -85,17 +85,68 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     fontSize: 13,
                     fontWeight: FontWeight.bold))),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+               vertical: Get.height * 0.01
+            ),
+            child: SizedBox(
+              height: Get.height * 0.03,
+              child: Row(
+                children: [
+                  SizedBox(width: Get.width * 0.05),
+                  Expanded(
+                    flex: 3,
+                    child: CustomButton(
+                      isFontBold: true,
+                      sizeText: 12,
+                      onPressed: () {}, 
+                      text: 'Promociones', 
+                      backgroundColor: ConstantesColores.color_fondo_gris,
+                      colorContent: ConstantesColores.azul_precio,
+                    ),
+                  ),
+                  SizedBox(width: Get.width * 0.02),
+                  Expanded(
+                    flex: 3,
+                    child: CustomButton(
+                      isFontBold: true,
+                      sizeText: 12,
+                      onPressed: () {}, 
+                      text: 'Más vendidos', 
+                      backgroundColor: ConstantesColores.color_fondo_gris,
+                      colorContent: ConstantesColores.azul_precio,
+                    ),
+                  ),
+                  SizedBox(width: Get.width * 0.02),
+                  Expanded(
+                    flex: 3,
+                    child: CustomButton(
+                      isFontBold: true,
+                      sizeText: 12,
+                      onPressed: () {}, 
+                      text: 'chocolatina', 
+                      backgroundColor: ConstantesColores.color_fondo_gris,
+                      colorContent: ConstantesColores.azul_precio,
+                    ),
+                  ),
+                  SizedBox(width: Get.width * 0.05),
+                ],
+              ),
+            ),
+          ),
           Expanded(
-              child: Obx(() => Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                  child: GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 9.0,
-                      children: resultadoBuscadorGeneralVm.cargarResultadosCard(
-                              context)
-                          .toList()))))
+              child: Obx(() => GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 4.0,
+                  mainAxisSpacing: 9.0,
+                  childAspectRatio: 2 / 3.1,
+                  
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Get.width * 0.04,
+                      vertical: Get.height * 0.01),
+                  children: resultadoBuscadorGeneralVm.cargarResultadosCard(
+                          context)
+                      .toList())))
         ],
       ),
     );

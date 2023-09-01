@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
@@ -25,8 +26,6 @@ class SearchFuzzyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     final cartProvider = Provider.of<CarroModelo>(context);
 
     return Scaffold(
@@ -80,12 +79,12 @@ class SearchFuzzyView extends StatelessWidget {
               child: Column(
                 children: [
                   Obx(
-                    () => searchFuzzyViewModel.allResultados.value.isNotEmpty
+                    () => searchFuzzyViewModel.allResultados.isNotEmpty
                         ? Container(
                             height: 300,
                             child: ListView.builder(
                               itemCount:
-                                  searchFuzzyViewModel.allResultados.value.length,
+                                  searchFuzzyViewModel.allResultados.length,
                               itemBuilder:
                                   (BuildContext context, int position) {
                                 return Column(
@@ -94,7 +93,7 @@ class SearchFuzzyView extends StatelessWidget {
                                       onTap: () {
                                         searchFuzzyViewModel.logicaSeleccion(
                                             searchFuzzyViewModel
-                                                .allResultados.value[position],
+                                                .allResultados[position],
                                             cargoConfirmar,
                                             cartProvider,
                                             context);
@@ -108,46 +107,24 @@ class SearchFuzzyView extends StatelessWidget {
                                             padding: const EdgeInsets.all(15),
                                             child: Row(
                                               children: [
-                                                Container(
-                                                  width: Get.width * 0.15,
-                                                  height: Get.height * 0.1,
-                                                  child: Image.network(
-                                                    searchFuzzyViewModel
-                                                                    .allResultados.value[
-                                                                position]
-                                                            is Producto
-                                                        ? Constantes()
-                                                                .urlImgProductos +
-                                                            '${searchFuzzyViewModel
-                                                                    .allResultados.value[
-                                                                position].codigo}.png'
-                                                        : searchFuzzyViewModel
-                                                                        .allResultados.value[
-                                                                    position]
-                                                                is Marca
-                                                            ? searchFuzzyViewModel
-                                                                .allResultados.value[
-                                                                    position]
-                                                                .ico
-                                                            : searchFuzzyViewModel
-                                                                            .allResultados.value[
-                                                                        position]
-                                                                    is Categorias
-                                                                ? searchFuzzyViewModel
-                                                                    .allResultados.value[
-                                                                        position]
-                                                                    .ico
-                                                                : searchFuzzyViewModel
-                                                                            .allResultados.value[
-                                                                        position]
-                                                                    is Fabricantes
-                                                                    ? searchFuzzyViewModel
-                                                                        .allResultados.value[
-                                                                            position]
-                                                                        .icono
-                                                                    : 'Error',
-                                                    fit: BoxFit.fitWidth,
+                                                CachedNetworkImage(
+                                                  height: Get.height * 0.07,
+                                                  imageUrl: searchFuzzyViewModel
+                                                      .iconoSugeridos(
+                                                          palabrabuscada:
+                                                              searchFuzzyViewModel
+                                                                      .allResultados[
+                                                                  position])!,
+                                                  placeholder: (context, url) =>
+                                                      Image.asset(
+                                                          'assets/image/jar-loading.gif'),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'assets/image/logo_login.png',
+                                                    width: Get.width * 0.05,
                                                   ),
+                                                  fit: BoxFit.fill,
                                                 ),
                                                 SizedBox(
                                                   width: Get.width * 0.05,
@@ -156,38 +133,13 @@ class SearchFuzzyView extends StatelessWidget {
                                                   width: Get.width * 0.5,
                                                   child: AutoSizeText(
                                                     searchFuzzyViewModel
-                                                                    .allResultados.value[
-                                                                position]
-                                                            is Producto
-                                                        ? searchFuzzyViewModel
-                                                            .allResultados.value[
-                                                                position]
-                                                            .nombre
-                                                        : searchFuzzyViewModel
-                                                                        .allResultados.value[
-                                                                    position]
-                                                                is Marca
-                                                            ? '${searchFuzzyViewModel
-                                                                .allResultados.value[
-                                                                    position]
-                                                                .nombre}/marca'
-                                                            : searchFuzzyViewModel
-                                                                            .allResultados.value[
-                                                                        position]
-                                                                    is Categorias
-                                                                ? searchFuzzyViewModel
-                                                                    .allResultados.value[
-                                                                        position]
-                                                                    .descripcion
-                                                                : searchFuzzyViewModel
-                                                                            .allResultados.value[
-                                                                        position]
-                                                                    is Fabricantes
-                                                                    ? '${searchFuzzyViewModel
-                                                                        .allResultados.value[
-                                                                            position]
-                                                                        .nombrecomercial}/proveedor'
-                                                                    : 'Error',
+                                                        .nombreSugeridos(
+                                                            palabrabuscada:
+                                                                searchFuzzyViewModel
+                                                                        .allResultados[
+                                                                    position],
+                                                            conDistintivo:
+                                                                true)!,
                                                     minFontSize: 12,
                                                     style: TextStyle(
                                                       color: Colors.black
@@ -203,8 +155,7 @@ class SearchFuzzyView extends StatelessWidget {
                                           Padding(
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: Get.width * 0.05,
-                                                vertical: Get.height * 0.05
-                                                ),
+                                                vertical: Get.height * 0.05),
                                             child: Icon(
                                               Icons.search,
                                               color:

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
@@ -34,9 +35,19 @@ class BusquedasRecientes extends StatelessWidget {
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
                   searchFuzzyViewModel.searchInput.value =
-                      searchFuzzyViewModel.listaRecientes[index].nombre!;
+                      searchFuzzyViewModel.nombreSugeridos(
+                          palabrabuscada:
+                              searchFuzzyViewModel.listaRecientes[index],
+                          conDistintivo: false)!;
+
                   searchFuzzyViewModel.runFilter(
-                      searchFuzzyViewModel.listaRecientes[index].nombre!);
+                      searchFuzzyViewModel.searchInput.value);
+
+                  searchFuzzyViewModel.controllerUser.text = searchFuzzyViewModel
+                      .nombreSugeridos(
+                          palabrabuscada:
+                              searchFuzzyViewModel.listaRecientes[index],
+                          conDistintivo: false)!;
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,31 +57,18 @@ class BusquedasRecientes extends StatelessWidget {
                       padding: const EdgeInsets.all(15),
                       child: Row(
                         children: [
-                          Container(
-                            width: Get.width * 0.15,
-                            height: Get.height * 0.1,
-                            child: Image.network(
-                              searchFuzzyViewModel.listaRecientes[index]
-                                      is Producto
-                                  ? Constantes().urlImgProductos +
-                                      '${searchFuzzyViewModel.listaRecientes[index].codigo}.png'
-                                  : searchFuzzyViewModel.listaRecientes[index]
-                                          is Marca
-                                      ? searchFuzzyViewModel
-                                          .listaRecientes[index].ico
-                                      : searchFuzzyViewModel
-                                                  .listaRecientes[index]
-                                              is Categorias
-                                          ? searchFuzzyViewModel
-                                              .listaRecientes[index].ico
-                                          : searchFuzzyViewModel
-                                                      .listaRecientes[index]
-                                                  is Fabricantes
-                                              ? searchFuzzyViewModel
-                                                  .listaRecientes[index].icono
-                                              : 'Error',
-                              fit: BoxFit.fitWidth,
+                          CachedNetworkImage(
+                            height: Get.height * 0.07,
+                            imageUrl: searchFuzzyViewModel.iconoSugeridos(
+                                palabrabuscada: searchFuzzyViewModel
+                                    .listaRecientes[index])!,
+                            placeholder: (context, url) =>
+                                Image.asset('assets/image/jar-loading.gif'),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/image/logo_login.png',
+                              width: Get.width * 0.05,
                             ),
+                            fit: BoxFit.fill,
                           ),
                           SizedBox(
                             width: Get.width * 0.05,
@@ -78,26 +76,10 @@ class BusquedasRecientes extends StatelessWidget {
                           SizedBox(
                             width: Get.width * 0.5,
                             child: AutoSizeText(
-                              searchFuzzyViewModel.listaRecientes[index]
-                                      is Producto
-                                  ? searchFuzzyViewModel
-                                      .listaRecientes[index].nombre
-                                  : searchFuzzyViewModel.listaRecientes[index]
-                                          is Marca
-                                      ? '${searchFuzzyViewModel
-                                          .listaRecientes[index].nombre}/marca'
-                                      : searchFuzzyViewModel
-                                                  .listaRecientes[index]
-                                              is Categorias
-                                          ? searchFuzzyViewModel
-                                              .listaRecientes[index].descripcion
-                                          : searchFuzzyViewModel
-                                                      .listaRecientes[index]
-                                                  is Fabricantes
-                                              ? '${searchFuzzyViewModel
-                                                  .listaRecientes[index]
-                                                  .nombrecomercial}/proveedor'
-                                              : 'Error',
+                              searchFuzzyViewModel.nombreSugeridos(
+                                  palabrabuscada: searchFuzzyViewModel
+                                      .listaRecientes[index],
+                                  conDistintivo: true)!, //
                               minFontSize: 12,
                               style: TextStyle(
                                 color: Colors.black.withOpacity(.4),

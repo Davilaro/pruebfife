@@ -13,6 +13,7 @@ import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 
@@ -83,8 +84,7 @@ class SearchFuzzyViewModel extends GetxController {
 
       mapListas.addAll({"proveedor": listaAllproveedor});
 
-      result = extractTop(
-        limit: 10,
+      result = extractAllSorted(
         query: enteredKeyword,
         choices: llenarLista(),
         cutoff: 10,
@@ -94,7 +94,8 @@ class SearchFuzzyViewModel extends GetxController {
         mapListas.forEach((key, value) {
           for (var i = 0; i < value.length; i++) {
             if (value[i] is Producto) {
-              if ((value[i] as Producto).nombre == element.choice) {
+              if ((value[i] as Producto).nombre == element.choice ||
+                  (value[i] as Producto).codigo == element.choice) {
                 allResultados.add(value[i]);
               }
             }
@@ -126,7 +127,10 @@ class SearchFuzzyViewModel extends GetxController {
     List<String> lista = [];
     mapListas.forEach((key, value) {
       for (var i = 0; i < value.length; i++) {
-        if (value[i] is Producto) lista.add((value[i] as Producto).nombre);
+        if (value[i] is Producto) {
+          lista.add((value[i] as Producto).nombre);
+          lista.add((value[i] as Producto).codigo);
+        }
         if (value[i] is Marca) lista.add((value[i] as Marca).nombre);
         if (value[i] is Categorias)
           lista.add((value[i] as Categorias).descripcion);
@@ -135,6 +139,35 @@ class SearchFuzzyViewModel extends GetxController {
       }
     });
     return lista;
+  }
+
+  String? iconoSugeridos({required Object palabrabuscada}) {
+    return palabrabuscada is Producto
+        ? Constantes().urlImgProductos + '${palabrabuscada.codigo}.png'
+        : palabrabuscada is Marca
+            ? palabrabuscada.ico
+            : palabrabuscada is Categorias
+                ? palabrabuscada.ico
+                : palabrabuscada is Fabricantes
+                    ? palabrabuscada.icono
+                    : 'assets/image/logo_login.png';
+  }
+
+  String? nombreSugeridos(
+      {required Object palabrabuscada, required bool conDistintivo}) {
+    return palabrabuscada is Producto
+        ? palabrabuscada.nombre
+        : palabrabuscada is Marca && conDistintivo
+            ? '${palabrabuscada.nombre}/marca'
+            : palabrabuscada is Marca && !conDistintivo
+                ? palabrabuscada.nombre
+                : palabrabuscada is Categorias
+                    ? palabrabuscada.descripcion
+                    : palabrabuscada is Fabricantes && conDistintivo
+                        ? '${palabrabuscada.nombrecomercial}/proveedor'
+                        : palabrabuscada is Fabricantes && !conDistintivo
+                            ? palabrabuscada.nombrecomercial
+                            : 'Error en la búsqueda';
   }
 
   Future<void> logicaSeleccion(

@@ -71,53 +71,36 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                           nombreCategoria: searchFuzzyViewModel.allResultados[i].descripcion,
                         )));
           },
-          child: Container(
-            height: Get.height * 0.1,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Wrap(
-              // mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      height: Get.height * 0.090,
-                      margin: EdgeInsets.fromLTRB(5, 2, 5, 0),
-                      alignment: Alignment.center,
-                      child: CachedNetworkImage(
-                        imageUrl: searchFuzzyViewModel.allResultados[i].ico,
-                        alignment: Alignment.bottomCenter,
-                        placeholder: (context, url) => Image.asset(
-                          'assets/image/jar-loading.gif',
-                          alignment: Alignment.center,
-                          height: 50,
-                        ),
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/image/logo_login.png',
-                          height: 50,
-                          alignment: Alignment.center,
-                        ),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.topCenter,
-                  margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                  child: AutoSizeText('${searchFuzzyViewModel.allResultados[i].descripcion}',
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Obx(() => Image.network(
+                          searchFuzzyViewModel.allResultados[i].ico,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset('assets/image/logo_login.png'),
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    child: AutoSizeText(
+                      'Categoría',
+                      maxFontSize: 15,
                       style: TextStyle(
-                          fontSize: 11,
                           fontWeight: FontWeight.bold,
                           color: HexColor('#0061cc')),
-                      textAlign: TextAlign.center,
-                      minFontSize: 8,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -142,29 +125,32 @@ class ResultadoBuscadorGeneralVm extends GetxController {
           child: Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Obx(() => Image.network(
-                        searchFuzzyViewModel.allResultados[i].ico,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Image.asset('assets/image/logo_login.png'),
-                        fit: BoxFit.fill,
-                      )),
-                ),
-                Expanded(
-                  child: AutoSizeText(
-                    'Marca',
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: HexColor('#0061cc')),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Obx(() => Image.network(
+                          searchFuzzyViewModel.allResultados[i].ico,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset('assets/image/logo_login.png'),
+                          fit: BoxFit.fill,
+                        )),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: AutoSizeText(
+                      'Marca',
+                      maxFontSize: 15,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: HexColor('#0061cc')),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );
