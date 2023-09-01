@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,8 @@ class RestorePasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = Get.put(StateControllerRadioButtonsAndChecks());
     
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
@@ -50,20 +53,26 @@ class RestorePasswordPage extends StatelessWidget {
                     fontSize: 15,
                   )),
               SizedBox(height: 25.0),
-              RadioButtom(),
-              BotonAgregarCarrito(
-                  borderRadio: 35,
-                  height: Get.height * 0.06,
-                  color: ConstantesColores.empodio_verde,
-                  onTap: () {
-                    Get.to(() => CreatePasswordPage());
-
-                    showPopup(
-                          context,
-                          'Confirmación de \n identidad correcto',
-                          SvgPicture.asset('assets/image/Icon_correcto.svg'));
-                  },
-                  text: "Aceptar"),
+            ClientCodeSelection(controller: controller),
+              Obx(
+                () =>  BotonAgregarCarrito(
+                    borderRadio: 35,
+                    height: Get.height * 0.06,
+                    color: controller.isClientCodeSelected
+                      ? ConstantesColores.empodio_verde
+                      : Colors.grey,
+                    onTap: controller.isClientCodeSelected
+                    ?() {
+                      Get.to(() => CreatePasswordPage());
+              
+                      showPopup(
+                            context,
+                            'Confirmación de \n identidad correcto',
+                            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                    }
+                    :null,
+                    text: "Aceptar"),
+              ),
               TextButtonWithUnderline(
                 text: "¿Dónde encontrar tu código de cliente?",
                 onPressed: () {

@@ -53,7 +53,6 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                 )),
             SizedBox(height: 35.0),
             CustomTextFormField(
-              errorMessage: 'dsf',
               controller: _controllerCellPhoneNumber,
               keyboardType: TextInputType.number,
               hintText: 'Ingrese su código ',
@@ -70,7 +69,7 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
             SizedBox(height: 10.0),
 
             Text(
-                "El código caduca en {2min} ",
+                "El código caduca en {15min} ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: ConstantesColores.gris_sku,

@@ -1,7 +1,6 @@
 import 'package:emart/_pideky/presentation/authentication/view/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/touch_id_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/shared/widgets/custom_checkBox.dart';
 import 'package:emart/shared/widgets/popups.dart';
@@ -10,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '../../../../shared/widgets/custom_textFormField.dart';
-import '../../../../shared/widgets/text_button_with_underline.dart';
-import '../../../../src/preferences/cont_colores.dart';
+import '../../../../../shared/widgets/custom_textFormField.dart';
+import '../../../../../shared/widgets/text_button_with_underline.dart';
+import '../../../../../src/preferences/cont_colores.dart';
+import '../biometric_id/touch_id_page.dart';
 
 class LogInPage extends StatelessWidget {
   LogInPage({Key? key}) : super(key: key);

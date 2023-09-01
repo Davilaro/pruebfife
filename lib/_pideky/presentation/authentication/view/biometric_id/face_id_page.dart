@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:local_auth/local_auth.dart';
 
-import '../../../../shared/widgets/boton_agregar_carrito.dart';
-import '../../../../shared/widgets/popups.dart';
-import '../../../../src/preferences/cont_colores.dart';
+import '../../../../../shared/widgets/boton_agregar_carrito.dart';
+import '../../../../../shared/widgets/popups.dart';
+import '../../../../../src/preferences/cont_colores.dart';
 
 class FaceIdPage extends StatefulWidget {
   const FaceIdPage();

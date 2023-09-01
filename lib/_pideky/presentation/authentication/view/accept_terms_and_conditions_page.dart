@@ -1,140 +1,131 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
-import '../../../../shared/widgets/popups.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
+import '../../../../src/controllers/state_controller_radio_buttons.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
-
-class TermsAndConditionsPage extends StatefulWidget {
-  const TermsAndConditionsPage();
-
-  @override
-  _TermsAndConditionsPageState createState() => _TermsAndConditionsPageState();
-}
-
-class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
-
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
-  bool acceptTerms = false;
-  bool authorizeDataTreatment = false;
-
+class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(StateControllerRadioButtons());
+
     return Scaffold(
-      backgroundColor: ConstantesColores.color_fondo_gris,
-      body: Container( 
+      backgroundColor: Colors.grey[200],
+      body: Container(
         padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Form(
-          key: _formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                image: AssetImage('assets/image/Icon_Terminos_y_condiciones.png'),
-                fit: BoxFit.contain,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage('assets/image/Icon_Terminos_y_condiciones.png'),
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Términos y condiciones',
+              style: TextStyle(
+                color: ConstantesColores.azul_precio,
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
               ),
-              SizedBox(height: 30),
-              Text(
-                'Términos y condiciones',
-                style: TextStyle(
-                  color: HexColor("#41398D"),
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
+            ),
+            SizedBox(height: 25),
+            Obx(
+              () => buildCheckboxRow(
+                text: 'Acepto Términos y condiciones',
+                value: controller.acceptTerms.value,
+                onChanged: () {
+                  controller.toggleAcceptTerms();
+                },
+              ),
+            ),
+            Container(
+              height: 70,
+              child: Obx(
+                () =>
+                    // buildCheckboxRow(
+                    //   text: 'Autorizo tratamiento de mis \n datos personales',
+                    //   value: controller.authorizeDataTreatment.value,
+                    //   onChanged: () {
+                    //     controller.toggleAuthorizeDataTreatment();
+                    //   },
+                    Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      checkColor: ConstantesColores.azul_precio,
+                      shape: CircleBorder(),
+                      activeColor: ConstantesColores.azul_precio,
+                      value: controller.authorizeDataTreatment.value,
+                      onChanged: (_) {
+                        controller.toggleAuthorizeDataTreatment();
+                      },
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 12),
+                      child: TextButtonWithUnderline(
+                        text: 'Autorizo tratamiento de mis \n datos personales',
+                        onPressed: () {},
+                        textColor: ConstantesColores.gris_sku,
+                        textSize: 15.0,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    shape: CircleBorder(),
-                    activeColor: HexColor("#41398D"),
-                    value: acceptTerms,
-                    onChanged: (newValue) {
-                      setState(() {
-                        acceptTerms = newValue ?? false;
-                      });
-                    },
-                  ),
-                  TextButtonWithUnderline(
-                    text: "Acepto Términos y condiciones",
-                    onPressed: () {},
-                    textColor: HexColor("#41398D"),
-                    textSize: 15.0,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    shape: CircleBorder(),
-                    activeColor: HexColor("#41398D"),
-                    value: authorizeDataTreatment,
-                    onChanged: (newValue) {
-                      setState(() {
-                        authorizeDataTreatment = newValue ?? false;
-                      });
-                    },
-                  ),
-                  //SizedBox(height: 15),
-                  Container(
-                    padding: EdgeInsets.only(top: 20),
-                    alignment: Alignment.bottomLeft,
-                    child: TextButtonWithUnderline(
-                      text: "Autorizo tratamiento de mis datos \n personales",
-                      onPressed: () {},
-                      textColor: HexColor("#41398D"),
-                      textSize: 15.0,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15,),
-              BotonAgregarCarrito(
+            ),
+            SizedBox(height: 15),
+            Obx(
+              () => BotonAgregarCarrito(
                 borderRadio: 35,
                 height: Get.height * 0.06,
-                color: ConstantesColores.empodio_verde,
-                onTap: () {
-
-                  if (_formkey.currentState!.validate()) {
-                   
-                    if (!acceptTerms) {
-                      showPopup(
-                    context,
-                    'Debes aceptar términos y condiciones',
-                    SvgPicture.asset(
-                      'assets/image/Icon_incorrecto.svg',
-                    ));
-                      return;
-                    }
-                    if (!authorizeDataTreatment) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Debes autorizar el tratamiento de tus datos personales.'),
-                      ));
-                      return;
-                    }
-                    
-                   
-                    Get.to(() => ConfirmIdentitySendSMSPage());
-                    showPopup(
-                      context,
-                      'Has aceptado los términos y condiciones',
-                      SvgPicture.asset('assets/image/Icon_correcto.svg'),
-                    );
-                  }
-                },
+                color: controller.isButtonEnabled
+                    ? ConstantesColores.empodio_verde
+                    : Colors.grey,
+                onTap: controller.isButtonEnabled
+                    ? () {
+                        Get.to(() => ConfirmIdentitySendSMSPage());
+                        // Realizar otras acciones al hacer clic
+                      }
+                    : null,
                 text: "Aceptar",
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget buildCheckboxRow({
+    required String text,
+    required bool value,
+    required VoidCallback onChanged,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+          checkColor: ConstantesColores.azul_precio,
+          shape: CircleBorder(),
+          activeColor: ConstantesColores.azul_precio,
+          value: value,
+          onChanged: (_) {
+            onChanged();
+          },
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: TextButtonWithUnderline(
+            text: text,
+            onPressed: () {},
+            textColor: ConstantesColores.gris_sku,
+            textSize: 15.0,
+          ),
+        ),
+      ],
     );
   }
 }
