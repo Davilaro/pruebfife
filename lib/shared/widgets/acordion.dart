@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,12 +142,21 @@ class _EstadoAcordion extends State<Acordion> {
                 ),
                 Visibility(
                     visible: mostrarOpacidad == 1 ? true : false,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black45,
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      height: Get.height * 0.105,
-                      width: Get.width,
+                    child: GestureDetector(
+                      onTap: mostrarOpacidad == 1
+                          ? () => mostrarAlertCartera(
+                              context,
+                              "Estos Productos no se enceuntran disponibles. Revisa el estado de tu cartera para poder comprar",
+                              null)
+                          : () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        height: Get.height * 0.105,
+                        width: Get.width,
+                      ),
                     ))
               ],
             ),
