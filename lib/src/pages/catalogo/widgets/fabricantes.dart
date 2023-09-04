@@ -103,9 +103,10 @@ class _FabricantesState extends State<Fabricantes> {
       final widgetTemp = GestureDetector(
         onTap: element.bloqueoCartera == 1
             ? () => mostrarAlertCartera(
-                context,
-                "Estos Productos no se enceuntran disponibles. Revisa el estado de tu cartera para poder comprar",
-                null)
+                  context,
+                  "Estos productos no se encuentran disponibles. Revisa el estado de tu cartera para poder comprar.",
+                  null,
+                )
             : () => {
                   //FIREBASE: Llamamos el evento select_content
                   TagueoFirebase().sendAnalityticSelectContent(

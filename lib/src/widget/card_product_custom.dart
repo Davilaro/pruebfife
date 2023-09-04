@@ -54,9 +54,10 @@ class _CardProductCustomState extends State<CardProductCustom> {
           onTap: widget.producto.bloqueoCartera == 0
               ? widget.onTapCard
               : () => mostrarAlertCartera(
-                  context,
-                  "Este Producto no se enceuntra disponible. Revisa el estado de tu cartera para poder comprar",
-                  null),
+                    context,
+                    "Este producto no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
+                    null,
+                  ),
           child: Stack(
             children: [
               Container(

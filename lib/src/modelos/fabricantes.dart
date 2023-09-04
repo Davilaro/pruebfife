@@ -24,6 +24,7 @@ class Fabricantes {
       this.texto1,
       this.texto2,
       this.diaVisita,
+      this.verPopUp,
       this.bloqueoCartera,
       required this.diasEntrega,
       this.razonSocial});
@@ -42,6 +43,7 @@ class Fabricantes {
   int? restrictivoNoFrecuencia;
   int? itinerario;
   int? bloqueoCartera;
+  int? verPopUp;
   String? texto1;
   String? texto2;
   String? diaVisita;
@@ -70,7 +72,9 @@ class Fabricantes {
       texto1: json["texto1"],
       texto2: json["texto2"],
       itinerario: json["itinerario"],
-      bloqueoCartera: json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
+      bloqueoCartera:
+          json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
+      verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],
       diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"]);
 
   Map<String, dynamic> toJson() => {
@@ -92,6 +96,7 @@ class Fabricantes {
         "texto1": texto1,
         "texto2": texto2,
         "itinerario": itinerario,
-        "diaEntrega": diasEntrega
+        "diaEntrega": diasEntrega,
+        "vePopUp": verPopUp,
       };
 }

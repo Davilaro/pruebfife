@@ -226,7 +226,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     try {
       var query = '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
-      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera,
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera, f.VisualizacionPopUp as verPopUp,
 		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
       FROM Fabricante f
 	    WHERE f.empresa LIKE '%$buscar%' OR f.nombrecomercial LIKE '%$buscar%'

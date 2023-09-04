@@ -1,7 +1,9 @@
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
+import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -285,6 +287,77 @@ void mostrarAlertCartera(
                             "assets/image/btn_aceptar.png",
                           ),
                         ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+}
+
+void mostrarAlertaPopUpVisto(
+    BuildContext context, String proveedores, List listaProveedores) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            content: Container(
+              constraints: BoxConstraints(
+                  minHeight: 200, minWidth: double.infinity, maxHeight: 300),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: ConstantesColores.agua_marina,
+                      size: 74.0,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(2),
+                      width: Get.width * 0.7,
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: new RichText(
+                        textAlign: TextAlign.center,
+                        text: new TextSpan(
+                          text: "Ahora tienes disponibles los productos de ",
+                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                          children: <TextSpan>[
+                            new TextSpan(
+                              text: "$proveedores.",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                            new TextSpan(
+                              text: " Agrégalos en tu siguiente pedido.",
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: BotonAgregarCarrito(
+                        color: ConstantesColores.azul_aguamarina_botones,
+                        height: 40,
+                        onTap: () async {
+                          await Servicies().sendOnPressInactivityByPortfolio(
+                              listaProveedores);
+                          Get.back();
+                        },
+                        text: 'Aceptar',
                       ),
                     )
                   ],

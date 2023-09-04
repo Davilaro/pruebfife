@@ -146,7 +146,7 @@ class _EstadoAcordion extends State<Acordion> {
                       onTap: mostrarOpacidad == 1
                           ? () => mostrarAlertCartera(
                               context,
-                              "Estos Productos no se enceuntran disponibles. Revisa el estado de tu cartera para poder comprar",
+                              "Estos productos no se encuentran disponibles. Revisa el estado de tu cartera para poder comprar.",
                               null)
                           : () {},
                       child: Container(
