@@ -33,6 +33,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
 
   @override
   void initState() {
+    print("entre categorias");
     super.initState();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');

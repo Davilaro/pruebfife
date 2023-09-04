@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -251,15 +253,19 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     await pr.hide();
 
     setState(() {});
-    Navigator.pushReplacementNamed(context, 'tab_opciones');
+
+    Get.offAll(() => TabOpciones());
+    opcionesAppBard!.selectOptionMenu = 0;
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final notificationController =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
     final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
     final controllerNequi = Get.find<MisPagosNequiViewModel>();
+    notificationController.resetMaps();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();
