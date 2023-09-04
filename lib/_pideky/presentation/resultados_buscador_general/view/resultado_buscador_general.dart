@@ -25,7 +25,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
 
   Widget build(BuildContext context) {
-    resultadoBuscadorGeneralVm.selecionarSoloProductos(allresultados);
     resultadoBuscadorGeneralVm.listaProductos.refresh();
 
     return Scaffold(
@@ -50,7 +49,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
-
                       },
                       child: Icon(
                         Icons.arrow_back_ios_new,
@@ -86,9 +84,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     fontWeight: FontWeight.bold))),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-               vertical: Get.height * 0.01
-            ),
+            padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
             child: SizedBox(
               height: Get.height * 0.03,
               child: Row(
@@ -99,8 +95,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     child: CustomButton(
                       isFontBold: true,
                       sizeText: 12,
-                      onPressed: () {}, 
-                      text: 'Promociones', 
+                      onPressed: () {
+                        resultadoBuscadorGeneralVm.cargarProductosPromo();
+                      },
+                      text: 'Promociones',
                       backgroundColor: ConstantesColores.color_fondo_gris,
                       colorContent: ConstantesColores.azul_precio,
                     ),
@@ -111,8 +109,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     child: CustomButton(
                       isFontBold: true,
                       sizeText: 12,
-                      onPressed: () {}, 
-                      text: 'Más vendidos', 
+                      onPressed: () {
+                        resultadoBuscadorGeneralVm.cargarProductosMasVendidos();
+                      },
+                      text: 'Más vendidos',
                       backgroundColor: ConstantesColores.color_fondo_gris,
                       colorContent: ConstantesColores.azul_precio,
                     ),
@@ -123,8 +123,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     child: CustomButton(
                       isFontBold: true,
                       sizeText: 12,
-                      onPressed: () {}, 
-                      text: 'chocolatina', 
+                      onPressed: () {},
+                      text: 'chocolatina',
                       backgroundColor: ConstantesColores.color_fondo_gris,
                       colorContent: ConstantesColores.azul_precio,
                     ),
@@ -140,12 +140,11 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                   crossAxisSpacing: 4.0,
                   mainAxisSpacing: 9.0,
                   childAspectRatio: 2 / 3.1,
-                  
                   padding: EdgeInsets.symmetric(
                       horizontal: Get.width * 0.04,
                       vertical: Get.height * 0.01),
-                  children: resultadoBuscadorGeneralVm.cargarResultadosCard(
-                          context)
+                  children: resultadoBuscadorGeneralVm
+                      .cargarResultadosCard(context)
                       .toList())))
         ],
       ),

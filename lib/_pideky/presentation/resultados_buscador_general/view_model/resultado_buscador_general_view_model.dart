@@ -2,7 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
+import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
@@ -18,6 +21,9 @@ class ResultadoBuscadorGeneralVm extends GetxController {
   final prefs = new Preferencias();
   final TextEditingController controllerUser = TextEditingController();
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final RxBool isPromo = false.obs;
+  final productService = ProductoService(ProductoRepositorySqlite());
+  final catalogSearchViewModel = Get.find<ControllerProductos>();
 
   RxString searchInput = "".obs;
 
@@ -32,27 +38,40 @@ class ResultadoBuscadorGeneralVm extends GetxController {
     searchFuzzyViewModel.runFilter(enteredKeyword);
   }
 
-  void selecionarSoloProductos(List allResultados) {
-    for (var i = 0; i < allResultados.length; i++) {
-      if (allResultados[i] is Producto) {
-        listaProductos.add(allResultados[i]);
-      }
-    }
+  void cargarProductosPromo() async {
+
+    searchFuzzyViewModel.allResultados.value = await productService.cargarProductosInterno(
+        1,
+        searchFuzzyViewModel.controllerUser.text,
+        catalogSearchViewModel.precioMinimo.value,
+        catalogSearchViewModel.precioMaximo.value,
+        0,
+        "",
+        "");
+
+  }
+  void cargarProductosMasVendidos() async {
+
+    // searchFuzzyViewModel.allResultados.value = await productService.cargarProductosFiltroCategoria(
+    //         widget.codigoCategoria,
+    //         widget.tipoCategoria,
+    //         catalogSearchViewModel.precioMinimo.value,
+    //         catalogSearchViewModel.precioMaximo.value,
+    //         widget.codigoSubCategoria,
+    //         widget.codigoMarca);
+
   }
 
   cargarResultadosCard(BuildContext context) {
-
-    
     final List<Widget> opciones = [];
     dynamic widgetTemp;
 
     for (var i = 0; i < searchFuzzyViewModel.allResultados.length; i++) {
-      
       if (searchFuzzyViewModel.allResultados[i] is Producto) {
         widgetTemp = InputValoresCatalogo(
           element: (searchFuzzyViewModel.allResultados[i] as Producto),
           numEmpresa: 'nutresa',
-          isCategoriaPromos: false,
+          isCategoriaPromos: isPromo.value,
           index: i,
         );
       }
@@ -61,14 +80,16 @@ class ResultadoBuscadorGeneralVm extends GetxController {
         widgetTemp = GestureDetector(
           onTap: () async {
             final List<dynamic> listaSubCategorias = await DBProvider.db
-                .consultarCategoriasSubCategorias(searchFuzzyViewModel.allResultados[i].codigo);
+                .consultarCategoriasSubCategorias(
+                    searchFuzzyViewModel.allResultados[i].codigo);
 
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => TabOpcionesCategorias(
                           listaCategorias: listaSubCategorias,
-                          nombreCategoria: searchFuzzyViewModel.allResultados[i].descripcion,
+                          nombreCategoria:
+                              searchFuzzyViewModel.allResultados[i].descripcion,
                         )));
           },
           child: Card(
@@ -76,8 +97,7 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                 borderRadius: BorderRadius.circular(10.0)),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02
-              ),
+                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02),
               child: Column(
                 children: [
                   Expanded(
@@ -113,10 +133,12 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomBuscardorFuzzy(
-                          codCategoria: searchFuzzyViewModel.allResultados[i].codigo,
+                          codCategoria:
+                              searchFuzzyViewModel.allResultados[i].codigo,
                           numEmpresa: 'nutresa',
                           tipoCategoria: 3,
-                          nombreCategoria: searchFuzzyViewModel.allResultados[i].nombre,
+                          nombreCategoria:
+                              searchFuzzyViewModel.allResultados[i].nombre,
                           isActiveBanner: false,
                           locacionFiltro: "marca",
                           codigoProveedor: "",
@@ -127,8 +149,7 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                 borderRadius: BorderRadius.circular(10.0)),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02
-              ),
+                  vertical: Get.height * 0.05, horizontal: Get.width * 0.02),
               child: Column(
                 children: [
                   Expanded(
@@ -163,13 +184,17 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomBuscardorFuzzy(
-                          codCategoria: searchFuzzyViewModel.allResultados[i].empresa,
+                          codCategoria:
+                              searchFuzzyViewModel.allResultados[i].empresa,
                           numEmpresa: 'nutresa',
                           tipoCategoria: 4,
-                          nombreCategoria: searchFuzzyViewModel.allResultados[i].nombrecomercial,
+                          nombreCategoria: searchFuzzyViewModel
+                              .allResultados[i].nombrecomercial,
                           img: searchFuzzyViewModel.allResultados[i].icono,
                           locacionFiltro: "proveedor",
-                          codigoProveedor: searchFuzzyViewModel.allResultados[i].empresa.toString(),
+                          codigoProveedor: searchFuzzyViewModel
+                              .allResultados[i].empresa
+                              .toString(),
                         )));
           },
           child: Card(
@@ -180,7 +205,8 @@ class ResultadoBuscadorGeneralVm extends GetxController {
                   margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   alignment: Alignment.center,
                   child: CachedNetworkImage(
-                      imageUrl: '${searchFuzzyViewModel.allResultados[i].icono}',
+                      imageUrl:
+                          '${searchFuzzyViewModel.allResultados[i].icono}',
                       placeholder: (context, url) =>
                           Image.asset('assets/image/jar-loading.gif'),
                       errorWidget: (context, url, error) =>
