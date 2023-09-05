@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:emart/_pideky/presentation/authentication/view/log_in/log_in_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/register_page.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
@@ -83,7 +85,9 @@ class _SplashState extends State<Splash> {
               : prefs.paisUsuario == 'CO'
                   ? Locale('es', 'CO')
                   : Locale('es', 'CO'));
-          Get.off(() => TabOpciones());
+          Get.off(() =>  LogInPage());
+        //  RegisterPage());
+          //Login());
         }
       }
     } else {

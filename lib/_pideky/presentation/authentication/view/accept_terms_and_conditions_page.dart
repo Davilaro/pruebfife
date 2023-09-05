@@ -1,4 +1,6 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
@@ -9,6 +11,7 @@ import '../../../../src/preferences/cont_colores.dart';
 class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final MiNegocioViewModel viewModel = Get.find();
     final controller = Get.put(StateControllerRadioButtons());
 
     return Scaffold(
@@ -39,6 +42,10 @@ class TermsAndConditionsPage extends StatelessWidget {
                 onChanged: () {
                   controller.toggleAcceptTerms();
                 },
+                onPressed: () => viewModel.terminosDatosPdf != null
+                                    ? verTerminosCondiciones(
+                                        context, viewModel.terminosDatosPdf)
+                                    : null,
               ),
             ),
             Container(
@@ -103,6 +110,7 @@ class TermsAndConditionsPage extends StatelessWidget {
     required String text,
     required bool value,
     required VoidCallback onChanged,
+    required VoidCallback onPressed,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -120,7 +128,7 @@ class TermsAndConditionsPage extends StatelessWidget {
           alignment: Alignment.center,
           child: TextButtonWithUnderline(
             text: text,
-            onPressed: () {},
+            onPressed: onPressed,
             textColor: ConstantesColores.gris_sku,
             textSize: 15.0,
           ),

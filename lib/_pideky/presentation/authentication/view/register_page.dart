@@ -1,12 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
+import 'package:emart/src/controllers/controller_selector_providers.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -14,30 +14,20 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/custom_textFormField.dart';
 import '../../../../shared/widgets/popups.dart';
-import '../../../../src/pages/catalogo/widgets/tab_categorias_opciones.dart';
-import '../../../../src/pages/principal_page/widgets/categorias_card.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage();
 
-  // final TextEditingController _controllerBusinessName = TextEditingController();
-  // final TextEditingController _controllerUserName = TextEditingController();
-  // final TextEditingController _controllerNit = TextEditingController();
-  // final TextEditingController _controllerTelephone = TextEditingController();
-  // final TextEditingController _controllerAdress = TextEditingController();
   final ValidationForms _validationForms = Get.put(ValidationForms());
+  final ControllerSelectorProviders _controllerSelectorProviders =
+      Get.put(ControllerSelectorProviders());
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
   String? value;
-  // String bussinesName = '';
-  // String customerName = '';
-  // String businessAddress = '';
-  // String nit = '';
-  // String cellPhoneNumber = '';
 
   @override
   Widget build(BuildContext context) {
+    RxString prueba = 'prueba'.obs;
     RxList<dynamic> listaFabricante = <dynamic>[].obs;
     final provider = Provider.of<CarroModelo>(context);
     List<dynamic> listaAllFabricantes = [];
@@ -84,7 +74,8 @@ class RegisterPage extends StatelessWidget {
           elevation: 0,
         ),
         body: SingleChildScrollView(
-          child: Container(
+            child: 
+           Container(
             padding: const EdgeInsets.only(top: 10, left: 19, right: 19),
             child: Form(
               // autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -108,7 +99,7 @@ class RegisterPage extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 15.0),
                     width: double.infinity,
-                    child: Text('Nombre Negocio',
+                    child: Text('Nombre Cliente',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: HexColor("#41398D"),
@@ -117,46 +108,40 @@ class RegisterPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   CustomTextFormField(
-                      // errorMessage: 'errer',
-                      // controller: _controllerBusinessName,
-                      hintText: 'Ingrese el nombre de su negocio',
-                      hintStyle: TextStyle(color: HexColor("#41398D")),
-                      backgroundColor: HexColor("#E4E3EC"),
-                      textColor: HexColor("#41398D"),
-                      borderRadius: 35,
-                      prefixIcon: Image.asset('assets/icon/Icon_negocio.png'),
-                      // icon: Icons.business_rounded,
-                      onChanged: (value) {
-                        _validationForms.bussinesName.value = value;
-                        _validationForms.userInteracted.value = true;
-                      },
-                      validator: _validationForms.validateTextFieldNullorEmpty
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty)
-                      //     return 'Campo requerido';
-                      //   if (value.trim().isEmpty) return 'Campo requerido';
-                      // }
-                      ),
-                  SizedBox(height: 20.0),
-                  Container(
-                    padding: EdgeInsets.only(left: 15.0),
-                    width: double.infinity,
-                    child: Text('Nombre cliente',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: HexColor("#41398D"),
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                  SizedBox(height: 10.0),
-                  CustomTextFormField(
-                      //  controller: _controllerUserName,
-                      hintText: 'Ingrese el nombre completo',
+                      hintText: 'Ingrese su nombre completo',
                       hintStyle: TextStyle(color: ConstantesColores.gris_sku),
                       backgroundColor: HexColor("#E4E3EC"),
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
-                      prefixIcon: Image.asset('assets/icon/Icon_cliente.png'),
+                      prefixIcon: SvgPicture.asset('assets/icon/cliente.svg',
+                        fit: BoxFit.scaleDown,
+                      ),
+                      onChanged: (value) {
+                        _validationForms.bussinesName.value = value;
+                        _validationForms.userInteracted.value = true;
+                      },
+                      validator: _validationForms.validateTextFieldNullorEmpty),
+                  SizedBox(height: 20.0),
+                  Container(
+                    padding: EdgeInsets.only(left: 15.0),
+                    width: double.infinity,
+                    child: Text('Nombre negocio',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: HexColor("#41398D"),
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(height: 10.0),
+                  CustomTextFormField(
+                      hintText: 'Ingrese el nombre de su negocio',
+                      hintStyle: TextStyle(color: ConstantesColores.gris_sku),
+                      backgroundColor: HexColor("#E4E3EC"),
+                      textColor: HexColor("#41398D"),
+                      borderRadius: 35,
+                      prefixIcon: SvgPicture.asset('assets/icon/Icon_negocio.svg',
+                      fit: BoxFit.scaleDown,
+                      ),
                       onChanged: (value) {
                         _validationForms.customerName.value = value;
                         _validationForms.userInteracted.value = true;
@@ -175,14 +160,15 @@ class RegisterPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   CustomTextFormField(
-                      //  controller: _controllerAdress,
                       hintText: 'Ingrese dirección de su negocio',
                       hintStyle: TextStyle(color: ConstantesColores.gris_sku),
                       backgroundColor: HexColor("#E4E3EC"),
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
                       prefixIcon:
-                          Image.asset('assets/icon/Icon_ubicación_negocio.png'),
+                          SvgPicture.asset('assets/icon/ubicación_negocio.svg',
+                        fit: BoxFit.scaleDown,
+                          ),
                       onChanged: (value) {
                         _validationForms.businessAddress.value = value;
                         _validationForms.userInteracted.value = true;
@@ -200,11 +186,23 @@ class RegisterPage extends StatelessWidget {
                             fontWeight: FontWeight.w700)),
                   ),
                   SizedBox(height: 10.0),
-
                   Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 20),
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                    padding: EdgeInsets.only(left: 15.0),
+                    width: double.infinity,
+                    child: Text('Selecciona los proveedores que te atienden ',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: ConstantesColores.gris_sku,
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  //Slider Proveedores
+                  Container(
+                      // color: Colors.amber,
+                      width: Get.width * 0.89,
+                      // height: 170,
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 1),
                       child: Column(
                         children: [
                           Padding(
@@ -216,71 +214,63 @@ class RegisterPage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                              height: Get.height * 0.2,
+                              height: Get.height * 0.1,
                               child: _CategoriasCard()),
                         ],
                       )),
-                  //  Obx(
-                  //  () =>  Container(
-                  //    // color: Colors.amber,
-                  //       height: size.height * 0.1,
-                  //      // margin: EdgeInsets.only(top: 10),
-                  //       child: RefreshIndicator(
-                  //         color: ConstantesColores.azul_precio,
-                  //         onRefresh: () async {
-                  //           await LogicaActualizar().actualizarDB();
-
-                  //             cargarLista();
-                  //         },
-
-                  //         child: GridView.count(
-                  //             crossAxisCount: 3,
-                  //             childAspectRatio: 1,
-                  //             crossAxisSpacing: 1.0, // Espaciado vertical
-                  //             mainAxisSpacing: 1.0,
-                  //             children: _cargarFabricantes(listaFabricante, context, provider),
-                  //             //[
-                  //             //   Container(
-                  //             //   color: Colors.black26,
-
-                  //             // ),
-                  //             //  Container(
-                  //             //   color: Colors.black26,
-                  //             // ),
-                  //             //  Container(
-                  //             //   color: Colors.black26,
-                  //             //   )
-                  //            // ]
-                  //           ),
-                  //       )
-                  //       ),
-                  //  ),
 
                   SizedBox(height: 20.0),
-                  Container(
-                    padding: EdgeInsets.only(left: 15.0),
-                    width: double.infinity,
-                    child: Text('Nit',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: HexColor("#41398D"),
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700)),
-                  ),
-                  SizedBox(height: 10.0),
-                  CustomTextFormField(
-                      keyboardType: TextInputType.number,
-                      //   controller: _controllerNit,
-                      hintText: 'Nit',
-                      hintStyle: TextStyle(color: ConstantesColores.gris_sku),
-                      backgroundColor: HexColor("#E4E3EC"),
-                      textColor: HexColor("#41398D"),
-                      borderRadius: 35,
-                      onChanged: (value) {
-                        _validationForms.nit.value = value;
-                        _validationForms.userInteracted.value = true;
-                      },
-                      validator: _validationForms.validateTextFieldNullorEmpty),
+                  Obx(() =>_controllerSelectorProviders.nitControllers.keys.isNotEmpty? Container(
+                              padding: EdgeInsets.only(left: 15.0),
+                              width: double.infinity,
+                              child: Text('Nit',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: HexColor("#41398D"),
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w700)),
+                            ):SizedBox.shrink(),),
+                   
+
+                Obx(() => _controllerSelectorProviders.nitControllers.keys.isNotEmpty?  Column(
+                    children: _controllerSelectorProviders.nitControllers.keys
+                        .map((providerName) {
+                      // final providerName = controllers.keyOf(controller);
+                      return Visibility(
+                        visible: _controllerSelectorProviders.selectedProviders
+                            .contains(providerName),
+                        //visible: ControllerSelectorProviders.to.selectedProviders.contains(prividerName),
+                        child: Column(
+                          children: [
+                           
+                            SizedBox(height: 10.0),
+                             
+                                   CustomTextFormField(
+                                      keyboardType: TextInputType.number,
+                                      hintText:
+                                          'Ingrese su nit para $providerName',
+                                      hintStyle: TextStyle(
+                                          color: ConstantesColores.gris_sku),
+                                      backgroundColor: HexColor("#E4E3EC"),
+                                      textColor: HexColor("#41398D"),
+                                      borderRadius: 35,
+                                      onChanged: (value) {
+                                        _validationForms.nit.value = value;
+                                        _validationForms.userInteracted.value =
+                                            true;
+                                      },
+                                      validator: _validationForms
+                                          .validateTextFieldNullorEmpty,
+                                    )
+                                 
+                            ,
+                            SizedBox(height: 20.0),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ):SizedBox()),
+
                   SizedBox(height: 20.0),
                   Container(
                     padding: EdgeInsets.only(left: 15.0),
@@ -301,7 +291,9 @@ class RegisterPage extends StatelessWidget {
                       backgroundColor: HexColor("#E4E3EC"),
                       textColor: HexColor("#41398D"),
                       borderRadius: 35,
-                      prefixIcon: Image.asset('assets/icon/Icon_telefono.png'),
+                      prefixIcon: SvgPicture.asset('assets/icon/telefono.svg',
+                       fit: BoxFit.scaleDown,
+                      ),
                       onChanged: (value) {
                         _validationForms.cellPhoneNumber.value = value;
                         _validationForms.userInteracted.value = true;
@@ -324,8 +316,10 @@ class RegisterPage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ));
+          )
+        
+        )
+        );
   }
 }
 
@@ -370,6 +364,8 @@ final prefs = new Preferencias();
 
 class _CategoriasCard extends StatelessWidget {
   final TextEditingController controllerSearch = TextEditingController();
+  final ControllerSelectorProviders _controllerSelectorProviders =
+      Get.put(ControllerSelectorProviders());
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
@@ -385,9 +381,7 @@ class _CategoriasCard extends StatelessWidget {
         // } else {
         return ListView(
           scrollDirection: Axis.horizontal,
-          children: 
-            _cargarDatos(context, snapshot.data, provider),
-          
+          children: _cargarDatos(context, snapshot.data, provider),
         );
         //  }
       },
@@ -397,76 +391,52 @@ class _CategoriasCard extends StatelessWidget {
   List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaCategorias,
       CarroModelo provider) {
     final List<Widget> opciones = [];
-    var onTapCard = false.obs;
+   // var onTapCard = false.obs;
 
-    // if (listaCategorias.length == 0) {
-    //   return opciones..add(Text('S.current.no_information_to_display'));
-    // }
+    
 
     listaCategorias.forEach((element) {
       final templete = GestureDetector(
         onTap: () {
-          onTapCard.value = !onTapCard.value;
+          _controllerSelectorProviders.toggleProvider(element.nombrecomercial);
+          // onTapCard.value = !onTapCard.value;
         },
-        child: Obx(
-          ()=> Container(
-              decoration: BoxDecoration(
-                  border: onTapCard.value == true
-                      ? Border.all(width: 1, color: Colors.blue)
-                      : Border()),
-              width: Get.width * 0.31,
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Container(
-                  height: Get.height * 0.1,
-                  width: Get.width * 0.5,
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: element.icono,
-                          height: Get.height * 0.08,
-                          placeholder: (context, url) =>
-                              Image.asset('assets/image/jar-loading.gif'),
-                          errorWidget: (context, url, error) =>
-                              Image.asset('assets/image/logo_login.png'),
-                          fit: BoxFit.contain,
-                        ),
-                        // SvgPicture.network(
-                        //   element.ico,
-                        //   height: Get.height * 0.08,
-                        //   placeholderBuilder: (context) => Container(
-                        //     height: Get.height * 0.08,
-                        //     child: CircularProgressIndicator(
-                        //       valueColor:
-                        //           AlwaysStoppedAnimation<Color>(Colors.white),
-                        //     ),
-                        //   ),
-                        // ),
-                        AutoSizeText(
-                          '${element.nombrecomercial}',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: HexColor("#41398D")),
-                          textAlign: TextAlign.center,
-                          minFontSize: 8,
-                          maxLines: 2,
-                        ),
-                      ],
+        child: Obx(() {
+          final isSelected = _controllerSelectorProviders.selectedProviders
+              .contains(element.nombrecomercial);
+
+          return Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                side:  BorderSide(color:isSelected? ConstantesColores.azul_precio:Colors.white),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+              height: Get.height * 0.15,
+              width: Get.width * 0.23,
+              // padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+              margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+              alignment: Alignment.center,
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: element.icono,
+                      height: Get.height * 0.07,
+                      placeholder: (context, url) =>
+                          Image.asset('assets/image/jar-loading.gif'),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/image/logo_login.png'),
+                      fit: BoxFit.contain,
                     ),
-                  ),
+                 
+                  ],
                 ),
-              )),
-        ),
+              ),
+            ),
+          );
+        }),
       );
 
       opciones.add(templete);
@@ -475,18 +445,4 @@ class _CategoriasCard extends StatelessWidget {
     return opciones;
   }
 
-  // _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
-  //     String nombre) async {
-  //   final List<dynamic> listaSubCategorias =
-  //       await DBProvider.db.consultarCategoriasSubCategorias(codigo);
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) => TabOpcionesCategorias(
-  //                 listaCategorias: listaSubCategorias,
-  //                 nombreCategoria: nombre,
-  //                 )
-  //               )
-  //             );
-  // }
-}
+  }

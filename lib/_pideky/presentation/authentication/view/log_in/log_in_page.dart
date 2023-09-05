@@ -66,7 +66,9 @@ class LogInPage extends StatelessWidget {
                     textColor: HexColor("#41398D"),
                     borderRadius: 35,
                     icon: Icons.perm_identity,
-                    prefixIcon: Image.asset('assets/icon/Icon_usuario.png'),
+                    prefixIcon: SvgPicture.asset('assets/icon/cliente.svg',
+                        fit: BoxFit.scaleDown,
+                      ),
                     onChanged: (value) {
                       _validationForms.userName.value = value;
                       _validationForms.userInteracted2.value = true; // Marca como interactuado
@@ -92,7 +94,8 @@ class LogInPage extends StatelessWidget {
                   textColor: HexColor("#41398D"),
                   borderRadius: 35,
                   icon: Icons.key,
-                  prefixIcon: Image.asset('assets/icon/Icon_contraseña.png'),
+                  prefixIcon: SvgPicture.asset('assets/icon/contraseña.svg',
+                        fit: BoxFit.scaleDown),
                   onChanged: (value) {
                       _validationForms.password.value = value;
                       _validationForms.userInteracted.value = true; // Marca como interactuado
