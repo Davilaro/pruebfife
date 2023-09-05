@@ -1,13 +1,17 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'dart:async';
+
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/routes/custonNavigatorBar.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
@@ -40,6 +44,8 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final String? codigoCategoria;
   final String? locacionFiltro;
   final String codigoProveedor;
+  final String? descripcionCategoria;
+  final String? empresa;
 
   const CustomBuscardorFuzzy(
       {Key? key,
@@ -56,7 +62,9 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       this.codigoSubCategoria,
       this.codigoCategoria,
       required this.locacionFiltro,
-      required this.codigoProveedor})
+      required this.codigoProveedor,
+      this.descripcionCategoria,
+      this.empresa})
       : super(key: key);
 
   @override
@@ -70,10 +78,28 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   List<dynamic> listaAllProducts = [];
   final TextEditingController _controllerSearch = TextEditingController();
   final controlador = Get.find<ControlBaseDatos>();
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
+  final prefs = Preferencias();
+  Timer _timer = Timer(Duration(milliseconds: 1), () {});
+
   @override
   void initState() {
+    if (prefs.usurioLogin == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _validacionGeneralNotificaciones();
+      });
+    }
     cargarProductos();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _controllerSearch.dispose();
+    Get.closeCurrentSnackbar();
+    super.dispose();
   }
 
   @override
@@ -102,7 +128,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                           color: HexColor("#30C3A3")),
                       onPressed: () {
                         controlador.isDisponibleFiltro.value = true;
-                        Navigator.of(context).pop();
+                        Get.back();
                         catalogSearchViewModel.setPrecioMinimo(0);
                         catalogSearchViewModel.setPrecioMaximo(100000);
                       }),
@@ -178,7 +204,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                     height: Get.height * 0.8,
                     width: size.width * 1,
                     padding: EdgeInsets.fromLTRB(
-                        10, 10, 10, widget.isActiveBanner ? 240 : 110),
+                        10, 10, 10, widget.isActiveBanner ? 140 : 50),
                     child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4.0,
@@ -192,17 +218,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
               ),
             ),
           ),
-          bottomNavigationBar: Container(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: CustonNavigatorBar(),
-            ),
-          ),
         ));
   }
+
+  HexColor colorItems() => HexColor("#43398E");
 
   _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
@@ -431,9 +450,140 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-  @override
-  void dispose() {
-    _controllerSearch.dispose();
-    super.dispose();
+  void _validacionGeneralNotificaciones() async {
+    switch (widget.locacionFiltro) {
+      case 'categoria':
+        await controllerNotificaciones
+            .getPushInUpByDataBaseCategorias('Categoría');
+        await controllerNotificaciones
+            .getSlideUpByDataBaseCategorias("Categoría");
+
+        if (controllerNotificaciones.listPushInUpCategorias.isNotEmpty) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
+          if (controllerNotificaciones
+                  .validacionMostrarPushInUp[widget.descripcionCategoria] ==
+              true) {
+            await controllerNotificaciones.showPushInUp(
+                widget.locacionFiltro, widget.descripcionCategoria, context);
+            int elapsedTime = 0;
+            if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
+              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+                if (elapsedTime >= 530) {
+                  controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                      widget.descripcionCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.closePushInUp.value ==
+                    true) {
+                  controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                      widget.descripcionCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.onTapPushInUp.value ==
+                    true) {
+                  timer.cancel();
+                }
+                elapsedTime++;
+              });
+            }
+          }
+        } else if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
+          controllerNotificaciones.closeSlideUp.value = false;
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.descripcionCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.descripcionCategoria, context);
+          }
+        }
+        break;
+      case 'marca':
+        await controllerNotificaciones.getPushInUpByDataBaseMarcas('Marcas');
+        await controllerNotificaciones.getSlideUpByDataBaseMarcas("Marcas");
+        if (controllerNotificaciones.listPushInUpMarcas.isNotEmpty) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
+          if (controllerNotificaciones
+                  .validacionMostrarPushInUp[widget.nombreCategoria] ==
+              true) {
+            await controllerNotificaciones.showPushInUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+            if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+              int elapsedTime = 0;
+              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+                if (elapsedTime >= 530) {
+                  controllerNotificaciones.showSlideUp(
+                      widget.locacionFiltro, widget.nombreCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.closePushInUp.value ==
+                    true) {
+                  controllerNotificaciones.showSlideUp(
+                      widget.locacionFiltro, widget.nombreCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.onTapPushInUp.value ==
+                    true) {
+                  timer.cancel();
+                }
+                elapsedTime++;
+              });
+            }
+          }
+        } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+          controllerNotificaciones.closeSlideUp.value = false;
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.nombreCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+          }
+        }
+        break;
+      case 'proveedor':
+        await controllerNotificaciones
+            .getPushInUpByDataBaseProveedores('Proveedor');
+        await controllerNotificaciones
+            .getSlideUpByDataBaseProveedores("Proveedor");
+        if (controllerNotificaciones.listPushInUpProveedores.isNotEmpty) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
+          if (controllerNotificaciones
+                  .validacionMostrarPushInUp[widget.nombreCategoria] ==
+              true) {
+            await controllerNotificaciones.showPushInUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+            if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+              int elapsedTime = 0;
+              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+                if (elapsedTime >= 530) {
+                  controllerNotificaciones.showSlideUp(
+                      widget.locacionFiltro, widget.nombreCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.closePushInUp.value ==
+                    true) {
+                  controllerNotificaciones.showSlideUp(
+                      widget.locacionFiltro, widget.nombreCategoria, context);
+                  timer.cancel();
+                } else if (controllerNotificaciones.onTapPushInUp.value ==
+                    true) {
+                  timer.cancel();
+                }
+                elapsedTime++;
+              });
+            }
+          }
+        } else if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.nombreCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.closeSlideUp.value = false;
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+          }
+        }
+        break;
+      default:
+    }
   }
 }

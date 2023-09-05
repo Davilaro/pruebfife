@@ -20,6 +20,7 @@ class UxcamTagueo {
 
     String fechaInicial = '';
     String fechaFinal = '';
+    var numeroOrdenes = 0;
 
     var datosCliente = await DBProviderHelper.db.consultarDatosCliente();
     //se define el nombre del usuarios nit + nombre
@@ -48,17 +49,26 @@ class UxcamTagueo {
           '${now.year}-${now.month.toString().length > 1 ? now.month : '0${now.month}'}-01';
     }
     try {
+      // dynamic resQuery = await misPedidosViewModel.misPedidosService
+      //     .consultarHistoricos("-1", fechaInicial, fechaFinal);
       dynamic resQuery = await misPedidosViewModel.misPedidosService
           .consultarHistoricos("-1", fechaInicial, fechaFinal);
+      List auxiliar = [];
+      for (var i = 0; i < resQuery.length; i++) {
+        if (!auxiliar.contains(resQuery[i].fechaTrans)) {
+          auxiliar.add(resQuery[i].fechaTrans);
+        }
+      }
 
       // se define el tipo de usuarios, de acuerdo a la cantidad de compras en el mes anterior
-      if (resQuery.length == 1) {
+      if (auxiliar.length == 1) {
         typeUser = "Begginer";
-      } else if (resQuery.length >= 4) {
+      } else if (auxiliar.length >= 4) {
         typeUser = "Digitalizado";
-      } else if (resQuery.length > 1 && resQuery.length <= 3) {
+      } else if (auxiliar.length > 1 && auxiliar.length <= 3) {
         typeUser = "Progreso";
       }
+      numeroOrdenes = auxiliar.length;
     } catch (e) {
       print('Evento validarTipoUsuario fallo peticion historico $e');
     }
@@ -66,6 +76,7 @@ class UxcamTagueo {
     //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
+    FlutterUxcam.setUserProperty("number_of_orders", numeroOrdenes.toString());
     FlutterUxcam.setUserProperty("nit_client", datosCliente[0].nit);
     FlutterUxcam.setUserProperty("City", prefs.ciudad);
     FlutterUxcam.setUserProperty("Country", prefs.paisUsuario);
@@ -506,6 +517,35 @@ class UxcamTagueo {
         );
     } catch (e) {
       print('Error tagueo clickPlaceIndividualOrder $e');
+    }
+  }
+
+  void onTapSlideUp(close) {
+    try {
+      if (prefs.usurioLogin == 1) {
+        FlutterUxcam.logEventWithProperties("onTapSlideUp", {
+          "close" : close,
+          "navegation" : true,
+          "City": prefs.ciudad ?? "",
+          "Country": prefs.paisUsuario ?? "CO"
+        });
+      }
+    } catch (e) {
+      print('Error tagueo onTapSlideUp $e');
+    }
+  }
+  void onTapPushInUp(close) {
+    try {
+      if (prefs.usurioLogin == 1) {
+        FlutterUxcam.logEventWithProperties("onTapPushInUp", {
+          "close" : close,
+          "navegation" : close == true? false : true,
+          "City": prefs.ciudad ?? "",
+          "Country": prefs.paisUsuario ?? "CO"
+        });
+      }
+    } catch (e) {
+      print('Error tagueo onTapPushInUp $e');
     }
   }
 }

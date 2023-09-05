@@ -207,6 +207,9 @@ class Preferencias {
     _prefs.setString("direccionsucursal", value);
   }
 
+
+
+
   clear() async {
     await _prefs.clear();
   }

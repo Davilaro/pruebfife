@@ -1,9 +1,14 @@
+import 'package:emart/src/utils/alertas.dart';
+
+import '../../../shared/widgets/new_app_bar.dart';
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -13,6 +18,7 @@ import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
@@ -20,19 +26,16 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/routes/custonNavigatorBar.dart';
+import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:connectivity/connectivity.dart';
-
-import '../../../shared/widgets/new_app_bar.dart';
 
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
@@ -50,9 +53,12 @@ class _TabOpcionesState extends State<TabOpciones>
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
+  final MiNegocioViewModel viewModelNegocio = Get.find();
   ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
@@ -62,13 +68,16 @@ class _TabOpcionesState extends State<TabOpciones>
     statusBarColor: ConstantesColores.color_fondo_gris,
     statusBarIconBrightness: Brightness.dark,
   );
+
   @override
   void initState() {
     super.initState();
-    print("dia actual ${prefs.diaActual}");
+
     _focusNode.dispose();
     hasInternet = true;
+
     cargarSecciones();
+    viewModelNegocio.cargarArchivos(prefs);
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -78,6 +87,7 @@ class _TabOpcionesState extends State<TabOpciones>
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
+    verPopUp();
     setState(() {});
   }
 
@@ -89,6 +99,8 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   Widget build(BuildContext context) {
     providerDatos = Provider.of<DatosListas>(context, listen: true);
+    final provider = Provider.of<OpcionesBard>(context, listen: true);
+
     return WillPopScope(
         onWillPop: () async => false,
         child: AnnotatedRegion(
@@ -105,17 +117,20 @@ class _TabOpcionesState extends State<TabOpciones>
               child: SafeArea(child: NewAppBar(drawerKey)),
             ),
             body: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                },
-                child: _HomePageBody()),
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: _HomePageBody(
+                provider: provider,
+              ),
+            ),
             bottomNavigationBar: Container(
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30.0),
                   topRight: Radius.circular(30.0),
                 ),
-                child: CustonNavigatorBar(),
+                child: CustomNavigatonBar(),
               ),
             ),
           ),
@@ -180,57 +195,128 @@ class _TabOpcionesState extends State<TabOpciones>
     _tabControllerTemplate.addListener(() {
       cargoControllerBase.cargoBaseDatos(_tabControllerTemplate.index);
     });
+
     cargoControllerBase.initControllertabController(_tabControllerTemplate);
+  }
+
+  void verPopUp() async {
+    var listaMora = '';
+    var listaProveedores = [];
+    final fabricantes = await DBProvider.db.consultarFricante('');
+    fabricantes.forEach((element) {
+      print("bloqueo : ${element.verPopUp}");
+      if (element.verPopUp == 0) {
+        listaMora = listaMora + element.nombrecomercial + ', ';
+        listaProveedores.add(element.empresa);
+      }
+    });
+    if (listaMora != '') {
+      listaMora = listaMora.substring(0, listaMora.length - 2);
+      mostrarAlertaPopUpVisto(context, listaMora, listaProveedores);
+    }
   }
 }
 
 class _HomePageBody extends StatelessWidget {
+  final provider;
   final cargoConfirmar = Get.find<ControlBaseDatos>();
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
+
+  _HomePageBody({Key? key, required this.provider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OpcionesBard>(context);
     final currenIndex = provider.selectOptionMenu;
 
-    switch (currenIndex) {
-      case 0:
-        return PrincipalPage();
+    return PageView(
+      controller: provider.pageController,
+      physics: NeverScrollableScrollPhysics(),
+      onPageChanged: (value) {
+        switch (currenIndex) {
+          case 0:
+            return UxcamTagueo().selectFooter('Principal Page');
 
-      case 1:
-        {
-          if (provider.getIisLocal != 0) {
-            //FIREBASE: Llamamos el evento select_content
-            TagueoFirebase().sendAnalityticSelectContent(
-                "Footer",
-                "${S.current.catalog}",
-                "",
-                "",
-                "${S.current.catalog}",
-                'MainActivity');
-            //UXCam: Llamamos el evento selectFooter
-            UxcamTagueo().selectFooter('${S.current.catalog}');
+          case 1:
+            {
+              if (provider.getIisLocal != 0) {
+                //FIREBASE: Llamamos el evento select_content
+                TagueoFirebase().sendAnalityticSelectContent(
+                    "Footer",
+                    "${S.current.catalog}",
+                    "",
+                    "",
+                    "${S.current.catalog}",
+                    'MainActivity');
+                //UXCam: Llamamos el evento selectFooter
+                UxcamTagueo().selectFooter('${S.current.catalog}');
 
-            onClickVerMas('Categorías', provider);
-          }
-          return TabCategoriaMarca();
+                onClickVerMas('Categorías', provider);
+              }
+              return UxcamTagueo().selectFooter('Tab Categoria Marca');
+            }
+
+          case 2:
+            return UxcamTagueo().selectFooter('Pedido Sugerido');
+
+          case 3:
+            {
+              //UXCam: Llamamos el evento selectFooter
+              return UxcamTagueo().selectFooter('Mis pedidos');
+            }
+
+          case 4:
+            return UxcamTagueo().selectFooter('Mis Negocio');
         }
+      },
+      children: [
+        PrincipalPage(),
+        TabCategoriaMarca(),
+        PedidoSugeridoPage(),
+        MisPedidosPage(),
+        MiNegocio()
+      ],
+    );
 
-      case 2:
-        return PedidoSugeridoPage();
+    // switch (currenIndex) {
+    //   case 0:
+    //     return PrincipalPage();
 
-      case 3:
-        {
-          //UXCam: Llamamos el evento selectFooter
-          UxcamTagueo().selectFooter('Mis pedidos');
-          return MisPedidosPage();
-        }
+    //   case 1:
+    //     {
+    //       if (provider.getIisLocal != 0) {
+    //         //FIREBASE: Llamamos el evento select_content
+    //         TagueoFirebase().sendAnalityticSelectContent(
+    //             "Footer",
+    //             "${S.current.catalog}",
+    //             "",
+    //             "",
+    //             "${S.current.catalog}",
+    //             'MainActivity');
+    //         //UXCam: Llamamos el evento selectFooter
+    //         UxcamTagueo().selectFooter('${S.current.catalog}');
 
-      case 4:
-        return MiNegocio();
+    //         onClickVerMas('Categorías', provider);
+    //       }
+    //       return TabCategoriaMarca();
+    //     }
 
-      default:
-        return Text('Prueba'); //PrincipalPage();
-    }
+    //   case 2:
+    //     return PedidoSugeridoPage();
+
+    //   case 3:
+    //     {
+    //       //UXCam: Llamamos el evento selectFooter
+    //       UxcamTagueo().selectFooter('Mis pedidos');
+    //       return MisPedidosPage();
+    //     }
+
+    //   case 4:
+    //     return MiNegocio();
+
+    //   default:
+    //     return Text('Prueba'); //PrincipalPage();
+    // }
   }
 
   void onClickVerMas(String ubicacion, provider) {
@@ -238,7 +324,7 @@ class _HomePageBody extends StatelessWidget {
       if (cargoConfirmar.seccionesDinamicas[i].descripcion.toLowerCase() ==
           ubicacion.toLowerCase()) {
         if (provider.selectOptionMenu != 1) {
-          provider.selectOptionMenu = 1;
+          provider.paginaActual = 1;
           provider.setIsLocal = 0;
         }
         cargoConfirmar.tabController.index = i;

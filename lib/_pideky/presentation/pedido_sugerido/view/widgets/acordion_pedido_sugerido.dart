@@ -28,6 +28,8 @@ List<Widget> acordionDinamico(BuildContext context) {
     lista.add(
       Container(
           child: Acordion(
+              bloqueoCartera: controller.listaProductosPorFabricante[fabricante]
+                  ["bloqueoCartera"],
               section: "PedidoSugerido",
               sectionName:
                   "${controller.listaProductosPorFabricante[fabricante]["nombrecomercial"]}",

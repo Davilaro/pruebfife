@@ -2,6 +2,7 @@
 
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -236,6 +237,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     final providerCar = Provider.of<OpcionesBard>(context, listen: false);
     final productViewModel = Get.find<ProductoViewModel>();
     final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
+
     pr = ProgressDialog(context);
     pr.style(
         message: 'Cambiando sucursal',
@@ -262,16 +264,20 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
     confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
+
     Get.offAll(() => TabOpciones());
+    opcionesAppBard!.selectOptionMenu = 0;
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final notificationController =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    notificationController.resetMaps();
     prefs.direccionSucursal = elemento.direccion;
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();
