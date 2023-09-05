@@ -1,4 +1,11 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:emart/_pideky/infrastructure/authentication/login/login_api.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:get/get.dart';
+
+import '../../_pideky/domain/authentication/login/service/i_login_service.dart';
 
 class ValidationForms extends GetxController {
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -15,6 +22,9 @@ class ValidationForms extends GetxController {
 
   RxBool userInteracted = false.obs;
   RxBool userInteracted2 = false.obs;
+  final prefs = Preferencias();
+
+  final loginRepository = LoginService(LoginApi());
 
   final passwordError = 'No es una contraseña válida'.obs;
 
@@ -32,53 +42,20 @@ class ValidationForms extends GetxController {
 
   late String _password;
 
-  //Variable para comparar las contraseñas
-  // bool _passwordsMatch = false;
+  Future<bool> sendUserAndPassword(String user, String password) async {
+    final isValid = await loginRepository.validationUserAndPassword(
+        user, encryptedPaswword(password));
+    print("valido  $isValid");
+    print("valido  ${prefs.codigoUnicoPideky}");
+    if (isValid) return true;
+    return false;
+  }
 
-  //Maneja la barra indicadora de contraseña de la vista de creación de contraseña
-  // void tagCheckPassword(String value) {
-  //   _password = value.trim();
-
-  //   if (_password.isEmpty) {
-  //     _strength = 0;
-  //     _displayText = '';
-  //   } else if (_password.length < 6) {
-  //     _strength = 1 / 4;
-  //     _displayText = 'débil';
-  //   } else if (_password.length < 8) {
-  //     _strength = 2 / 4;
-  //     _displayText = 'Medio';
-  //   } else {
-  //     if (!passwordRegExp.hasMatch(_password)) {
-  //       _strength = 3 / 4;
-  //       _displayText = 'Fuerte';
-  //     } else {
-  //       _strength = 1;
-  //       _displayText = 'Fuerte';
-  //     }
-  //   }
-  // }
-
-  //     void tagCheckPassword(String password) {
-  //   if (password.isEmpty) {
-  //     strength.value = 0;
-  //     displayText.value = '';
-  //   } else if (password.length < 6) {
-  //     strength.value = 1 / 4;
-  //     displayText.value = 'débil';
-  //   } else if (password.length < 8) {
-  //     strength.value = 2 / 4;
-  //     displayText.value = 'Medio';
-  //   } else {
-  //     if (!passwordRegExp.hasMatch(password)) {
-  //       strength.value = 3 / 4;
-  //       displayText.value = 'Fuerte';
-  //     } else {
-  //       strength.value = 1;
-  //       displayText.value = 'Fuerte';
-  //     }
-  //   }
-  // }
+  String encryptedPaswword(String password) {
+    var bytes = utf8.encode(password);
+    var digest = sha512.convert(bytes);
+    return digest.toString();
+  }
 
   void tagCheckPassword(String value) {
     _password = value.trim();

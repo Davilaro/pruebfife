@@ -207,7 +207,13 @@ class Preferencias {
     _prefs.setString("direccionsucursal", value);
   }
 
+  get isFirstTime {
+    return _prefs.getBool("isfirsttime") ?? true;
+  }
 
+  set isFirstTime(dynamic value) {
+    _prefs.setBool("isfirsttime", value);
+  }
 
 
   clear() async {

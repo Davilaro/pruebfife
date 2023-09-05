@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/_pideky/presentation/authentication/view/log_in/log_in_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/log_in_page_new_user.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
@@ -88,13 +88,14 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
             BotonAgregarCarrito(
                 height: Get.height * 0.06,
                 color: ConstantesColores.agua_marina,
-                onTap: 
-                () => Get.to(() => Login()),
-                
+                onTap: () {
+                  prefs.isFirstTime = true;
+                  Get.offAll(() => LogInPageNewUser());
+                },
+
                 // confirmacionPaisViewModel.confirmarPais(
                 //     itemSeleccionado.value, false),
-                 text: S.current.accept
-                 )
+                text: S.current.accept)
           ],
         ),
       ),
