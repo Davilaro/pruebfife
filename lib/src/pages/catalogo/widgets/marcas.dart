@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
@@ -102,11 +103,11 @@ class _MarcasWidgetState extends State<MarcasWidget> {
       final widgetTemp = GestureDetector(
         onTap: () => {
           //Firebase: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent("Marcas", element.titulo,
-              element.titulo, element.titulo, element.codigo, 'ViewMarcs'),
+          TagueoFirebase().sendAnalityticSelectContent("Marcas", (element as Marca).nombre,
+              element.nombre, element.nombre, element.codigo, 'ViewMarcs'),
           //UXCam: Llamamos el evento seeBrand
-          UxcamTagueo().seeBrand(element.titulo),
-          _onClickCatalogo(element.codigo, context, provider, element.titulo)
+          UxcamTagueo().seeBrand(element.nombre),
+          _onClickCatalogo(element.codigo, context, provider, element.nombre)
         },
         child: Card(
           shape:
