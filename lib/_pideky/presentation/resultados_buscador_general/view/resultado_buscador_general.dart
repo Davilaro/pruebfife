@@ -3,9 +3,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/filtros_resultado_general/view/filtros_resultado_general.dart';
 import 'package:emart/_pideky/presentation/resultados_buscador_general/view_model/resultado_buscador_general_view_model.dart';
 import 'package:emart/_pideky/presentation/resultados_buscador_general/widgets/campo_texto_resultado.dart';
-import 'package:emart/_pideky/presentation/resultados_buscador_general/widgets/filtros_resultado_general.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -74,7 +74,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FiltrosResultadoGeneral(
+                              builder: (context) => FiltrosResultadoGeneralView(
                                     codCategoria: '',
                                     codigoProveedor: '',
                                     nombreCategoria: '',
@@ -140,19 +140,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                       colorContent: ConstantesColores.azul_precio,
                     ),
                   ),
-                  SizedBox(width: Get.width * 0.02),
-                  Expanded(
-                    flex: 3,
-                    child: CustomButton(
-                      isFontBold: true,
-                      sizeText: 12,
-                      onPressed: () {},
-                      text: 'chocolatina',
-                      backgroundColor: ConstantesColores.color_fondo_gris,
-                      colorContent: ConstantesColores.azul_precio,
-                    ),
-                  ),
                   SizedBox(width: Get.width * 0.05),
+                  
                 ],
               ),
             ),

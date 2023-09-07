@@ -1,12 +1,16 @@
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/filtros_resultado_general/view_model/filtros_resultado_general_vm.dart';
 import 'package:emart/_pideky/presentation/resultados_buscador_general/view/resultado_buscador_general.dart';
 import 'package:emart/_pideky/presentation/resultados_buscador_general/view_model/resultado_buscador_general_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
+import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/fabricantes.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
+import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -17,12 +21,12 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-class FiltrosResultadoGeneral extends StatefulWidget {
+class FiltrosResultadoGeneralView extends StatefulWidget {
   final String codCategoria;
   final String nombreCategoria;
   final String? urlImagen;
   final String codigoProveedor;
-  FiltrosResultadoGeneral(
+  FiltrosResultadoGeneralView(
       {Key? key,
       required this.codCategoria,
       required this.nombreCategoria,
@@ -31,14 +35,15 @@ class FiltrosResultadoGeneral extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FiltrosResultadoGeneralState createState() =>
-      _FiltrosResultadoGeneralState();
+  _FiltrosResultadoGeneralViewState createState() =>
+      _FiltrosResultadoGeneralViewState();
 }
 
-class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
+class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralView> {
   ControllerProductos catalogSearchViewModel = Get.find();
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
+  final filtrosResultadoGeneralVm= Get.put(FiltrosResultadoGeneralVm());
   RangeValues values = RangeValues(0, 500000);
   int valorRound = 3;
 
@@ -51,6 +56,16 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
   RxList<String> listSubCategorias = ['Todas'].obs;
   RxList<String> listMarcas = ['Todas'].obs;
   RxList<String> listProveedor = ['Todas'].obs;
+
+  RxList<Fabricantes> listObjectoProveedor = <Fabricantes>[].obs;
+  RxList<Categorias> listObjectoSubCategoria = <Categorias>[].obs;
+  RxList<Categorias> listObjectoCategoria = <Categorias>[].obs;
+  RxList<Marca> listObjectoMarca = <Marca>[].obs;
+
+  String? codigoProveedor;
+  String? codigoSubCategoria; 
+  String? codigoMarca; 
+  String? codigoCategoria; 
 
   Color buttonColor = ConstantesColores.color_fondo_gris;
   Color textColor = ConstantesColores.azul_precio;
@@ -67,6 +82,7 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final controlador = Get.find<ControlBaseDatos>();
+    final providerDatos = Provider.of<DatosListas>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Proveedor',
@@ -150,10 +166,18 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
                           onChange: (String? value) async {
                             setState(() {
                               dropdownValueProveedor = value!;
+                              codigoProveedor = listObjectoProveedor
+                                  .where((element) =>
+                                      element.nombrecomercial ==
+                                      dropdownValueProveedor)
+                                  .first
+                                  .empresa!;
+                              
                             });
+
                             if (dropdownValueProveedor != null &&
                                 dropdownValueProveedor != "Todas") {
-                              await cargarProveedor();
+                              await cargarCategorias();
                             }
                           })),
                       SizedBox(
@@ -169,57 +193,69 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
                           onChange: (String? value) async {
                             setState(() {
                               dropdownValueCategoria = value!;
+                              codigoCategoria = listObjectoCategoria
+                                  .where((element) =>
+                                      element.descripcion ==
+                                      dropdownValueCategoria)
+                                  .first
+                                  .codigo;
                             });
                             if (dropdownValueCategoria != null &&
                                 dropdownValueCategoria != "Todas") {
                               await cargarSubCategorias();
                               await cargarMarcasPorCategoria(1);
-                            } 
-                            
+                            }
                           })),
                       SizedBox(
                         height: 5,
                       ),
                       Obx(() => DropDownFiltroProveedores(
-                          titulo: "Subcategoría",
-                          listaItems: listSubCategorias.value,
-                          hin: "Todas",
-                          color: buttonColor,
-                          textcolor: textColor,
-                          onChange: (String? value) async {
-                            setState(() {
-                              dropdownValueMarca = "Todas";
-                              dropdownValueSubCategoria = value!;
-                            });
-                            if ((dropdownValueSubCategoria == "Todas" ||
-                                        dropdownValueSubCategoria == null) &&
-                                    dropdownValueCategoria == "Todas" ||
-                                dropdownValueCategoria == null) {
-                              
-                              await cargarMarcasPorCategoria(2);
-                            }
-                          },
-                          value: dropdownValueSubCategoria)),
+                            titulo: "Subcategoría",
+                            listaItems: listSubCategorias.value,
+                            hin: "Todas",
+                            color: buttonColor,
+                            value: dropdownValueSubCategoria,
+                            textcolor: textColor,
+                            onChange: (String? value) async {
+                              setState(() {
+                                dropdownValueMarca = "Todas";
+                                dropdownValueSubCategoria = value!;
+                                codigoSubCategoria = listObjectoSubCategoria
+                                    .where((element) =>
+                                        element.descripcion ==
+                                        dropdownValueSubCategoria)
+                                    .first
+                                    .codigo;
+                              });
+                              if ((dropdownValueSubCategoria == "Todas" ||
+                                          dropdownValueSubCategoria == null) &&
+                                      dropdownValueCategoria == "Todas" ||
+                                  dropdownValueCategoria == null) {
+                                await cargarMarcasPorCategoria(2);
+                              }
+                            },
+                          )),
                       SizedBox(
                         height: 5,
                       ),
                       Obx(() => DropDownFiltroProveedores(
-                          titulo: "Marca",
-                          listaItems: listMarcas.value,
-                          color: buttonColor,
-                          textcolor: textColor,
-                          hin: "Todas",
-                          onChange: (String? value) async {
-                            setState(() {
-                              dropdownValueMarca = value!;
-                            });
-
-                            if (dropdownValueMarca != null &&
-                                dropdownValueMarca != "Todas") {
-                              await cargarProveedor();
-                            }
-                          },
-                          value: dropdownValueMarca))
+                            titulo: "Marca",
+                            listaItems: listMarcas.value,
+                            color: buttonColor,
+                            textcolor: textColor,
+                            value: dropdownValueMarca,
+                            hin: "Todas",
+                            onChange: (String? value) async {
+                              setState(() {
+                                dropdownValueMarca = value!;
+                                codigoMarca = listObjectoMarca
+                                    .where((element) =>
+                                        element.nombre == dropdownValueMarca)
+                                    .first
+                                    .codigo;                                
+                              });
+                            },
+                          ))
                     ],
                   ),
                 ),
@@ -329,15 +365,15 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
                 GestureDetector(
                   onTap: () async {
                     controlador.isDisponibleFiltro.value = false;
-
-                    await resultadoBuscadorGeneralVm.cargarPrecios(
-                        values: values,
-                        dropdownValueMarca: dropdownValueMarca ?? 'Todo',
-                        valorRound: valorRound,
-                        dropdownValueCategoria: dropdownValueCategoria ?? 'Todo',
-                        dropdownValueSubCategoria: dropdownValueCategoria ?? 'Todo',
-                        dropdownValueProveedor: dropdownValueProveedor ?? 'Todo');
-
+                    filtrosResultadoGeneralVm.cargarProductosFiltrados(
+                      codigoCategoria: codigoCategoria ?? '',
+                      codMarca: codigoMarca ?? ''	,
+                      codProveedor: codigoProveedor ?? '',
+                      codigoSubCategoria: codigoSubCategoria ?? '',
+                      precioMaximo: values.end,
+                      precioMinimo: values.start,
+                      valorRound: valorRound
+                    );
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -381,9 +417,13 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
 
   cargarCategorias() async {
     //validar por el provedor
-    var resQuery = await DBProvider.db.consultarCategorias('', 0);
+    var resQuery = await DBProvider.db
+        .consultarCategoriasPorFabricante(codigoProveedor ?? "");
+
+    listCategorias.clear();
     for (var i = 0; i < resQuery.length; i++) {
       listCategorias.add(resQuery[i].descripcion);
+      listObjectoCategoria.add(resQuery[i]);
     }
   }
 
@@ -391,13 +431,16 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
     var resQuery = await searchFuzzyViewModel.marcaService.getAllMarcas();
     for (var i = 0; i < resQuery.length; i++) {
       listMarcas.add(resQuery[i].nombre);
+      listObjectoMarca.add(resQuery[i]);
+
     }
   }
 
   cargarProveedor() async {
     var resQuery = await DBProvider.db.consultarFricante("");
     for (var i = 0; i < resQuery.length; i++) {
-      listProveedor.add((resQuery[i] as Fabricantes).nombrecomercial!);
+      listProveedor.add(resQuery[i].nombrecomercial!);
+      listObjectoProveedor.add(resQuery[i]);
     }
   }
 
@@ -409,6 +452,7 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
         await DBProvider.db.consultarCategoriasSubCategorias(codigoCategoria);
     for (var i = 0; i < resQuery.length; i++) {
       listSubCategorias.add(resQuery[i].descripcion);
+      listObjectoSubCategoria.add(resQuery[i]);
     }
   }
 
@@ -440,10 +484,6 @@ class _FiltrosResultadoGeneralState extends State<FiltrosResultadoGeneral> {
     dropdownValueSubCategoria = "Todas";
     dropdownValueMarca = "Todas";
     dropdownValueProveedor = "Todas";
-    listSubCategorias.value = ['Todas'];
-    listCategorias.value = ['Todas'];
-    listMarcas.value = ['Todas'];
-    listProveedor.value = ['Todas'];
     values = RangeValues(0, 500000);
   }
 }

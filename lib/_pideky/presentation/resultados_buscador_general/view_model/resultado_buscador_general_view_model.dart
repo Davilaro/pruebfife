@@ -55,48 +55,13 @@ class ResultadoBuscadorGeneralVm extends GetxController {
   void cargarProductosImperdibles() async {
     searchFuzzyViewModel.allResultados.value =
         await productService.cargarProductosInterno(
-            2,
-            searchFuzzyViewModel.controllerUser.text,
-            catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value,
-            0,
-            "",
-            "");
-  }
-
-  cargarPrecios(
-      {required RangeValues values,
-      providerDatos,
-      context,
-      required String dropdownValueMarca,
-      required int valorRound,
-      required String dropdownValueCategoria,
-      required String dropdownValueSubCategoria,
-      required String dropdownValueProveedor}) async {
-    List productosFiltrados = [];
-
-    searchFuzzyViewModel.allResultados.forEach((element) {
-      if (element is Producto) {
-        bool cumpleProveedor = dropdownValueProveedor == 'Todos' ||
-            dropdownValueProveedor == element.fabricante;
-        bool cumpleMarca = dropdownValueMarca == 'Todos' ||
-            dropdownValueMarca == element.categoria;
-        bool cumpleCategoria = dropdownValueCategoria == 'Todos' ||
-            dropdownValueCategoria == element.marca;
-        // bool cumpleSubcategoria = dropdownValueSubCategoria == null || dropdownValueSubCategoria == element.subcategoria;
-        bool cumplePrecio =
-            element.precio >= values.start && element.precio <= values.end;
-
-        if (cumpleProveedor &&
-            cumpleMarca &&
-            cumpleCategoria &&
-            // cumpleSubcategoria &&
-            cumplePrecio) {
-          productosFiltrados.add(element);
-        }
-      }
-    });
-
-    searchFuzzyViewModel.allResultados.value = productosFiltrados;
+      2,
+      searchFuzzyViewModel.controllerUser.text,
+      catalogSearchViewModel.precioMinimo.value,
+      catalogSearchViewModel.precioMaximo.value,
+      0,
+      "",
+      "",
+    );
   }
 }
