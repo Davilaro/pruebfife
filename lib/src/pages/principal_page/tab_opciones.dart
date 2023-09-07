@@ -1,18 +1,17 @@
-import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/src/utils/alertas.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
-import '../../../shared/widgets/notification_push_in_app.dart';
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
-import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -88,6 +87,7 @@ class _TabOpcionesState extends State<TabOpciones>
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     preambuloBase();
+    verPopUp();
     setState(() {});
   }
 
@@ -197,6 +197,23 @@ class _TabOpcionesState extends State<TabOpciones>
     });
 
     cargoControllerBase.initControllertabController(_tabControllerTemplate);
+  }
+
+  void verPopUp() async {
+    var listaMora = '';
+    var listaProveedores = [];
+    final fabricantes = await DBProvider.db.consultarFricante('');
+    fabricantes.forEach((element) {
+      print("bloqueo : ${element.verPopUp}");
+      if (element.verPopUp == 0) {
+        listaMora = listaMora + element.nombrecomercial + ', ';
+        listaProveedores.add(element.empresa);
+      }
+    });
+    if (listaMora != '') {
+      listaMora = listaMora.substring(0, listaMora.length - 2);
+      mostrarAlertaPopUpVisto(context, listaMora, listaProveedores);
+    }
   }
 }
 

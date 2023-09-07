@@ -615,7 +615,6 @@ class Servicies {
       final url;
 
       url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/CrearTelefonoNit');
-      print(url);
       final response = await http.post(
         url,
         headers: <String, String>{
@@ -706,6 +705,32 @@ class Servicies {
         return false;
       }
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> sendOnPressInactivityByPortfolio(List proveedor) async {
+    final url;
+    String listaJson = jsonEncode(proveedor);
+    url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/popupCartera');
+    print(
+        'json list $listaJson ${prefs.codigoUnicoPideky} ${prefs.codCliente}}');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        "CCUP": prefs.codigoUnicoPideky,
+        "Codigo": prefs.codCliente,
+        "Proveedores": listaJson
+      }),
+    );
+    if (response.statusCode == 200) {
+      print('true');
+      return true;
+    } else {
+      print('false');
       return false;
     }
   }
