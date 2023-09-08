@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 
 class ValidationForms extends GetxController {
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -17,6 +18,7 @@ class ValidationForms extends GetxController {
   RxBool userInteracted2 = false.obs;
 
   final passwordError = 'No es una contraseña válida'.obs;
+  final emailError = ''.obs;
 
   //Variables para linea de progreso de contraseña
   // late String _password;
@@ -31,54 +33,9 @@ class ValidationForms extends GetxController {
   RxBool passwordsMatch = false.obs;
 
   late String _password;
+  final prefs = Preferencias();
 
-  //Variable para comparar las contraseñas
-  // bool _passwordsMatch = false;
-
-  //Maneja la barra indicadora de contraseña de la vista de creación de contraseña
-  // void tagCheckPassword(String value) {
-  //   _password = value.trim();
-
-  //   if (_password.isEmpty) {
-  //     _strength = 0;
-  //     _displayText = '';
-  //   } else if (_password.length < 6) {
-  //     _strength = 1 / 4;
-  //     _displayText = 'débil';
-  //   } else if (_password.length < 8) {
-  //     _strength = 2 / 4;
-  //     _displayText = 'Medio';
-  //   } else {
-  //     if (!passwordRegExp.hasMatch(_password)) {
-  //       _strength = 3 / 4;
-  //       _displayText = 'Fuerte';
-  //     } else {
-  //       _strength = 1;
-  //       _displayText = 'Fuerte';
-  //     }
-  //   }
-  // }
-
-  //     void tagCheckPassword(String password) {
-  //   if (password.isEmpty) {
-  //     strength.value = 0;
-  //     displayText.value = '';
-  //   } else if (password.length < 6) {
-  //     strength.value = 1 / 4;
-  //     displayText.value = 'débil';
-  //   } else if (password.length < 8) {
-  //     strength.value = 2 / 4;
-  //     displayText.value = 'Medio';
-  //   } else {
-  //     if (!passwordRegExp.hasMatch(password)) {
-  //       strength.value = 3 / 4;
-  //       displayText.value = 'Fuerte';
-  //     } else {
-  //       strength.value = 1;
-  //       displayText.value = 'Fuerte';
-  //     }
-  //   }
-  // }
+  
 
   void tagCheckPassword(String value) {
     _password = value.trim();
@@ -108,14 +65,6 @@ class ValidationForms extends GetxController {
     passwordsMatch.value = value == _password;
   }
 
-  //  void comparePasswords(String confirmPassword) {
-  //   passwordsMatch.value = confirmPassword == createPassword.value;
-  // }
-
-  // double get strength =>  _strength;
-  // String get displayText => _displayText;
-  // bool get passwordsMatch => _passwordsMatch;
-
   //Validación básica para verificar si un campo cualquiera está vacío o es null
   String? validateTextFieldNullorEmpty(String? value) {
     if (value == null || value.isEmpty || value.trim().isEmpty)
@@ -140,6 +89,50 @@ class ValidationForms extends GetxController {
     if (!passwordRegExp.hasMatch(value)) {
       return passwordError.value;
     }
+    return null;
+  }
+
+  //Validación para email encuesta homePage
+  String? validateEmail(String? value) {
+   emailError.value = 'No es un email válido ';
+    if (value == null || value.isEmpty) {
+      return 'Campo requerido';
+    }
+    if (value.trim().isEmpty) {
+      return passwordError.value;
+    }
+
+    final emailRegExp = RegExp(
+      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+    );
+    if (!emailRegExp.hasMatch(value)) {
+      return emailError.value;
+    }
+    return null;
+  }
+
+  // Validación de números de celular, Colombia, Costa Rica  encuesta homePage
+  String? validateTelephone(String? value) {
+    final colombiaRegExp =  RegExp(r'^3\d{9}$'); 
+    final costaRicaRegExp = RegExp(r'^[678]\d{7}$');
+
+    emailError.value = 'No es un telefono válido';
+    if (value == null || value.isEmpty) {
+      return 'Campo requerido';
+    }
+    if (value.trim().isEmpty) {
+      return passwordError.value;
+    }
+    if (prefs.paisUsuario == "CO") {
+      if (!colombiaRegExp.hasMatch(value)) {
+        return 'No es un número de teléfono válido para Colombia';
+      }
+    } else if (prefs.paisUsuario == "CR") {
+      if (!costaRicaRegExp.hasMatch(value)) {
+        return 'No es un número de teléfono válido para Costa Rica';
+      }
+    }
+
     return null;
   }
 }
