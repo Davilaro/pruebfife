@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class CampoTexto extends StatelessWidget {
-  CampoTexto();
+class BuscadorGeneral extends StatelessWidget {
+  BuscadorGeneral();
 
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
 

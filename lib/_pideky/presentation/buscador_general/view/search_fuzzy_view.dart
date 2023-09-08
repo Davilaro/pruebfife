@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/buscador_general/widgets/busquedas_recientes.dart';
-import 'package:emart/_pideky/presentation/buscador_general/widgets/campo_texto.dart';
+import 'package:emart/shared/widgets/buscador_general.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -53,7 +53,7 @@ class SearchFuzzyView extends StatelessWidget {
                           size: 30,
                         ),
                       ),
-                      CampoTexto(),
+                      BuscadorGeneral(),
                     ],
                   )),
             ),
