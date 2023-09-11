@@ -6,7 +6,7 @@ import 'package:emart/_pideky/presentation/resultados_buscador_general/view_mode
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/categorias.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
@@ -57,7 +57,7 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
   RxList<String> listMarcas = ['Todas'].obs;
   RxList<String> listProveedor = ['Todas'].obs;
 
-  RxList<Fabricantes> listObjectoProveedor = <Fabricantes>[].obs;
+  RxList<Fabricante> listObjectoProveedor = <Fabricante>[].obs;
   RxList<Categorias> listObjectoSubCategoria = <Categorias>[].obs;
   RxList<Categorias> listObjectoCategoria = <Categorias>[].obs;
   RxList<Marca> listObjectoMarca = <Marca>[].obs;

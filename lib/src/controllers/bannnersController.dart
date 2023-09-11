@@ -9,7 +9,7 @@ import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compr
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/bannner.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -136,7 +136,7 @@ class BannnerControllers extends GetxController {
 
   _direccionarProveedor(
     BuildContext context,
-    Fabricantes proveedor,
+    Fabricante proveedor,
   ) {
     Navigator.push(
         context,

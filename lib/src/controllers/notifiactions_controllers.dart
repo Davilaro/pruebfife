@@ -19,7 +19,7 @@ import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -292,7 +292,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
 
   _direccionarProveedor(
     BuildContext context,
-    Fabricantes proveedor,
+    Fabricante proveedor,
   ) {
     Navigator.push(
         context,

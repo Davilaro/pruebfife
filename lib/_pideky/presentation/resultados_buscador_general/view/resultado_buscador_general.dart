@@ -10,7 +10,7 @@ import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/modelos/categorias.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -278,7 +278,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
         );
       }
 
-      if (searchFuzzyViewModel.allResultados[i] is Fabricantes) {
+      if (searchFuzzyViewModel.allResultados[i] is Fabricante) {
         widgetTemp = GestureDetector(
           onTap: () {
             Navigator.push(

@@ -13,10 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
-import '../../../widget/dounser.dart';
 
 final prefs = new Preferencias();
 
@@ -50,15 +47,11 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
 
-    final Debouncer onSearchDebouncer =
-        new Debouncer(delay: new Duration(milliseconds: 500));
-
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Column(children: [
-              _campoTexto(context, onSearchDebouncer),
               Flexible(
                   flex: 2,
                   child: Obx(() => Container(
@@ -165,31 +158,6 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));
-  }
-
-  _campoTexto(BuildContext context, Debouncer onSearchDebouncer) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: controllerSearch,
-        style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
-        decoration: InputDecoration(
-          fillColor: HexColor("#41398D"),
-          hintText: 'Encuentra tus marcas',
-          hintStyle: TextStyle(
-            color: HexColor("#41398D"),
-          ),
-          suffixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
-        ),
-      ),
-    );
   }
 
   void cargarLista() async {

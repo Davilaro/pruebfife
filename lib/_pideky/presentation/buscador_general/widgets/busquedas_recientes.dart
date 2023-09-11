@@ -4,7 +4,7 @@ import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/src/modelos/categorias.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

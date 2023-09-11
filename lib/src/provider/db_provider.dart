@@ -4,7 +4,7 @@ import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/modelos/marcaFiltro.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/modelos/respuesta.dart';
@@ -205,7 +205,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -222,7 +222,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     ''');
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -270,7 +270,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -354,7 +354,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       List<Seccion> lista = [];
 
       final sql = await db.rawQuery('''
-      SELECT id, descripcion, orden_componente as orden FROM Secciones ORDER by orden_componente ASC
+      SELECT id, descripcion, orden_componente as orden FROM Secciones ORDER by orden_componente ASC LIMIT 3
     ''');
 
       lista = List<Seccion>.from(sql.map((x) => Seccion.fromJson(x)));

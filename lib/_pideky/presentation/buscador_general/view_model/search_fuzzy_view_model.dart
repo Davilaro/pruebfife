@@ -8,7 +8,7 @@ import 'package:emart/_pideky/presentation/productos/view/detalle_producto_searc
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/modelos/categorias.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -33,7 +33,7 @@ class SearchFuzzyViewModel extends GetxController {
   List<Producto> listaAllProducts = [];
   List<Marca> listaAllMarcas = [];
   List<Categorias> listaAllcategorias = [];
-  List<Fabricantes> listaAllproveedor = [];
+  List<Fabricante> listaAllproveedor = [];
 
   //mapa para guardar las listas
   RxMap mapListas = {}.obs;
@@ -110,8 +110,8 @@ class SearchFuzzyViewModel extends GetxController {
                 allResultados.add(value[i]);
               }
             }
-            if (value[i] is Fabricantes) {
-              if ((value[i] as Fabricantes).nombrecomercial == element.choice &&
+            if (value[i] is Fabricante) {
+              if ((value[i] as Fabricante).nombrecomercial == element.choice &&
                   !allResultados.contains(value[i])) {
                 allResultados.add(value[i]);
               }
@@ -134,8 +134,8 @@ class SearchFuzzyViewModel extends GetxController {
         if (value[i] is Marca) lista.add((value[i] as Marca).nombre);
         if (value[i] is Categorias)
           lista.add((value[i] as Categorias).descripcion);
-        if (value[i] is Fabricantes)
-          lista.add((value[i] as Fabricantes).nombrecomercial.toString());
+        if (value[i] is Fabricante)
+          lista.add((value[i] as Fabricante).nombrecomercial.toString());
       }
     });
     return lista;
@@ -148,7 +148,7 @@ class SearchFuzzyViewModel extends GetxController {
             ? palabrabuscada.ico
             : palabrabuscada is Categorias
                 ? palabrabuscada.ico
-                : palabrabuscada is Fabricantes
+                : palabrabuscada is Fabricante
                     ? palabrabuscada.icono
                     : 'assets/image/logo_login.png';
   }
@@ -163,9 +163,9 @@ class SearchFuzzyViewModel extends GetxController {
                 ? palabrabuscada.nombre
                 : palabrabuscada is Categorias
                     ? palabrabuscada.descripcion
-                    : palabrabuscada is Fabricantes && conDistintivo
+                    : palabrabuscada is Fabricante && conDistintivo
                         ? '${palabrabuscada.nombrecomercial}/proveedor'
-                        : palabrabuscada is Fabricantes && !conDistintivo
+                        : palabrabuscada is Fabricante && !conDistintivo
                             ? palabrabuscada.nombrecomercial
                             : 'Error en la búsqueda';
   }
@@ -205,7 +205,7 @@ class SearchFuzzyViewModel extends GetxController {
                     nombreCategoria: object.descripcion,
                   )));
     }
-    if (object is Fabricantes) {
+    if (object is Fabricante) {
       Navigator.push(
           context,
           MaterialPageRoute(

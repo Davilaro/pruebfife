@@ -10,7 +10,7 @@ import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlit
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/categorias.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';

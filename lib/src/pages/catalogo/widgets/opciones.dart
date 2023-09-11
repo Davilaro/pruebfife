@@ -34,14 +34,14 @@ class BtnOpciones extends StatelessWidget {
     for (var i = 0; i < listaSecciones.length; i++) {
       Seccion seccion = listaSecciones[i];
       opciones.add(SizedBox(
-          height: 55,
+          height: 44,
           child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
                 side: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(10.0)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextButton(
                   onPressed: () => {
                         //FIREBASE: Llamamos el evento select_content

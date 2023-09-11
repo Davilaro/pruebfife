@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 
 ListaSucursalesData listaSucursalesDataFromJson(String str) =>
     ListaSucursalesData.fromJson(json.decode(str));
@@ -67,8 +67,8 @@ class ListaSucursalesData {
         codigoUnicoPideky: json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"],
         pais: json["Pais"] == null ? "" : json["Pais"],
-        fabricantes: List<Fabricantes>.from(
-          json["fabricantes"].map((x) => Fabricantes.fromJson(x)),
+        fabricantes: List<Fabricante>.from(
+          json["fabricantes"].map((x) => Fabricante.fromJson(x)),
         ),
         sucursal: json["Sucursal"],
       );

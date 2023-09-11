@@ -6,7 +6,7 @@ import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/estado.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
@@ -409,7 +409,7 @@ class Servicies {
       final res = json.decode(reponse.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Fabricantes.fromJson(valor)).toList()
+          ? res.map((valor) => Fabricante.fromJson(valor)).toList()
           : [];
     } catch (e) {
       print(e.toString());
