@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -30,6 +31,9 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   RxList<dynamic> listaCategoria = <dynamic>[].obs;
   List<dynamic> listaAllCategorias = [];
   final TextEditingController controllerSearch = TextEditingController();
+  RxString proveedor = "".obs;
+  RxList<Fabricante> listaFabricante = <Fabricante>[].obs;
+  RxInt indexAux = 0.obs;
   // ControllerProductos constrollerProductos = Get.find();
 
   @override
@@ -49,6 +53,59 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
         body: Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Column(children: [
+            Obx(
+              () => Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.05, vertical: 0),
+                child: SizedBox(
+                  height: Get.height * 0.07,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listaFabricante.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          proveedor.value = listaFabricante[index].empresa!;
+                          indexAux.value = index;
+                          cargarLista();
+                        });
+                      },
+                      child: Container(
+                        width: Get.width * 0.2,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Get.width * 0.01,
+                            vertical: Get.height * 0.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: indexAux == index
+                                ? ConstantesColores.azul_precio
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: CachedNetworkImage(
+                          imageUrl: listaFabricante[index].icono!,
+                          alignment: Alignment.bottomCenter,
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/image/logo_login.png',
+                            height: Get.height * 0.05,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: Get.height * 0.02,
+            ),
             Expanded(
                 flex: 2,
                 child: Obx(() => Container(
@@ -172,10 +229,28 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   }
 
   void cargarLista() async {
-    // constrollerProductos.getAgotados();
     listaAllCategorias =
-        await DBProvider.db.consultarCategorias(controllerSearch.text, 0);
+        await DBProvider.db.consultarCategoriasPorFabricante(proveedor.value);
     listaCategoria.value = listaAllCategorias;
+    cargarListaProovedor();
+  }
+
+  void cargarListaProovedor() async {
+    listaFabricante.value = await DBProvider.db.consultarFricante("");
+
+    listaFabricante.forEach((element) {
+      if (element.empresa == "NUTRESA") {
+        listaFabricante.remove(element);
+        listaFabricante.insert(0, element);
+      }
+      if (element.empresa == "ZENU") {
+        listaFabricante.remove(element);
+        listaFabricante.insert(1, element);
+      }
+    });
+
+    listaFabricante.add(Fabricante(
+        diasEntrega: 0, empresa: "", icono: "assets/image/logo_login.png"));
   }
 
   void _runFilter() {
@@ -193,11 +268,11 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
         });
 
         final result = extractTop(
-        limit: 10,
-        query: controllerSearch.text,
-        choices: listaAux,
-        cutoff: 10,
-      );
+          limit: 10,
+          query: controllerSearch.text,
+          choices: listaAux,
+          cutoff: 10,
+        );
 
         listaCategoria.value = [];
         result

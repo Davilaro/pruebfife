@@ -77,7 +77,6 @@ class _TabOpcionesState extends State<TabOpciones>
     hasInternet = true;
 
     cargarSecciones();
-    // cargarSeccionesProveedores();
     viewModelNegocio.cargarArchivos(prefs);
     subscription = Connectivity()
         .onConnectivityChanged
@@ -199,18 +198,6 @@ class _TabOpcionesState extends State<TabOpciones>
 
     cargoControllerBase.initControllertabController(_tabControllerTemplate);
   }
-
-  // void cargarSeccionesProveedores() async {
-  //   var _tabControllerTemplate = new TabController(
-  //       length: cargoControllerBase.imagenesProveedor.length,
-  //       vsync: this,
-  //       initialIndex: cargoControllerBase.cambioTab2.value);
-  //   _tabControllerTemplate.addListener(() {
-  //     cargoControllerBase.cargoBaseDatos(_tabControllerTemplate.index);
-  //   });
-
-  //   cargoControllerBase.initControllertabController2(_tabControllerTemplate);
-  // }
 
   void verPopUp() async {
     var listaMora = '';

@@ -24,18 +24,18 @@ class TabCategoriaMarca extends StatefulWidget {
 
 class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     with SingleTickerProviderStateMixin {
+  RxString proveedor = "".obs;
   Map listSeccionsRoute = {
     2: Fabricantes(),
     3: CategoriasGrilla(),
     4: MarcasWidget(),
+    //estas dos no se usan por el momento pero trato de borrar y se daña todo :C
     1: CatalogoPoductosInterno(tipoCategoria: 1),
     5: CatalogoPoductosInterno(tipoCategoria: 2)
   };
+  final cargoConfirmar = Get.find<ControlBaseDatos>();
   ControllerProductos constrollerProductos = Get.find();
   RxInt contador = 5.obs;
-
-  final cargoConfirmar = Get.find<ControlBaseDatos>();
-  List<Fabricante> imagenesProveedor = [];
 
   @override
   void initState() {
@@ -44,7 +44,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
     // cargarData();
-    cargarImagenes();
   }
 
   @override
@@ -97,7 +96,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                           return Tab(
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: Get.width * 0.065),
+                                  horizontal: Get.width * 0.078),
                               height: Get.height * 0.04,
                               decoration: BoxDecoration(
                                 color: cargoConfirmar.cambioTab.value == index
@@ -113,76 +112,13 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                           );
                         })),
                   ),
-                  cargoConfirmar.tabController.index == 1
-                      ? const SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: TabBar(
-                              controller: cargoConfirmar.tabController,
-                              labelPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              onTap: (index) {
-                                //FIREBASE: Llamamos el evento select_content
-                                TagueoFirebase().sendAnalityticSelectContent(
-                                    "Header",
-                                    "${cargoConfirmar.seccionesDinamicas[index].descripcion}",
-                                    "",
-                                    "",
-                                    "${cargoConfirmar.seccionesDinamicas[index].descripcion}",
-                                    'CategoryPage');
-                                //UXCam: Llamamos el evento selectSeccion
-                                UxcamTagueo().selectSeccion(cargoConfirmar
-                                    .seccionesDinamicas[index].descripcion);
-                                cargoConfirmar.cargoBaseDatos(index);
-                              },
-                              indicatorColor: Colors.transparent,
-                              unselectedLabelColor: Colors.black,
-                              isScrollable: true,
-                              tabs: List<Widget>.generate(
-                                  imagenesProveedor.length, (index) {
-                                var fabricante = imagenesProveedor[index];
-
-                                return Tab(
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15),
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: cargoConfirmar.cambioTab.value ==
-                                              index
-                                          ? selectedColor
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Align(
-                                        alignment: Alignment.center,
-                                        child: CachedNetworkImage(
-                                          imageUrl: fabricante.icono!,
-                                          alignment: Alignment.bottomCenter,
-                                          placeholder: (context, url) =>
-                                              Image.asset(
-                                            'assets/image/jar-loading.gif',
-                                            alignment: Alignment.center,
-                                            height: 50,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            'assets/image/logo_login.png',
-                                            height: 50,
-                                            alignment: Alignment.center,
-                                          ),
-                                          fit: BoxFit.contain,
-                                        )),
-                                  ),
-                                );
-                              })),
-                        ),
                   Expanded(
                     child: TabBarView(
                       controller: cargoConfirmar.tabController,
-                      children:
-                          cargarWidgets(cargoConfirmar.seccionesDinamicas),
+                      children: cargarWidgets(
+                          cargoConfirmar.seccionesDinamicas.value),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -197,28 +133,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
       listWidget.add(listSeccionsRoute[seccion.idSeccion]);
     }
     return listWidget;
-  }
-
-  cargarImagenes() async {
-    imagenesProveedor = await DBProvider.db.consultarFricante('');
-    imagenesProveedor.add(Fabricante(
-        empresa: 'TODOS',
-        icono: 'assets/image/estrella.png', diasEntrega: 0));
-    priorizarNutresa(imagenesProveedor);
-    setState(() {});
-  }
-
-  priorizarNutresa(List<Fabricante> proveedores) {
-    proveedores.forEach((element) {
-      if (element.empresa == 'NUTRESA') {
-        proveedores.remove(element);
-        proveedores.insert(0, element);
-      }
-      if (element.empresa == 'ZENU') {
-        proveedores.remove(element);
-        proveedores.insert(1, element);
-      }
-    });
   }
 
   _buscadorPrincipal(BuildContext context) {

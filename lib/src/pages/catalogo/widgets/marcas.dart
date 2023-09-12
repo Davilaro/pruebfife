@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
@@ -33,6 +36,10 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
+  RxString proveedor = "".obs;
+  RxList<Fabricante> listaFabricante = <Fabricante>[].obs;
+  RxInt indexAux = 0.obs;
+
   @override
   void initState() {
     //UXCAM:Se define el nombre de la pantalla
@@ -52,6 +59,59 @@ class _MarcasWidgetState extends State<MarcasWidget> {
         body: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Column(children: [
+              Obx(
+                () => Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Get.width * 0.05, vertical: 0),
+                  child: SizedBox(
+                    height: Get.height * 0.07,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: listaFabricante.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            proveedor.value = listaFabricante[index].empresa!;
+                            indexAux.value = index;
+                            cargarLista();
+                          });
+                        },
+                        child: Container(
+                          width: Get.width * 0.2,
+                          margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.01,
+                              vertical: Get.height * 0.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: indexAux == index
+                                  ? ConstantesColores.azul_precio
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: CachedNetworkImage(
+                            imageUrl: listaFabricante[index].icono!,
+                            alignment: Alignment.bottomCenter,
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/image/logo_login.png',
+                              height: Get.height * 0.05,
+                              alignment: Alignment.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
               Flexible(
                   flex: 2,
                   child: Obx(() => Container(
@@ -96,8 +156,13 @@ class _MarcasWidgetState extends State<MarcasWidget> {
       final widgetTemp = GestureDetector(
         onTap: () => {
           //Firebase: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent("Marcas", (element as Marca).nombre,
-              element.nombre, element.nombre, element.codigo, 'ViewMarcs'),
+          TagueoFirebase().sendAnalityticSelectContent(
+              "Marcas",
+              (element as Marca).nombre,
+              element.nombre,
+              element.nombre,
+              element.codigo,
+              'ViewMarcs'),
           //UXCam: Llamamos el evento seeBrand
           UxcamTagueo().seeBrand(element.nombre),
           _onClickCatalogo(element.codigo, context, provider, element.nombre)
@@ -161,8 +226,28 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   }
 
   void cargarLista() async {
-    listaAllMarcas = await marcaService.consultaMarcas(controllerSearch.text);
+    listaAllMarcas =
+        await await DBProvider.db.consultarMarcasPorFabricante(proveedor.value);
     listaMarca.value = listaAllMarcas;
+    cargarListaProovedor();
+  }
+
+  void cargarListaProovedor() async {
+    listaFabricante.value = await DBProvider.db.consultarFricante("");
+
+    listaFabricante.forEach((element) {
+      if (element.empresa == "NUTRESA") {
+        listaFabricante.remove(element);
+        listaFabricante.insert(0, element);
+      }
+      if (element.empresa == "ZENU") {
+        listaFabricante.remove(element);
+        listaFabricante.insert(1, element);
+      }
+    });
+
+    listaFabricante.add(Fabricante(
+        diasEntrega: 0, empresa: "", icono: "assets/image/logo_login.png"));
   }
 
   void _runFilter() {
@@ -179,11 +264,11 @@ class _MarcasWidgetState extends State<MarcasWidget> {
           listaAux.add(element.titulo);
         });
         final result = extractTop(
-        limit: 10,
-        query: controllerSearch.text,
-        choices: listaAllMarcas.map((element) => element.nombre).toList(),
-        cutoff: 10,
-      );
+          limit: 10,
+          query: controllerSearch.text,
+          choices: listaAllMarcas.map((element) => element.nombre).toList(),
+          cutoff: 10,
+        );
         listaMarca.value = [];
         result
             .map((r) => listaMarca.add(listaAllMarcas

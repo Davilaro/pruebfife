@@ -492,11 +492,13 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<dynamic> consultarMarcasPorFabricante(String fabricante) async {
     final db = await baseAbierta;
 
+    String where = fabricante != '' ? 'where fabricante = "$fabricante"' : '';
+
     try {
       final sql = await db.rawQuery('''
          select * from marca where 
          codigo in 
-         (select marcacodigopideki from producto where fabricante = '$fabricante')
+         (select marcacodigopideki from producto $where)
     ''');
 
       return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
@@ -508,11 +510,13 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<dynamic> consultarCategoriasPorFabricante(String fabricante) async {
     final db = await baseAbierta;
 
+    String where = fabricante != '' ? 'where fabricante = "$fabricante"' : '';
+
     try {
       final sql = await db.rawQuery('''
       
-      select codigo, descripcion from categoria WHERE CODIGO 
-      IN (select categoriacodigopideki from producto where fabricante = '$fabricante')
+      select codigo, descripcion,ico2 as ico,orden from categoria WHERE CODIGO 
+      IN (select categoriacodigopideki from producto $where)
       
     ''');
 
