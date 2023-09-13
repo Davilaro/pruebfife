@@ -322,24 +322,29 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                           ),
                           color: Colors.white,
                         ),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: SvgPicture.asset(
-                                'assets/icon/Icono_Todos.svg',
-                                height: Get.height * 0.035,
-                                alignment: Alignment.center,
-                                fit: BoxFit.contain,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            top: Get.height * 0.005,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: SvgPicture.asset(
+                                  'assets/icon/Icono_Todos.svg',
+                                  height: Get.height * 0.03,
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
-                            ),
-                            AutoSizeText('Todos',
-                                maxFontSize: 10,
-                                style: TextStyle(
-                                    color: ConstantesColores.azul_precio),
-                                minFontSize: 6,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis),
-                          ],
+                              AutoSizeText('Todos',
+                                  maxFontSize: 10,
+                                  style: TextStyle(
+                                      color: ConstantesColores.azul_precio),
+                                  minFontSize: 6,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
                         ),
                       ),
                     ),
