@@ -166,10 +166,11 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    if (contadorSeleccionados.value <= 2) {
-                      contadorSeleccionados.value++;
-                    }
 
+                    if(!esBuscadoZenu.value) contadorSeleccionados.value--;
+
+                    if (contadorSeleccionados.value <= 2) contadorSeleccionados.value++;
+                  
                     if (contadorSeleccionados.value <= 2) {
                       esBuscadoZenu.value = !esBuscadoZenu.value;
 
@@ -221,6 +222,9 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
               GestureDetector(
                 onTap: () {
                   setState(() {
+
+                    if(!esBuscadoCrem.value) contadorSeleccionados.value--;
+                    
                     if (contadorSeleccionados.value <= 2) {
                       contadorSeleccionados.value++;
                     }
