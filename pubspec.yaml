@@ -69,7 +69,7 @@ dependencies:
   # firebase_analytics: ^8.3.4
   # firebase_messaging: ^11.1.0
   # firebase_storage: null
-  syncfusion_flutter_pdfviewer: ^19.3.53-beta
+  #syncfusion_flutter_pdfviewer: ^19.3.53-beta
   firebase_core: ^2.7.0
   firebase_analytics_web: ^0.5.1+12
   firebase_analytics: ^10.1.4

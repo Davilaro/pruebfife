@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
@@ -13,6 +14,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
@@ -48,6 +50,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
   RxInt contadorSeleccionados = 0.obs;
 
+  RxList<bool> seleccionados = [false, false, false].obs;
+
   @override
   void initState() {
     //UXCAM:Se define el nombre de la pantalla
@@ -68,9 +72,13 @@ class _MarcasWidgetState extends State<MarcasWidget> {
         body: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Column(children: [
-              Obx(
-                () => botonesProveedores()
-              ),
+              Obx(() => listaMarca.isEmpty
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: ConstantesColores.azul_precio,
+                      ),
+                    )
+                  : botonesProveedores()),
               SizedBox(
                 height: Get.height * 0.02,
               ),
@@ -107,206 +115,246 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                       ))))
             ])));
   }
-   Widget botonesProveedores() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04, vertical: 0),
-      child: SizedBox(
-          height: Get.height * 0.08,
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
 
-                    esBuscadoNutresa.isFalse && proveedor.value == 'NUTRESA'
-                    ? proveedor.value = ''
-                    : esBuscadoNutresa.isFalse && proveedor2.value == 'NUTRESA'
-                      ? proveedor2.value = ''
-                      :
-
-                      proveedor.isNotEmpty
-                          ? proveedor2.value.isNotEmpty 
-                            ?proveedor2.value = ''
-                            :proveedor2.value = listaFabricante[0].empresa!
-                          : proveedor.value = listaFabricante[0].empresa!;
-               
-                      esBuscadoNutresa.value = !esBuscadoNutresa.value;
-                      esBuscadoTodos.value = false;
-
-
-                      cargarLista();
-                    
-                  });
-                },
-                child: Container(
-                  width: Get.width * 0.2,
-                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: esBuscadoNutresa.value
-                          ? ConstantesColores.azul_precio
-                          : Colors.transparent,
-                      width: 2,
+  Widget botonesProveedores() {
+    return listaFabricante.isEmpty
+        ? Center(
+            child: CircularProgressIndicator(
+              color: ConstantesColores.azul_precio,
+            ),
+          )
+        : Padding(
+            padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04),
+            child: SizedBox(
+                height: Get.height * 0.08,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          // Si el botón no está seleccionado, se verifica si hay menos de dos botones seleccionados
+                          if (!seleccionados[0]) {
+                            if (seleccionados
+                                    .where((element) => element)
+                                    .length <
+                                2) {
+                              // Se cambia el estado del botón a seleccionado
+                              seleccionados[0] = true;
+                              esBuscadoTodos.value = false;
+                              // Se asigna el valor del botón a la variable correspondiente
+                              if (proveedor.isEmpty) {
+                                proveedor.value = 'NUTRESA';
+                              } else {
+                                proveedor2.value = 'NUTRESA';
+                              }
+                            }
+                          } else {
+                            // Si el botón está seleccionado, se cambia el estado a no seleccionado
+                            seleccionados[0] = false;
+                            // Se elimina el valor del botón de la variable correspondiente
+                            if (proveedor.value == 'NUTRESA') {
+                              proveedor.value = proveedor2.value;
+                              proveedor2.value = '';
+                            } else if (proveedor2.value == 'NUTRESA') {
+                              proveedor2.value = '';
+                            }
+                          }
+                          cargarLista();
+                        });
+                      },
+                      child: Container(
+                        width: Get.width * 0.2,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: seleccionados[0]
+                                ? ConstantesColores.azul_precio
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: listaFabricante[0].icono!,
+                          alignment: Alignment.bottomCenter,
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/icon/cerrar_ventana.png',
+                            height: Get.height * 0.05,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
                     ),
-                    color: Colors.white,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: listaFabricante[0].icono!,
-                    alignment: Alignment.bottomCenter,
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/icon/cerrar_ventana.png',
-                      height: Get.height * 0.05,
-                      alignment: Alignment.center,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (!seleccionados[1]) {
+                            if (seleccionados
+                                    .where((element) => element)
+                                    .length <
+                                2) {
+                              // Se cambia el estado del botón a seleccionado
+                              seleccionados[1] = true;
+                              esBuscadoTodos.value = false;
+                              // Se asigna el valor del botón a la variable correspondiente
+                              if (proveedor.isEmpty) {
+                                proveedor.value = 'ZENU';
+                              } else {
+                                proveedor2.value = 'ZENU';
+                              }
+                            }
+                          } else {
+                            // Si el botón está seleccionado, se cambia el estado a no seleccionado
+                            seleccionados[1] = false;
+                            // Se elimina el valor del botón de la variable correspondiente
+                            if (proveedor.value == 'ZENU') {
+                              proveedor.value = proveedor2.value;
+                              proveedor2.value = '';
+                            } else if (proveedor2.value == 'ZENU') {
+                              proveedor2.value = '';
+                            }
+                          }
+                          cargarLista();
+                        });
+                      },
+                      child: Container(
+                        width: Get.width * 0.2,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: seleccionados[1]
+                                ? ConstantesColores.azul_precio
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          color: Colors.white,
+                        ),
+                        alignment: Alignment.center,
+                        child: CachedNetworkImage(
+                          imageUrl: listaFabricante[1].icono!,
+                          alignment: Alignment.bottomCenter,
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/icon/cerrar_ventana.png',
+                            height: Get.height * 0.05,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-
-                    esBuscadoNutresa.isFalse && proveedor.value == 'ZENU'
-                    ? proveedor.value = ''
-                    : esBuscadoNutresa.isFalse && proveedor2.value == 'ZENU'
-                      ? proveedor2.value = ''
-                      :
-
-               
-                      proveedor.isNotEmpty
-                          ? proveedor2.value.isNotEmpty 
-                            ?proveedor2.value = ''
-                            :proveedor2.value = listaFabricante[1].empresa!
-                          : proveedor.value = listaFabricante[1].empresa!;
-
-                      esBuscadoZenu.value = !esBuscadoZenu.value;
-
-                      esBuscadoTodos.value = false;
-
-                      cargarLista();
-                    
-                  });
-                },
-                child: Container(
-                  width: Get.width * 0.2,
-                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: esBuscadoZenu.value
-                          ? ConstantesColores.azul_precio
-                          : Colors.transparent,
-                      width: 2,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (!seleccionados[2]) {
+                            if (seleccionados
+                                    .where((element) => element)
+                                    .length <
+                                2) {
+                              // Se cambia el estado del botón a seleccionado
+                              seleccionados[2] = true;
+                              esBuscadoTodos.value = false;
+                              // Se asigna el valor del botón a la variable correspondiente
+                              if (proveedor.isEmpty) {
+                                proveedor.value = 'MEALS';
+                              } else {
+                                proveedor2.value = 'MEALS';
+                              }
+                            }
+                          } else {
+                            // Si el botón está seleccionado, se cambia el estado a no seleccionado
+                            seleccionados[2] = false;
+                            // Se elimina el valor del botón de la variable correspondiente
+                            if (proveedor.value == 'MEALS') {
+                              proveedor.value = proveedor2.value;
+                              proveedor2.value = '';
+                            } else if (proveedor2.value == 'MEALS') {
+                              proveedor2.value = '';
+                            }
+                          }
+                          cargarLista();
+                        });
+                      },
+                      child: Container(
+                        width: Get.width * 0.2,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: seleccionados[2]
+                                ? ConstantesColores.azul_precio
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          color: Colors.white,
+                        ),
+                        alignment: Alignment.center,
+                        child: CachedNetworkImage(
+                          imageUrl: listaFabricante[2].icono!,
+                          alignment: Alignment.bottomCenter,
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/icon/cerrar_ventana.png',
+                            height: Get.height * 0.05,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
                     ),
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: CachedNetworkImage(
-                    imageUrl: listaFabricante[1].icono!,
-                    alignment: Alignment.bottomCenter,
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/icon/cerrar_ventana.png',
-                      height: Get.height * 0.05,
-                      alignment: Alignment.center,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          proveedor.value = listaFabricante[3].empresa!;
+                          esBuscadoTodos.value = !esBuscadoTodos.value;
+                          proveedor2 = "".obs;
+
+                          seleccionados[0] = false;
+                          seleccionados[1] = false;
+                          seleccionados[2] = false;
+
+                          cargarLista();
+                        });
+                      },
+                      child: Container(
+                        width: Get.width * 0.2,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: esBuscadoTodos.value
+                                ? ConstantesColores.azul_precio
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: SvgPicture.asset(
+                                'assets/icon/Icono_Todos.svg',
+                                height: Get.height * 0.035,
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            AutoSizeText('Todos',
+                                maxFontSize: 10,
+                                style: TextStyle(
+                                    color: ConstantesColores.azul_precio),
+                                minFontSize: 6,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-
-                    esBuscadoNutresa.isFalse && proveedor.value == 'MEALS'
-                    ? proveedor.value = ''
-                    : esBuscadoNutresa.isFalse && proveedor2.value == 'MEALS'
-                      ? proveedor2.value = ''
-                      :
-
-                      proveedor.isNotEmpty
-                          ? proveedor2.value.isNotEmpty 
-                            ?proveedor2.value = ''
-                            :proveedor2.value = listaFabricante[2].empresa!
-                          : proveedor.value = listaFabricante[2].empresa!;
-
-                      esBuscadoCrem.value = !esBuscadoCrem.value;
-
-                      esBuscadoTodos.value = false;
-                      cargarLista();
-                    
-                  });
-                },
-                child: Container(
-                  width: Get.width * 0.2,
-                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: esBuscadoCrem.value
-                          ? ConstantesColores.azul_precio
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: CachedNetworkImage(
-                    imageUrl: listaFabricante[2].icono!,
-                    alignment: Alignment.bottomCenter,
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/icon/cerrar_ventana.png',
-                      height: Get.height * 0.05,
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-
-                    proveedor.value = listaFabricante[3].empresa!;
-                    esBuscadoTodos.value = !esBuscadoTodos.value;
-                    proveedor2 = "".obs;
-
-                    esBuscadoCrem.value = false;
-                    esBuscadoNutresa.value = false;
-                    esBuscadoZenu.value = false;
-
-                    cargarLista();
-                  });
-                },
-                child: Container(
-                  width: Get.width * 0.2,
-                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: esBuscadoTodos.value
-                          ? ConstantesColores.azul_precio
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: listaFabricante[3].icono!,
-                    alignment: Alignment.bottomCenter,
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/icon/cerrar_ventana.png',
-                      width: Get.width * 0.01,
-                      height: Get.height * 0.05,
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )),
-    );
+                  ],
+                )),
+          );
   }
 
   List<Widget> _cargarMarcas(
@@ -389,8 +437,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   }
 
   void cargarLista() async {
-    listaAllMarcas =
-        await await DBProvider.db.consultarMarcasPorFabricante(proveedor.value, proveedor2.value);
+    listaAllMarcas = await await DBProvider.db
+        .consultarMarcasPorFabricante(proveedor.value, proveedor2.value);
     listaMarca.value = listaAllMarcas;
   }
 

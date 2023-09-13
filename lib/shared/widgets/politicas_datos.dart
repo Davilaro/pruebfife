@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+//import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 void verPoliticasCondiciones(BuildContext context, politicasDatosPdf) {
-  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  //final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   void _aceptarPoliticas() {
     Navigator.pop(context);
   }
@@ -26,7 +26,7 @@ void verPoliticasCondiciones(BuildContext context, politicasDatosPdf) {
                 width: Get.height * 0.8,
                 child: PDFView(
                   pdfData: politicasDatosPdf ?? null,
-                  key: _pdfViewerKey,
+                  //skey: _pdfViewerKey,
                 ),
               ),
               GestureDetector(
