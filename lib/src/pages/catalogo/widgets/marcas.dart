@@ -37,8 +37,16 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   RxString proveedor = "".obs;
+  RxString proveedor2 = "".obs;
+
   RxList<Fabricante> listaFabricante = <Fabricante>[].obs;
-  RxInt indexAux = 0.obs;
+
+  RxBool esBuscadoNutresa = false.obs;
+  RxBool esBuscadoZenu = false.obs;
+  RxBool esBuscadoCrem = false.obs;
+  RxBool esBuscadoTodos = false.obs;
+
+  RxInt contadorSeleccionados = 0.obs;
 
   @override
   void initState() {
@@ -46,6 +54,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
     FlutterUxcam.tagScreenName('BrandsPage');
     controllerSearch.addListener(_runFilter);
     cargarLista();
+    cargarListaProovedor();
 
     super.initState();
   }
@@ -60,54 +69,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
             padding: const EdgeInsets.only(top: 10),
             child: Column(children: [
               Obx(
-                () => Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Get.width * 0.05, vertical: 0),
-                  child: SizedBox(
-                    height: Get.height * 0.07,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listaFabricante.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            proveedor.value = listaFabricante[index].empresa!;
-                            indexAux.value = index;
-                            cargarLista();
-                          });
-                        },
-                        child: Container(
-                          width: Get.width * 0.2,
-                          margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Get.width * 0.01,
-                              vertical: Get.height * 0.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: indexAux == index
-                                  ? ConstantesColores.azul_precio
-                                  : Colors.transparent,
-                              width: 2,
-                            ),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          alignment: Alignment.center,
-                          child: CachedNetworkImage(
-                            imageUrl: listaFabricante[index].icono!,
-                            alignment: Alignment.bottomCenter,
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/image/logo_login.png',
-                              height: Get.height * 0.05,
-                              alignment: Alignment.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                () => botonesProveedores()
               ),
               SizedBox(
                 height: Get.height * 0.02,
@@ -144,6 +106,207 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                                     .toList()),
                       ))))
             ])));
+  }
+   Widget botonesProveedores() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.04, vertical: 0),
+      child: SizedBox(
+          height: Get.height * 0.08,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+
+                    esBuscadoNutresa.isFalse && proveedor.value == 'NUTRESA'
+                    ? proveedor.value = ''
+                    : esBuscadoNutresa.isFalse && proveedor2.value == 'NUTRESA'
+                      ? proveedor2.value = ''
+                      :
+
+                      proveedor.isNotEmpty
+                          ? proveedor2.value.isNotEmpty 
+                            ?proveedor2.value = ''
+                            :proveedor2.value = listaFabricante[0].empresa!
+                          : proveedor.value = listaFabricante[0].empresa!;
+               
+                      esBuscadoNutresa.value = !esBuscadoNutresa.value;
+                      esBuscadoTodos.value = false;
+
+
+                      cargarLista();
+                    
+                  });
+                },
+                child: Container(
+                  width: Get.width * 0.2,
+                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: esBuscadoNutresa.value
+                          ? ConstantesColores.azul_precio
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: listaFabricante[0].icono!,
+                    alignment: Alignment.bottomCenter,
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/icon/cerrar_ventana.png',
+                      height: Get.height * 0.05,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+
+                    esBuscadoNutresa.isFalse && proveedor.value == 'ZENU'
+                    ? proveedor.value = ''
+                    : esBuscadoNutresa.isFalse && proveedor2.value == 'ZENU'
+                      ? proveedor2.value = ''
+                      :
+
+               
+                      proveedor.isNotEmpty
+                          ? proveedor2.value.isNotEmpty 
+                            ?proveedor2.value = ''
+                            :proveedor2.value = listaFabricante[1].empresa!
+                          : proveedor.value = listaFabricante[1].empresa!;
+
+                      esBuscadoZenu.value = !esBuscadoZenu.value;
+
+                      esBuscadoTodos.value = false;
+
+                      cargarLista();
+                    
+                  });
+                },
+                child: Container(
+                  width: Get.width * 0.2,
+                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: esBuscadoZenu.value
+                          ? ConstantesColores.azul_precio
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                    color: Colors.white,
+                  ),
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    imageUrl: listaFabricante[1].icono!,
+                    alignment: Alignment.bottomCenter,
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/icon/cerrar_ventana.png',
+                      height: Get.height * 0.05,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+
+                    esBuscadoNutresa.isFalse && proveedor.value == 'MEALS'
+                    ? proveedor.value = ''
+                    : esBuscadoNutresa.isFalse && proveedor2.value == 'MEALS'
+                      ? proveedor2.value = ''
+                      :
+
+                      proveedor.isNotEmpty
+                          ? proveedor2.value.isNotEmpty 
+                            ?proveedor2.value = ''
+                            :proveedor2.value = listaFabricante[2].empresa!
+                          : proveedor.value = listaFabricante[2].empresa!;
+
+                      esBuscadoCrem.value = !esBuscadoCrem.value;
+
+                      esBuscadoTodos.value = false;
+                      cargarLista();
+                    
+                  });
+                },
+                child: Container(
+                  width: Get.width * 0.2,
+                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: esBuscadoCrem.value
+                          ? ConstantesColores.azul_precio
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                    color: Colors.white,
+                  ),
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    imageUrl: listaFabricante[2].icono!,
+                    alignment: Alignment.bottomCenter,
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/icon/cerrar_ventana.png',
+                      height: Get.height * 0.05,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+
+                    proveedor.value = listaFabricante[3].empresa!;
+                    esBuscadoTodos.value = !esBuscadoTodos.value;
+                    proveedor2 = "".obs;
+
+                    esBuscadoCrem.value = false;
+                    esBuscadoNutresa.value = false;
+                    esBuscadoZenu.value = false;
+
+                    cargarLista();
+                  });
+                },
+                child: Container(
+                  width: Get.width * 0.2,
+                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: esBuscadoTodos.value
+                          ? ConstantesColores.azul_precio
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: listaFabricante[3].icono!,
+                    alignment: Alignment.bottomCenter,
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/icon/cerrar_ventana.png',
+                      width: Get.width * 0.01,
+                      height: Get.height * 0.05,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 
   List<Widget> _cargarMarcas(
@@ -227,9 +390,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
   void cargarLista() async {
     listaAllMarcas =
-        await await DBProvider.db.consultarMarcasPorFabricante(proveedor.value);
+        await await DBProvider.db.consultarMarcasPorFabricante(proveedor.value, proveedor2.value);
     listaMarca.value = listaAllMarcas;
-    cargarListaProovedor();
   }
 
   void cargarListaProovedor() async {

@@ -79,7 +79,7 @@ class SearchFuzzyView extends StatelessWidget {
                             height: 300,
                             child: ListView.builder(
                               itemCount:
-                                  searchFuzzyViewModel.allResultados.length,
+                                  10,
                               itemBuilder:
                                   (BuildContext context, int position) {
                                 return Column(
@@ -110,9 +110,6 @@ class SearchFuzzyView extends StatelessWidget {
                                                               searchFuzzyViewModel
                                                                       .allResultados[
                                                                   position])!,
-                                                  placeholder: (context, url) =>
-                                                      Image.asset(
-                                                          'assets/image/jar-loading.gif'),
                                                   errorWidget:
                                                       (context, url, error) =>
                                                           Image.asset(

@@ -418,7 +418,7 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
   cargarCategorias() async {
     //validar por el provedor
     var resQuery = await DBProvider.db
-        .consultarCategoriasPorFabricante(codigoProveedor ?? "");
+        .consultarCategoriasPorFabricante(codigoProveedor ?? "", '');
 
     listCategorias.clear();
     for (var i = 0; i < resQuery.length; i++) {

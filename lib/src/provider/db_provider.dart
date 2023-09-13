@@ -489,10 +489,10 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<dynamic> consultarMarcasPorFabricante(String fabricante) async {
+  Future<dynamic> consultarMarcasPorFabricante(String fabricante, String fabricante2) async {
     final db = await baseAbierta;
 
-    String where = fabricante != '' ? 'where fabricante = "$fabricante"' : '';
+    String where = fabricante != '' ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")' : '';
 
     try {
       final sql = await db.rawQuery('''
@@ -507,10 +507,10 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<dynamic> consultarCategoriasPorFabricante(String fabricante) async {
+  Future<dynamic> consultarCategoriasPorFabricante(String fabricante, String fabricante2) async {
     final db = await baseAbierta;
 
-    String where = fabricante != '' ? 'where fabricante = "$fabricante"' : '';
+    String where = fabricante != '' ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")' : '';
 
     try {
       final sql = await db.rawQuery('''
