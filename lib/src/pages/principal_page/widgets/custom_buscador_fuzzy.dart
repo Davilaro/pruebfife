@@ -1,33 +1,22 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:async';
-
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
-import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/routes/custonNavigatorBar.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
-import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -167,32 +156,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   SizedBox(
                     height: 5,
                   ),
-                  Container(
-                      height: size.height * 0.1,
-                      width: size.width * 1,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: _buscador(context, onSearchDebouncer),
-                            ),
-                            Visibility(
-                              visible:
-                                  controlador.isDisponibleFiltro.value == true,
-                              child: GestureDetector(
-                                onTap: () => {_irFiltro()},
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(right: 30, bottom: 10),
-                                  child: GestureDetector(
-                                    child: SvgPicture.asset(
-                                        'assets/image/filtro_btn.svg'),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ])),
-                  //Banner
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: _buscadorPrincipal(context),
+                  ),
                   Visibility(
                     visible: widget.isActiveBanner,
                     child: Container(
@@ -243,45 +210,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     return opciones;
   }
 
-  _buscador(BuildContext context, Debouncer onSearchDebouncer) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(12, 0, 12, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      width: MediaQuery.of(context).size.width * 0.75,
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-          controller: _controllerSearch,
-          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
-          decoration: InputDecoration(
-            fillColor: HexColor("#41398D"),
-            hintText: 'Encuentra tus productos',
-            hintStyle: TextStyle(
-              color: HexColor("#41398D"),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Icon(
-                Icons.search,
-                color: HexColor("#41398D"),
-              ),
-            ),
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
-          ),
-          onChanged: (val) => onSearchDebouncer.debounce(() {
-                if (val.length > 3) {
-                  //FIREBASE: Llamamos el evento search
-                  TagueoFirebase().sendAnalityticsSearch(val);
-                  //UXCam: Llamamos el evento search
-                  UxcamTagueo().search(val);
-                }
-                runFilter(_controllerSearch.text);
-              })),
-    );
-  }
 
   void cargarProductos() async {
     ProductoService productService =
@@ -391,70 +319,41 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-  void runFilter(String enteredKeyword) {
-    if (enteredKeyword.isEmpty) {
-      listaProducto.value = listaAllProducts;
-    } else {
-      List listaAux = [];
-      listaProducto.value = [];
-      listaAllProducts.forEach((element) {
-        if (element.codigo
-            .toLowerCase()
-            .contains(enteredKeyword.toLowerCase())) {
-          listaProducto.add(element);
-        }
-        listaAux.add(element.nombre);
-      });
-      final result = extractTop(
-        limit: 10,
-        query: _controllerSearch.text,
-        choices: listaAllProducts.map((element) => element.nombre).toList(),
-        cutoff: 10,
-      );
-      result
-          .map((r) => listaProducto.add(listaAllProducts
-              .firstWhere((element) => element.nombre == r.choice)))
-          .forEach(print);
-    }
+   _buscadorPrincipal(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+        color: HexColor("#E4E3EC"),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchFuzzyView()));
+        },
+        child: TextField(
+          enabled: false,
+          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
+          decoration: InputDecoration(
+            fillColor: HexColor("#41398D"),
+            hintText: 'Encuentra aquí todo lo que necesitas',
+            hintStyle: TextStyle(
+              color: HexColor("#41398D"),
+            ),
+            suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Icon(
+                  Icons.search,
+                  color: HexColor("#41398D"),
+                )),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
+          ),
+        ),
+      ),
+    );
   }
 
-  _irFiltro() async {
-    if (widget.locacionFiltro == "proveedor") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroProveedor(
-                  codCategoria: widget.codCategoria!,
-                  nombreCategoria: widget.nombreCategoria!,
-                  urlImagen: widget.img,
-                  codigoProveedor: widget.codigoProveedor,
-                )),
-      );
-    }
-    if (widget.locacionFiltro == "marca") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroPrecios(
-                  codMarca: widget.codigoMarca,
-                  nombreMarca: widget.nombreCategoria,
-                  urlImagen: widget.img,
-                )),
-      );
-    }
-    if (widget.locacionFiltro == "categoria") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroCategoria(
-                  codCategoria: widget.codCategoria,
-                  nombreCategoria: widget.nombreCategoria,
-                  urlImagen: widget.img,
-                  codSubCategoria: widget.codCategoria,
-                )),
-      );
-    }
-  }
 
   void _validacionGeneralNotificaciones() async {
     switch (widget.locacionFiltro) {

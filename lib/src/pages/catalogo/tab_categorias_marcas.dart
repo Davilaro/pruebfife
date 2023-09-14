@@ -37,14 +37,14 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
   ControllerProductos constrollerProductos = Get.find();
   RxInt contador = 5.obs;
 
-  // @override
-  // void initState() {
-  //   print("entre categorias");
-  //   super.initState();
-  //   //UXCAM: Se define el nombre de la interfaz
-  //   FlutterUxcam.tagScreenName('CategoriesTabs');
-  //   // cargarData();
-  // }
+  @override
+  void initState() {
+    print("entre categorias");
+    super.initState();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('CategoriesTabs');
+    // cargarData();
+  }
 
   @override
   Widget build(BuildContext context) {

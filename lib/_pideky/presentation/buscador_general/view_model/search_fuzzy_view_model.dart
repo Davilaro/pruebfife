@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -47,6 +49,11 @@ class SearchFuzzyViewModel extends GetxController {
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   List<ExtractedResult<String>> result = [];
+
+  
+
+  final BuildContext context =  Get.context!;
+
 
   @override
   void onInit() {
@@ -244,4 +251,5 @@ class SearchFuzzyViewModel extends GetxController {
     allResultados.value = [];
     searchInput.value = "";
   }
+
 }
