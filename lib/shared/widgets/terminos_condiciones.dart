@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-//import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 void verTerminosCondiciones(BuildContext context, terminosDatosPdf) {
-  // final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   showDialog(
       context: context,
@@ -23,7 +23,7 @@ void verTerminosCondiciones(BuildContext context, terminosDatosPdf) {
                 width: Get.height * 0.8,
                 child: terminosDatosPdf = PDFView(
                   pdfData: terminosDatosPdf,
-                  //key: _pdfViewerKey,
+                  key: _pdfViewerKey,
                 ),
               ),
               GestureDetector(

@@ -3,7 +3,7 @@ import 'package:emart/src/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-//import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class Politicas extends StatefulWidget {
   Politicas({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class _PoliticasState extends State<Politicas> {
     cargarArchivo();
   }
 
-  //final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -56,11 +56,10 @@ class _PoliticasState extends State<Politicas> {
                 Container(
                     height: Get.height * 0.8,
                     width: Get.height * 0.8,
-                    child: SizedBox()
-                    /* SfPdfViewer.network(
+                    child:  SfPdfViewer.network(
                     urlPoliticas,
                     key: _pdfViewerKey,
-                  ),*/
+                  ),
                     ),
                 GestureDetector(
                   onTap: () {

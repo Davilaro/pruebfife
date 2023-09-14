@@ -346,7 +346,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                                 ),
                               ),
                               AutoSizeText('Todos',
-                                  maxFontSize: 10,
+                                  maxFontSize: 9,
                                   style: TextStyle(
                                       color: ConstantesColores.azul_precio),
                                   minFontSize: 6,

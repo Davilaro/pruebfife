@@ -141,7 +141,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: Get.width * 0.05),
-                  
                 ],
               ),
             ),
@@ -155,9 +154,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                       horizontal: Get.width * 0.04,
                       vertical: Get.height * 0.01),
-                  children: 
-                      cargarResultadosCard(context)
-                      .toList())))
+                  children: cargarResultadosCard(context).toList())))
         ],
       ),
     );
@@ -183,6 +180,13 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
             final List<dynamic> listaSubCategorias = await DBProvider.db
                 .consultarCategoriasSubCategorias(
                     searchFuzzyViewModel.allResultados[i].codigo);
+            if (searchFuzzyViewModel.controllerUser.text != '') {
+              searchFuzzyViewModel.listaRecientes
+                  .add(searchFuzzyViewModel.allResultados[i]);
+
+              searchFuzzyViewModel.listaRecientes =
+                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+            }
 
             Navigator.push(
                 context,
@@ -244,6 +248,13 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                           locacionFiltro: "marca",
                           codigoProveedor: "",
                         )));
+            if (searchFuzzyViewModel.controllerUser.text != '') {
+              searchFuzzyViewModel.listaRecientes
+                  .add(searchFuzzyViewModel.allResultados[i]);
+
+              searchFuzzyViewModel.listaRecientes =
+                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+            }
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -297,6 +308,13 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                               .allResultados[i].empresa
                               .toString(),
                         )));
+            if (searchFuzzyViewModel.controllerUser.text != '') {
+              searchFuzzyViewModel.listaRecientes
+                  .add(searchFuzzyViewModel.allResultados[i]);
+
+              searchFuzzyViewModel.listaRecientes =
+                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+            }
           },
           child: Card(
               shape: RoundedRectangleBorder(
@@ -333,5 +351,3 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
     return opciones;
   }
 }
-
-

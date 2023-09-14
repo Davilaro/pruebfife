@@ -337,7 +337,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                                 ),
                               ),
                               AutoSizeText('Todos',
-                                  maxFontSize: 10,
+                                  maxFontSize: 9,
                                   style: TextStyle(
                                       color: ConstantesColores.azul_precio),
                                   minFontSize: 6,

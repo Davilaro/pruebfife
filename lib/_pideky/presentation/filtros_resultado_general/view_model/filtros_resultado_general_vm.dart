@@ -6,10 +6,9 @@ import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fu
 import 'package:get/get.dart';
 
 class FiltrosResultadoGeneralVm extends GetxController {
-
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
-  
+
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
 
   void cargarProductosFiltrados({
@@ -23,15 +22,14 @@ class FiltrosResultadoGeneralVm extends GetxController {
   }) async {
     valorRound == 1
         ? searchFuzzyViewModel.allResultados.value =
-                await productService.cargarProductosFiltroProveedores(
-                    codigoCategoria,
-                    2,
-                    searchFuzzyViewModel.controllerUser.text,
-                    precioMinimo,
-                    precioMaximo,
-                    codigoSubCategoria,
-                    codMarca,
-                    codProveedor)
+            await productService.cargarProductosInterno(
+                1,
+                searchFuzzyViewModel.controllerUser.text,
+                precioMinimo,
+                precioMaximo,
+                0,
+                "",
+                "")
         : valorRound == 2
             ? searchFuzzyViewModel.allResultados.value =
                 await productService.cargarProductosFiltroProveedores(
@@ -54,5 +52,4 @@ class FiltrosResultadoGeneralVm extends GetxController {
                     codMarca,
                     codProveedor);
   }
-
 }
