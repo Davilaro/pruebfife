@@ -37,14 +37,14 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
   ControllerProductos constrollerProductos = Get.find();
   RxInt contador = 5.obs;
 
-  @override
-  void initState() {
-    print("entre categorias");
-    super.initState();
-    //UXCAM: Se define el nombre de la interfaz
-    FlutterUxcam.tagScreenName('CategoriesTabs');
-    // cargarData();
-  }
+  // @override
+  // void initState() {
+  //   print("entre categorias");
+  //   super.initState();
+  //   //UXCAM: Se define el nombre de la interfaz
+  //   FlutterUxcam.tagScreenName('CategoriesTabs');
+  //   // cargarData();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
 
     final selectedColor = Colors.yellow;
 
-    return Obx(() => DefaultTabController(
+    return DefaultTabController(
         length: cargoConfirmar.seccionesDinamicas.length,
         child: Container(
           width: double.infinity,
@@ -94,19 +94,21 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                           Seccion seccion =
                               cargoConfirmar.seccionesDinamicas[index];
                           return Tab(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Get.width * 0.078),
-                              height: Get.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: cargoConfirmar.cambioTab.value == index
-                                    ? selectedColor
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(seccion.descripcion.toString()),
+                            child: Obx(
+                              () => Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Get.width * 0.078),
+                                height: Get.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: cargoConfirmar.cambioTab.value == index
+                                      ? selectedColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(seccion.descripcion.toString()),
+                                ),
                               ),
                             ),
                           );
@@ -115,21 +117,20 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                   Expanded(
                     child: TabBarView(
                       controller: cargoConfirmar.tabController,
-                      children: cargarWidgets(
-                          cargoConfirmar.seccionesDinamicas.value),
+                      children: cargarWidgets(),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           ),
-        )));
+        ));
   }
 
-  cargarWidgets(List data) {
+  List<Widget> cargarWidgets() {
     List<Widget> listWidget = [];
-    for (var i = 0; i < data.length; i++) {
-      Seccion seccion = data[i];
+    for (var i = 0; i < cargoConfirmar.seccionesDinamicas.length; i++) {
+      Seccion seccion = cargoConfirmar.seccionesDinamicas[i];
       listWidget.add(listSeccionsRoute[seccion.idSeccion]);
     }
     return listWidget;
