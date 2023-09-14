@@ -74,13 +74,7 @@ class LogInPage extends StatelessWidget {
                       _validationForms.userInteracted2.value = true; // Marca como interactuado
                     },
                     validator:  _validationForms.validateTextFieldNullorEmpty
-                    //(value) {
-                    //   if (value == null || value.isEmpty)
-                    //     return 'Campo requerido';
-                    //   if (value.trim().isEmpty) return 'Campo requerido';
-                    //   if (value.length < 6)
-                    //     return 'Usuario debe tener más de 6 caracteres';
-                    // },
+                   
                     ),
 
                 SizedBox(height: 15.0),
@@ -103,19 +97,7 @@ class LogInPage extends StatelessWidget {
                  // onChanged: (value) => password = value,
 
                  validator: _validationForms.validatePassword
-                  // validator: (value) {
-                  //   if (value == null || value.isEmpty)
-                  //     return 'Campo requerido';
-                  //   if (value.trim().isEmpty) return 'Campo requerido';
-                  //   final passwordRegExp = RegExp(
-                  //       //r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])(?!.*[\W_]).{8,}$'
-                  //       //r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
-                  //       r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-                  //   if (!passwordRegExp.hasMatch(value))
-                  //     return 'No es una contraseña válida';
-
-                  //   return null;
-                  // },
+                
                 ),
 
                 Container(
@@ -166,24 +148,10 @@ class LogInPage extends StatelessWidget {
                           SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
                         );
                       }
-                      // },
-
-                      // final isValid = formkey.currentState!.validate();
-                      // if (!isValid)
-                      //   showPopup(
-                      //       context,
-                      //       'Usuario y/o contraseña incorrecto',
-                      //       SvgPicture.asset(
-                      //         'assets/image/Icon_incorrecto.svg',
-                      //       ));
-                      // else
-                      //   Get.to(() => CreatePasswordPage());
-                      // showPopup(context, 'Ingreso correcto',
-                      //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                     
                     },
                     text: "Ingresar"),
 
-                // print('$username , $password');
                 // showPopupFindClientCode(
                 //     context, Image.asset('assets/image/factura_imagen.png'));
 

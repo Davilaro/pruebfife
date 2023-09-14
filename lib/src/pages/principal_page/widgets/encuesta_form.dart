@@ -28,6 +28,8 @@ class EncuestaForm extends StatefulWidget {
 
 class _EncuestaFormState extends State<EncuestaForm> {
   TextEditingController controllerText = TextEditingController();
+   TextEditingController controllerEmail = TextEditingController();
+   TextEditingController controllerTelephone = TextEditingController();
   RxString mensajeValid = ''.obs;
   String _seleccion = '';
   late Map<String, bool> _opcionesMultiple = {};
@@ -125,6 +127,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               )),
                         )
                       : Container(),
+                      
                   //Pregunta seleccion multiple mutiples respuesta
                   widget.encuesta.tipoPreguntaId == 4
                       ? Visibility(
@@ -161,9 +164,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
                           ),
                         )
                       : Container(),
-                      
-                      // Pregunta teléfono y correo
 
+                  // Pregunta teléfono y correo
                   Visibility(           
                     visible: widget.encuesta.tipoPreguntaId == 13 || widget.encuesta.tipoPreguntaId == 14, 
                     child: Column(
@@ -173,7 +175,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                             keyboardType: TextInputType.text,
                             hintText: 'Ingresa tu correo electrónico',
                             backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerText,
+                            controller: controllerEmail,
                             onChanged: (value) {
                               String? validationError =
                                   _validationForms.validateEmail(value);
@@ -189,7 +191,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                             keyboardType: TextInputType.number,
                             hintText: 'Ingresa tu número de  celular',
                             backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerText,
+                            controller: controllerTelephone,
                             onChanged: (value) {
                               String? validationError =
                                   _validationForms.validateTelephone(value);
@@ -199,6 +201,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               });
                             },
                             errorMessage: _errorText,
+                            
                           ),
                       ],
                     ),
@@ -283,8 +286,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
   Future _validarInformacion(BuildContext context, Encuesta encuesta) async {
     if (encuesta.tipoPreguntaId == 1 && controllerText.text.isNotEmpty ||
         encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty || 
-        encuesta.tipoPreguntaId == 13 && controllerText.text.isNotEmpty ||
-        encuesta.tipoPreguntaId == 14 && controllerText.text.isNotEmpty) {
+        encuesta.tipoPreguntaId == 13 && _errorText == null && controllerEmail.text.isNotEmpty ||
+        encuesta.tipoPreguntaId == 14 && _errorText == null && controllerTelephone.text.isNotEmpty) {
       mensajeValid.value = '';
       var respues =
           await Servicies().enviarEncuesta(encuesta, controllerText.text);
@@ -346,7 +349,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
         mensajeValid.value = 'Por favor seleccione una respuesta';
       }
     } else {
-      mensajeValid.value = 'Por favor ingrese una respuesta';
+      //mensajeValid.value = 'Por favor ingrese una respuesta';
     }
      
 

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 
 class ValidationForms extends GetxController {
-  // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   RxString userName = ''.obs;
   RxString password = ''.obs;
   RxString bussinesName = ''.obs;
@@ -10,22 +9,16 @@ class ValidationForms extends GetxController {
   RxString businessAddress = ''.obs;
   RxString nit = ''.obs;
   RxString cellPhoneNumber = ''.obs;
-  // RxString createPassword   = ''.obs;
   RxString confirmPassword = ''.obs;
   RxString confirmationCode = ''.obs;
-
   RxBool userInteracted = false.obs;
   RxBool userInteracted2 = false.obs;
 
   final passwordError = 'No es una contraseña válida'.obs;
   final emailError = ''.obs;
 
-  //Variables para linea de progreso de contraseña
-  // late String _password;
-  // double _strength = 0;
-  RegExp passwordRegExp =
-      RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-  // String _displayText = '';
+    RegExp passwordRegExp = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
+
 
   RxString createPassword = ''.obs;
   RxDouble strength = 0.0.obs;
@@ -75,7 +68,6 @@ class ValidationForms extends GetxController {
     return null;
   }
 
-  //Validación principal para campos de contraseña válida que el campo no este vacío y tampoco sea null y cumpla las reglas de contraseña según el  requerimiento.
   String? validatePassword(String? value) {
     passwordError.value = 'No es una contraseña válida';
     if (value == null || value.isEmpty) {

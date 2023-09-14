@@ -396,7 +396,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<List<dynamic>> consultarEncuesta() async {
+  Future<List<Encuesta>> consultarEncuesta() async {
     try {
       final db = await baseAbierta;
       List<Encuesta> lista = [];
