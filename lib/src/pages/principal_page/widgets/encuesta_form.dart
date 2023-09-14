@@ -28,8 +28,8 @@ class EncuestaForm extends StatefulWidget {
 
 class _EncuestaFormState extends State<EncuestaForm> {
   TextEditingController controllerText = TextEditingController();
-   TextEditingController controllerEmail = TextEditingController();
-   TextEditingController controllerTelephone = TextEditingController();
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerTelephone = TextEditingController();
   RxString mensajeValid = ''.obs;
   String _seleccion = '';
   late Map<String, bool> _opcionesMultiple = {};
@@ -127,7 +127,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               )),
                         )
                       : Container(),
-                      
+
                   //Pregunta seleccion multiple mutiples respuesta
                   widget.encuesta.tipoPreguntaId == 4
                       ? Visibility(
@@ -166,8 +166,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       : Container(),
 
                   // Pregunta teléfono y correo
-                  Visibility(           
-                    visible: widget.encuesta.tipoPreguntaId == 13 || widget.encuesta.tipoPreguntaId == 14, 
+                  Visibility(
+                    visible: widget.encuesta.tipoPreguntaId == 13 ||
+                        widget.encuesta.tipoPreguntaId == 14,
                     child: Column(
                       children: [
                         if (widget.encuesta.tipoPreguntaId == 13)
@@ -180,8 +181,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               String? validationError =
                                   _validationForms.validateEmail(value);
                               setState(() {
-                                _errorText =
-                                    validationError; 
+                                _errorText = validationError;
                               });
                             },
                             errorMessage: _errorText,
@@ -196,17 +196,15 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               String? validationError =
                                   _validationForms.validateTelephone(value);
                               setState(() {
-                                _errorText =
-                                    validationError; 
+                                _errorText = validationError;
                               });
                             },
                             errorMessage: _errorText,
-                            
                           ),
                       ],
                     ),
                   ),
-               
+
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     width: Get.width * 0.5,
@@ -285,9 +283,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
 
   Future _validarInformacion(BuildContext context, Encuesta encuesta) async {
     if (encuesta.tipoPreguntaId == 1 && controllerText.text.isNotEmpty ||
-        encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty || 
-        encuesta.tipoPreguntaId == 13 && _errorText == null && controllerEmail.text.isNotEmpty ||
-        encuesta.tipoPreguntaId == 14 && _errorText == null && controllerTelephone.text.isNotEmpty) {
+        encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty) {
       mensajeValid.value = '';
       var respues =
           await Servicies().enviarEncuesta(encuesta, controllerText.text);
@@ -348,11 +344,41 @@ class _EncuestaFormState extends State<EncuestaForm> {
       } else {
         mensajeValid.value = 'Por favor seleccione una respuesta';
       }
-    } else {
-      //mensajeValid.value = 'Por favor ingrese una respuesta';
+    } else if (encuesta.tipoPreguntaId == 13) {
+      if (_errorText == null && controllerEmail.text.isNotEmpty) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, controllerEmail.text);
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          controllerText.text = '';
+          alertaFinEncuesta();
+          return;
+        }
+      } else {
+        // mensajeValid.value = 'Por favor seleccione una respuesta';
+      }
+    } else if (encuesta.tipoPreguntaId == 14) {
+      if (_errorText == null && controllerTelephone.text.isNotEmpty) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, controllerTelephone.text);
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          controllerText.text = '';
+          alertaFinEncuesta();
+          return;
+        }
+      }
     }
-     
-
   }
 
   alertaFinEncuesta() {
