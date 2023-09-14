@@ -1,14 +1,17 @@
+import 'package:emart/generated/l10n.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 import '../../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../../shared/widgets/popups.dart';
 import '../../../../../src/preferences/cont_colores.dart';
-import 'face_id_page.dart';
 
 class TouchIdPage extends StatefulWidget {
   const TouchIdPage();
@@ -20,29 +23,25 @@ class TouchIdPage extends StatefulWidget {
 class _TouchIdPageState extends State<TouchIdPage> {
   // bool authenticated = false;
 
-  late final LocalAuthentication auth;
-  bool _supporState = false;
-
-  @override
-  void initState() {
-    super.initState();
-    auth = LocalAuthentication();
-    auth.isDeviceSupported().then((bool isSupported) => setState(() {
-          _supporState = isSupported;
-        }));
-  }
+  final LocalAuthentication auth = LocalAuthentication();
+  final prefs = Preferencias();
+  final validationForm = Get.find<ValidationForms>();
 
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressDialog(context);
+    progress.style(
+        message: S.current.logging_in,
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Container(
             padding: EdgeInsets.only(top: 150, left: 30, right: 30),
             child: Column(children: [
-              if (_supporState)
-                const Text('This device is supported')
-              else
-                const Text('This devices is not supported'),
               Container(
                   child: Image(
                 image: AssetImage('assets/image/Icon_touch_ID.png'),
@@ -67,24 +66,18 @@ class _TouchIdPageState extends State<TouchIdPage> {
                 borderRadio: 35,
                 height: Get.height * 0.06,
                 color: ConstantesColores.empodio_verde,
-                onTap: () {
-                  _getAvaliableBiometrics(); // () async {
-                  _authenticate();
-
-                  showPopup(context, 'Touch ID activado',
-                      SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                  showPopupSuccessfulregistration(context);
-                  showPopupUnrecognizedfingerprint(context, 'Huella no reconocida',
-                  Image(image: AssetImage('assets/image/Icon_touch_ID.png'),
-                  fit: BoxFit.contain,
-                ) );
+                onTap: () async {
+                  await _getAvaliableBiometrics(); // () async {
+                  await _authenticate(context, progress);
                 },
                 text: "Usar Touch ID",
               ),
               TextButton(
-                  onPressed: () {
-                    Get.to(() => FaceIdPage());
+                  onPressed: () async {
+                    prefs.isDataBiometricActive = false;
+                    await progress.show();
+                    await validationForm.login(
+                        context, validationForm.userName.value, progress, false);
                     //Get.back();
                   },
                   child: Text('Cancelar',
@@ -96,19 +89,35 @@ class _TouchIdPageState extends State<TouchIdPage> {
             ])));
   }
 
-  Future<void> _authenticate() async {
+  Future<void> _authenticate(context, progress) async {
     try {
       bool authenticated = await auth.authenticate(
         localizedReason:
-            'Suscribe or you will never find any stack overflow answer',
+            'Por favor pon tu huella para ingresar a la aplicación.',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
         ),
       );
+      if (authenticated) {
+        prefs.isDataBiometricActive = true;
+        prefs.ccupBiometric = validationForm.userName.value;
+        await progress.show();
+        await validationForm.login(
+            context, validationForm.userName.value, progress, true);
+        await showPopup(context, 'Touch ID activado',
+            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+      }
 
       print('Authenticated : $authenticated');
     } on PlatformException catch (e) {
+      showPopupUnrecognizedfingerprint(
+          context,
+          'Huella no reconocida',
+          Image(
+            image: AssetImage('assets/image/Icon_touch_ID.png'),
+            fit: BoxFit.contain,
+          ));
       print(e);
     }
   }

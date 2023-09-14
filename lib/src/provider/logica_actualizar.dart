@@ -23,7 +23,7 @@ class LogicaActualizar {
       //     prefs.codigopadrepideky,
       //     false);
       await AppUtil.appUtil
-          .downloadZip(prefs.usurioLoginCedula, prefs.sucursal, false);
+          .downloadZip(prefs.codigoUnicoPideky, prefs.sucursal, false);
       await AppUtil.appUtil.abrirBases();
       await _cargarDataUsuario();
     }
@@ -32,7 +32,7 @@ class LogicaActualizar {
   _cargarDataUsuario() async {
     try {
       List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
-
+      
       prefs.usuarioRazonSocial = datosCliente[0].razonsocial;
       prefs.codCliente = datosCliente[0].codigo;
       prefs.codTienda = 'nutresa';

@@ -148,16 +148,24 @@ class CreatePasswordPage extends StatelessWidget {
                         borderRadio: 35,
                         height: Get.height * 0.06,
                         color: ConstantesColores.empodio_verde,
-                        onTap: () {
+                        onTap: () async {
                           final isValid = formkey.currentState!.validate();
-                          if (!isValid) return;
-                          Get.to(() => TermsAndConditionsPage());
-                          showPopup(
-                              context,
-                              'Contraseña actualizada',
-                              SvgPicture.asset(
-                                'assets/image/Icon_correcto.svg',
-                              ));
+                          if (isValid == false)
+                            return;
+                          else {
+                            bool response =
+                                await _validationForms.changePassword();
+                            if (response == true) {
+                              await _validationForms.getDataSecurityQuestion();
+                              Get.to(() => TermsAndConditionsPage());
+                              showPopup(
+                                  context,
+                                  'Contraseña actualizada',
+                                  SvgPicture.asset(
+                                    'assets/image/Icon_correcto.svg',
+                                  ));
+                            }
+                          }
                         },
                         text: "Actualizar contraseña"),
                     SizedBox(height: 10.0),

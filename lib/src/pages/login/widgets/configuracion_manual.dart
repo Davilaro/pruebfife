@@ -403,8 +403,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     late Estado estado;
 
     if (tipo == 'TELEFONO') {
-      estado =
-          await Servicies().enviarMS(dropdownValue, widget.codigoRespuesta);
+      // estado =
+      //     await Servicies().enviarMS(dropdownValue, widget.codigoRespuesta);
     } else {
       estado = await Servicies().enviarCorreo(
           _controllerCorreo.text.toString().replaceAll(' ', ''),
@@ -733,7 +733,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
   Future loguin(BuildContext context) async {
     List<dynamic> respuesta =
-        await Servicies().getListaSucursales(prefs.codClienteLogueado);
+        await Servicies().getListaSucursales(false);
 
     if (respuesta.length > 0) {
       pr.hide();

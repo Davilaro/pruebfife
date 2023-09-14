@@ -1,5 +1,7 @@
+
 import 'package:emart/_pideky/presentation/authentication/view/restore_password_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,8 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(StateControllerRadioButtonsAndChecks());
+   
+    FocusManager.instance.primaryFocus?.unfocus();
 
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
@@ -56,7 +60,11 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
                     ? ConstantesColores.empodio_verde
                     : Colors.grey,
                 onTap: controller.isPhoneNumberSelected
-                    ? () {
+                    ? () async {
+                        if (await controller.sendMsg() == false) {
+                          return;
+                        }
+
                         Get.to(() => ConfirmIdentityEnterCodePage());
                       }
                     : null,
@@ -77,7 +85,7 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
       floatingActionButton: Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-          padding: const EdgeInsets.only(left: 40, bottom: 80),
+          padding: const EdgeInsets.only(left: 40, bottom: 40),
           child: Container(
             height: 32,
             width: 130,

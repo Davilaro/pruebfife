@@ -1,5 +1,6 @@
-import 'package:emart/_pideky/presentation/authentication/view/register_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
+import 'dart:io';
+import 'package:emart/_pideky/presentation/authentication/view/entry_as_collaboratol.dart';
+import 'package:emart/_pideky/presentation/authentication/view/register/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/shared/widgets/custom_checkBox.dart';
@@ -7,37 +8,25 @@ import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import '../../../../../generated/l10n.dart';
 import '../../../../../shared/widgets/custom_textFormField.dart';
 import '../../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../../src/preferences/cont_colores.dart';
-import '../biometric_id/touch_id_page.dart';
 
-class LogInPageOldUser extends StatefulWidget {
-  LogInPageOldUser({Key? key}) : super(key: key);
-
-  @override
-  State<LogInPageOldUser> createState() => _LogInPageOldUserState();
-}
-
-class _LogInPageOldUserState extends State<LogInPageOldUser> {
-  final ValidationForms _validationForms = Get.put(ValidationForms());
-
-  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+class LogInPage extends StatelessWidget {
+  LogInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pr = ProgressDialog(context);
-    pr.style(
-        message: S.current.logging_in,
-        progressWidget: Image(
-          image: AssetImage('assets/image/jar-loading.gif'),
-          fit: BoxFit.cover,
-          height: 20,
-        ));
+    final ValidationForms _validationForms = Get.find<ValidationForms>();
+
+    final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('LoginPage');
+    String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
+
     double screenWidth = MediaQuery.of(context).size.width;
     double scaleFactor = 0.6;
 
@@ -84,15 +73,7 @@ class _LogInPageOldUserState extends State<LogInPageOldUser> {
                       _validationForms.userInteracted2.value =
                           true; // Marca como interactuado
                     },
-                    validator: _validationForms.validateTextFieldNullorEmpty
-                    //(value) {
-                    //   if (value == null || value.isEmpty)
-                    //     return 'Campo requerido';
-                    //   if (value.trim().isEmpty) return 'Campo requerido';
-                    //   if (value.length < 6)
-                    //     return 'Usuario debe tener más de 6 caracteres';
-                    // },
-                    ),
+                    validator: _validationForms.validateTextFieldNullorEmpty),
                 SizedBox(height: 15.0),
                 CustomTextFormField(
                     // controller: _controllerPassword,
@@ -110,33 +91,20 @@ class _LogInPageOldUserState extends State<LogInPageOldUser> {
                       _validationForms.userInteracted.value =
                           true; // Marca como interactuado
                     },
-                    // onChanged: (value) => password = value,
-
-                    validator: _validationForms.validatePassword
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty)
-                    //     return 'Campo requerido';
-                    //   if (value.trim().isEmpty) return 'Campo requerido';
-                    //   final passwordRegExp = RegExp(
-                    //       //r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])(?!.*[\W_]).{8,}$'
-                    //       //r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
-                    //       r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-                    //   if (!passwordRegExp.hasMatch(value))
-                    //     return 'No es una contraseña válida';
-
-                    //   return null;
-                    // },
+                    validator: _validationForms.validatePassword),
+                Visibility(
+                  visible: prefs.isFirstTime != true ? true : false,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    width: double.infinity,
+                    child: TextButtonWithUnderline(
+                      text: "¿Olvidaste tu contraseña?",
+                      onPressed: () {
+                        Get.to(() => ConfirmIdentitySelectMethodPage());
+                      },
+                      textColor: HexColor("#41398D"),
+                      textSize: 15.0,
                     ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: double.infinity,
-                  child: TextButtonWithUnderline(
-                    text: "¿Olvidaste tu contraseña?",
-                    onPressed: () {
-                      Get.to(() => ConfirmIdentitySelectMethodPage());
-                    },
-                    textColor: HexColor("#41398D"),
-                    textSize: 15.0,
                   ),
                 ),
                 Row(
@@ -158,28 +126,7 @@ class _LogInPageOldUserState extends State<LogInPageOldUser> {
                     onTap: () async {
                       final isValid = formkey.currentState!.validate();
                       if (isValid) {
-                        await pr.show();
-                        var validation =
-                            await _validationForms.sendUserAndPassword(
-                                _validationForms.userName.value,
-                                _validationForms.password.value);
-                        if (validation) {
-                          await pr.hide();
-                          Get.to(() => CreatePasswordPage());
-                          showPopup(
-                            context,
-                            'Ingreso correcto',
-                            SvgPicture.asset('assets/image/Icon_correcto.svg'),
-                          );
-                        } else {
-                          await pr.hide();
-                          showPopup(
-                            context,
-                            'Usuario y/o contraseña incorrecto',
-                            SvgPicture.asset(
-                                'assets/image/Icon_incorrecto.svg'),
-                          );
-                        }
+                        await _validationForms.validationLoginNewUser(context);
                       } else {
                         showPopup(
                           context,
@@ -197,28 +144,74 @@ class _LogInPageOldUserState extends State<LogInPageOldUser> {
                   textColor: HexColor("#41398D"),
                   textSize: 18.0,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => TouchIdPage());
+                TextButtonWithUnderline(
+                  text: "Ingreso como colaborador",
+                  onPressed: () {
+                    Get.to(() => EntryAsCollaboratorPage());
                   },
-                  child: Container(
-                      height: 70,
-                      child: Image(
-                        image: AssetImage('assets/image/Icon_touch_ID.png'),
-                        fit: BoxFit.contain,
-                      )),
+                  textColor: ConstantesColores.gris_sku,
+                  textSize: 15.0,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text('Ingresar con Touch ID',
-                    style: TextStyle(
-                        color: ConstantesColores.gris_sku,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400))
+                prefs.isDataBiometricActive != true
+                    ? SizedBox.shrink()
+                    : plataforma == "Ios"
+                        ? _validationForms.supportState.value == true
+                            ? Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await _validationForms
+                                          .loginWithBiometricData(context);
+                                    },
+                                    child: Container(
+                                        height: 70,
+                                        child: Image(
+                                          image: AssetImage(
+                                              'assets/image/Image_face_ID.png'),
+                                          fit: BoxFit.contain,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('Ingresar con Face ID',
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_sku,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400))
+                                ],
+                              )
+                            : SizedBox.shrink()
+                        : _validationForms.supportState.value == true
+                            ? Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await _validationForms
+                                          .loginWithBiometricData(context);
+                                    },
+                                    child: Container(
+                                        height: 70,
+                                        child: Image(
+                                          image: AssetImage(
+                                              'assets/image/Icon_touch_ID.png'),
+                                          fit: BoxFit.contain,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('Ingresar con Touch ID',
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_sku,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400))
+                                ],
+                              )
+                            : SizedBox.shrink()
               ],
             ),
           ),

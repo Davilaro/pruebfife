@@ -1,10 +1,10 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/restore_password_page.dart';
+import 'package:emart/shared/widgets/custom_textFormField.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
-import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class ConfirmIdentitySelectMethodPage extends StatelessWidget {
@@ -12,6 +12,9 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValidationForms _validationForms = Get.find<ValidationForms>();
+
+    final GlobalKey<FormState> formkey = GlobalKey<FormState>();
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         appBar: AppBar(
@@ -24,32 +27,43 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
         ),
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(children: [
-              SizedBox(height: 15.0),
-              Text(
-                  "Te ayudaremos a configurar una \n nueva contraseña, pero primero \n debemos verificar tu identidad",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: ConstantesColores.gris_sku,
-                    fontSize: 15,
-                  )),
-              SizedBox(height: 35.0),
-              BotonAgregarCarrito(
-                  borderRadio: 35,
-                  height: Get.height * 0.06,
-                  color: ConstantesColores.empodio_verde,
-                  onTap: () {
-                    Get.to(() => ConfirmIdentitySendSMSPage());
-                  },
-                  text: "Enviar mensaje de texto"),
-              TextButtonWithUnderline(
-                text: "Probar otro metodo",
-                onPressed: () {
-                  Get.to(() => RestorePasswordPage());
-                },
-                textColor: HexColor("#41398D"),
-                textSize: 18.0,
-              ),
-            ])));
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formkey,
+              child: Column(children: [
+                SizedBox(height: 15.0),
+                Text(
+                    "Te ayudaremos a configurar una \n nueva contraseña, pero primero \n debemos verificar tu identidad",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: ConstantesColores.gris_sku,
+                      fontSize: 15,
+                    )),
+                SizedBox(height: 15.0),
+                CustomTextFormField(
+                    textAlign: TextAlign.center,
+                    hintText: 'Ingresa el usuario o Nit',
+                    hintStyle: TextStyle(color: ConstantesColores.gris_sku),
+                    backgroundColor: Colors.white,
+                    textColor: HexColor("#41398D"),
+                    borderRadius: 35,
+                    icon: Icons.perm_identity,
+                    onChanged: (value) {
+                      _validationForms.userName.value = value;
+                      _validationForms.userInteracted2.value =
+                          true; // Marca como interactuado
+                    },
+                    validator: _validationForms.validateTextFieldNullorEmpty),
+                BotonAgregarCarrito(
+                    width: Get.width * 0.9,
+                    borderRadio: 35,
+                    height: Get.height * 0.06,
+                    color: ConstantesColores.empodio_verde,
+                    onTap: () {
+                      Get.to(() => ConfirmIdentitySendSMSPage());
+                    },
+                    text: "Aceptar"),
+              ]),
+            )));
   }
 }

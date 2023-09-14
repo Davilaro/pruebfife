@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-void showPopup(
+Future<void> showPopup(
   BuildContext context,
   String mensaje,
   Widget? icon,
-) {
+) async {
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -34,7 +34,7 @@ void showPopup(
                         child: Container(),
                       ),
                       GestureDetector(
-                        onTap: () => Get.back(),
+                        onTap: () => Navigator.of(context).pop(),
                         child: Icon(
                           Icons.cancel_outlined,
                           color: ConstantesColores.azul_precio,
@@ -152,7 +152,7 @@ void showPopupFindClientCode(
 
 void showPopupUnrecognizedfingerprint(
   BuildContext context,
-   String mensaje,
+  String mensaje,
   Widget? icon,
 ) {
   showDialog(
@@ -162,17 +162,18 @@ void showPopupUnrecognizedfingerprint(
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
-          contentPadding: EdgeInsets.only(top: 55, left:30, right: 30, bottom: 30),
+          contentPadding:
+              EdgeInsets.only(top: 55, left: 30, right: 30, bottom: 30),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
                     child: icon != null
-                    ? icon 
-                    : Image(
-                  image: AssetImage('assets/image/Icon_touch_ID.png'),
-                  fit: BoxFit.contain,
-                )),
+                        ? icon
+                        : Image(
+                            image: AssetImage('assets/image/Icon_touch_ID.png'),
+                            fit: BoxFit.contain,
+                          )),
                 SizedBox(height: 20),
                 Text(mensaje,
                     style: TextStyle(
@@ -184,15 +185,18 @@ void showPopupUnrecognizedfingerprint(
                   borderRadio: 35,
                   height: Get.height * 0.06,
                   color: ConstantesColores.empodio_verde,
-                  onTap: () {},
+                  onTap: () {
+                    Get.back();
+                  },
                   text: "Probar de nuevo",
                 ),
                 TextButton(
                   child: Text(
                     "Cancelar",
-                    style: TextStyle(color: HexColor("#41398D"), 
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                        color: HexColor("#41398D"),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900),
                   ),
                   onPressed: () {
                     Get.back();
@@ -205,11 +209,11 @@ void showPopupUnrecognizedfingerprint(
       });
 }
 
-void showPopupSuccessfulregistration(
+Future<void> showPopupSuccessfulregistration(
   BuildContext context,
   // String mensaje,
- // Widget? icon,
-) {
+  // Widget? icon,
+) async {
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -217,7 +221,8 @@ void showPopupSuccessfulregistration(
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
-          contentPadding: EdgeInsets.only(top: 30, left:10, right: 10, bottom: 15),
+          contentPadding:
+              EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 15),
           content: SingleChildScrollView(
             child: Column(
               children: [
@@ -227,37 +232,34 @@ void showPopupSuccessfulregistration(
                   fit: BoxFit.contain,
                 )),
                 SizedBox(height: 20),
-                Text('¡Registro exitoso!',
+                Text('¡Perfecto!',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.w900)),
                 SizedBox(height: 15.0),
-
                 Container(
-                 // color: Colors.amber,
+                  // color: Colors.amber,
                   width: double.infinity,
-                  child: Text('¡Se ha realizado correctamente el registro de \n tu cuenta Pideky, a continuación selecciona \n una sucursal para comenzar a realizar \n tus pedidos. !',
+                  child: Text(
+                      'Se ha realizado correctamente la petición para ser cliente Pideky, pronto nos pondremos en contacto contigo',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          
-                          //fontWeight: FontWeight.w500
-                          )
-                          ),
-                ),
+                        color: Colors.black,
+                        fontSize: 13,
 
+                        //fontWeight: FontWeight.w500
+                      )),
+                ),
                 BotonAgregarCarrito(
                   borderRadio: 35,
                   height: Get.height * 0.05,
                   color: ConstantesColores.azul_precio,
                   onTap: () {
-                      Get.back();
+                    Get.back();
                   },
                   text: "Aceptar",
                 ),
-               
               ],
             ),
           ),

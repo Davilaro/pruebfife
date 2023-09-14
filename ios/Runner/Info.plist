@@ -75,6 +75,6 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Why is my app authenticating using face id?</string>
+	<string>La aplicaciòn requiere el uso de face id para el inicio de sesion altero al tradicional de usuario y contraseña</string>
 </dict>
 </plist>

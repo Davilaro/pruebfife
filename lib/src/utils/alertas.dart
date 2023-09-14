@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page_old_user.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/pages/login/login.dart';
@@ -159,7 +159,7 @@ void alertCustom(BuildContext context) {
                   'tab_opciones', (Route<dynamic> route) => false);
             },
             onLeftPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Login())),
+                context, MaterialPageRoute(builder: (context) => LogInPage())),
             content: Container(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
@@ -172,7 +172,7 @@ void alertCustom(BuildContext context) {
       });
 }
 
-void mostrarAlertCustomWidget(
+void mostrarAlertCustomWidgetOld(
   BuildContext context,
   Widget mensaje,
   Widget? icon,
@@ -300,7 +300,7 @@ void mostrarAlertCartera(
 }
 
 void mostrarAlertaPopUpVisto(
-    BuildContext context, String proveedores, List listaProveedores) {
+    BuildContext context, String proveedores, List<Map> listaProveedores) {
   showDialog(
       context: context,
       barrierDismissible: false,

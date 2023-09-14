@@ -529,6 +529,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             }
           }
         } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+          print("entre marca");
           controllerNotificaciones.closeSlideUp.value = false;
           if (controllerNotificaciones
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
@@ -573,6 +574,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             }
           }
         } else if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+          controllerNotificaciones.closeSlideUp.value = false;
           if (controllerNotificaciones
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
                   true &&

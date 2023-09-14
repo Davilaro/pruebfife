@@ -43,15 +43,13 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   final cargoControllerBase = Get.put(ControlBaseDatos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
 
-  late OpcionesBard? opcionesAppBard;
-
   @override
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('ListBranchesPage');
+
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
-    opcionesAppBard = Provider.of<OpcionesBard>(context);
 
     usuariLogin = args.usuario;
 
@@ -221,6 +219,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
+    final opcionesAppBard = Provider.of<OpcionesBard>(context, listen: false);
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
     // prefs.codTienda = 'nutresa';
@@ -254,8 +253,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
     setState(() {});
 
+    opcionesAppBard.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
-    opcionesAppBard!.selectOptionMenu = 0;
+    // Navigator.of(context).pushNamedAndRemoveUntil(
+    //     'tab_opciones', (Route<dynamic> route) => false);
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
@@ -272,7 +273,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     PedidoEmart.listaProductos = new Map();
     PedidoEmart.listaValoresPedidoAgregados = new Map();
 
-    await AppUtil.appUtil.downloadZip(usuariLogin!, elemento.sucursal, false);
+    await AppUtil.appUtil
+        .downloadZip(prefs.codigoUnicoPideky!, elemento.sucursal, false);
     // var cargo = await AppUtil.appUtil.downloadZip(
     //     usuariLogin!,
     //     prefs.codCliente,

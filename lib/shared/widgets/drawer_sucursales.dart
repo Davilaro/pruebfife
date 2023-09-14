@@ -40,7 +40,6 @@ class DrawerSucursales extends StatefulWidget {
 
 class _DrawerSucursalesState extends State<DrawerSucursales> {
   late Object? valueRadio;
-  late OpcionesBard? opcionesAppBard;
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
   @override
@@ -55,7 +54,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   Widget build(BuildContext context) {
     final provider = Provider.of<DatosListas>(context);
     final cartProvider = Provider.of<CarroModelo>(context);
-    opcionesAppBard = Provider.of<OpcionesBard>(context);
+
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -109,7 +108,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
               ],
             ),
             FutureBuilder(
-              future: Servicies().getListaSucursales(prefs.codClienteLogueado),
+              future: Servicies().getListaSucursales(false),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 List listaSucursales = snapshot.data;
                 if (snapshot.hasData) {
@@ -265,8 +264,12 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     setState(() {});
     confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
 
+    //Get.off(() => TabOpciones());
+    providerCar.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
-    opcionesAppBard!.selectOptionMenu = 0;
+    // Navigator.of(context).pushNamedAndRemoveUntil(
+    //     'tab_opciones', (Route<dynamic> route) => false);
+
     mostrarAlert(context, S.current.text_change_of_branch,
         SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
@@ -285,7 +288,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     PedidoEmart.listaValoresPedidoAgregados = new Map();
 
     await AppUtil.appUtil
-        .downloadZip(prefs.usurioLoginCedula!, elemento.sucursal, false);
+        .downloadZip(prefs.codigoUnicoPideky!, elemento.sucursal, false);
     await AppUtil.appUtil.abrirBases();
   }
 

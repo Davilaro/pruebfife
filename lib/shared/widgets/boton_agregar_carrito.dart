@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class BotonAgregarCarrito extends StatelessWidget {
   final Function()? onTap;
@@ -12,7 +14,7 @@ class BotonAgregarCarrito extends StatelessWidget {
       {Key? key,
       this.colortext = Colors.white,
       required this.height,
-      this.width = 800,
+      this.width,
       required this.color,
       required this.onTap,
       required this.text,
@@ -25,7 +27,7 @@ class BotonAgregarCarrito extends StatelessWidget {
       alignment: Alignment.center,
       margin: EdgeInsets.only(top: 20, bottom: 10),
       height: height,
-      width: width,
+      width: width ?? Get.width * 0.8,
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.circular(borderRadio)),
       child: MaterialButton(

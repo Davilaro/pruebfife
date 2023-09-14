@@ -226,10 +226,34 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     try {
       var query = '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
-      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera, f.VisualizacionPopUp as verPopUp,
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.Codigo as codigo,
 		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
       FROM Fabricante f
 	    WHERE f.empresa LIKE '%$buscar%' OR f.nombrecomercial LIKE '%$buscar%'
+      GROUP BY f.empresa
+      ORDER BY f.orden ASC 
+
+    ''';
+
+      final sql = await db.rawQuery(query);
+
+      return sql.isNotEmpty
+          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarFabricanteBloqueo() async {
+    final db = await baseAbierta;
+
+    try {
+      var query = '''
+      SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera, f.VisualizacionPopUp as verPopUp, f.Codigo as codigo,
+		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
+      FROM Fabricante f
       GROUP BY f.empresa
       ORDER BY f.orden ASC 
 

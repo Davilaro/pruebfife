@@ -52,25 +52,29 @@ class ListaSucursalesData {
 
   factory ListaSucursalesData.fromJson(Map<String, dynamic> json) =>
       ListaSucursalesData(
-        codigo: json["codigo"],
-        nombre: json["nombre"],
-        razonsocial: json["razonsocial"],
-        nit: json["nit"],
-        direccion: json["direccion"],
-        ciudad: json["ciudad"],
-        telefono: json["telefono"],
-        codigomeals: json["codigomeals"],
-        codigonutresa: json["codigonutresa"],
-        codigozenu: json["codigozenu"],
-        codigopozuelo: json["codigopozuelo"],
-        codigoalpina: json["codigoalpina"],
-        codigoUnicoPideky: json["CodigoUnicoPideky"],
-        bloqueado: json["Bloqueado"],
+        codigo: json["Codigo"] == null ? "" : json["Codigo"],
+        nombre: json["Nombre"] == null ? "" : json["Nombre"],
+        razonsocial: json["RazonSocial"] == null ? "" : json["RazonSocial"],
+        nit: json["Nit"] == null ? "" : json["Nit"],
+        direccion: json["Direccion"] == null ? "" : json["Direccion"],
+        ciudad: json["Ciudad"] == null ? "" : json["Ciudad"],
+        telefono: json["Telefono"] == null ? "" : json["Telefono"],
+        codigomeals: json["CodigoMeals"] == null ? "" : json["CodigoMeals"],
+        codigonutresa:
+            json["CodigoNutresa"] == null ? "" : json["CodigoNutresa"],
+        codigozenu: json["CodigoZenu"] == null ? "" : json["CodigoZenu"],
+        codigopozuelo:
+            json["CodigoPozuelo"] == null ? "" : json["CodigoPozuelo"],
+        codigoalpina: json["CodigoAlpina"] == null ? "" : json["CodigoAlpina"],
+        codigoUnicoPideky:
+            json["CodigoUnicoPideky"] == null ? "" : json["CodigoUnicoPideky"],
+        bloqueado: json["Bloqueado"] == null ? "" : json["Bloqueado"],
         pais: json["Pais"] == null ? "" : json["Pais"],
-        fabricantes: List<Fabricantes>.from(
-          json["fabricantes"].map((x) => Fabricantes.fromJson(x)),
-        ),
-        sucursal: json["Sucursal"],
+        fabricantes: json["Fabricantes"] == null
+            ? []
+            : List<Fabricantes>.from(
+                json["Fabricantes"].map((x) => Fabricantes.fromJson(x))),
+        sucursal: json["Sucursal"] == null ? "" : json["Sucursal"],
       );
 
   Map<String, dynamic> toJson() => {

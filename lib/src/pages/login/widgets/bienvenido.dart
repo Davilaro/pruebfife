@@ -498,7 +498,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
     try {
       if (val == 1) {
-        estado = await Servicies().enviarMS(dropdownValue, codigoRespuesta);
+        //estado = await Servicies().enviarMS(dropdownValue, codigoRespuesta);
       } else if (val == 2) {
         estado = await Servicies().enviarCorreo(dropdownValue, codigoRespuesta);
       }
@@ -798,7 +798,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
   Future loguin(BuildContext context) async {
     List<dynamic> respuesta =
-        await Servicies().getListaSucursales(prefs.codClienteLogueado);
+        await Servicies().getListaSucursales(false);
 
     if (respuesta.length > 0) {
       pr.hide();

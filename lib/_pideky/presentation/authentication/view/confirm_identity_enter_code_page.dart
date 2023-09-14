@@ -1,5 +1,9 @@
-import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
+import 'dart:io';
+
+import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face_id_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,21 +13,19 @@ import '../../../../shared/widgets/custom_textFormField.dart';
 import '../../../../shared/widgets/popups.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
-import 'create_password_page.dart';
-
 
 class ConfirmIdentityEnterCodePage extends StatelessWidget {
   ConfirmIdentityEnterCodePage({Key? key}) : super(key: key);
 
   final TextEditingController _controllerCellPhoneNumber =
       TextEditingController();
+  final controller = Get.put(StateControllerRadioButtonsAndChecks());
 
-      final ValidationForms _validationForms = Get.find();
+  final ValidationForms _validationForms = Get.find();
 
   @override
   Widget build(BuildContext context) {
-
-
+    String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
       body: Container(
@@ -32,11 +34,9 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                
                 child: Image(
-                  image: AssetImage('assets/image/Icon_confirmar_identidad_2.png'),
-                 
-                )),
+              image: AssetImage('assets/image/Icon_confirmar_identidad_2.png'),
+            )),
             SizedBox(height: 25),
             Text("Confirmar identidad",
                 style: TextStyle(
@@ -65,42 +65,46 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
               },
               validator: _validationForms.validateTextFieldNullorEmpty,
             ),
-
             SizedBox(height: 10.0),
-
-            Text(
-                "El código caduca en {15min} ",
+            Text("El código caduca en (15min) ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: ConstantesColores.gris_sku,
                   fontSize: 15,
                 )),
-
-                SizedBox(height: 35.0),
-
+            SizedBox(height: 35.0),
             BotonAgregarCarrito(
                 borderRadio: 35,
                 height: Get.height * 0.06,
                 color: ConstantesColores.empodio_verde,
-                onTap: () {
-                 
-                final  isValid = _validationForms.confirmationCode.isNotEmpty;
-                
-                if (isValid) {
-                  Get.to(() => CreatePasswordPage());
-                  showPopup(
-                      context,
-                      'Confirmación de \n identidad correcto',
-                      SvgPicture.asset('assets/image/Icon_correcto.svg'));
-                }
-              },
-                text: "Aceptar"),
+                onTap: () async {
+                  final isValid = _validationForms.confirmationCode.isNotEmpty;
 
-                TextButtonWithUnderline(
+                  if (isValid == false) {
+                    return;
+                  } else {
+                    if (await _validationForms.validationCodePhone(context) ==
+                        false) {
+                      showPopup(
+                          context,
+                          'Confirmación de \n identidad incorrecto',
+                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
+                    } else {
+                      plataforma == 'Android'
+                          ? Get.to(() => TouchIdPage())
+                          : Get.to(() => FaceIdPage());
+                      await showPopup(
+                          context,
+                          'Confirmación de \n identidad correcto',
+                          SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                    }
+                  }
+                },
+                text: "Aceptar"),
+            TextButtonWithUnderline(
               text: "Enviar otro código",
-              onPressed: () {
-                Get.to(() => ConfirmIdentitySelectMethodPage());
-                
+              onPressed: () async {
+                await controller.sendMsg();
               },
               textColor: HexColor("#41398D"),
               textSize: 18.0,

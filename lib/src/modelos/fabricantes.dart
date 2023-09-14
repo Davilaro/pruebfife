@@ -9,6 +9,7 @@ class Fabricantes {
   Fabricantes(
       {this.empresa,
       this.icono,
+      this.codigo,
       // this.codIndirecto,
       this.tipofabricante,
       this.nombrecomercial,
@@ -35,6 +36,7 @@ class Fabricantes {
   // String? codIndirecto;
   String? nombrecomercial;
   String? estado;
+  String? codigo;
   String? hora;
   double? topeMinimo;
   int? montoMinimoFrecuencia;
@@ -75,7 +77,9 @@ class Fabricantes {
       bloqueoCartera:
           json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],
-      diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"]);
+      diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"],
+      codigo: json["codigo"] == null ? '' : json["codigo"]
+      );
 
   Map<String, dynamic> toJson() => {
         "empresa": empresa,
@@ -98,5 +102,6 @@ class Fabricantes {
         "itinerario": itinerario,
         "diaEntrega": diasEntrega,
         "vePopUp": verPopUp,
+        "codigo" : codigo
       };
 }

@@ -1,7 +1,11 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
@@ -11,8 +15,10 @@ import '../../../../src/preferences/cont_colores.dart';
 class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     final MiNegocioViewModel viewModel = Get.find();
     final controller = Get.put(StateControllerRadioButtons());
+    final ValidationForms _validationForms = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -43,20 +49,15 @@ class TermsAndConditionsPage extends StatelessWidget {
                   controller.toggleAcceptTerms();
                 },
                 onPressed: () => viewModel.terminosDatosPdf != null
-                                    ? verTerminosCondiciones(
-                                        context, viewModel.terminosDatosPdf)
-                                    : null,
+                    ? verTerminosCondiciones(
+                        context, viewModel.terminosDatosPdf)
+                    : null,
               ),
             ),
             Container(
               height: 70,
               child: Obx(
                 () =>
-                    // buildCheckboxRow(
-                    //   text: 'Autorizo tratamiento de mis \n datos personales',
-                    //   value: controller.authorizeDataTreatment.value,
-                    //   onChanged: () {
-                    //     controller.toggleAuthorizeDataTreatment();
                     //   },
                     Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -92,8 +93,26 @@ class TermsAndConditionsPage extends StatelessWidget {
                     ? ConstantesColores.empodio_verde
                     : Colors.grey,
                 onTap: controller.isButtonEnabled
-                    ? () {
-                        Get.to(() => ConfirmIdentitySendSMSPage());
+                    ? () async {
+                        bool loadData =
+                            await Servicies().loadDataTermsAndConditions();
+                        if (loadData) {
+                          await _validationForms.getPhoneNumbers();
+                          Get.to(() => ConfirmIdentitySendSMSPage());
+                          showPopup(
+                            context,
+                            'Ingreso correcto',
+                            SvgPicture.asset('assets/image/Icon_correcto.svg'),
+                          );
+                        } else {
+                          showPopup(
+                            context,
+                            'Algo salio mal, por favor intentalo de nuevo',
+                            SvgPicture.asset(
+                                'assets/image/Icon_incorrecto.svg'),
+                          );
+                        }
+
                         // Realizar otras acciones al hacer clic
                       }
                     : null,

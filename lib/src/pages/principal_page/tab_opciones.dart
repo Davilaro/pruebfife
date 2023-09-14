@@ -201,15 +201,17 @@ class _TabOpcionesState extends State<TabOpciones>
 
   void verPopUp() async {
     var listaMora = '';
-    var listaProveedores = [];
-    final fabricantes = await DBProvider.db.consultarFricante('');
+    List<Map> listaProveedores = [];
+    final fabricantes = await DBProvider.db.consultarFabricanteBloqueo();
     fabricantes.forEach((element) {
       print("bloqueo : ${element.verPopUp}");
       if (element.verPopUp == 0) {
         listaMora = listaMora + element.nombrecomercial + ', ';
-        listaProveedores.add(element.empresa);
+        listaProveedores
+            .add({'Codigo': element.codigo, 'Proveedor': element.empresa});
       }
     });
+    print('listaProveedores: $listaProveedores');
     if (listaMora != '') {
       listaMora = listaMora.substring(0, listaMora.length - 2);
       mostrarAlertaPopUpVisto(context, listaMora, listaProveedores);

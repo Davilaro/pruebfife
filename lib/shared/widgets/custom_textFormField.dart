@@ -15,6 +15,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final Widget? prefixIcon;
+  final TextAlign? textAlign;
 
   CustomTextFormField({
     this.controller,
@@ -31,6 +32,7 @@ class CustomTextFormField extends StatefulWidget {
     this.errorMessage,
     this.keyboardType,
     this.prefixIcon,
+    this.textAlign,
   });
 
   @override
@@ -43,6 +45,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlign: widget.textAlign ?? TextAlign.start,
       validator: widget.validator,
       controller: widget.controller,
       keyboardType: widget.keyboardType,
@@ -64,10 +67,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         errorText: widget.errorMessage,
         hintText: widget.hintText,
         hintStyle: widget.hintStyle,
-        prefixIcon: widget.prefixIcon ?? Icon(
-          widget.icon,
-          color: widget.textColor,
-        ),
+        prefixIcon: widget.prefixIcon ?? null,
         suffixIcon: widget.obscureText != null
             ? IconButton(
                 icon: Icon(

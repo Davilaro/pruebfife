@@ -10,7 +10,7 @@ class OpcionesBard extends ChangeNotifier {
   int _numeroClickCarrito = 0;
   int _numeroClickVerImpedibles = 0;
   int _numeroClickVerPromos = 0;
-  final PageController _pageController = PageController();
+  final PageController _pageController = PageController(initialPage: 0);
 
   int get getNumeroClickVerImpedibles {
     return _numeroClickVerImpedibles;
