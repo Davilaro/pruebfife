@@ -98,7 +98,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                             await Servicies().loadDataTermsAndConditions();
                         if (loadData) {
                           await _validationForms.getPhoneNumbers();
-                          Get.to(() => ConfirmIdentitySendSMSPage());
+                          Get.to(() => ConfirmIdentitySendSMSPage(isChangePassword: false,));
                           showPopup(
                             context,
                             'Ingreso correcto',

@@ -67,7 +67,7 @@ class OpcionesBard extends ChangeNotifier {
     return _selectMenuOption;
   }
 
-  set selectOptionMenu(int valor) {
+   set selectOptionMenu(int valor) {
     _pageController.animateToPage(valor,
         duration: Duration(milliseconds: 250), curve: Curves.easeOut);
     //_pageController.jumpToPage(valor);

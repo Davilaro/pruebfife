@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -55,7 +56,7 @@ modalCerrarSesion(context, size, provider) {
 
   Widget _botonAceptar(size, provider) {
     return GestureDetector(
-      onTap: () => {
+      onTap: ()  => {
         _showLoaderDialog(context),
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
@@ -65,7 +66,6 @@ modalCerrarSesion(context, size, provider) {
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
-          Navigator.pop(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
               'splash', (Route<dynamic> route) => false);
         }),

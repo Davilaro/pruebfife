@@ -15,7 +15,8 @@ import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class RestorePasswordPage extends StatefulWidget {
-  const RestorePasswordPage();
+  const RestorePasswordPage({required this.isChangePassword});
+  final bool isChangePassword;
 
   @override
   State<RestorePasswordPage> createState() => _RestorePasswordPageState();
@@ -76,14 +77,25 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                         ? () async {
                             if (validationForm.selectedCode ==
                                 validationForm.correctCode) {
-                              plataforma == 'Android'
-                                  ? Get.to(() => TouchIdPage())
-                                  : Get.to(() => FaceIdPage());
-                              await showPopup(
-                                  context,
-                                  'Confirmación de \n identidad correcto',
-                                  SvgPicture.asset(
-                                      'assets/image/Icon_correcto.svg'));
+                              if (widget.isChangePassword == true) {
+                                Get.to(() => CreatePasswordPage(
+                                      isChangePassword: true,
+                                    ));
+                                showPopup(
+                                    context,
+                                    'Ingreso correcto',
+                                    SvgPicture.asset(
+                                        'assets/image/Icon_correcto.svg'));
+                              } else {
+                                plataforma == 'Android'
+                                    ? Get.to(() => TouchIdPage())
+                                    : Get.to(() => FaceIdPage());
+                                await showPopup(
+                                    context,
+                                    'Confirmación de \n identidad correcto',
+                                    SvgPicture.asset(
+                                        'assets/image/Icon_correcto.svg'));
+                              }
                             } else {
                               showPopup(
                                   context,

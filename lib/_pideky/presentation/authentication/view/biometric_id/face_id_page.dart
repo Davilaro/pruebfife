@@ -87,7 +87,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
                     prefs.isDataBiometricActive = false;
                     await progress.show();
                     await validationForm.login(context,
-                        validationForm.userName.value, progress, false);
+                        prefs.codigoUnicoPideky, progress, false);
                     //Get.back();
                   },
                   child: Text('Cancelar',
@@ -111,7 +111,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
       );
       if (authenticated) {
         prefs.isDataBiometricActive = true;
-        prefs.ccupBiometric = validationForm.userName.value;
+        prefs.ccupBiometric = prefs.codigoUnicoPideky;
         await progress.show();
         await validationForm.login(
             context, prefs.ccupBiometric, progress, true);

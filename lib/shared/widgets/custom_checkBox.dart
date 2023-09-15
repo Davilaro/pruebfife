@@ -1,4 +1,5 @@
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 
 class CustomCheckBox extends StatefulWidget {
@@ -10,14 +11,16 @@ class CustomCheckBox extends StatefulWidget {
 class _CustomCheckBoxState
     extends State<CustomCheckBox> {
   bool _isChecked = false;
+  final prefs = Preferencias();
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      value: _isChecked,
+      value: prefs.rememberMe,
       onChanged: (newValue) {
+        print("new value $newValue");
         setState(() {
-          _isChecked = newValue!;
+          prefs.rememberMe = _isChecked;
         });
       },
       shape: RoundedRectangleBorder(

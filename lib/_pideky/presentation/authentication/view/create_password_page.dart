@@ -1,4 +1,7 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:emart/_pideky/presentation/authentication/view/accept_terms_and_conditions_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,8 +14,11 @@ import '../../../../shared/widgets/popups.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class CreatePasswordPage extends StatelessWidget {
+  final bool isChangePassword;
   final ValidationForms _validationForms = Get.put(ValidationForms());
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+  CreatePasswordPage({Key? key, required this.isChangePassword}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -156,11 +162,27 @@ class CreatePasswordPage extends StatelessWidget {
                             bool response =
                                 await _validationForms.changePassword();
                             if (response == true) {
-                              await _validationForms.getDataSecurityQuestion();
-                              Get.to(() => TermsAndConditionsPage());
+                              if(isChangePassword == true) {
+                                Get.to(() => LogInPage());
                               showPopup(
                                   context,
                                   'Contraseña actualizada',
+                                  SvgPicture.asset(
+                                    'assets/image/Icon_correcto.svg',
+                                  ));
+                              } else {
+                                Get.to(() => TermsAndConditionsPage());
+                              showPopup(
+                                  context,
+                                  'Contraseña actualizada',
+                                  SvgPicture.asset(
+                                    'assets/image/Icon_correcto.svg',
+                                  ));
+                              }
+                            } else if (response == "Por favor validar con otro Nit") {
+                              showPopup(
+                                  context,
+                                  'Por favor validar con otro Nit',
                                   SvgPicture.asset(
                                     'assets/image/Icon_correcto.svg',
                                   ));

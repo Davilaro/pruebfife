@@ -3,6 +3,7 @@ import 'package:emart/_pideky/presentation/authentication/view/restore_password_
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,14 +13,15 @@ import '../../../../src/preferences/cont_colores.dart';
 import 'confirm_identity_enter_code_page.dart';
 
 class ConfirmIdentitySendSMSPage extends StatelessWidget {
-  ConfirmIdentitySendSMSPage({Key? key}) : super(key: key);
+  ConfirmIdentitySendSMSPage({Key? key, required this.isChangePassword}) : super(key: key);
+  final bool isChangePassword;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(StateControllerRadioButtonsAndChecks());
-   
     FocusManager.instance.primaryFocus?.unfocus();
-
+    final controller = Get.put(StateControllerRadioButtonsAndChecks());
+    final ValidationForms _validationForms = Get.find<ValidationForms>();
+   
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),
       body: Container(
@@ -65,7 +67,7 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
                           return;
                         }
 
-                        Get.to(() => ConfirmIdentityEnterCodePage());
+                        Get.to(() => ConfirmIdentityEnterCodePage(isChangePassword: isChangePassword,));
                       }
                     : null,
                 text: "Enviar SMS",
@@ -73,8 +75,9 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
             ),
             TextButtonWithUnderline(
               text: "Probar otro método",
-              onPressed: () {
-                Get.to(() => RestorePasswordPage());
+              onPressed: () async {
+                await _validationForms.getDataSecurityQuestion();
+                Get.to(() => RestorePasswordPage(isChangePassword: isChangePassword));
               },
               textColor: HexColor("#41398D"),
               textSize: 18.0,

@@ -21,6 +21,7 @@ Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   InitialBindings();
+  
   final prefs = new Preferencias();
   await prefs.initPrefs();
   final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
@@ -67,10 +68,7 @@ class _MyAppState extends State<MyApp> {
     },
   );
 
-  @override
-  void initState() {
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {

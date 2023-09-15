@@ -52,8 +52,11 @@ class LoginApi extends ILogin {
       final url;
       url = Uri.parse(Constantes().urlPrincipal + "LogIn/ActualizarPassword");
       final response = await http.post(url, body: jsonRequest);
-      if (response.statusCode == 200) {
+      var responseDecode = jsonDecode(response.body);
+      if (response.statusCode == 200 && responseDecode == prefs.codigoUnicoPideky) {
         return true;
+      } else if (responseDecode  == "Por favor validar con otro Nit"){
+        return responseDecode;
       } else {
         return false;
       }
@@ -184,7 +187,7 @@ class LoginApi extends ILogin {
       final url;
 
       url = Uri.parse(
-          Constantes().urlPrincipal + 'LogIn/IniciarSesionColaboradores');
+          Constantes().urlPrincipal + 'LogIn/ValidarNit');
 
       final response = await http.post(
         url,
@@ -197,14 +200,20 @@ class LoginApi extends ILogin {
         }),
       );
       var resDecode = jsonDecode(response.body);
+      
       if (resDecode == "Nit invalido") {
-        return true;
+        return resDecode;
+      } else if (resDecode == "Por favor validar con otro Nit"){
+        return resDecode;
       } else {
-        return false;
+        prefs.codigoUnicoPideky = resDecode;
+        return true;
       }
     } catch (e) {
       print("error validando el nit $e");
       return false;
     }
   }
+  
+
 }

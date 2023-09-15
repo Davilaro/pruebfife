@@ -84,6 +84,7 @@ class Servicies {
       "Token": token,
       "IdDevice": divace[2],
     });
+    print("sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky}");
     try {
       final url = Uri.parse(
         Constantes().urlPrincipal + 'LogIn/Sucursales',

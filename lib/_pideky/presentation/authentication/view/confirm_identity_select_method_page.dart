@@ -59,8 +59,12 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
                     borderRadio: 35,
                     height: Get.height * 0.06,
                     color: ConstantesColores.empodio_verde,
-                    onTap: () {
-                      Get.to(() => ConfirmIdentitySendSMSPage());
+                    onTap: () async {
+                      final isValid = formkey.currentState!.validate();
+                      if(isValid == true) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        await _validationForms.validationNit(context);
+                      }
                     },
                     text: "Aceptar"),
               ]),

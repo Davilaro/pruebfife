@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
@@ -15,8 +17,9 @@ import '../../../../shared/widgets/text_button_with_underline.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class ConfirmIdentityEnterCodePage extends StatelessWidget {
-  ConfirmIdentityEnterCodePage({Key? key}) : super(key: key);
-
+  ConfirmIdentityEnterCodePage({Key? key, required this.isChangePassword})
+      : super(key: key);
+  final bool isChangePassword;
   final TextEditingController _controllerCellPhoneNumber =
       TextEditingController();
   final controller = Get.put(StateControllerRadioButtonsAndChecks());
@@ -90,13 +93,21 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                           'Confirmación de \n identidad incorrecto',
                           SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
                     } else {
-                      plataforma == 'Android'
-                          ? Get.to(() => TouchIdPage())
-                          : Get.to(() => FaceIdPage());
-                      await showPopup(
-                          context,
-                          'Confirmación de \n identidad correcto',
-                          SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                      if (isChangePassword == true) {
+                        Get.to(() => CreatePasswordPage(
+                              isChangePassword: true,
+                            ));
+                        showPopup(context, 'Ingreso correcto',
+                            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                      } else {
+                        plataforma == 'Android'
+                            ? Get.to(() => TouchIdPage())
+                            : Get.to(() => FaceIdPage());
+                        await showPopup(
+                            context,
+                            'Confirmación de \n identidad correcto',
+                            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                      }
                     }
                   }
                 },

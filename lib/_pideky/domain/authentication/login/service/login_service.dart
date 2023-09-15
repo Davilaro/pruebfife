@@ -28,4 +28,5 @@ class LoginService {
   Future<dynamic> validationNit(String nit) {
     return loginRepository.validationNit(nit);
   }
+
 }

@@ -15,6 +15,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/pages/carrito/configurar_pedido.dart';
@@ -104,12 +105,16 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0)),
                     child: GestureDetector(
-                      onTap: () => {_configurarPedido(size, cartProvider)},
+                      onTap: () => {
+                        prefs.typeCollaborator != "2" ?
+                        _configurarPedido(size, cartProvider) : 
+                        mostrarAlert(context, "No puedes realizar pedidos ya que te encuentras en modo colaborador", null)
+                        },
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: HexColor("#42B39C"),
+                          color: prefs.typeCollaborator != "2" ? HexColor("#42B39C") : ConstantesColores.gris_sku,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         height: Get.height * 0.08,

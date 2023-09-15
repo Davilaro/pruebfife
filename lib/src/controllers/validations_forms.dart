@@ -9,6 +9,7 @@ import 'package:emart/_pideky/domain/authentication/register/service/register_se
 import 'package:emart/_pideky/infrastructure/authentication/login/login_api.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/select_sucursal_as_collaborator.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
@@ -16,6 +17,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
@@ -89,6 +91,44 @@ class ValidationForms extends GetxController {
 
   late String _password;
 
+  Future validationNit(context) async {
+    final progress = ProgressDialog(context);
+    progress.style(
+        message: "Validando usuario",
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
+    await progress.show();
+    var response = await loginService.validationNit(userName.value);
+    await progress.hide();
+    if (response == true) {
+      await getPhoneNumbers();
+
+      Get.to(() => ConfirmIdentitySendSMSPage(
+            isChangePassword: true,
+          ));
+      showPopup(
+        context,
+        'Usuario correcto',
+        SvgPicture.asset('assets/image/Icon_correcto.svg'),
+      );
+    } else if (response == "Nit invalido") {
+      showPopup(
+        context,
+        response,
+        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+      );
+    } else {
+      showPopup(
+        context,
+        response,
+        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+      );
+    }
+  }
+
   Future getSucursalesAsCollaborator(context) async {
     prefs.codigoUnicoPideky = ccupSucursal.value;
     List<dynamic> sucursales = await Servicies().getListaSucursales(false);
@@ -117,6 +157,7 @@ class ValidationForms extends GetxController {
         .loginAsCollaborator(encryptedPaswword(codeCollaborator.value));
     await progress.hide();
     if (response == true) {
+      await getPhoneNumbers();
       Get.to(() => SelectSucursalAsCollaboratorPage());
     } else {
       showPopup(
@@ -179,7 +220,7 @@ class ValidationForms extends GetxController {
   Future<bool> validationCodePhone(context) async {
     final progress = ProgressDialog(context);
     progress.style(
-        message: "Validando código de confirmación",
+        message: "Validando código",
         progressWidget: Image(
           image: AssetImage('assets/image/jar-loading.gif'),
           fit: BoxFit.cover,
@@ -289,10 +330,12 @@ class ValidationForms extends GetxController {
           }
         }
       } else {
-        Get.to(() => CreatePasswordPage());
+        Get.to(() => CreatePasswordPage(
+              isChangePassword: false,
+            ));
         showPopup(
           context,
-          'Ingreso correcto',
+          'Ingre-so correcto',
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
       }
@@ -377,7 +420,6 @@ class ValidationForms extends GetxController {
               context, cargarLinkWhatssap(context), null);
         }
       });
-
       PedidoSugeridoViewModel.userLog.value = 1;
 
       if (respuesta.length > 0) {

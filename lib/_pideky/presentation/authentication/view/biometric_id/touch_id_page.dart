@@ -77,7 +77,7 @@ class _TouchIdPageState extends State<TouchIdPage> {
                     prefs.isDataBiometricActive = false;
                     await progress.show();
                     await validationForm.login(
-                        context, validationForm.userName.value, progress, false);
+                        context, prefs.codigoUnicoPideky, progress, false);
                     //Get.back();
                   },
                   child: Text('Cancelar',
@@ -101,10 +101,10 @@ class _TouchIdPageState extends State<TouchIdPage> {
       );
       if (authenticated) {
         prefs.isDataBiometricActive = true;
-        prefs.ccupBiometric = validationForm.userName.value;
+        prefs.ccupBiometric = prefs.codigoUnicoPideky;
         await progress.show();
         await validationForm.login(
-            context, validationForm.userName.value, progress, true);
+            context, prefs.ccupBiometric, progress, true);
         await showPopup(context, 'Touch ID activado',
             SvgPicture.asset('assets/image/Icon_correcto.svg'));
       }

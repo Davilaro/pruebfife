@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/widgets/activacion_manual_maestro.dart';

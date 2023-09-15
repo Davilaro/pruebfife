@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -219,7 +220,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
-    final opcionesAppBard = Provider.of<OpcionesBard>(context, listen: false);
+    final opcionesAppBard = Provider.of<OpcionesBard>(context,listen: false);
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
     // prefs.codTienda = 'nutresa';
@@ -251,12 +252,12 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
     await pr.hide();
 
-    setState(() {});
 
-    opcionesAppBard.selectOptionMenu = 0;
-    Get.offAll(() => TabOpciones());
-    // Navigator.of(context).pushNamedAndRemoveUntil(
-    //     'tab_opciones', (Route<dynamic> route) => false);
+   // opcionesAppBard.selectOptionMenu = 0;
+    
+    //Get.offAll(() => TabOpciones());
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        'tab_opciones', (Route<dynamic> route) => false);
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
