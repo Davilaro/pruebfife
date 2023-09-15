@@ -10,7 +10,6 @@ class CustomCheckBox extends StatefulWidget {
 
 class _CustomCheckBoxState
     extends State<CustomCheckBox> {
-  bool _isChecked = false;
   final prefs = Preferencias();
 
   @override
@@ -20,7 +19,7 @@ class _CustomCheckBoxState
       onChanged: (newValue) {
         print("new value $newValue");
         setState(() {
-          prefs.rememberMe = _isChecked;
+          prefs.rememberMe = newValue;
         });
       },
       shape: RoundedRectangleBorder(

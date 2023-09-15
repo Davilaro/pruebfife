@@ -229,7 +229,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];

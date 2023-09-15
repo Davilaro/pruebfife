@@ -153,52 +153,7 @@ class LogInPage extends StatelessWidget {
                     },
                     text: "Ingresar"),
 
-                // showPopupFindClientCode(
-                //     context, Image.asset('assets/image/factura_imagen.png'));
-
-                // showPopup(context, 'Ingreso correcto',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                // showPopup(
-                //     context,
-                //     'Has aceptado los términos y condiciones',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                // showPopup(context, 'Touch ID activado',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                // showPopup(context, 'Número de celular actualizado.',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                // showPopup(
-                //     context,
-                //     'Confirmación de \n identidad correcto',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-                // showPopupTouchId(context,
-                //     Image.asset('assets/image/Icon_touch_ID.png'));
-
-                // showPopup(
-                //     context,
-                //     'Confirmación de identidad incorrecto',
-                //     SvgPicture.asset(
-                //       'assets/image/Icon_incorrecto.svg',
-                //     ));
-
-                // showPopup(
-                //     context,
-                //     'Usuario y/o contraseña incorrecto',
-                //     SvgPicture.asset(
-                //       'assets/image/Icon_incorrecto.svg',
-                //     ));
-
-                // showPopup(
-                //     context,
-                //     'Contraseña actualizada',
-                //     SvgPicture.asset(
-                //       'assets/image/Icon_correcto.svg',
-                //     ));
-
+               
                 TextButtonWithUnderline(
                   text: "Quiero ser cliente Pideky",
                   onPressed: () {

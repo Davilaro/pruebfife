@@ -1,3 +1,5 @@
+// ignore_for_file: must_call_super
+
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -372,7 +374,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                       ],
                     )),
                 //ENCUESTA
-                FutureBuilder(
+                prefs.typeCollaborator == "2" ? FutureBuilder(
                     initialData: [],
                     future: DBProvider.db.consultarEncuesta(),
                     builder: (BuildContext context,
@@ -393,7 +395,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                                   child: EncuestaForm(snapshot.data[0])),
                             ));
                       }
-                    })
+                    }) : SizedBox.shrink()
               ],
             ),
           ),

@@ -1,11 +1,11 @@
 
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ControllerSelectorProviders extends GetxController {
   final selectedProviders = <String>[].obs;
-  final selectedFabricantes = <Fabricantes>[].obs;
+  final selectedFabricantes = <Fabricante>[].obs;
   RxMap<String, TextEditingController> nitControllers =
       RxMap<String, TextEditingController>();
 
@@ -28,7 +28,7 @@ class ControllerSelectorProviders extends GetxController {
     update();
   }
 
-  void toggleFabricantes(Fabricantes providerName) {
+  void toggleFabricantes(Fabricante providerName) {
     if (selectedFabricantes.contains(providerName)) {
       // Si el proveedor ya está seleccionado, lo quitamos
       selectedFabricantes.remove(providerName);
