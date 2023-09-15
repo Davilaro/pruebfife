@@ -41,8 +41,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
 
     return Scaffold(
       key: drawerKey,
-      drawerEnableOpenDragGesture:
-          prefs.usurioLogin == 1 ? true : false,
+      drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
       drawer: DrawerSucursales(drawerKey),
       appBar: PreferredSize(
         preferredSize: prefs.usurioLogin == 1
@@ -61,6 +60,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
+                        searchFuzzyViewModel.allResultados.clear();
                       },
                       child: Icon(
                         Icons.arrow_back_ios_new,

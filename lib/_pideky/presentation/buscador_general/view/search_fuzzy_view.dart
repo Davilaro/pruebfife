@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
@@ -8,7 +6,6 @@ import 'package:emart/shared/widgets/buscador_general.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:flutter/material.dart';
@@ -17,30 +14,15 @@ import 'package:provider/provider.dart';
 
 class SearchFuzzyView extends StatelessWidget {
 
-  //  locacionFiltro
-
-  
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
-  final Timer timer = Timer(Duration(milliseconds: 1), () {});
-
-  final controllerNotificaciones =
-      Get.find<NotificationsSlideUpAndPushInUpControllers>();
-
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
-
-    // if (prefs.usurioLogin == 1) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     validacionGeneralNotificaciones(context);
-    //   });
-    // }
-
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
@@ -204,134 +186,3 @@ class SearchFuzzyView extends StatelessWidget {
     );
   }
 }
-
-// void validacionGeneralNotificaciones(context) async {
-//   switch (widget.locacionFiltro) {
-//     case 'categoria':
-//       await controllerNotificaciones
-//           .getPushInUpByDataBaseCategorias('Categoría');
-//       await controllerNotificaciones
-//           .getSlideUpByDataBaseCategorias("Categoría");
-
-//       if (controllerNotificaciones.listPushInUpCategorias.isNotEmpty) {
-//         controllerNotificaciones.closePushInUp.value = false;
-//         controllerNotificaciones.onTapPushInUp.value = false;
-//         if (controllerNotificaciones
-//                 .validacionMostrarPushInUp[widget.descripcionCategoria] ==
-//             true) {
-//           await controllerNotificaciones.showPushInUp(
-//               widget.locacionFiltro, widget.descripcionCategoria, context);
-//           int elapsedTime = 0;
-//           if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-//             timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-//               if (elapsedTime >= 530) {
-//                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
-//                     widget.descripcionCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.closePushInUp.value == true) {
-//                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
-//                     widget.descripcionCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-//                 timer.cancel();
-//               }
-//               elapsedTime++;
-//             });
-//           }
-//         }
-//       } else if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-//         controllerNotificaciones.closeSlideUp.value = false;
-//         if (controllerNotificaciones
-//                     .validacionMostrarSlideUp[widget.descripcionCategoria] ==
-//                 true &&
-//             controllerNotificaciones.closeSlideUp.value == false) {
-//           controllerNotificaciones.showSlideUp(
-//               widget.locacionFiltro, widget.descripcionCategoria, context);
-//         }
-//       }
-//       break;
-//     case 'marca':
-//       await controllerNotificaciones.getPushInUpByDataBaseMarcas('Marcas');
-//       await controllerNotificaciones.getSlideUpByDataBaseMarcas("Marcas");
-//       if (controllerNotificaciones.listPushInUpMarcas.isNotEmpty) {
-//         controllerNotificaciones.closePushInUp.value = false;
-//         controllerNotificaciones.onTapPushInUp.value = false;
-//         if (controllerNotificaciones
-//                 .validacionMostrarPushInUp[widget.nombreCategoria] ==
-//             true) {
-//           await controllerNotificaciones.showPushInUp(
-//               widget.locacionFiltro, widget.nombreCategoria, context);
-//           if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
-//             int elapsedTime = 0;
-//             timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-//               if (elapsedTime >= 530) {
-//                 controllerNotificaciones.showSlideUp(
-//                     widget.locacionFiltro, widget.nombreCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.closePushInUp.value == true) {
-//                 controllerNotificaciones.showSlideUp(
-//                     widget.locacionFiltro, widget.nombreCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-//                 timer.cancel();
-//               }
-//               elapsedTime++;
-//             });
-//           }
-//         }
-//       } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
-//         controllerNotificaciones.closeSlideUp.value = false;
-//         if (controllerNotificaciones
-//                     .validacionMostrarSlideUp[widget.nombreCategoria] ==
-//                 true &&
-//             controllerNotificaciones.closeSlideUp.value == false) {
-//           controllerNotificaciones.showSlideUp(
-//               widget.locacionFiltro, widget.nombreCategoria, context);
-//         }
-//       }
-//       break;
-//     case 'proveedor':
-//       await controllerNotificaciones
-//           .getPushInUpByDataBaseProveedores('Proveedor');
-//       await controllerNotificaciones
-//           .getSlideUpByDataBaseProveedores("Proveedor");
-//       if (controllerNotificaciones.listPushInUpProveedores.isNotEmpty) {
-//         controllerNotificaciones.closePushInUp.value = false;
-//         controllerNotificaciones.onTapPushInUp.value = false;
-//         if (controllerNotificaciones
-//                 .validacionMostrarPushInUp[widget.nombreCategoria] ==
-//             true) {
-//           await controllerNotificaciones.showPushInUp(
-//               widget.locacionFiltro, widget.nombreCategoria, context);
-//           if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
-//             int elapsedTime = 0;
-//             timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-//               if (elapsedTime >= 530) {
-//                 controllerNotificaciones.showSlideUp(
-//                     widget.locacionFiltro, widget.nombreCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.closePushInUp.value == true) {
-//                 controllerNotificaciones.showSlideUp(
-//                     widget.locacionFiltro, widget.nombreCategoria, context);
-//                 timer.cancel();
-//               } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-//                 timer.cancel();
-//               }
-//               elapsedTime++;
-//             });
-//           }
-//         }
-//       } else if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
-//         if (controllerNotificaciones
-//                     .validacionMostrarSlideUp[widget.nombreCategoria] ==
-//                 true &&
-//             controllerNotificaciones.closeSlideUp.value == false) {
-//           controllerNotificaciones.closeSlideUp.value = false;
-//           controllerNotificaciones.showSlideUp(
-//               widget.locacionFiltro, widget.nombreCategoria, context);
-//         }
-//       }
-//       break;
-//     default:
-//   }
-// }

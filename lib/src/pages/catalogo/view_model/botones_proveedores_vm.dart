@@ -29,7 +29,7 @@ class BotonesProveedoresVm extends GetxController {
     }
 
     if (idTab == 2) {
-      listaAllMarcas = await await DBProvider.db
+      listaAllMarcas = await  DBProvider.db
           .consultarMarcasPorFabricante(proveedor.value, proveedor2.value);
       listaMarca.value = listaAllMarcas;
     }
