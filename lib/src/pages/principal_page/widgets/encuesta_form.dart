@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -12,6 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
+
+import '../../../controllers/validations_forms.dart';
 
 class EncuestaForm extends StatefulWidget {
   final Encuesta encuesta;
@@ -24,12 +28,18 @@ class EncuestaForm extends StatefulWidget {
 
 class _EncuestaFormState extends State<EncuestaForm> {
   TextEditingController controllerText = TextEditingController();
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerTelephone = TextEditingController();
   RxString mensajeValid = ''.obs;
   String _seleccion = '';
   late Map<String, bool> _opcionesMultiple = {};
 
   final controllerProducto = Get.find<ControllerProductos>();
   final controllerEncuesta = Get.find<EncuestaControllers>();
+  final _validationForms = Get.put(ValidationForms());
+  final prefs = Preferencias();
+
+  String? _errorText;
 
   @override
   void initState() {
@@ -117,6 +127,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               )),
                         )
                       : Container(),
+
                   //Pregunta seleccion multiple mutiples respuesta
                   widget.encuesta.tipoPreguntaId == 4
                       ? Visibility(
@@ -153,6 +164,46 @@ class _EncuestaFormState extends State<EncuestaForm> {
                           ),
                         )
                       : Container(),
+
+                  // Pregunta teléfono y correo
+                  Visibility(
+                    visible: widget.encuesta.tipoPreguntaId == 13 ||
+                        widget.encuesta.tipoPreguntaId == 14,
+                    child: Column(
+                      children: [
+                        if (widget.encuesta.tipoPreguntaId == 13)
+                          CustomTextFormField(
+                            keyboardType: TextInputType.text,
+                            hintText: 'Ingresa tu correo electrónico',
+                            backgroundColor: HexColor("#E4E3EC"),
+                            controller: controllerEmail,
+                            onChanged: (value) {
+                              String? validationError =
+                                  _validationForms.validateEmail(value);
+                              setState(() {
+                                _errorText = validationError;
+                              });
+                            },
+                            errorMessage: _errorText,
+                          ),
+                        if (widget.encuesta.tipoPreguntaId == 14)
+                          CustomTextFormField(
+                            keyboardType: TextInputType.number,
+                            hintText: 'Ingresa tu número de  celular',
+                            backgroundColor: HexColor("#E4E3EC"),
+                            controller: controllerTelephone,
+                            onChanged: (value) {
+                              String? validationError =
+                                  _validationForms.validateTelephone(value);
+                              setState(() {
+                                _errorText = validationError;
+                              });
+                            },
+                            errorMessage: _errorText,
+                          ),
+                      ],
+                    ),
+                  ),
 
                   Container(
                     margin: EdgeInsets.only(top: 20),
@@ -293,8 +344,40 @@ class _EncuestaFormState extends State<EncuestaForm> {
       } else {
         mensajeValid.value = 'Por favor seleccione una respuesta';
       }
-    } else {
-      mensajeValid.value = 'Por favor ingrese una respuesta';
+    } else if (encuesta.tipoPreguntaId == 13) {
+      if (_errorText == null && controllerEmail.text.isNotEmpty) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, controllerEmail.text);
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          controllerText.text = '';
+          alertaFinEncuesta();
+          return;
+        }
+      } else {
+        // mensajeValid.value = 'Por favor seleccione una respuesta';
+      }
+    } else if (encuesta.tipoPreguntaId == 14) {
+      if (_errorText == null && controllerTelephone.text.isNotEmpty) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, controllerTelephone.text);
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          controllerText.text = '';
+          alertaFinEncuesta();
+          return;
+        }
+      }
     }
   }
 

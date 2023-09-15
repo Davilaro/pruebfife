@@ -45,7 +45,6 @@ import 'package:emart/_pideky/infrastructure/authentication/register/register_ap
 import '../../_pideky/domain/authentication/login/service/login_service.dart';
 
 class ValidationForms extends GetxController {
-  // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
   final prefs = Preferencias();
   RxBool supportState = false.obs;
@@ -75,19 +74,15 @@ class ValidationForms extends GetxController {
   RxList listProviders = [].obs;
   RxList listSucursales = [].obs;
   RxList<Map<String, String>> sendProvidersList = RxList();
-
   final loginService = LoginService(LoginApi());
   final registerService = RegisterService(RegisterApi());
   final LocalAuthentication auth = LocalAuthentication();
 
   final passwordError = 'No es una contraseña válida'.obs;
+  final emailError = ''.obs;
 
-  //Variables para linea de progreso de contraseña
-  // late String _password;
-  // double _strength = 0;
-  RegExp passwordRegExp =
-      RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-  // String _displayText = '';
+    RegExp passwordRegExp = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
+
 
   late String _password;
 
@@ -481,7 +476,6 @@ class ValidationForms extends GetxController {
     return null;
   }
 
-  //Validación principal para campos de contraseña válida que el campo no este vacío y tampoco sea null y cumpla las reglas de contraseña según el  requerimiento.
   String? validatePassword(String? value) {
     passwordError.value = 'No es una contraseña válida';
     if (value == null || value.isEmpty) {
@@ -495,6 +489,50 @@ class ValidationForms extends GetxController {
     if (!passwordRegExp.hasMatch(value)) {
       return passwordError.value;
     }
+    return null;
+  }
+
+  //Validación para email encuesta homePage
+  String? validateEmail(String? value) {
+   emailError.value = 'No es un email válido ';
+    if (value == null || value.isEmpty) {
+      return 'Campo requerido';
+    }
+    if (value.trim().isEmpty) {
+      return passwordError.value;
+    }
+
+    final emailRegExp = RegExp(
+      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+    );
+    if (!emailRegExp.hasMatch(value)) {
+      return emailError.value;
+    }
+    return null;
+  }
+
+  // Validación de números de celular, Colombia, Costa Rica  encuesta homePage
+  String? validateTelephone(String? value) {
+    final colombiaRegExp =  RegExp(r'^3\d{9}$'); 
+    final costaRicaRegExp = RegExp(r'^[678]\d{7}$');
+
+    emailError.value = 'No es un telefono válido';
+    if (value == null || value.isEmpty) {
+      return 'Campo requerido';
+    }
+    if (value.trim().isEmpty) {
+      return passwordError.value;
+    }
+    if (prefs.paisUsuario == "CO") {
+      if (!colombiaRegExp.hasMatch(value)) {
+        return 'No es un número de teléfono válido para Colombia';
+      }
+    } else if (prefs.paisUsuario == "CR") {
+      if (!costaRicaRegExp.hasMatch(value)) {
+        return 'No es un número de teléfono válido para Costa Rica';
+      }
+    }
+
     return null;
   }
 
