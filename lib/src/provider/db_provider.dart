@@ -535,14 +535,16 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     String where = fabricante != '' ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")' : '';
-
-    try {
-      final sql = await db.rawQuery('''
+    var query = '''
       
       select codigo, descripcion,ico2 as ico,orden from categoria WHERE CODIGO 
       IN (select categoriacodigopideki from producto $where)
       
-    ''');
+    ''';
+
+    try {
+      final sql = await db.rawQuery(query);
+      log(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()

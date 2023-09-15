@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/register/register_page.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/pages/login/login.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';

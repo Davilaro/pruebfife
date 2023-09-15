@@ -374,7 +374,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                       ],
                     )),
                 //ENCUESTA
-                prefs.typeCollaborator == "2" ? FutureBuilder(
+                prefs.typeCollaborator != "2" ? FutureBuilder(
                     initialData: [],
                     future: DBProvider.db.consultarEncuesta(),
                     builder: (BuildContext context,

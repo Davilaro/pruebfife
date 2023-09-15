@@ -116,6 +116,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                   ),
                   Expanded(
                     child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
                       controller: cargoConfirmar.tabController,
                       children: cargarWidgets(),
                     ),

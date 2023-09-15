@@ -20,11 +20,11 @@ class BotonTodosfiltro extends StatelessWidget {
               !botonesProveedoresVm.esBuscadoTodos.value;
           botonesProveedoresVm.proveedor.value = "";
           botonesProveedoresVm.proveedor2.value = "";
-
+      
           for (int i = 0; i < botonesProveedoresVm.seleccionados.length; i++) {
             botonesProveedoresVm.seleccionados[i] = false;
           }
-
+      
           botonesProveedoresVm.cargarLista(idTab);
         },
         child: Container(

@@ -61,6 +61,7 @@ modalCerrarSesion(context, size, provider) {
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;
+          prefs.typeCollaborator = "";
           provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;

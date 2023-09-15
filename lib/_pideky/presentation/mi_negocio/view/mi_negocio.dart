@@ -16,6 +16,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/alertas.dart' as alert;
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -674,8 +675,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    viewModel.iniciarModalEliminarUsuario(
-                                        context, size, provider);
+                                    prefs.typeCollaborator != "2"
+                                        ? viewModel.iniciarModalEliminarUsuario(
+                                            context, size, provider)
+                                        : mostrarAlert(
+                                            context,
+                                            "No puedes realizar pedidos ya que te encuentras en modo colaborador",
+                                            null);
                                   },
                                   child: Row(children: [
                                     Image.asset(

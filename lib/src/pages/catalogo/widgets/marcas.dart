@@ -17,9 +17,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -63,17 +61,24 @@ class _MarcasWidgetState extends State<MarcasWidget> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: Get.width * 0.045, vertical: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
-                        ? Center(
-                            child: CircularProgressIndicator(
-                            color: ConstantesColores.azul_precio,
-                          ))
-                        : BotonesProveedores(idTab: 2)),
-                    BotonTodosfiltro(idTab: 2),
-                  ],
+                child: Container(
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                color: ConstantesColores.azul_precio,
+                              ))
+                            : BotonesProveedores(idTab: 2)),
+                        BotonTodosfiltro(idTab: 2),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               SizedBox(

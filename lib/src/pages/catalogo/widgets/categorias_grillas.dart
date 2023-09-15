@@ -54,18 +54,25 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
             Padding(
               padding: EdgeInsets.symmetric(
                     horizontal: Get.width * 0.045, vertical: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
-                  ? Center(
-                    child: CircularProgressIndicator(
-                      color: ConstantesColores.azul_precio,
-                    ),
-                  )
-                  :BotonesProveedores(idTab: 1)),
-                  BotonTodosfiltro(idTab: 1),
-                ],
+              child: Container(
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
+                      ? Center(
+                        child: CircularProgressIndicator(
+                          color: ConstantesColores.azul_precio,
+                        ),
+                      )
+                      :
+                      BotonesProveedores(idTab: 1)),
+                      BotonTodosfiltro(idTab: 1),
+                    ],
+                  ),
+                ),
               ),
             ),
             SizedBox(
