@@ -61,6 +61,10 @@ dependencies:
   overlay_support: ^2.1.0
   package_info: ^2.0.2
   permission_handler: ^10.2.0
+  fuzzywuzzy: ^1.1.2
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
   pinch_zoom_image_last: ^0.4.1
   progress_dialog_null_safe: ^1.0.7
   provider: ^6.0.0

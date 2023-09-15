@@ -1,4 +1,7 @@
 // ignore_for_file: unnecessary_statements, unnecessary_null_comparison
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
 
@@ -16,8 +19,7 @@ import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
-import 'package:emart/src/modelos/marcas.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -33,6 +35,8 @@ import 'package:provider/provider.dart';
 class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   final notificacionesService =
       NotificationPushInAppSlideUpService(NotificationPushInUpAndSlideUpSql());
+
+  final marcaService = MarcaService(MarcaRepositorySqlite());
 
   final prefs = Preferencias();
   final bannerController = Get.put(BannnerControllers());
@@ -196,8 +200,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
-      resBusqueda = await DBProvider.db
-          .consultarMarcas(notificacion.categoriaRedireccion.toString());
+      resBusqueda = marcaService.consultaMarcas(notificacion.categoriaRedireccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {
@@ -271,7 +274,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
 
   _direccionarMarca(
     BuildContext context,
-    Marcas marca,
+    Marca marca,
   ) {
     Navigator.push(
         context,
@@ -280,7 +283,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   codCategoria: marca.codigo,
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
-                  nombreCategoria: marca.titulo,
+                  nombreCategoria: marca.nombre,
                   isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
@@ -289,7 +292,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
 
   _direccionarProveedor(
     BuildContext context,
-    Fabricantes proveedor,
+    Fabricante proveedor,
   ) {
     Navigator.push(
         context,

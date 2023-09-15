@@ -54,13 +54,13 @@ class _PoliticasState extends State<Politicas> {
             child: Column(
               children: [
                 Container(
-                  height: Get.height * 0.8,
-                  width: Get.height * 0.8,
-                  child: SfPdfViewer.network(
+                    height: Get.height * 0.8,
+                    width: Get.height * 0.8,
+                    child:  SfPdfViewer.network(
                     urlPoliticas,
                     key: _pdfViewerKey,
                   ),
-                ),
+                    ),
                 GestureDetector(
                   onTap: () {
                     _aceptarPoliticas();

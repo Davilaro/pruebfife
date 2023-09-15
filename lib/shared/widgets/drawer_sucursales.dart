@@ -1,5 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
@@ -41,6 +42,7 @@ class DrawerSucursales extends StatefulWidget {
 class _DrawerSucursalesState extends State<DrawerSucursales> {
   late Object? valueRadio;
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final seachrFuzzyVM = Get.put(SearchFuzzyViewModel());
 
   @override
   void initState() {
@@ -173,6 +175,10 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                       });
                                       mostrarCategorias(context, sucursal,
                                           provider, cartProvider);
+                                      seachrFuzzyVM.listaRecientes.clear();
+                                      seachrFuzzyVM.controllerUser.text = '';
+                                      seachrFuzzyVM.allResultados.clear();
+                                      seachrFuzzyVM.searchInput.value = '';
                                     },
                                   )
                                 ],

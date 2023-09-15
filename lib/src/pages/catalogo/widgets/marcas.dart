@@ -1,4 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
+import 'package:emart/shared/widgets/botones_proveedores.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/fabricante.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/pages/catalogo/widgets/boton_todos_filtro.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -8,13 +17,11 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
-import '../../../widget/dounser.dart';
 
 final prefs = new Preferencias();
 
@@ -28,17 +35,19 @@ class MarcasWidget extends StatefulWidget {
 }
 
 class _MarcasWidgetState extends State<MarcasWidget> {
-  RxList<dynamic> listaMarca = <dynamic>[].obs;
-  List<dynamic> listaAllMarcas = [];
   final TextEditingController controllerSearch = TextEditingController();
+
+  MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
+
+  final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
 
   @override
   void initState() {
     //UXCAM:Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('BrandsPage');
-    controllerSearch.addListener(_runFilter);
-    cargarLista();
-
+    botonesProveedoresVm.cargarListaProovedor();
+    botonesProveedoresVm.cargarLista(2);
+    botonesProveedoresVm.cargarSeleccionados();
     super.initState();
   }
 
@@ -46,15 +55,30 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   Widget build(BuildContext context) {
     final provider = Provider.of<CarroModelo>(context);
 
-    final Debouncer onSearchDebouncer =
-        new Debouncer(delay: new Duration(milliseconds: 500));
-
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 10),
             child: Column(children: [
-              _campoTexto(context, onSearchDebouncer),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.045, vertical: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
+                        ? Center(
+                            child: CircularProgressIndicator(
+                            color: ConstantesColores.azul_precio,
+                          ))
+                        : BotonesProveedores(idTab: 2)),
+                    BotonTodosfiltro(idTab: 2),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
               Flexible(
                   flex: 2,
                   child: Obx(() => Container(
@@ -68,12 +92,8 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                         onRefresh: () async {
                           await LogicaActualizar().actualizarDB();
 
-                          // cargarLista();
+                          botonesProveedoresVm.cargarLista(2);
 
-                          setState(() {
-                            initState();
-                            (context as Element).reassemble();
-                          });
                           return Future<void>.delayed(
                               const Duration(seconds: 3));
                         },
@@ -82,9 +102,11 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                             childAspectRatio: 1.0,
                             crossAxisSpacing: 1.0,
                             mainAxisSpacing: 3,
-                            children:
-                                _cargarMarcas(listaMarca, context, provider)
-                                    .toList()),
+                            children: _cargarMarcas(
+                                    botonesProveedoresVm.listaMarca,
+                                    context,
+                                    provider)
+                                .toList()),
                       ))))
             ])));
   }
@@ -99,11 +121,16 @@ class _MarcasWidgetState extends State<MarcasWidget> {
       final widgetTemp = GestureDetector(
         onTap: () => {
           //Firebase: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent("Marcas", element.titulo,
-              element.titulo, element.titulo, element.codigo, 'ViewMarcs'),
+          TagueoFirebase().sendAnalityticSelectContent(
+              "Marcas",
+              (element as Marca).nombre,
+              element.nombre,
+              element.nombre,
+              element.codigo,
+              'ViewMarcs'),
           //UXCam: Llamamos el evento seeBrand
-          UxcamTagueo().seeBrand(element.titulo),
-          _onClickCatalogo(element.codigo, context, provider, element.titulo)
+          UxcamTagueo().seeBrand(element.nombre),
+          _onClickCatalogo(element.codigo, context, provider, element.nombre)
         },
         child: Card(
           shape:
@@ -121,14 +148,6 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                       Image.asset('assets/image/logo_login.png'),
                   fit: BoxFit.fill,
                 )),
-            // child: CachedNetworkImage(
-            //   imageUrl: element.ico,
-            //   placeholder: (context, url) =>
-            //       Image.asset('assets/image/jar-loading.gif'),
-            //   errorWidget: (context, url, error) =>
-            //       Image.asset('assets/image/logo_login.png'),
-            //   fit: BoxFit.fill,
-            // ),
           ),
         ),
       );
@@ -161,60 +180,6 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));
-  }
-
-  _campoTexto(BuildContext context, Debouncer onSearchDebouncer) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: controllerSearch,
-        style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
-        decoration: InputDecoration(
-          fillColor: HexColor("#41398D"),
-          hintText: 'Encuentra tus marcas',
-          hintStyle: TextStyle(
-            color: HexColor("#41398D"),
-          ),
-          suffixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
-        ),
-      ),
-    );
-  }
-
-  void cargarLista() async {
-    listaAllMarcas = await DBProvider.db.consultarMarcas(controllerSearch.text);
-    listaMarca.value = listaAllMarcas;
-  }
-
-  void _runFilter() {
-    if (controllerSearch.text.isEmpty) {
-      listaMarca.value = listaAllMarcas;
-    } else {
-      if (controllerSearch.text.length > 2) {
-        //FIREBASE: Llamamos el evento search
-        TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
-        //UXCam: Llamamos el evento search
-        UxcamTagueo().search(controllerSearch.text);
-        List listaAux = [];
-        listaAllMarcas.forEach((element) {
-          listaAux.add(element.titulo);
-        });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
-        listaMarca.value = [];
-        result
-            .map((r) => listaMarca.add(listaAllMarcas
-                .firstWhere((element) => element.titulo == r.item)))
-            .forEach(print);
-      }
-    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -38,6 +39,7 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
+  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
   bool isProductoEnOferta = false;
   RxBool isNewProduct = false.obs;
   RxBool isPromoProduct = false.obs;
@@ -78,6 +80,12 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                       '', isAgotado, isNewProduct.value, isPromoProduct.value);
                 }
                 detalleProducto(widget.element, cartProvider);
+                if (searchFuzzyViewModel.controllerUser.text != '') {
+                  searchFuzzyViewModel.listaRecientes.add(widget.element);
+
+                  searchFuzzyViewModel.listaRecientes =
+                      searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+                }
               },
               isAgotadoLabel: isAgotado,
               isVisibleLabelPromo: isPromoProduct.value,

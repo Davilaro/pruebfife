@@ -49,7 +49,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
     return Card(
         shape: RoundedRectangleBorder(
             side: new BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(8.0)),
+            borderRadius: BorderRadius.circular(10)),
         child: GestureDetector(
           onTap: widget.producto.bloqueoCartera == 0
               ? widget.onTapCard
@@ -71,6 +71,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                       children: [
                         //Imagen producto
                         Container(
+                          padding: EdgeInsets.only(top: 8.0),
                           alignment: Alignment.center,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),

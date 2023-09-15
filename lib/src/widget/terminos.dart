@@ -21,7 +21,7 @@ class _TerminosState extends State<Terminos> {
     cargarArchivo();
   }
 
-  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -54,13 +54,13 @@ class _TerminosState extends State<Terminos> {
             child: Column(
               children: [
                 Container(
-                  height: Get.height * 0.8,
-                  width: Get.height * 0.8,
-                  child: SfPdfViewer.network(
+                    height: Get.height * 0.8,
+                    width: Get.height * 0.8,
+                    child: SfPdfViewer.network(
                     urlTerminos,
                     key: _pdfViewerKey,
                   ),
-                ),
+                    ),
                 GestureDetector(
                   onTap: () {
                     _aceptarTerminos(context);

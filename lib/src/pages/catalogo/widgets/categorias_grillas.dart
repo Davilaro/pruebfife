@@ -1,17 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/shared/widgets/botones_proveedores.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/pages/catalogo/widgets/boton_todos_filtro.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
-import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -28,32 +29,48 @@ class CategoriasGrilla extends StatefulWidget {
 }
 
 class _CategoriasGrillaState extends State<CategoriasGrilla> {
-  RxList<dynamic> listaCategoria = <dynamic>[].obs;
-  List<dynamic> listaAllCategorias = [];
   final TextEditingController controllerSearch = TextEditingController();
-  // ControllerProductos constrollerProductos = Get.find();
+
+  final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
 
   @override
   void initState() {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('CategoriesPage');
-    controllerSearch.addListener(_runFilter);
-    cargarLista();
+    botonesProveedoresVm.cargarListaProovedor();
+    botonesProveedoresVm.cargarLista(1);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    botonesProveedoresVm.cargarSeleccionados();
     final provider = Provider.of<CarroModelo>(context);
-    final Debouncer onSearchDebouncer =
-        new Debouncer(delay: new Duration(milliseconds: 500));
-
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Column(children: [
-            _campoTexto(context, onSearchDebouncer),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.045, vertical: 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
+                  ? Center(
+                    child: CircularProgressIndicator(
+                      color: ConstantesColores.azul_precio,
+                    ),
+                  )
+                  :BotonesProveedores(idTab: 1)),
+                  BotonTodosfiltro(idTab: 1),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: Get.height * 0.02,
+            ),
             Expanded(
                 flex: 2,
                 child: Obx(() => Container(
@@ -66,9 +83,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                           ConstantesColores.agua_marina.withOpacity(0.6),
                       onRefresh: () async {
                         await LogicaActualizar().actualizarDB();
-                        setState(() {
-                          cargarLista();
-                        });
+                        botonesProveedoresVm.cargarLista(1);
                         return Future<void>.delayed(const Duration(seconds: 3));
                       },
                       child: GridView.count(
@@ -77,7 +92,9 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                           crossAxisSpacing: 9.0,
                           mainAxisSpacing: 9.0,
                           children: _cargarCategorias(
-                                  listaCategoria, context, provider)
+                                  botonesProveedoresVm.listaCategoria,
+                                  context,
+                                  provider)
                               .toList()),
                     ))))
           ]),
@@ -174,62 +191,6 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                   listaCategorias: listaSubCategorias,
                   nombreCategoria: nombre,
                 )));
-  }
-
-  _campoTexto(BuildContext context, Debouncer onSearchDebouncer) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: controllerSearch,
-        style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
-        decoration: InputDecoration(
-          fillColor: HexColor("#41398D"),
-          hintText: 'Encuentra tus categorías',
-          hintStyle: TextStyle(
-            color: HexColor("#41398D"),
-          ),
-          suffixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
-        ),
-      ),
-    );
-  }
-
-  void cargarLista() async {
-    // constrollerProductos.getAgotados();
-    listaAllCategorias =
-        await DBProvider.db.consultarCategorias(controllerSearch.text, 0);
-    listaCategoria.value = listaAllCategorias;
-  }
-
-  void _runFilter() {
-    if (controllerSearch.text.isEmpty) {
-      listaCategoria.value = listaAllCategorias;
-    } else {
-      if (controllerSearch.text.length > 2) {
-        //FIREBASE: Llamamos el evento search
-        TagueoFirebase().sendAnalityticsSearch(controllerSearch.text);
-        //UXCam: Llamamos el evento search
-        UxcamTagueo().search(controllerSearch.text);
-        List listaAux = [];
-        listaAllCategorias.forEach((element) {
-          listaAux.add(element.descripcion);
-        });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
-        listaCategoria.value = [];
-        result
-            .map((r) => listaCategoria.add(listaAllCategorias
-                .firstWhere((element) => element.descripcion == r.item)))
-            .forEach(print);
-      }
-    }
   }
 
   @override

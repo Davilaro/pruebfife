@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-Fabricantes fabricantesFromJson(String str) =>
-    Fabricantes.fromJson(json.decode(str));
+Fabricante fabricantesFromJson(String str) =>
+    Fabricante.fromJson(json.decode(str));
 
-String fabricantesToJson(Fabricantes data) => json.encode(data.toJson());
+String fabricantesToJson(Fabricante data) => json.encode(data.toJson());
 
-class Fabricantes {
-  Fabricantes(
+class Fabricante {
+  Fabricante(
       {this.empresa,
       this.icono,
       this.codigo,
@@ -53,7 +53,7 @@ class Fabricantes {
   String? nitCliente;
   String? razonSocial;
 
-  factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
+  factory Fabricante.fromJson(Map<String, dynamic> json) => Fabricante(
       empresa: json["empresa"] == null ? '' : json["empresa"],
       icono: json["ico"] == null ? '' : json["ico"],
       tipofabricante:

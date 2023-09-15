@@ -5,7 +5,7 @@ import 'package:emart/_pideky/presentation/productos/view_model/producto_view_mo
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -740,7 +740,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     PedidoEmart.cambioVista.value = 1;
                     cartProvider.guardarCambiodevista = 1;
                     Navigator.pop(context);
-                    List<Fabricantes> fabricanteSeleccionado =
+                    List<Fabricante> fabricanteSeleccionado =
                         await DBProvider.db.consultarFricante(fabricante);
 
                     _onClickCatalogo(
