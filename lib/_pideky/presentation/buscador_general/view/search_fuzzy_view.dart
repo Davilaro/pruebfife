@@ -140,7 +140,7 @@ class SearchFuzzyView extends StatelessWidget {
                                                   width: Get.width * 0.05,
                                                 ),
                                                 SizedBox(
-                                                  width: Get.width * 0.5,
+                                                  width: Get.width * 0.4,
                                                   child: AutoSizeText(
                                                     searchFuzzyViewModel
                                                         .nombreSugeridos(

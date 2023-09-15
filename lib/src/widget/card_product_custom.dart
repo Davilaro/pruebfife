@@ -71,6 +71,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                       children: [
                         //Imagen producto
                         Container(
+                          padding: EdgeInsets.only(top: 8.0),
                           alignment: Alignment.center,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),

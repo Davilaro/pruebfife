@@ -42,10 +42,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
     return Scaffold(
       key: drawerKey,
       drawerEnableOpenDragGesture:
-          resultadoBuscadorGeneralVm.prefs.usurioLogin == 1 ? true : false,
+          prefs.usurioLogin == 1 ? true : false,
       drawer: DrawerSucursales(drawerKey),
       appBar: PreferredSize(
-        preferredSize: resultadoBuscadorGeneralVm.prefs.usurioLogin == 1
+        preferredSize: prefs.usurioLogin == 1
             ? const Size.fromHeight(118)
             : const Size.fromHeight(70),
         child: SafeArea(child: NewAppBar(drawerKey)),
