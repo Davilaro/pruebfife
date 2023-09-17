@@ -165,46 +165,47 @@ class _EncuestaFormState extends State<EncuestaForm> {
                         )
                       : Container(),
 
-                  // Pregunta teléfono y correo
-                  Visibility(
-                    visible: widget.encuesta.tipoPreguntaId == 13 ||
-                        widget.encuesta.tipoPreguntaId == 14,
-                    child: Column(
-                      children: [
-                        if (widget.encuesta.tipoPreguntaId == 13)
-                          CustomTextFormField(
-                            keyboardType: TextInputType.text,
-                            hintText: 'Ingresa tu correo electrónico',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerEmail,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateEmail(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
-                          ),
-                        if (widget.encuesta.tipoPreguntaId == 14)
-                          CustomTextFormField(
-                            keyboardType: TextInputType.number,
-                            hintText: 'Ingresa tu número de  celular',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerTelephone,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateTelephone(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
-                          ),
-                      ],
+                  // Pregunta correo
+                  widget.encuesta.tipoPreguntaId == 13
+                 ? Visibility(
+                    visible: widget.encuesta.tipoPreguntaId == 13,
+                    child: CustomTextFormField(
+                      keyboardType: TextInputType.text,
+                      hintText: 'Ingresa tu correo electrónico',
+                      backgroundColor: HexColor("#E4E3EC"),
+                      controller: controllerEmail,
+                      onChanged: (value) {
+                        String? validationError =
+                            _validationForms.validateEmail(value);
+                        setState(() {
+                          _errorText = validationError;
+                        });
+                      },
+                      errorMessage: _errorText,
                     ),
-                  ),
-
+                  )
+                  : Container(),
+                  //Pregunta telefono.
+                  widget.encuesta.tipoPreguntaId == 14
+                 ? Visibility(
+                    visible: widget.encuesta.tipoPreguntaId == 14,
+                    child: CustomTextFormField(
+                      keyboardType: TextInputType.number,
+                      hintText: 'Ingresa tu número de  celular',
+                      backgroundColor: HexColor("#E4E3EC"),
+                      controller: controllerTelephone,
+                      onChanged: (value) {
+                        String? validationError =
+                            _validationForms.validateTelephone(value);
+                        setState(() {
+                          _errorText = validationError;
+                        });
+                      },
+                      errorMessage: _errorText,
+                    ),
+                  )
+                  : Container(),
+                  
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     width: Get.width * 0.5,
@@ -355,25 +356,23 @@ class _EncuestaFormState extends State<EncuestaForm> {
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          controllerText.text = '';
+          controllerEmail.text = '';
           alertaFinEncuesta();
           return;
         }
-      } else {
-        // mensajeValid.value = 'Por favor seleccione una respuesta';
-      }
+      } 
     } else if (encuesta.tipoPreguntaId == 14) {
       if (_errorText == null && controllerTelephone.text.isNotEmpty) {
         mensajeValid.value = '';
-        var respues =
-            await Servicies().enviarEncuesta(encuesta, controllerTelephone.text);
+        var respues = await Servicies()
+            .enviarEncuesta(encuesta, controllerTelephone.text);
         var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
         if (!respues) {
           mostrarAlert(context,
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          controllerText.text = '';
+          controllerTelephone.text = '';
           alertaFinEncuesta();
           return;
         }
