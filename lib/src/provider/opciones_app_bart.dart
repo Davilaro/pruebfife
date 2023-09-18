@@ -10,7 +10,7 @@ class OpcionesBard extends ChangeNotifier {
   int _numeroClickCarrito = 0;
   int _numeroClickVerImpedibles = 0;
   int _numeroClickVerPromos = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  late final PageController _pageController = PageController();
 
   int get getNumeroClickVerImpedibles {
     return _numeroClickVerImpedibles;
@@ -67,7 +67,7 @@ class OpcionesBard extends ChangeNotifier {
     return _selectMenuOption;
   }
 
-   set selectOptionMenu(int valor) {
+  set selectOptionMenu(int valor) {
     _pageController.animateToPage(valor,
         duration: Duration(milliseconds: 250), curve: Curves.easeOut);
     //_pageController.jumpToPage(valor);

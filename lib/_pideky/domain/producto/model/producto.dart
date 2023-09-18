@@ -169,6 +169,6 @@ class Producto {
         "activoprodnuevo": activoprodnuevo,
         "fechafinnuevo_1": fechafinnuevo_1,
         "fechafinpromocion_1": fechafinpromocion_1,
-        'bloqueoCarter': bloqueoCartera
+        'bloqueoCartera': bloqueoCartera
       };
 }

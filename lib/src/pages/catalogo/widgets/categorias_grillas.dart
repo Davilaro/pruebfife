@@ -7,6 +7,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
@@ -53,7 +54,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
           child: Column(children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                    horizontal: Get.width * 0.045, vertical: 0),
+                  horizontal: Get.width * 0.045, vertical: 0),
               child: Container(
                 width: double.infinity,
                 child: SingleChildScrollView(
@@ -62,13 +63,12 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Obx(() => botonesProveedoresVm.listaFabricante.isEmpty
-                      ? Center(
-                        child: CircularProgressIndicator(
-                          color: ConstantesColores.azul_precio,
-                        ),
-                      )
-                      :
-                      BotonesProveedores(idTab: 1)),
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: ConstantesColores.azul_precio,
+                              ),
+                            )
+                          : BotonesProveedores(idTab: 1)),
                       BotonTodosfiltro(idTab: 1),
                     ],
                   ),
@@ -114,20 +114,32 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     final size = MediaQuery.of(context).size;
 
     for (var element in result) {
+      print("categoria ${element.fabricante}");
       final widgetTemp = GestureDetector(
         onTap: () {
-          //FIREBASE: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent(
-              "Categorías",
-              element.descripcion,
-              '',
-              element.descripcion,
-              element.codigo,
-              'ViewCategoris');
-          //UXCam: Llamamos el evento seeCategory
-          UxcamTagueo().seeCategory(element.descripcion);
-          _onClickCatalogo(
-              element.codigo, context, provider, element.descripcion);
+          print(
+              "categoria ${botonesProveedoresVm.listaFabricantesBloqueados.contains(element.fabricante)}");
+          if (botonesProveedoresVm.listaFabricantesBloqueados
+              .contains(element.fabricante)) {
+            mostrarAlertCartera(
+              context,
+              "Esta categoría no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
+              null,
+            );
+          } else {
+            //FIREBASE: Llamamos el evento select_content
+            TagueoFirebase().sendAnalityticSelectContent(
+                "Categorías",
+                element.descripcion,
+                '',
+                element.descripcion,
+                element.codigo,
+                'ViewCategoris');
+            //UXCam: Llamamos el evento seeCategory
+            UxcamTagueo().seeCategory(element.descripcion);
+            _onClickCatalogo(
+                element.codigo, context, provider, element.descripcion);
+          }
         },
         child: Container(
           height: Get.height * 0.1,
@@ -135,46 +147,64 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Wrap(
-            // mainAxisAlignment: MainAxisAlignment.end,
+          child: Stack(
             children: [
-              Column(
+              Wrap(
+                // mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Column(
+                    children: [
+                      Container(
+                        height: size.height * 0.090,
+                        margin: EdgeInsets.fromLTRB(5, 2, 5, 0),
+                        alignment: Alignment.center,
+                        child: CachedNetworkImage(
+                          imageUrl: element.ico,
+                          alignment: Alignment.bottomCenter,
+                          placeholder: (context, url) => Image.asset(
+                            'assets/image/jar-loading.gif',
+                            alignment: Alignment.center,
+                            height: 50,
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/image/logo_login.png',
+                            height: 50,
+                            alignment: Alignment.center,
+                          ),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ],
+                  ),
                   Container(
-                    height: size.height * 0.090,
-                    margin: EdgeInsets.fromLTRB(5, 2, 5, 0),
-                    alignment: Alignment.center,
-                    child: CachedNetworkImage(
-                      imageUrl: element.ico,
-                      alignment: Alignment.bottomCenter,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/image/jar-loading.gif',
-                        alignment: Alignment.center,
-                        height: 50,
-                      ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/image/logo_login.png',
-                        height: 50,
-                        alignment: Alignment.center,
-                      ),
-                      fit: BoxFit.contain,
-                    ),
+                    alignment: Alignment.topCenter,
+                    margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                    child: AutoSizeText('${element.descripcion}',
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: HexColor('#0061cc')),
+                        textAlign: TextAlign.center,
+                        minFontSize: 8,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
-              Container(
-                alignment: Alignment.topCenter,
-                margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                child: AutoSizeText('${element.descripcion}',
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: HexColor('#0061cc')),
-                    textAlign: TextAlign.center,
-                    minFontSize: 8,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis),
-              ),
+              Align(
+                alignment: Alignment.center,
+                child: Visibility(
+                  visible: botonesProveedoresVm.listaFabricantesBloqueados
+                      .contains(element.fabricante),
+                  child: Container(
+                    height: Get.height * 0.14,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

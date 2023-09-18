@@ -10,7 +10,7 @@ import 'package:emart/src/utils/util.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class LoginApi extends ILogin {
+class LoginApi implements ILogin {
   @override
   Future<int> validationUserAndPassword(String user, String password) async {
     final prefs = Preferencias();
@@ -53,9 +53,10 @@ class LoginApi extends ILogin {
       url = Uri.parse(Constantes().urlPrincipal + "LogIn/ActualizarPassword");
       final response = await http.post(url, body: jsonRequest);
       var responseDecode = jsonDecode(response.body);
-      if (response.statusCode == 200 && responseDecode == prefs.codigoUnicoPideky) {
+      if (response.statusCode == 200 &&
+          responseDecode == prefs.codigoUnicoPideky) {
         return true;
-      } else if (responseDecode  == "Por favor validar con otro Nit"){
+      } else if (responseDecode == "Por favor validar con otro Nit") {
         return responseDecode;
       } else {
         return false;
@@ -169,7 +170,6 @@ class LoginApi extends ILogin {
       if (response.statusCode == 200 &&
           jsonDecode(response.body) != "Código invalido") {
         prefs.typeCollaborator = jsonDecode(response.body);
-
         return true;
       } else {
         return false;
@@ -186,8 +186,7 @@ class LoginApi extends ILogin {
     try {
       final url;
 
-      url = Uri.parse(
-          Constantes().urlPrincipal + 'LogIn/ValidarNit');
+      url = Uri.parse(Constantes().urlPrincipal + 'LogIn/ValidarNit');
 
       final response = await http.post(
         url,
@@ -200,10 +199,10 @@ class LoginApi extends ILogin {
         }),
       );
       var resDecode = jsonDecode(response.body);
-      
+
       if (resDecode == "Nit invalido") {
         return resDecode;
-      } else if (resDecode == "Por favor validar con otro Nit"){
+      } else if (resDecode == "Por favor validar con otro Nit") {
         return resDecode;
       } else {
         prefs.codigoUnicoPideky = resDecode;
@@ -214,6 +213,4 @@ class LoginApi extends ILogin {
       return false;
     }
   }
-  
-
 }

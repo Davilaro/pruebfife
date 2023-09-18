@@ -27,6 +27,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../src/utils/alertas.dart';
+
 final prefs = new Preferencias();
 
 class DetalleProductoSearch extends StatefulWidget {
@@ -56,6 +58,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   @override
   void initState() {
     super.initState();
+    print(
+        "producto ${widget.producto.bloqueoCartera} ${widget.producto.fabricante}");
     isAgotado = constrollerProductos.validarAgotado(widget.producto);
     _controllerCantidadProducto.text =
         cargoConfirmar.controllerCantidadProducto.value;
@@ -68,7 +72,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controllerCantidadProducto.dispose();
     super.dispose();
   }
@@ -388,10 +391,17 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                   Visibility(
                     visible: !isAgotado,
                     child: BotonAgregarCarrito(
-                      onTap: isFrecuencia
-                          ? () => llenarCarrito(widget.producto, cartProvider)
-                          : () => productViewModel.iniciarModal(
-                              context, widget.producto.fabricante),
+                      onTap: widget.producto.bloqueoCartera != 1
+                          ? isFrecuencia
+                              ? () =>
+                                  llenarCarrito(widget.producto, cartProvider)
+                              : () => productViewModel.iniciarModal(
+                                  context, widget.producto.fabricante)
+                          : () => mostrarAlertCartera(
+                                context,
+                                "Este producto no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
+                                null,
+                              ),
                       width: Get.width * 0.8,
                       height: widget.tamano * 0.06,
                       color: isFrecuencia
@@ -488,8 +498,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     double precioMinimo = 0;
     double valor = 0.7;
 
-    
-
     try {
       if (cartProvider.getListaFabricante[widget.producto.fabricante]
                   ["precioFinal"] <
@@ -512,8 +520,6 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   double retornarTamanoPrincipal(cartProvider) {
     double precioMinimo = 0;
     double valor = 0.6;
-
-    
 
     try {
       if (cartProvider.getListaFabricante[widget.producto.fabricante]

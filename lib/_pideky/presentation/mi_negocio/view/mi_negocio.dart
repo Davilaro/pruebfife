@@ -42,7 +42,7 @@ class _MiNegocioState extends State<MiNegocio> {
   @override
   void initState() {
     if (prefs.usurioLogin == -1) {
-      Future.delayed(Duration(seconds: 0)).then((value) {
+      Future.delayed(Duration(milliseconds: 700)).then((value) {
         alert.alertCustom(context);
       });
     }
@@ -680,7 +680,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                             context, size, provider)
                                         : mostrarAlert(
                                             context,
-                                            "No puedes realizar pedidos ya que te encuentras en modo colaborador",
+                                            "No puedes eliminar la cuenta ya que te encuentras en modo colaborador",
                                             null);
                                   },
                                   child: Row(children: [

@@ -513,17 +513,21 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<dynamic> consultarMarcasPorFabricante(String fabricante, String fabricante2) async {
+  Future<dynamic> consultarMarcasPorFabricante(
+      String fabricante, String fabricante2) async {
     final db = await baseAbierta;
 
-    String where = fabricante != '' ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")' : '';
+    String where = fabricante != ''
+        ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")'
+        : '';
 
     try {
-      final sql = await db.rawQuery('''
+      final query = '''
          select * from marca where 
          codigo in 
          (select marcacodigopideki from producto $where)
-    ''');
+    ''';
+      final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
     } catch (e) {
@@ -531,10 +535,72 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<dynamic> consultarCategoriasPorFabricante(String fabricante, String fabricante2) async {
+  Future<dynamic> consultarMarcasPorFabricanteCatalogo(List empresas) async {
     final db = await baseAbierta;
 
-    String where = fabricante != '' ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")' : '';
+    try {
+      if (empresas.isNotEmpty) {
+        final placeholders =
+            List.generate(empresas.length, (index) => '?').join(', ');
+        final query = '''
+         SELECT * FROM marca WHERE fabricante IN ($placeholders)
+    ''';
+        final sql = await db.rawQuery(query, empresas);
+
+        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+      } else {
+        final query = '''
+         SELECT * FROM marca 
+    ''';
+        final sql = await db.rawQuery(query);
+
+        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+      }
+    } catch (e) {
+      print("error traer marcas $e");
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarCategoriasPorFabricanteCatalogo(
+      List empresas) async {
+    final db = await baseAbierta;
+
+    try {
+      if (empresas.isNotEmpty) {
+        final placeholders =
+            List.generate(empresas.length, (index) => '?').join(', ');
+        final query = '''
+         select codigo, descripcion,ico2 as ico,orden from categoria WHERE fabricante IN ($placeholders)
+    ''';
+        final sql = await db.rawQuery(query, empresas);
+
+        return sql.isNotEmpty
+            ? sql.map((e) => Categorias.fromJson(e)).toList()
+            : [];
+      } else {
+        final query = '''
+         select codigo, descripcion,ico2 as ico, fabricante ,orden FROM categoria 
+    ''';
+        final sql = await db.rawQuery(query);
+
+        return sql.isNotEmpty
+            ? sql.map((e) => Categorias.fromJson(e)).toList()
+            : [];
+      }
+    } catch (e) {
+      print("error traer categoria $e");
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarCategoriasPorFabricante(
+      String fabricante, String fabricante2) async {
+    final db = await baseAbierta;
+
+    String where = fabricante != ''
+        ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")'
+        : '';
     var query = '''
       
       select codigo, descripcion,ico2 as ico,orden from categoria WHERE CODIGO 
@@ -544,7 +610,6 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
 
     try {
       final sql = await db.rawQuery(query);
-      log(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()

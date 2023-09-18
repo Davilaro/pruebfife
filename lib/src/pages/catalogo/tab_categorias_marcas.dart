@@ -1,12 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/modelos/seccion.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/pages/catalogo/widgets/categorias_grillas.dart';
@@ -35,15 +33,21 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
   };
   final cargoConfirmar = Get.find<ControlBaseDatos>();
   ControllerProductos constrollerProductos = Get.find();
+  final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
   RxInt contador = 5.obs;
 
   @override
   void initState() {
-    print("entre categorias");
     super.initState();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
     // cargarData();
+  }
+
+  @override
+  void dispose() {
+    botonesProveedoresVm.listaProveedores.clear();
+    super.dispose();
   }
 
   @override

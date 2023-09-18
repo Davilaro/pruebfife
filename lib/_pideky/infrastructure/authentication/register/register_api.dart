@@ -3,7 +3,7 @@ import 'package:emart/_pideky/domain/authentication/register/interface/i_registe
 import 'package:emart/src/preferences/const.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterApi extends IRegister {
+class RegisterApi implements IRegister {
   @override
   Future<bool> register(String name, String bussinesName, String bussinesAdress,
       String telefono, List<Map<String, String>> infoProveedores) async {

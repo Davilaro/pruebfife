@@ -434,10 +434,12 @@ class Servicies {
           body: datos);
 
       if (response.statusCode == 200) {
+        print("restorno pedido ${response.body}");
         var res = ValidarPedido.fromJson(jsonDecode(response.body));
 
         return res;
       } else {
+        print("restorno pedido ${response.body}");
         throw Exception('Failed');
       }
     } catch (e) {

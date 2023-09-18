@@ -6,6 +6,7 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_search.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -50,10 +51,7 @@ class SearchFuzzyViewModel extends GetxController {
 
   List<ExtractedResult<String>> result = [];
 
-  
-
-  final BuildContext context =  Get.context!;
-
+  final BuildContext context = Get.context!;
 
   @override
   void onInit() {
@@ -179,77 +177,80 @@ class SearchFuzzyViewModel extends GetxController {
 
   Future<void> logicaSeleccion(
       Object object, cargoConfirmar, cartProvider, context) async {
-    if (controllerUser.text != '') {
-      listaRecientes.add(object);
-      listaRecientes = listaRecientes.reversed.toList().obs;
-    }
     if (prefs.usurioLogin == -1) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-    }
-    if (object is Marca) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: object.codigo,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 3,
-                    nombreCategoria: object.nombre,
-                    isActiveBanner: false,
-                    locacionFiltro: "marca",
-                    codigoProveedor: "",
-                  )));
-    }
-    if (object is Categorias) {
-      final List<dynamic> listaSubCategorias =
-          await DBProvider.db.consultarCategoriasSubCategorias(object.codigo);
+          context, MaterialPageRoute(builder: (context) => LogInPage()));
+    } else {
+      if (controllerUser.text != '') {
+        listaRecientes.add(object);
+        listaRecientes = listaRecientes.reversed.toList().obs;
+      }
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => TabOpcionesCategorias(
-                    listaCategorias: listaSubCategorias,
-                    nombreCategoria: object.descripcion,
-                  )));
+      if (object is Marca) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomBuscardorFuzzy(
+                      codCategoria: object.codigo,
+                      numEmpresa: 'nutresa',
+                      tipoCategoria: 3,
+                      nombreCategoria: object.nombre,
+                      isActiveBanner: false,
+                      locacionFiltro: "marca",
+                      codigoProveedor: "",
+                    )));
+      }
+      if (object is Categorias) {
+        final List<dynamic> listaSubCategorias =
+            await DBProvider.db.consultarCategoriasSubCategorias(object.codigo);
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TabOpcionesCategorias(
+                      listaCategorias: listaSubCategorias,
+                      nombreCategoria: object.descripcion,
+                    )));
+      }
+      if (object is Fabricante) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomBuscardorFuzzy(
+                      codCategoria: object.empresa,
+                      numEmpresa: 'nutresa',
+                      tipoCategoria: 4,
+                      nombreCategoria: object.nombrecomercial,
+                      img: object.icono,
+                      locacionFiltro: "proveedor",
+                      codigoProveedor: object.empresa.toString(),
+                    )));
+      }
+      if (object is Producto) {
+        PedidoEmart.inicializarValoresFabricante();
+        cartProvider.actualizarListaFabricante =
+            PedidoEmart.listaPrecioPorFabricante!;
+        //validar que este en la lista de productos
+        cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(object));
+        cargoConfirmar.cargarProductoNuevo(
+            ProductoCambiante.m(object.nombre, object.codigo), 1);
+        cartProvider.guardarCambiodevista = 1;
+        PedidoEmart.cambioVista.value = 1;
+        String title = searchInput.value;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetalleProductoSearch(
+                      producto: object,
+                      tamano: Get.height * .8,
+                      title: title == '' ? S.current.product : title,
+                    )));
+      }
     }
-    if (object is Fabricante) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: object.empresa,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: object.nombrecomercial,
-                    img: object.icono,
-                    locacionFiltro: "proveedor",
-                    codigoProveedor: object.empresa.toString(),
-                  )));
-    }
-    if (object is Producto) {
-      PedidoEmart.inicializarValoresFabricante();
-      cartProvider.actualizarListaFabricante =
-          PedidoEmart.listaPrecioPorFabricante!;
-      //validar que este en la lista de productos
-      cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(object));
-      cargoConfirmar.cargarProductoNuevo(
-          ProductoCambiante.m(object.nombre, object.codigo), 1);
-      cartProvider.guardarCambiodevista = 1;
-      PedidoEmart.cambioVista.value = 1;
-      String title = searchInput.value;
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DetalleProductoSearch(
-                    producto: object,
-                    tamano: Get.height * .8,
-                    title: title == '' ? S.current.product : title,
-                  )));
-    }
+
     controllerUser.text = "";
     searchInput.value = "";
     allResultados.value = [];
     searchInput.value = "";
   }
-
 }

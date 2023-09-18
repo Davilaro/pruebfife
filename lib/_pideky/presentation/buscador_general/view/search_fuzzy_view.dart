@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SearchFuzzyView extends StatelessWidget {
-
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
@@ -78,6 +77,7 @@ class SearchFuzzyView extends StatelessWidget {
                     () => searchFuzzyViewModel.allResultados.isNotEmpty
                         ? Container(
                             height: 300,
+                            width: Get.width * 0.9,
                             child: ListView.builder(
                               itemCount: 10,
                               itemBuilder:

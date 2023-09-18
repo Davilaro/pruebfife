@@ -220,7 +220,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
 
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
-    final opcionesAppBard = Provider.of<OpcionesBard>(context,listen: false);
+    //final opcionesAppBard = Provider.of<OpcionesBard>(context,listen: false);
     // prefs.usuarioRazonSocial = elemento.razonsocial;
     // prefs.codCliente = elemento.codigo;
     // prefs.codTienda = 'nutresa';

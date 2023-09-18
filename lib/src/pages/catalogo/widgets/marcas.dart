@@ -13,6 +13,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
@@ -65,7 +66,6 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                   width: double.infinity,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -125,35 +125,67 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
       final widgetTemp = GestureDetector(
         onTap: () => {
-          //Firebase: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent(
-              "Marcas",
-              (element as Marca).nombre,
-              element.nombre,
-              element.nombre,
-              element.codigo,
-              'ViewMarcs'),
-          //UXCam: Llamamos el evento seeBrand
-          UxcamTagueo().seeBrand(element.nombre),
-          _onClickCatalogo(element.codigo, context, provider, element.nombre)
+          if (botonesProveedoresVm.listaFabricantesBloqueados
+              .contains(element.fabricante))
+            {
+              mostrarAlertCartera(
+                context,
+                "Esta marca no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
+                null,
+              )
+            }
+          else
+            {
+              //Firebase: Llamamos el evento select_content
+              TagueoFirebase().sendAnalityticSelectContent(
+                  "Marcas",
+                  (element as Marca).nombre,
+                  element.nombre,
+                  element.nombre,
+                  element.codigo,
+                  'ViewMarcs'),
+              //UXCam: Llamamos el evento seeBrand
+              UxcamTagueo().seeBrand(element.nombre),
+              _onClickCatalogo(
+                  element.codigo, context, provider, element.nombre)
+            }
         },
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 0,
-          child: Container(
-            height: Get.height * 4,
-            width: Get.width * 1,
-            margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-            alignment: Alignment.center,
-            color: Colors.white,
-            child: Obx(() => Image.network(
-                  icon.value,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Image.asset('assets/image/logo_login.png'),
-                  fit: BoxFit.fill,
-                )),
-          ),
+        child: Stack(
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              elevation: 0,
+              child: Container(
+                height: Get.height * 4,
+                width: Get.width * 1,
+                margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Obx(() => Image.network(
+                      icon.value,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.asset('assets/image/logo_login.png'),
+                      fit: BoxFit.fill,
+                    )),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(4),
+              child: Visibility(
+                visible: botonesProveedoresVm.listaFabricantesBloqueados
+                    .contains(element.fabricante),
+                child: Container(
+                  height: Get.height * 4,
+                  width: Get.width * 1,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
 

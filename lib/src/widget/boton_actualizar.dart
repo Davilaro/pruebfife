@@ -47,6 +47,7 @@ class _BotonActualizarState extends State<BotonActualizar> {
 
 Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
+  final providerTabs = Provider.of<OpcionesBard>(context, listen: false);
   final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
   final controllerNequi = Get.find<MisPagosNequiViewModel>();
   isActualizando.value = true;
@@ -71,6 +72,8 @@ Future<void> actualizarPagina(
       provider.setIsLocal = 0;
     }
     productViewModel.cargarCondicionEntrega();
+
+    providerTabs.selectOptionMenu = 0;
     Navigator.pushReplacementNamed(
       context,
       'tab_opciones',

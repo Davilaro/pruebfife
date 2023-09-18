@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
 import 'package:emart/src/controllers/controller_selector_providers.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -16,7 +15,6 @@ import '../../../../../shared/widgets/popups.dart';
 import '../../../../../src/preferences/cont_colores.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage();
 
   @override
   Widget build(BuildContext context) {

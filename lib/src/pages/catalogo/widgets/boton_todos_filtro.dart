@@ -15,16 +15,14 @@ class BotonTodosfiltro extends StatelessWidget {
     return Obx(
       () => GestureDetector(
         onTap: () {
-          
           botonesProveedoresVm.esBuscadoTodos.value =
               !botonesProveedoresVm.esBuscadoTodos.value;
-          botonesProveedoresVm.proveedor.value = "";
-          botonesProveedoresVm.proveedor2.value = "";
-      
+          botonesProveedoresVm.listaProveedores.clear();
+
           for (int i = 0; i < botonesProveedoresVm.seleccionados.length; i++) {
             botonesProveedoresVm.seleccionados[i] = false;
           }
-      
+
           botonesProveedoresVm.cargarLista(idTab);
         },
         child: Container(
@@ -58,7 +56,9 @@ class BotonTodosfiltro extends StatelessWidget {
                 ),
                 AutoSizeText('Todos',
                     maxFontSize: 10,
-                    style: TextStyle(color: ConstantesColores.azul_precio, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: ConstantesColores.azul_precio,
+                        fontWeight: FontWeight.bold),
                     minFontSize: 6,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis),

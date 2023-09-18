@@ -76,6 +76,20 @@ class UxcamTagueo {
     }
 
     //UXCam: se asigna el nombre de usuario y se asigna el tipo de usuario
+    switch (prefs.typeCollaborator) {
+      case "1":
+        print("enviando tipo usuaruio");
+        FlutterUxcam.setUserProperty("type_collaborator", "full access");
+        break;
+
+      case "2":
+        FlutterUxcam.setUserProperty("type_collaborator", "limited access");
+        break;
+
+      default:
+        FlutterUxcam.setUserProperty("type_collaborator", "no access");
+        break;
+    }
     FlutterUxcam.setUserIdentity('$userUxCam');
     FlutterUxcam.setUserProperty("subscription_type", typeUser);
     FlutterUxcam.setUserProperty("number_of_orders", numeroOrdenes.toString());
@@ -164,13 +178,13 @@ class UxcamTagueo {
   }
 
   void search(String value) {
-    if (prefs.usurioLogin == 1)
-      FlutterUxcam.logEventWithProperties("search", {
-        "search": value,
-        "City": prefs.ciudad ?? "",
-        "Regional": prefs.oficinaVentas,
-        "Country": prefs.paisUsuario ?? "CO"
-      });
+    if (prefs.usurioLogin == 1) print("search function");
+    FlutterUxcam.logEventWithProperties("search", {
+      "search": value,
+      "City": prefs.ciudad ?? "",
+      "Regional": prefs.oficinaVentas,
+      "Country": prefs.paisUsuario ?? "CO"
+    });
   }
 
   void clickCarrito(provider, String ubicacion) {

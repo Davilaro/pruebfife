@@ -30,14 +30,15 @@ class LogInPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double scaleFactor = 0.6;
 
-    return Scaffold(
-      backgroundColor: HexColor('#eeeeee'),
-      body: ListView(children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 80),
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formkey,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: HexColor('#eeeeee'),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 80),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -56,42 +57,52 @@ class LogInPage extends StatelessWidget {
                         fontSize: 25,
                         fontWeight: FontWeight.w900)),
                 SizedBox(height: 35.0),
-                CustomTextFormField(
-                    // controller: _controllerUserName,
-                    hintText: 'Ingresa el usuario que te asignamos',
-                    hintStyle: TextStyle(color: ConstantesColores.gris_sku),
-                    backgroundColor: HexColor("#E4E3EC"),
-                    textColor: HexColor("#41398D"),
-                    borderRadius: 35,
-                    icon: Icons.perm_identity,
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icon/cliente.svg',
-                      fit: BoxFit.scaleDown,
-                    ),
-                    onChanged: (value) {
-                      _validationForms.userName.value = value;
-                      _validationForms.userInteracted2.value =
-                          true; // Marca como interactuado
-                    },
-                    validator: _validationForms.validateTextFieldNullorEmpty),
-                SizedBox(height: 15.0),
-                CustomTextFormField(
-                    // controller: _controllerPassword,
-                    obscureText: true,
-                    hintText: 'Ingresa la contraseña que te asignamos',
-                    hintStyle: TextStyle(color: ConstantesColores.gris_sku),
-                    backgroundColor: HexColor("#E4E3EC"),
-                    textColor: HexColor("#41398D"),
-                    borderRadius: 35,
-                    icon: Icons.key,
-                    prefixIcon: SvgPicture.asset('assets/icon/contraseña.svg',
-                        fit: BoxFit.scaleDown),
-                    onChanged: (value) {
-                      _validationForms.password.value = value;
-                      _validationForms.userInteracted.value =
-                          true; // Marca como interactuado
-                    },
-                    validator: _validationForms.validatePassword),
+                Form(
+                  child: Column(
+                    children: [
+                      CustomTextFormField(
+                          // controller: _controllerUserName,
+                          hintText: 'Ingresa el usuario que te asignamos',
+                          hintStyle:
+                              TextStyle(color: ConstantesColores.gris_sku),
+                          backgroundColor: HexColor("#E4E3EC"),
+                          textColor: HexColor("#41398D"),
+                          borderRadius: 35,
+                          icon: Icons.perm_identity,
+                          prefixIcon: SvgPicture.asset(
+                            'assets/icon/cliente.svg',
+                            fit: BoxFit.scaleDown,
+                          ),
+                          onChanged: (value) {
+                            _validationForms.userName.value = value;
+                            _validationForms.userInteracted2.value =
+                                true; // Marca como interactuado
+                          },
+                          validator:
+                              _validationForms.validateTextFieldNullorEmpty),
+                      SizedBox(height: 15.0),
+                      CustomTextFormField(
+                          // controller: _controllerPassword,
+                          obscureText: true,
+                          hintText: 'Ingresa la contraseña que te asignamos',
+                          hintStyle:
+                              TextStyle(color: ConstantesColores.gris_sku),
+                          backgroundColor: HexColor("#E4E3EC"),
+                          textColor: HexColor("#41398D"),
+                          borderRadius: 35,
+                          icon: Icons.key,
+                          prefixIcon: SvgPicture.asset(
+                              'assets/icon/contraseña.svg',
+                              fit: BoxFit.scaleDown),
+                          onChanged: (value) {
+                            _validationForms.password.value = value;
+                            _validationForms.userInteracted.value =
+                                true; // Marca como interactuado
+                          },
+                          validator: _validationForms.validatePassword),
+                    ],
+                  ),
+                ),
                 Visibility(
                   visible: prefs.isFirstTime != true ? true : false,
                   child: Container(
@@ -124,16 +135,7 @@ class LogInPage extends StatelessWidget {
                     height: Get.height * 0.06,
                     color: ConstantesColores.empodio_verde,
                     onTap: () async {
-                      final isValid = formkey.currentState!.validate();
-                      if (isValid) {
-                        await _validationForms.validationLoginNewUser(context);
-                      } else {
-                        showPopup(
-                          context,
-                          'Usuario y/o contraseña incorrecto',
-                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-                        );
-                      }
+                      await _validationForms.validationLoginNewUser(context);
                     },
                     text: "Ingresar"),
                 TextButtonWithUnderline(
@@ -216,7 +218,7 @@ class LogInPage extends StatelessWidget {
             ),
           ),
         ),
-      ]),
+      ),
     );
   }
 }

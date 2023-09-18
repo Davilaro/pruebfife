@@ -81,8 +81,8 @@ class ValidationForms extends GetxController {
   final passwordError = 'No es una contraseña válida'.obs;
   final emailError = ''.obs;
 
-    RegExp passwordRegExp = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
-
+  RegExp passwordRegExp =
+      RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[A-Z])[a-zA-Z\d]{8,}$');
 
   late String _password;
 
@@ -296,7 +296,7 @@ class ValidationForms extends GetxController {
     return -1;
   }
 
-  Future<void> validationLoginNewUser(context) async {
+  Future<dynamic> validationLoginNewUser(context) async {
     final progress = ProgressDialog(context);
     progress.style(
         message: S.current.logging_in,
@@ -322,6 +322,7 @@ class ValidationForms extends GetxController {
               'Ingreso correcto',
               SvgPicture.asset('assets/image/Icon_correcto.svg'),
             );
+            return true;
           }
         }
       } else {
@@ -330,9 +331,10 @@ class ValidationForms extends GetxController {
             ));
         showPopup(
           context,
-          'Ingre-so correcto',
+          'Ingreso correcto',
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
+        return true;
       }
     } else {
       await progress.hide();
@@ -341,6 +343,7 @@ class ValidationForms extends GetxController {
         'Usuario y/o contraseña incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      return false;
     }
   }
 
@@ -494,7 +497,7 @@ class ValidationForms extends GetxController {
 
   //Validación para email encuesta homePage
   String? validateEmail(String? value) {
-   emailError.value = 'No es un email válido ';
+    emailError.value = 'No es un email válido ';
     if (value == null || value.isEmpty) {
       return 'Campo requerido';
     }
@@ -513,7 +516,7 @@ class ValidationForms extends GetxController {
 
   // Validación de números de celular, Colombia, Costa Rica  encuesta homePage
   String? validateTelephone(String? value) {
-    final colombiaRegExp =  RegExp(r'^3\d{9}$'); 
+    final colombiaRegExp = RegExp(r'^3\d{9}$');
     final costaRicaRegExp = RegExp(r'^[678]\d{7}$');
 
     emailError.value = 'No es un telefono válido';

@@ -157,8 +157,7 @@ void alertCustom(BuildContext context) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   'tab_opciones', (Route<dynamic> route) => false);
             },
-            onLeftPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LogInPage())),
+            onLeftPressed: () => Get.to(() => LogInPage()),
             content: Container(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(

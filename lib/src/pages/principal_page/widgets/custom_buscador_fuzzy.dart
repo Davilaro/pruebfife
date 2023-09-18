@@ -99,9 +99,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
-    final Debouncer onSearchDebouncer =
-        new Debouncer(delay: new Duration(milliseconds: 500));
-
     final size = MediaQuery.of(context).size;
     setState(() {
       if (catalogSearchViewModel.isFilter) {
@@ -210,12 +207,12 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     return opciones;
   }
 
-
   void cargarProductos() async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     if (widget.claseProducto != null) {
       if (widget.claseProducto == 1) {
+        print("tipo de producto 1");
         listaAllProducts = await productService.cargarProductosInterno(
             1,
             "",
@@ -227,6 +224,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 2) {
+        print("tipo de producto 2");
         listaAllProducts = await productService.cargarProductosInterno(
             2,
             "",
@@ -238,6 +236,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
+        print("tipo de producto 4");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca!,
             widget.tipoCategoria,
@@ -249,6 +248,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 3) {
+        print("tipo de producto 3");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoSubCategoria!,
             widget.tipoCategoria,
@@ -260,6 +260,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
+        print("tipo de producto 5");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoCategoria!,
             widget.tipoCategoria,
@@ -271,6 +272,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 6) {
+        print("tipo de producto 6");
         listaAllProducts =
             await productService.cargarProductosFiltroProveedores(
                 widget.codCategoria,
@@ -284,6 +286,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 7) {
+        print("tipo de producto 7");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca,
             7,
@@ -297,6 +300,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       }
       //para el filtro de categorias
       if (widget.claseProducto == 8) {
+        print("tipo de producto 8");
         listaAllProducts = await productService.cargarProductosFiltroCategoria(
             widget.codigoCategoria,
             widget.tipoCategoria,
@@ -307,6 +311,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
     } else {
+      print("tipo de producto otro");
       listaAllProducts = await productService.cargarProductos(
           widget.codCategoria!,
           widget.tipoCategoria,
@@ -319,7 +324,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-   _buscadorPrincipal(BuildContext context) {
+  _buscadorPrincipal(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       decoration: BoxDecoration(
@@ -353,7 +358,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       ),
     );
   }
-
 
   void _validacionGeneralNotificaciones() async {
     switch (widget.locacionFiltro) {
