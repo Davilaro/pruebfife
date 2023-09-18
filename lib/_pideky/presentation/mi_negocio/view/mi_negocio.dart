@@ -42,9 +42,7 @@ class _MiNegocioState extends State<MiNegocio> {
   @override
   void initState() {
     if (prefs.usurioLogin == -1) {
-      Future.delayed(Duration(milliseconds: 700)).then((value) {
-        alert.alertCustom(context);
-      });
+      alert.alertCustom(context);
     }
     if (prefs.paisUsuario == "CO") {
       viewModel.pais.value = "CO";
