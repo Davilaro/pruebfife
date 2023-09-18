@@ -58,6 +58,8 @@ class LogInPage extends StatelessWidget {
                         fontWeight: FontWeight.w900)),
                 SizedBox(height: 35.0),
                 Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: formkey,
                   child: Column(
                     children: [
                       CustomTextFormField(
@@ -135,7 +137,16 @@ class LogInPage extends StatelessWidget {
                     height: Get.height * 0.06,
                     color: ConstantesColores.empodio_verde,
                     onTap: () async {
-                      await _validationForms.validationLoginNewUser(context);
+                      final isValid = formkey.currentState!.validate();
+                      if (isValid) {
+                        await _validationForms.validationLoginNewUser(context);
+                      } else {
+                        showPopup(
+                          context,
+                          'Usuario y/o contraseña incorrecto',
+                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+                        );
+                      }
                     },
                     text: "Ingresar"),
                 TextButtonWithUnderline(
