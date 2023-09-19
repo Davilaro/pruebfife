@@ -240,9 +240,13 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //         ? Locale('es', 'CO')
     //         : Locale('es', 'CO'));
     pr = ProgressDialog(context);
-    pr.style(message: 'Cargando información');
-    pr = ProgressDialog(context,
-        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
+    pr.style(
+        message: S.current.logging_in,
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
 
     await pr.show();
     await cargarInformacion(provider, elemento);
@@ -252,9 +256,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
     await pr.hide();
 
+    // opcionesAppBard.selectOptionMenu = 0;
 
-   // opcionesAppBard.selectOptionMenu = 0;
-    
     //Get.offAll(() => TabOpciones());
     Navigator.of(context).pushNamedAndRemoveUntil(
         'tab_opciones', (Route<dynamic> route) => false);

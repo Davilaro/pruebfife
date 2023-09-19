@@ -317,6 +317,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
 
   int calcularDiasFaltantes(List<String> diasSemana, diasEspecificos,
       String diaActual, int diasEntrega) {
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     // Obtener el índice del dia actual en la lista de días de la semana
     int indexDiaActual = diasSemana.indexOf(diaActual);
 
@@ -365,31 +366,35 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ['preciominimo'];
 
-    if (itinerario == 1) {
-      print("frecuencia actual$frecuencia");
-      if (frecuencia == false) {
-        diasFaltantes = calcularDiasFaltantes(
-            diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
-        return textoReturn =
-            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
-      } else if (frecuencia == true && precioMinimo == 0) {
-        return textoReturn = "";
-      } else if (frecuencia == true && precioMinimo != 0) {
-        diasFaltantes = calcularDiasFaltantes(
-            diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
-        return "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
-      }
-    } else {
-      if (frecuencia == false) {
-        return textoReturn =
-            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en 1 día hábil.";
-      } else if (frecuencia == true && precioMinimo == 0) {
-        return textoReturn = "";
+    if (cartProvider.getListaFabricante[widget.productos.fabricante]
+            ["precioFinal"] <
+        precioMinimo) {
+      if (itinerario == 1) {
+        if (frecuencia == false) {
+          diasFaltantes = calcularDiasFaltantes(
+              diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
+          return textoReturn =
+              "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
+        } else if (frecuencia == true && precioMinimo == 0) {
+          return textoReturn = "";
+        } else if (frecuencia == true && precioMinimo != 0) {
+          diasFaltantes = calcularDiasFaltantes(
+              diasDeLaSemana, diasVisita, prefs.diaActual, diasEntrega);
+          return "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasFaltantes ${diasFaltantes > 1 ? "días hábiles" : "día hábil"}.";
+        }
       } else {
-        return textoReturn =
-            "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+        if (frecuencia == false) {
+          return textoReturn =
+              "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en 1 día hábil.";
+        } else if (frecuencia == true && precioMinimo == 0) {
+          return textoReturn = "";
+        } else {
+          return textoReturn =
+              "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";
+        }
       }
     }
+
     textoReturn = '';
     return textoReturn;
   }
