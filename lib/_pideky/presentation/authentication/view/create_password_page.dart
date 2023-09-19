@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
@@ -22,6 +23,8 @@ class CreatePasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('CreateNewPasswordPage');
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       body: SafeArea(

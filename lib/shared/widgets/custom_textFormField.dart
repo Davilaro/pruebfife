@@ -53,6 +53,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onChanged: widget.onChanged,
       obscureText: _isObscured && (widget.obscureText ?? false),
       decoration: InputDecoration(
+        
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(35),
@@ -61,7 +62,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           borderSide: BorderSide(color: Colors.grey[500]!),
           borderRadius: BorderRadius.circular(35),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         filled: true,
         fillColor: widget.backgroundColor,
         errorText: widget.errorMessage,

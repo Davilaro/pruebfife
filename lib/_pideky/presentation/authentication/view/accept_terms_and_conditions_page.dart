@@ -6,6 +6,7 @@ import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
@@ -15,6 +16,8 @@ import '../../../../src/preferences/cont_colores.dart';
 class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('AcceptTermsAndConditionsPage');
     FocusManager.instance.primaryFocus?.unfocus();
     final MiNegocioViewModel viewModel = Get.find();
     final controller = Get.put(StateControllerRadioButtons());

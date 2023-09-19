@@ -6,6 +6,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
@@ -91,11 +92,8 @@ class _SplashState extends State<Splash> {
               : prefs.paisUsuario == 'CO'
                   ? Locale('es', 'CO')
                   : Locale('es', 'CO'));
-          Navigator.pushReplacementNamed(
-            context,
-            'tab_opciones',
-          );
-          // Get.off(() => TabOpciones());
+
+          Get.off(() => TabOpciones());
           //  RegisterPage());
           //Login());
         }
@@ -148,53 +146,47 @@ class _SplashState extends State<Splash> {
       } else {
         final provider = Provider.of<OpcionesBard>(context, listen: false);
         await Servicies().deleteAccount();
-          await AppUtil.appUtil.eliminarCarpeta();
-          prefs.usurioLogin = -1;
-          provider.setNumeroClickCarrito = 0;
-          prefs.typeCollaborator = "";
-          provider.setNumeroClickVerImpedibles = 0;
-          provider.setNumeroClickVerPromos = 0;
-          PedidoEmart.cantItems.value = '0';
-          var res = false;
-      var contador = 0;
-      do {
-        if (contador > 3) {
-          cargo = false;
-          break;
-        } else {
-          cargo = await AppUtil.appUtil
-              .downloadZip('1006120026', prefs.sucursal, true);
-          contador++;
-        }
-      } while (!cargo);
+        await AppUtil.appUtil.eliminarCarpeta();
+        prefs.usurioLogin = -1;
+        provider.setNumeroClickCarrito = 0;
+        prefs.typeCollaborator = "";
+        provider.setNumeroClickVerImpedibles = 0;
+        provider.setNumeroClickVerPromos = 0;
+        PedidoEmart.cantItems.value = '0';
+        var res = false;
+        var contador = 0;
+        do {
+          if (contador > 3) {
+            cargo = false;
+            break;
+          } else {
+            cargo = await AppUtil.appUtil
+                .downloadZip('1006120026', prefs.sucursal, true);
+            contador++;
+          }
+        } while (!cargo);
 
-      if (!cargo && contador > 3) {
-        alert.mostrarAlert(
-            context, 'Imposible conectar con la Base de datos', null);
-      } else {
-        res = await AppUtil.appUtil.abrirBases();
-        if (res && cargo) {
-          S.load(prefs.paisUsuario == 'CR'
-              ? Locale('es', prefs.paisUsuario)
-              : prefs.paisUsuario == 'CO'
-                  ? Locale('es', 'CO')
-                  : Locale('es', 'CO'));
-          Navigator.pushReplacementNamed(
-            context,
-            'tab_opciones',
-          );
-          // Get.off(() => TabOpciones());
-          //  RegisterPage());
-          //Login());
+        if (!cargo && contador > 3) {
+          alert.mostrarAlert(
+              context, 'Imposible conectar con la Base de datos', null);
+        } else {
+          res = await AppUtil.appUtil.abrirBases();
+          if (res && cargo) {
+            S.load(prefs.paisUsuario == 'CR'
+                ? Locale('es', prefs.paisUsuario)
+                : prefs.paisUsuario == 'CO'
+                    ? Locale('es', 'CO')
+                    : Locale('es', 'CO'));
+            Navigator.pushReplacementNamed(
+              context,
+              'tab_opciones',
+            );
+            // Get.off(() => TabOpciones());
+            //  RegisterPage());
+            //Login());
+          }
         }
-      }
       }
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print("confirmacion aqwui");
   }
 }

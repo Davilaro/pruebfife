@@ -8,6 +8,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ class SelectSucursalAsCollaboratorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('SelectSucursalAsCollaboratorPage');
     final provider = Provider.of<DatosListas>(context);
     final ValidationForms _validationForms = Get.find<ValidationForms>();
     final GlobalKey<FormState> formkey = GlobalKey<FormState>();

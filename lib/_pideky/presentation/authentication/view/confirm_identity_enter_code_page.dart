@@ -8,6 +8,7 @@ import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/custom_textFormField.dart';
@@ -27,6 +28,8 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ConfirmIdentityByCodePage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     return Scaffold(
       backgroundColor: HexColor('#eeeeee'),

@@ -7,6 +7,7 @@ import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
@@ -28,6 +29,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('RestorePasswordPage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     FocusManager.instance.primaryFocus?.unfocus();
 

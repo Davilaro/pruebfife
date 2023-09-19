@@ -3,6 +3,7 @@ import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -11,6 +12,8 @@ class EntryAsCollaboratorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('EntryAsCollaboratorPage');
     final ValidationForms _validationForms = Get.find<ValidationForms>();
 
     final GlobalKey<FormState> formkey = GlobalKey<FormState>();

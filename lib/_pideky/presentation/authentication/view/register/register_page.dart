@@ -6,6 +6,7 @@ import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,10 @@ import '../../../../../shared/widgets/popups.dart';
 import '../../../../../src/preferences/cont_colores.dart';
 
 class RegisterPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
+    //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('RegisterPage');
     final ValidationForms _validationForms = Get.put(ValidationForms());
     final ControllerSelectorProviders _controllerSelectorProviders =
         Get.put(ControllerSelectorProviders());

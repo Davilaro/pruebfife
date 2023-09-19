@@ -6,6 +6,7 @@ import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/text_button_with_underline.dart';
@@ -18,6 +19,8 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ConfirmIdentitySendSMSPage');
     FocusManager.instance.primaryFocus?.unfocus();
     final controller = Get.put(StateControllerRadioButtonsAndChecks());
     final ValidationForms _validationForms = Get.find<ValidationForms>();

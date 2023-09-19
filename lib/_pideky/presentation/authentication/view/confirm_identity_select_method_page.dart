@@ -1,7 +1,8 @@
-import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
+
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../../../../shared/widgets/boton_agregar_carrito.dart';
@@ -12,6 +13,8 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      //UXCAM: Se define el nombre de la interfaz
+    FlutterUxcam.tagScreenName('ValidateChangePasswordPage');
     final ValidationForms _validationForms = Get.find<ValidationForms>();
 
     final GlobalKey<FormState> formkey = GlobalKey<FormState>();
