@@ -3,6 +3,7 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
@@ -47,9 +48,11 @@ class _BotonActualizarState extends State<BotonActualizar> {
 
 Future<void> actualizarPagina(
     dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
+  final botonesController = Get.find<BotonesProveedoresVm>();
   final providerTabs = Provider.of<OpcionesBard>(context, listen: false);
   final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
   final controllerNequi = Get.find<MisPagosNequiViewModel>();
+  final productViewModel = Get.find<ProductoViewModel>();
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);
@@ -69,9 +72,14 @@ Future<void> actualizarPagina(
       cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
       cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
       provider.selectOptionMenu = 1;
+
       provider.setIsLocal = 0;
     }
     productViewModel.cargarCondicionEntrega();
+    await botonesController.cargarListaProovedor();
+    botonesController.listaFabricantesBloqueados.isNotEmpty
+        ? null
+        : productViewModel.eliminarBDTemporal();
 
     providerTabs.selectOptionMenu = 0;
     Navigator.pushReplacementNamed(

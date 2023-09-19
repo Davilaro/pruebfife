@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_statements
+
 import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -41,6 +43,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     super.initState();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
+    botonesProveedoresVm.seleccionados.clear();
     // cargarData();
   }
 

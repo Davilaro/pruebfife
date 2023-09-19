@@ -1,3 +1,4 @@
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/utils/alertas.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
@@ -54,6 +55,7 @@ class _TabOpcionesState extends State<TabOpciones>
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
   final MiNegocioViewModel viewModelNegocio = Get.find();
+  final botonesController = Get.find<BotonesProveedoresVm>();
   ProductoViewModel productViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
@@ -87,6 +89,7 @@ class _TabOpcionesState extends State<TabOpciones>
       });
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
+
     preambuloBase();
     verPopUp();
     setState(() {});
@@ -144,6 +147,7 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
+    botonesController.listaFabricantesBloqueados.clear();
     try {
       if (PedidoEmart.listaControllersPedido?.keys.length == null) {
         PedidoEmart.listaControllersPedido = new Map();

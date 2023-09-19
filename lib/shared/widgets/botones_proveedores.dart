@@ -94,8 +94,6 @@ class BotonesProveedores extends StatelessWidget {
                                 element ==
                                 botonesProveedoresVm
                                     .listaFabricante[index].empresa);
-                        print(
-                            "seleccionado ${botonesProveedoresVm.listaProveedores}");
                       }
 
                       botonesProveedoresVm.cargarLista(idTab);

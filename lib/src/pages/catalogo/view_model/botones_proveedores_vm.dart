@@ -37,7 +37,7 @@ class BotonesProveedoresVm extends GetxController {
     }
   }
 
-  void cargarListaProovedor() async {
+  Future<void> cargarListaProovedor() async {
     listaFabricante.value = prefs.usurioLogin != -1
         ? await DBProvider.db.consultarFabricanteBloqueo()
         : await DBProvider.db.consultarFricante("");
@@ -62,6 +62,15 @@ class BotonesProveedoresVm extends GetxController {
   void cargarSeleccionados() {
     while (seleccionados.length < listaFabricante.length) {
       seleccionados.add(false);
+    }
+  }
+
+  static BotonesProveedoresVm get findOrInitialize {
+    try {
+      return Get.find<BotonesProveedoresVm>();
+    } catch (e) {
+      Get.put(BotonesProveedoresVm());
+      return Get.find<BotonesProveedoresVm>();
     }
   }
 }

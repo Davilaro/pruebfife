@@ -66,8 +66,10 @@ class _EstadoAcordion extends State<Acordion> {
   @override
   void initState() {
     super.initState();
+
     mostrarOpacidad =
         widget.bloqueoCartera == null ? 0 : widget.bloqueoCartera!;
+    print("oscuridad ${widget.bloqueoCartera}");
   }
 
   @override

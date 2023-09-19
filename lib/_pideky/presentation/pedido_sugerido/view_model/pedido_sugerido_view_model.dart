@@ -105,7 +105,7 @@ class PedidoSugeridoViewModel extends GetxController
   }
 
   Future getListaFabricantes() async {
-    listaFabricante.value = await DBProvider.db.consultarFricante("");
+    listaFabricante.value = await DBProvider.db.consultarFabricanteBloqueo();
   }
 
   initController() async {
