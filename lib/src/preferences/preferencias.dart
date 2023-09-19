@@ -224,7 +224,7 @@ class Preferencias {
   }
 
   get rememberMe {
-    return _prefs.getBool("rememberme") ?? false;
+    return _prefs.getBool("rememberme") ?? true;
   }
 
   set rememberMe(dynamic value) {
