@@ -81,7 +81,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 }
                 detalleProducto(widget.element, cartProvider);
                 if (searchFuzzyViewModel.controllerUser.text != '') {
-                  searchFuzzyViewModel.listaRecientes.add(widget.element);
+                  searchFuzzyViewModel.listaRecientes.addIf(
+                      !searchFuzzyViewModel.listaRecientes
+                          .contains(widget.element),
+                      widget.element);
 
                   searchFuzzyViewModel.listaRecientes =
                       searchFuzzyViewModel.listaRecientes.reversed.toList().obs;

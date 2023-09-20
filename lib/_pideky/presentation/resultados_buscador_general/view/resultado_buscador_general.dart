@@ -181,8 +181,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                 .consultarCategoriasSubCategorias(
                     searchFuzzyViewModel.allResultados[i].codigo);
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes
-                  .add(searchFuzzyViewModel.allResultados[i]);
+              searchFuzzyViewModel.listaRecientes.addIf(
+                  !searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =
                   searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
@@ -249,8 +251,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                           codigoProveedor: "",
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes
-                  .add(searchFuzzyViewModel.allResultados[i]);
+              searchFuzzyViewModel.listaRecientes.addIf(
+                  !searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =
                   searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
@@ -309,8 +313,10 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                               .toString(),
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes
-                  .add(searchFuzzyViewModel.allResultados[i]);
+              searchFuzzyViewModel.listaRecientes.addIf(
+                  !searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =
                   searchFuzzyViewModel.listaRecientes.reversed.toList().obs;

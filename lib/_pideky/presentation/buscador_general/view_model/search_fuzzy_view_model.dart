@@ -182,7 +182,7 @@ class SearchFuzzyViewModel extends GetxController {
           context, MaterialPageRoute(builder: (context) => LogInPage()));
     } else {
       if (controllerUser.text != '') {
-        listaRecientes.add(object);
+        listaRecientes.addIf(!listaRecientes.contains(object), object);
         listaRecientes = listaRecientes.reversed.toList().obs;
       }
 
