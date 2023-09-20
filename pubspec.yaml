@@ -56,7 +56,7 @@ dependencies:
   http: ^0.13.1
   imagebutton: ^0.0.6
   intl: ^0.17.0
-  local_auth: ^2.1.2
+  
   onesignal_flutter: ^3.2.7
   overlay_support: ^2.1.0
   package_info: ^2.0.2
@@ -74,6 +74,8 @@ dependencies:
   url_launcher: ^6.0.12
   video_player: ^2.4.7
   webview_flutter: ^2.3.1
+  local_auth: ^2.1.2
+  local_auth_ios: ^1.1.3
 
 dev_dependencies:
 
