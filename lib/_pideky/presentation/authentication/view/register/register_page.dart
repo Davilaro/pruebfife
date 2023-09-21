@@ -274,12 +274,21 @@ class RegisterPage extends StatelessWidget {
                     color: ConstantesColores.empodio_verde,
                     onTap: () async {
                       var isValid = formkey.currentState!.validate();
-                      bool isRegister =
-                          await _validationForms.sendRegisterUser();
-                      if (isValid == true && isRegister == true) {
-                        Get.back();
-                        showPopupSuccessfulregistration(context);
-                      } else if (isRegister == false) {
+                      if (isValid == true) {
+                        bool isRegister =
+                            await _validationForms.sendRegisterUser();
+                        if (isRegister == true) {
+                          Get.back();
+                          showPopupSuccessfulregistration(context);
+                        } else {
+                          showPopup(
+                            context,
+                            'Algo salio mal, por favor intentalo de nuevo',
+                            SvgPicture.asset(
+                                'assets/image/Icon_incorrecto.svg'),
+                          );
+                        }
+                      } else {
                         showPopup(
                           context,
                           'Algo salio mal, por favor intentalo de nuevo',

@@ -82,24 +82,23 @@ class LogInPage extends StatelessWidget {
                                   .validateTextFieldNullorEmpty),
                           SizedBox(height: 15.0),
                           CustomTextFormField(
-                              obscureText: true,
-                              hintText:
-                                  'Ingresa la contraseña que te asignamos',
-                              hintStyle:
-                                  TextStyle(color: ConstantesColores.gris_sku),
-                              backgroundColor: HexColor("#E4E3EC"),
-                              textColor: HexColor("#41398D"),
-                              borderRadius: 35,
-                              icon: Icons.key,
-                              prefixIcon: SvgPicture.asset(
-                                  'assets/icon/contraseña.svg',
-                                  fit: BoxFit.scaleDown),
-                              onChanged: (value) {
-                                _validationForms.password.value = value;
-                                _validationForms.userInteracted.value =
-                                    true; // Marca como interactuado
-                              },
-                              validator: _validationForms.validatePassword),
+                            obscureText: true,
+                            hintText: 'Ingresa la contraseña que te asignamos',
+                            hintStyle:
+                                TextStyle(color: ConstantesColores.gris_sku),
+                            backgroundColor: HexColor("#E4E3EC"),
+                            textColor: HexColor("#41398D"),
+                            borderRadius: 35,
+                            icon: Icons.key,
+                            prefixIcon: SvgPicture.asset(
+                                'assets/icon/contraseña.svg',
+                                fit: BoxFit.scaleDown),
+                            onChanged: (value) {
+                              _validationForms.password.value = value;
+                              _validationForms.userInteracted.value =
+                                  true; // Marca como interactuado
+                            },
+                          ),
                           SizedBox(height: 25.0),
                           Visibility(
                             visible: prefs.isFirstTime != true ? true : false,
