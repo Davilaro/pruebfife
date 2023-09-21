@@ -112,7 +112,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     }
   }
 
-  Future<void> showPushInUp(
+  Future<dynamic> showPushInUp(
     String? nombreSeccion,
     String? nombreCategoria,
     BuildContext context,
@@ -130,9 +130,10 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       case 'marca':
         if (validacionMostrarPushInUp[nombreCategoria] == true) {
           var notificationTemp = listPushInUpMarcas.first;
@@ -145,9 +146,10 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       case 'proveedor':
         if (validacionMostrarPushInUp[nombreCategoria] == true) {
           var notificationTemp = listPushInUpProveedores.first;
@@ -161,10 +163,12 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       default:
+        return false;
     }
   }
 
@@ -200,7 +204,8 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
-      resBusqueda = marcaService.consultaMarcas(notificacion.categoriaRedireccion.toString());
+      resBusqueda = marcaService
+          .consultaMarcas(notificacion.categoriaRedireccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {

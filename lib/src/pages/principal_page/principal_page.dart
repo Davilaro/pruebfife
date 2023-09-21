@@ -64,7 +64,6 @@ class _PrincipalPageState extends State<PrincipalPage>
   @override
   void initState() {
     super.initState();
-    print("entre aqui");
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
     if (prefs.usurioLogin == 1) {

@@ -367,33 +367,29 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         await controllerNotificaciones
             .getSlideUpByDataBaseCategorias("Categoría");
 
-        if (controllerNotificaciones.listPushInUpCategorias.isNotEmpty) {
+        if (controllerNotificaciones.listPushInUpCategorias.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context) ==
+                true) {
           controllerNotificaciones.closePushInUp.value = false;
           controllerNotificaciones.onTapPushInUp.value = false;
-          if (controllerNotificaciones
-                  .validacionMostrarPushInUp[widget.descripcionCategoria] ==
-              true) {
-            await controllerNotificaciones.showPushInUp(
-                widget.locacionFiltro, widget.descripcionCategoria, context);
-            int elapsedTime = 0;
-            if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-                if (elapsedTime >= 530) {
-                  controllerNotificaciones.showSlideUp(widget.locacionFiltro,
-                      widget.descripcionCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.closePushInUp.value ==
-                    true) {
-                  controllerNotificaciones.showSlideUp(widget.locacionFiltro,
-                      widget.descripcionCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.onTapPushInUp.value ==
-                    true) {
-                  timer.cancel();
-                }
-                elapsedTime++;
-              });
-            }
+
+          int elapsedTime = 0;
+          if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
           }
         } else if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
           controllerNotificaciones.closeSlideUp.value = false;
@@ -409,33 +405,29 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       case 'marca':
         await controllerNotificaciones.getPushInUpByDataBaseMarcas('Marcas');
         await controllerNotificaciones.getSlideUpByDataBaseMarcas("Marcas");
-        if (controllerNotificaciones.listPushInUpMarcas.isNotEmpty) {
+        if (controllerNotificaciones.listPushInUpMarcas.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context) ==
+                true) {
           controllerNotificaciones.closePushInUp.value = false;
           controllerNotificaciones.onTapPushInUp.value = false;
-          if (controllerNotificaciones
-                  .validacionMostrarPushInUp[widget.nombreCategoria] ==
-              true) {
-            await controllerNotificaciones.showPushInUp(
-                widget.locacionFiltro, widget.nombreCategoria, context);
-            if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
-              int elapsedTime = 0;
-              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-                if (elapsedTime >= 530) {
-                  controllerNotificaciones.showSlideUp(
-                      widget.locacionFiltro, widget.nombreCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.closePushInUp.value ==
-                    true) {
-                  controllerNotificaciones.showSlideUp(
-                      widget.locacionFiltro, widget.nombreCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.onTapPushInUp.value ==
-                    true) {
-                  timer.cancel();
-                }
-                elapsedTime++;
-              });
-            }
+
+          if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+            int elapsedTime = 0;
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
           }
         } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
           print("entre marca");
@@ -454,33 +446,29 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             .getPushInUpByDataBaseProveedores('Proveedor');
         await controllerNotificaciones
             .getSlideUpByDataBaseProveedores("Proveedor");
-        if (controllerNotificaciones.listPushInUpProveedores.isNotEmpty) {
+        if (controllerNotificaciones.listPushInUpProveedores.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context) ==
+                true) {
           controllerNotificaciones.closePushInUp.value = false;
           controllerNotificaciones.onTapPushInUp.value = false;
-          if (controllerNotificaciones
-                  .validacionMostrarPushInUp[widget.nombreCategoria] ==
-              true) {
-            await controllerNotificaciones.showPushInUp(
-                widget.locacionFiltro, widget.nombreCategoria, context);
-            if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
-              int elapsedTime = 0;
-              _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-                if (elapsedTime >= 530) {
-                  controllerNotificaciones.showSlideUp(
-                      widget.locacionFiltro, widget.nombreCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.closePushInUp.value ==
-                    true) {
-                  controllerNotificaciones.showSlideUp(
-                      widget.locacionFiltro, widget.nombreCategoria, context);
-                  timer.cancel();
-                } else if (controllerNotificaciones.onTapPushInUp.value ==
-                    true) {
-                  timer.cancel();
-                }
-                elapsedTime++;
-              });
-            }
+
+          if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+            int elapsedTime = 0;
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
           }
         } else if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
           controllerNotificaciones.closeSlideUp.value = false;
