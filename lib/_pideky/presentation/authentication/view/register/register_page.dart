@@ -274,10 +274,12 @@ class RegisterPage extends StatelessWidget {
                     color: ConstantesColores.empodio_verde,
                     onTap: () async {
                       var isValid = formkey.currentState!.validate();
-                      if (isValid == true) {
+                      if (isValid == true &&
+                          _validationForms.sendProvidersList.isNotEmpty) {
                         bool isRegister =
                             await _validationForms.sendRegisterUser();
                         if (isRegister == true) {
+                          _validationForms.sendProvidersList.clear();
                           Get.back();
                           showPopupSuccessfulregistration(context);
                         } else {
