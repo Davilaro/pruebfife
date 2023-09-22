@@ -53,7 +53,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onChanged: widget.onChanged,
       obscureText: _isObscured && (widget.obscureText ?? false),
       decoration: InputDecoration(
-        
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(35),
@@ -72,7 +71,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         suffixIcon: widget.obscureText != null
             ? IconButton(
                 icon: Icon(
-                  _isObscured ? Icons.visibility : Icons.visibility_off,
+                  _isObscured == false
+                      ? Icons.visibility
+                      : Icons.visibility_off,
                   color: widget.textColor,
                 ),
                 onPressed: () {

@@ -40,9 +40,8 @@ class _SplashState extends State<Splash> {
     auth.isDeviceSupported().then((bool isSupported) => setState(() {
           validationForms.supportState.value = isSupported;
         }));
-    Future.delayed(Duration(milliseconds: 1000), () {
-      executeAfterBuild(context);
-    });
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => executeAfterBuild(context));
   }
 
   @override

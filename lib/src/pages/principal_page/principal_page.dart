@@ -92,6 +92,8 @@ class _PrincipalPageState extends State<PrincipalPage>
   void validacionGeneralNotificaciones() async {
     if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true) {
       await showPushInUp();
+      controllerNotificaciones.closePushInUp.value = false;
+      controllerNotificaciones.onTapPushInUp.value = false;
       if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
         int elapsedTime = 0;
         Timer.periodic(Duration(milliseconds: 10), (timer) {
@@ -117,6 +119,8 @@ class _PrincipalPageState extends State<PrincipalPage>
   Future<void> showPushInUp() async {
     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
     if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
+      controllerNotificaciones.closePushInUp.value = false;
+      controllerNotificaciones.onTapPushInUp.value = false;
       controllerNotificaciones.validacionMostrarPushInUp["Home"] = false;
       showDialog(
           context: context,
@@ -373,28 +377,33 @@ class _PrincipalPageState extends State<PrincipalPage>
                       ],
                     )),
                 //ENCUESTA
-                prefs.typeCollaborator != "2" ? FutureBuilder(
-                    initialData: [],
-                    future: DBProvider.db.consultarEncuesta(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data.length == 0) {
-                        return Container();
-                      } else {
-                        controllerEncuesta.isVisibleEncuesta.value = true;
-                        return Obx(() => Visibility(
-                              visible:
-                                  controllerEncuesta.isVisibleEncuesta.value,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 10, right: 10, top: 15, bottom: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: EncuestaForm(snapshot.data[0])),
-                            ));
-                      }
-                    }) : SizedBox.shrink()
+                prefs.typeCollaborator != "2"
+                    ? FutureBuilder(
+                        initialData: [],
+                        future: DBProvider.db.consultarEncuesta(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.data.length == 0) {
+                            return Container();
+                          } else {
+                            controllerEncuesta.isVisibleEncuesta.value = true;
+                            return Obx(() => Visibility(
+                                  visible: controllerEncuesta
+                                      .isVisibleEncuesta.value,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          top: 15,
+                                          bottom: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: EncuestaForm(snapshot.data[0])),
+                                ));
+                          }
+                        })
+                    : SizedBox.shrink()
               ],
             ),
           ),
@@ -412,8 +421,8 @@ class _PrincipalPageState extends State<PrincipalPage>
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SearchFuzzyView()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchFuzzyView()));
         },
         child: TextField(
           enabled: false,

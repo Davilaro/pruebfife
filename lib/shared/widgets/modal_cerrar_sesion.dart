@@ -1,13 +1,19 @@
 import 'dart:async';
 
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/generated/l10n.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 
@@ -53,21 +59,57 @@ modalCerrarSesion(context, size, provider) {
     );
   }
 
+  Future cerrarBases() async {
+    final controllerNotifications =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    var cargo = false;
+    var res = false;
+    var contador = 0;
+    do {
+      if (contador > 3) {
+        cargo = false;
+        break;
+      } else {
+        cargo = await AppUtil.appUtil
+            .downloadZip('1006120026', prefs.sucursal, true);
+        contador++;
+      }
+    } while (!cargo);
+
+    if (!cargo && contador > 3) {
+      mostrarAlert(context, 'Imposible conectar con la Base de datos', null);
+    } else {
+      res = await AppUtil.appUtil.abrirBases();
+      if (res && cargo) {
+        S.load(prefs.paisUsuario == 'CR'
+            ? Locale('es', prefs.paisUsuario)
+            : prefs.paisUsuario == 'CO'
+                ? Locale('es', 'CO')
+                : Locale('es', 'CO'));
+        controllerNotifications.validacionMostrarPushInUp.clear();
+        controllerNotifications.validacionMostrarSlideUp.clear();
+        Provider.of<OpcionesBard>(context, listen: false).selectOptionMenu = 0;
+        Get.offAll(() => TabOpciones());
+        //  RegisterPage());
+        //Login());
+      }
+    }
+  }
+
   Widget _botonAceptar(size, provider) {
     return GestureDetector(
-      onTap: ()  => {
+      onTap: () => {
         _showLoaderDialog(context),
-        Future.delayed(Duration(milliseconds: 700)).then((value) async {
+        Future.delayed(Duration(milliseconds: 400)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
-          prefs.usurioLogin = -1;
           prefs.typeCollaborator = "";
-          provider.selectOptionMenu = 0;
+          prefs.usurioLogin = -1;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              'splash', (Route<dynamic> route) => false);
+
+          await cerrarBases();
         }),
       },
       child: Container(

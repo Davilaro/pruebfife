@@ -47,11 +47,12 @@ Future<void> main() async {
 // }
 
 class MyApp extends StatefulWidget {
-  @override
   _MyAppState createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
+  
   MaterialColor white = const MaterialColor(
     0xFFEEEEEE,
     const <int, Color>{
@@ -67,6 +68,12 @@ class _MyAppState extends State<MyApp> {
       900: const Color(0xFFEEEEEE),
     },
   );
+
+  @override
+  void initState() {
+    
+    super.initState();
+  }
 
 
 

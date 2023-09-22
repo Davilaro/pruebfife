@@ -78,13 +78,16 @@ class Servicies {
 
     var ccup =
         loginBiometric == true ? prefs.ccupBiometric : prefs.codigoUnicoPideky;
+    prefs.codigoUnicoPideky = ccup;
+    print(
+        "sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky} ccup $ccup");
     final List<dynamic> divace = await getDeviceDetails();
     final bodyEncode = json.encode({
       "CCUP": ccup,
       "Token": token,
       "IdDevice": divace[2],
     });
-    print("sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky}");
+
     try {
       final url = Uri.parse(
         Constantes().urlPrincipal + 'LogIn/Sucursales',

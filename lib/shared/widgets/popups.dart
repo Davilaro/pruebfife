@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+import '../../_pideky/presentation/authentication/view/log_in/log_in_page.dart';
+
 Future<void> showPopup(
   BuildContext context,
   String mensaje,
@@ -296,7 +298,7 @@ void alertCustom(BuildContext context) {
                   'tab_opciones', (Route<dynamic> route) => false);
             },
             onLeftPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Login())),
+                context, MaterialPageRoute(builder: (context) => LogInPage())),
             content: Container(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(

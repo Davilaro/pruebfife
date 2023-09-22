@@ -1,4 +1,3 @@
-
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';

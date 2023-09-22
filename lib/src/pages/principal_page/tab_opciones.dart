@@ -64,7 +64,6 @@ class _TabOpcionesState extends State<TabOpciones>
   final catalogSearchViewModel = Get.put(ControllerHistorico());
 
   final bannerPut = Get.put(BannnerControllers());
-  final controllerTabs = OpcionesBard().pageController;
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   FocusNode _focusNode = FocusNode();
   SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle(
@@ -97,7 +96,6 @@ class _TabOpcionesState extends State<TabOpciones>
 
   dispose() {
     subscription.cancel();
-    controllerTabs.dispose();
     super.dispose();
   }
 
