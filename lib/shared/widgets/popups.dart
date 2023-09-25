@@ -123,10 +123,11 @@ void showPopupFindClientCode(
                 ),
                 Container(
                   // padding: EdgeInsets.only(top:15),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   child: icon != null
                       ? icon
                       : Image.asset(
-                          'assets/image/factura_imagen.png',
+                          'assets/image/factura_gif.gif',
                         ),
                 ),
                 Container(

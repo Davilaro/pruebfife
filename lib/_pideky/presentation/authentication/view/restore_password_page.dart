@@ -29,7 +29,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-      //UXCAM: Se define el nombre de la interfaz
+    //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('RestorePasswordPage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     FocusManager.instance.primaryFocus?.unfocus();
@@ -114,7 +114,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                 text: "¿Dónde encontrar tu código de cliente?",
                 onPressed: () {
                   showPopupFindClientCode(
-                      context, Image.asset('assets/image/factura_imagen.png'));
+                      context, Image.asset('assets/image/factura_gif.gif'));
                 },
                 textColor: HexColor("#41398D"),
                 textSize: 16.0,

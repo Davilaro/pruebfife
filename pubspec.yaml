@@ -49,22 +49,21 @@ dependencies:
   flutter_svg: ^0.23.0+1
   flutter_uxcam: ^2.3.0
   fuzzy: ^0.3.0
+  fuzzywuzzy: ^1.1.2
   get: null
   get_storage: null
+  gif: ^2.2.0
   google_tag_manager: ^0.1.0
   hexcolor: ^3.0.1
   http: ^0.13.1
   imagebutton: ^0.0.6
   intl: ^0.17.0
-  
+  local_auth: ^2.1.2
+  local_auth_ios: ^1.1.3
   onesignal_flutter: ^3.2.7
   overlay_support: ^2.1.0
   package_info: ^2.0.2
   permission_handler: ^10.2.0
-  fuzzywuzzy: ^1.1.2
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   pinch_zoom_image_last: ^0.4.1
   progress_dialog_null_safe: ^1.0.7
   provider: ^6.0.0
@@ -74,11 +73,8 @@ dependencies:
   url_launcher: ^6.0.12
   video_player: ^2.4.7
   webview_flutter: ^2.3.1
-  local_auth: ^2.1.2
-  local_auth_ios: ^1.1.3
 
 dev_dependencies:
-
   flutter_launcher_icons: null
   flutter_test:
     sdk: flutter
