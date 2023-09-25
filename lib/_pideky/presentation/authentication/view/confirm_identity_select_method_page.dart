@@ -1,4 +1,3 @@
-
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      //UXCAM: Se define el nombre de la interfaz
+    //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('ValidateChangePasswordPage');
     final ValidationForms _validationForms = Get.find<ValidationForms>();
 
@@ -34,15 +33,15 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               key: formkey,
               child: Column(children: [
-                SizedBox(height: 15.0),
+                SizedBox(height: Get.height * 0.02),
                 Text(
-                    "Te ayudaremos a configurar una \n nueva contraseña, pero primero \n debemos verificar tu identidad",
-                    textAlign: TextAlign.center,
+                    "Te ayudaremos a configurar una nueva contraseña, pero primero debemos verificar tu identidad",
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                       color: ConstantesColores.gris_sku,
-                      fontSize: 15,
+                      fontSize: 14,
                     )),
-                SizedBox(height: 15.0),
+                SizedBox(height: Get.height * 0.05),
                 CustomTextFormField(
                     textAlign: TextAlign.center,
                     hintText: 'Ingresa el usuario o Nit',
@@ -57,6 +56,7 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
                           true; // Marca como interactuado
                     },
                     validator: _validationForms.validateTextFieldNullorEmpty),
+                Expanded(child: Container()),
                 BotonAgregarCarrito(
                     width: Get.width * 0.9,
                     borderRadio: 35,
@@ -64,12 +64,13 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
                     color: ConstantesColores.empodio_verde,
                     onTap: () async {
                       final isValid = formkey.currentState!.validate();
-                      if(isValid == true) {
+                      if (isValid == true) {
                         FocusManager.instance.primaryFocus?.unfocus();
                         await _validationForms.validationNit(context);
                       }
                     },
                     text: "Aceptar"),
+                SizedBox(height: Get.height * 0.03),
               ]),
             )));
   }

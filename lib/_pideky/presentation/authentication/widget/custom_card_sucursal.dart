@@ -80,7 +80,7 @@ class CustomCardSucursales extends StatelessWidget {
                       ],
                     )),
                 Container(
-                  width: Get.width * 0.23,
+                  width: Get.width * 0.2,
                   child: Center(
                     child: Icon(
                       Icons.play_arrow_rounded,

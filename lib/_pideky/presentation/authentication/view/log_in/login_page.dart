@@ -62,7 +62,9 @@ class LogInPage extends StatelessWidget {
                       child: Column(
                         children: [
                           CustomTextFormField(
-                              hintText: 'Ingresa el usuario que te asignamos',
+                              hintText: prefs.isFirstTime == true
+                                  ? 'Ingresa usuario asignado'
+                                  : "Ingresa tu usario",
                               hintStyle:
                                   TextStyle(color: ConstantesColores.gris_sku),
                               backgroundColor: HexColor("#E4E3EC"),
@@ -83,7 +85,9 @@ class LogInPage extends StatelessWidget {
                           SizedBox(height: 15.0),
                           CustomTextFormField(
                             obscureText: true,
-                            hintText: 'Ingresa la contraseña que te asignamos',
+                            hintText: prefs.isFirstTime == true
+                                ? 'Ingresa contraseña asignada'
+                                : "Ingresa tu contraseña",
                             hintStyle:
                                 TextStyle(color: ConstantesColores.gris_sku),
                             backgroundColor: HexColor("#E4E3EC"),

@@ -1,6 +1,6 @@
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
-import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
@@ -83,6 +83,7 @@ void showPopupFindClientCode(
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final formController = Get.find<ValidationForms>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -110,39 +111,34 @@ void showPopupFindClientCode(
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   child: Text(
-                    'Encuentra tu código cliente de \n Comercial Nutresa cerca de la esquina \n superior derecha de tu factura',
-                    textAlign: TextAlign.center,
+                    'Encuentra tu código cliente de ${formController.providerQuestion} cerca de la esquina superior derecha de tu factura.',
+                    textAlign: TextAlign.justify,
                     style: TextStyle(
-                        height: 1,
                         color: HexColor("#41398D"),
                         fontSize: 15.0,
-                        fontWeight: FontWeight.w900),
+                        fontWeight: FontWeight.normal),
                   ),
                 ),
                 Container(
-                  color: Colors.amber,
                   // padding: EdgeInsets.only(top:15),
-                  // height: 150,
-                  // width: 280,
                   child: icon != null
                       ? icon
                       : Image.asset(
                           'assets/image/factura_imagen.png',
-                          fit: BoxFit.contain,
                         ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   child: Text(
-                    'Es un código de 12 números \n junto a tu nombre',
+                    'Es un código de 12 números junto a tu nombre',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         height: 1,
                         color: HexColor("#41398D"),
                         fontSize: 15.0,
-                        fontWeight: FontWeight.w900),
+                        fontWeight: FontWeight.normal),
                   ),
                 ),
               ],
