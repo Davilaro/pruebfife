@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -100,7 +101,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
 
   detalleProducto(Producto producto, CarroModelo cartProvider) async {
     if (prefs.usurioLogin == -1) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LogInPage()));
     } else {
       PedidoEmart.inicializarValoresFabricante();
       cartProvider.actualizarListaFabricante =

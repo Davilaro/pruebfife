@@ -60,6 +60,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
+                        resultadoBuscadorGeneralVm.selectedButton.value = '';
                         searchFuzzyViewModel.allResultados.clear();
                       },
                       child: Icon(
@@ -121,35 +122,47 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                         sizeText: 12,
                         onPressed: () {
                           resultadoBuscadorGeneralVm.cargarProductosPromo();
-                        resultadoBuscadorGeneralVm.setSelectedButton('Promociones'); 
+                          resultadoBuscadorGeneralVm
+                              .setSelectedButton('Promociones');
                         },
                         text: 'Promociones',
-                        backgroundColor: resultadoBuscadorGeneralVm.selectedButton.value == 'Promociones'
-                          ? ConstantesColores.azul_precio
-                          : ConstantesColores.color_fondo_gris,
-                        colorContent: resultadoBuscadorGeneralVm.selectedButton.value == 'Promociones'
-                          ? Colors.white
-                          : ConstantesColores.azul_precio,
+                        backgroundColor:
+                            resultadoBuscadorGeneralVm.selectedButton.value ==
+                                    'Promociones'
+                                ? ConstantesColores.azul_precio
+                                : ConstantesColores.color_fondo_gris,
+                        colorContent:
+                            resultadoBuscadorGeneralVm.selectedButton.value ==
+                                    'Promociones'
+                                ? Colors.white
+                                : ConstantesColores.azul_precio,
                       );
                     }),
                   ),
                   SizedBox(width: Get.width * 0.02),
                   Expanded(
                     flex: 3,
-                    child: Obx(() => CustomButton(
+                    child: Obx(
+                      () => CustomButton(
                         isFontBold: true,
                         sizeText: 12,
                         onPressed: () {
-                          resultadoBuscadorGeneralVm.cargarProductosImperdibles();
-                          resultadoBuscadorGeneralVm.setSelectedButton('Imperdibles');   
+                          resultadoBuscadorGeneralVm
+                              .cargarProductosImperdibles();
+                          resultadoBuscadorGeneralVm
+                              .setSelectedButton('Imperdibles');
                         },
                         text: 'Imperdibles',
-                        backgroundColor: resultadoBuscadorGeneralVm.selectedButton.value == 'Imperdibles'
-                          ? ConstantesColores.azul_precio
-                          : ConstantesColores.color_fondo_gris,
-                        colorContent: resultadoBuscadorGeneralVm.selectedButton.value == 'Imperdibles'
-                          ? Colors.white
-                          : ConstantesColores.azul_precio,
+                        backgroundColor:
+                            resultadoBuscadorGeneralVm.selectedButton.value ==
+                                    'Imperdibles'
+                                ? ConstantesColores.azul_precio
+                                : ConstantesColores.color_fondo_gris,
+                        colorContent:
+                            resultadoBuscadorGeneralVm.selectedButton.value ==
+                                    'Imperdibles'
+                                ? Colors.white
+                                : ConstantesColores.azul_precio,
                       ),
                     ),
                   ),
