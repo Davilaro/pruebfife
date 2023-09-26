@@ -21,6 +21,8 @@ class ResultadoBuscadorGeneralVm extends GetxController {
 
   RxList<Producto> listaProductos = <Producto>[].obs;
 
+  var selectedButton = ''.obs;
+
   void initState() {
     searchInput.value = searchFuzzyViewModel.searchInput.value;
     listaProductos.value = [];
@@ -53,5 +55,9 @@ class ResultadoBuscadorGeneralVm extends GetxController {
       "",
       "",
     );
+  }
+
+  void setSelectedButton(String buttonName) {
+    selectedButton.value = buttonName;
   }
 }
