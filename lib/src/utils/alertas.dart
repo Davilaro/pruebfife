@@ -328,19 +328,19 @@ void mostrarAlertaPopUpVisto(
                         textAlign: TextAlign.center,
                         text: new TextSpan(
                           text: "Ahora tienes disponibles los productos de ",
-                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                          style: TextStyle(color: Colors.black54, fontSize: 14),
                           children: <TextSpan>[
                             new TextSpan(
                               text: "$proveedores.",
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
                             new TextSpan(
                               text: " Agrégalos en tu siguiente pedido.",
                               style: TextStyle(
-                                  color: Colors.black54, fontSize: 18),
+                                  color: Colors.black54, fontSize: 15),
                             ),
                           ],
                         ),

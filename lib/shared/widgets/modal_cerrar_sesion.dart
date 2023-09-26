@@ -98,8 +98,8 @@ modalCerrarSesion(context, size, provider) {
 
   Widget _botonAceptar(size, provider) {
     return GestureDetector(
-      onTap: () => {
-        _showLoaderDialog(context),
+      onTap: () async => {
+        await _showLoaderDialog(context),
         Future.delayed(Duration(milliseconds: 400)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.typeCollaborator = "";
@@ -108,7 +108,6 @@ modalCerrarSesion(context, size, provider) {
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
-
           await cerrarBases();
         }),
       },

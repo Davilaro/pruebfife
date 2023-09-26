@@ -114,7 +114,7 @@ void showPopupFindClientCode(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   child: Text(
                     'Encuentra tu código cliente de ${formController.providerQuestion} cerca de la esquina superior derecha de tu factura.',
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                         color: HexColor("#41398D"),
                         fontSize: 15.0,
@@ -134,7 +134,7 @@ void showPopupFindClientCode(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   child: Text(
                     'Es un código de 12 números junto a tu nombre',
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                         height: 1,
                         color: HexColor("#41398D"),
