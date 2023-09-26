@@ -115,29 +115,42 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                   SizedBox(width: Get.width * 0.05),
                   Expanded(
                     flex: 3,
-                    child: CustomButton(
-                      isFontBold: true,
-                      sizeText: 12,
-                      onPressed: () {
-                        resultadoBuscadorGeneralVm.cargarProductosPromo();
-                      },
-                      text: 'Promociones',
-                      backgroundColor: ConstantesColores.color_fondo_gris,
-                      colorContent: ConstantesColores.azul_precio,
-                    ),
+                    child: Obx(() {
+                      return CustomButton(
+                        isFontBold: true,
+                        sizeText: 12,
+                        onPressed: () {
+                          resultadoBuscadorGeneralVm.cargarProductosPromo();
+                        resultadoBuscadorGeneralVm.setSelectedButton('Promociones'); 
+                        },
+                        text: 'Promociones',
+                        backgroundColor: resultadoBuscadorGeneralVm.selectedButton.value == 'Promociones'
+                          ? ConstantesColores.azul_precio
+                          : ConstantesColores.color_fondo_gris,
+                        colorContent: resultadoBuscadorGeneralVm.selectedButton.value == 'Promociones'
+                          ? Colors.white
+                          : ConstantesColores.azul_precio,
+                      );
+                    }),
                   ),
                   SizedBox(width: Get.width * 0.02),
                   Expanded(
                     flex: 3,
-                    child: CustomButton(
-                      isFontBold: true,
-                      sizeText: 12,
-                      onPressed: () {
-                        resultadoBuscadorGeneralVm.cargarProductosImperdibles();
-                      },
-                      text: 'Imperdibles',
-                      backgroundColor: ConstantesColores.color_fondo_gris,
-                      colorContent: ConstantesColores.azul_precio,
+                    child: Obx(() => CustomButton(
+                        isFontBold: true,
+                        sizeText: 12,
+                        onPressed: () {
+                          resultadoBuscadorGeneralVm.cargarProductosImperdibles();
+                          resultadoBuscadorGeneralVm.setSelectedButton('Imperdibles');   
+                        },
+                        text: 'Imperdibles',
+                        backgroundColor: resultadoBuscadorGeneralVm.selectedButton.value == 'Imperdibles'
+                          ? ConstantesColores.azul_precio
+                          : ConstantesColores.color_fondo_gris,
+                        colorContent: resultadoBuscadorGeneralVm.selectedButton.value == 'Imperdibles'
+                          ? Colors.white
+                          : ConstantesColores.azul_precio,
+                      ),
                     ),
                   ),
                   SizedBox(width: Get.width * 0.05),

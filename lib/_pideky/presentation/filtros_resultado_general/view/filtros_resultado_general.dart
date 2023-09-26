@@ -37,11 +37,12 @@ class FiltrosResultadoGeneralView extends StatefulWidget {
       _FiltrosResultadoGeneralViewState();
 }
 
-class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralView> {
+class _FiltrosResultadoGeneralViewState
+    extends State<FiltrosResultadoGeneralView> {
   ControllerProductos catalogSearchViewModel = Get.find();
   final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
-  final filtrosResultadoGeneralVm= Get.put(FiltrosResultadoGeneralVm());
+  final filtrosResultadoGeneralVm = Get.put(FiltrosResultadoGeneralVm());
   RangeValues values = RangeValues(0, 500000);
   int valorRound = 3;
 
@@ -61,9 +62,9 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
   RxList<Marca> listObjectoMarca = <Marca>[].obs;
 
   String? codigoProveedor;
-  String? codigoSubCategoria; 
-  String? codigoMarca; 
-  String? codigoCategoria; 
+  String? codigoSubCategoria;
+  String? codigoMarca;
+  String? codigoCategoria;
 
   Color buttonColor = ConstantesColores.color_fondo_gris;
   Color textColor = ConstantesColores.azul_precio;
@@ -170,7 +171,6 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
                                       dropdownValueProveedor)
                                   .first
                                   .empresa!;
-                              
                             });
 
                             if (dropdownValueProveedor != null &&
@@ -250,7 +250,7 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
                                     .where((element) =>
                                         element.nombre == dropdownValueMarca)
                                     .first
-                                    .codigo;                                
+                                    .codigo;
                               });
                             },
                           ))
@@ -364,14 +364,21 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
                   onTap: () async {
                     controlador.isDisponibleFiltro.value = false;
                     filtrosResultadoGeneralVm.cargarProductosFiltrados(
-                      codigoCategoria: codigoCategoria ?? '',
-                      codMarca: codigoMarca ?? ''	,
-                      codProveedor: codigoProveedor ?? '',
-                      codigoSubCategoria: codigoSubCategoria ?? '',
-                      precioMaximo: values.end,
-                      precioMinimo: values.start,
-                      valorRound: valorRound
-                    );
+                        codigoCategoria: codigoCategoria ?? '',
+                        codMarca: codigoMarca ?? '',
+                        codProveedor: codigoProveedor ?? '',
+                        codigoSubCategoria: codigoSubCategoria ?? '',
+                        precioMaximo: values.end,
+                        precioMinimo: values.start,
+                        valorRound: valorRound);
+
+                    if (valorRound == 1) {
+                      resultadoBuscadorGeneralVm
+                          .setSelectedButton('Promociones');
+                    } else if (valorRound == 2) {
+                      resultadoBuscadorGeneralVm
+                          .setSelectedButton('Imperdibles');
+                    }
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -430,7 +437,6 @@ class _FiltrosResultadoGeneralViewState extends State<FiltrosResultadoGeneralVie
     for (var i = 0; i < resQuery.length; i++) {
       listMarcas.add(resQuery[i].nombre);
       listObjectoMarca.add(resQuery[i]);
-
     }
   }
 
