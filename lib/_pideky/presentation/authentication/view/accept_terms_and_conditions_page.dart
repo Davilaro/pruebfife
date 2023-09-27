@@ -16,7 +16,7 @@ import '../../../../src/preferences/cont_colores.dart';
 class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      //UXCAM: Se define el nombre de la interfaz
+    //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('AcceptTermsAndConditionsPage');
     FocusManager.instance.primaryFocus?.unfocus();
     final MiNegocioViewModel viewModel = Get.find();
@@ -101,12 +101,15 @@ class TermsAndConditionsPage extends StatelessWidget {
                             await Servicies().loadDataTermsAndConditions();
                         if (loadData) {
                           await _validationForms.getPhoneNumbers();
-                          Get.to(() => ConfirmIdentitySendSMSPage(isChangePassword: false,));
                           showPopup(
                             context,
                             'Ingreso correcto',
                             SvgPicture.asset('assets/image/Icon_correcto.svg'),
                           );
+                          Future.delayed(Duration(seconds: 3)).then((value) =>
+                              Get.to(() => ConfirmIdentitySendSMSPage(
+                                    isChangePassword: false,
+                                  )));
                         } else {
                           showPopup(
                             context,

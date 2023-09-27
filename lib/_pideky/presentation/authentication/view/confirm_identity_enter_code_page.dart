@@ -28,7 +28,7 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      //UXCAM: Se define el nombre de la interfaz
+    //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('ConfirmIdentityByCodePage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     return Scaffold(
@@ -96,19 +96,21 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                           SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
                     } else {
                       if (isChangePassword == true) {
-                        Get.to(() => CreatePasswordPage(
-                              isChangePassword: true,
-                            ));
                         showPopup(context, 'Ingreso correcto',
                             SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                        Future.delayed(Duration(seconds: 3)).then((value) =>
+                            Get.to(() => Get.to(() => CreatePasswordPage(
+                                  isChangePassword: true,
+                                ))));
                       } else {
-                        plataforma == 'Android'
-                            ? Get.to(() => TouchIdPage())
-                            : Get.to(() => FaceIdPage());
                         await showPopup(
                             context,
                             'Confirmación de \n identidad correcto',
                             SvgPicture.asset('assets/image/Icon_correcto.svg'));
+                        Future.delayed(Duration(seconds: 3)).then((value) =>
+                            Get.to(() => plataforma == 'Android'
+                                ? Get.to(() => TouchIdPage())
+                                : Get.to(() => FaceIdPage())));
                       }
                     }
                   }

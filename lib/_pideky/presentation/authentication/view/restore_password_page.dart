@@ -81,14 +81,16 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                             if (validationForm.selectedCode ==
                                 validationForm.correctCode) {
                               if (widget.isChangePassword == true) {
-                                Get.to(() => CreatePasswordPage(
-                                      isChangePassword: true,
-                                    ));
                                 showPopup(
                                     context,
                                     'Ingreso correcto',
                                     SvgPicture.asset(
                                         'assets/image/Icon_correcto.svg'));
+                                Future.delayed(Duration(seconds: 3)).then(
+                                    (value) => Get.to(
+                                        () => Get.to(() => CreatePasswordPage(
+                                              isChangePassword: true,
+                                            ))));
                               } else {
                                 plataforma == 'Android'
                                     ? Get.to(() => TouchIdPage())
