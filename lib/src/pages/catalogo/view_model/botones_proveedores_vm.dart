@@ -16,7 +16,7 @@ class BotonesProveedoresVm extends GetxController {
   RxString proveedor = "".obs;
   RxString proveedor2 = "".obs;
 
-  RxBool esBuscadoTodos = false.obs;
+  RxBool esBuscadoTodos = true.obs;
 
   RxInt contadorSeleccionados = 0.obs;
 
