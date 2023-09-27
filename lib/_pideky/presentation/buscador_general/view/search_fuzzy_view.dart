@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 class SearchFuzzyView extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
@@ -86,6 +86,7 @@ class SearchFuzzyView extends StatelessWidget {
                                   children: [
                                     InkWell(
                                       onTap: () {
+
                                         searchFuzzyViewModel.logicaSeleccion(
                                             searchFuzzyViewModel
                                                 .allResultados[position],

@@ -40,7 +40,7 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
   bool isProductoEnOferta = false;
   RxBool isNewProduct = false.obs;
   RxBool isPromoProduct = false.obs;
@@ -83,10 +83,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 detalleProducto(widget.element, cartProvider);
                 if (searchFuzzyViewModel.controllerUser.text != '') {
                   searchFuzzyViewModel.listaRecientes.addIf(
-                      !searchFuzzyViewModel.listaRecientes
-                          .contains(widget.element),
+                      searchFuzzyViewModel.listaRecientes
+                              .contains(widget.element) ==
+                          false,
                       widget.element);
-
                   searchFuzzyViewModel.listaRecientes =
                       searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
                 }

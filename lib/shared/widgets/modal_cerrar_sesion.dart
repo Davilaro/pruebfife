@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
@@ -20,6 +21,7 @@ import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_vi
 final prefs = new Preferencias();
 final controllerNequi = Get.find<MisPagosNequiViewModel>();
 final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+final controllerSearchViewModel = Get.find<SearchFuzzyViewModel>();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
@@ -108,6 +110,7 @@ modalCerrarSesion(context, size, provider) {
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
+          controllerSearchViewModel.listaRecientes.clear();
           await cerrarBases();
         }),
       },
@@ -237,6 +240,7 @@ modalEliminarUsuario(context, size, provider) {
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
           _showLoaderDialogDeleteAccount(context);
+          controllerSearchViewModel.listaRecientes.clear();
           Navigator.pop(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
               'splash', (Route<dynamic> route) => false);

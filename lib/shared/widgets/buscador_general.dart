@@ -9,7 +9,7 @@ import 'package:hexcolor/hexcolor.dart';
 class BuscadorGeneral extends StatelessWidget {
   BuscadorGeneral();
 
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +37,17 @@ class BuscadorGeneral extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
+                    searchFuzzyViewModel.listaRecientes.forEach((element) {
+                      print("recientes ${element.nombre}");
+                    });
                     searchFuzzyViewModel
                         .runFilter(searchFuzzyViewModel.controllerUser.text);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ResultadoBuscadorGeneral(
-                                  allresultados: searchFuzzyViewModel
-                                      .allResultados,
+                                  allresultados:
+                                      searchFuzzyViewModel.allResultados,
                                 )));
                   },
                   icon: Icon(

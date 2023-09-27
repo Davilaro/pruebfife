@@ -9,9 +9,9 @@ class FiltrosResultadoGeneralVm extends GetxController {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
 
-  void cargarProductosFiltrados({
+  Future cargarProductosFiltrados({
     required String codigoCategoria,
     required String codMarca,
     required String codProveedor,

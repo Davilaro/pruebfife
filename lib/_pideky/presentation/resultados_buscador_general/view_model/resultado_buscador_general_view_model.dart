@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class ResultadoBuscadorGeneralVm extends GetxController {
   final TextEditingController controllerUser = TextEditingController();
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
   final RxBool isPromo = false.obs;
   final catalogSearchViewModel = Get.find<ControllerProductos>();
 

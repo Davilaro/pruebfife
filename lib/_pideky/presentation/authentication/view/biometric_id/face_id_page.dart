@@ -39,7 +39,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
 
   @override
   Widget build(BuildContext context) {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: S.current.logging_in,
         progressWidget: Image(

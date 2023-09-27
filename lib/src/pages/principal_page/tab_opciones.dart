@@ -1,4 +1,5 @@
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
@@ -38,6 +39,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../preferences/metodo_ingresados.dart';
+
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
 
@@ -50,6 +53,7 @@ class _TabOpcionesState extends State<TabOpciones>
     with SingleTickerProviderStateMixin {
   late bool hasInternet;
   late bool cargandoDatos = true;
+  late final cartProvider = Provider.of<CarroModelo>(context);
 
   late StreamSubscription<ConnectivityResult> subscription;
 
@@ -57,6 +61,7 @@ class _TabOpcionesState extends State<TabOpciones>
   final MiNegocioViewModel viewModelNegocio = Get.find();
   final botonesController = Get.find<BotonesProveedoresVm>();
   ProductoViewModel productViewModel = Get.find();
+  ProductoViewModel productoViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final controllerNotificaciones =
@@ -205,20 +210,33 @@ class _TabOpcionesState extends State<TabOpciones>
 
   void verPopUp() async {
     var listaMora = '';
+    List listabloqueo = [];
     List<Map> listaProveedores = [];
     final fabricantes = await DBProvider.db.consultarFabricanteBloqueo();
     fabricantes.forEach((element) {
-      print("bloqueo : ${element.verPopUp}");
       if (element.verPopUp == 0) {
         listaMora = listaMora + element.nombrecomercial + ', ';
         listaProveedores
             .add({'Codigo': element.codigo, 'Proveedor': element.empresa});
       }
+      if (element.bloqueoCartera == 1) {
+        listabloqueo.add(element.empresa);
+      }
     });
-    print('listaProveedores: $listaProveedores');
     if (listaMora != '') {
       listaMora = listaMora.substring(0, listaMora.length - 2);
       mostrarAlertaPopUpVisto(context, listaMora, listaProveedores);
+    }
+    if (listabloqueo.isNotEmpty) {
+      PedidoEmart.listaProductos!.forEach((key, value) {
+        PedidoEmart.listaControllersPedido![value.codigo]!.text = "0";
+        PedidoEmart.registrarValoresPedido(value, "1", false);
+        //eliminamos el pedido de la temporal
+        productoViewModel.eliminarProductoTemporal(value.codigo);
+        PedidoEmart.iniciarProductosPorFabricante();
+        cargoConfirmar.mapaHistoricos.updateAll((key, value) => value = false);
+        MetodosLLenarValores().calcularValorTotal(cartProvider);
+      });
     }
   }
 }
