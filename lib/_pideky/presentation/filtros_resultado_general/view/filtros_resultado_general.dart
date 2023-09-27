@@ -84,7 +84,7 @@ class _FiltrosResultadoGeneralViewState
     final providerDatos = Provider.of<DatosListas>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Proveedor',
+        title: Text('Buscador',
             style: TextStyle(
                 color: ConstantesColores.azul_precio,
                 fontWeight: FontWeight.bold)),
