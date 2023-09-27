@@ -28,6 +28,7 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -100,15 +101,13 @@ class ValidationForms extends GetxController {
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
+      showPopup(context, 'Usuario correcto',
+          SvgPicture.asset('assets/image/Icon_correcto.svg'));
 
-      Get.to(() => ConfirmIdentitySendSMSPage(
-            isChangePassword: true,
-          ));
-      showPopup(
-        context,
-        'Usuario correcto',
-        SvgPicture.asset('assets/image/Icon_correcto.svg'),
-      );
+      await Future.delayed(Duration(seconds: 3))
+          .then((value) => Get.to(() => Get.to(() => ConfirmIdentitySendSMSPage(
+                isChangePassword: true,
+              ))));
     } else if (response == "Nit invalido") {
       showPopup(
         context,
@@ -153,7 +152,13 @@ class ValidationForms extends GetxController {
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
-      Get.to(() => SelectSucursalAsCollaboratorPage());
+      showPopup(
+        context,
+        'Codigo correcto',
+        SvgPicture.asset('assets/image/Icon_correcto.svg'),
+      );
+      await Future.delayed(Duration(seconds: 3)).then((value) =>
+          Get.to(() => Get.to(() => SelectSucursalAsCollaboratorPage())));
     } else {
       showPopup(
         context,
@@ -317,23 +322,21 @@ class ValidationForms extends GetxController {
         } else {
           if (await login(context, prefs.codClienteLogueado, progress, false) ==
               true) {
-            await showPopup(
-              context,
-              'Ingreso correcto',
-              SvgPicture.asset('assets/image/Icon_correcto.svg'),
-            );
             return true;
           }
         }
       } else {
-        Get.to(() => CreatePasswordPage(
-              isChangePassword: false,
-            ));
+        await progress.hide();
         showPopup(
           context,
           'Ingreso correcto',
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
+        await Future.delayed(Duration(seconds: 3))
+            .then((value) => Get.to(() => CreatePasswordPage(
+                  isChangePassword: false,
+                )));
+
         return true;
       }
     } else {
@@ -409,34 +412,61 @@ class ValidationForms extends GetxController {
     try {
       List<dynamic> respuesta =
           await Servicies().getListaSucursales(isLoginBiometric);
-      respuesta.forEach((element) {
-        if (element.bloqueado == "1") {
-          progress.hide();
-          providerOptions.selectOptionMenu = 0;
-          Get.off(() => TabOpciones());
-          return mostrarAlertCustomWidget(
-              context, cargarLinkWhatssap(context), null);
-        }
-      });
-      PedidoSugeridoViewModel.userLog.value = 1;
+
+      // respuesta.forEach((element) {
+      //   if (element.bloqueado == "1") {
+      //     progress.hide();
+      //     providerOptions.selectOptionMenu = 0;
+      //     Get.off(() => TabOpciones());
+      //     return mostrarAlertCustomWidget(
+      //         context, cargarLinkWhatssap(context), null);
+      //   }
+      // });
 
       if (respuesta.length > 0) {
+        if (respuesta.first.bloqueado == "1") {
+          progress.hide();
+          prefs.usurioLogin = -1;
+          providerOptions.selectOptionMenu = 0;
+          mostrarAlertCustomWidgetOld(
+              context, cargarLinkWhatssap(context), null);
+          Future.delayed(Duration(seconds: 4))
+              .then((value) => Get.offAll(() => Splash()));
+          return false;
+        }
+        PedidoSugeridoViewModel.userLog.value = 1;
         prefs.isFirstTime = false;
         progress.hide();
-        Navigator.pushReplacementNamed(
+        showPopup(
           context,
-          'listaSucursale',
-          arguments: ScreenArguments(respuesta, nit),
+          'Ingreso correcto',
+          SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
+        Future.delayed(Duration(seconds: 3)).then((value) {
+          Get.offAll(() => Navigator.pushReplacementNamed(
+                context,
+                'listaSucursale',
+                arguments: ScreenArguments(respuesta, nit),
+              ));
+        });
+
+        return true;
       } else {
         progress.hide();
-        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+        showPopup(
+          context,
+          'Ingreso incorrecto',
+          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+        );
         return false;
       }
     } catch (e) {
       print('Error retorno login $e');
-      //message: Error al obtener información
-      mostrarAlert(context, S.current.error_information, null);
+      showPopup(
+        context,
+        'Ingreso incorrecto',
+        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+      );
       return false;
     }
   }
