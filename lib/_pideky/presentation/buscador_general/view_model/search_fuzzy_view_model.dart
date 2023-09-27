@@ -51,8 +51,6 @@ class SearchFuzzyViewModel extends GetxController {
 
   List<ExtractedResult<String>> result = [];
 
-  final BuildContext context = Get.context!;
-
   @override
   void onInit() {
     initState();
@@ -182,8 +180,11 @@ class SearchFuzzyViewModel extends GetxController {
           context, MaterialPageRoute(builder: (context) => LogInPage()));
     } else {
       if (controllerUser.text != '') {
-        listaRecientes.addIf(!listaRecientes.contains(object), object);
+        listaRecientes.addIf(listaRecientes.contains(object) == false, object);
         listaRecientes = listaRecientes.reversed.toList().obs;
+        listaRecientes.forEach((element) {
+          print("recientes ${element.nombre}");
+        });
       }
 
       if (object is Marca) {
@@ -252,5 +253,14 @@ class SearchFuzzyViewModel extends GetxController {
     searchInput.value = "";
     allResultados.value = [];
     searchInput.value = "";
+  }
+
+  static SearchFuzzyViewModel get findOrInitialize {
+    try {
+      return Get.find<SearchFuzzyViewModel>();
+    } catch (e) {
+      Get.put(SearchFuzzyViewModel());
+      return Get.find<SearchFuzzyViewModel>();
+    }
   }
 }

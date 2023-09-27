@@ -42,7 +42,7 @@ class DrawerSucursales extends StatefulWidget {
 class _DrawerSucursalesState extends State<DrawerSucursales> {
   late Object? valueRadio;
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  final seachrFuzzyVM = Get.put(SearchFuzzyViewModel());
+  final seachrFuzzyVM = Get.find<SearchFuzzyViewModel>();
 
   @override
   void initState() {

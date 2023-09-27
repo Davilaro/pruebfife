@@ -40,7 +40,7 @@ class FiltrosResultadoGeneralView extends StatefulWidget {
 class _FiltrosResultadoGeneralViewState
     extends State<FiltrosResultadoGeneralView> {
   ControllerProductos catalogSearchViewModel = Get.find();
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
   final filtrosResultadoGeneralVm = Get.put(FiltrosResultadoGeneralVm());
   RangeValues values = RangeValues(0, 500000);
@@ -363,14 +363,7 @@ class _FiltrosResultadoGeneralViewState
                 GestureDetector(
                   onTap: () async {
                     controlador.isDisponibleFiltro.value = false;
-                    filtrosResultadoGeneralVm.cargarProductosFiltrados(
-                        codigoCategoria: codigoCategoria ?? '',
-                        codMarca: codigoMarca ?? '',
-                        codProveedor: codigoProveedor ?? '',
-                        codigoSubCategoria: codigoSubCategoria ?? '',
-                        precioMaximo: values.end,
-                        precioMinimo: values.start,
-                        valorRound: valorRound);
+                    resultadoBuscadorGeneralVm.cargarProductosImperdibles();
 
                     if (valorRound == 1) {
                       resultadoBuscadorGeneralVm

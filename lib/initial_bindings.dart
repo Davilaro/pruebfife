@@ -32,5 +32,6 @@ class InitialBindings extends Bindings {
     NotificationsSlideUpAndPushInUpControllers.findOrInitialize;
     ValidationForms.findOrInitialize;
     BotonesProveedoresVm.findOrInitialize;
+    SearchFuzzyViewModel.findOrInitialize;
   }
 }

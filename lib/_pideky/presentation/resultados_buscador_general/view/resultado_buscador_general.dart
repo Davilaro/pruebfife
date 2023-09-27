@@ -34,7 +34,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   final controllerBanner = Get.find<BannnerControllers>();
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
-  final searchFuzzyViewModel = Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
 
   Widget build(BuildContext context) {
     resultadoBuscadorGeneralVm.listaProductos.refresh();
@@ -208,8 +208,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                     searchFuzzyViewModel.allResultados[i].codigo);
             if (searchFuzzyViewModel.controllerUser.text != '') {
               searchFuzzyViewModel.listaRecientes.addIf(
-                  !searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
                   searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =
@@ -278,8 +278,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
               searchFuzzyViewModel.listaRecientes.addIf(
-                  !searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
                   searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =
@@ -340,8 +340,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
               searchFuzzyViewModel.listaRecientes.addIf(
-                  !searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]),
+                  searchFuzzyViewModel.listaRecientes
+                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
                   searchFuzzyViewModel.allResultados[i]);
 
               searchFuzzyViewModel.listaRecientes =

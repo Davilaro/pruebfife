@@ -8,7 +8,7 @@ class CampoTextoResultado extends StatelessWidget {
   CampoTextoResultado();
 
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
-  final searchFuzzyViewModel= Get.put(SearchFuzzyViewModel());
+  final searchFuzzyViewModel= Get.find<SearchFuzzyViewModel>();
 
   @override
   Widget build(BuildContext context) {
