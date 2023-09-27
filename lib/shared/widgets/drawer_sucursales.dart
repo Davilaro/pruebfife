@@ -243,7 +243,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     final productViewModel = Get.find<ProductoViewModel>();
     final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
 
-    pr = ProgressDialog(context);
+    pr = ProgressDialog(context, isDismissible: false);
     pr.style(
         message: 'Cambiando sucursal',
         progressWidget: Image(

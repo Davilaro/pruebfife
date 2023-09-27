@@ -239,7 +239,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     : elemento.pais == 'CO'
     //         ? Locale('es', 'CO')
     //         : Locale('es', 'CO'));
-    pr = ProgressDialog(context);
+    pr = ProgressDialog(context, isDismissible: false);
     pr.style(
         message: S.current.logging_in,
         progressWidget: Image(
@@ -256,7 +256,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
     await pr.hide();
 
-    opcionesAppBard.selectOptionMenu = 0;
+    //opcionesAppBard.selectOptionMenu = 0;
 
     //Get.offAll(() => TabOpciones());
     Navigator.of(context).pushNamedAndRemoveUntil(

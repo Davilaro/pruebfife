@@ -87,7 +87,7 @@ class ValidationForms extends GetxController {
   late String _password;
 
   Future validationNit(context) async {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: "Validando usuario",
         progressWidget: Image(
@@ -139,7 +139,7 @@ class ValidationForms extends GetxController {
   }
 
   Future loginAsCollaborator(context) async {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: S.current.logging_in,
         progressWidget: Image(
@@ -164,7 +164,7 @@ class ValidationForms extends GetxController {
   }
 
   Future loginWithBiometricData(context) async {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: S.current.logging_in,
         progressWidget: Image(
@@ -213,7 +213,7 @@ class ValidationForms extends GetxController {
   }
 
   Future<bool> validationCodePhone(context) async {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: "Validando código",
         progressWidget: Image(
@@ -297,7 +297,7 @@ class ValidationForms extends GetxController {
   }
 
   Future<dynamic> validationLoginNewUser(context) async {
-    final progress = ProgressDialog(context);
+    final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
         message: S.current.logging_in,
         progressWidget: Image(
@@ -542,7 +542,7 @@ class ValidationForms extends GetxController {
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     final opcionesAppBard = Provider.of<OpcionesBard>(context, listen: false);
-    pr = ProgressDialog(context);
+    pr = ProgressDialog(context, isDismissible: false);
     pr.style(message: 'Cargando información');
     pr = ProgressDialog(context,
         type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
