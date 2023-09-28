@@ -28,7 +28,6 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -105,9 +104,9 @@ class ValidationForms extends GetxController {
           SvgPicture.asset('assets/image/Icon_correcto.svg'));
 
       await Future.delayed(Duration(seconds: 3))
-          .then((value) => Get.to(() => Get.to(() => ConfirmIdentitySendSMSPage(
+          .then((value) => Get.to(() => ConfirmIdentitySendSMSPage(
                 isChangePassword: true,
-              ))));
+              )));
     } else if (response == "Nit invalido") {
       showPopup(
         context,
@@ -300,8 +299,6 @@ class ValidationForms extends GetxController {
   Future<int> sendUserAndPassword(String user, String password) async {
     final isValid = await loginService.validationUserAndPassword(
         user, encryptedPaswword(password));
-    print("valido  $isValid");
-    print("valido  ${prefs.codigoUnicoPideky}");
     if (isValid != -1) return isValid;
     return -1;
   }
@@ -322,8 +319,8 @@ class ValidationForms extends GetxController {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
-              ? Get.to(() => TouchIdPage())
-              : Get.to(() => FaceIdPage());
+              ? Get.off(() => TouchIdPage())
+              : Get.off(() => FaceIdPage());
         } else {
           if (await login(context, prefs.codClienteLogueado, progress, false) ==
               true) {
@@ -433,7 +430,6 @@ class ValidationForms extends GetxController {
         if (respuesta.first.bloqueado == "1") {
           progress.hide();
           prefs.usurioLogin = -1;
-          providerOptions.selectOptionMenu = 0;
           mostrarAlertCustomWidgetOld(
               context, cargarLinkWhatssap(context), null);
 
@@ -448,7 +444,7 @@ class ValidationForms extends GetxController {
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
         await Future.delayed(Duration(seconds: 3)).then((value) {
-          Get.offAll(() => Navigator.pushReplacementNamed(
+          Get.off(() => Navigator.pushReplacementNamed(
                 context,
                 'listaSucursale',
                 arguments: ScreenArguments(respuesta, nit),

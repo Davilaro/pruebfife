@@ -32,11 +32,10 @@ class LogInPage extends StatelessWidget {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: SingleChildScrollView(
-            child: Container(
-              height: Get.height,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +47,7 @@ class LogInPage extends StatelessWidget {
                         fit: BoxFit.contain,
                       )),
                   SizedBox(
-                    height: 100,
+                    height: Get.height * 0.05,
                   ),
                   Text("Inicia sesión",
                       style: TextStyle(
@@ -163,6 +162,9 @@ class LogInPage extends StatelessWidget {
                             },
                             textColor: HexColor("#41398D"),
                             textSize: 18.0,
+                          ),
+                          SizedBox(
+                            height: 30,
                           ),
                           TextButtonWithUnderline(
                             text: "Ingreso como colaborador",

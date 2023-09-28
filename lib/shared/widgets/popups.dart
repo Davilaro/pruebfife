@@ -28,25 +28,6 @@ Future<void> showPopup(
             child: Column(
               children: [
                 Container(
-                  width: double.infinity,
-                  //color: Colors.red,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Icon(
-                          Icons.cancel_outlined,
-                          color: ConstantesColores.azul_precio,
-                          size: 39,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
                   //color: Colors.amber,
                   padding: EdgeInsets.only(top: 30),
                   height: 100,

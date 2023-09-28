@@ -26,7 +26,9 @@ class LoginApi implements ILogin {
       });
       var data = jsonDecode(response.body);
       print("data loguin  $data");
-      if (response.statusCode == 200 && data["Actualizar"] != null) {
+      if (response.statusCode == 200 &&
+          data["Actualizar"] != null &&
+          data['CCUP'] != "Usuario y contraseña invalidos") {
         prefs.codigoUnicoPideky = data["CCUP"];
         prefs.usurioLogin = 1;
         confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
