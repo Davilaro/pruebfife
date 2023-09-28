@@ -1,5 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import 'dart:async';
+
 import 'package:emart/_pideky/presentation/authentication/view/accept_terms_and_conditions_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
@@ -167,32 +169,66 @@ class CreatePasswordPage extends StatelessWidget {
                                 await _validationForms.changePassword();
                             if (response == true) {
                               if (isChangePassword == true) {
-                                Get.to(() => LogInPage());
+                                int timeIteration = 0;
+                                _validationForms.isClosePopup.value = false;
                                 showPopup(
                                     context,
-                                    'Contraseña actualizada',
+                                    'Usuario correcto',
                                     SvgPicture.asset(
-                                      'assets/image/Icon_correcto.svg',
-                                    ));
+                                        'assets/image/Icon_correcto.svg'));
+                                Timer.periodic(Duration(milliseconds: 500),
+                                    (timer) {
+                                  if (timeIteration >= 5) {
+                                    timer.cancel();
+                                    Get.back();
+                                    Get.off(() => LogInPage());
+                                  }
+                                  if (_validationForms.isClosePopup.value ==
+                                      true) {
+                                    timer.cancel();
+                                    Get.off(() => LogInPage());
+                                  }
+                                  timeIteration++;
+                                });
                               } else {
+                                int timeIteration = 0;
+                                _validationForms.isClosePopup.value = false;
                                 showPopup(
                                     context,
-                                    'Contraseña actualizada',
+                                    'Usuario correcto',
                                     SvgPicture.asset(
-                                      'assets/image/Icon_correcto.svg',
-                                    ));
-                                Future.delayed(Duration(seconds: 3)).then(
-                                    (value) =>
-                                        Get.to(() => TermsAndConditionsPage()));
+                                        'assets/image/Icon_correcto.svg'));
+                                Timer.periodic(Duration(milliseconds: 500),
+                                    (timer) {
+                                  if (timeIteration >= 5) {
+                                    timer.cancel();
+                                    Get.back();
+                                    Get.off(() => TermsAndConditionsPage());
+                                  }
+                                  if (_validationForms.isClosePopup.value ==
+                                      true) {
+                                    timer.cancel();
+                                    Get.off(() => TermsAndConditionsPage());
+                                  }
+                                  timeIteration++;
+                                });
                               }
                             } else if (response ==
                                 "Por favor validar con otro Nit") {
+                              _validationForms.isClosePopup.value = false;
                               showPopup(
                                   context,
                                   'Por favor validar con otro Nit',
                                   SvgPicture.asset(
                                     'assets/image/Icon_correcto.svg',
                                   ));
+                              await Future.delayed(Duration(seconds: 3))
+                                  .then((value) async {
+                                if (_validationForms.isClosePopup.value ==
+                                    false) {
+                                  Get.back();
+                                }
+                              });
                             }
                           }
                         },

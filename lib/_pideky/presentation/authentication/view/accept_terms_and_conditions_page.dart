@@ -101,22 +101,25 @@ class TermsAndConditionsPage extends StatelessWidget {
                             await Servicies().loadDataTermsAndConditions();
                         if (loadData) {
                           await _validationForms.getPhoneNumbers();
-                          showPopup(
-                            context,
-                            'Ingreso correcto',
-                            SvgPicture.asset('assets/image/Icon_correcto.svg'),
-                          );
-                          Future.delayed(Duration(seconds: 3)).then((value) =>
-                              Get.to(() => ConfirmIdentitySendSMSPage(
-                                    isChangePassword: false,
-                                  )));
+                          await _validationForms.closePopUp(
+                              ConfirmIdentitySendSMSPage(
+                                isChangePassword: false,
+                              ),
+                              context, "Has aceptado los términos y condiciones");
                         } else {
+                          _validationForms.isClosePopup.value = false;
                           showPopup(
                             context,
                             'Algo salio mal, por favor intentalo de nuevo',
                             SvgPicture.asset(
                                 'assets/image/Icon_incorrecto.svg'),
                           );
+                          await Future.delayed(Duration(seconds: 3))
+                              .then((value) async {
+                            if (_validationForms.isClosePopup.value == false) {
+                              Get.back();
+                            }
+                          });
                         }
 
                         // Realizar otras acciones al hacer clic

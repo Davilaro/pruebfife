@@ -204,8 +204,9 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
-      resBusqueda = marcaService
+      resBusqueda = await marcaService
           .consultaMarcas(notificacion.categoriaRedireccion.toString());
+      print("marca resBusqueda: $resBusqueda");
       _direccionarMarca(context, resBusqueda[0]);
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {

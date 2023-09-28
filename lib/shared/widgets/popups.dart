@@ -20,6 +20,7 @@ Future<void> showPopup(
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final controller = Get.find<ValidationForms>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -27,6 +28,28 @@ Future<void> showPopup(
           content: SingleChildScrollView(
             child: Column(
               children: [
+                Container(
+                  width: double.infinity,
+                  //color: Colors.red,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(),
+                      ),
+                      GestureDetector(
+                        onTap: () => {
+                          controller.isClosePopup.value = true,
+                          Navigator.of(context).pop()
+                        },
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          color: ConstantesColores.azul_precio,
+                          size: 39,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   //color: Colors.amber,
                   padding: EdgeInsets.only(top: 30),
@@ -139,6 +162,7 @@ void showPopupUnrecognizedfingerprint(
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final controllerForms = Get.find<ValidationForms>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -166,6 +190,7 @@ void showPopupUnrecognizedfingerprint(
                   height: Get.height * 0.06,
                   color: ConstantesColores.empodio_verde,
                   onTap: () {
+                    controllerForms.isClosePopup.value = true;
                     Get.back();
                   },
                   text: "Probar de nuevo",
@@ -198,6 +223,7 @@ Future<void> showPopupSuccessfulregistration(
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final controllerForm = Get.find<ValidationForms>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -236,6 +262,7 @@ Future<void> showPopupSuccessfulregistration(
                   height: Get.height * 0.05,
                   color: ConstantesColores.azul_precio,
                   onTap: () {
+                    controllerForm.isClosePopup.value = true;
                     Get.back();
                   },
                   text: "Aceptar",

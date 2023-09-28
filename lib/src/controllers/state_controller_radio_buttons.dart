@@ -45,6 +45,7 @@ class PhoneNumberSelection extends StatelessWidget {
     final List phoneNumbers = _validationForms.phoneNumbers;
 
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
       height: Get.height * 0.3,
       child: SingleChildScrollView(
         child: Column(

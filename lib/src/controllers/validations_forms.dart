@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, unnecessary_null_comparison, invalid_use_of_protected_member, unrelated_type_equality_checks
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -51,6 +52,9 @@ class ValidationForms extends GetxController {
   RxBool userInteracted = false.obs;
   RxBool userInteracted2 = false.obs;
   RxBool passwordsMatch = false.obs;
+  RxBool isClosePopup = false.obs;
+  RxBool preguntaBloqueada = false.obs;
+  RxInt numIntentos = 0.obs;
   RxString userName = ''.obs;
   RxString password = ''.obs;
   RxString bussinesName = ''.obs;
@@ -86,6 +90,55 @@ class ValidationForms extends GetxController {
 
   late String _password;
 
+  late Timer _temporizador;
+  RxInt tiempoFaltante = 10.obs;
+
+  void restarTemporizador() {
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      if (tiempoFaltante.value < 1) {
+        timer.cancel();
+      }
+      tiempoFaltante.value--;
+    });
+  }
+
+  void iniciarTemporizador() {
+    const tiempoEspera = Duration(minutes: 10);
+    _temporizador = Timer(tiempoEspera, () {
+      print("inicio");
+      preguntaBloqueada.value = false;
+      numIntentos.value = 0;
+      cancelarTemporizador();
+    });
+  }
+
+  void cancelarTemporizador() {
+    if (_temporizador != null && _temporizador.isActive) {
+      _temporizador.cancel();
+    }
+  }
+
+  Future<void> closePopUp(
+      Widget navegation, BuildContext context, String? texto) async {
+    int timeIteration = 0;
+    isClosePopup.value = false;
+    showPopup(context, texto ?? 'Usuario correcto',
+        SvgPicture.asset('assets/image/Icon_correcto.svg'));
+    Timer.periodic(Duration(milliseconds: 500), (timer) {
+      if (timeIteration >= 5) {
+        timer.cancel();
+        Get.back();
+        Get.off(() => navegation);
+      }
+      if (isClosePopup.value == true) {
+        timer.cancel();
+        print("navegando a login");
+        Get.off(() => navegation);
+      }
+      timeIteration++;
+    });
+  }
+
   Future validationNit(context) async {
     final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
@@ -100,27 +153,36 @@ class ValidationForms extends GetxController {
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
-      showPopup(context, 'Usuario correcto',
-          SvgPicture.asset('assets/image/Icon_correcto.svg'));
-
-      await Future.delayed(Duration(seconds: 3))
-          .then((value) => Get.to(() => ConfirmIdentitySendSMSPage(
-                isChangePassword: true,
-              )));
+      await closePopUp(
+          ConfirmIdentitySendSMSPage(
+            isChangePassword: true,
+          ),
+          context,
+          null);
     } else if (response == "Nit invalido") {
+      isClosePopup.value = false;
       showPopup(
         context,
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
     } else {
+      isClosePopup.value = false;
       showPopup(
         context,
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
     }
   }
 
@@ -130,12 +192,17 @@ class ValidationForms extends GetxController {
     if (sucursales.isNotEmpty) {
       listSucursales.value = sucursales;
     } else {
+      isClosePopup.value = false;
       showPopup(
         context,
         'CCUP incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
     }
   }
 
@@ -154,20 +221,19 @@ class ValidationForms extends GetxController {
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
-      showPopup(
-        context,
-        'Codigo correcto',
-        SvgPicture.asset('assets/image/Icon_correcto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3))
-          .then((value) => Get.to(() => SelectSucursalAsCollaboratorPage()));
+      await closePopUp(SelectSucursalAsCollaboratorPage(), context, null);
     } else {
+      isClosePopup.value = false;
       showPopup(
         context,
         'Codigo incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
     }
   }
 
@@ -194,9 +260,8 @@ class ValidationForms extends GetxController {
         await progress.show();
         await login(context, prefs.ccupBiometric, progress, true);
       }
-
-      print('Authenticated : $authenticated');
     } on PlatformException catch (e) {
+      isClosePopup.value = false;
       showPopupUnrecognizedfingerprint(
           context,
           'Huella no reconocida',
@@ -204,7 +269,11 @@ class ValidationForms extends GetxController {
             image: AssetImage('assets/image/Icon_touch_ID.png'),
             fit: BoxFit.contain,
           ));
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
       print(e);
     }
   }
@@ -329,26 +398,28 @@ class ValidationForms extends GetxController {
         }
       } else {
         await progress.hide();
-        showPopup(
-          context,
-          'Ingreso correcto',
-          SvgPicture.asset('assets/image/Icon_correcto.svg'),
-        );
-        await Future.delayed(Duration(seconds: 3))
-            .then((value) => Get.to(() => CreatePasswordPage(
-                  isChangePassword: false,
-                )));
+        await closePopUp(
+            CreatePasswordPage(
+              isChangePassword: false,
+            ),
+            context,
+            null);
 
         return true;
       }
     } else {
       await progress.hide();
+      isClosePopup.value = false;
       showPopup(
         context,
         'Usuario y/o contraseña incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
       return false;
     }
   }
@@ -438,37 +509,61 @@ class ValidationForms extends GetxController {
         PedidoSugeridoViewModel.userLog.value = 1;
         prefs.isFirstTime = false;
         progress.hide();
-        showPopup(
-          context,
-          'Ingreso correcto',
-          SvgPicture.asset('assets/image/Icon_correcto.svg'),
-        );
-        await Future.delayed(Duration(seconds: 3)).then((value) {
-          Get.off(() => Navigator.pushReplacementNamed(
-                context,
-                'listaSucursale',
-                arguments: ScreenArguments(respuesta, nit),
-              ));
+        int timeIteration = 0;
+        isClosePopup.value = false;
+        showPopup(context, 'Usuario correcto',
+            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+        providerOptions.selectOptionMenu = 0;
+        Timer.periodic(Duration(milliseconds: 500), (timer) {
+          if (timeIteration >= 5) {
+            timer.cancel();
+            Get.back();
+            Navigator.pushReplacementNamed(
+              context,
+              'listaSucursale',
+              arguments: ScreenArguments(respuesta, nit),
+            );
+          }
+          if (isClosePopup.value == true) {
+            timer.cancel();
+            Navigator.pushReplacementNamed(
+              context,
+              'listaSucursale',
+              arguments: ScreenArguments(respuesta, nit),
+            );
+          }
+          timeIteration++;
         });
 
         return true;
       } else {
         progress.hide();
+        isClosePopup.value = false;
         showPopup(
           context,
           'Ingreso incorrecto',
           SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
         );
+        await Future.delayed(Duration(seconds: 3)).then((value) async {
+          if (isClosePopup.value == false) {
+            Get.back();
+          }
+        });
         return false;
       }
     } catch (e) {
       print('Error retorno login $e');
+      isClosePopup.value = false;
       showPopup(
         context,
         'Ingreso incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
+      await Future.delayed(Duration(seconds: 3)).then((value) async {
+        if (isClosePopup.value == false) {
+          Get.back();
+        }
+      });
       return false;
     }
   }
