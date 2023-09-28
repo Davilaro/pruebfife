@@ -21,7 +21,12 @@ class BotonesProveedores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    botonesProveedoresVm.cargarSeleccionados();
+   if (botonesProveedoresVm.cargarSeleccionados == true){
+      botonesProveedoresVm.resetSeleccionados(idTab);
+   }
+      
+   // botonesProveedoresVm.cargarSeleccionados();
+    
     return SizedBox(
         height: Get.height * 0.09,
         child: ListView.builder(
@@ -56,7 +61,7 @@ class BotonesProveedores extends StatelessWidget {
                                 0) {
                           // Se cambia el estado del botón a seleccionado
                           botonesProveedoresVm.seleccionados[index] = true;
-                          botonesProveedoresVm.esBuscadoTodos.value = false;
+                        //  botonesProveedoresVm.esBuscadoTodos.value = false;
                           // Se asigna el valor del botón a la variable correspondiente
                           // if (botonesProveedoresVm.proveedor.isEmpty) {
                           //   botonesProveedoresVm.proveedor.value =
@@ -119,6 +124,7 @@ class BotonesProveedores extends StatelessWidget {
                             color: Colors.white,
                           ),
                           child: Container(
+                            //color: Colors.amber,
                             padding: EdgeInsets.only(
                               top: Get.height * 0.002,
                             ),

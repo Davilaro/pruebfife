@@ -44,7 +44,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
     botonesProveedoresVm.seleccionados.clear();
-    botonesProveedoresVm.esBuscadoTodos = true.obs; 
+  //  botonesProveedoresVm.esBuscadoTodos = true.obs; 
     // cargarData();
   }
 
