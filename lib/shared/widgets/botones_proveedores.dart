@@ -21,12 +21,9 @@ class BotonesProveedores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   if (botonesProveedoresVm.cargarSeleccionados == true){
-      botonesProveedoresVm.resetSeleccionados(idTab);
-   }
-      
-   // botonesProveedoresVm.cargarSeleccionados();
     
+    botonesProveedoresVm.cargarSeleccionados();
+
     return SizedBox(
         height: Get.height * 0.09,
         child: ListView.builder(
@@ -60,18 +57,18 @@ class BotonesProveedores extends StatelessWidget {
                                     .length ==
                                 0) {
                           // Se cambia el estado del botón a seleccionado
+                          for (var i = 0;
+                              i < botonesProveedoresVm.seleccionados.length;
+                              i++) {
+                            botonesProveedoresVm.seleccionados[i] =
+                                (index == i);
+                          }
+
                           botonesProveedoresVm.seleccionados[index] = true;
-                        //  botonesProveedoresVm.esBuscadoTodos.value = false;
-                          // Se asigna el valor del botón a la variable correspondiente
-                          // if (botonesProveedoresVm.proveedor.isEmpty) {
-                          //   botonesProveedoresVm.proveedor.value =
-                          //       botonesProveedoresVm
-                          //           .listaFabricante[index].empresa!;
-                          // } else {
-                          //   botonesProveedoresVm.proveedor2.value =
-                          //       botonesProveedoresVm
-                          //           .listaFabricante[index].empresa!;
-                          // }
+                         
+
+                          botonesProveedoresVm.listaProveedores.value = [];
+
                           botonesProveedoresVm.listaProveedores.addIf(
                               !botonesProveedoresVm.listaProveedores.contains(
                                   botonesProveedoresVm
@@ -79,30 +76,10 @@ class BotonesProveedores extends StatelessWidget {
                               botonesProveedoresVm
                                   .listaFabricante[index].empresa);
                         }
-                      } else {
-                        // Si el botón está seleccionado, se cambia el estado a no seleccionado
-                        botonesProveedoresVm.seleccionados[index] = false;
-                        // Se elimina el valor del botón de la variable correspondiente
-                        // if (botonesProveedoresVm.proveedor.value ==
-                        //     botonesProveedoresVm
-                        //         .listaFabricante[index].empresa!) {
-                        //   botonesProveedoresVm.proveedor.value =
-                        //       botonesProveedoresVm.proveedor2.value;
-                        //   botonesProveedoresVm.proveedor2.value = '';
-                        // } else if (botonesProveedoresVm.proveedor2.value ==
-                        //     botonesProveedoresVm
-                        //         .listaFabricante[index].empresa!) {
-                        //   botonesProveedoresVm.proveedor2.value = '';
-                        // }
-                        botonesProveedoresVm.listaProveedores.removeWhere(
-                            (element) =>
-                                element ==
-                                botonesProveedoresVm
-                                    .listaFabricante[index].empresa);
                       }
-
                       botonesProveedoresVm.cargarLista(idTab);
                     }
+                    botonesProveedoresVm.esBuscadoTodos.value = false;
                   },
                   child: Obx(
                     () => Stack(

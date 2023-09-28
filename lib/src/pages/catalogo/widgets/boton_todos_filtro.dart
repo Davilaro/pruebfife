@@ -15,8 +15,10 @@ class BotonTodosfiltro extends StatelessWidget {
     return Obx(
       () => GestureDetector(
         onTap: () {
-          botonesProveedoresVm.esBuscadoTodos.value =
-              !botonesProveedoresVm.esBuscadoTodos.value;
+          //botonesProveedoresVm.esBuscadoTodos.value = !botonesProveedoresVm.esBuscadoTodos.value;
+
+          botonesProveedoresVm.esBuscadoTodos.value = true;
+
           botonesProveedoresVm.listaProveedores.clear();
 
           for (int i = 0; i < botonesProveedoresVm.seleccionados.length; i++) {
