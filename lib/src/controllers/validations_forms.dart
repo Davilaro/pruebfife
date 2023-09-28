@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:emart/_pideky/domain/authentication/login/models/security_question_model.dart';
@@ -287,6 +288,15 @@ class ValidationForms extends GetxController {
       incorrectCodes.addIf(
           !incorrectCodes.contains(correctCode.value), correctCode.value);
       providerQuestion.value = answer.negocio!;
+      final random = Random();
+      for (int i = incorrectCodes.length - 1; i > 0; i--) {
+        int j = random.nextInt(i + 1);
+
+        // Intercambiar elementos en las posiciones i y j
+        String temp = incorrectCodes[i];
+        incorrectCodes[i] = incorrectCodes[j];
+        incorrectCodes[j] = temp;
+      }
     }
   }
 

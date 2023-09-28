@@ -137,7 +137,7 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                             } else {
                               validationForm.preguntaBloqueada.value = true;
                               validationForm.iniciarTemporizador();
-                              validationForm.tiempoFaltante();
+                              validationForm.restarTemporizador();
                               validationForm.isClosePopup.value = false;
                               showPopup(
                                   context,
