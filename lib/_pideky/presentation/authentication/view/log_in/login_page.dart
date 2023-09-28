@@ -151,6 +151,8 @@ class LogInPage extends StatelessWidget {
                                     SvgPicture.asset(
                                         'assets/image/Icon_incorrecto.svg'),
                                   );
+                                  await Future.delayed(Duration(seconds: 3))
+                                      .then((value) => Get.back());
                                 }
                               },
                               text: "Ingresar"),
@@ -226,7 +228,7 @@ class LogInPage extends StatelessWidget {
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            Text('Ingresar con Touch ID',
+                                            Text('Ingresar con huella',
                                                 style: TextStyle(
                                                     color: ConstantesColores
                                                         .gris_sku,

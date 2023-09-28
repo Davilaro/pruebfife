@@ -70,7 +70,7 @@ class _TouchIdPageState extends State<TouchIdPage> {
                   await _getAvaliableBiometrics(); // () async {
                   await _authenticate(context, progress);
                 },
-                text: "Usar Touch ID",
+                text: "Usar huella",
               ),
               TextButton(
                   onPressed: () async {
@@ -105,7 +105,7 @@ class _TouchIdPageState extends State<TouchIdPage> {
         await progress.show();
         await validationForm.login(
             context, prefs.ccupBiometric, progress, true);
-        await showPopup(context, 'Touch ID activado',
+        await showPopup(context, 'Huella activada',
             SvgPicture.asset('assets/image/Icon_correcto.svg'));
       }
 

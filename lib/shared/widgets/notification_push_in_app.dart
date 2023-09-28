@@ -19,6 +19,8 @@ class NotificationPushInApp extends StatefulWidget {
 
 class _NotificationPushInAppState extends State<NotificationPushInApp>
     with SingleTickerProviderStateMixin {
+  late final String imageUrl; // Reemplaza con la URL de tu imagen
+  final String uniqueKey = UniqueKey().toString();
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   bool cerrado = false;
@@ -31,6 +33,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
   @override
   void initState() {
     super.initState();
+    imageUrl = widget.data.imageUrl;
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -72,29 +75,29 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Container(
-                        color: Colors.transparent,
-                        child: GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              cerrado = true;
-                            });
-                            _animationController.reverse();
-                            await Future.delayed(Duration(milliseconds: 300),
-                                () {
-                              notificationController.validarRedireccionOnTap(
-                                  widget.data,
-                                  context,
-                                  provider,
-                                  cargoConfirmar,
-                                  prefs,
-                                  widget.ubicacion);
-                            });
-                            notificationController.onTapPushInUp.value = true;
-                            UxcamTagueo().onTapPushInUp(false);
-                            Navigator.of(context).pop();
-                          },
-                          child: Center(
+                      child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            cerrado = true;
+                          });
+                          _animationController.reverse();
+                          await Future.delayed(Duration(milliseconds: 300), () {
+                            notificationController.validarRedireccionOnTap(
+                                widget.data,
+                                context,
+                                provider,
+                                cargoConfirmar,
+                                prefs,
+                                widget.ubicacion);
+                          });
+                          notificationController.onTapPushInUp.value = true;
+                          UxcamTagueo().onTapPushInUp(false);
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Container(
+                            height: Get.height * 0.7,
+                            width: Get.width * 0.85,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: CachedNetworkImage(
@@ -103,7 +106,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                                   alignment: Alignment.center,
                                   height: 50,
                                 ),
-                                imageUrl: widget.data.imageUrl,
+                                imageUrl: '$imageUrl?$uniqueKey',
                                 height:
                                     MediaQuery.of(context).size.height * 0.7,
                                 width:
@@ -121,6 +124,14 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                         ),
                       ),
                     ),
+                    //  FadeInImage(
+                    //               fit: BoxFit.cover,
+                    //               placeholder: AssetImage(
+                    //                   'assets/image/jar-loading.gif'),
+                    //               image: NetworkImage(
+                    //                 widget.data.imageUrl,
+                    //               ))
+
                     Positioned(
                       top: 100,
                       right: 1,
@@ -133,7 +144,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                           await Future.delayed(Duration(milliseconds: 300), () {
                             Navigator.of(context).pop();
                           });
-                           UxcamTagueo().onTapPushInUp(true);
+                          UxcamTagueo().onTapPushInUp(true);
                           notificationController.closePushInUp.value = true;
                         },
                         child: Container(

@@ -114,12 +114,14 @@ class ValidationForms extends GetxController {
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     } else {
       showPopup(
         context,
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -134,6 +136,7 @@ class ValidationForms extends GetxController {
         'CCUP incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -157,14 +160,15 @@ class ValidationForms extends GetxController {
         'Codigo correcto',
         SvgPicture.asset('assets/image/Icon_correcto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) =>
-          Get.to(() => Get.to(() => SelectSucursalAsCollaboratorPage())));
+      await Future.delayed(Duration(seconds: 3))
+          .then((value) => Get.to(() => SelectSucursalAsCollaboratorPage()));
     } else {
       showPopup(
         context,
         'Codigo incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -201,6 +205,7 @@ class ValidationForms extends GetxController {
             image: AssetImage('assets/image/Icon_touch_ID.png'),
             fit: BoxFit.contain,
           ));
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       print(e);
     }
   }
@@ -346,6 +351,7 @@ class ValidationForms extends GetxController {
         'Usuario y/o contraseña incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       return false;
     }
   }
@@ -430,8 +436,7 @@ class ValidationForms extends GetxController {
           providerOptions.selectOptionMenu = 0;
           mostrarAlertCustomWidgetOld(
               context, cargarLinkWhatssap(context), null);
-          Future.delayed(Duration(seconds: 4))
-              .then((value) => Get.offAll(() => Splash()));
+
           return false;
         }
         PedidoSugeridoViewModel.userLog.value = 1;
@@ -442,7 +447,7 @@ class ValidationForms extends GetxController {
           'Ingreso correcto',
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
-        Future.delayed(Duration(seconds: 3)).then((value) {
+        await Future.delayed(Duration(seconds: 3)).then((value) {
           Get.offAll(() => Navigator.pushReplacementNamed(
                 context,
                 'listaSucursale',
@@ -467,6 +472,7 @@ class ValidationForms extends GetxController {
         'Ingreso incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       return false;
     }
   }

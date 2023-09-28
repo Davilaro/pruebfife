@@ -46,6 +46,6 @@ class PedidoSugeridoModel {
       };
 
   setNombreComercial(nombrecomercial) {
-    this.nombreComercial = nombreComercial;
+    nombreComercial = nombreComercial;
   }
 }
