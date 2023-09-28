@@ -28,7 +28,6 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -105,21 +104,23 @@ class ValidationForms extends GetxController {
           SvgPicture.asset('assets/image/Icon_correcto.svg'));
 
       await Future.delayed(Duration(seconds: 3))
-          .then((value) => Get.to(() => Get.to(() => ConfirmIdentitySendSMSPage(
+          .then((value) => Get.to(() => ConfirmIdentitySendSMSPage(
                 isChangePassword: true,
-              ))));
+              )));
     } else if (response == "Nit invalido") {
       showPopup(
         context,
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     } else {
       showPopup(
         context,
         response,
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -134,6 +135,7 @@ class ValidationForms extends GetxController {
         'CCUP incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -157,14 +159,15 @@ class ValidationForms extends GetxController {
         'Codigo correcto',
         SvgPicture.asset('assets/image/Icon_correcto.svg'),
       );
-      await Future.delayed(Duration(seconds: 3)).then((value) =>
-          Get.to(() => Get.to(() => SelectSucursalAsCollaboratorPage())));
+      await Future.delayed(Duration(seconds: 3))
+          .then((value) => Get.to(() => SelectSucursalAsCollaboratorPage()));
     } else {
       showPopup(
         context,
         'Codigo incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
     }
   }
 
@@ -201,6 +204,7 @@ class ValidationForms extends GetxController {
             image: AssetImage('assets/image/Icon_touch_ID.png'),
             fit: BoxFit.contain,
           ));
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       print(e);
     }
   }
@@ -295,8 +299,6 @@ class ValidationForms extends GetxController {
   Future<int> sendUserAndPassword(String user, String password) async {
     final isValid = await loginService.validationUserAndPassword(
         user, encryptedPaswword(password));
-    print("valido  $isValid");
-    print("valido  ${prefs.codigoUnicoPideky}");
     if (isValid != -1) return isValid;
     return -1;
   }
@@ -317,8 +319,8 @@ class ValidationForms extends GetxController {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
-              ? Get.to(() => TouchIdPage())
-              : Get.to(() => FaceIdPage());
+              ? Get.off(() => TouchIdPage())
+              : Get.off(() => FaceIdPage());
         } else {
           if (await login(context, prefs.codClienteLogueado, progress, false) ==
               true) {
@@ -346,6 +348,7 @@ class ValidationForms extends GetxController {
         'Usuario y/o contraseña incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       return false;
     }
   }
@@ -427,11 +430,9 @@ class ValidationForms extends GetxController {
         if (respuesta.first.bloqueado == "1") {
           progress.hide();
           prefs.usurioLogin = -1;
-          providerOptions.selectOptionMenu = 0;
           mostrarAlertCustomWidgetOld(
               context, cargarLinkWhatssap(context), null);
-          Future.delayed(Duration(seconds: 4))
-              .then((value) => Get.offAll(() => Splash()));
+
           return false;
         }
         PedidoSugeridoViewModel.userLog.value = 1;
@@ -442,8 +443,8 @@ class ValidationForms extends GetxController {
           'Ingreso correcto',
           SvgPicture.asset('assets/image/Icon_correcto.svg'),
         );
-        Future.delayed(Duration(seconds: 3)).then((value) {
-          Get.offAll(() => Navigator.pushReplacementNamed(
+        await Future.delayed(Duration(seconds: 3)).then((value) {
+          Get.off(() => Navigator.pushReplacementNamed(
                 context,
                 'listaSucursale',
                 arguments: ScreenArguments(respuesta, nit),
@@ -467,6 +468,7 @@ class ValidationForms extends GetxController {
         'Ingreso incorrecto',
         SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
       );
+      await Future.delayed(Duration(seconds: 3)).then((value) => Get.back());
       return false;
     }
   }
