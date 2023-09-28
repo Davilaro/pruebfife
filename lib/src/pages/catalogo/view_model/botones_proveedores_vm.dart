@@ -73,4 +73,20 @@ class BotonesProveedoresVm extends GetxController {
       return Get.find<BotonesProveedoresVm>();
     }
   }
+
+  // Mantener el boton todos seleccionado por defecto cada que se ingrese en categorias o marcas 
+  void resetSeleccionados(int idTab) {
+    for (int i = 0; i < seleccionados.length; i++) {
+      seleccionados[i] = false;
+    }
+   // esBuscadoTodos.value = true;
+  //  listaProveedores.clear();
+    if (idTab != 1) {
+     // seleccionados.assignAll(List.filled(listaFabricante.length, true));
+     esBuscadoTodos.value = true;
+     // listaProveedores.assignAll(listaFabricante.map((fabricante) => fabricante.empresa));
+     listaProveedores.clear();
+    }
+    cargarLista(idTab);
+  }
 }
