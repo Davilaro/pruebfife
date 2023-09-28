@@ -19,11 +19,12 @@ class CreatePasswordPage extends StatelessWidget {
   final ValidationForms _validationForms = Get.put(ValidationForms());
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  CreatePasswordPage({Key? key, required this.isChangePassword}) : super(key: key);
+  CreatePasswordPage({Key? key, required this.isChangePassword})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-      //UXCAM: Se define el nombre de la interfaz
+    //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CreateNewPasswordPage');
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
@@ -165,24 +166,27 @@ class CreatePasswordPage extends StatelessWidget {
                             bool response =
                                 await _validationForms.changePassword();
                             if (response == true) {
-                              if(isChangePassword == true) {
+                              if (isChangePassword == true) {
                                 Get.to(() => LogInPage());
-                              showPopup(
-                                  context,
-                                  'Contraseña actualizada',
-                                  SvgPicture.asset(
-                                    'assets/image/Icon_correcto.svg',
-                                  ));
+                                showPopup(
+                                    context,
+                                    'Contraseña actualizada',
+                                    SvgPicture.asset(
+                                      'assets/image/Icon_correcto.svg',
+                                    ));
                               } else {
-                                Get.to(() => TermsAndConditionsPage());
-                              showPopup(
-                                  context,
-                                  'Contraseña actualizada',
-                                  SvgPicture.asset(
-                                    'assets/image/Icon_correcto.svg',
-                                  ));
+                                showPopup(
+                                    context,
+                                    'Contraseña actualizada',
+                                    SvgPicture.asset(
+                                      'assets/image/Icon_correcto.svg',
+                                    ));
+                                Future.delayed(Duration(seconds: 3)).then(
+                                    (value) =>
+                                        Get.to(() => TermsAndConditionsPage()));
                               }
-                            } else if (response == "Por favor validar con otro Nit") {
+                            } else if (response ==
+                                "Por favor validar con otro Nit") {
                               showPopup(
                                   context,
                                   'Por favor validar con otro Nit',
