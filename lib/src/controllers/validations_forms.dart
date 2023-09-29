@@ -140,6 +140,24 @@ class ValidationForms extends GetxController {
     });
   }
 
+  Future<void> backClosePopup(context,
+      {String? texto = "Usuario y/o contraseña incorrecto"}) async {
+    int timeIteration = 0;
+    isClosePopup.value = false;
+    showPopup(
+        context, texto!, SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
+    Timer.periodic(Duration(milliseconds: 500), (timer) {
+      if (timeIteration >= 5) {
+        timer.cancel();
+        Get.back();
+      }
+      if (isClosePopup.value == true) {
+        timer.cancel();
+      }
+      timeIteration++;
+    });
+  }
+
   Future validationNit(context) async {
     final progress = ProgressDialog(context, isDismissible: false);
     progress.style(
@@ -161,29 +179,10 @@ class ValidationForms extends GetxController {
           context,
           null);
     } else if (response == "Nit invalido") {
-      isClosePopup.value = false;
-      showPopup(
-        context,
-        response,
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: response);
     } else {
       isClosePopup.value = false;
-      showPopup(
-        context,
-        response,
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: response);
     }
   }
 
@@ -193,17 +192,7 @@ class ValidationForms extends GetxController {
     if (sucursales.isNotEmpty) {
       listSucursales.value = sucursales;
     } else {
-      isClosePopup.value = false;
-      showPopup(
-        context,
-        'CCUP incorrecto',
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: "CCUP incorrecto");
     }
   }
 
@@ -224,17 +213,7 @@ class ValidationForms extends GetxController {
       await getPhoneNumbers();
       await closePopUp(SelectSucursalAsCollaboratorPage(), context, null);
     } else {
-      isClosePopup.value = false;
-      showPopup(
-        context,
-        'Codigo incorrecto',
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: 'Codigo incorrecto');
     }
   }
 
@@ -249,8 +228,9 @@ class ValidationForms extends GetxController {
         ));
     try {
       bool authenticated = await auth.authenticate(
-        localizedReason:
-            'Por favor pon tu huella para ingresar a la aplicación.',
+        localizedReason: plataforma == "Android"
+            ? 'Por favor pon tu huella para ingresar a la aplicación.'
+            : 'Por favor acerca tu rostro para ingresar a la aplicación.',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
@@ -262,18 +242,31 @@ class ValidationForms extends GetxController {
         await login(context, prefs.ccupBiometric, progress, true);
       }
     } on PlatformException catch (e) {
+      final textoPopUp = plataforma == "Android"
+          ? "Huella no reconocida"
+          : "Rostro no reconocido";
+      final iconPopUp = plataforma == "Android"
+          ? AssetImage('assets/image/Icon_touch_ID.png')
+          : AssetImage('assets/image/Image_face_ID.png');
+      int timeIteration = 0;
+      isClosePopup.value = false;
       isClosePopup.value = false;
       showPopupUnrecognizedfingerprint(
           context,
-          'Huella no reconocida',
+          textoPopUp,
           Image(
-            image: AssetImage('assets/image/Icon_touch_ID.png'),
+            image: iconPopUp,
             fit: BoxFit.contain,
           ));
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
+      Timer.periodic(Duration(milliseconds: 500), (timer) {
+        if (timeIteration >= 5) {
+          timer.cancel();
           Get.back();
         }
+        if (isClosePopup.value == true) {
+          timer.cancel();
+        }
+        timeIteration++;
       });
       print(e);
     }
@@ -419,17 +412,8 @@ class ValidationForms extends GetxController {
       }
     } else {
       await progress.hide();
-      isClosePopup.value = false;
-      showPopup(
-        context,
-        'Usuario y/o contraseña incorrecto',
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: "Usuario y/o contraseña incorrecto");
+
       return false;
     }
   }
@@ -548,32 +532,14 @@ class ValidationForms extends GetxController {
         return true;
       } else {
         progress.hide();
-        isClosePopup.value = false;
-        showPopup(
-          context,
-          'Ingreso incorrecto',
-          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-        );
-        await Future.delayed(Duration(seconds: 3)).then((value) async {
-          if (isClosePopup.value == false) {
-            Get.back();
-          }
-        });
+        await backClosePopup(context, texto: "Usuario incorrecto");
+
         return false;
       }
     } catch (e) {
       print('Error retorno login $e');
-      isClosePopup.value = false;
-      showPopup(
-        context,
-        'Ingreso incorrecto',
-        SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-      );
-      await Future.delayed(Duration(seconds: 3)).then((value) async {
-        if (isClosePopup.value == false) {
-          Get.back();
-        }
-      });
+      await backClosePopup(context, texto: "Usuario incorrecto");
+
       return false;
     }
   }

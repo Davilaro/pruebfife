@@ -92,17 +92,9 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
                 onPressed: () async {
                   await _validationForms.getDataSecurityQuestion();
                   if (_validationForms.preguntaBloqueada.value == true) {
-                    _validationForms.isClosePopup.value = false;
-                    showPopup(
-                        context,
-                        'Vuelve a intentar en ${_validationForms.tiempoFaltante} ${_validationForms.tiempoFaltante.value > 1 ? "minutos" : "minuto"}',
-                        SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
-                    await Future.delayed(Duration(seconds: 3))
-                        .then((value) async {
-                      if (_validationForms.isClosePopup.value == false) {
-                        Get.back();
-                      }
-                    });
+                    await _validationForms.backClosePopup(context,
+                        texto:
+                            'Vuelve a intentar en ${_validationForms.tiempoFaltante} ${_validationForms.tiempoFaltante.value > 1 ? "minutos" : "minuto"}');
                   } else {
                     Get.to(() => RestorePasswordPage(
                         isChangePassword: isChangePassword));

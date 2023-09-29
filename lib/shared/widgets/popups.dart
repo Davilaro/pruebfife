@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
@@ -9,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../../_pideky/presentation/authentication/view/log_in/log_in_page.dart';
 
 Future<void> showPopup(
   BuildContext context,

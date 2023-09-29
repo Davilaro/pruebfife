@@ -120,42 +120,33 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                                 }
                               } else {
                                 validationForm.numIntentos.value++;
-                                validationForm.isClosePopup.value = false;
-                                showPopup(
-                                    context,
-                                    'Confirmación de \n identidad incorrecto',
-                                    SvgPicture.asset(
-                                        'assets/image/Icon_incorrecto.svg'));
-                                await Future.delayed(Duration(seconds: 3))
-                                    .then((value) async {
-                                  if (validationForm.isClosePopup.value ==
-                                      false) {
-                                    Get.back();
-                                  }
-                                });
+                                await validationForm.backClosePopup(context,
+                                    texto:
+                                        'Confirmación de \n identidad incorrecto');
                               }
                             } else {
                               validationForm.preguntaBloqueada.value = true;
                               validationForm.iniciarTemporizador();
                               validationForm.restarTemporizador();
+                              int timeIteration = 0;
                               validationForm.isClosePopup.value = false;
                               showPopup(
                                   context,
                                   'Has superado el número máximo de intentos, vuelve a intentar en 10 minutos',
                                   SvgPicture.asset(
                                       'assets/image/Icon_incorrecto.svg'));
-                              // mostrarAlert(
-                              //     context,
-                              //     "Has superado el número máximo de intentos, vuelve a intentar en 10 minutos",
-                              //     SvgPicture.asset(
-                              //         'assets/image/Icon_incorrecto.svg'));
-                              await Future.delayed(Duration(seconds: 3))
-                                  .then((value) async {
-                                if (validationForm.isClosePopup.value ==
-                                    false) {
+                              Timer.periodic(Duration(milliseconds: 500),
+                                  (timer) {
+                                if (timeIteration >= 5) {
+                                  timer.cancel();
                                   Get.back();
                                   Get.back();
                                 }
+                                if (validationForm.isClosePopup.value == true) {
+                                  timer.cancel();
+                                  Get.back();
+                                }
+                                timeIteration++;
                               });
                             }
                           }

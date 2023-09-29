@@ -91,24 +91,16 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                   } else {
                     if (await _validationForms.validationCodePhone(context) ==
                         false) {
-                      _validationForms.isClosePopup.value = false;
-                      showPopup(
-                          context,
-                          'Confirmación de \n identidad incorrecto',
-                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
-                      await Future.delayed(Duration(seconds: 3))
-                          .then((value) async {
-                        if (_validationForms.isClosePopup.value == false) {
-                          Get.back();
-                        }
-                      });
+                      await _validationForms.backClosePopup(context,
+                          texto: 'Confirmación de \n identidad incorrecto');
                     } else {
                       if (isChangePassword == true) {
                         await _validationForms.closePopUp(
                             CreatePasswordPage(
                               isChangePassword: true,
                             ),
-                            context, "Confirmación de \n identidad correcto");
+                            context,
+                            "Confirmación de \n identidad correcto");
                       } else {
                         int timeIteration = 0;
                         _validationForms.isClosePopup.value = false;

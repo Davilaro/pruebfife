@@ -215,20 +215,8 @@ class CreatePasswordPage extends StatelessWidget {
                               }
                             } else if (response ==
                                 "Por favor validar con otro Nit") {
-                              _validationForms.isClosePopup.value = false;
-                              showPopup(
-                                  context,
-                                  'Por favor validar con otro Nit',
-                                  SvgPicture.asset(
-                                    'assets/image/Icon_correcto.svg',
-                                  ));
-                              await Future.delayed(Duration(seconds: 3))
-                                  .then((value) async {
-                                if (_validationForms.isClosePopup.value ==
-                                    false) {
-                                  Get.back();
-                                }
-                              });
+                              await _validationForms.backClosePopup(context,
+                                  texto: 'Por favor validar con otro Nit');
                             }
                           }
                         },
