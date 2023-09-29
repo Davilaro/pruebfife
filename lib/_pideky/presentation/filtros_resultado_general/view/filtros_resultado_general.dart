@@ -363,14 +363,19 @@ class _FiltrosResultadoGeneralViewState
                 GestureDetector(
                   onTap: () async {
                     controlador.isDisponibleFiltro.value = false;
-                    resultadoBuscadorGeneralVm.cargarProductosImperdibles();
+
+
+                   // resultadoBuscadorGeneralVm.cargarProductosImperdibles();
+                   // resultadoBuscadorGeneralVm.cargarProductosPromo();
 
                     if (valorRound == 1) {
                       resultadoBuscadorGeneralVm
                           .setSelectedButton('Promociones');
+                          resultadoBuscadorGeneralVm.cargarProductosPromo();
                     } else if (valorRound == 2) {
                       resultadoBuscadorGeneralVm
                           .setSelectedButton('Imperdibles');
+                          resultadoBuscadorGeneralVm.cargarProductosImperdibles();
                     }
                     Navigator.pop(context);
                   },
