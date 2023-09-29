@@ -281,21 +281,23 @@ class RegisterPage extends StatelessWidget {
                         if (isRegister == true) {
                           _validationForms.sendProvidersList.clear();
                           Get.back();
+                          _validationForms.isClosePopup.value = false;
                           showPopupSuccessfulregistration(context);
+                          await Future.delayed(Duration(seconds: 3))
+                              .then((value) async {
+                            if (_validationForms.isClosePopup.value == false) {
+                              Get.back();
+                            }
+                          });
                         } else {
-                          showPopup(
-                            context,
-                            'Algo salio mal, por favor intentalo de nuevo',
-                            SvgPicture.asset(
-                                'assets/image/Icon_incorrecto.svg'),
-                          );
+                          await _validationForms.backClosePopup(context,
+                              texto:
+                                  'Algo salio mal, por favor intentalo de nuevo');
                         }
                       } else {
-                        showPopup(
-                          context,
-                          'Algo salio mal, por favor intentalo de nuevo',
-                          SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
-                        );
+                        await _validationForms.backClosePopup(context,
+                            texto:
+                                'Algo salio mal, por favor intentalo de nuevo');
                       }
                     },
                     text: "Comenzar"),

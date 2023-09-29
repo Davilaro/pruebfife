@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -15,9 +16,11 @@ void mostrarAlert(
   Widget? icon,
 ) {
   showDialog(
+  
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        final controllerForm = Get.find<ValidationForms>();
         return WillPopScope(
           onWillPop: () => Future.value(false),
           child: AlertDialog(
@@ -36,7 +39,9 @@ void mostrarAlert(
                             child: Container(),
                           ),
                           GestureDetector(
-                            onTap: () => Get.back(),
+                            onTap: () =>{
+                              controllerForm.isClosePopup.value = true,
+                               Get.back()},
                             child: Icon(
                               Icons.cancel,
                               color: ConstantesColores.verde,

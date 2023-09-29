@@ -103,7 +103,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
     try {
       bool authenticated = await auth.authenticate(
         localizedReason:
-            'Por favor pon tu huella para ingresar a la aplicación.',
+            'Por favor acerca tu rostro para ingresar a la aplicación.',
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: true,
@@ -115,7 +115,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
         await progress.show();
         await validationForm.login(
             context, prefs.ccupBiometric, progress, true);
-        await showPopup(context, 'Touch ID activado',
+        await showPopup(context, 'Face ID activado',
             SvgPicture.asset('assets/image/Icon_correcto.svg'));
       }
 

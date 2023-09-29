@@ -144,6 +144,7 @@ class LogInPage extends StatelessWidget {
                                       .validationLoginNewUser(context);
                                   return;
                                 } else {
+                                  _validationForms.isClosePopup.value = false;
                                   showPopup(
                                     context,
                                     'Usuario y/o contraseña incorrecto',
@@ -151,7 +152,12 @@ class LogInPage extends StatelessWidget {
                                         'assets/image/Icon_incorrecto.svg'),
                                   );
                                   await Future.delayed(Duration(seconds: 3))
-                                      .then((value) => Get.back());
+                                      .then((value) async {
+                                    if (_validationForms.isClosePopup.value ==
+                                        false) {
+                                      Get.back();
+                                    }
+                                  });
                                 }
                               },
                               text: "Ingresar"),

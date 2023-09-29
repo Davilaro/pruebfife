@@ -1,10 +1,12 @@
 import 'package:emart/_pideky/presentation/authentication/view/restore_password_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/shared/widgets/popups.dart';
 
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -36,6 +38,7 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
             children: [
               Container(
                 child: Image(
+                  width: Get.width * 0.28,
                   image:
                       AssetImage('assets/image/Icon_confirmar_identidad.png'),
                 ),
@@ -81,12 +84,21 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
                   text: "Enviar SMS",
                 ),
               ),
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
               TextButtonWithUnderline(
                 text: "Probar otro método",
                 onPressed: () async {
                   await _validationForms.getDataSecurityQuestion();
-                  Get.to(() =>
-                      RestorePasswordPage(isChangePassword: isChangePassword));
+                  if (_validationForms.preguntaBloqueada.value == true) {
+                    await _validationForms.backClosePopup(context,
+                        texto:
+                            'Vuelve a intentar en ${_validationForms.tiempoFaltante} ${_validationForms.tiempoFaltante.value > 1 ? "minutos" : "minuto"}');
+                  } else {
+                    Get.to(() => RestorePasswordPage(
+                        isChangePassword: isChangePassword));
+                  }
                 },
                 textColor: HexColor("#41398D"),
                 textSize: 18.0,
@@ -98,7 +110,7 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
       floatingActionButton: Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-          padding: const EdgeInsets.only(left: 40, bottom: 40),
+          padding: const EdgeInsets.only(left: 40, bottom: 20),
           child: Container(
             height: 32,
             width: 130,
@@ -108,19 +120,9 @@ class ConfirmIdentitySendSMSPage extends StatelessWidget {
               },
               label: Container(
                 padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/image/image_boton_ayuda.png', // Ruta de la imagen
-                      width: 23, // Ajusta el ancho de la imagen
-                      height: 23, // Ajusta la altura de la imagen
-                    ),
-                    SizedBox(width: 2), // Espacio entre la imagen y el texto
-                    Text(
-                      'Solicitar ayuda',
-                      style: TextStyle(fontSize: 9, color: Colors.white),
-                    ),
-                  ],
+                child: Text(
+                  'Solicitar ayuda',
+                  style: TextStyle(fontSize: 9, color: Colors.white),
                 ),
               ),
               backgroundColor: ConstantesColores.azul_precio,

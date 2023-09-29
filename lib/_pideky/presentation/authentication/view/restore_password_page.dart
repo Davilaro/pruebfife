@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face_id_page.dart';
@@ -5,6 +6,7 @@ import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touc
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -78,35 +80,74 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                         : Colors.grey,
                     onTap: controller.isClientCodeSelected
                         ? () async {
-                            if (validationForm.selectedCode ==
-                                validationForm.correctCode) {
-                              if (widget.isChangePassword == true) {
-                                showPopup(
-                                    context,
-                                    'Ingreso correcto',
-                                    SvgPicture.asset(
-                                        'assets/image/Icon_correcto.svg'));
-                                Future.delayed(Duration(seconds: 3)).then(
-                                    (value) => Get.to(
-                                        () => Get.to(() => CreatePasswordPage(
-                                              isChangePassword: true,
-                                            ))));
+                            if (validationForm.numIntentos < 2) {
+                              if (validationForm.selectedCode ==
+                                  validationForm.correctCode) {
+                                validationForm.numIntentos.value = 0;
+                                if (widget.isChangePassword == true) {
+                                  await validationForm.closePopUp(
+                                      CreatePasswordPage(
+                                        isChangePassword: true,
+                                      ),
+                                      context,
+                                      "Confirmación de \n identidad correcto");
+                                } else {
+                                  int timeIteration = 0;
+                                  validationForm.isClosePopup.value = false;
+                                  showPopup(
+                                      context,
+                                      'Confirmación de \n identidad correcto',
+                                      SvgPicture.asset(
+                                          'assets/image/Icon_correcto.svg'));
+                                  Timer.periodic(Duration(milliseconds: 500),
+                                      (timer) {
+                                    if (timeIteration >= 5) {
+                                      timer.cancel();
+                                      Get.back();
+                                      Get.to(() => plataforma == 'Android'
+                                          ? Get.to(() => TouchIdPage())
+                                          : Get.to(() => FaceIdPage()));
+                                    }
+                                    if (validationForm.isClosePopup.value ==
+                                        true) {
+                                      timer.cancel();
+                                      Get.to(() => plataforma == 'Android'
+                                          ? Get.to(() => TouchIdPage())
+                                          : Get.to(() => FaceIdPage()));
+                                    }
+                                    timeIteration++;
+                                  });
+                                }
                               } else {
-                                plataforma == 'Android'
-                                    ? Get.to(() => TouchIdPage())
-                                    : Get.to(() => FaceIdPage());
-                                await showPopup(
-                                    context,
-                                    'Confirmación de \n identidad correcto',
-                                    SvgPicture.asset(
-                                        'assets/image/Icon_correcto.svg'));
+                                validationForm.numIntentos.value++;
+                                await validationForm.backClosePopup(context,
+                                    texto:
+                                        'Confirmación de \n identidad incorrecto');
                               }
                             } else {
+                              validationForm.preguntaBloqueada.value = true;
+                              validationForm.iniciarTemporizador();
+                              validationForm.restarTemporizador();
+                              int timeIteration = 0;
+                              validationForm.isClosePopup.value = false;
                               showPopup(
                                   context,
-                                  'Confirmación de \n identidad incorrecto',
+                                  'Has superado el número máximo de intentos, vuelve a intentar en 10 minutos',
                                   SvgPicture.asset(
                                       'assets/image/Icon_incorrecto.svg'));
+                              Timer.periodic(Duration(milliseconds: 500),
+                                  (timer) {
+                                if (timeIteration >= 5) {
+                                  timer.cancel();
+                                  Get.back();
+                                  Get.back();
+                                }
+                                if (validationForm.isClosePopup.value == true) {
+                                  timer.cancel();
+                                  Get.back();
+                                }
+                                timeIteration++;
+                              });
                             }
                           }
                         : null,
