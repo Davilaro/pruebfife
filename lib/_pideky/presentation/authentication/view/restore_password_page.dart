@@ -104,16 +104,16 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                                     if (timeIteration >= 5) {
                                       timer.cancel();
                                       Get.back();
-                                      Get.to(() => plataforma == 'Android'
-                                          ? Get.to(() => TouchIdPage())
-                                          : Get.to(() => FaceIdPage()));
+                                      plataforma == 'Android'
+                                          ? Get.off(() => TouchIdPage())
+                                          : Get.off(() => FaceIdPage());
                                     }
                                     if (validationForm.isClosePopup.value ==
                                         true) {
                                       timer.cancel();
-                                      Get.to(() => plataforma == 'Android'
-                                          ? Get.to(() => TouchIdPage())
-                                          : Get.to(() => FaceIdPage()));
+                                      plataforma == 'Android'
+                                          ? Get.off(() => TouchIdPage())
+                                          : Get.off(() => FaceIdPage());
                                     }
                                     timeIteration++;
                                   });
