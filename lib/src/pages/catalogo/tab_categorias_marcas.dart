@@ -44,7 +44,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
     botonesProveedoresVm.seleccionados.clear();
-    //  botonesProveedoresVm.esBuscadoTodos = true.obs;
+       botonesProveedoresVm.esBuscadoTodos.value = true;
     // cargarData();
   }
 
@@ -81,7 +81,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                         controller: cargoConfirmar.tabController,
                         labelPadding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                         onTap: (index) {
-                          
+
                           botonesProveedoresVm.esBuscadoTodos.value = true;
                           botonesProveedoresVm.listaProveedores.clear();
                           for (int i = 0;
