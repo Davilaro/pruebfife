@@ -86,7 +86,6 @@ class SearchFuzzyView extends StatelessWidget {
                                   children: [
                                     InkWell(
                                       onTap: () {
-
                                         searchFuzzyViewModel.logicaSeleccion(
                                             searchFuzzyViewModel
                                                 .allResultados[position],
@@ -110,7 +109,8 @@ class SearchFuzzyView extends StatelessWidget {
                                                           palabrabuscada:
                                                               searchFuzzyViewModel
                                                                       .allResultados[
-                                                                  position])!,
+                                                                  position])
+                                                      .toString(),
                                                   errorWidget:
                                                       (context, url, error) =>
                                                           Image.asset(

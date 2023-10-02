@@ -354,7 +354,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
           Visibility(
             visible: !isAgotado,
             child: BotonAgregarCarrito(
-              onTap: widget.isFrecuencia
+              onTap: 
+              widget.isFrecuencia
                   ? () => llenarCarrito(widget.productos, cartProvider)
                   : () => productViewModel.iniciarModal(
                       context, widget.productos.fabricante),

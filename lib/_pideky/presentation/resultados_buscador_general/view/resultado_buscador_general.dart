@@ -207,13 +207,12 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                 .consultarCategoriasSubCategorias(
                     searchFuzzyViewModel.allResultados[i].codigo);
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes.addIf(
-                  searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
-                  searchFuzzyViewModel.allResultados[i]);
-
-              searchFuzzyViewModel.listaRecientes =
-                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+              searchFuzzyViewModel.llenarRecientes(
+                  searchFuzzyViewModel.allResultados[i], Categorias);
+              // searchFuzzyViewModel.listaRecientes.addIf(
+              //     searchFuzzyViewModel.listaRecientes
+              //         .contains(searchFuzzyViewModel.allResultados[i]) == false,
+              //     searchFuzzyViewModel.allResultados[i]);
             }
 
             Navigator.push(
@@ -277,13 +276,13 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                           codigoProveedor: "",
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes.addIf(
-                  searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
-                  searchFuzzyViewModel.allResultados[i]);
-
-              searchFuzzyViewModel.listaRecientes =
-                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+              searchFuzzyViewModel.llenarRecientes(
+                  searchFuzzyViewModel.allResultados[i], Marca);
+              // searchFuzzyViewModel.listaRecientes.addIf(
+              //     searchFuzzyViewModel.listaRecientes
+              //             .contains(searchFuzzyViewModel.allResultados[i]) ==
+              //         false,
+              //     searchFuzzyViewModel.allResultados[i]);
             }
           },
           child: Card(
@@ -339,13 +338,13 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                               .toString(),
                         )));
             if (searchFuzzyViewModel.controllerUser.text != '') {
-              searchFuzzyViewModel.listaRecientes.addIf(
-                  searchFuzzyViewModel.listaRecientes
-                      .contains(searchFuzzyViewModel.allResultados[i]) == false,
-                  searchFuzzyViewModel.allResultados[i]);
-
-              searchFuzzyViewModel.listaRecientes =
-                  searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
+              searchFuzzyViewModel.llenarRecientes(
+                  searchFuzzyViewModel.allResultados[i], Fabricante);
+              // searchFuzzyViewModel.listaRecientes.addIf(
+              //     searchFuzzyViewModel.listaRecientes
+              //             .contains(searchFuzzyViewModel.allResultados[i]) ==
+              //         false,
+              //     searchFuzzyViewModel.allResultados[i]);
             }
           },
           child: Card(

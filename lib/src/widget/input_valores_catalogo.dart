@@ -74,6 +74,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               isProductoEnOferta: isProductoEnOferta,
               onTapCard: () {
                 if (prefs.usurioLogin != -1) {
+                  if (searchFuzzyViewModel.controllerUser.text != '') {
+                    searchFuzzyViewModel.llenarRecientes(
+                        widget.element, Producto);
+                  }
                   //FIREBASE: Llamamos el evento select_item
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
@@ -81,15 +85,6 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                       '', isAgotado, isNewProduct.value, isPromoProduct.value);
                 }
                 detalleProducto(widget.element, cartProvider);
-                if (searchFuzzyViewModel.controllerUser.text != '') {
-                  searchFuzzyViewModel.listaRecientes.addIf(
-                      searchFuzzyViewModel.listaRecientes
-                              .contains(widget.element) ==
-                          false,
-                      widget.element);
-                  searchFuzzyViewModel.listaRecientes =
-                      searchFuzzyViewModel.listaRecientes.reversed.toList().obs;
-                }
               },
               isAgotadoLabel: isAgotado,
               isVisibleLabelPromo: isPromoProduct.value,

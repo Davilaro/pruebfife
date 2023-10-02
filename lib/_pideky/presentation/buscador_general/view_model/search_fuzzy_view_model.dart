@@ -64,6 +64,49 @@ class SearchFuzzyViewModel extends GetxController {
     searchInput.value = "";
   }
 
+  bool validarExistencia(producto, tipo) {
+    if (listaRecientes.isNotEmpty) {
+      for (var element in listaRecientes) {
+        if (tipo == Producto) {
+          if (element is Producto) {
+            if (element.codigo == producto.codigo) {
+              return true;
+            }
+          }
+        } else if (tipo == Marca) {
+          if (element is Marca) {
+            if (element.nombre == producto.nombre) {
+              return true;
+            }
+          }
+        } else if (tipo == Categorias) {
+          if (element is Categorias) {
+            if (element.descripcion == producto.descripcion) {
+              return true;
+            }
+          }
+        } else if (tipo == Fabricante) {
+          if (element is Fabricante) {
+            if (element.nombrecomercial == producto.nombrecomercial) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  void llenarRecientes(dynamic producto, dynamic tipo) {
+    if (validarExistencia(producto, tipo) == false) {
+      listaRecientes.insert(0, producto);
+    }
+
+    if (listaRecientes.length > 3) {
+      listaRecientes.removeLast();
+    }
+  }
+
   void cargarSugerencias() async {
     listaAllProducts = await productService.cargarProductosFiltro("", "");
     listaAllMarcas = await marcaService.getAllMarcas();
@@ -179,15 +222,8 @@ class SearchFuzzyViewModel extends GetxController {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LogInPage()));
     } else {
-      if (controllerUser.text != '') {
-        listaRecientes.addIf(listaRecientes.contains(object) == false, object);
-        listaRecientes = listaRecientes.reversed.toList().obs;
-        listaRecientes.forEach((element) {
-          print("recientes ${element.nombre}");
-        });
-      }
-
       if (object is Marca) {
+        llenarRecientes(object, Marca);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -202,6 +238,7 @@ class SearchFuzzyViewModel extends GetxController {
                     )));
       }
       if (object is Categorias) {
+        llenarRecientes(object, Categorias);
         final List<dynamic> listaSubCategorias =
             await DBProvider.db.consultarCategoriasSubCategorias(object.codigo);
 
@@ -214,6 +251,7 @@ class SearchFuzzyViewModel extends GetxController {
                     )));
       }
       if (object is Fabricante) {
+        llenarRecientes(object, Fabricante);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -228,6 +266,7 @@ class SearchFuzzyViewModel extends GetxController {
                     )));
       }
       if (object is Producto) {
+        llenarRecientes(object, Producto);
         PedidoEmart.inicializarValoresFabricante();
         cartProvider.actualizarListaFabricante =
             PedidoEmart.listaPrecioPorFabricante!;

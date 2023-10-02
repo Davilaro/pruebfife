@@ -53,7 +53,7 @@ class _TabOpcionesState extends State<TabOpciones>
     with SingleTickerProviderStateMixin {
   late bool hasInternet;
   late bool cargandoDatos = true;
-  late final cartProvider = Provider.of<CarroModelo>(context);
+  late final cartProvider = Provider.of<CarroModelo>(context, listen: false);
 
   late StreamSubscription<ConnectivityResult> subscription;
 
@@ -150,7 +150,6 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   Future<void> _descarcarDB() async {
-    botonesController.listaFabricantesBloqueados.clear();
     try {
       if (PedidoEmart.listaControllersPedido?.keys.length == null) {
         PedidoEmart.listaControllersPedido = new Map();
@@ -191,6 +190,7 @@ class _TabOpcionesState extends State<TabOpciones>
     } catch (e) {
       print('error de descarga db $e');
     }
+    botonesController.listaFabricantesBloqueados.clear();
   }
 
   void cargarSecciones() async {

@@ -574,7 +574,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
         final query = '''
          select codigo, descripcion,ico2 as ico,orden from categoria WHERE fabricante IN ($placeholders)
     ''';
-        log(query);
+        // log(query);
         final sql = await db.rawQuery(query, empresas);
 
         return sql.isNotEmpty
@@ -584,7 +584,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
         final query = '''
          select codigo, descripcion,ico2 as ico, fabricante ,orden FROM categoria 
     ''';
-        log(query);
+        //log(query);
         final sql = await db.rawQuery(query);
 
         return sql.isNotEmpty
