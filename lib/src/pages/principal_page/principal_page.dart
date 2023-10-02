@@ -86,29 +86,28 @@ class _PrincipalPageState extends State<PrincipalPage>
     var formatDay = tempDay.add(Duration(days: 1));
     var finalDay = DateFormat.EEEE().format(formatDay);
     prefs.nextDay = finalDay;
-    print('next day : ${prefs.nextDay}');
   }
 
   void validacionGeneralNotificaciones() async {
-    if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true) {
+    controllerNotificaciones.closePushInUp.value = false;
+    controllerNotificaciones.onTapPushInUp.value = false;
+    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
+        controllerNotificaciones.listPushInUpHome.isNotEmpty) {
       await showPushInUp();
-      controllerNotificaciones.closePushInUp.value = false;
-      controllerNotificaciones.onTapPushInUp.value = false;
-      if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-        int elapsedTime = 0;
-        Timer.periodic(Duration(milliseconds: 10), (timer) {
-          if (elapsedTime >= 530) {
-            showSlideUp();
-            timer.cancel();
-          } else if (controllerNotificaciones.closePushInUp.value == true) {
-            showSlideUp();
-            timer.cancel();
-          } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-            timer.cancel();
-          }
-          elapsedTime++;
-        });
-      }
+      int elapsedTime = 0;
+      Timer.periodic(Duration(milliseconds: 10), (timer) {
+        if (elapsedTime >= 530) {
+          showSlideUp();
+          timer.cancel();
+        } else if (controllerNotificaciones.closePushInUp.value == true) {
+          showSlideUp();
+          timer.cancel();
+        } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+          timer.cancel();
+        }
+        elapsedTime++;
+      });
     } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
             true &&
         controllerNotificaciones.closeSlideUp.value == false) {

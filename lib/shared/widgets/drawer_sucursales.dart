@@ -255,8 +255,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
         type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
-    await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
+    await cargarInformacion(provider, elemento);
 
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
@@ -275,9 +275,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     Get.offAll(() => TabOpciones());
     // Navigator.of(context).pushNamedAndRemoveUntil(
     //     'tab_opciones', (Route<dynamic> route) => false);
-
-    mostrarAlert(context, S.current.text_change_of_branch,
-        SvgPicture.asset('assets/image/check_producto_agregado.svg'));
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
@@ -317,6 +314,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     prefs.paisUsuario = datosCliente[0].pais;
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
+    prefs.codClienteLogueado = datosCliente[0].nit;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)

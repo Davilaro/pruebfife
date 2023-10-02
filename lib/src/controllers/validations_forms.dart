@@ -651,8 +651,8 @@ class ValidationForms extends GetxController {
         type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
-    await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
+    await cargarInformacion(provider, elemento);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
@@ -710,6 +710,7 @@ class ValidationForms extends GetxController {
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
     prefs.direccionSucursal = datosCliente[0].direccion;
+    prefs.codClienteLogueado = datosCliente[0].nit;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)
