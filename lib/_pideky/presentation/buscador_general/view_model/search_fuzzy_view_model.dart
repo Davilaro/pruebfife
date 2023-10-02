@@ -13,7 +13,6 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -51,14 +50,10 @@ class SearchFuzzyViewModel extends GetxController {
 
   List<ExtractedResult<String>> result = [];
 
-  @override
-  void onInit() {
-    initState();
-    super.onInit();
-  }
+  
 
-  void initState() {
-    cargarSugerencias();
+  Future<void> initState() async {
+    await cargarSugerencias();
     allResultados.value = [];
     controllerUser.text = "";
     searchInput.value = "";
@@ -107,7 +102,7 @@ class SearchFuzzyViewModel extends GetxController {
     }
   }
 
-  void cargarSugerencias() async {
+  Future<void> cargarSugerencias() async {
     listaAllProducts = await productService.cargarProductosFiltro("", "");
     listaAllMarcas = await marcaService.getAllMarcas();
     listaAllcategorias = await DBProvider.db.consultarCategorias("", 0);

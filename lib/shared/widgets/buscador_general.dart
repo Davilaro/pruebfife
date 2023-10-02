@@ -37,6 +37,7 @@ class BuscadorGeneral extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
+                    print(searchFuzzyViewModel.listaAllMarcas);
                     searchFuzzyViewModel
                         .runFilter(searchFuzzyViewModel.controllerUser.text);
                     Navigator.push(

@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -64,6 +65,7 @@ class _TabOpcionesState extends State<TabOpciones>
   ProductoViewModel productoViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final searchController = Get.find<SearchFuzzyViewModel>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
@@ -194,6 +196,7 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   void cargarSecciones() async {
+    await searchController.initState();
     cargoControllerBase
         .cargarSecciones(await DBProvider.db.consultarSecciones());
 
