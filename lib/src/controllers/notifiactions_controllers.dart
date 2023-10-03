@@ -225,9 +225,16 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         Get.back();
         providerBottomNavigationBar.selectOptionMenu = 4;
       } else {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        providerBottomNavigationBar.selectOptionMenu = 4;
+        isPushInUp == true
+            ? {
+                Navigator.of(context).pop(),
+                Navigator.of(context).pop(),
+                providerBottomNavigationBar.selectOptionMenu = 4,
+              }
+            : {
+                Navigator.of(context).pop(),
+                providerBottomNavigationBar.selectOptionMenu = 4,
+              };
       }
     } else if (notificacion.redireccion == "Mis pagos Nequi") {
       if (locasionBanner == "Home") {
@@ -243,9 +250,13 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         await Get.to(() => ClubGanadoresPage());
         Get.back();
       } else {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        Get.to(() => ClubGanadoresPage());
+        isPushInUp == true
+            ? {
+                Navigator.of(context).pop(),
+                Navigator.of(context).pop(),
+                Get.to(() => ClubGanadoresPage())
+              }
+            : {Navigator.of(context).pop(), Get.to(() => ClubGanadoresPage())};
       }
     } else {
       await Navigator.push(
