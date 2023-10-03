@@ -173,7 +173,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     }
   }
 
-  void validarRedireccionOnTap(
+  Future validarRedireccionOnTap(
     NotificationPushInAppSlideUpModel notificacion,
     BuildContext context,
     CarroModelo provider,
@@ -206,42 +206,48 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
       resBusqueda = await marcaService
-          .consultaMarcas(notificacion.categoriaRedireccion.toString());
+          .consultaMarcas(notificacion.subCategoriaRedireccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf)
-            : null;
+            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf, true)
+            : Get.back();
       } else {
         await _navegacionPushInUp();
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf)
-            : null;
+            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf, true)
+            : Get.back();
       }
     } else if (notificacion.redireccion == "Mi Negocio") {
       if (locasionBanner == "Home") {
+        Get.back();
         providerBottomNavigationBar.selectOptionMenu = 4;
       } else {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
         providerBottomNavigationBar.selectOptionMenu = 4;
       }
     } else if (notificacion.redireccion == "Mis pagos Nequi") {
       if (locasionBanner == "Home") {
-        Get.to(() => MisPagosNequiPage());
+        await Get.to(() => MisPagosNequiPage());
+        Get.back();
       } else {
         Navigator.of(context).pop();
-        Get.to(() => MisPagosNequiPage());
+        await Get.to(() => MisPagosNequiPage());
+        Get.back();
       }
     } else if (notificacion.redireccion == "Club de ganadores") {
       if (locasionBanner == "Home") {
-        Get.to(() => ClubGanadoresPage());
+        await Get.to(() => ClubGanadoresPage());
+        Get.back();
       } else {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
         Get.to(() => ClubGanadoresPage());
       }
     } else {
-      Navigator.push(
+      await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
@@ -254,6 +260,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                     locacionFiltro: "proveedor",
                     codigoProveedor: "",
                   )));
+      Get.back();
     }
   }
 
@@ -269,20 +276,21 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
               element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
     }
 
-    Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TabOpcionesCategorias(
                   listaCategorias: resSubBusqueda,
                   nombreCategoria: subCategoria,
                 )));
+    Get.back();
   }
 
   _direccionarMarca(
     BuildContext context,
     Marca marca,
-  ) {
-    Navigator.push(
+  ) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CustomBuscardorFuzzy(
@@ -294,13 +302,14 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));
+    Get.back();
   }
 
   _direccionarProveedor(
     BuildContext context,
     Fabricante proveedor,
-  ) {
-    Navigator.push(
+  ) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CustomBuscardorFuzzy(
@@ -312,6 +321,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   locacionFiltro: "proveedor",
                   codigoProveedor: proveedor.empresa.toString(),
                 )));
+    Get.back();
   }
 
   _detalleProducto(
@@ -319,7 +329,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       final CarroModelo cartProvider,
       BuildContext context,
       CambioEstadoProductos cargoConfirmar,
-      Preferencias prefs) {
+      Preferencias prefs) async {
     if (prefs.usurioLogin == -1) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Login()));
@@ -333,8 +343,9 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       cartProvider.guardarCambiodevista = 1;
       PedidoEmart.cambioVista.value = 1;
 
-      Navigator.push(context,
+      await Navigator.push(context,
           MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+      Get.back();
     }
   }
 

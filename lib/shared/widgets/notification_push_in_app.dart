@@ -81,18 +81,20 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                             cerrado = true;
                           });
                           _animationController.reverse();
-                          await Future.delayed(Duration(milliseconds: 300), () {
-                            notificationController.validarRedireccionOnTap(
-                                widget.data,
-                                context,
-                                provider,
-                                cargoConfirmar,
-                                prefs,
-                                widget.ubicacion);
-                          });
+                          await Future.delayed(
+                              Duration(milliseconds: 300),
+                              () async => {
+                                    await notificationController
+                                        .validarRedireccionOnTap(
+                                            widget.data,
+                                            context,
+                                            provider,
+                                            cargoConfirmar,
+                                            prefs,
+                                            widget.ubicacion)
+                                  });
                           notificationController.onTapPushInUp.value = true;
                           UxcamTagueo().onTapPushInUp(false);
-                          Navigator.of(context).pop();
                         },
                         child: Center(
                           child: Container(

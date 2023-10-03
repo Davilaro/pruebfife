@@ -574,7 +574,7 @@ class _MiNegocioState extends State<MiNegocio> {
                               child: GestureDetector(
                                 onTap: () => viewModel.terminosDatosPdf != null
                                     ? verTerminosCondiciones(
-                                        context, viewModel.terminosDatosPdf)
+                                        context, viewModel.terminosDatosPdf, false)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:

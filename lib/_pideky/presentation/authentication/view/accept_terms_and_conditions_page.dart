@@ -53,7 +53,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                 },
                 onPressed: () => viewModel.terminosDatosPdf != null
                     ? verTerminosCondiciones(
-                        context, viewModel.terminosDatosPdf)
+                        context, viewModel.terminosDatosPdf, false)
                     : null,
               ),
             ),
@@ -105,12 +105,12 @@ class TermsAndConditionsPage extends StatelessWidget {
                               ConfirmIdentitySendSMSPage(
                                 isChangePassword: false,
                               ),
-                              context, "Has aceptado los términos y condiciones");
+                              context,
+                              "Has aceptado los términos y condiciones");
                         } else {
                           await _validationForms.backClosePopup(context,
-                            texto:
-                                'Algo salio mal, por favor intentalo de nuevo');
-                          
+                              texto:
+                                  'Algo salio mal, por favor intentalo de nuevo');
                         }
 
                         // Realizar otras acciones al hacer clic
