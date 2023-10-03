@@ -173,13 +173,13 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   }
 
   Future validarRedireccionOnTap(
-    NotificationPushInAppSlideUpModel notificacion,
-    BuildContext context,
-    CarroModelo provider,
-    CambioEstadoProductos cargoConfirmar,
-    Preferencias prefs,
-    String locasionBanner,
-  ) async {
+      NotificationPushInAppSlideUpModel notificacion,
+      BuildContext context,
+      CarroModelo provider,
+      CambioEstadoProductos cargoConfirmar,
+      Preferencias prefs,
+      String locasionBanner,
+      bool isPushInUp) async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     final providerBottomNavigationBar =
@@ -210,12 +210,14 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf, true)
+            ? verTerminosCondiciones(
+                context, viewModel.terminosDatosPdf, isPushInUp)
             : Get.back();
       } else {
         await _navegacionPushInUp();
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf, true)
+            ? verTerminosCondiciones(
+                context, viewModel.terminosDatosPdf, isPushInUp)
             : Get.back();
       }
     } else if (notificacion.redireccion == "Mi Negocio") {

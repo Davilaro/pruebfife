@@ -19,6 +19,7 @@ void showSlideUpNotification(context, data, ubicacion) {
 
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
+      Get.back();
       notificationController.closeSlideUp.value = true;
       notificationController.validarRedireccionOnTap(
         data,
@@ -27,9 +28,9 @@ void showSlideUpNotification(context, data, ubicacion) {
         cargoConfirmar,
         prefs,
         ubicacion,
+        false
       );
       UxcamTagueo().onTapSlideUp(true);
-      Get.back();
     },
     duration: Duration(minutes: 2),
     animationDuration: Duration(milliseconds: 500),

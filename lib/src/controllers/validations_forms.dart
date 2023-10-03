@@ -651,8 +651,8 @@ class ValidationForms extends GetxController {
         type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
 
     await pr.show();
-    await cargarDataUsuario(elemento.sucursal);
     await cargarInformacion(provider, elemento);
+    await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }

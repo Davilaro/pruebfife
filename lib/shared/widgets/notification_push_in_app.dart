@@ -91,7 +91,8 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                                             provider,
                                             cargoConfirmar,
                                             prefs,
-                                            widget.ubicacion)
+                                            widget.ubicacion,
+                                            true)
                                   });
                           notificationController.onTapPushInUp.value = true;
                           UxcamTagueo().onTapPushInUp(false);

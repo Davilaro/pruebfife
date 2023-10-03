@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 void verTerminosCondiciones(
-    BuildContext context, terminosDatosPdf, bool isPushInUpp) {
+    BuildContext context, terminosDatosPdf, bool isPushInUpp,) {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   showDialog(
