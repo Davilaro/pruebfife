@@ -210,8 +210,9 @@ class _FabricantesState extends State<Fabricantes> {
   }
 
   void cargarLista() async {
-    listaAllFabricantes =
-        await DBProvider.db.consultarFricante(controllerSearch.text);
+    listaAllFabricantes = prefs.usurioLogin != -1
+        ? await DBProvider.db.consultarFabricanteBloqueo()
+        : await DBProvider.db.consultarFricante(controllerSearch.text);
     listaFabricante.value = listaAllFabricantes;
   }
 
@@ -228,13 +229,14 @@ class _FabricantesState extends State<Fabricantes> {
         listaAllFabricantes.forEach((element) {
           listaAux.add(element.nombrecomercial);
         });
-        
+
         final result = extractTop(
-        limit: 10,
-        query: controllerSearch.text,
-        choices: listaAllFabricantes.map((element) => element.nombre).toList(),
-        cutoff: 10,
-      );
+          limit: 10,
+          query: controllerSearch.text,
+          choices:
+              listaAllFabricantes.map((element) => element.nombre).toList(),
+          cutoff: 10,
+        );
         listaFabricante.value = [];
         result
             .map((r) => listaFabricante.add(listaAllFabricantes

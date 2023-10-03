@@ -580,7 +580,6 @@ class UxcamTagueo {
 
   void onTapPushInUp(close) {
     try {
-      print('regional1 ${prefs.oficinaVentas}');
       if (prefs.usurioLogin == 1) {
         FlutterUxcam.logEventWithProperties("onTapPushInUp", {
           "close": close,

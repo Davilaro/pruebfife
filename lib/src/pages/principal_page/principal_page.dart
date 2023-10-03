@@ -116,7 +116,7 @@ class _PrincipalPageState extends State<PrincipalPage>
   }
 
   Future<void> showPushInUp() async {
-    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
     if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
       controllerNotificaciones.closePushInUp.value = false;
       controllerNotificaciones.onTapPushInUp.value = false;
