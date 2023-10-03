@@ -197,8 +197,8 @@ class _TabOpcionesState extends State<TabOpciones>
 
   void cargarSecciones() async {
     await searchController.initState();
-    cargoControllerBase
-        .cargarSecciones(await DBProvider.db.consultarSecciones());
+    final sesiones = await DBProvider.db.consultarSecciones();
+    cargoControllerBase.cargarSecciones(sesiones);
 
     var _tabControllerTemplate = new TabController(
         length: cargoControllerBase.seccionesDinamicas.length,

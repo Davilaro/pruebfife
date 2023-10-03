@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -22,9 +24,13 @@ class BtnOpciones extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-          children:
-              _cargarSecciones(cargoConfirmar.seccionesDinamicas, context)),
+      child: Obx(
+        () => cargoConfirmar.seccionesDinamicas.isEmpty
+            ? SizedBox.shrink()
+            : Row(
+                children: _cargarSecciones(
+                    cargoConfirmar.seccionesDinamicas.value, context)),
+      ),
     );
   }
 
