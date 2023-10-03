@@ -4,7 +4,6 @@ import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 
 import '../../_pideky/domain/producto/service/producto_service.dart';
 import '../../_pideky/presentation/productos/view/detalle_producto_compra.dart';
@@ -271,6 +270,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   _direccionarCategoria(BuildContext context, CarroModelo provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
+      bannerController.setIsVisitBanner(true);
       bannerController.cambiarSubCategoria(resSubBusqueda.indexWhere(
           (element) =>
               element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
