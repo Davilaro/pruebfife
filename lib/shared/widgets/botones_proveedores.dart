@@ -21,7 +21,6 @@ class BotonesProveedores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     botonesProveedoresVm.cargarSeleccionados();
 
     return SizedBox(
@@ -48,34 +47,23 @@ class BotonesProveedores extends StatelessWidget {
                       // Si el botón no está seleccionado, se verifica si hay menos de dos botones botonesProveedoresVm.seleccionados
 
                       if (!botonesProveedoresVm.seleccionados[index]) {
-                        if (botonesProveedoresVm.seleccionados
-                                    .where((element) => element)
-                                    .length <
-                                botonesProveedoresVm.seleccionados.length - 1 ||
-                            botonesProveedoresVm.seleccionados
-                                    .where((element) => element)
-                                    .length ==
-                                0) {
-                          // Se cambia el estado del botón a seleccionado
-                          for (var i = 0;
-                              i < botonesProveedoresVm.seleccionados.length;
-                              i++) {
-                            botonesProveedoresVm.seleccionados[i] =
-                                (index == i);
-                          }
-
-                          botonesProveedoresVm.seleccionados[index] = true;
-                         
-
-                          botonesProveedoresVm.listaProveedores.value = [];
-
-                          botonesProveedoresVm.listaProveedores.addIf(
-                              !botonesProveedoresVm.listaProveedores.contains(
-                                  botonesProveedoresVm
-                                      .listaFabricante[index].empresa),
-                              botonesProveedoresVm
-                                  .listaFabricante[index].empresa);
+                      
+                        for (var i = 0;
+                            i < botonesProveedoresVm.seleccionados.length;
+                            i++) {
+                          botonesProveedoresVm.seleccionados[i] = (index == i);
                         }
+
+                        botonesProveedoresVm.seleccionados[index] = true;
+
+                        botonesProveedoresVm.listaProveedores.value = [];
+
+                        botonesProveedoresVm.listaProveedores.addIf(
+                            !botonesProveedoresVm.listaProveedores.contains(
+                                botonesProveedoresVm
+                                    .listaFabricante[index].empresa),
+                            botonesProveedoresVm
+                                .listaFabricante[index].empresa);
                       }
                       botonesProveedoresVm.cargarLista(idTab);
                     }
