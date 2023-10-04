@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -403,8 +404,8 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
     late Estado estado;
 
     if (tipo == 'TELEFONO') {
-      estado =
-          await Servicies().enviarMS(dropdownValue, widget.codigoRespuesta);
+      // estado =
+      //     await Servicies().enviarMS(dropdownValue, widget.codigoRespuesta);
     } else {
       estado = await Servicies().enviarCorreo(
           _controllerCorreo.text.toString().replaceAll(' ', ''),
@@ -733,7 +734,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
   Future loguin(BuildContext context) async {
     List<dynamic> respuesta =
-        await Servicies().getListaSucursales(prefs.codClienteLogueado);
+        await Servicies().getListaSucursales(false);
 
     if (respuesta.length > 0) {
       pr.hide();

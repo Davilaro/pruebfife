@@ -164,7 +164,12 @@ class AppUtil {
       final dbFileTemp = File('${await androidPaht}/DB7001.db');
       final dbFileTemp2 = File('${await androidPaht}/Temp.db');
 
-      await dbFileTemp.delete();
+      if (await dbFileTemp.exists()) {
+        await dbFileTemp.delete();
+        print('Archivo eliminado correctamente');
+      } else {
+        print('El archivo no existe en la ubicación especificada');
+      }
       print(
           'lugar hola temporal existe ${await dbFileTemp2.exists()} --- ${await androidPaht}');
       // await appDocDirectory.delete(recursive: true);

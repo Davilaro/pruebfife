@@ -13,13 +13,15 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
       var sql = await db.rawQuery('''
         SELECT   S.negocio  Negocio, S.Codigo, P.Nombre,
         round(((P.precio - (P.precio * ifnull(tmp.descuento,0) / 100))) +
-        (P.precio - (P.precio * ifnull(tmp.descuento,0) / 100)) * P.iva /100,0) precio, S.Cantidad FROM pedidoSugerido S INNER JOIN Producto P
-        ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio
+        (P.precio - (P.precio * ifnull(tmp.descuento,0) / 100)) * P.iva /100,0) precio, S.Cantidad,
+        F.BloqueoCartera
+        FROM pedidoSugerido S 
+        INNER JOIN Producto P ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
-        select count(P.codigo) identificador,*
-        from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
-        ) tmp where tmp.identificador = 1) tmp on P.fabricante = tmp.proveedor and P.codigo = tmp.codigo''');
-
+             select count(P.codigo) identificador,*
+             from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
+        ) tmp where tmp.identificador = 1) tmp on P.fabricante = tmp.proveedor and P.codigo = tmp.codigo
+        INNER JOIN Fabricante F ON F.empresa = P.Fabricante ''');
       return sql.isNotEmpty
           ? sql.map((e) => PedidoSugeridoModel.fromJson(e)).toList()
           : [];

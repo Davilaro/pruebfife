@@ -1,4 +1,7 @@
 // ignore_for_file: unnecessary_statements, unnecessary_null_comparison
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
+import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
 
@@ -16,8 +19,7 @@ import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
-import 'package:emart/src/modelos/marcas.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -33,6 +35,8 @@ import 'package:provider/provider.dart';
 class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   final notificacionesService =
       NotificationPushInAppSlideUpService(NotificationPushInUpAndSlideUpSql());
+
+  final marcaService = MarcaService(MarcaRepositorySqlite());
 
   final prefs = Preferencias();
   final bannerController = Get.put(BannnerControllers());
@@ -108,7 +112,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     }
   }
 
-  Future<void> showPushInUp(
+  Future<dynamic> showPushInUp(
     String? nombreSeccion,
     String? nombreCategoria,
     BuildContext context,
@@ -126,9 +130,10 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       case 'marca':
         if (validacionMostrarPushInUp[nombreCategoria] == true) {
           var notificationTemp = listPushInUpMarcas.first;
@@ -141,9 +146,10 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       case 'proveedor':
         if (validacionMostrarPushInUp[nombreCategoria] == true) {
           var notificationTemp = listPushInUpProveedores.first;
@@ -157,21 +163,23 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                       onWillPop: () async => false,
                       child: NotificationPushInApp(notificationTemp, ""));
                 });
+            return true;
           }
         }
-        break;
+        return false;
       default:
+        return false;
     }
   }
 
-  void validarRedireccionOnTap(
-    NotificationPushInAppSlideUpModel notificacion,
-    BuildContext context,
-    CarroModelo provider,
-    CambioEstadoProductos cargoConfirmar,
-    Preferencias prefs,
-    String locasionBanner,
-  ) async {
+  Future validarRedireccionOnTap(
+      NotificationPushInAppSlideUpModel notificacion,
+      BuildContext context,
+      CarroModelo provider,
+      CambioEstadoProductos cargoConfirmar,
+      Preferencias prefs,
+      String locasionBanner,
+      bool isPushInUp) async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     final providerBottomNavigationBar =
@@ -196,43 +204,62 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
-      resBusqueda = await DBProvider.db
-          .consultarMarcas(notificacion.categoriaRedireccion.toString());
+      resBusqueda = await marcaService
+          .consultaMarcas(notificacion.subCategoriaRedireccion.toString());
       _direccionarMarca(context, resBusqueda[0]);
     } else if (notificacion.redireccion == "Términos y condiciones") {
       if (locasionBanner == 'Home') {
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf)
-            : null;
+            ? verTerminosCondiciones(
+                context, viewModel.terminosDatosPdf, isPushInUp)
+            : Get.back();
       } else {
         await _navegacionPushInUp();
         viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(context, viewModel.terminosDatosPdf)
-            : null;
+            ? verTerminosCondiciones(
+                context, viewModel.terminosDatosPdf, isPushInUp)
+            : Get.back();
       }
     } else if (notificacion.redireccion == "Mi Negocio") {
       if (locasionBanner == "Home") {
+        Get.back();
         providerBottomNavigationBar.selectOptionMenu = 4;
       } else {
-        Navigator.of(context).pop();
-        providerBottomNavigationBar.selectOptionMenu = 4;
+        isPushInUp == true
+            ? {
+                Navigator.of(context).pop(),
+                Navigator.of(context).pop(),
+                providerBottomNavigationBar.selectOptionMenu = 4,
+              }
+            : {
+                Navigator.of(context).pop(),
+                providerBottomNavigationBar.selectOptionMenu = 4,
+              };
       }
     } else if (notificacion.redireccion == "Mis pagos Nequi") {
       if (locasionBanner == "Home") {
-        Get.to(() => MisPagosNequiPage());
+        await Get.to(() => MisPagosNequiPage());
+        Get.back();
       } else {
         Navigator.of(context).pop();
-        Get.to(() => MisPagosNequiPage());
+        await Get.to(() => MisPagosNequiPage());
+        Get.back();
       }
     } else if (notificacion.redireccion == "Club de ganadores") {
       if (locasionBanner == "Home") {
-        Get.to(() => ClubGanadoresPage());
+        await Get.to(() => ClubGanadoresPage());
+        Get.back();
       } else {
-        Navigator.of(context).pop();
-        Get.to(() => ClubGanadoresPage());
+        isPushInUp == true
+            ? {
+                Navigator.of(context).pop(),
+                Navigator.of(context).pop(),
+                Get.to(() => ClubGanadoresPage())
+              }
+            : {Navigator.of(context).pop(), Get.to(() => ClubGanadoresPage())};
       }
     } else {
-      Navigator.push(
+      await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CustomBuscardorFuzzy(
@@ -245,6 +272,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                     locacionFiltro: "proveedor",
                     codigoProveedor: "",
                   )));
+      Get.back();
     }
   }
 
@@ -255,43 +283,46 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   _direccionarCategoria(BuildContext context, CarroModelo provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
+      bannerController.setIsVisitBanner(true);
       bannerController.cambiarSubCategoria(resSubBusqueda.indexWhere(
           (element) =>
               element.descripcion.toLowerCase() == subCategoria.toLowerCase()));
     }
 
-    Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => TabOpcionesCategorias(
                   listaCategorias: resSubBusqueda,
                   nombreCategoria: subCategoria,
                 )));
+    Get.back();
   }
 
   _direccionarMarca(
     BuildContext context,
-    Marcas marca,
-  ) {
-    Navigator.push(
+    Marca marca,
+  ) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CustomBuscardorFuzzy(
                   codCategoria: marca.codigo,
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
-                  nombreCategoria: marca.titulo,
+                  nombreCategoria: marca.nombre,
                   isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));
+    Get.back();
   }
 
   _direccionarProveedor(
     BuildContext context,
-    Fabricantes proveedor,
-  ) {
-    Navigator.push(
+    Fabricante proveedor,
+  ) async {
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CustomBuscardorFuzzy(
@@ -303,6 +334,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   locacionFiltro: "proveedor",
                   codigoProveedor: proveedor.empresa.toString(),
                 )));
+    Get.back();
   }
 
   _detalleProducto(
@@ -310,7 +342,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       final CarroModelo cartProvider,
       BuildContext context,
       CambioEstadoProductos cargoConfirmar,
-      Preferencias prefs) {
+      Preferencias prefs) async {
     if (prefs.usurioLogin == -1) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Login()));
@@ -324,8 +356,9 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       cartProvider.guardarCambiodevista = 1;
       PedidoEmart.cambioVista.value = 1;
 
-      Navigator.push(context,
+      await Navigator.push(context,
           MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+      Get.back();
     }
   }
 

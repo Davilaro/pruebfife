@@ -1,11 +1,5 @@
-import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
-import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
-import 'package:emart/src/pages/principal_page/principal_page.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

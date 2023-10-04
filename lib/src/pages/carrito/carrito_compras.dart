@@ -5,7 +5,7 @@ import 'package:emart/_pideky/presentation/productos/view_model/producto_view_mo
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -15,6 +15,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/pages/carrito/configurar_pedido.dart';
@@ -28,12 +29,10 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
-late ProgressDialog pr;
 RxBool isValid = false.obs;
 //late CarroModelo cartProvider;
 
@@ -104,12 +103,21 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0)),
                     child: GestureDetector(
-                      onTap: () => {_configurarPedido(size, cartProvider)},
+                      onTap: () => {
+                        prefs.typeCollaborator != "2"
+                            ? _configurarPedido(size, cartProvider)
+                            : mostrarAlert(
+                                context,
+                                "No puedes realizar pedidos ya que te encuentras en modo colaborador",
+                                null)
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: HexColor("#42B39C"),
+                          color: prefs.typeCollaborator != "2"
+                              ? HexColor("#42B39C")
+                              : ConstantesColores.gris_sku,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         height: Get.height * 0.08,
@@ -735,7 +743,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                     PedidoEmart.cambioVista.value = 1;
                     cartProvider.guardarCambiodevista = 1;
                     Navigator.pop(context);
-                    List<Fabricantes> fabricanteSeleccionado =
+                    List<Fabricante> fabricanteSeleccionado =
                         await DBProvider.db.consultarFricante(fabricante);
 
                     _onClickCatalogo(

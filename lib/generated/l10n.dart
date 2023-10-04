@@ -530,10 +530,10 @@ class S {
     );
   }
 
-  /// `My Nequi Payments`
+  /// `My Payments`
   String get my_nequi_payments {
     return Intl.message(
-      'My Nequi Payments',
+      'My Payments',
       name: 'my_nequi_payments',
       desc: '',
       args: [],

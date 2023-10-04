@@ -335,7 +335,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
   cargarCategorias() async {
     //validar por el provedor
     var resQuery = await DBProvider.db
-        .consultarCategoriasPorFabricante(widget.codCategoria.toUpperCase());
+        .consultarCategoriasPorFabricante(widget.codCategoria.toUpperCase(), '');
     for (var i = 0; i < resQuery.length; i++) {
       listCategorias.add(resQuery[i].descripcion);
     }
@@ -343,7 +343,7 @@ class _FiltroProveedorState extends State<FiltroProveedor> {
 
   cargarMarca() async {
     var resQuery = await DBProvider.db
-        .consultarMarcasPorFabricante(widget.codCategoria.toUpperCase());
+        .consultarMarcasPorFabricante(widget.codCategoria.toUpperCase(), '');
     for (var i = 0; i < resQuery.length; i++) {
       listMarcas.add(resQuery[i].titulo);
     }

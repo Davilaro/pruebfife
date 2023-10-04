@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 void showSlideUpNotification(context, data, ubicacion) {
   final provider = Provider.of<CarroModelo>(context, listen: false);
+  final String imageUrl = data.imageUrl; // Reemplaza con la URL de tu imagen
+  final String uniqueKey = UniqueKey().toString();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final notificationController =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
@@ -17,17 +19,11 @@ void showSlideUpNotification(context, data, ubicacion) {
 
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
+      Get.back();
       notificationController.closeSlideUp.value = true;
       notificationController.validarRedireccionOnTap(
-        data,
-        context,
-        provider,
-        cargoConfirmar,
-        prefs,
-        ubicacion,
-      );
+          data, context, provider, cargoConfirmar, prefs, ubicacion, false);
       UxcamTagueo().onTapSlideUp(true);
-      Get.back();
     },
     duration: Duration(minutes: 2),
     animationDuration: Duration(milliseconds: 500),
@@ -51,7 +47,7 @@ void showSlideUpNotification(context, data, ubicacion) {
                 alignment: Alignment.center,
                 height: 50,
               ),
-              imageUrl: data.imageUrl,
+              imageUrl: '$imageUrl?$uniqueKey',
               errorWidget: (context, url, error) => Image.asset(
                 'assets/image/logo_login.png',
                 height: 50,

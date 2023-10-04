@@ -15,7 +15,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/utils/alertas.dart' as alert;
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -42,7 +42,7 @@ class _MiNegocioState extends State<MiNegocio> {
   void initState() {
     if (prefs.usurioLogin == -1) {
       Future.delayed(Duration(seconds: 0)).then((value) {
-        alert.alertCustom(context);
+        alertCustom(context);
       });
     }
     if (prefs.paisUsuario == "CO") {
@@ -574,7 +574,7 @@ class _MiNegocioState extends State<MiNegocio> {
                               child: GestureDetector(
                                 onTap: () => viewModel.terminosDatosPdf != null
                                     ? verTerminosCondiciones(
-                                        context, viewModel.terminosDatosPdf)
+                                        context, viewModel.terminosDatosPdf, false)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:
@@ -674,8 +674,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    viewModel.iniciarModalEliminarUsuario(
-                                        context, size, provider);
+                                    prefs.typeCollaborator != "2"
+                                        ? viewModel.iniciarModalEliminarUsuario(
+                                            context, size, provider)
+                                        : mostrarAlert(
+                                            context,
+                                            "No puedes eliminar la cuenta ya que te encuentras en modo colaborador",
+                                            null);
                                   },
                                   child: Row(children: [
                                     Image.asset(

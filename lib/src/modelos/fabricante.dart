@@ -1,14 +1,15 @@
 import 'dart:convert';
 
-Fabricantes fabricantesFromJson(String str) =>
-    Fabricantes.fromJson(json.decode(str));
+Fabricante fabricantesFromJson(String str) =>
+    Fabricante.fromJson(json.decode(str));
 
-String fabricantesToJson(Fabricantes data) => json.encode(data.toJson());
+String fabricantesToJson(Fabricante data) => json.encode(data.toJson());
 
-class Fabricantes {
-  Fabricantes(
+class Fabricante {
+  Fabricante(
       {this.empresa,
       this.icono,
+      this.codigo,
       // this.codIndirecto,
       this.tipofabricante,
       this.nombrecomercial,
@@ -24,6 +25,8 @@ class Fabricantes {
       this.texto1,
       this.texto2,
       this.diaVisita,
+      this.verPopUp,
+      this.bloqueoCartera,
       required this.diasEntrega,
       this.razonSocial});
 
@@ -33,6 +36,7 @@ class Fabricantes {
   // String? codIndirecto;
   String? nombrecomercial;
   String? estado;
+  String? codigo;
   String? hora;
   double? topeMinimo;
   int? montoMinimoFrecuencia;
@@ -40,6 +44,8 @@ class Fabricantes {
   int? restrictivoFrecuencia;
   int? restrictivoNoFrecuencia;
   int? itinerario;
+  int? bloqueoCartera;
+  int? verPopUp;
   String? texto1;
   String? texto2;
   String? diaVisita;
@@ -47,7 +53,7 @@ class Fabricantes {
   String? nitCliente;
   String? razonSocial;
 
-  factory Fabricantes.fromJson(Map<String, dynamic> json) => Fabricantes(
+  factory Fabricante.fromJson(Map<String, dynamic> json) => Fabricante(
       empresa: json["empresa"] == null ? '' : json["empresa"],
       icono: json["ico"] == null ? '' : json["ico"],
       tipofabricante:
@@ -68,7 +74,12 @@ class Fabricantes {
       texto1: json["texto1"],
       texto2: json["texto2"],
       itinerario: json["itinerario"],
-      diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"]);
+      bloqueoCartera:
+          json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
+      verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],
+      diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"],
+      codigo: json["codigo"] == null ? '' : json["codigo"]
+      );
 
   Map<String, dynamic> toJson() => {
         "empresa": empresa,
@@ -89,6 +100,8 @@ class Fabricantes {
         "texto1": texto1,
         "texto2": texto2,
         "itinerario": itinerario,
-        "diaEntrega": diasEntrega
+        "diaEntrega": diasEntrega,
+        "vePopUp": verPopUp,
+        "codigo" : codigo
       };
 }

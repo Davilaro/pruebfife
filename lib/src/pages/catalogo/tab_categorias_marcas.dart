@@ -1,6 +1,10 @@
+// ignore_for_file: unnecessary_statements
+
+import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/seccion.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/catalogo/widgets/catalogo_interno.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -11,6 +15,7 @@ import 'package:emart/src/pages/catalogo/widgets/marcas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class TabCategoriaMarca extends StatefulWidget {
   @override
@@ -19,25 +24,34 @@ class TabCategoriaMarca extends StatefulWidget {
 
 class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     with SingleTickerProviderStateMixin {
+  RxString proveedor = "".obs;
   Map listSeccionsRoute = {
     2: Fabricantes(),
     3: CategoriasGrilla(),
     4: MarcasWidget(),
+    //estas dos no se usan por el momento pero trato de borrar y se daña todo :C
     1: CatalogoPoductosInterno(tipoCategoria: 1),
     5: CatalogoPoductosInterno(tipoCategoria: 2)
   };
-  ControllerProductos constrollerProductos = Get.find();
-  RxInt contador = 5.obs;
-
   final cargoConfirmar = Get.find<ControlBaseDatos>();
+  ControllerProductos constrollerProductos = Get.find();
+  final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
+  RxInt contador = 5.obs;
 
   @override
   void initState() {
-    print("entre categorias");
     super.initState();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('CategoriesTabs');
+    botonesProveedoresVm.seleccionados.clear();
+       botonesProveedoresVm.esBuscadoTodos.value = true;
     // cargarData();
+  }
+
+  @override
+  void dispose() {
+    botonesProveedoresVm.listaProveedores.clear();
+    super.dispose();
   }
 
   @override
@@ -46,7 +60,7 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
 
     final selectedColor = Colors.yellow;
 
-    return Obx(() => DefaultTabController(
+    return DefaultTabController(
         length: cargoConfirmar.seccionesDinamicas.length,
         child: Container(
           width: double.infinity,
@@ -58,11 +72,23 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
               child: Column(
                 children: [
                   Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                    child: _buscadorPrincipal(context),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: TabBar(
                         controller: cargoConfirmar.tabController,
-                        labelPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        labelPadding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                         onTap: (index) {
+                          botonesProveedoresVm.esBuscadoTodos.value = true;
+                          botonesProveedoresVm.listaProveedores.clear();
+                          for (int i = 0;
+                              i < botonesProveedoresVm.seleccionados.length;
+                              i++) {
+                            botonesProveedoresVm.seleccionados[i] = false;
+                          }
+
                           //FIREBASE: Llamamos el evento select_content
                           TagueoFirebase().sendAnalityticSelectContent(
                               "Header",
@@ -84,18 +110,21 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                           Seccion seccion =
                               cargoConfirmar.seccionesDinamicas[index];
                           return Tab(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: cargoConfirmar.cambioTab.value == index
-                                    ? selectedColor
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(seccion.descripcion.toString()),
+                            child: Obx(
+                              () => Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Get.width * 0.078),
+                                height: Get.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: cargoConfirmar.cambioTab.value == index
+                                      ? selectedColor
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(seccion.descripcion.toString()),
+                                ),
                               ),
                             ),
                           );
@@ -103,24 +132,59 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
                   ),
                   Expanded(
                     child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
                       controller: cargoConfirmar.tabController,
-                      children:
-                          cargarWidgets(cargoConfirmar.seccionesDinamicas),
+                      children: cargarWidgets(),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        )));
+        ));
   }
 
-  cargarWidgets(List data) {
+  List<Widget> cargarWidgets() {
     List<Widget> listWidget = [];
-    for (var i = 0; i < data.length; i++) {
-      Seccion seccion = data[i];
+    for (var i = 0; i < cargoConfirmar.seccionesDinamicas.length; i++) {
+      Seccion seccion = cargoConfirmar.seccionesDinamicas[i];
       listWidget.add(listSeccionsRoute[seccion.idSeccion]);
     }
     return listWidget;
+  }
+
+  _buscadorPrincipal(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+        color: HexColor("#E4E3EC"),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchFuzzyView()));
+        },
+        child: TextField(
+          enabled: false,
+          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
+          decoration: InputDecoration(
+            fillColor: HexColor("#41398D"),
+            hintText: 'Encuentra aquí todo lo que necesitas',
+            hintStyle: TextStyle(
+              color: HexColor("#41398D"),
+            ),
+            suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Icon(
+                  Icons.search,
+                  color: HexColor("#41398D"),
+                )),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
+          ),
+        ),
+      ),
+    );
   }
 }

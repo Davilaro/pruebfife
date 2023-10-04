@@ -70,6 +70,7 @@ class PedidoSugeridoViewModel extends GetxController
       String icon = '';
       String nombreComercial = "";
       double precioProductos = 0;
+      int bloqueoCartera = 0;
 
       for (int i = 0; i < value.length; i++) {
         precioProductos =
@@ -80,6 +81,7 @@ class PedidoSugeridoViewModel extends GetxController
         if (listaFabricante[j].empresa == key) {
           icon = listaFabricante[j].icono;
           nombreComercial = listaFabricante[j].nombrecomercial;
+          bloqueoCartera = listaFabricante[j].bloqueoCartera;
         }
       }
 
@@ -89,7 +91,8 @@ class PedidoSugeridoViewModel extends GetxController
                 'precioProductos': precioProductos,
                 'items': value,
                 'imagen': icon,
-                'nombrecomercial': nombreComercial
+                'nombrecomercial': nombreComercial,
+                'bloqueoCartera': bloqueoCartera,
               });
     });
     // update();
@@ -102,7 +105,7 @@ class PedidoSugeridoViewModel extends GetxController
   }
 
   Future getListaFabricantes() async {
-    listaFabricante.value = await DBProvider.db.consultarFricante("");
+    listaFabricante.value = await DBProvider.db.consultarFabricanteBloqueo();
   }
 
   initController() async {

@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -38,6 +40,7 @@ class InputValoresCatalogo extends StatefulWidget {
 class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
   bool isProductoEnOferta = false;
   RxBool isNewProduct = false.obs;
   RxBool isPromoProduct = false.obs;
@@ -71,6 +74,10 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               isProductoEnOferta: isProductoEnOferta,
               onTapCard: () {
                 if (prefs.usurioLogin != -1) {
+                  if (searchFuzzyViewModel.controllerUser.text != '') {
+                    searchFuzzyViewModel.llenarRecientes(
+                        widget.element, Producto);
+                  }
                   //FIREBASE: Llamamos el evento select_item
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
                   //UXCam: Llamamos el evento seeDetailProduct
@@ -89,7 +96,8 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
 
   detalleProducto(Producto producto, CarroModelo cartProvider) async {
     if (prefs.usurioLogin == -1) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LogInPage()));
     } else {
       PedidoEmart.inicializarValoresFabricante();
       cartProvider.actualizarListaFabricante =

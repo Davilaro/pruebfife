@@ -258,11 +258,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           .updateAll((key, value) => value = false);
       productoViewModel.eliminarBDTemporal();
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => PedidoRealizado(
-                  numEmpresa: widget.numEmpresa, numdoc: numDoc)),
-          (Route<dynamic> route) => false);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc)));
     } else {
       Navigator.pop(context);
       mostrarAlertaUtilsError(_context2, validar.mensaje!);

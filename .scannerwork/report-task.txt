@@ -1,6 +1,6 @@
-projectKey=pideky
-serverUrl=https://sonarqube.sandboxcw.net
-serverVersion=9.7.1.62043
-dashboardUrl=https://sonarqube.sandboxcw.net/dashboard?id=pideky
-ceTaskId=AYSLpG1XhnaMVJChMf_C
-ceTaskUrl=https://sonarqube.sandboxcw.net/api/ce/task?id=AYSLpG1XhnaMVJChMf_C
+projectKey=com.celuweb.pidekyapp
+serverUrl=http://44.211.128.2:9000
+serverVersion=9.9.2.77730
+dashboardUrl=http://44.211.128.2:9000/dashboard?id=com.celuweb.pidekyapp
+ceTaskId=AYrcOm0KAgRrYx-L7uBo
+ceTaskUrl=http://44.211.128.2:9000/api/ce/task?id=AYrcOm0KAgRrYx-L7uBo

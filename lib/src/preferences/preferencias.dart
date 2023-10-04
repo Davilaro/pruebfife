@@ -207,10 +207,57 @@ class Preferencias {
     _prefs.setString("direccionsucursal", value);
   }
 
+  get isFirstTime {
+    return _prefs.getBool("isfirsttime") ?? true;
+  }
 
+  set isFirstTime(dynamic value) {
+    _prefs.setBool("isfirsttime", value);
+  }
 
+  get oficinaVentas {
+    return _prefs.getString("oficinaventas") ?? "";
+  }
 
-  clear() async {
-    await _prefs.clear();
+  set oficinaVentas(dynamic value) {
+    _prefs.setString("oficinaventas", value);
+  }
+
+  get rememberMe {
+    return _prefs.getBool("rememberme") ?? true;
+  }
+
+  set rememberMe(dynamic value) {
+    _prefs.setBool("rememberme", value);
+  }
+
+  bool? get isDataBiometricActive {
+    final value = _prefs.getBool("isDataBiometricActive");
+    return value == null ? null : value;
+  }
+
+  set isDataBiometricActive(dynamic value) {
+    if (value == null) {
+      _prefs.remove(
+          "isDataBiometricActive"); // Elimina la clave si el valor es nulo.
+    } else {
+      _prefs.setBool("isDataBiometricActive", value);
+    }
+  }
+
+  get ccupBiometric {
+    return _prefs.getString("ccupBiometric") ?? "";
+  }
+
+  set ccupBiometric(dynamic value) {
+    _prefs.setString("ccupBiometric", value);
+  }
+
+  get typeCollaborator {
+    return _prefs.getString("typCollaborator") ?? "";
+  }
+
+  set typeCollaborator(dynamic value) {
+    _prefs.setString("typCollaborator", value);
   }
 }

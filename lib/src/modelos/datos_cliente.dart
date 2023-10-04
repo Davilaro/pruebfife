@@ -6,29 +6,29 @@ DatosCliente datosClienteFromJson(String str) =>
 String datosClienteToJson(DatosCliente data) => json.encode(data.toJson());
 
 class DatosCliente {
-  DatosCliente({
-    this.codigo,
-    this.nombre,
-    this.razonsocial,
-    this.nit,
-    this.direccion,
-    this.ciudad,
-    this.telefono,
-    this.telefonoWhatsapp,
-    this.condicionPago,
-    this.codigoUnicoPideky,
-    this.pais,
-    this.codigomeals,
-    this.codigonutresa,
-    this.codigozenu,
-    this.codigopozuelo,
-    this.codigoalpina,
-    this.nitNutresa,
-    this.nitZenu,
-    this.nitMeals,
-    this.nitPozuelo,
-    this.nitAlpina,
-  });
+  DatosCliente(
+      {this.codigo,
+      this.nombre,
+      this.razonsocial,
+      this.nit,
+      this.direccion,
+      this.ciudad,
+      this.telefono,
+      this.telefonoWhatsapp,
+      this.condicionPago,
+      this.codigoUnicoPideky,
+      this.pais,
+      this.codigomeals,
+      this.codigonutresa,
+      this.codigozenu,
+      this.codigopozuelo,
+      this.codigoalpina,
+      this.nitNutresa,
+      this.nitZenu,
+      this.nitMeals,
+      this.nitPozuelo,
+      this.nitAlpina,
+      this.regional});
 
   String? codigo;
   String? nombre;
@@ -41,7 +41,7 @@ class DatosCliente {
   String? condicionPago;
   String? codigoUnicoPideky;
   String? pais;
-
+  String? regional;
   String? codigonutresa;
   String? codigozenu;
   String? codigomeals;
@@ -80,6 +80,7 @@ class DatosCliente {
         nitMeals: json["NitMeals"] == null ? '' : json['NitMeals'],
         nitPozuelo: json["NitPozuelo"] == null ? '' : json['NitPozuelo'],
         nitAlpina: json["NitAlpina"] == null ? '' : json['NitAlpina'],
+        regional: json["Regional"] == null ? "" : json['Regional'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,5 +104,6 @@ class DatosCliente {
         "NitMeals": nitMeals,
         "NitPozuelo": nitPozuelo,
         "NitAlpina": nitAlpina,
+        "Regional": regional
       };
 }

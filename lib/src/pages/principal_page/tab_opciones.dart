@@ -1,18 +1,20 @@
-import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/utils/alertas.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
-import '../../../shared/widgets/notification_push_in_app.dart';
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
-import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -38,6 +40,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../preferences/metodo_ingresados.dart';
+
 final prefs = new Preferencias();
 DatosListas providerDatos = new DatosListas();
 
@@ -50,14 +54,18 @@ class _TabOpcionesState extends State<TabOpciones>
     with SingleTickerProviderStateMixin {
   late bool hasInternet;
   late bool cargandoDatos = true;
+  late final cartProvider = Provider.of<CarroModelo>(context, listen: false);
 
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
   final MiNegocioViewModel viewModelNegocio = Get.find();
+  final botonesController = Get.find<BotonesProveedoresVm>();
   ProductoViewModel productViewModel = Get.find();
+  ProductoViewModel productoViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
+  final searchController = Get.find<SearchFuzzyViewModel>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final catalogSearchViewModel = Get.put(ControllerHistorico());
@@ -87,7 +95,9 @@ class _TabOpcionesState extends State<TabOpciones>
       });
     });
     cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
+
     preambuloBase();
+    verPopUp();
     setState(() {});
   }
 
@@ -182,11 +192,13 @@ class _TabOpcionesState extends State<TabOpciones>
     } catch (e) {
       print('error de descarga db $e');
     }
+    botonesController.listaFabricantesBloqueados.clear();
   }
 
   void cargarSecciones() async {
-    cargoControllerBase
-        .cargarSecciones(await DBProvider.db.consultarSecciones());
+    await searchController.initState();
+    final sesiones = await DBProvider.db.consultarSecciones();
+    cargoControllerBase.cargarSecciones(sesiones);
 
     var _tabControllerTemplate = new TabController(
         length: cargoControllerBase.seccionesDinamicas.length,
@@ -197,6 +209,38 @@ class _TabOpcionesState extends State<TabOpciones>
     });
 
     cargoControllerBase.initControllertabController(_tabControllerTemplate);
+  }
+
+  void verPopUp() async {
+    var listaMora = '';
+    List listabloqueo = [];
+    List<Map> listaProveedores = [];
+    final fabricantes = await DBProvider.db.consultarFabricanteBloqueo();
+    fabricantes.forEach((element) {
+      if (element.verPopUp == 0) {
+        listaMora = listaMora + element.nombrecomercial + ', ';
+        listaProveedores
+            .add({'Codigo': element.codigo, 'Proveedor': element.empresa});
+      }
+      if (element.bloqueoCartera == 1) {
+        listabloqueo.add(element.empresa);
+      }
+    });
+    if (listaMora != '') {
+      listaMora = listaMora.substring(0, listaMora.length - 2);
+      mostrarAlertaPopUpVisto(context, listaMora, listaProveedores);
+    }
+    if (listabloqueo.isNotEmpty) {
+      PedidoEmart.listaProductos!.forEach((key, value) {
+        PedidoEmart.listaControllersPedido![value.codigo]!.text = "0";
+        PedidoEmart.registrarValoresPedido(value, "1", false);
+        //eliminamos el pedido de la temporal
+        productoViewModel.eliminarProductoTemporal(value.codigo);
+        PedidoEmart.iniciarProductosPorFabricante();
+        cargoConfirmar.mapaHistoricos.updateAll((key, value) => value = false);
+        MetodosLLenarValores().calcularValorTotal(cartProvider);
+      });
+    }
   }
 }
 

@@ -10,6 +10,8 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../../../../src/pages/login/login.dart';
+
 class ConfirmacionPais extends StatefulWidget {
   @override
   State<ConfirmacionPais> createState() => _ConfirmacionPaisState();
@@ -85,8 +87,12 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
             BotonAgregarCarrito(
                 height: Get.height * 0.06,
                 color: ConstantesColores.agua_marina,
-                onTap: () => confirmacionPaisViewModel.confirmarPais(
-                    itemSeleccionado.value, false),
+                onTap: () {
+                  prefs.isFirstTime = true;
+                  confirmacionPaisViewModel.confirmarPais(
+                      itemSeleccionado.value, false);
+                  
+                },
                 text: S.current.accept)
           ],
         ),

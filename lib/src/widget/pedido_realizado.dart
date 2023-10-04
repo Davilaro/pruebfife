@@ -1,9 +1,12 @@
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 class PedidoRealizado extends StatelessWidget {
   final int numEmpresa;
@@ -225,8 +228,9 @@ class PedidoRealizado extends StatelessWidget {
     );
   }
 
-  _irMenuPrincipal(context) {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        'tab_opciones', (Route<dynamic> route) => false);
+  _irMenuPrincipal(context) async {
+    final providerCar = Provider.of<OpcionesBard>(context, listen: false);
+    providerCar.selectOptionMenu = 0;
+    Get.offAll(() => TabOpciones());
   }
 }

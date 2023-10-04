@@ -39,7 +39,7 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: Text(
-          'Mis Pagos Nequi',
+          'Mis Pagos',
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
