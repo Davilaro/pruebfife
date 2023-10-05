@@ -1,3 +1,4 @@
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/alertas.dart';

@@ -16,7 +16,6 @@ void mostrarAlert(
   Widget? icon,
 ) {
   showDialog(
-  
       context: context,
       barrierDismissible: false,
       builder: (context) {
@@ -39,9 +38,10 @@ void mostrarAlert(
                             child: Container(),
                           ),
                           GestureDetector(
-                            onTap: () =>{
+                            onTap: () => {
                               controllerForm.isClosePopup.value = true,
-                               Get.back()},
+                              Get.back()
+                            },
                             child: Icon(
                               Icons.cancel,
                               color: ConstantesColores.verde,
@@ -134,46 +134,46 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
       });
 }
 
-void alertCustom(BuildContext context) {
-  showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return WillPopScope(
-          onWillPop: () => Future.value(false),
-          child: CustomDialog(
-            title: Container(
-                margin: EdgeInsets.only(top: 40),
-                child: Text(
-                  S.current.activate_your_user,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: ConstantesColores.azul_precio,
-                      fontWeight: FontWeight.bold),
-                )),
-            isVertical: true,
-            hasLeftButton: true,
-            hasRightButton: true,
-            onRightPressed: () {
-              Provider.of<OpcionesBard>(context, listen: false)
-                  .selectOptionMenu = 0;
-              Navigator.pop(context);
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  'tab_opciones', (Route<dynamic> route) => false);
-            },
-            onLeftPressed: () => Get.to(() => LogInPage()),
-            content: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Text(
-                  S.current.activate_user_for_buy,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                )),
-          ),
-        );
-      });
-}
+// void alertCustom(BuildContext context) {
+//   showDialog(
+//       context: context,
+//       barrierDismissible: false,
+//       builder: (context) {
+//         return WillPopScope(
+//           onWillPop: () => Future.value(false),
+//           child: CustomDialog(
+//             title: Container(
+//                 margin: EdgeInsets.only(top: 40),
+//                 child: Text(
+//                   S.current.activate_your_user,
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                       fontSize: 25,
+//                       color: ConstantesColores.azul_precio,
+//                       fontWeight: FontWeight.bold),
+//                 )),
+//             isVertical: true,
+//             hasLeftButton: true,
+//             hasRightButton: true,
+//             onRightPressed: () {
+//               Provider.of<OpcionesBard>(context, listen: false)
+//                   .selectOptionMenu = 0;
+//               Navigator.pop(context);
+//               Navigator.of(context).pushNamedAndRemoveUntil(
+//                   'tab_opciones', (Route<dynamic> route) => false);
+//             },
+//             onLeftPressed: () => Get.to(() => LogInPage()),
+//             content: Container(
+//                 padding: EdgeInsets.symmetric(horizontal: 40),
+//                 child: Text(
+//                   S.current.activate_user_for_buy,
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(color: Colors.grey),
+//                 )),
+//           ),
+//         );
+//       });
+// }
 
 void mostrarAlertCustomWidgetOld(
   BuildContext context,

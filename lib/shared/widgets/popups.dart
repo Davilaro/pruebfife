@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-
 Future<void> showPopup(
   BuildContext context,
   String mensaje,
@@ -302,8 +301,13 @@ void alertCustom(BuildContext context) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   'tab_opciones', (Route<dynamic> route) => false);
             },
-            onLeftPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LogInPage())),
+            onLeftPressed: () => {
+              Get.back(),
+              Provider.of<OpcionesBard>(context, listen: false)
+                  .selectOptionMenu = 0,
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => LogInPage()))
+            },
             content: Container(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(

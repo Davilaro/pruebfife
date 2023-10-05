@@ -22,6 +22,7 @@ import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -30,6 +31,7 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -133,7 +135,6 @@ class ValidationForms extends GetxController {
       }
       if (isClosePopup.value == true) {
         timer.cancel();
-        print("navegando a login");
         Get.off(() => navegation);
       }
       timeIteration++;
@@ -391,8 +392,8 @@ class ValidationForms extends GetxController {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
-              ? Get.off(() => TouchIdPage())
-              : Get.off(() => FaceIdPage());
+              ? Get.offAll(() => TouchIdPage())
+              : Get.offAll(() => FaceIdPage());
         } else {
           if (await login(context, prefs.codClienteLogueado, progress, false) ==
               true) {
@@ -512,18 +513,27 @@ class ValidationForms extends GetxController {
           if (timeIteration >= 5) {
             timer.cancel();
             Get.back();
-            Navigator.pushReplacementNamed(
-              context,
-              'listaSucursale',
-              arguments: ScreenArguments(respuesta, nit),
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => ListaSucursales(),
+                settings: RouteSettings(
+                  arguments: ScreenArguments(respuesta, nit),
+                ),
+              ),
+              (route) => false, // Elimina todas las rutas anteriores
             );
           }
           if (isClosePopup.value == true) {
             timer.cancel();
-            Navigator.pushReplacementNamed(
-              context,
-              'listaSucursale',
-              arguments: ScreenArguments(respuesta, nit),
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => ListaSucursales(),
+                settings: RouteSettings(
+                  arguments: ScreenArguments(respuesta, nit),
+                ),
+              ),
+              (route) => false, // Elimina todas las rutas anteriores
             );
           }
           timeIteration++;
@@ -645,22 +655,25 @@ class ValidationForms extends GetxController {
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     final opcionesAppBard = Provider.of<OpcionesBard>(context, listen: false);
-    pr = ProgressDialog(context, isDismissible: false);
-    pr.style(message: 'Cargando información');
-    pr = ProgressDialog(context,
-        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
-
-    await pr.show();
+    final progress = ProgressDialog(context, isDismissible: false);
+    progress.style(
+        message: S.current.logging_in,
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
+    await progress.show();
     await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
-    await pr.hide();
+    await progress.hide();
     listSucursales.clear();
     seleccionSucursal.value = "";
     opcionesAppBard.selectOptionMenu = 0;
-    Get.offAll(() => TabOpciones());
+    Get.offAll(() => Splash());
     // Navigator.of(context).pushNamedAndRemoveUntil(
     //     'tab_opciones', (Route<dynamic> route) => false);
   }

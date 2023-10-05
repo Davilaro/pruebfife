@@ -8,6 +8,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/mis_estadisticas.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/politicas_datos.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -42,6 +43,7 @@ class _MiNegocioState extends State<MiNegocio> {
   void initState() {
     if (prefs.usurioLogin == -1) {
       Future.delayed(Duration(seconds: 0)).then((value) {
+        print("negocio");
         alertCustom(context);
       });
     }
@@ -573,8 +575,8 @@ class _MiNegocioState extends State<MiNegocio> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: GestureDetector(
                                 onTap: () => viewModel.terminosDatosPdf != null
-                                    ? verTerminosCondiciones(
-                                        context, viewModel.terminosDatosPdf, false)
+                                    ? verTerminosCondiciones(context,
+                                        viewModel.terminosDatosPdf, false)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:

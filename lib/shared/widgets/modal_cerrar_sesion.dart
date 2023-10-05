@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:async';
 
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
@@ -11,6 +13,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,48 +64,14 @@ modalCerrarSesion(context, size, provider) {
     );
   }
 
-  Future cerrarBases() async {
+  Widget _botonAceptar(size, provider) {
     final controllerNotifications =
         Get.find<NotificationsSlideUpAndPushInUpControllers>();
-    var cargo = false;
-    var res = false;
-    var contador = 0;
-    do {
-      if (contador > 3) {
-        cargo = false;
-        break;
-      } else {
-        cargo = await AppUtil.appUtil
-            .downloadZip('1006120026', prefs.sucursal, true);
-        contador++;
-      }
-    } while (!cargo);
-
-    if (!cargo && contador > 3) {
-      mostrarAlert(context, 'Imposible conectar con la Base de datos', null);
-    } else {
-      res = await AppUtil.appUtil.abrirBases();
-      if (res && cargo) {
-        S.load(prefs.paisUsuario == 'CR'
-            ? Locale('es', prefs.paisUsuario)
-            : prefs.paisUsuario == 'CO'
-                ? Locale('es', 'CO')
-                : Locale('es', 'CO'));
-        controllerNotifications.validacionMostrarPushInUp.clear();
-        controllerNotifications.validacionMostrarSlideUp.clear();
-        Provider.of<OpcionesBard>(context, listen: false).selectOptionMenu = 0;
-        Get.offAll(() => TabOpciones());
-        //  RegisterPage());
-        //Login());
-      }
-    }
-  }
-
-  Widget _botonAceptar(size, provider) {
     return GestureDetector(
       onTap: () async => {
-        await _showLoaderDialog(context),
-        Future.delayed(Duration(milliseconds: 400)).then((value) async {
+        Get.back(),
+        _showLoaderDialog(context),
+        Future.delayed(Duration(milliseconds: 800)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.typeCollaborator = "";
           prefs.usurioLogin = -1;
@@ -110,8 +79,13 @@ modalCerrarSesion(context, size, provider) {
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
+          controllerNotifications.validacionMostrarPushInUp.clear();
+          controllerNotifications.validacionMostrarSlideUp.clear();
+          Provider.of<OpcionesBard>(context, listen: false).selectOptionMenu =
+              0;
           controllerSearchViewModel.listaRecientes.clear();
-          await cerrarBases();
+          Get.offAll(() => Splash());
+          //await cerrarBases();
         }),
       },
       child: Container(
