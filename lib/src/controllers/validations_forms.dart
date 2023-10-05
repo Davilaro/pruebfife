@@ -498,7 +498,6 @@ class ValidationForms extends GetxController {
 
   Future<dynamic> login(
       BuildContext context, String nit, progress, bool isLoginBiometric) async {
-    final providerOptions = Provider.of<OpcionesBard>(context, listen: false);
     try {
       List<dynamic> respuesta =
           await Servicies().getListaSucursales(isLoginBiometric);
@@ -693,7 +692,7 @@ class ValidationForms extends GetxController {
     listSucursales.clear();
     seleccionSucursal.value = "";
     opcionesAppBard.selectOptionMenu = 0;
-    Get.offAll(() => Splash());
+    Get.offAll(() => TabOpciones());
     // Navigator.of(context).pushNamedAndRemoveUntil(
     //     'tab_opciones', (Route<dynamic> route) => false);
   }

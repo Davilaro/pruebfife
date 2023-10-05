@@ -258,8 +258,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //opcionesAppBard.selectOptionMenu = 0;
 
     //Get.offAll(() => TabOpciones());
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('splash', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        'tab_opciones', (Route<dynamic> route) => false);
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
