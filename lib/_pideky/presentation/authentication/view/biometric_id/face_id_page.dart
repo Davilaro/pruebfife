@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -86,8 +88,8 @@ class _FaceIdPageState extends State<FaceIdPage> {
                   onPressed: () async {
                     prefs.isDataBiometricActive = false;
                     await progress.show();
-                    await validationForm.login(context,
-                        prefs.codigoUnicoPideky, progress, false);
+                    await validationForm.login(
+                        context, prefs.codigoUnicoPideky, progress, false);
                     //Get.back();
                   },
                   child: Text('Cancelar',
@@ -115,13 +117,33 @@ class _FaceIdPageState extends State<FaceIdPage> {
         await progress.show();
         await validationForm.login(
             context, prefs.ccupBiometric, progress, true);
-        await showPopup(context, 'Face ID activado',
-            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+        return;
       }
 
       print('Authenticated : $authenticated');
     } on PlatformException catch (e) {
+      int timeIteration = 0;
+      validationForm.isClosePopup.value = false;
+      validationForm.isClosePopup.value = false;
+      showPopupUnrecognizedfingerprint(
+          context,
+          "Rostro no reconocido",
+          Image(
+            image: AssetImage('assets/image/Image_face_ID.png'),
+            fit: BoxFit.contain,
+          ));
+      Timer.periodic(Duration(milliseconds: 500), (timer) {
+        if (timeIteration >= 5) {
+          timer.cancel();
+          Get.back();
+        }
+        if (validationForm.isClosePopup.value == true) {
+          timer.cancel();
+        }
+        timeIteration++;
+      });
       print(e);
+      return;
     }
   }
 

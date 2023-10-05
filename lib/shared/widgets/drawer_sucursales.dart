@@ -282,7 +282,6 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
         Get.find<NotificationsSlideUpAndPushInUpControllers>();
     notificationController.resetMaps();
     prefs.direccionSucursal = elemento.direccion;
-    prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
 
     PedidoEmart.listaControllersPedido = new Map();

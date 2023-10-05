@@ -30,7 +30,6 @@ class LoginApi implements ILogin {
           data["Actualizar"] != null &&
           data['CCUP'] != "Usuario y contraseña invalidos") {
         prefs.codigoUnicoPideky = data["CCUP"];
-        prefs.usurioLogin = 1;
         confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
         return toInt(data["Actualizar"]);
       } else {

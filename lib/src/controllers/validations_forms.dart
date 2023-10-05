@@ -13,6 +13,7 @@ import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
+import 'package:emart/_pideky/presentation/authentication/view/register/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/select_sucursal_as_collaborator.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
@@ -237,10 +238,11 @@ class ValidationForms extends GetxController {
           biometricOnly: true,
         ),
       );
-      if (authenticated) {
+      if (authenticated == true) {
         prefs.isDataBiometricActive = true;
         await progress.show();
         await login(context, prefs.ccupBiometric, progress, true);
+        return;
       }
     } on PlatformException catch (e) {
       final textoPopUp = plataforma == "Android"
@@ -270,6 +272,7 @@ class ValidationForms extends GetxController {
         timeIteration++;
       });
       print(e);
+      return;
     }
   }
 
@@ -402,12 +405,30 @@ class ValidationForms extends GetxController {
         }
       } else {
         await progress.hide();
-        await closePopUp(
-            CreatePasswordPage(
-              isChangePassword: false,
-            ),
-            context,
-            null);
+        int timeIteration = 0;
+        isClosePopup.value = false;
+        showPopup(context, 'Usuario correcto',
+            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+        Timer.periodic(Duration(milliseconds: 500), (timer) {
+          if (timeIteration >= 5) {
+            timer.cancel();
+            Get.back();
+            Get.offAll(
+              () => CreatePasswordPage(
+                isChangePassword: false,
+              ),
+            );
+          }
+          if (isClosePopup.value == true) {
+            timer.cancel();
+            Get.offAll(
+              () => CreatePasswordPage(
+                isChangePassword: false,
+              ),
+            );
+          }
+          timeIteration++;
+        });
 
         return true;
       }
@@ -508,12 +529,11 @@ class ValidationForms extends GetxController {
         isClosePopup.value = false;
         showPopup(context, 'Usuario correcto',
             SvgPicture.asset('assets/image/Icon_correcto.svg'));
-        providerOptions.selectOptionMenu = 0;
+        //providerOptions.selectOptionMenu = 0;
         Timer.periodic(Duration(milliseconds: 500), (timer) {
           if (timeIteration >= 5) {
             timer.cancel();
             Get.back();
-
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => ListaSucursales(),
