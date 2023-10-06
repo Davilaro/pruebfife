@@ -72,6 +72,12 @@ class CustomCardSucursales extends StatelessWidget {
                           style: desingSucursales(razonSocial,
                               _validationForm.seleccionSucursal.value),
                         ),
+
+                         Text(
+                          "Barrio: barrio",
+                          style: desingSucursales(razonSocial,
+                              _validationForm.seleccionSucursal.value),
+                        ),
                         Text(
                           "Ciudad: $ciudad",
                           style: desingSucursales(razonSocial,

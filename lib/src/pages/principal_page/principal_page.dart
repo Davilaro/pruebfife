@@ -72,6 +72,7 @@ class _PrincipalPageState extends State<PrincipalPage>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         validacionGeneralNotificaciones();
       });
+      showEncuestas();
     }
     controllerProducto.getAgotados();
     validarVersionActual(context);
@@ -142,6 +143,35 @@ class _PrincipalPageState extends State<PrincipalPage>
           () => showSlideUpNotification(
               context, controllerNotificaciones.listSlideUpHome.first, "Home"));
     }
+  }
+
+  Future<void> showEncuestas() async {
+    //  if (prefs.typeCollaborator != "2") {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return FutureBuilder(
+              initialData: [],
+              future: DBProvider.db.consultarEncuesta(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data.length == 0) {
+                  return Container();
+                } else {
+                  controllerEncuesta.isVisibleEncuesta.value = true;
+                  return Obx(() => Visibility(
+                        visible: controllerEncuesta.isVisibleEncuesta.value,
+                        child: Container(
+                            margin: EdgeInsets.only(
+                                left: 10, right: 10, top: 15, bottom: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: EncuestaForm(snapshot.data[0])),
+                      ));
+                }
+              });
+        });
+    // }
   }
 
   @override

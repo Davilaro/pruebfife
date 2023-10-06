@@ -165,7 +165,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                 'Total: ${productoViewModel.getCurrency(cartProvider.getTotal)}',
                 style: disenoValores()),
             Text(
-              '* Este pedido tiene incluido el iva',
+              '* Este pedido ya tiene incluido los impuestos',
               style: TextStyle(color: ConstantesColores.verde),
             ),
             cartProvider.getTotalAhorro - cartProvider.getTotal == 0

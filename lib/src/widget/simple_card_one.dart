@@ -1,4 +1,9 @@
+import 'package:emart/shared/widgets/terminos_condiciones.dart';
+import 'package:emart/shared/widgets/text_button_with_underline.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class SimpleCardOne extends StatefulWidget {
@@ -6,6 +11,8 @@ class SimpleCardOne extends StatefulWidget {
   final String referencia;
   SimpleCardOne({Key? key, required this.texto, required this.referencia})
       : super(key: key);
+
+  final controller = Get.put(StateControllerRadioButtons());
 
   @override
   _SimpleCardOneState createState() => _SimpleCardOneState();
@@ -15,6 +22,7 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(StateControllerRadioButtons());
     return Container(
       margin: EdgeInsets.only(bottom: 14),
       child: Column(
@@ -88,28 +96,29 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
                             },
                             children: [
                               TableRow(children: [
-                                Container(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.task_alt,
-                                    color: HexColor("#30C3A3"),
-                                    size: 30,
-                                  ),
-                                ),
-                                Container(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          widget.referencia,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ],
+                                Obx(() =>
+                                   Container(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Column(
+                                      children: [
+                                        formaPagoCheckboxRow(
+                                            text: 'Pago en efectivo',
+                                            value: controller.cashPayment.value,
+                                            onChanged: () {
+                                              controller.paymentTypeSelection();
+                                            },
+                                            onPressed: () {}),
+                                
+                                        formaPagoCheckboxRow(
+                                            text: 'Pago en linea',
+                                            value: controller.payOnLine.value,
+                                            onChanged: () {
+                                              controller.paymentTypeSelection();
+                                            },
+                                            onPressed: () {}),
+                                        
+                                      ],
+                                    ),
                                   ),
                                 )
                               ])
@@ -126,4 +135,40 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
       ),
     );
   }
+}
+
+ Widget formaPagoCheckboxRow({
+  required String text,
+  required bool value,
+  required VoidCallback onChanged,
+  required VoidCallback onPressed,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Transform.scale(
+        scale: 1.2,
+        child: Checkbox(
+          //visualDensity: VisualDensity(horizontal: -1, vertical: -4),
+          checkColor: Colors.white,
+          shape: CircleBorder(),
+          activeColor: ConstantesColores.empodio_verde,
+          value: value,
+          onChanged: (_) {
+            onChanged();
+          },
+        ),
+      ),
+      Container(
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ),
+    ],
+  );
 }

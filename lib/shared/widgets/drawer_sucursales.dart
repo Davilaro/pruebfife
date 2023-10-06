@@ -156,6 +156,11 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                             maxLines: 1,
                                           ),
                                           Text(
+                                            "Barrio: barrio",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          Text(
                                             "Ciudad ${sucursal.ciudad.toString()}",
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,

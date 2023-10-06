@@ -124,6 +124,9 @@ class StateControllerRadioButtons extends GetxController {
   RxBool acceptTerms = false.obs;
   RxBool authorizeDataTreatment = false.obs;
 
+  RxBool cashPayment = true.obs;
+  RxBool payOnLine = false.obs;
+
   bool get isButtonEnabled => acceptTerms.value && authorizeDataTreatment.value;
 
   void toggleAcceptTerms() {
@@ -132,5 +135,10 @@ class StateControllerRadioButtons extends GetxController {
 
   void toggleAuthorizeDataTreatment() {
     authorizeDataTreatment.value = !authorizeDataTreatment.value;
+  }
+
+  void paymentTypeSelection() {
+    cashPayment.value = !cashPayment.value;
+    payOnLine.value = !payOnLine.value;
   }
 }
