@@ -1,27 +1,22 @@
+import 'dart:async';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_categoria.dart';
-import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/filtro_proveedor.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/routes/custonNavigatorBar.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
-import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/dounser.dart';
-import 'package:emart/src/widget/filtro_precios.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:emart/src/widget/ofertas_internas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -40,6 +35,8 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final String? codigoCategoria;
   final String? locacionFiltro;
   final String codigoProveedor;
+  final String? descripcionCategoria;
+  final String? empresa;
 
   const CustomBuscardorFuzzy(
       {Key? key,
@@ -56,7 +53,9 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       this.codigoSubCategoria,
       this.codigoCategoria,
       required this.locacionFiltro,
-      required this.codigoProveedor})
+      required this.codigoProveedor,
+      this.descripcionCategoria,
+      this.empresa})
       : super(key: key);
 
   @override
@@ -70,10 +69,28 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
   List<dynamic> listaAllProducts = [];
   final TextEditingController _controllerSearch = TextEditingController();
   final controlador = Get.find<ControlBaseDatos>();
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
+  final prefs = Preferencias();
+  Timer _timer = Timer(Duration(milliseconds: 1), () {});
+
   @override
   void initState() {
+    if (prefs.usurioLogin == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _validacionGeneralNotificaciones();
+      });
+    }
     cargarProductos();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _controllerSearch.dispose();
+    Get.closeCurrentSnackbar();
+    super.dispose();
   }
 
   @override
@@ -81,9 +98,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     super.didUpdateWidget(super.widget);
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
-
-    final Debouncer onSearchDebouncer =
-        new Debouncer(delay: new Duration(milliseconds: 500));
 
     final size = MediaQuery.of(context).size;
     setState(() {
@@ -102,7 +116,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                           color: HexColor("#30C3A3")),
                       onPressed: () {
                         controlador.isDisponibleFiltro.value = true;
-                        Navigator.of(context).pop();
+                        Get.back();
                         catalogSearchViewModel.setPrecioMinimo(0);
                         catalogSearchViewModel.setPrecioMaximo(100000);
                       }),
@@ -139,32 +153,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   SizedBox(
                     height: 5,
                   ),
-                  Container(
-                      height: size.height * 0.1,
-                      width: size.width * 1,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: _buscador(context, onSearchDebouncer),
-                            ),
-                            Visibility(
-                              visible:
-                                  controlador.isDisponibleFiltro.value == true,
-                              child: GestureDetector(
-                                onTap: () => {_irFiltro()},
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(right: 30, bottom: 10),
-                                  child: GestureDetector(
-                                    child: SvgPicture.asset(
-                                        'assets/image/filtro_btn.svg'),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ])),
-                  //Banner
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: _buscadorPrincipal(context),
+                  ),
                   Visibility(
                     visible: widget.isActiveBanner,
                     child: Container(
@@ -178,7 +170,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                     height: Get.height * 0.8,
                     width: size.width * 1,
                     padding: EdgeInsets.fromLTRB(
-                        10, 10, 10, widget.isActiveBanner ? 240 : 110),
+                        10, 10, 10, widget.isActiveBanner ? 140 : 50),
                     child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4.0,
@@ -192,17 +184,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
               ),
             ),
           ),
-          bottomNavigationBar: Container(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: CustonNavigatorBar(),
-            ),
-          ),
         ));
   }
+
+  HexColor colorItems() => HexColor("#43398E");
 
   _cargarProductosLista(List<dynamic> data, BuildContext context) {
     final List<Widget> opciones = [];
@@ -222,51 +207,12 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     return opciones;
   }
 
-  _buscador(BuildContext context, Debouncer onSearchDebouncer) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(12, 0, 12, 10),
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      width: MediaQuery.of(context).size.width * 0.75,
-      decoration: BoxDecoration(
-        color: HexColor("#E4E3EC"),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-          controller: _controllerSearch,
-          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
-          decoration: InputDecoration(
-            fillColor: HexColor("#41398D"),
-            hintText: 'Encuentra tus productos',
-            hintStyle: TextStyle(
-              color: HexColor("#41398D"),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Icon(
-                Icons.search,
-                color: HexColor("#41398D"),
-              ),
-            ),
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
-          ),
-          onChanged: (val) => onSearchDebouncer.debounce(() {
-                if (val.length > 3) {
-                  //FIREBASE: Llamamos el evento search
-                  TagueoFirebase().sendAnalityticsSearch(val);
-                  //UXCam: Llamamos el evento search
-                  UxcamTagueo().search(val);
-                }
-                runFilter(_controllerSearch.text);
-              })),
-    );
-  }
-
   void cargarProductos() async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     if (widget.claseProducto != null) {
       if (widget.claseProducto == 1) {
+        print("tipo de producto 1");
         listaAllProducts = await productService.cargarProductosInterno(
             1,
             "",
@@ -278,6 +224,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 2) {
+        print("tipo de producto 2");
         listaAllProducts = await productService.cargarProductosInterno(
             2,
             "",
@@ -289,6 +236,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
+        print("tipo de producto 4");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca!,
             widget.tipoCategoria,
@@ -300,6 +248,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 3) {
+        print("tipo de producto 3");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoSubCategoria!,
             widget.tipoCategoria,
@@ -311,6 +260,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
+        print("tipo de producto 5");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoCategoria!,
             widget.tipoCategoria,
@@ -322,6 +272,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 6) {
+        print("tipo de producto 6");
         listaAllProducts =
             await productService.cargarProductosFiltroProveedores(
                 widget.codCategoria,
@@ -335,6 +286,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 7) {
+        print("tipo de producto 7");
         listaAllProducts = await productService.cargarProductos(
             widget.codigoMarca,
             7,
@@ -348,6 +300,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       }
       //para el filtro de categorias
       if (widget.claseProducto == 8) {
+        print("tipo de producto 8");
         listaAllProducts = await productService.cargarProductosFiltroCategoria(
             widget.codigoCategoria,
             widget.tipoCategoria,
@@ -358,6 +311,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         listaProducto.value = listaAllProducts;
       }
     } else {
+      print("tipo de producto otro");
       listaAllProducts = await productService.cargarProductos(
           widget.codCategoria!,
           widget.tipoCategoria,
@@ -370,70 +324,165 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     }
   }
 
-  void runFilter(String enteredKeyword) {
-    if (enteredKeyword.isEmpty) {
-      listaProducto.value = listaAllProducts;
-    } else {
-      List listaAux = [];
-      listaProducto.value = [];
-      listaAllProducts.forEach((element) {
-        if (element.codigo
-            .toLowerCase()
-            .contains(enteredKeyword.toLowerCase())) {
-          listaProducto.add(element);
+  _buscadorPrincipal(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+        color: HexColor("#E4E3EC"),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchFuzzyView()));
+        },
+        child: TextField(
+          enabled: false,
+          style: TextStyle(color: HexColor("#41398D"), fontSize: 13),
+          decoration: InputDecoration(
+            fillColor: HexColor("#41398D"),
+            hintText: 'Encuentra aquí todo lo que necesitas',
+            hintStyle: TextStyle(
+              color: HexColor("#41398D"),
+            ),
+            suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Icon(
+                  Icons.search,
+                  color: HexColor("#41398D"),
+                )),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.fromLTRB(10.0, 15, 10.0, 0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _validacionGeneralNotificaciones() async {
+    switch (widget.locacionFiltro) {
+      case 'categoria':
+        await controllerNotificaciones
+            .getPushInUpByDataBaseCategorias('Categoría');
+        await controllerNotificaciones
+            .getSlideUpByDataBaseCategorias("Categoría");
+
+        if (controllerNotificaciones.listPushInUpCategorias.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context) ==
+                true) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
+
+          int elapsedTime = 0;
+          if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(widget.locacionFiltro,
+                    widget.descripcionCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
+          }
+        } else if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
+          controllerNotificaciones.closeSlideUp.value = false;
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.descripcionCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.descripcionCategoria, context);
+          }
         }
-        listaAux.add(element.nombre);
-      });
-      final fuse = Fuzzy(listaAux);
-      final result = fuse.search(enteredKeyword);
-      result
-          .map((r) => listaProducto.add(listaAllProducts
-              .firstWhere((element) => element.nombre == r.item)))
-          .forEach(print);
-    }
-  }
+        break;
+      case 'marca':
+        await controllerNotificaciones.getPushInUpByDataBaseMarcas('Marcas');
+        await controllerNotificaciones.getSlideUpByDataBaseMarcas("Marcas");
+        if (controllerNotificaciones.listPushInUpMarcas.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context) ==
+                true) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
 
-  _irFiltro() async {
-    if (widget.locacionFiltro == "proveedor") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroProveedor(
-                  codCategoria: widget.codCategoria!,
-                  nombreCategoria: widget.nombreCategoria!,
-                  urlImagen: widget.img,
-                  codigoProveedor: widget.codigoProveedor,
-                )),
-      );
-    }
-    if (widget.locacionFiltro == "marca") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroPrecios(
-                  codMarca: widget.codigoMarca,
-                  nombreMarca: widget.nombreCategoria,
-                  urlImagen: widget.img,
-                )),
-      );
-    }
-    if (widget.locacionFiltro == "categoria") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => FiltroCategoria(
-                  codCategoria: widget.codCategoria,
-                  nombreCategoria: widget.nombreCategoria,
-                  urlImagen: widget.img,
-                  codSubCategoria: widget.codCategoria,
-                )),
-      );
-    }
-  }
+          if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+            int elapsedTime = 0;
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
+          }
+        } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
+          print("entre marca");
+          controllerNotificaciones.closeSlideUp.value = false;
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.nombreCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+          }
+        }
+        break;
+      case 'proveedor':
+        await controllerNotificaciones
+            .getPushInUpByDataBaseProveedores('Proveedor');
+        await controllerNotificaciones
+            .getSlideUpByDataBaseProveedores("Proveedor");
+        if (controllerNotificaciones.listPushInUpProveedores.isNotEmpty &&
+            await controllerNotificaciones.showPushInUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context) ==
+                true) {
+          controllerNotificaciones.closePushInUp.value = false;
+          controllerNotificaciones.onTapPushInUp.value = false;
 
-  @override
-  void dispose() {
-    _controllerSearch.dispose();
-    super.dispose();
+          if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+            int elapsedTime = 0;
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+              if (elapsedTime >= 530) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.closePushInUp.value == true) {
+                controllerNotificaciones.showSlideUp(
+                    widget.locacionFiltro, widget.nombreCategoria, context);
+                timer.cancel();
+              } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+                timer.cancel();
+              }
+              elapsedTime++;
+            });
+          }
+        } else if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
+          controllerNotificaciones.closeSlideUp.value = false;
+          if (controllerNotificaciones
+                      .validacionMostrarSlideUp[widget.nombreCategoria] ==
+                  true &&
+              controllerNotificaciones.closeSlideUp.value == false) {
+            controllerNotificaciones.closeSlideUp.value = false;
+            controllerNotificaciones.showSlideUp(
+                widget.locacionFiltro, widget.nombreCategoria, context);
+          }
+        }
+        break;
+      default:
+    }
   }
 }

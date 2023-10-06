@@ -10,13 +10,19 @@ class DropDownFiltroProveedores extends StatefulWidget {
   final String? hin;
   final Function(String?)? onChange;
   final String? value;
+  final Color? color;
+  final Color? textcolor;
+
   DropDownFiltroProveedores(
       {Key? key,
       required this.titulo,
       required this.listaItems,
       required this.hin,
       required this.onChange,
-      required this.value})
+      required this.value,
+      this.color,
+      this.textcolor
+      })
       : super(key: key);
 
   @override
@@ -37,14 +43,14 @@ class _DropDownFiltroProveedoresState extends State<DropDownFiltroProveedores> {
           ),
           DropdownButton2(
             buttonWidth: 200,
-            iconDisabledColor: Colors.white,
-            iconEnabledColor: Colors.white,
+            iconDisabledColor: widget.textcolor ?? Colors.white,
+            iconEnabledColor: widget.textcolor ?? Colors.white,
             hint: Text(
               '    ${widget.hin}',
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: widget.textcolor ?? Colors.white, fontWeight: FontWeight.bold),
             ),
             buttonPadding: const EdgeInsets.only(left: 14, right: 14),
             isExpanded: true,
@@ -57,13 +63,13 @@ class _DropDownFiltroProveedoresState extends State<DropDownFiltroProveedores> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                            color: widget.textcolor ?? Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ))
                 .toList(),
             value: widget.value,
             buttonDecoration: BoxDecoration(
-                color: ConstantesColores.azul_precio,
+                color: widget.color ?? ConstantesColores.azul_precio,
                 borderRadius: BorderRadius.circular(30)),
             dropdownDecoration: BoxDecoration(
                 color: ConstantesColores.agua_marina,

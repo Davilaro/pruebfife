@@ -73,7 +73,7 @@ class MiNegocioViewModel extends GetxController {
     }
   }
 
-  cargarArchivos(Preferencias prefs) async {
+  Future<void>cargarArchivos(Preferencias prefs) async {
     try {
       if (prefs.usurioLogin == 1) {
         politicasDatosPdf = await Servicies().cargarArchivo(

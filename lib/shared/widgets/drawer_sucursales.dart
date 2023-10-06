@@ -1,7 +1,9 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -39,8 +41,8 @@ class DrawerSucursales extends StatefulWidget {
 
 class _DrawerSucursalesState extends State<DrawerSucursales> {
   late Object? valueRadio;
-  late OpcionesBard? opcionesAppBard;
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final seachrFuzzyVM = Get.find<SearchFuzzyViewModel>();
 
   @override
   void initState() {
@@ -54,7 +56,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   Widget build(BuildContext context) {
     final provider = Provider.of<DatosListas>(context);
     final cartProvider = Provider.of<CarroModelo>(context);
-    opcionesAppBard = Provider.of<OpcionesBard>(context);
+
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -108,7 +110,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
               ],
             ),
             FutureBuilder(
-              future: Servicies().getListaSucursales(prefs.codClienteLogueado),
+              future: Servicies().getListaSucursales(false),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 List listaSucursales = snapshot.data;
                 if (snapshot.hasData) {
@@ -173,6 +175,10 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                       });
                                       mostrarCategorias(context, sucursal,
                                           provider, cartProvider);
+                                      seachrFuzzyVM.listaRecientes.clear();
+                                      seachrFuzzyVM.controllerUser.text = '';
+                                      seachrFuzzyVM.allResultados.clear();
+                                      seachrFuzzyVM.searchInput.value = '';
                                     },
                                   )
                                 ],
@@ -236,7 +242,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     final providerCar = Provider.of<OpcionesBard>(context, listen: false);
     final productViewModel = Get.find<ProductoViewModel>();
     final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
-    pr = ProgressDialog(context);
+
+    pr = ProgressDialog(context, isDismissible: false);
     pr.style(
         message: 'Cambiando sucursal',
         progressWidget: Image(
@@ -262,16 +269,20 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     //Navigator.pushReplacementNamed(context, 'tab_opciones');
     setState(() {});
     confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
+
+    //Get.off(() => TabOpciones());
+    providerCar.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
-    mostrarAlert(context, S.current.text_change_of_branch,
-        SvgPicture.asset('assets/image/check_producto_agregado.svg'));
+    // Navigator.of(context).pushNamedAndRemoveUntil(
+    //     'tab_opciones', (Route<dynamic> route) => false);
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final notificationController =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    notificationController.resetMaps();
     prefs.direccionSucursal = elemento.direccion;
-    prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();
@@ -279,7 +290,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     PedidoEmart.listaValoresPedidoAgregados = new Map();
 
     await AppUtil.appUtil
-        .downloadZip(prefs.usurioLoginCedula!, elemento.sucursal, false);
+        .downloadZip(prefs.codigoUnicoPideky!, elemento.sucursal, false);
     await AppUtil.appUtil.abrirBases();
   }
 
@@ -302,6 +313,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
     prefs.paisUsuario = datosCliente[0].pais;
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
+    prefs.codClienteLogueado = datosCliente[0].nit;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)

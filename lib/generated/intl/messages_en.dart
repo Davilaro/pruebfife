@@ -121,7 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "my_account": MessageLookupByLibrary.simpleMessage("My account"),
         "my_business": MessageLookupByLibrary.simpleMessage("My Business"),
         "my_nequi_payments":
-            MessageLookupByLibrary.simpleMessage("My Nequi Payments"),
+            MessageLookupByLibrary.simpleMessage("My Payments"),
         "my_orders": MessageLookupByLibrary.simpleMessage("My orders"),
         "my_statistics": MessageLookupByLibrary.simpleMessage("My Statistics"),
         "my_suppliers": MessageLookupByLibrary.simpleMessage("My suppliers"),

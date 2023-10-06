@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -13,7 +14,7 @@ import 'package:emart/src/widget/dounser.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:fuzzy/fuzzy.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -99,41 +100,54 @@ class _FabricantesState extends State<Fabricantes> {
 
     for (var element in result) {
       final widgetTemp = GestureDetector(
-        onTap: () => {
-          //FIREBASE: Llamamos el evento select_content
-          TagueoFirebase().sendAnalityticSelectContent(
-              "Proveedores",
-              element.nombrecomercial,
-              element.nombrecomercial,
-              "",
-              "-1",
-              'ViewProviders'),
-          //UXCam: Llamamos el evento seeProvider
-          UxcamTagueo().seeProvider(element.nombrecomercial),
-          _onClickCatalogo(element.empresa, context, provider,
-              element.nombrecomercial, element.icono),
-        },
-        child: Column(
+        onTap: element.bloqueoCartera == 1
+            ? () => mostrarAlertCartera(
+                  context,
+                  "Estos productos no se encuentran disponibles. Revisa el estado de tu cartera para poder comprar.",
+                  null,
+                )
+            : () => {
+                  //FIREBASE: Llamamos el evento select_content
+                  TagueoFirebase().sendAnalityticSelectContent(
+                      "Proveedores",
+                      element.nombrecomercial,
+                      element.nombrecomercial,
+                      "",
+                      "-1",
+                      'ViewProviders'),
+                  //UXCam: Llamamos el evento seeProvider
+                  UxcamTagueo().seeProvider(element.nombrecomercial),
+                  _onClickCatalogo(element.empresa, context, provider,
+                      element.nombrecomercial, element.icono),
+                },
+        child: Stack(
           children: [
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0)),
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    alignment: Alignment.center,
-                    child: CachedNetworkImage(
-                        imageUrl: '${element.icono}',
-                        placeholder: (context, url) =>
-                            Image.asset('assets/image/jar-loading.gif'),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/image/logo_login.png'),
-                        fit: BoxFit.fill),
-                  ),
-                ],
+              child: Container(
+                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                alignment: Alignment.center,
+                child: CachedNetworkImage(
+                    imageUrl: '${element.icono}',
+                    placeholder: (context, url) =>
+                        Image.asset('assets/image/jar-loading.gif'),
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/image/logo_login.png'),
+                    fit: BoxFit.fill),
               ),
             ),
+            Visibility(
+                visible: element.bloqueoCartera == 1 ? true : false,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  height: Get.height,
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ))
           ],
         ),
       );
@@ -144,6 +158,10 @@ class _FabricantesState extends State<Fabricantes> {
 
   _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
       String nombre, String icono) async {
+    final controllerNotificaciones =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    controllerNotificaciones.llenarMapSlideUp(nombre);
+    controllerNotificaciones.llenarMapPushInUp(nombre);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -192,8 +210,9 @@ class _FabricantesState extends State<Fabricantes> {
   }
 
   void cargarLista() async {
-    listaAllFabricantes =
-        await DBProvider.db.consultarFricante(controllerSearch.text);
+    listaAllFabricantes = prefs.usurioLogin != -1
+        ? await DBProvider.db.consultarFabricanteBloqueo()
+        : await DBProvider.db.consultarFricante(controllerSearch.text);
     listaFabricante.value = listaAllFabricantes;
   }
 
@@ -210,12 +229,18 @@ class _FabricantesState extends State<Fabricantes> {
         listaAllFabricantes.forEach((element) {
           listaAux.add(element.nombrecomercial);
         });
-        final fuse = Fuzzy(listaAux);
-        final result = fuse.search(controllerSearch.text);
+
+        final result = extractTop(
+          limit: 10,
+          query: controllerSearch.text,
+          choices:
+              listaAllFabricantes.map((element) => element.nombre).toList(),
+          cutoff: 10,
+        );
         listaFabricante.value = [];
         result
             .map((r) => listaFabricante.add(listaAllFabricantes
-                .firstWhere((element) => element.nombrecomercial == r.item)))
+                .firstWhere((element) => element.nombrecomercial == r.choice)))
             .forEach(print);
       }
     }

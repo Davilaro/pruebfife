@@ -16,7 +16,8 @@ class CustomButton extends StatelessWidget {
       this.blockDoubleClick = true,
       this.borderRadio = 40,
       this.padding,
-      this.rightIcon})
+      this.rightIcon,
+      this.isFontBold = false})
       : super(key: key);
 
   final VoidCallback onPressed;
@@ -31,6 +32,7 @@ class CustomButton extends StatelessWidget {
   final EdgeInsets? padding;
   final AssetImage? leftIcon;
   final AssetImage? rightIcon;
+  final bool isFontBold;
 
   final RxBool absorbPointer = false.obs;
 
@@ -58,7 +60,7 @@ class CustomButton extends StatelessWidget {
                 if (leftIcon != null || rightIcon != null) const Spacer(),
                 AutoSizeText(
                   text,
-                  style: TextStyle(color: colorContent, fontSize: sizeText),
+                  style: TextStyle(color: colorContent, fontSize: sizeText, fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal),
                 ),
                 if (leftIcon != null || rightIcon != null) const Spacer(),
                 if (rightIcon != null)

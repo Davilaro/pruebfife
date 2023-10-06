@@ -21,6 +21,7 @@ Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   InitialBindings();
+  
   final prefs = new Preferencias();
   await prefs.initPrefs();
   final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
@@ -30,7 +31,7 @@ Future<void> main() async {
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
-
+  print("data biometrica ${prefs.isDataBiometricActive}");
   runApp(MyApp());
 }
 
@@ -46,11 +47,12 @@ Future<void> main() async {
 // }
 
 class MyApp extends StatefulWidget {
-  @override
   _MyAppState createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
+  
   MaterialColor white = const MaterialColor(
     0xFFEEEEEE,
     const <int, Color>{
@@ -69,8 +71,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

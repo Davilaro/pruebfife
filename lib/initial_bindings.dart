@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/club_ganadores/view_mdel/club_ganadores_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
@@ -8,6 +9,9 @@ import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sug
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_multimedia.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:get/get.dart';
 
@@ -25,5 +29,9 @@ class InitialBindings extends Bindings {
     ProductoViewModel.findOrInitialize;
     RepetirOrdenViewModel.findOrInitialize;
     ClubGanadoresViewModel.findOrInitialize;
+    NotificationsSlideUpAndPushInUpControllers.findOrInitialize;
+    ValidationForms.findOrInitialize;
+    BotonesProveedoresVm.findOrInitialize;
+    SearchFuzzyViewModel.findOrInitialize;
   }
 }

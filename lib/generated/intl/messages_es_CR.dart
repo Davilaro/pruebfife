@@ -120,8 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "master_code": MessageLookupByLibrary.simpleMessage("Código maestro"),
         "my_account": MessageLookupByLibrary.simpleMessage("Mi cuenta"),
         "my_business": MessageLookupByLibrary.simpleMessage("Mi Negocio"),
-        "my_nequi_payments":
-            MessageLookupByLibrary.simpleMessage("Mis Pagos Nequi"),
+        "my_nequi_payments": MessageLookupByLibrary.simpleMessage("Mis Pagos"),
         "my_orders": MessageLookupByLibrary.simpleMessage("Mis pedidos"),
         "my_statistics":
             MessageLookupByLibrary.simpleMessage("Mis estadísticas"),

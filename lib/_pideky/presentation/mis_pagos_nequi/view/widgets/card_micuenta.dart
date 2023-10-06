@@ -32,7 +32,7 @@ class CardMicuenta extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "#Nequi donde te consignan tus Pagos",
+                "#Cuenta donde te consignan tus Pagos",
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: ConstantesColores.gris_oscuro),

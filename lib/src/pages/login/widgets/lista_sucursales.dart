@@ -1,7 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -41,15 +44,13 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   final cargoControllerBase = Get.put(ControlBaseDatos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
 
-  late OpcionesBard? opcionesAppBard;
-
   @override
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('ListBranchesPage');
+
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
-    opcionesAppBard = Provider.of<OpcionesBard>(context);
 
     usuariLogin = args.usuario;
 
@@ -237,10 +238,14 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     //     : elemento.pais == 'CO'
     //         ? Locale('es', 'CO')
     //         : Locale('es', 'CO'));
-    pr = ProgressDialog(context);
-    pr.style(message: 'Cargando información');
-    pr = ProgressDialog(context,
-        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
+    pr = ProgressDialog(context, isDismissible: false);
+    pr.style(
+        message: S.current.logging_in,
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
 
     await pr.show();
     await cargarInformacion(provider, elemento);
@@ -250,23 +255,29 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     }
     await pr.hide();
 
-    setState(() {});
-    Navigator.pushReplacementNamed(context, 'tab_opciones');
+    //opcionesAppBard.selectOptionMenu = 0;
+
+    //Get.offAll(() => TabOpciones());
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        'tab_opciones', (Route<dynamic> route) => false);
   }
 
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
+    final notificationController =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
     final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
     final controllerNequi = Get.find<MisPagosNequiViewModel>();
+    notificationController.resetMaps();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = usuariLogin;
-    opcionesAppBard!.selectOptionMenu = 0;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();
     PedidoEmart.listaProductos = new Map();
     PedidoEmart.listaValoresPedidoAgregados = new Map();
 
-    await AppUtil.appUtil.downloadZip(usuariLogin!, elemento.sucursal, false);
+    await AppUtil.appUtil
+        .downloadZip(prefs.codigoUnicoPideky!, elemento.sucursal, false);
     // var cargo = await AppUtil.appUtil.downloadZip(
     //     usuariLogin!,
     //     prefs.codCliente,
@@ -296,6 +307,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     prefs.sucursal = sucursal;
     prefs.ciudad = datosCliente[0].ciudad;
     prefs.direccionSucursal = datosCliente[0].direccion;
+    prefs.codClienteLogueado = datosCliente[0].nit;
 
     S.load(datosCliente[0].pais == 'CR'
         ? Locale('es', datosCliente[0].pais)

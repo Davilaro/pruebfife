@@ -1,10 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/modelos/marcaFiltro.dart';
-import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/modelos/respuesta.dart';
 import 'package:emart/src/modelos/seccion.dart';
@@ -69,7 +70,8 @@ class DBProvider {
   Future<dynamic> consultarExistenciaModulo(codigoCliente, codigoModulo) async {
     final db = await baseAbierta;
     try {
-      final res1 = await db.rawQuery('''
+      final res1 = await db.rawQuery(
+          '''
         SELECT codModulo FROM ModuloRespuestas WHERE codModulo=$codigoModulo and codCliente='$codigoCliente'
     ''');
       return res1.isEmpty ? false : true;
@@ -79,46 +81,14 @@ class DBProvider {
     }
   }
 
-  Future<dynamic> consultarMarcas(String buscar) async {
-    final db = await baseAbierta;
-
-    try {
-      var sql = await db.rawQuery('''
-      
-      SELECT m.codigo, m.descripcion, m.ico  
-      FROM Marca m
-      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
-      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '%$buscar%'
-      GROUP BY p.marcacodigopideki 
-      ORDER BY m.orden ASC 
-       
-    ''');
-      if (sql.length > 1) {
-        sql = await db.rawQuery('''
-      
-      SELECT m.codigo, m.descripcion, m.ico  
-      FROM Marca m
-      INNER JOIN Producto p ON m.codigo = p.marcacodigopideki
-      WHERE m.codigo LIKE '%$buscar%' OR m.descripcion LIKE '$buscar'
-      GROUP BY p.marcacodigopideki 
-      ORDER BY m.orden ASC 
-       
-    ''');
-      }
-
-      return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
   Future<dynamic> consultarCategorias(String buscar, int limit) async {
     final db = await baseAbierta;
 
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
-      var query = ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
+      var query =
+          ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
             FROM Categoria c 
             INNER JOIN Producto p ON c.codigo = p.categoriacodigopideki 
             WHERE c.codigo LIKE '%$buscar%'  OR c.descripcion LIKE '%$buscar%'
@@ -146,8 +116,8 @@ class DBProvider {
 
     try {
       final isLimit = limit != 0 ? "LIMIT $limit" : "";
-
-      final sql = await db.rawQuery('''
+      var query =
+          '''
       
       SELECT c.codigo, c.descripcion, c.ico2 as ico
       FROM CategoriaDestacada c
@@ -156,7 +126,8 @@ class DBProvider {
       GROUP BY p.categoriacodigopideki
       ORDER BY c.orden ASC $isLimit 
       
-    ''');
+    ''';
+      final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
@@ -170,7 +141,8 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-      var query = '''
+      var query =
+          '''
 SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden 
       FROM SubCategoria s 
       INNER JOIN Producto p ON s.codigo = p.subcategoriacodigopideki 
@@ -183,8 +155,8 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
       WHERE s.cod_categoria = '$buscar' 
       GROUP BY p.subcategoriaId2 ORDER by s.orden ASC
 ''';
-      final sql = await db.rawQuery(query);
 
+      final sql = await db.rawQuery(query);
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
           : [];
@@ -200,7 +172,8 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     try {
       var condicion = buscador != '' ? ' and s.descripcion = "$buscador" ' : '';
 
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       
       SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante
       FROM SubCategoria s 
@@ -223,9 +196,10 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     final db = await baseAbierta;
 
     try {
-      var query = '''
+      var query =
+          '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
-      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, 
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.Codigo as codigo,
 		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
       FROM Fabricante f
 	    WHERE f.empresa LIKE '%$buscar%' OR f.nombrecomercial LIKE '%$buscar%'
@@ -237,7 +211,32 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarFabricanteBloqueo() async {
+    final db = await baseAbierta;
+
+    try {
+      var query =
+          '''
+      SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
+      WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera, f.VisualizacionPopUp as verPopUp, f.Codigo as codigo,
+		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
+      FROM Fabricante f
+      GROUP BY f.empresa
+      ORDER BY f.orden ASC 
+
+    ''';
+
+      final sql = await db.rawQuery(query);
+
+      return sql.isNotEmpty
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -248,13 +247,14 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
 	    SELECT empresa, ico, tipofabricante, Estado, nombrecomercial, NitCliente, RazonSocial 
       FROM ProveedoresActivos ORDER by Estado ASC
     ''');
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -265,7 +265,8 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT fa.empresa, fa.nombrecomercial, la.descripcion, la.Indicativo, la.telefonovendedor,
 la.nombrevendedor, la.codigovendedor, fa.ico FROM fabricante as fa
 JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
@@ -283,7 +284,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     try {
-      var query = '''
+      var query =
+          '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as topeMinimo,  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega 
@@ -302,7 +304,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
-          ? sql.map((e) => Fabricantes.fromJson(e)).toList()
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
           : [];
     } catch (e) {
       return [];
@@ -312,7 +314,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<List<dynamic>> cargarBannersSql(String? tipo) async {
     final db = await baseAbierta;
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT b.fabricante_x as fabricante, f.empresa as empresa, f.nombrecomercial as nombrecomercial, 
       f.tipofabricante as tipofabricante, b.Link as Ico, b.Id, b.nombrefoto_x as nombrebanner, 
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
@@ -330,7 +333,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
        SELECT version version
        FROM version WHERE tipo = "$tipo" 
     ''');
@@ -349,7 +353,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
        SELECT obligatorio obligatorio
        FROM version
     ''');
@@ -369,7 +374,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     try {
       List<Respuesta> lista = [];
 
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT codigosku as respuesta FROM Agotados
     ''');
 
@@ -385,7 +391,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     try {
       List<Seccion> lista = [];
 
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT id, descripcion, orden_componente as orden FROM Secciones ORDER by orden_componente ASC
     ''');
 
@@ -396,12 +403,13 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<List<dynamic>> consultarEncuesta() async {
+  Future<List<Encuesta>> consultarEncuesta() async {
     try {
       final db = await baseAbierta;
       List<Encuesta> lista = [];
 
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
         SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta,
         par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre
         INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id
@@ -428,7 +436,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
        SELECT link, orientacion
        FROM Multimedia first_value 
     ''');
@@ -444,7 +453,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<String> consultarSucursal() async {
     final db = await baseAbierta;
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
        SELECT razonsocial 
        FROM Sucursales limit 1 
     ''');
@@ -462,7 +472,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<void> editarTelefonoWhatsapp(String telefono) async {
     final db = await baseAbierta;
     try {
-      await db.rawUpdate(''' 
+      await db.rawUpdate(
+          ''' 
           UPDATE Sucursales SET telefonowhatsapp = "$telefono" 
           ''');
     } catch (e) {
@@ -473,7 +484,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<String?> consultarCodigoMarcaPorNombre(String? nombre) async {
     final db = await baseAbierta;
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
          SELECT codigo FROM Marca where descripcion = '$nombre'
     ''');
 
@@ -490,7 +502,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<String?> consultarCodigoSubCategoriaPorNombre(String? nombre) async {
     final db = await baseAbierta;
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
            SELECT codigo FROM subCategoria where descripcion='$nombre'
     ''');
 
@@ -507,7 +520,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<String?> consultarCodigoCategoriaaPorNombre(String? nombre) async {
     final db = await baseAbierta;
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
           SELECT codigo FROM Categoria where descripcion='$nombre'
     ''');
 
@@ -521,32 +535,111 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<dynamic> consultarMarcasPorFabricante(String fabricante) async {
+  Future<dynamic> consultarMarcasPorFabricante(
+      String fabricante, String fabricante2) async {
     final db = await baseAbierta;
 
+    String where = fabricante != ''
+        ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")'
+        : '';
+
     try {
-      final sql = await db.rawQuery('''
+      final query =
+          '''
          select * from marca where 
          codigo in 
-         (select marcacodigopideki from producto where fabricante = '$fabricante')
-    ''');
+         (select marcacodigopideki from producto $where)
+    ''';
+      final sql = await db.rawQuery(query);
 
-      return sql.isNotEmpty ? sql.map((e) => Marcas.fromJson(e)).toList() : [];
+      return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
     } catch (e) {
       return [];
     }
   }
 
-  Future<dynamic> consultarCategoriasPorFabricante(String fabricante) async {
+  Future<dynamic> consultarMarcasPorFabricanteCatalogo(List empresas) async {
     final db = await baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      if (empresas.isNotEmpty) {
+        final placeholders =
+            List.generate(empresas.length, (index) => '?').join(', ');
+        final query =
+            '''
+         SELECT * FROM marca WHERE fabricante IN ($placeholders)
+    ''';
+        final sql = await db.rawQuery(query, empresas);
+
+        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+      } else {
+        final query = '''
+         SELECT * FROM marca 
+    ''';
+        final sql = await db.rawQuery(query);
+
+        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+      }
+    } catch (e) {
+      print("error traer marcas $e");
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarCategoriasPorFabricanteCatalogo(
+      List empresas) async {
+    final db = await baseAbierta;
+    print("empresas $empresas");
+
+    try {
+      if (empresas.isNotEmpty) {
+        final placeholders =
+            List.generate(empresas.length, (index) => '?').join(', ');
+        final query =
+            '''
+         select codigo, descripcion,ico2 as ico,orden from categoria WHERE fabricante IN ($placeholders)
+    ''';
+        // log(query);
+        final sql = await db.rawQuery(query, empresas);
+
+        return sql.isNotEmpty
+            ? sql.map((e) => Categorias.fromJson(e)).toList()
+            : [];
+      } else {
+        final query =
+            '''
+         select codigo, descripcion,ico2 as ico, fabricante ,orden FROM categoria 
+    ''';
+        //log(query);
+        final sql = await db.rawQuery(query);
+
+        return sql.isNotEmpty
+            ? sql.map((e) => Categorias.fromJson(e)).toList()
+            : [];
+      }
+    } catch (e) {
+      print("error traer categoria $e");
+      return [];
+    }
+  }
+
+  Future<dynamic> consultarCategoriasPorFabricante(
+      String fabricante, String fabricante2) async {
+    final db = await baseAbierta;
+
+    String where = fabricante != ''
+        ? 'WHERE fabricante IN ("$fabricante", "$fabricante2")'
+        : '';
+    var query =
+        '''
       
-      select codigo, descripcion from categoria WHERE CODIGO 
-      IN (select categoriacodigopideki from producto where fabricante = '$fabricante')
+      select codigo, descripcion,ico2 as ico,orden from categoria WHERE CODIGO 
+      IN (select categoriacodigopideki from producto $where)
       
-    ''');
+    ''';
+
+    try {
+      final sql = await db.rawQuery(query);
 
       return sql.isNotEmpty
           ? sql.map((e) => Categorias.fromJson(e)).toList()
@@ -559,7 +652,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<String?> consultarProductoEnOfertaPorCodigo(String? codigo) async {
     final db = await baseAbierta;
     try {
-      List<Map> list = await db.rawQuery('''
+      List<Map> list = await db.rawQuery(
+          '''
          SELECT codigo FROM Ofertas where codigo='$codigo'
     ''');
 
@@ -585,20 +679,23 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     try {
       dynamic sql;
       if (tipo == 1) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
    select distinct marcapideki  as nombreMarca   
    from Producto where categoriacodigopideki=$codigoCategoria or categoriaId2 = $codigoCategoria
       
     ''');
       } else if (tipo == 2) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
    select distinct marcapideki  as nombreMarca  from Producto where categoriacodigopideki=$codigoCategoria 
    or categoriaId2 = $codigoCategoria and subcategoriacodigopideki=$codigoSubcateegoria or subcategoriaId2=$codigoSubcateegoria
       
     ''');
       }
       if (tipo == 3) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
    select distinct marcapideki  as nombreMarca  from Producto where subcategoriacodigopideki=$codigoSubcateegoria or subcategoriaId2=$codigoSubcateegoria
       
     ''');
@@ -615,7 +712,8 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     final db = await baseAbierta;
 
     try {
-      var sql = await db.rawQuery('''
+      var sql = await db.rawQuery(
+          '''
       
         SELECT URL FROM DocumentosLegales WHERE TipoDocumento LIKE '%$buscar%'
        

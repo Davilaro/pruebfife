@@ -6,6 +6,7 @@ import 'package:device_info/device_info.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -234,11 +235,11 @@ class _LoginState extends State<Login> {
 
   Future loguin(BuildContext context, String nit) async {
     try {
-      List<dynamic> respuesta = await Servicies().getListaSucursales(nit);
+      List<dynamic> respuesta = await Servicies().getListaSucursales(false);
       respuesta.forEach((element) {
         if (element.bloqueado == "1") {
           Navigator.pushReplacementNamed(context, "inicio_compra");
-          return mostrarAlertCustomWidget(
+          return mostrarAlertCustomWidgetOld(
               context, cargarLinkWhatssap(context), null);
         }
       });
@@ -257,7 +258,7 @@ class _LoginState extends State<Login> {
         );
       } else {
         await pr.hide();
-        mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
+        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
         return false;
       }
     } catch (e) {
@@ -314,14 +315,14 @@ class _LoginState extends State<Login> {
 
     if (respues.codigo == null) {
       await prValidar.hide();
-      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
     } else if (respues.codigo == -1) {
       await prValidar.hide();
-      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
 
-      mostrarAlertCustomWidget(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
     } else if (respues.codigo == 0) {
       //message: No se pudo generar el código
       mostrarAlert(context, S.current.code_could_not_be_generated, null);
@@ -381,9 +382,4 @@ Future<void> lanzarWhatssap(context) async {
   }
 }
 
-class ScreenArguments {
-  final List<dynamic> listaEmpresas;
-  final String usuario;
 
-  ScreenArguments(this.listaEmpresas, this.usuario);
-}

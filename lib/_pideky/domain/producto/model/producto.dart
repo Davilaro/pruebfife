@@ -32,6 +32,7 @@ class Producto {
       this.activoprodnuevo,
       this.activopromocion,
       this.fechafinnuevo_1,
+      required this.bloqueoCartera,
       this.fechafinpromocion_1});
 
   String codigo;
@@ -41,6 +42,7 @@ class Producto {
   // String linea;
   String marca;
   String categoria;
+  int bloqueoCartera;
   // String ean;
   // String peso;
   // int longitud;
@@ -92,6 +94,8 @@ class Producto {
         activopromocion: json["activopromocion"],
         fechafinnuevo_1: json["fechafinnuevo_1"],
         fechafinpromocion_1: json["fechafinpromocion_1"],
+        bloqueoCartera:
+            json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       );
 
   factory Producto.fromJson2(Map<dynamic, dynamic> json) => Producto(
@@ -133,6 +137,8 @@ class Producto {
         fechafinpromocion_1: json["fechafinpromocion_1"] == null
             ? ''
             : json["fechafinpromocion_1"],
+        bloqueoCartera:
+            json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -162,6 +168,7 @@ class Producto {
         "activopromocion": activopromocion,
         "activoprodnuevo": activoprodnuevo,
         "fechafinnuevo_1": fechafinnuevo_1,
-        "fechafinpromocion_1": fechafinpromocion_1
+        "fechafinpromocion_1": fechafinpromocion_1,
+        'bloqueoCartera': bloqueoCartera
       };
 }

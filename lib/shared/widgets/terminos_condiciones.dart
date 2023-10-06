@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-void verTerminosCondiciones(BuildContext context, terminosDatosPdf) {
+void verTerminosCondiciones(
+    BuildContext context, terminosDatosPdf, bool isPushInUpp,) {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        print("se ejecuto");
         return Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.all(10),
@@ -28,7 +30,13 @@ void verTerminosCondiciones(BuildContext context, terminosDatosPdf) {
               ),
               GestureDetector(
                 onTap: () {
-                  _aceptarTerminos(context);
+                  isPushInUpp == true
+                      // ignore: unnecessary_statements
+                      ? {
+                          _aceptarTerminos(context),
+                          _aceptarTerminos(context),
+                        }
+                      : _aceptarTerminos(context);
                 },
                 child: Container(
                   width: Get.width * 0.9,

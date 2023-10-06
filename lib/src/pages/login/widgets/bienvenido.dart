@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/modelos/estado.dart';
+import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/widgets/activacion_manual_maestro.dart';
@@ -498,7 +499,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
     try {
       if (val == 1) {
-        estado = await Servicies().enviarMS(dropdownValue, codigoRespuesta);
+        //estado = await Servicies().enviarMS(dropdownValue, codigoRespuesta);
       } else if (val == 2) {
         estado = await Servicies().enviarCorreo(dropdownValue, codigoRespuesta);
       }
@@ -798,7 +799,7 @@ class _BienvenidoState extends State<Bienvenido> {
 
   Future loguin(BuildContext context) async {
     List<dynamic> respuesta =
-        await Servicies().getListaSucursales(prefs.codClienteLogueado);
+        await Servicies().getListaSucursales(false);
 
     if (respuesta.length > 0) {
       pr.hide();

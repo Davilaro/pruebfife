@@ -1,9 +1,12 @@
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ControlBaseDatos extends GetxController {
   RxInt cambioTab = 0.obs;
-  var seccionesDinamicas = [].obs;
+  RxString proveedorCategoria = "".obs;
+  RxList seccionesDinamicas = [].obs;
+  RxList<Fabricante> imagenesProveedor = <Fabricante>[].obs;
   RxBool isDisponibleFiltro = true.obs;
 
   late TabController tabController;

@@ -1,19 +1,26 @@
+// ignore_for_file: must_call_super
+
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/card_notification_slide_up.dart';
+import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
-import 'package:emart/src/widget/search_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -39,7 +46,8 @@ class PrincipalPage extends StatefulWidget {
   State<PrincipalPage> createState() => _PrincipalPageState();
 }
 
-class _PrincipalPageState extends State<PrincipalPage> {
+class _PrincipalPageState extends State<PrincipalPage>
+    with AutomaticKeepAliveClientMixin {
   final controllerEncuesta = Get.put(EncuestaControllers());
   final productViewModel = Get.find<ProductoViewModel>();
 
@@ -48,6 +56,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final cargoConfirmar = Get.find<ControlBaseDatos>();
   final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
   final viewModelNequi = Get.find<MisPagosNequiViewModel>();
+  final controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
 
   var nombreTienda = prefs.usuarioRazonSocial;
 
@@ -56,6 +66,13 @@ class _PrincipalPageState extends State<PrincipalPage> {
     super.initState();
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
+    if (prefs.usurioLogin == 1) {
+      controllerNotificaciones.llenarMapPushInUp("Home");
+      controllerNotificaciones.llenarMapSlideUp("Home");
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        validacionGeneralNotificaciones();
+      });
+    }
     controllerProducto.getAgotados();
     validarVersionActual(context);
     //FIREBASE: Llamamos el evento select_content
@@ -69,7 +86,68 @@ class _PrincipalPageState extends State<PrincipalPage> {
     var formatDay = tempDay.add(Duration(days: 1));
     var finalDay = DateFormat.EEEE().format(formatDay);
     prefs.nextDay = finalDay;
-    print('next day : ${prefs.nextDay}');
+  }
+
+  void validacionGeneralNotificaciones() async {
+    controllerNotificaciones.closePushInUp.value = false;
+    controllerNotificaciones.onTapPushInUp.value = false;
+    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
+        controllerNotificaciones.listPushInUpHome.isNotEmpty) {
+      await showPushInUp();
+      int elapsedTime = 0;
+      Timer.periodic(Duration(milliseconds: 10), (timer) {
+        if (elapsedTime >= 530) {
+          showSlideUp();
+          timer.cancel();
+        } else if (controllerNotificaciones.closePushInUp.value == true) {
+          showSlideUp();
+          timer.cancel();
+        } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+          timer.cancel();
+        }
+        elapsedTime++;
+      });
+    } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
+            true &&
+        controllerNotificaciones.closeSlideUp.value == false) {
+      showSlideUp();
+    }
+  }
+
+  Future<void> showPushInUp() async {
+    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
+      controllerNotificaciones.closePushInUp.value = false;
+      controllerNotificaciones.onTapPushInUp.value = false;
+      controllerNotificaciones.validacionMostrarPushInUp["Home"] = false;
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WillPopScope(
+                onWillPop: () async => false,
+                child: NotificationPushInApp(
+                    controllerNotificaciones.listPushInUpHome.first, "Home"));
+          });
+    }
+  }
+
+  void showSlideUp() async {
+    await controllerNotificaciones.getSlideUpByDataBaseHome("Home");
+    if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
+      controllerNotificaciones.closeSlideUp.value = true;
+      controllerNotificaciones.validacionMostrarSlideUp["Home"] = false;
+      await Future.delayed(
+          Duration(milliseconds: 100),
+          () => showSlideUpNotification(
+              context, controllerNotificaciones.listSlideUpHome.first, "Home"));
+    }
+  }
+
+  @override
+  void dispose() {
+    Get.closeCurrentSnackbar();
+    super.dispose();
   }
 
   @override
@@ -298,28 +376,33 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       ],
                     )),
                 //ENCUESTA
-                FutureBuilder(
-                    initialData: [],
-                    future: DBProvider.db.consultarEncuesta(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data.length == 0) {
-                        return Container();
-                      } else {
-                        controllerEncuesta.isVisibleEncuesta.value = true;
-                        return Obx(() => Visibility(
-                              visible:
-                                  controllerEncuesta.isVisibleEncuesta.value,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 10, right: 10, top: 15, bottom: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: EncuestaForm(snapshot.data[0])),
-                            ));
-                      }
-                    })
+                prefs.typeCollaborator != "2"
+                    ? FutureBuilder(
+                        initialData: [],
+                        future: DBProvider.db.consultarEncuesta(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.data.length == 0) {
+                            return Container();
+                          } else {
+                            controllerEncuesta.isVisibleEncuesta.value = true;
+                            return Obx(() => Visibility(
+                                  visible: controllerEncuesta
+                                      .isVisibleEncuesta.value,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          top: 15,
+                                          bottom: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: EncuestaForm(snapshot.data[0])),
+                                ));
+                          }
+                        })
+                    : SizedBox.shrink()
               ],
             ),
           ),
@@ -337,8 +420,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SearchFuzzy()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchFuzzyView()));
         },
         child: TextField(
           enabled: false,
@@ -386,4 +469,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
       }
     }
   }
+
+  @override
+  bool get wantKeepAlive => false;
 }

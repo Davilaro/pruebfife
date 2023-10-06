@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/src/pages/carrito/carrito_compras.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
@@ -67,20 +67,20 @@ class AccionesBartCarrito extends StatelessWidget {
     if (prefs.usurioLogin == -1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Login()),
+        MaterialPageRoute(builder: (context) => LogInPage()),
       );
     } else {
       //UXCam: Llamamos el evento clickCarrito
       UxcamTagueo().clickCarrito(provider, 'Superior');
       if (!esCarrito) {
-        var respuesta = await Navigator.push(
+       await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   CarritoCompras(numEmpresa: prefs.numEmpresa)),
         );
       } else {
-        var respuesta = await Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>

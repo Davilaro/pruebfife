@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/modelos/seccion.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -22,9 +24,13 @@ class BtnOpciones extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-          children:
-              _cargarSecciones(cargoConfirmar.seccionesDinamicas, context)),
+      child: Obx(
+        () => cargoConfirmar.seccionesDinamicas.isEmpty
+            ? SizedBox.shrink()
+            : Row(
+                children: _cargarSecciones(
+                    cargoConfirmar.seccionesDinamicas.value, context)),
+      ),
     );
   }
 
@@ -34,14 +40,14 @@ class BtnOpciones extends StatelessWidget {
     for (var i = 0; i < listaSecciones.length; i++) {
       Seccion seccion = listaSecciones[i];
       opciones.add(SizedBox(
-          height: 55,
+          height: 44,
           child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
                 side: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(10.0)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextButton(
                   onPressed: () => {
                         //FIREBASE: Llamamos el evento select_content

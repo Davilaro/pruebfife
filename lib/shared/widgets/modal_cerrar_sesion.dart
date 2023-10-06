@@ -1,19 +1,30 @@
+// ignore_for_file: unused_element
+
 import 'dart:async';
 
+import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/generated/l10n.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/splash/splash_principal.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 
 final prefs = new Preferencias();
 final controllerNequi = Get.find<MisPagosNequiViewModel>();
 final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+final controllerSearchViewModel = Get.find<SearchFuzzyViewModel>();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
@@ -54,20 +65,27 @@ modalCerrarSesion(context, size, provider) {
   }
 
   Widget _botonAceptar(size, provider) {
+    final controllerNotifications =
+        Get.find<NotificationsSlideUpAndPushInUpControllers>();
     return GestureDetector(
-      onTap: () => {
+      onTap: () async => {
+        Get.back(),
         _showLoaderDialog(context),
-        Future.delayed(Duration(milliseconds: 700)).then((value) async {
+        Future.delayed(Duration(milliseconds: 800)).then((value) async {
           await AppUtil.appUtil.eliminarCarpeta();
+          prefs.typeCollaborator = "";
           prefs.usurioLogin = -1;
-          provider.selectOptionMenu = 0;
           provider.setNumeroClickCarrito = 0;
           provider.setNumeroClickVerImpedibles = 0;
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
-          Navigator.pop(context);
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              'splash', (Route<dynamic> route) => false);
+          controllerNotifications.validacionMostrarPushInUp.clear();
+          controllerNotifications.validacionMostrarSlideUp.clear();
+          Provider.of<OpcionesBard>(context, listen: false).selectOptionMenu =
+              0;
+          controllerSearchViewModel.listaRecientes.clear();
+          Get.offAll(() => Splash());
+          //await cerrarBases();
         }),
       },
       child: Container(
@@ -196,6 +214,7 @@ modalEliminarUsuario(context, size, provider) {
           provider.setNumeroClickVerPromos = 0;
           PedidoEmart.cantItems.value = '0';
           _showLoaderDialogDeleteAccount(context);
+          controllerSearchViewModel.listaRecientes.clear();
           Navigator.pop(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
               'splash', (Route<dynamic> route) => false);

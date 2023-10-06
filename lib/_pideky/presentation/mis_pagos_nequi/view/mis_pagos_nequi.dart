@@ -39,7 +39,7 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
         title: Text(
-          'Mis Pagos Nequi',
+          'Mis Pagos',
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
@@ -51,7 +51,7 @@ class _MisPagosNequiPageState extends State<MisPagosNequiPage> {
         elevation: 0,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         actions: <Widget>[
           BotonActualizar(),

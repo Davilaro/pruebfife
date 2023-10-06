@@ -1,16 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:device_info/device_info.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/estado.dart';
-import 'package:emart/src/modelos/fabricantes.dart';
+import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
-import 'package:emart/src/modelos/marcas.dart';
 import 'package:emart/src/modelos/notificaciones.dart';
 import 'package:emart/src/modelos/novedades_registro.dart';
 import 'package:emart/src/modelos/pedido.dart';
@@ -20,9 +22,11 @@ import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
+import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -44,13 +48,56 @@ class Servicies {
         : [];
   }
 
-  Future<List<dynamic>> getListaSucursales(String nit) async {
+  static Future<List<String>> getDeviceDetails() async {
+    String deviceName = '';
+    String deviceVersion = '';
+    String identifier = '';
+
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        deviceName = build.model;
+        deviceVersion = build.version.toString();
+        identifier = build.androidId; //UUID for Android
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        deviceName = data.name;
+        deviceVersion = data.systemVersion;
+        identifier = data.identifierForVendor; //UUID for iOS
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+
+    return [deviceName, deviceVersion, identifier];
+  }
+
+  Future<List<dynamic>> getListaSucursales(bool loginBiometric) async {
+    String? token = PushNotificationServer.token as String;
+
+    var ccup =
+        loginBiometric == true ? prefs.ccupBiometric : prefs.codigoUnicoPideky;
+    prefs.codigoUnicoPideky = ccup;
+    print(
+        "sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky} ccup $ccup");
+    final List<dynamic> divace = await getDeviceDetails();
+    final bodyEncode = json.encode({
+      "CCUP": ccup,
+      "Token": token,
+      "IdDevice": divace[2],
+    });
+
     try {
       final url = Uri.parse(
-        Constantes().urlPrincipal + 'SucursalesPideKi?nit=$nit',
+        Constantes().urlPrincipal + 'LogIn/Sucursales',
       );
       print(url);
-      final reponse = await http.get(url);
+      final reponse = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: bodyEncode);
 
       final res = json.decode(reponse.body);
 
@@ -58,6 +105,7 @@ class Servicies {
           ? res.map((valor) => ListaSucursalesData.fromJson(valor)).toList()
           : [];
     } catch (e) {
+      print("error consultando sucursales $e");
       return [];
     }
   }
@@ -160,7 +208,7 @@ class Servicies {
       final res = json.decode(response.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Marcas.fromJson(valor)).toList()
+          ? res.map((valor) => Marca.fromJson(valor)).toList()
           : [];
     } catch (e) {}
 
@@ -258,11 +306,13 @@ class Servicies {
     }
   }
 
-  Future<dynamic> enviarMS(String telefono, int codigo) async {
+  Future<dynamic> enviarMS(
+    String telefono,
+  ) async {
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlPrincipal + 'cliente/enviarcodigo');
+      url = Uri.parse(Constantes().urlPrincipal + 'LogIn/EnviarCodigo');
       print(url);
       final response = await http.post(
         url,
@@ -270,9 +320,10 @@ class Servicies {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "Codigo": '$codigo',
-          "Telefono": '$telefono',
-          "Pais": "US"
+          "CCUP": prefs.codigoUnicoPideky,
+          "Telefono": telefono,
+          "Email": "",
+          "Pais": prefs.paisUsuario
         }),
       );
 
@@ -291,7 +342,7 @@ class Servicies {
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlPrincipal + 'cliente/activar');
+      url = Uri.parse(Constantes().urlPrincipal + 'LogIn/ValidarCodigo');
       print(url);
       final response = await http.post(
         url,
@@ -386,10 +437,12 @@ class Servicies {
           body: datos);
 
       if (response.statusCode == 200) {
+        print("restorno pedido ${response.body}");
         var res = ValidarPedido.fromJson(jsonDecode(response.body));
 
         return res;
       } else {
+        print("restorno pedido ${response.body}");
         throw Exception('Failed');
       }
     } catch (e) {
@@ -409,7 +462,7 @@ class Servicies {
       final res = json.decode(reponse.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Fabricantes.fromJson(valor)).toList()
+          ? res.map((valor) => Fabricante.fromJson(valor)).toList()
           : [];
     } catch (e) {
       print(e.toString());
@@ -615,7 +668,6 @@ class Servicies {
       final url;
 
       url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/CrearTelefonoNit');
-      print(url);
       final response = await http.post(
         url,
         headers: <String, String>{
@@ -671,7 +723,6 @@ class Servicies {
             "fecha": "$currentDate",
             "pais": "${prefs.paisUsuario}"
           }));
-      print("estado envio ${response.statusCode}");
       if (response.statusCode == 200) {
         print("tyc enviados correctamente");
         return true;
@@ -706,6 +757,32 @@ class Servicies {
         return false;
       }
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> sendOnPressInactivityByPortfolio(List<Map> proveedor) async {
+    final url;
+    try {
+      url = Uri.parse(Constantes().urlPrincipal + 'Encuestas/popupCartera');
+      var body = {"CCUP": prefs.codigoUnicoPideky, "Proveedores": proveedor};
+      var encodeBody = jsonEncode(body);
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: encodeBody,
+      );
+      if (response.statusCode == 200) {
+        print('portafolio enviado correctamente');
+        return true;
+      } else {
+        print('portafolio no enviado');
+        return false;
+      }
+    } catch (e) {
+      print("error enviando portafolio $e");
       return false;
     }
   }

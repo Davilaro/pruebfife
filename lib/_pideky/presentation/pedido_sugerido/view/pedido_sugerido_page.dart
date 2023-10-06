@@ -1,4 +1,4 @@
-import 'package:emart/shared/widgets/top_buttons.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -25,7 +25,9 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
   final prefs = Preferencias();
   @override
   void initState() {
+    pedidoSugeridoViewModel.tabActual.value = 0;
     if (prefs.usurioLogin == -1) {
+      pedidoSugeridoViewModel.initController();
       Future.delayed(Duration(seconds: 0)).then((value) {
         alertCustom(context);
       });
@@ -35,20 +37,9 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
     FlutterUxcam.tagScreenName('SuggestedOrderPage');
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Pedido Sugerido');
-    if (prefs.usurioLogin == -1) {
-      pedidoSugeridoViewModel.initController();
-    }
 
     super.initState();
   }
-
-  @override
-  void dispose() {
-    pedidoSugeridoViewModel.tabActual.value = 0;
-    super.dispose();
-  }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +60,6 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
                         indicatorColor: Colors.transparent,
                         unselectedLabelColor: Colors.black,
                         splashFactory: NoSplash.splashFactory,
-                        
                         onTap: (index) {
                           //UXCam: Llamamos el evento selectSectionPedidoSugerido
                           UxcamTagueo().selectSectionPedidoSugerido(

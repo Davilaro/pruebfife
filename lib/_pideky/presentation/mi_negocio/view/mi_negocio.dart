@@ -8,6 +8,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view
 import 'package:emart/_pideky/presentation/mis_estadisticas/view/mis_estadisticas.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/politicas_datos.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
 import 'package:emart/src/preferences/const.dart';
@@ -15,7 +16,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/utils/alertas.dart' as alert;
+import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -42,7 +43,8 @@ class _MiNegocioState extends State<MiNegocio> {
   void initState() {
     if (prefs.usurioLogin == -1) {
       Future.delayed(Duration(seconds: 0)).then((value) {
-        alert.alertCustom(context);
+        print("negocio");
+        alertCustom(context);
       });
     }
     if (prefs.paisUsuario == "CO") {
@@ -573,8 +575,8 @@ class _MiNegocioState extends State<MiNegocio> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: GestureDetector(
                                 onTap: () => viewModel.terminosDatosPdf != null
-                                    ? verTerminosCondiciones(
-                                        context, viewModel.terminosDatosPdf)
+                                    ? verTerminosCondiciones(context,
+                                        viewModel.terminosDatosPdf, false)
                                     : null,
                                 child: Row(
                                   mainAxisAlignment:
@@ -674,8 +676,13 @@ class _MiNegocioState extends State<MiNegocio> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    viewModel.iniciarModalEliminarUsuario(
-                                        context, size, provider);
+                                    prefs.typeCollaborator != "2"
+                                        ? viewModel.iniciarModalEliminarUsuario(
+                                            context, size, provider)
+                                        : mostrarAlert(
+                                            context,
+                                            "No puedes eliminar la cuenta ya que te encuentras en modo colaborador",
+                                            null);
                                   },
                                   child: Row(children: [
                                     Image.asset(
