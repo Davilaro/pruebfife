@@ -2,7 +2,6 @@
 
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/modelos/seccion.dart';
-import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';

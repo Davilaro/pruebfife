@@ -41,7 +41,6 @@ class _ConfiguracionMamualMaestrState extends State<ConfiguracionMamualMaestr> {
   @override
   Widget build(BuildContext context) {
     _contex_dos = context;
-    bool _correo = false;
     final size = MediaQuery.of(context).size;
 
     return Scaffold(

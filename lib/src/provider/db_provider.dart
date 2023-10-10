@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/bannner.dart';
@@ -85,7 +84,6 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-      final isLimit = limit != 0 ? "LIMIT $limit" : "";
 
       var query =
           ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 

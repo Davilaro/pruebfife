@@ -10,7 +10,6 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppUtil {

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
 import 'package:emart/src/modelos/encuesta.dart';

@@ -96,7 +96,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
         ],
       ),
     );
-    ;
+    
   }
 
   Widget _cartaNotificacion(Notificaciones notification) {

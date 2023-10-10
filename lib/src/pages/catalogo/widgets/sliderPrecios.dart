@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';

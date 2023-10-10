@@ -57,7 +57,6 @@ class CatalogoPoductosCategorias extends StatelessWidget {
 
     for (var element in data) {
       Producto productos = element;
-      bool isProductoPromo = false;
 
       final widgetTemp = InputValoresCatalogo(
         element: productos,

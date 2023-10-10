@@ -1,4 +1,3 @@
-import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';

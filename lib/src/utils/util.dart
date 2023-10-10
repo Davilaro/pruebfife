@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, deprecated_member_use, unused_catch_clause
+
 import 'dart:io';
 
 import 'package:emart/src/provider/db_provider.dart';
