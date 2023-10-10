@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member, non_constant_identifier_names
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';

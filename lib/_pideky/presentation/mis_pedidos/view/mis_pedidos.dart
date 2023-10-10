@@ -1,9 +1,9 @@
 import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/body_mis_pedidos.dart';
 
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/shared/widgets/popups.dart';
 
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

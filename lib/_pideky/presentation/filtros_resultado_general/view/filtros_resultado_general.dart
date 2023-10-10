@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/filtros_resultado_general/view_model/filtros_resultado_general_vm.dart';
@@ -10,14 +12,12 @@ import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart'
 import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/provider.dart';
 
 class FiltrosResultadoGeneralView extends StatefulWidget {
   final String codCategoria;
@@ -81,7 +81,6 @@ class _FiltrosResultadoGeneralViewState
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final controlador = Get.find<ControlBaseDatos>();
-    final providerDatos = Provider.of<DatosListas>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Buscador',

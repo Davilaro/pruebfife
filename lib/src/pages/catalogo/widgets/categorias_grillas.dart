@@ -114,11 +114,8 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     final size = MediaQuery.of(context).size;
 
     for (var element in result) {
-      print("categoria ${element.fabricante}");
       final widgetTemp = GestureDetector(
         onTap: () {
-          print(
-              "categoria ${botonesProveedoresVm.listaFabricantesBloqueados.contains(element.fabricante)}");
           if (botonesProveedoresVm.listaFabricantesBloqueados
               .contains(element.fabricante)) {
             mostrarAlertCartera(

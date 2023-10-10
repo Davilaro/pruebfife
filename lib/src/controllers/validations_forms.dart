@@ -21,7 +21,7 @@ import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
-import 'package:emart/src/pages/login/login.dart';
+import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -133,7 +133,6 @@ class ValidationForms extends GetxController {
       }
       if (isClosePopup.value == true) {
         timer.cancel();
-        print("navegando a login");
         Get.off(() => navegation);
       }
       timeIteration++;
@@ -236,10 +235,11 @@ class ValidationForms extends GetxController {
           biometricOnly: true,
         ),
       );
-      if (authenticated) {
+      if (authenticated == true) {
         prefs.isDataBiometricActive = true;
         await progress.show();
         await login(context, prefs.ccupBiometric, progress, true);
+        return;
       }
     } on PlatformException catch (e) {
       final textoPopUp = plataforma == "Android"
@@ -269,6 +269,7 @@ class ValidationForms extends GetxController {
         timeIteration++;
       });
       print(e);
+      return;
     }
   }
 
@@ -359,7 +360,7 @@ class ValidationForms extends GetxController {
         sendProvidersList.value);
   }
 
-  Future<bool> changePassword() async {
+  Future changePassword() async {
     if (passwordsMatch.value == true) {
       String encriptedPassword = encryptedPaswword(createPassword.value);
       return await loginService.changePassword(
@@ -391,8 +392,8 @@ class ValidationForms extends GetxController {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
-              ? Get.off(() => TouchIdPage())
-              : Get.off(() => FaceIdPage());
+              ? Get.offAll(() => TouchIdPage())
+              : Get.offAll(() => FaceIdPage());
         } else {
           if (await login(context, prefs.codClienteLogueado, progress, false) ==
               true) {
@@ -401,12 +402,30 @@ class ValidationForms extends GetxController {
         }
       } else {
         await progress.hide();
-        await closePopUp(
-            CreatePasswordPage(
-              isChangePassword: false,
-            ),
-            context,
-            null);
+        int timeIteration = 0;
+        isClosePopup.value = false;
+        showPopup(context, 'Usuario correcto',
+            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+        Timer.periodic(Duration(milliseconds: 500), (timer) {
+          if (timeIteration >= 5) {
+            timer.cancel();
+            Get.back();
+            Get.offAll(
+              () => CreatePasswordPage(
+                isChangePassword: false,
+              ),
+            );
+          }
+          if (isClosePopup.value == true) {
+            timer.cancel();
+            Get.offAll(
+              () => CreatePasswordPage(
+                isChangePassword: false,
+              ),
+            );
+          }
+          timeIteration++;
+        });
 
         return true;
       }
@@ -476,7 +495,6 @@ class ValidationForms extends GetxController {
 
   Future<dynamic> login(
       BuildContext context, String nit, progress, bool isLoginBiometric) async {
-    final providerOptions = Provider.of<OpcionesBard>(context, listen: false);
     try {
       List<dynamic> respuesta =
           await Servicies().getListaSucursales(isLoginBiometric);
@@ -507,23 +525,31 @@ class ValidationForms extends GetxController {
         isClosePopup.value = false;
         showPopup(context, 'Usuario correcto',
             SvgPicture.asset('assets/image/Icon_correcto.svg'));
-        providerOptions.selectOptionMenu = 0;
+        //providerOptions.selectOptionMenu = 0;
         Timer.periodic(Duration(milliseconds: 500), (timer) {
           if (timeIteration >= 5) {
             timer.cancel();
             Get.back();
-            Navigator.pushReplacementNamed(
-              context,
-              'listaSucursale',
-              arguments: ScreenArguments(respuesta, nit),
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => ListaSucursales(),
+                settings: RouteSettings(
+                  arguments: ScreenArguments(respuesta, nit),
+                ),
+              ),
+              (route) => false, // Elimina todas las rutas anteriores
             );
           }
           if (isClosePopup.value == true) {
             timer.cancel();
-            Navigator.pushReplacementNamed(
-              context,
-              'listaSucursale',
-              arguments: ScreenArguments(respuesta, nit),
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => ListaSucursales(),
+                settings: RouteSettings(
+                  arguments: ScreenArguments(respuesta, nit),
+                ),
+              ),
+              (route) => false, // Elimina todas las rutas anteriores
             );
           }
           timeIteration++;
@@ -645,18 +671,21 @@ class ValidationForms extends GetxController {
   mostrarCategorias(
       BuildContext context, dynamic elemento, DatosListas provider) async {
     final opcionesAppBard = Provider.of<OpcionesBard>(context, listen: false);
-    pr = ProgressDialog(context, isDismissible: false);
-    pr.style(message: 'Cargando información');
-    pr = ProgressDialog(context,
-        type: ProgressDialogType.normal, isDismissible: false, showLogs: true);
-
-    await pr.show();
+    final progress = ProgressDialog(context, isDismissible: false);
+    progress.style(
+        message: S.current.logging_in,
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
+    await progress.show();
     await cargarInformacion(provider, elemento);
     await cargarDataUsuario(elemento.sucursal);
     if (prefs.usurioLogin == 1) {
       UxcamTagueo().validarTipoUsuario();
     }
-    await pr.hide();
+    await progress.hide();
     listSucursales.clear();
     seleccionSucursal.value = "";
     opcionesAppBard.selectOptionMenu = 0;

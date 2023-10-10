@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
-import '../../login/login.dart';
 
 String codEmpresa = '';
 

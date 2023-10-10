@@ -21,7 +21,7 @@
 
 ----------------------------- Para Iniciar El Proyecto --------------------------------------------------
 
-1. validar que tenga la version de flutter 3.7.7
+1. validar que tenga la version de flutter 3.13.6
 2. instalamos dependencias con flutter pub get
 3. iniciamos un enmulador o conectamos un movil
 4. en el Visual Studio vamos a Run/Run Without Debugging y seleccionamos el movil o el enmulador

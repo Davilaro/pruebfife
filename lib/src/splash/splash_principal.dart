@@ -144,7 +144,6 @@ class _SplashState extends State<Splash> {
         }
       } else {
         final provider = Provider.of<OpcionesBard>(context, listen: false);
-        await Servicies().deleteAccount();
         await AppUtil.appUtil.eliminarCarpeta();
         prefs.usurioLogin = -1;
         provider.setNumeroClickCarrito = 0;

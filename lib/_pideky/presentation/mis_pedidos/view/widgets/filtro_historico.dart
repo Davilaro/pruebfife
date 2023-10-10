@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';

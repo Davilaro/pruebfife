@@ -32,10 +32,10 @@ class SearchFuzzyViewModel extends GetxController {
 
   RxString searchInput = "".obs;
 
-  List<Producto> listaAllProducts = [];
-  List<Marca> listaAllMarcas = [];
-  List<Categorias> listaAllcategorias = [];
-  List<Fabricante> listaAllproveedor = [];
+  List<dynamic> listaAllProducts = [];
+  List<dynamic> listaAllMarcas = [];
+  List<dynamic> listaAllcategorias = [];
+  List<dynamic> listaAllproveedor = [];
 
   //mapa para guardar las listas
   RxMap mapListas = {}.obs;
@@ -49,8 +49,6 @@ class SearchFuzzyViewModel extends GetxController {
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
   List<ExtractedResult<String>> result = [];
-
-  
 
   Future<void> initState() async {
     await cargarSugerencias();
@@ -174,7 +172,7 @@ class SearchFuzzyViewModel extends GetxController {
         }
         if (value[i] is Marca) lista.add((value[i] as Marca).nombre);
         if (value[i] is Categorias)
-          lista.add((value[i] as Categorias).descripcion);
+          lista.add((value[i] as Categorias).descripcion!);
         if (value[i] is Fabricante)
           lista.add((value[i] as Fabricante).nombrecomercial.toString());
       }
@@ -242,7 +240,7 @@ class SearchFuzzyViewModel extends GetxController {
             MaterialPageRoute(
                 builder: (context) => TabOpcionesCategorias(
                       listaCategorias: listaSubCategorias,
-                      nombreCategoria: object.descripcion,
+                      nombreCategoria: object.descripcion!,
                     )));
       }
       if (object is Fabricante) {

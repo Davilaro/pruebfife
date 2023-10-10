@@ -194,7 +194,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
       if (searchFuzzyViewModel.allResultados[i] is Producto) {
         widgetTemp = InputValoresCatalogo(
           element: (searchFuzzyViewModel.allResultados[i] as Producto),
-          numEmpresa: 'nutresa',
           isCategoriaPromos: resultadoBuscadorGeneralVm.isPromo.value,
           index: i,
         );

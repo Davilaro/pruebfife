@@ -30,7 +30,6 @@ class LoginApi implements ILogin {
           data["Actualizar"] != null &&
           data['CCUP'] != "Usuario y contraseña invalidos") {
         prefs.codigoUnicoPideky = data["CCUP"];
-        prefs.usurioLogin = 1;
         confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
         return toInt(data["Actualizar"]);
       } else {
@@ -43,7 +42,7 @@ class LoginApi implements ILogin {
   }
 
   @override
-  Future<bool> changePassword(String user, String password) async {
+  Future<dynamic> changePassword(String user, String password) async {
     final prefs = Preferencias();
     var jsonRequest = {
       "Usuario": user,

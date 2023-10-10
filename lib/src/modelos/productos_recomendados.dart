@@ -45,22 +45,26 @@ class ProductosRecomendados {
 
   factory ProductosRecomendados.fromJson(Map<String, dynamic> json) =>
       ProductosRecomendados(
-        codigo: json["codigo"],
-        nombre: json["Descripcion"],
-        precio: json["precio"],
+        codigo: json["codigo"] == null ? '' : json["codigo"],
+        nombre: json["Descripcion"] == null ? '' : json["Descripcion"],
+        precio: json["precio"] == null ? 0 : json["precio"],
         // longitud: json["longitud"] == null ? '' : json["longitud"],
         // ancho: json["ancho"] == null ? '' : json["ancho"],
         // volumen: json["volumen"] == null ? '' : json["volumen"],
-        iva: json["iva"],
-        cantidad: json["cantidad"],
+        iva: json["iva"] == null ? 0 : json["iva"],
+        cantidad: json["cantidad"] == null ? '' : json["cantidad"],
         // largo: json["largo"] == null ? '' : json["largo"],
         // unidad: json["unidad"],
         // peso: json["peso"] == 0 ? '0' : json["peso"],
-        fabricante: json["fabricante"],
-        nombrecomercial: json["nombrecomercial"],
-        codigocliente: json["codigocliente"],
-        descuento: json["descuento"],
-        preciodescuento: json["preciodescuento"],
+        fabricante: json["fabricante"] == null ? '' : json["fabricante"],
+        nombrecomercial: json["nombrecomercial"] == null
+            ? ''
+            : json["nombrecomercial"],
+        codigocliente: json["codigocliente"] == null ? '' : json["codigocliente"],
+        descuento: json["descuento"] == null ? 0 : json["descuento"],
+        preciodescuento: json["preciodescuento"] == null
+            ? 0
+            : json["preciodescuento"],
       );
 
   Map<String, dynamic> toJson() => {

@@ -112,15 +112,15 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                           if (timeIteration >= 5) {
                             timer.cancel();
                             Get.back();
-                            Get.to(() => plataforma == 'Android'
+                            plataforma == 'Android'
                                 ? Get.to(() => TouchIdPage())
-                                : Get.to(() => FaceIdPage()));
+                                : Get.to(() => FaceIdPage());
                           }
                           if (_validationForms.isClosePopup.value == true) {
                             timer.cancel();
-                            Get.to(() => plataforma == 'Android'
+                            plataforma == 'Android'
                                 ? Get.to(() => TouchIdPage())
-                                : Get.to(() => FaceIdPage()));
+                                : Get.to(() => FaceIdPage());
                           }
                           timeIteration++;
                         });

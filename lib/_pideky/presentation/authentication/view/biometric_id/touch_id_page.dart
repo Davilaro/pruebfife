@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:local_auth/local_auth.dart';
@@ -105,20 +106,33 @@ class _TouchIdPageState extends State<TouchIdPage> {
         await progress.show();
         await validationForm.login(
             context, prefs.ccupBiometric, progress, true);
-        await showPopup(context, 'Huella activada',
-            SvgPicture.asset('assets/image/Icon_correcto.svg'));
+        return;
       }
 
       print('Authenticated : $authenticated');
     } on PlatformException catch (e) {
+      int timeIteration = 0;
+      validationForm.isClosePopup.value = false;
+      validationForm.isClosePopup.value = false;
       showPopupUnrecognizedfingerprint(
           context,
-          'Huella no reconocida',
+          "Huella no reconocida",
           Image(
             image: AssetImage('assets/image/Icon_touch_ID.png'),
             fit: BoxFit.contain,
           ));
+      Timer.periodic(Duration(milliseconds: 500), (timer) {
+        if (timeIteration >= 5) {
+          timer.cancel();
+          Get.back();
+        }
+        if (validationForm.isClosePopup.value == true) {
+          timer.cancel();
+        }
+        timeIteration++;
+      });
       print(e);
+      return;
     }
   }
 

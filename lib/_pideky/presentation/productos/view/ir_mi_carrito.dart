@@ -290,7 +290,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
     //UXCam: Llamamos el evento clickCarrito
     UxcamTagueo().clickCarrito(provider, 'Inferior');
-    var resul = await Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) => CarritoCompras(numEmpresa: prefs.numEmpresa)),
@@ -317,7 +317,6 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
 
   int calcularDiasFaltantes(List<String> diasSemana, diasEspecificos,
       String diaActual, int diasEntrega) {
-    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     // Obtener el índice del dia actual en la lista de días de la semana
     int indexDiaActual = diasSemana.indexOf(diaActual);
 

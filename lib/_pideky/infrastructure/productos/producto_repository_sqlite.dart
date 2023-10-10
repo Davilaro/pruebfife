@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -588,7 +586,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 6) {
         //tipo 6 para productos del dia
-        String date = DateTime.now().toString();
 
         sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,

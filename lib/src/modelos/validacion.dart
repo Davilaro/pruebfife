@@ -25,10 +25,12 @@ class Validacion {
   String? pais;
 
   factory Validacion.fromJson(Map<String, dynamic> json) => Validacion(
-        codigo: json["Codigo"],
-        activo: json["Activo"],
-        codTienda: json["CodTienda"],
-        tieneDomicilio: json["TieneDomicilio"],
+        codigo: json["Codigo"] == null ? 0 : json["Codigo"],
+        activo: json["Activo"] == null ? 0 : json["Activo"],
+        codTienda: json["CodTienda"] == null ? 0 : json["CodTienda"],
+        tieneDomicilio: json["TieneDomicilio"] == null
+            ? 0
+            : json["TieneDomicilio"],
         telefonos: json["Telefonos"] == null || json["Telefonos"] == 0
             ? ['sin informacion']
             : List<String>.from(json["Telefonos"].map((x) => x)),

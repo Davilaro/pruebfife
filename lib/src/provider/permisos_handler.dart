@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:permission_handler/permission_handler.dart';
 
 class Permisos {
