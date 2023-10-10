@@ -1,4 +1,3 @@
-// @dart=3.1
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';

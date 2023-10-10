@@ -104,13 +104,13 @@ class PedidoEmart {
 
       for (int j = 0; j < listaFabricante!.length; j++) {
         if (listaFabricante![j].empresa == key) {
-          icon = listaFabricante![j].icono;
-          horaFabricante = listaFabricante![j].hora;
-          diasEntrega = listaFabricante![j].diasEntrega;
+          icon = listaFabricante![j].icono ?? "";
+          horaFabricante = listaFabricante![j].hora ?? "";
+          diasEntrega = listaFabricante![j].diasEntrega ?? 0;
           texto1 = listaFabricante![j].texto1 ?? "";
           texto2 = listaFabricante![j].texto2 ?? "";
           itinerario = listaFabricante![j].itinerario ?? 0;
-          diasFrecuencia = listaFabricante![j].diaVisita;
+          diasFrecuencia = listaFabricante![j].diaVisita ?? [];
           topeMinimo = listaFabricante![j].topeMinimo ?? 0;
           montoMinimoFrecuencia =
               listaFabricante![j].montoMinimoFrecuencia ?? 0;
@@ -221,7 +221,6 @@ class PedidoEmart {
                         int.parse(obtenerValor(elemet)!))) /
                 100),
           );
-          print("descuento asignado ${productoAsignado.descuento}");
           listaAgrupar.add(productoAsignado);
         }
       }

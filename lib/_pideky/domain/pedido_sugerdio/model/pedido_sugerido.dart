@@ -27,12 +27,16 @@ class PedidoSugeridoModel {
 
   factory PedidoSugeridoModel.fromJson(Map<String, dynamic> json) =>
       PedidoSugeridoModel(
-          negocio: json["Negocio"],
-          codigo: json["Codigo"],
-          nombre: json["nombre"],
-          precio: json["precio"],
-          cantidad: json["Cantidad"],
-          bloqueoCartera: json["bloqueoCartera"]);
+          negocio: json["Negocio"] == null ? '' : json["Negocio"],
+          codigo: json["Codigo"] == null ? '' : json["Codigo"],
+          nombre: json["nombre"] == null ? '' : json["nombre"],
+          precio: json["precio"] == null ? 0 : json["precio"],
+          cantidad: json["Cantidad"] == null ? 0 : json["Cantidad"],
+          bloqueoCartera: json["bloqueoCartera"] == null
+              ? 0
+              : json["bloqueoCartera"] == 0
+                  ? 0
+                  : json["bloqueoCartera"]);
 
   get length => null;
 

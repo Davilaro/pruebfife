@@ -360,7 +360,7 @@ class ValidationForms extends GetxController {
         sendProvidersList.value);
   }
 
-  Future<bool> changePassword() async {
+  Future changePassword() async {
     if (passwordsMatch.value == true) {
       String encriptedPassword = encryptedPaswword(createPassword.value);
       return await loginService.changePassword(

@@ -110,8 +110,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
             FutureBuilder(
               future: Servicies().getListaSucursales(false),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                List listaSucursales = snapshot.data;
                 if (snapshot.hasData) {
+                  List listaSucursales = snapshot.data;
                   return Expanded(
                     child: ListView.builder(
                       itemCount: listaSucursales.length,

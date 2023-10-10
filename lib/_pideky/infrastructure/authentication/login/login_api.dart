@@ -42,7 +42,7 @@ class LoginApi implements ILogin {
   }
 
   @override
-  Future<bool> changePassword(String user, String password) async {
+  Future<dynamic> changePassword(String user, String password) async {
     final prefs = Preferencias();
     var jsonRequest = {
       "Usuario": user,

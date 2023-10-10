@@ -270,6 +270,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
       PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
         if (value['precioProducto'] == 0.0) {
         } else {
+          print("data carrito ${value['items']}");
           listaWidget.add(
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),

@@ -63,7 +63,7 @@ class Preferencias {
   }
 
   get numEmpresa {
-    return _prefs.getInt('numEmpresa') ?? "null";
+    return _prefs.getInt('numEmpresa') ?? 0;
   }
 
   set numEmpresa(dynamic value) {
@@ -80,7 +80,7 @@ class Preferencias {
   }
 
   get numCategoria {
-    return _prefs.getInt('numCategoria') ?? "null";
+    return _prefs.getInt('numCategoria') ?? 0;
   }
 
   set numCategoria(dynamic value) {
@@ -104,7 +104,7 @@ class Preferencias {
   }
 
   get codActivacionLogin {
-    return _prefs.getInt('codActivacion') ?? "";
+    return _prefs.getInt('codActivacion') ?? 0;
   }
 
   set codActivacionLogin(dynamic value) {

@@ -165,7 +165,7 @@ class CreatePasswordPage extends StatelessWidget {
                           if (isValid == false)
                             return;
                           else {
-                            bool response =
+                            var response =
                                 await _validationForms.changePassword();
                             if (response == true) {
                               if (isChangePassword == true) {
