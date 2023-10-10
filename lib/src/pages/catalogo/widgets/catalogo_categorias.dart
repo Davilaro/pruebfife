@@ -60,7 +60,6 @@ class CatalogoPoductosCategorias extends StatelessWidget {
 
       final widgetTemp = InputValoresCatalogo(
         element: productos,
-        numEmpresa: numEmpresa,
         isCategoriaPromos: false,
         index: data.indexOf(element),
       );

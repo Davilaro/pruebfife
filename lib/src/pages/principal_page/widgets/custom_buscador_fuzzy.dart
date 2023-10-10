@@ -195,7 +195,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       Producto productos = data[i];
       final widgetTemp = InputValoresCatalogo(
         element: productos,
-        numEmpresa: widget.numEmpresa,
         isCategoriaPromos: false,
         index: i,
       );

@@ -20,14 +20,12 @@ final prefs = new Preferencias();
 
 class InputValoresCatalogo extends StatefulWidget {
   final Producto element;
-  final String numEmpresa;
   final bool isCategoriaPromos;
   final int index;
 
   InputValoresCatalogo(
       {Key? key,
       required this.element,
-      required this.numEmpresa,
       required this.isCategoriaPromos,
       required this.index})
       : super(key: key);
