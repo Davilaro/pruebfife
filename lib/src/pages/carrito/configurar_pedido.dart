@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
+import 'package:emart/src/pages/carrito/order_notification_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -39,6 +41,7 @@ class ConfigurarPedido extends StatefulWidget {
 class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   final prefs = new Preferencias();
   ProductoViewModel productoViewModel = Get.find();
+  final controller = Get.put(StateControllerRadioButtons());
 
   late ProgressDialog pr;
   late BuildContext _context2;
@@ -126,7 +129,14 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
-      onTap: () => {_dialogEnviarPedido(size)},
+      onTap: () => { _dialogEnviarPedido(size)
+        // if (controller.isPayOnLine.value)
+        //   {Get.to(() => OrderNotificationPage())}
+        // else
+        //   {_dialogEnviarPedido(size)}
+
+        //_dialogEnviarPedido(size)
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,
@@ -258,9 +268,14 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           .updateAll((key, value) => value = false);
       productoViewModel.eliminarBDTemporal();
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc)));
+      if (controller.isPayOnLine.value) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => OrderNotificationPage()));
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => PedidoRealizado(
+                numEmpresa: widget.numEmpresa, numdoc: numDoc)));
+      }
     } else {
       Navigator.pop(context);
       mostrarAlertaUtilsError(_context2, validar.mensaje!);
