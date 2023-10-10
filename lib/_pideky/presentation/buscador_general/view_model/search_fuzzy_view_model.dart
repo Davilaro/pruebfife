@@ -172,7 +172,7 @@ class SearchFuzzyViewModel extends GetxController {
         }
         if (value[i] is Marca) lista.add((value[i] as Marca).nombre);
         if (value[i] is Categorias)
-          lista.add((value[i] as Categorias).descripcion);
+          lista.add((value[i] as Categorias).descripcion!);
         if (value[i] is Fabricante)
           lista.add((value[i] as Fabricante).nombrecomercial.toString());
       }
@@ -240,7 +240,7 @@ class SearchFuzzyViewModel extends GetxController {
             MaterialPageRoute(
                 builder: (context) => TabOpcionesCategorias(
                       listaCategorias: listaSubCategorias,
-                      nombreCategoria: object.descripcion,
+                      nombreCategoria: object.descripcion!,
                     )));
       }
       if (object is Fabricante) {
