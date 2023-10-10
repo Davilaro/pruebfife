@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';

@@ -65,15 +65,23 @@ class Fabricante {
       topeMinimo: json["topeMinimo"] == null ? 0 : json["topeMinimo"],
       nitCliente: json["NitCliente"] == null ? '' : json["NitCliente"],
       razonSocial: json["RazonSocial"] == null ? '' : json["RazonSocial"],
-      hora: json["hora"],
-      montoMinimoFrecuencia: json["montominimofrecuencia"],
-      montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
-      restrictivoFrecuencia: json["restrictivofrecuencia"],
-      restrictivoNoFrecuencia: json["restrictivonofrecuencia"],
+      hora: json["hora"] == null ? '' : json["hora"],
+      montoMinimoFrecuencia: json["montominimofrecuencia"] == null
+          ? 0
+          : json["montominimofrecuencia"],
+      montoMinimoNoFrecuencia: json["montominimonofrecuencia"] == null
+          ? 0
+          : json["montominimonofrecuencia"],
+      restrictivoFrecuencia: json["restrictivofrecuencia"] == null
+          ? 0
+          : json["restrictivofrecuencia"],
+      restrictivoNoFrecuencia: json["restrictivonofrecuencia"] == null
+          ? 0
+          : json["restrictivonofrecuencia"],
       diaVisita: json["diavisita"] == null ? "" : json["diavisita"],
-      texto1: json["texto1"],
-      texto2: json["texto2"],
-      itinerario: json["itinerario"],
+      texto1: json["texto1"] == null ? "" : json["texto1"],
+      texto2: json["texto2"] == null ? "" : json["texto2"],
+      itinerario: json["itinerario"] == null ? 0 : json["itinerario"],
       bloqueoCartera:
           json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],

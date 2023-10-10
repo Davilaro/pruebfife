@@ -12,7 +12,7 @@ class LogicaActualizar {
       await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
       await AppUtil.appUtil.abrirBases();
     } else {
-      http: //186.147.143.44/SyncPidekySqlitePrd/CrearDB.aspx?nit=1006120026&cliente=10426885&clientenutresa=10360653&clientezenu=10426885&clientemeals=10847893&codigopadrepideky=
+      //http: //186.147.143.44/SyncPidekySqlitePrd/CrearDB.aspx?nit=1006120026&cliente=10426885&clientenutresa=10360653&clientezenu=10426885&clientemeals=10847893&codigopadrepideky=
       // await AppUtil.appUtil.downloadZip(
       //     prefs.usurioLoginCedula,
       //     prefs.codCliente,

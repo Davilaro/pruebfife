@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:device_info/device_info.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
@@ -22,7 +21,6 @@ import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';

@@ -85,15 +85,19 @@ class Producto {
         nitFabricante:
             json["nitFabricante"] == null ? '' : json["nitFabricante"],
         cantidad: json["cantidad"] == null ? 0 : json["cantidad"],
-        nombrecomercial: json["nombrecomercial"],
-        codigocliente: json["codigocliente"],
-        descuento: json["descuento"],
-        preciodescuento: json["preciodescuento"],
-        precioinicial: json["precioinicial"],
-        activoprodnuevo: json["activoprodnuevo"],
-        activopromocion: json["activopromocion"],
-        fechafinnuevo_1: json["fechafinnuevo_1"],
-        fechafinpromocion_1: json["fechafinpromocion_1"],
+        nombrecomercial: json["nombrecomercial"] == null
+            ? ''
+            : json["nombrecomercial"],
+        codigocliente: json["codigocliente"] == null ? '' : json["codigocliente"],
+        descuento: json["descuento"] == null ? 0.0 : json["descuento"],
+        preciodescuento: json["preciodescuento"] == null
+            ? 0.0
+            : json["preciodescuento"],
+        precioinicial: json["precioinicial"] == null ? 0.0 : json["precioinicial"],
+        activoprodnuevo: json["activoprodnuevo"] == null ? 0 : json["activoprodnuevo"],
+        activopromocion: json["activopromocion"] == null ? 0 : json["activopromocion"],
+        fechafinnuevo_1: json["fechafinnuevo_1"] == null ? '' : json["fechafinnuevo_1"],
+        fechafinpromocion_1: json["fechafinpromocion_1"] == null ? '' : json["fechafinpromocion_1"],
         bloqueoCartera:
             json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       );

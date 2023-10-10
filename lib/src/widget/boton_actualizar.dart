@@ -2,9 +2,10 @@ import 'dart:async';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
-import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:emart/src/provider/logica_actualizar.dart';
@@ -26,7 +27,7 @@ class _BotonActualizarState extends State<BotonActualizar> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
-
+    final prefs = Preferencias();
     final cargoConfirmar = Get.find<ControlBaseDatos>();
     return Visibility(
       visible: prefs.usurioLogin == 1,
@@ -47,9 +48,8 @@ class _BotonActualizarState extends State<BotonActualizar> {
 }
 
 Future<void> actualizarPagina(
-    dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
+    OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
   final botonesController = Get.find<BotonesProveedoresVm>();
-  final providerTabs = Provider.of<OpcionesBard>(context, listen: false);
   final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
   final controllerNequi = Get.find<MisPagosNequiViewModel>();
   final productViewModel = Get.find<ProductoViewModel>();
@@ -68,23 +68,13 @@ Future<void> actualizarPagina(
       Navigator.pop(context);
       //pop dialog
     });
-    if (provider.selectOptionMenu == 1) {
-      cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
-      cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
-      provider.selectOptionMenu = 1;
 
-      provider.setIsLocal = 0;
-    }
     productViewModel.cargarCondicionEntrega();
     await botonesController.cargarListaProovedor();
     botonesController.listaFabricantesBloqueados.isNotEmpty
         ? null
         : productViewModel.eliminarBDTemporal();
-
-    providerTabs.selectOptionMenu = 0;
-    Navigator.pushReplacementNamed(
-      context,
-      'tab_opciones',
-    ).timeout(Duration(seconds: 3));
+    provider.selectOptionMenu = 0;
+    Get.offAll(() => TabOpciones());
   }
 }

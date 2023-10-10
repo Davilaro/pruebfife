@@ -5,7 +5,6 @@ import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:local_auth/local_auth.dart';
@@ -26,7 +25,6 @@ class _FaceIdPageState extends State<FaceIdPage> {
   // bool authenticated = false;
 
   late final LocalAuthentication auth;
-  bool _supporState = false;
   final prefs = Preferencias();
   final validationForm = Get.find<ValidationForms>();
 
@@ -34,9 +32,7 @@ class _FaceIdPageState extends State<FaceIdPage> {
   void initState() {
     super.initState();
     auth = LocalAuthentication();
-    auth.isDeviceSupported().then((bool isSupported) => setState(() {
-          _supporState = isSupported;
-        }));
+    
   }
 
   @override

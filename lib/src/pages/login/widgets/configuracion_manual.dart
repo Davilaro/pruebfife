@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:imagebutton/imagebutton.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 final TextEditingController _controllerCorreo = TextEditingController();

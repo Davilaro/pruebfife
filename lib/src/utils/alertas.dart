@@ -1,14 +1,9 @@
-import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 void mostrarAlert(
   BuildContext context,

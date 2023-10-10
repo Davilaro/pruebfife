@@ -3,9 +3,7 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 late CarroModelo cartProvider;

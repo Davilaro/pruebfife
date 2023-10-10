@@ -13,9 +13,7 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
@@ -112,8 +110,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
             FutureBuilder(
               future: Servicies().getListaSucursales(false),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                List listaSucursales = snapshot.data;
                 if (snapshot.hasData) {
+                  List listaSucursales = snapshot.data;
                   return Expanded(
                     child: ListView.builder(
                       itemCount: listaSucursales.length,

@@ -1,3 +1,4 @@
+import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -5,7 +6,6 @@ import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/pages/login/widgets/configuracion_manual.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:imagebutton/imagebutton.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 final TextEditingController _controllerCorreo = TextEditingController();

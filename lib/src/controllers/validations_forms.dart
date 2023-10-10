@@ -13,7 +13,6 @@ import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
-import 'package:emart/_pideky/presentation/authentication/view/register/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/select_sucursal_as_collaborator.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
@@ -22,7 +21,6 @@ import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validar.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -32,7 +30,6 @@ import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/splash/splash_principal.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/colores.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -363,7 +360,7 @@ class ValidationForms extends GetxController {
         sendProvidersList.value);
   }
 
-  Future<bool> changePassword() async {
+  Future changePassword() async {
     if (passwordsMatch.value == true) {
       String encriptedPassword = encryptedPaswword(createPassword.value);
       return await loginService.changePassword(

@@ -1,12 +1,9 @@
 import 'package:emart/_pideky/presentation/authentication/view/restore_password_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
-import 'package:emart/shared/widgets/popups.dart';
-
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
