@@ -19,7 +19,7 @@ class Preferencias {
   }
 
   get paisUsuario {
-    return _prefs.getString("paisUsuario") ?? "";
+    return _prefs.getString("paisUsuario") ?? null;
   }
 
   set paisUsuario(dynamic value) {
