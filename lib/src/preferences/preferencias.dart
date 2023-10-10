@@ -11,7 +11,7 @@ class Preferencias {
   late SharedPreferences _prefs;
 
   get usuarioRazonSocial {
-    return _prefs.getString('usuarioRazonSocial') ?? null;
+    return _prefs.getString('usuarioRazonSocial') ?? "";
   }
 
   set usuarioRazonSocial(dynamic value) {
@@ -19,7 +19,7 @@ class Preferencias {
   }
 
   get paisUsuario {
-    return _prefs.getString("paisUsuario") ?? null;
+    return _prefs.getString("paisUsuario") ?? "";
   }
 
   set paisUsuario(dynamic value) {
@@ -27,7 +27,7 @@ class Preferencias {
   }
 
   get usuarioLogueado {
-    return _prefs.getString('usuarioLogueado') ?? null;
+    return _prefs.getString('usuarioLogueado') ?? "";
   }
 
   set usuarioLogueado(dynamic value) {
@@ -39,7 +39,7 @@ class Preferencias {
   }
 
   get codClienteLogueado {
-    return _prefs.getString('codClienteLogueado') ?? null;
+    return _prefs.getString('codClienteLogueado') ?? "";
   }
 
   set codClienteLogueado(dynamic value) {
@@ -55,7 +55,7 @@ class Preferencias {
   }
 
   get codTienda {
-    return _prefs.getString('codTienda') ?? null;
+    return _prefs.getString('codTienda') ?? "";
   }
 
   set codTienda(dynamic value) {
@@ -63,7 +63,7 @@ class Preferencias {
   }
 
   get numEmpresa {
-    return _prefs.getInt('numEmpresa') ?? null;
+    return _prefs.getInt('numEmpresa') ?? "null";
   }
 
   set numEmpresa(dynamic value) {
@@ -80,7 +80,7 @@ class Preferencias {
   }
 
   get numCategoria {
-    return _prefs.getInt('numCategoria') ?? null;
+    return _prefs.getInt('numCategoria') ?? "null";
   }
 
   set numCategoria(dynamic value) {
@@ -96,7 +96,7 @@ class Preferencias {
   }
 
   get usurioLoginCedula {
-    return _prefs.getString('usuarioLoginCedula') ?? null;
+    return _prefs.getString('usuarioLoginCedula') ?? "";
   }
 
   set usurioLoginCedula(dynamic value) {
@@ -104,7 +104,7 @@ class Preferencias {
   }
 
   get codActivacionLogin {
-    return _prefs.getInt('codActivacion') ?? null;
+    return _prefs.getInt('codActivacion') ?? "";
   }
 
   set codActivacionLogin(dynamic value) {
