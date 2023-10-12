@@ -10,6 +10,7 @@ import 'package:emart/_pideky/presentation/productos/view_model/producto_view_mo
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -31,6 +32,7 @@ import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
 import 'package:emart/src/widget/reproduct_video.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -72,7 +74,6 @@ class _PrincipalPageState extends State<PrincipalPage>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         validacionGeneralNotificaciones();
       });
-      showEncuestas();
     }
     controllerProducto.getAgotados();
     validarVersionActual(context);
@@ -90,6 +91,53 @@ class _PrincipalPageState extends State<PrincipalPage>
   }
 
   void validacionGeneralNotificaciones() async {
+    if (prefs.typeCollaborator != "2") {
+      showDialog(
+          context: context,
+          builder: (_) => new AlertDialog(
+            insetPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Color.fromARGB(123, 200, 195, 195),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(28.0))),
+                content: Builder(
+                  builder: (context) {
+                    // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+
+                    return FutureBuilder(
+              initialData: [],
+              future: DBProvider.db.consultarEncuesta(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data.length == 0) {
+                  return Container();
+                } else {
+                 // controllerEncuesta.isVisibleEncuesta.value = true;
+                  return Container(
+                   // color: Colors.amber,
+                    height: height - 624,
+                      width: width - 25,
+                    //  margin: EdgeInsets.only(
+                       //   left: 10, right: 10, top: 15, bottom: 10),
+                      decoration: BoxDecoration(
+                      //color: Colors.amber,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                       child: Material(child: EncuestaForm(snapshot.data[0]))
+                      );
+                }
+              });
+        
+                                 },
+                ),
+              )
+        
+          );
+    }
+
+    
     controllerNotificaciones.closePushInUp.value = false;
     controllerNotificaciones.onTapPushInUp.value = false;
     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
@@ -143,35 +191,6 @@ class _PrincipalPageState extends State<PrincipalPage>
           () => showSlideUpNotification(
               context, controllerNotificaciones.listSlideUpHome.first, "Home"));
     }
-  }
-
-  Future<void> showEncuestas() async {
-    //  if (prefs.typeCollaborator != "2") {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return FutureBuilder(
-              initialData: [],
-              future: DBProvider.db.consultarEncuesta(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.data.length == 0) {
-                  return Container();
-                } else {
-                  controllerEncuesta.isVisibleEncuesta.value = true;
-                  return Obx(() => Visibility(
-                        visible: controllerEncuesta.isVisibleEncuesta.value,
-                        child: Container(
-                            margin: EdgeInsets.only(
-                                left: 10, right: 10, top: 15, bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: EncuestaForm(snapshot.data[0])),
-                      ));
-                }
-              });
-        });
-    // }
   }
 
   @override
@@ -432,7 +451,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                                 ));
                           }
                         })
-                    : SizedBox.shrink()
+                    : SizedBox.shrink(),
               ],
             ),
           ),

@@ -130,12 +130,6 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
       onTap: () => { _dialogEnviarPedido(size)
-        // if (controller.isPayOnLine.value)
-        //   {Get.to(() => OrderNotificationPage())}
-        // else
-        //   {_dialogEnviarPedido(size)}
-
-        //_dialogEnviarPedido(size)
       },
       child: Container(
         width: size.width * 0.9,

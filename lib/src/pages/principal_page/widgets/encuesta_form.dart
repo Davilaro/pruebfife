@@ -68,7 +68,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 15),
+         // margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30), color: Colors.white),

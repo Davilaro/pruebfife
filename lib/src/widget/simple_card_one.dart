@@ -149,7 +149,6 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
       Transform.scale(
         scale: 1.2,
         child: Checkbox(
-          //visualDensity: VisualDensity(horizontal: -1, vertical: -4),
           checkColor: Colors.white,
           shape: CircleBorder(),
           activeColor: ConstantesColores.empodio_verde,

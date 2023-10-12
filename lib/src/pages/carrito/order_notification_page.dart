@@ -1,9 +1,12 @@
 import 'package:emart/_pideky/presentation/club_ganadores/view_mdel/club_ganadores_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
+import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 import '../../../../src/preferences/cont_colores.dart';
 
 class OrderNotificationPage extends StatelessWidget {
@@ -25,8 +28,7 @@ class OrderNotificationPage extends StatelessWidget {
               padding:
                   EdgeInsets.only(top: 15, bottom: 25, left: 20, right: 20),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                      15), // Ajusta el radio según tus preferencias
+                  borderRadius: BorderRadius.circular(15), 
                   color: Colors.white),
               child: Column(
                 children: [
@@ -61,10 +63,11 @@ class OrderNotificationPage extends StatelessWidget {
               color: ConstantesColores.empodio_verde,
               onTap: () async {
                 if (controller.isPayOnLine.value) {
-                  clubGanadoresViewModel.launchUrl();
-                } else {
-                  Container();
-                }
+                 await clubGanadoresViewModel.launchUrl();
+                 Provider.of<OpcionesBard>(context,listen: false).selectOptionMenu = 0;
+                 Get.offAll(() => TabOpciones());
+                 } 
+
               },
               text: 'Ir al portal de pagos',
 
