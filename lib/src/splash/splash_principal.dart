@@ -64,7 +64,7 @@ class _SplashState extends State<Splash> {
 
   Future<void> _descarcarDB() async {
     var cargo = false;
-    if (prefs.usurioLogin == null || prefs.paisUsuario == null) {
+    if (prefs.usurioLogin == null || prefs.isFirstDownload == null) {
       Get.offAll(() => ConfirmacionPais());
     } else if (prefs.usurioLogin == -1) {
       var res = false;

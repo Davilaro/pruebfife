@@ -46,8 +46,7 @@ class ConfirmacionPaisViewModel {
   confirmarPais(dynamic pais, bool isLogin) async {
     try {
       FlutterUxConfig config;
-      prefs.paisUsuario = pais ?? "CO";
-      pais = prefs.paisUsuario;
+      prefs.paisUsuario = pais;
       S.load(Locale('es', pais));
       FlutterUxcam.optIntoSchematicRecordings();
       if (Constantes().titulo == 'PRD' && pais == "CR") {
