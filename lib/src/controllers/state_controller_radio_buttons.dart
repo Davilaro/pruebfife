@@ -125,7 +125,7 @@ class StateControllerRadioButtons extends GetxController {
   RxBool authorizeDataTreatment = false.obs;
 
   RxBool cashPayment = false.obs;
-  RxBool payOnLine = true.obs;
+  RxBool payOnLine = false.obs;
   RxBool isPayOnLine = false.obs;
 
   bool get isButtonEnabled => acceptTerms.value && authorizeDataTreatment.value;
@@ -138,14 +138,30 @@ class StateControllerRadioButtons extends GetxController {
     authorizeDataTreatment.value = !authorizeDataTreatment.value;
   }
 
-  void paymentTypeSelection() {
-    if (payOnLine.value = !payOnLine.value) {
-      isPayOnLine = true.obs;
-    }else{
-      isPayOnLine = false.obs;
+//   void paymentTypeSelection() {
+//     if (payOnLine.value = !payOnLine.value) {
+//       isPayOnLine = true.obs;
+//     }else{
+//       isPayOnLine = false.obs;
+//     }
+    
+// cashPayment.value = !cashPayment.value;
+    
+//   }
+
+void paymentTypeSelection( String selectedType) {
+    if (selectedType == "cash") {
+      cashPayment.value = true;
+      payOnLine.value = false;
+      isPayOnLine.value = false; // Pago en efectivo, no se permite la navegación
+    } else if (selectedType == "online") {
+      cashPayment.value = false;
+      payOnLine.value = true;
+      isPayOnLine.value = true; // Pago en línea, se permite la navegación
+    } else {
+      cashPayment.value = false;
+      payOnLine.value = false;
+      isPayOnLine.value = false; // Ningún tipo seleccionado, no se permite la navegación
     }
-    
-cashPayment.value = !cashPayment.value;
-    
   }
 }

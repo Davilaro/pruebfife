@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/pedido.dart';
@@ -22,6 +23,7 @@ import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -110,6 +112,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: _total(size, cartProvider, format),
                                   ),
+                                  SizedBox(height: 100),
                                   _botonGrandeConfigurar(size)
                                 ],
                               )
@@ -129,7 +132,21 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
-      onTap: () => { _dialogEnviarPedido(size)
+      onTap: () => {
+        if (!controller.cashPayment.value && !controller.payOnLine.value)
+          {
+            showPopup(
+              context,
+              'Debes seleccionar un medio de pago',
+              SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+            )
+          }
+        else
+          {
+            _dialogEnviarPedido(size)
+            // Al menos una opción de pago seleccionada, procede con la confirmación del pedido y navegación.
+            // Agrega aquí el código para confirmar el pedido y navegar a la siguiente vista.
+          }
       },
       child: Container(
         width: size.width * 0.9,
@@ -263,8 +280,11 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       productoViewModel.eliminarBDTemporal();
 
       if (controller.isPayOnLine.value) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => OrderNotificationPage()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => OrderNotificationPage(
+                  numEmpresa: widget.numEmpresa,
+                  numdoc: numDoc,
+                )));
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => PedidoRealizado(

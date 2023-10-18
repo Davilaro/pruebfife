@@ -91,53 +91,6 @@ class _PrincipalPageState extends State<PrincipalPage>
   }
 
   void validacionGeneralNotificaciones() async {
-    if (prefs.typeCollaborator != "2") {
-      showDialog(
-          context: context,
-          builder: (_) => new AlertDialog(
-            insetPadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            backgroundColor: Color.fromARGB(123, 200, 195, 195),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(28.0))),
-                content: Builder(
-                  builder: (context) {
-                    // Get available height and width of the build area of this widget. Make a choice depending on the size.
-                    var height = MediaQuery.of(context).size.height;
-                    var width = MediaQuery.of(context).size.width;
-
-                    return FutureBuilder(
-              initialData: [],
-              future: DBProvider.db.consultarEncuesta(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.data.length == 0) {
-                  return Container();
-                } else {
-                 // controllerEncuesta.isVisibleEncuesta.value = true;
-                  return Container(
-                   // color: Colors.amber,
-                    height: height - 624,
-                      width: width - 25,
-                    //  margin: EdgeInsets.only(
-                       //   left: 10, right: 10, top: 15, bottom: 10),
-                      decoration: BoxDecoration(
-                      //color: Colors.amber,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                       child: Material(child: EncuestaForm(snapshot.data[0]))
-                      );
-                }
-              });
-        
-                                 },
-                ),
-              )
-        
-          );
-    }
-
-    
     controllerNotificaciones.closePushInUp.value = false;
     controllerNotificaciones.onTapPushInUp.value = false;
     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");

@@ -135,7 +135,7 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () => {_irSoporte(context)},
+                  onPressed: () => {irSoporte(context)},
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: <Widget>[
@@ -216,7 +216,7 @@ class PedidoRealizado extends StatelessWidget {
     );
   }
 
-  _irSoporte(context) {
+  irSoporte(context) {
     //UXCam: Llamamos el evento clickSoport
     UxcamTagueo().clickSoport();
     Navigator.push(
