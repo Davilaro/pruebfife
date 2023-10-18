@@ -240,7 +240,7 @@ class _LoginState extends State<Login> {
         if (element.bloqueado == "1") {
           Navigator.pushReplacementNamed(context, "inicio_compra");
           return mostrarAlertCustomWidgetOld(
-              context, cargarLinkWhatssap(context), null);
+              context, cargarLinkWhatssap(context), null, null);
         }
       });
       prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
@@ -258,7 +258,7 @@ class _LoginState extends State<Login> {
         );
       } else {
         await pr.hide();
-        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
         return false;
       }
     } catch (e) {
@@ -315,14 +315,14 @@ class _LoginState extends State<Login> {
 
     if (respues.codigo == null) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == -1) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
 
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == 0) {
       //message: No se pudo generar el código
       mostrarAlert(context, S.current.code_could_not_be_generated, null);
