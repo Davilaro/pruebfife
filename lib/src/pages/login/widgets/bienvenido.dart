@@ -734,7 +734,7 @@ class _BienvenidoState extends State<Bienvenido> {
       Navigator.pushReplacementNamed(
         context,
         'listaSucursale',
-        arguments: ScreenArguments(respuesta, widget.usuario),
+        arguments: ScreenArguments(respuesta,),
       );
     } else {
       await pr.hide();

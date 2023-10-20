@@ -29,7 +29,7 @@ class LoginService {
     return loginRepository.loginAsCollaborator(user);
   }
 
-  Future<dynamic> validationNit(String nit) {
-    return loginRepository.validationNit(nit);
+  Future<dynamic> validationCCUP(String nit) {
+    return loginRepository.validationCCUP(nit);
   }
 }

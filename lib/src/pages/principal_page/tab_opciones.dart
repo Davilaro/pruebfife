@@ -94,11 +94,9 @@ class _TabOpcionesState extends State<TabOpciones>
         hasInternet = result != ConnectivityResult.none;
       });
     });
-    cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
 
     preambuloBase();
     verPopUp();
-    setState(() {});
   }
 
   dispose() {
@@ -198,6 +196,7 @@ class _TabOpcionesState extends State<TabOpciones>
   void cargarSecciones() async {
     await searchController.initState();
     final sesiones = await DBProvider.db.consultarSecciones();
+    cargoConfirmar.cargarProductoNuevo(ProductoCambiante(), 1);
     cargoControllerBase.cargarSecciones(sesiones);
 
     var _tabControllerTemplate = new TabController(

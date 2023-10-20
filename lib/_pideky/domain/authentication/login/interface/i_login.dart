@@ -4,6 +4,6 @@ abstract class ILogin {
   Future<List<String>> getPhoneNumbers();
   Future<dynamic> validationCode(String code);
   Future<dynamic> getSecurityQuestionCodes();
-  Future<dynamic> validationNit(String nit);
+  Future<dynamic> validationCCUP(String ccup);
   Future<dynamic> loginAsCollaborator(String user);
 }

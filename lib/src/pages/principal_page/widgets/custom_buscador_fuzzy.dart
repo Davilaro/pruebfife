@@ -348,9 +348,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       allProducts.addAll(nonZerosList);
       allProducts.addAll(
           productsList.where((element) => element.ordenMarca == 0).toList());
-      allProducts.forEach((element) {
-        print("orden ${element.ordenSubcategoria}");
-      });
     } else {
       return productsList;
     }
