@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -12,7 +14,6 @@ class SimpleCardOne extends StatefulWidget {
   SimpleCardOne({Key? key, required this.texto, required this.referencia})
       : super(key: key);
 
-  final controller = Get.put(StateControllerRadioButtons());
 
   @override
   _SimpleCardOneState createState() => _SimpleCardOneState();
@@ -84,54 +85,60 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
             ),
           ),
           _isExpanded
-              ? AnimatedContainer(
-                  duration: Duration(milliseconds: 2000),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Table(
-                            columnWidths: {
-                              0: FlexColumnWidth(2),
-                              1: FlexColumnWidth(5)
-                            },
-                            children: [
-                              TableRow(children: [
-                                // if(PedidoEmart.listaProductosPorFabricante![fabricante] == 'NUTRESA')
-                                Obx(
-                                 
-                                  () => Container(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Column(
-                                      children: [
-                                        
-                                        formaPagoCheckboxRow(
-                                            text: 'Pago en efectivo',
-                                            value: controller.cashPayment.value,
-                                            onChanged: () {
-                                              controller.paymentTypeSelection("cash");
-                                            },
-                                            onPressed: () {}),
-                                        formaPagoCheckboxRow(
-                                            text: 'Pago en linea',
-                                            value: controller.payOnLine.value,
-                                            onChanged: () {
-                                              controller.paymentTypeSelection('online');
-                                            },
-                                            onPressed: () {}),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ])
-                            ],
-                          ),
-                          margin: EdgeInsets.only(top: 14),
+
+              ?  Obx(() =>
+                 Visibility(
+                  visible: controller.paymentCheckIsVisible.value,
+                   child: AnimatedContainer(
+                      duration: Duration(milliseconds: 2000),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Table(
+                                columnWidths: {
+                                  0: FlexColumnWidth(2),
+                                  1: FlexColumnWidth(5)
+                                },
+                                children: [
+                                  TableRow(children: [                                  
+                                       Container(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Column(
+                                          children: [
+                                            
+                                             paymentMethodCheckbox(
+                                                  text: 'Pago en efectivo',
+                                                  value: controller.cashPayment.value,
+                                                  onChanged: () {
+                                                    controller.paymentTypeSelection("cash");
+                                                  },
+                                                  onPressed: () {}),
+                                            
+                               
+                                             paymentMethodCheckbox(
+                                                  text: 'Pago en linea',
+                                                  value: controller.payOnLine.value,
+                                                  onChanged: () {
+                                                    controller.paymentTypeSelection('online');
+                                                  },
+                                                  onPressed: () {}),
+                                                //),
+                                          ],
+                                        ),
+                                      ),
+                                    
+                                  ])
+                                ],
+                              ),
+                              margin: EdgeInsets.only(top: 14),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                )
+                 ),
+              )
               : Container()
         ],
       ),
@@ -139,7 +146,7 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
   }
 }
 
-Widget formaPagoCheckboxRow({
+Widget paymentMethodCheckbox({
   required String text,
   required bool value,
   required VoidCallback onChanged,
@@ -173,3 +180,8 @@ Widget formaPagoCheckboxRow({
     ],
   );
 }
+
+
+
+
+

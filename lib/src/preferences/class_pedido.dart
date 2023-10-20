@@ -14,7 +14,7 @@ class PedidoEmart {
   static Map<String, bool>? listSugeridosAgregados;
   static Map<String, Producto>? listaProductos;
   static Map<String, dynamic>? listaSugeridos;
-  static Map<String, dynamic>? listaProductosPorFabricante;
+  static RxMap<String, dynamic>? listaProductosPorFabricante = RxMap();
   static List<dynamic>? listaFabricante = [];
   static Map<String, dynamic>? listaPrecioPorFabricante;
   static RxInt cambioVista = 1.obs;
@@ -38,7 +38,7 @@ class PedidoEmart {
   }
 
   static iniciarProductosPorFabricante() {
-    listaProductosPorFabricante = new Map();
+    listaProductosPorFabricante = new RxMap();
     final listaAgrupar = <ProductoAsignado>[];
 
     listaProductos!.forEach((key, elemet) {

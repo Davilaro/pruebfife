@@ -112,7 +112,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: _total(size, cartProvider, format),
                                   ),
-                                  SizedBox(height: 100),
+                                  SizedBox(height: 50),
                                   _botonGrandeConfigurar(size)
                                 ],
                               )
@@ -133,6 +133,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
       onTap: () => {
+        if(controller.paymentCheckIsVisible.value == false){
+            _dialogEnviarPedido(size)
+        }else
         if (!controller.cashPayment.value && !controller.payOnLine.value)
           {
             showPopup(
@@ -142,11 +145,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             )
           }
         else
-          {
-            _dialogEnviarPedido(size)
-            // Al menos una opción de pago seleccionada, procede con la confirmación del pedido y navegación.
-            // Agrega aquí el código para confirmar el pedido y navegar a la siguiente vista.
-          }
+          {_dialogEnviarPedido(size)}
       },
       child: Container(
         width: size.width * 0.9,
@@ -182,6 +181,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Divider(height: 40.0),
             Text(
                 'Total: ${productoViewModel.getCurrency(cartProvider.getTotal)}',
                 style: disenoValores()),
@@ -194,7 +194,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                 : Text(
                     'Estás ahorrando: ${productoViewModel.getCurrency((cartProvider.getTotalAhorro - cartProvider.getTotal))}',
                     style: TextStyle(color: Colors.red[600]),
-                  )
+                  ),
+            Divider(height: 40.0),
           ],
         ),
       ),

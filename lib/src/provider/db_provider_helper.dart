@@ -223,6 +223,20 @@ class DBProviderHelper {
     }
   }
 
+   Future<dynamic> consultarTipoFabricanteDirectoOIndirecto(String fabricante) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
+      SELECT ce.* FROM CondicionesEntrega ce LEFT JOIN Sucursales_Empresas se on ce.fabricante=se.empresa AND
+      ce.tipo=se.tipoFabricante WHERE ce.fabricante='$fabricante' LIMIT 1
+    ''');
+
+      return sql.first['tipo'];
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<String> consultarCodigoClienteProducto(String? codigoProducto) async {
     final db = await baseAbierta;
     try {
