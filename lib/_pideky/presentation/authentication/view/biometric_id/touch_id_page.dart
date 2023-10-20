@@ -78,7 +78,7 @@ class _TouchIdPageState extends State<TouchIdPage> {
                     prefs.isDataBiometricActive = false;
                     await progress.show();
                     await validationForm.login(
-                        context, prefs.codigoUnicoPideky, progress, false);
+                        context, progress, false);
                     //Get.back();
                   },
                   child: Text('Cancelar',
@@ -105,7 +105,7 @@ class _TouchIdPageState extends State<TouchIdPage> {
         prefs.ccupBiometric = prefs.codigoUnicoPideky;
         await progress.show();
         await validationForm.login(
-            context, prefs.ccupBiometric, progress, true);
+            context, progress, true);
         return;
       }
 

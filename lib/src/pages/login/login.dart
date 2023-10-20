@@ -254,7 +254,7 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(
           context,
           'listaSucursale',
-          arguments: ScreenArguments(respuesta, _controllerUser.text),
+          arguments: ScreenArguments(respuesta,),
         );
       } else {
         await pr.hide();

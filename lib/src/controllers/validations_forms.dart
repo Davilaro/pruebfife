@@ -168,7 +168,7 @@ class ValidationForms extends GetxController {
           height: 20,
         ));
     await progress.show();
-    var response = await loginService.validationNit(userName.value);
+    var response = await loginService.validationCCUP(userName.value);
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
@@ -178,11 +178,12 @@ class ValidationForms extends GetxController {
           ),
           context,
           null);
-    } else if (response == "Nit invalido") {
+    } else if (response == "CCUP invalido") {
+      isClosePopup.value = false;
       await backClosePopup(context, texto: response);
     } else {
       isClosePopup.value = false;
-      await backClosePopup(context, texto: response);
+      await backClosePopup(context, texto: "Por favor intenta con otro CCUP");
     }
   }
 
@@ -239,7 +240,7 @@ class ValidationForms extends GetxController {
       if (authenticated == true) {
         prefs.isDataBiometricActive = true;
         await progress.show();
-        await login(context, prefs.ccupBiometric, progress, true);
+        await login(context, progress, true);
         return;
       }
     } on PlatformException catch (e) {
@@ -373,6 +374,7 @@ class ValidationForms extends GetxController {
   Future<int> sendUserAndPassword(String user, String password) async {
     final isValid = await loginService.validationUserAndPassword(
         user, encryptedPaswword(password));
+
     if (isValid != -1) return isValid;
     return -1;
   }
@@ -388,16 +390,15 @@ class ValidationForms extends GetxController {
         ));
     await progress.show();
     var validation = await sendUserAndPassword(userName.value, password.value);
-    if (validation != -1 && validation != 2 && validation != 1) {
-      prefs.codClienteLogueado = userName.value;
+    print("respuesta $validation");
+    if (validation != -1 && validation != -2) {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
               ? Get.offAll(() => TouchIdPage())
               : Get.offAll(() => FaceIdPage());
         } else {
-          if (await login(context, prefs.codClienteLogueado, progress, false) ==
-              true) {
+          if (await login(context, progress, false) == true) {
             return true;
           }
         }
@@ -432,7 +433,7 @@ class ValidationForms extends GetxController {
       }
     } else {
       await progress.hide();
-      if (validation == 1) {
+      if (validation == -1) {
         mostrarAlertCustomWidgetOld(
             context,
             Text(
@@ -444,7 +445,7 @@ class ValidationForms extends GetxController {
               color: ConstantesColores.azul_aguamarina_botones,
             ),
             null);
-      } else if (validation == 2 || validation == 3) {
+      } else if (validation == -2) {
         mostrarAlertCustomWidgetOld(
             context,
             Text(
@@ -519,7 +520,7 @@ class ValidationForms extends GetxController {
   }
 
   Future<dynamic> login(
-      BuildContext context, String nit, progress, bool isLoginBiometric) async {
+      BuildContext context, progress, bool isLoginBiometric) async {
     try {
       List<dynamic> respuesta =
           await Servicies().getListaSucursales(isLoginBiometric);
@@ -559,7 +560,7 @@ class ValidationForms extends GetxController {
               MaterialPageRoute(
                 builder: (context) => ListaSucursales(),
                 settings: RouteSettings(
-                  arguments: ScreenArguments(respuesta, nit),
+                  arguments: ScreenArguments(respuesta),
                 ),
               ),
               (route) => false, // Elimina todas las rutas anteriores
@@ -571,7 +572,7 @@ class ValidationForms extends GetxController {
               MaterialPageRoute(
                 builder: (context) => ListaSucursales(),
                 settings: RouteSettings(
-                  arguments: ScreenArguments(respuesta, nit),
+                  arguments: ScreenArguments(respuesta),
                 ),
               ),
               (route) => false, // Elimina todas las rutas anteriores

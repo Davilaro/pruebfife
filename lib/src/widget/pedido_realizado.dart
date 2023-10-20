@@ -177,7 +177,7 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () => {_irMenuPrincipal(context)},
+                  onPressed: () => _irMenuPrincipal(context),
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: <Widget>[

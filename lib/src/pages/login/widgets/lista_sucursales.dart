@@ -49,7 +49,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
 
-    usuariLogin = args.usuario;
 
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
@@ -266,7 +265,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final controllerNequi = Get.find<MisPagosNequiViewModel>();
     notificationController.resetMaps();
     prefs.usurioLogin = 1;
-    prefs.usurioLoginCedula = usuariLogin;
+    prefs.usurioLoginCedula = prefs.codClienteLogueado;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();

@@ -10,10 +10,16 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
     final db = await dataBase.baseAbierta;
 
     try {
-      var sql = await db.rawQuery('''
+      var sql = await db.rawQuery(
+          '''
         SELECT   S.negocio  Negocio, S.Codigo, P.Nombre,
-        round(((P.precio - (P.precio * ifnull(tmp.descuento,0) / 100))) +
-        (P.precio - (P.precio * ifnull(tmp.descuento,0) / 100)) * P.iva /100,0) precio, S.Cantidad,
+        ROUND((( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) + 
+            (CASE
+                  WHEN p.ICUI = 0 THEN p.IBUA
+                   ELSE ((p.precio * p.ICUI) / 100)
+                END) + 
+            (( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) * p.iva / 100)), 0)
+     AS precio, S.Cantidad,
         F.BloqueoCartera
         FROM pedidoSugerido S 
         INNER JOIN Producto P ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio

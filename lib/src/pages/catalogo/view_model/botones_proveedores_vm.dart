@@ -1,4 +1,3 @@
-import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +5,7 @@ class BotonesProveedoresVm extends GetxController {
   final RxList<dynamic> listaCategoria = <dynamic>[].obs;
   List<dynamic> listaAllCategorias = [];
 
-  final RxList<Fabricante> listaFabricante = <Fabricante>[].obs;
+  final RxList<dynamic> listaFabricante = <dynamic>[].obs;
 
   RxList<dynamic> listaMarca = <dynamic>[].obs;
   List<dynamic> listaAllMarcas = [];
@@ -74,18 +73,18 @@ class BotonesProveedoresVm extends GetxController {
     }
   }
 
-  // Mantener el boton todos seleccionado por defecto cada que se ingrese en categorias o marcas 
+  // Mantener el boton todos seleccionado por defecto cada que se ingrese en categorias o marcas
   void resetSeleccionados(int idTab) {
     for (int i = 0; i < seleccionados.length; i++) {
       seleccionados[i] = false;
     }
-   // esBuscadoTodos.value = true;
-  //  listaProveedores.clear();
+    // esBuscadoTodos.value = true;
+    //  listaProveedores.clear();
     if (idTab != 1) {
-     // seleccionados.assignAll(List.filled(listaFabricante.length, true));
-     esBuscadoTodos.value = true;
-     // listaProveedores.assignAll(listaFabricante.map((fabricante) => fabricante.empresa));
-     listaProveedores.clear();
+      // seleccionados.assignAll(List.filled(listaFabricante.length, true));
+      esBuscadoTodos.value = true;
+      // listaProveedores.assignAll(listaFabricante.map((fabricante) => fabricante.empresa));
+      listaProveedores.clear();
     }
     cargarLista(idTab);
   }

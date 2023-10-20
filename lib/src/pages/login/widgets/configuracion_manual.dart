@@ -747,7 +747,7 @@ class _ConfiguracionManualState extends State<ConfiguracionManual> {
 
       Navigator.of(context).pushNamedAndRemoveUntil(
           'listaSucursale', (Route<dynamic> route) => false,
-          arguments: ScreenArguments(respuesta, prefs.codClienteLogueado));
+          arguments: ScreenArguments(respuesta));
     } else {
       await pr.hide();
       mostrarAlert(context, 'Error al obtener información', null);
