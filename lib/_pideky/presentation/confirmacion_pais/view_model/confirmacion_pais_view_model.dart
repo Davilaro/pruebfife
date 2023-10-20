@@ -43,10 +43,10 @@ class ConfirmacionPaisViewModel {
     });
   }
 
-  confirmarPais(String? pais, bool isLogin) async {
+  confirmarPais(dynamic pais, bool isLogin) async {
     try {
       FlutterUxConfig config;
-      prefs.paisUsuario = pais ?? 'CO';
+      prefs.paisUsuario = pais;
       S.load(Locale('es', pais));
       FlutterUxcam.optIntoSchematicRecordings();
       if (Constantes().titulo == 'PRD' && pais == "CR") {

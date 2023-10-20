@@ -28,12 +28,17 @@ class LoginApi implements ILogin {
       print("data loguin  $data");
       if (response.statusCode == 200 &&
           data["Actualizar"] != null &&
-          data['CCUP'] != "Usuario y contraseña invalidos") {
+          data['CCUP'] != "1" &&
+          data['CCUP'] != "2") {
         prefs.codigoUnicoPideky = data["CCUP"];
         confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
         return toInt(data["Actualizar"]);
       } else {
-        return -1;
+        if (data['CCUP'] != "1" && data['CCUP'] != "2" && data['CCUP'] != "3") {
+          return -1;
+        } else {
+          return toInt(data['CCUP']);
+        }
       }
     } catch (e) {
       print("error consultando usuario y contraseña $e");

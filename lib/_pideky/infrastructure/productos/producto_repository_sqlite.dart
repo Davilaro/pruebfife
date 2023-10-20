@@ -86,7 +86,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 2) {
         query = '''
-      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
         (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0) precio , 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
@@ -118,6 +118,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       } else if (tipo == 3) {
         query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
         round(((p.precio - (p.precio * ifnull(tmp.descuento,0) / 100))) + 
       (p.precio - (p.precio * ifnull(tmp.descuento,0) / 100)) * p.iva /100,0)  precio , 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
@@ -268,9 +269,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ORDER BY p.orden ASC
          
         ''';
-        // String resp = query.toString();
-        // log(resp);
       }
+      //log(query);
 
       sql = await db.rawQuery(query);
 

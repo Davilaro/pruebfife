@@ -81,6 +81,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       });
     }
     cargarProductos();
+
     super.initState();
   }
 
@@ -205,7 +206,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     return opciones;
   }
 
-  void cargarProductos() async {
+  Future<void> cargarProductos() async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
     if (widget.claseProducto != null) {
@@ -231,6 +232,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             0,
             widget.codigoMarca,
             widget.codigoProveedor);
+        sortProductByOrder(listaAllProducts);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 4) {
@@ -255,6 +257,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             catalogSearchViewModel.precioMaximo.value,
             widget.codigoMarca,
             widget.codigoProveedor);
+        sortProductByOrder(listaAllProducts);
         listaProducto.value = listaAllProducts;
       }
       if (widget.claseProducto == 5) {
@@ -310,6 +313,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       }
     } else {
       print("tipo de producto otro");
+      print("tipo ${widget.tipoCategoria}");
+
       listaAllProducts = await productService.cargarProductos(
           widget.codCategoria!,
           widget.tipoCategoria,
@@ -318,8 +323,38 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
           catalogSearchViewModel.precioMaximo.value,
           widget.codigoMarca,
           widget.codigoProveedor);
-      listaProducto.value = listaAllProducts;
+      listaProducto.value = sortProductByOrder(listaAllProducts);
     }
+  }
+
+  sortProductByOrder(List productsList) {
+    var allProducts = [];
+    var nonZerosList = [];
+    if (widget.tipoCategoria == 2) {
+      nonZerosList = productsList.where((element) {
+        return element.ordenSubcategoria != 0;
+      }).toList();
+      nonZerosList.sort((a, b) => a.ordenSubcategoria - b.ordenSubcategoria);
+      allProducts.addAll(nonZerosList);
+
+      allProducts.addAll(productsList
+          .where((element) => element.ordenSubcategoria == 0)
+          .toList());
+    } else if (widget.tipoCategoria == 3) {
+      nonZerosList = productsList.where((element) {
+        return element.ordenMarca != 0;
+      }).toList();
+      nonZerosList.sort((a, b) => a.ordenMarca - b.ordenMarca);
+      allProducts.addAll(nonZerosList);
+      allProducts.addAll(
+          productsList.where((element) => element.ordenMarca == 0).toList());
+      allProducts.forEach((element) {
+        print("orden ${element.ordenSubcategoria}");
+      });
+    } else {
+      return productsList;
+    }
+    return allProducts;
   }
 
   _buscadorPrincipal(BuildContext context) {

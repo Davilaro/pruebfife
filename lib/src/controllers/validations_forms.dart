@@ -24,6 +24,7 @@ import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
@@ -387,7 +388,7 @@ class ValidationForms extends GetxController {
         ));
     await progress.show();
     var validation = await sendUserAndPassword(userName.value, password.value);
-    if (validation != -1) {
+    if (validation != -1 && validation != 2 && validation != 1) {
       prefs.codClienteLogueado = userName.value;
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
@@ -431,7 +432,31 @@ class ValidationForms extends GetxController {
       }
     } else {
       await progress.hide();
-      await backClosePopup(context, texto: "Usuario y/o contraseña incorrecto");
+      if (validation == 1) {
+        mostrarAlertCustomWidgetOld(
+            context,
+            Text(
+              "La contraseña no coincide con este usuario. Por favor, revisa que esté bien escrito, o si la olvidaste, cambia tu contraseña. Si aún presentas problemas, contacta a soporte",
+              textAlign: TextAlign.left,
+            ),
+            SvgPicture.asset(
+              'assets/image/Icon_incorrecto.svg',
+              color: ConstantesColores.azul_aguamarina_botones,
+            ),
+            null);
+      } else if (validation == 2 || validation == 3) {
+        mostrarAlertCustomWidgetOld(
+            context,
+            Text(
+              "El NIT ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+              textAlign: TextAlign.left,
+            ),
+            SvgPicture.asset(
+              'assets/image/Icon_incorrecto.svg',
+              color: ConstantesColores.azul_aguamarina_botones,
+            ),
+            null);
+      }
 
       return false;
     }
@@ -514,7 +539,7 @@ class ValidationForms extends GetxController {
           progress.hide();
           prefs.usurioLogin = -1;
           mostrarAlertCustomWidgetOld(
-              context, cargarLinkWhatssap(context), null);
+              context, cargarLinkWhatssap(context), null, null);
 
           return false;
         }

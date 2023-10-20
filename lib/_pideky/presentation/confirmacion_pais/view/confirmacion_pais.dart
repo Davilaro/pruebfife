@@ -89,9 +89,9 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
                 color: ConstantesColores.agua_marina,
                 onTap: () {
                   prefs.isFirstTime = true;
+                  prefs.isFirstDownload = false;
                   confirmacionPaisViewModel.confirmarPais(
                       itemSeleccionado.value, false);
-                  
                 },
                 text: S.current.accept)
           ],

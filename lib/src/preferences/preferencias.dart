@@ -19,7 +19,7 @@ class Preferencias {
   }
 
   get paisUsuario {
-    return _prefs.getString("paisUsuario") ?? "";
+    return _prefs.getString("paisUsuario") ?? null;
   }
 
   set paisUsuario(dynamic value) {
@@ -213,6 +213,14 @@ class Preferencias {
 
   set isFirstTime(dynamic value) {
     _prefs.setBool("isfirsttime", value);
+  }
+
+  get isFirstDownload {
+    return _prefs.getBool("isfirstdownload") ?? null;
+  }
+
+  set isFirstDownload(dynamic value) {
+    _prefs.setBool("isfirstdownload", value);
   }
 
   get oficinaVentas {

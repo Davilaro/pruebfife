@@ -174,6 +174,7 @@ void mostrarAlertCustomWidgetOld(
   BuildContext context,
   Widget mensaje,
   Widget? icon,
+  Widget? iconClose,
 ) {
   showDialog(
       context: context,
@@ -190,21 +191,24 @@ void mostrarAlertCustomWidgetOld(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(),
-                          ),
-                          GestureDetector(
-                            onTap: () => Get.back(),
-                            child: Icon(
-                              Icons.cancel,
-                              color: ConstantesColores.verde,
-                              size: 30,
+                    Visibility(
+                      visible: iconClose == null ? false : true,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () => Get.back(),
+                              child: Icon(
+                                Icons.cancel,
+                                color: ConstantesColores.verde,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -212,7 +216,7 @@ void mostrarAlertCustomWidgetOld(
                       width: 50,
                       child: icon != null
                           ? icon
-                          : Image.asset('assets/image/alerta_img.png'),
+                          : Image.asset('assets/image/alerta_img.png',),
                     ),
                     Container(
                         padding:
