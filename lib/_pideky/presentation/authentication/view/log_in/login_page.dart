@@ -151,7 +151,7 @@ class LogInPage extends StatelessWidget {
                           TextButtonWithUnderline(
                             text: "Quiero ser cliente Pideky",
                             onPressed: () {
-                              Get.offAll(() => RegisterPage());
+                              Get.to(() => RegisterPage());
                             },
                             textColor: HexColor("#41398D"),
                             textSize: 18.0,

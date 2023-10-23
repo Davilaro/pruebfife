@@ -502,7 +502,7 @@ class ValidationForms extends GetxController {
         //message: El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en
         Text(
           S.current.the_nit_entered_is_not_registered,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
         ),
         GestureDetector(
           onTap: () => lanzarWhatssap(context),
