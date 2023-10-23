@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -9,8 +7,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
-    final sql = await db.rawQuery(
-        '''
+    final sql = await db.rawQuery('''
       SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
     ''');
 
@@ -21,8 +18,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProvider.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
        
         SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          ROUND(
@@ -97,8 +93,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 2) {
-        query =
-            '''
+        query = '''
       SELECT 
     p.codigo, 
     p.nombre, 
@@ -243,8 +238,7 @@ ORDER BY p.orden ASC
         
     ''';
       } else if (tipo == 3) {
-        query =
-            '''
+        query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
        p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
         ROUND(
@@ -348,8 +342,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
        ''';
       } else if (tipo == 4) {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
       ROUND(
         (
@@ -452,8 +445,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else if (tipo == 5) {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
         ROUND(
         (
@@ -557,8 +549,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       ''';
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
-        query =
-            '''
+        query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
         ROUND(
         (
@@ -663,8 +654,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
       ''';
       } else {
-        query =
-            '''
+        query = '''
        SELECT 
             p.codigo, 
             p.nombre, 
@@ -798,8 +788,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
         ''';
       }
-    print("tipo $tipo");
-      log(query);
+      //print("tipo $tipo");
+      //log(query);
 
       sql = await db.rawQuery(query);
 
@@ -835,8 +825,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipoProducto == 2) {
-        query =
-            '''
+        query = '''
         SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,  ROUND(
         (
             (
@@ -919,8 +908,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
         sql = await db.rawQuery(query);
       } else {
-        query =
-            '''
+        query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
       ROUND(
         (
@@ -1140,8 +1128,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       List<Producto> lista = [];
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
-      List<Map> sql = await db.rawQuery(
-          '''
+      List<Map> sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, ROUND(
         (
             (
@@ -1225,8 +1212,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 5) {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1337,8 +1323,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 1) {
         //tipo 1 para imperdibles
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
          ROUND(
         (
@@ -1449,8 +1434,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 3) {
         //tipo 3 para marca e imperdible
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1563,8 +1547,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 6) {
         //tipo 6 para productos del dia
 
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1671,8 +1654,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 4) {
         //tipo 4 para marca  y promo
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1779,8 +1761,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ? sql.map((e) => Producto.fromJson(e)).toList()
             : [];
       } else {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -1912,8 +1893,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 1) {
         //tipo 1 para filtrar solo por marca, categoria y subcategoria
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
             SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          ROUND(
         (
@@ -2022,8 +2002,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
         //tipo 2 para productos mas vendidos
       } else if (tipo == 2) {
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -2134,8 +2113,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
       } else {
         //tipo 3 para imperdibles marcas, categorias y subc
-        sql = await db.rawQuery(
-            '''
+        sql = await db.rawQuery('''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -2290,8 +2268,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   Future<List<Producto>> consultarPedidoTemporal() async {
     final db = await DBProviderHelper.db.tempAbierta;
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
       SELECT codigo_producto codigo, cantidad FROM pedido  
     ''');
 
