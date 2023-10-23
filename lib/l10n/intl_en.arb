@@ -94,7 +94,7 @@
     "the_email_does_not":"The email does not comply with the format",
     "the_verification_code_incorrect":"The verification code is incorrect, \nplease check it and try again.",
     "terms_conditions":"Terms and conditions",
-    "the_nit_entered_is_not_registered":"The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ",
+    "the_nit_entered_is_not_registered":"The CCUP entered is not registered in our database. Please check that it is spelled correctly or contact us on ",
     "the_number_is_incorrect": "The number entered does not correspond to a cellular number.",
 
     "unable_send_text_message":"Unable to send text message {e}",

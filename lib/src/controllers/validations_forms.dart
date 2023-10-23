@@ -449,7 +449,7 @@ class ValidationForms extends GetxController {
         mostrarAlertCustomWidgetOld(
             context,
             Text(
-              "El NIT ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+              "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
               textAlign: TextAlign.left,
             ),
             SvgPicture.asset(
