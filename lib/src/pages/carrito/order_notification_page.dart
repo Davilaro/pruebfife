@@ -40,21 +40,21 @@ class OrderNotificationPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15), color: Colors.white),
               child: Column(
                 children: [
-                  Container(
-                     width: 70,
-                     height: 70,
-                    child: CachedNetworkImage(
-                            imageUrl: PedidoEmart
-                                    .listaProductosPorFabricante!["NUTRESA"]
-                                ["imagen"],),
-                  ),
                   // Container(
-                  //     child: Image(
-                  //   width: 50,
-                  //   height: 50,
-                  //   image: AssetImage(
-                  //       'assets/image/img_grupo_nutresa.png'),
-                  // )),
+                  //    width: 70,
+                  //    height: 70,
+                  //   child: CachedNetworkImage(
+                  //           imageUrl: PedidoEmart
+                  //                   .listaProductosPorFabricante!["NUTRESA"]
+                  //               ["imagen"],),
+                  // ),
+                  Container(
+                      child: Image(
+                    width: 50,
+                    height: 50,
+                    image: AssetImage(
+                        'assets/image/img_grupo_nutresa.png'),
+                  )),
                   SizedBox(height: 25),
                   Text("¡Hemos generado tu orden Pideky!",
                       style: TextStyle(

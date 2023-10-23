@@ -24,7 +24,6 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(StateControllerRadioButtons());
-    CarroModelo carroModelo;
     return Container(
       margin: EdgeInsets.only(bottom: 14),
       child: Column(
