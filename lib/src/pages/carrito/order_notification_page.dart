@@ -8,6 +8,7 @@ import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -40,21 +41,13 @@ class OrderNotificationPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15), color: Colors.white),
               child: Column(
                 children: [
-                  // Container(
-                  //    width: 70,
-                  //    height: 70,
-                  //   child: CachedNetworkImage(
-                  //           imageUrl: PedidoEmart
-                  //                   .listaProductosPorFabricante!["NUTRESA"]
-                  //               ["imagen"],),
-                  // ),
+               
                   Container(
-                      child: Image(
+                      child: SvgPicture.asset('assets/image/Logo nutresa.svg'),
                     width: 50,
                     height: 50,
-                    image: AssetImage(
-                        'assets/image/img_grupo_nutresa.png'),
-                  )),
+                    
+                  ),
                   SizedBox(height: 25),
                   Text("¡Hemos generado tu orden Pideky!",
                       style: TextStyle(
