@@ -133,11 +133,9 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
       onTap: () => {
-        if(controller.paymentCheckIsVisible.value == false){
-            _dialogEnviarPedido(size)
-
-        }else
-        if (!controller.cashPayment.value && !controller.payOnLine.value)
+        if (controller.paymentCheckIsVisible.value == false)
+          {_dialogEnviarPedido(size)}
+        else if (!controller.cashPayment.value && !controller.payOnLine.value)
           {
             showPopup(
               context,
@@ -146,9 +144,10 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             )
           }
         else
-          {_dialogEnviarPedido(size),
-          controller.cashPayment.value = false,
-          controller.payOnLine.value = false
+          {
+            _dialogEnviarPedido(size),
+            controller.cashPayment.value = false,
+            controller.payOnLine.value = false
           }
       },
       child: Container(
@@ -285,11 +284,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       productoViewModel.eliminarBDTemporal();
 
       if (controller.isPayOnLine.value) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => OrderNotificationPage(
-                  numEmpresa: widget.numEmpresa,
-                  numdoc: numDoc,
-                )));
+        Get.off(() => OrderNotificationPage(
+            numEmpresa: widget.numEmpresa, numdoc: numDoc));
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => PedidoRealizado(
