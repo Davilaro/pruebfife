@@ -135,6 +135,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
       onTap: () => {
         if(controller.paymentCheckIsVisible.value == false){
             _dialogEnviarPedido(size)
+
         }else
         if (!controller.cashPayment.value && !controller.payOnLine.value)
           {
@@ -145,7 +146,10 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             )
           }
         else
-          {_dialogEnviarPedido(size)}
+          {_dialogEnviarPedido(size),
+          controller.cashPayment.value = false,
+          controller.payOnLine.value = false
+          }
       },
       child: Container(
         width: size.width * 0.9,

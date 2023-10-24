@@ -56,7 +56,7 @@ class OrderNotificationPage extends StatelessWidget {
                           fontWeight: FontWeight.w800)),
                   SizedBox(height: 15.0),
                   Text(
-                      "Da click en el botón ir al portal de pagos\ny no olvides mostrar el comprobante\na tu entregador! ",
+                      "Da click en el botón ir al portal de pagos\ny no olvides mostrar el comprobante\na tu entregador.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: ConstantesColores.azul_precio,

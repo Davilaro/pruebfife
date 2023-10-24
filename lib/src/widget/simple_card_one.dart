@@ -116,7 +116,7 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
                                             
                                
                                              paymentMethodCheckbox(
-                                                  text: 'Pago en linea',
+                                                  text: 'Pago en línea ',
                                                   value: controller.payOnLine.value,
                                                   onChanged: () {
                                                     controller.paymentTypeSelection('online');
