@@ -66,7 +66,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "El número de orden es: $numdoc",
+                                "El número de orden Pideky es: $numdoc",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
@@ -77,7 +77,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "para dudas o reporte de novedades",
+                                "Para dudas o reporte de novedades",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
@@ -110,7 +110,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "proveedor.",
+                                "fabricante.",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
