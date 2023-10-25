@@ -111,6 +111,7 @@ class OrderNotificationPage extends StatelessWidget {
                     Provider.of<OpcionesBard>(context, listen: false)
                         .selectOptionMenu = 0;
                     Get.offAll(() => TabOpciones());
+                    controller.isPayOnLine.value = false;
                   }
                 },
                 text: 'Ir al portal de pagos',

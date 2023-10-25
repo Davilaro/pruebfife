@@ -73,9 +73,13 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             statusBarIconBrightness: Brightness.dark,
           ),
           leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+              icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+              onPressed: () {
+                controller.cashPayment.value = false;
+                controller.payOnLine.value = false;
+                controller.isPayOnLine.value = false;
+                Navigator.of(context).pop();
+              }),
           elevation: 0,
         ),
         body: Container(
@@ -134,7 +138,11 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
     return GestureDetector(
       onTap: () => {
         if (controller.paymentCheckIsVisible.value == false)
-          {_dialogEnviarPedido(size)}
+          {
+            _dialogEnviarPedido(size),
+            controller.cashPayment.value = false,
+            controller.payOnLine.value = false,
+          }
         else if (!controller.cashPayment.value && !controller.payOnLine.value)
           {
             showPopup(

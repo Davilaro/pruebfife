@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
@@ -17,6 +18,7 @@ class PedidoRealizado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(StateControllerRadioButtons());
     return WillPopScope(
       onWillPop: () async => false,
       child: Material(
@@ -177,7 +179,11 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () => _irMenuPrincipal(context),
+                  onPressed: () { _irMenuPrincipal(context);
+                    controller.isPayOnLine.value = false;
+                    controller.cashPayment.value = false;
+                    controller.payOnLine.value = false;
+                  },
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: <Widget>[
