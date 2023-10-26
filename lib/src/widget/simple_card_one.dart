@@ -10,7 +10,6 @@ class SimpleCardOne extends StatefulWidget {
   SimpleCardOne({Key? key, required this.texto, required this.referencia})
       : super(key: key);
 
-
   @override
   _SimpleCardOneState createState() => _SimpleCardOneState();
 }
@@ -80,60 +79,60 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
             ),
           ),
           _isExpanded
-
-              ?  Obx(() =>
-                 Visibility(
-                  visible: controller.paymentCheckIsVisible.value,
-                   child: AnimatedContainer(
-                      duration: Duration(milliseconds: 2000),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Table(
-                                columnWidths: {
-                                  0: FlexColumnWidth(2),
-                                  1: FlexColumnWidth(5)
-                                },
-                                children: [
-                                  TableRow(children: [                                  
-                                       Container(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Column(
-                                          children: [
-                                            
-                                             paymentMethodCheckbox(
-                                                  text: 'Pago en efectivo',
-                                                  value: controller.cashPayment.value,
-                                                  onChanged: () {
-                                                    controller.paymentTypeSelection("cash");
-                                                  },
-                                                  onPressed: () {}),
-                                            
-                               
-                                             paymentMethodCheckbox(
-                                                  text: 'Pago en línea ',
-                                                  value: controller.payOnLine.value,
-                                                  onChanged: () {
-                                                    controller.paymentTypeSelection('online');
-                                                  },
-                                                  onPressed: () {}),
-                                                //),
-                                          ],
-                                        ),
-                                      ),
-                                    
-                                  ])
-                                ],
-                              ),
-                              margin: EdgeInsets.only(top: 14),
-                            ),
-                          ],
+              ? Obx(()  {
+                 final isVisible = controller.paymentCheckIsVisible.value;
+                 if (!isVisible) {
+          controller.cashPayment.value = true;
+        }
+                return  AnimatedContainer(
+                  duration: Duration(milliseconds: 2000),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Table(
+                            columnWidths: {
+                              0: FlexColumnWidth(2),
+                              1: FlexColumnWidth(5)
+                            },
+                            children: [
+                              TableRow(children: [
+                                Container(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Column(
+                                    children: [
+                                      
+                                      paymentMethodCheckbox(
+                                          text: 'Pago en efectivo',
+                                          value:controller.cashPayment.value,
+                                          onChanged: () {
+                                            controller.paymentTypeSelection(
+                                                "cash");
+                                          },
+                                          onPressed: () {}),
+                                         
+                                        if (isVisible) 
+                                         paymentMethodCheckbox(
+                                          text: 'Pago en portal línea ',
+                                          value: controller.payOnLine.value,
+                                          onChanged: () {
+                                            controller.paymentTypeSelection(
+                                                'online');
+                                          },
+                                          onPressed: () {}),
+                                    ],
+                                  ),
+                                ),
+                              ])
+                            ],
+                          ),
+                          margin: EdgeInsets.only(top: 14),
                         ),
-                      ),
+                      ],
                     ),
-                 ),
-              )
+                  ),
+                );
+                })
               : Container()
         ],
       ),
@@ -175,8 +174,3 @@ Widget paymentMethodCheckbox({
     ],
   );
 }
-
-
-
-
-

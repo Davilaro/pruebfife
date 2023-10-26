@@ -6,6 +6,7 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
@@ -49,6 +50,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   ProductoViewModel productoViewModel = Get.find();
   late final cartProvider = Provider.of<CarroModelo>(context);
+  final controller = Get.put(StateControllerRadioButtons());
 
   @override
   void initState() {
@@ -104,6 +106,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         borderRadius: BorderRadius.circular(50.0)),
                     child: GestureDetector(
                       onTap: () => {
+                        controller.cashPayment.value = false,
+                        controller.payOnLine.value = false,
                         prefs.typeCollaborator != "2"
                             ? _configurarPedido(size, cartProvider)
                             : mostrarAlert(
@@ -671,6 +675,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
       child: InkWell(
         onTap: () {
+                controller.cashPayment.value = false;
+                controller.payOnLine.value = false;
           dialogVaciarCarrito(fabricante, cartProvider, value, precioMinimo);
         },
         child: Row(
