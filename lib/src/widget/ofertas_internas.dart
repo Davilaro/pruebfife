@@ -71,6 +71,7 @@ class _OfertasInternaState extends State<OfertasInterna> {
                       },
                     ),
                     items: _listaBanners!.map((item) {
+                      print("lista banners ${_listaBanners!.length}}");
                       return InkWell(
                         onTap: () {
                           //FIREBASE: Llamamos el evento select_promotion

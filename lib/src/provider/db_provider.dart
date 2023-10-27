@@ -318,7 +318,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
       FROM Banner b
       inner join Fabricante f ON b.fabricante_x =f.empresa
-      WHERE b.tipo = '$tipo'
+      WHERE b.tipo = '$tipo' order by b.Orden asc
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
