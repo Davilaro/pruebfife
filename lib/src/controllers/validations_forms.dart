@@ -639,16 +639,35 @@ class ValidationForms extends GetxController {
   String? validateTextFieldCCUP(String? value) {
     ccupValid.value = false;
     var numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
     if (value == null || value.isEmpty || value.trim().isEmpty)
       return 'Campo requerido';
     //if (value.trim().isEmpty) return 'Campo requerido';
-    if (value.length < 11 ||
-        value[0].toLowerCase() != "c" ||
-        numberList.contains(value[1].toLowerCase())) return 'CCUP incorrecto';
+    if (prefs.paisUsuario == "CO") {
+      if (value.length < 11 ||
+          value[0].toLowerCase() != "c" ||
+          numberList.contains(value[1].toLowerCase())) return 'CCUP incorrecto';
 
-    for (int i = 2; i < value.length; i++) {
-      if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      for (int i = 2; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
+    } else if (prefs.paisUsuario == "CR") {
+      if (value.length < 11) {
+        if (value.length > 4 && value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+        return 'CCUP incorrecto';
+      } else {
+        if (value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+      }
+
+      for (int i = 4; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
     }
+
     ccupValid.value = true;
     return null;
   }
