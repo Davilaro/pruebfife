@@ -642,8 +642,9 @@ class ValidationForms extends GetxController {
     if (value == null || value.isEmpty || value.trim().isEmpty)
       return 'Campo requerido';
     //if (value.trim().isEmpty) return 'Campo requerido';
-    if (value.length < 11 || value[0].toLowerCase() != "c")
-      return 'CCUP incorrecto';
+    if (value.length < 11 ||
+        value[0].toLowerCase() != "c" ||
+        numberList.contains(value[1].toLowerCase())) return 'CCUP incorrecto';
 
     for (int i = 2; i < value.length; i++) {
       if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
