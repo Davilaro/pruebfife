@@ -24,6 +24,7 @@ import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
@@ -55,6 +56,7 @@ class ValidationForms extends GetxController {
   RxBool passwordsMatch = false.obs;
   RxBool isClosePopup = false.obs;
   RxBool preguntaBloqueada = false.obs;
+  RxBool ccupValid = false.obs;
   RxInt numIntentos = 0.obs;
   RxString userName = ''.obs;
   RxString password = ''.obs;
@@ -167,7 +169,7 @@ class ValidationForms extends GetxController {
           height: 20,
         ));
     await progress.show();
-    var response = await loginService.validationNit(userName.value);
+    var response = await loginService.validationCCUP(userName.value);
     await progress.hide();
     if (response == true) {
       await getPhoneNumbers();
@@ -177,11 +179,12 @@ class ValidationForms extends GetxController {
           ),
           context,
           null);
-    } else if (response == "Nit invalido") {
+    } else if (response == "CCUP invalido") {
+      isClosePopup.value = false;
       await backClosePopup(context, texto: response);
     } else {
       isClosePopup.value = false;
-      await backClosePopup(context, texto: response);
+      await backClosePopup(context, texto: "Por favor intenta con otro CCUP");
     }
   }
 
@@ -238,7 +241,7 @@ class ValidationForms extends GetxController {
       if (authenticated == true) {
         prefs.isDataBiometricActive = true;
         await progress.show();
-        await login(context, prefs.ccupBiometric, progress, true);
+        await login(context, progress, true);
         return;
       }
     } on PlatformException catch (e) {
@@ -372,6 +375,7 @@ class ValidationForms extends GetxController {
   Future<int> sendUserAndPassword(String user, String password) async {
     final isValid = await loginService.validationUserAndPassword(
         user, encryptedPaswword(password));
+
     if (isValid != -1) return isValid;
     return -1;
   }
@@ -387,16 +391,15 @@ class ValidationForms extends GetxController {
         ));
     await progress.show();
     var validation = await sendUserAndPassword(userName.value, password.value);
-    if (validation != -1) {
-      prefs.codClienteLogueado = userName.value;
+    print("respuesta $validation");
+    if (validation != -1 && validation != -2) {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
           plataforma == "Android"
               ? Get.offAll(() => TouchIdPage())
               : Get.offAll(() => FaceIdPage());
         } else {
-          if (await login(context, prefs.codClienteLogueado, progress, false) ==
-              true) {
+          if (await login(context, progress, false) == true) {
             return true;
           }
         }
@@ -431,7 +434,31 @@ class ValidationForms extends GetxController {
       }
     } else {
       await progress.hide();
-      await backClosePopup(context, texto: "Usuario y/o contraseña incorrecto");
+      if (validation == -1) {
+        mostrarAlertCustomWidgetOld(
+            context,
+            Text(
+              "La contraseña no coincide con este usuario. Por favor, revisa que esté bien escrito, o si la olvidaste, cambia tu contraseña. Si aún presentas problemas, contacta a soporte",
+              textAlign: TextAlign.center,
+            ),
+            SvgPicture.asset(
+              'assets/image/Icon_incorrecto.svg',
+              color: ConstantesColores.azul_aguamarina_botones,
+            ),
+            null);
+      } else if (validation == -2) {
+        mostrarAlertCustomWidgetOld(
+            context,
+            Text(
+              "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+              textAlign: TextAlign.center,
+            ),
+            SvgPicture.asset(
+              'assets/image/Icon_incorrecto.svg',
+              color: ConstantesColores.azul_aguamarina_botones,
+            ),
+            null);
+      }
 
       return false;
     }
@@ -476,7 +503,7 @@ class ValidationForms extends GetxController {
         //message: El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en
         Text(
           S.current.the_nit_entered_is_not_registered,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
         ),
         GestureDetector(
           onTap: () => lanzarWhatssap(context),
@@ -494,7 +521,7 @@ class ValidationForms extends GetxController {
   }
 
   Future<dynamic> login(
-      BuildContext context, String nit, progress, bool isLoginBiometric) async {
+      BuildContext context, progress, bool isLoginBiometric) async {
     try {
       List<dynamic> respuesta =
           await Servicies().getListaSucursales(isLoginBiometric);
@@ -514,7 +541,7 @@ class ValidationForms extends GetxController {
           progress.hide();
           prefs.usurioLogin = -1;
           mostrarAlertCustomWidgetOld(
-              context, cargarLinkWhatssap(context), null);
+              context, cargarLinkWhatssap(context), null, null);
 
           return false;
         }
@@ -534,7 +561,7 @@ class ValidationForms extends GetxController {
               MaterialPageRoute(
                 builder: (context) => ListaSucursales(),
                 settings: RouteSettings(
-                  arguments: ScreenArguments(respuesta, nit),
+                  arguments: ScreenArguments(respuesta),
                 ),
               ),
               (route) => false, // Elimina todas las rutas anteriores
@@ -546,7 +573,7 @@ class ValidationForms extends GetxController {
               MaterialPageRoute(
                 builder: (context) => ListaSucursales(),
                 settings: RouteSettings(
-                  arguments: ScreenArguments(respuesta, nit),
+                  arguments: ScreenArguments(respuesta),
                 ),
               ),
               (route) => false, // Elimina todas las rutas anteriores
@@ -605,6 +632,43 @@ class ValidationForms extends GetxController {
     //if (value.trim().isEmpty) return 'Campo requerido';
     if (value.length < 6) return 'Información incorrecta';
 
+    return null;
+  }
+
+  //Validación básica para verificar si un campo cualquiera está vacío o es null en el ccup
+  String? validateTextFieldCCUP(String? value) {
+    ccupValid.value = false;
+    var numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+    if (value == null || value.isEmpty || value.trim().isEmpty)
+      return 'Campo requerido';
+    //if (value.trim().isEmpty) return 'Campo requerido';
+    if (prefs.paisUsuario == "CO") {
+      if (value.length < 11 ||
+          value[0].toLowerCase() != "c" ||
+          numberList.contains(value[1].toLowerCase())) return 'CCUP incorrecto';
+
+      for (int i = 2; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
+    } else if (prefs.paisUsuario == "CR") {
+      if (value.length < 11) {
+        if (value.length > 4 && value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+        return 'CCUP incorrecto';
+      } else {
+        if (value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+      }
+
+      for (int i = 4; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
+    }
+
+    ccupValid.value = true;
     return null;
   }
 

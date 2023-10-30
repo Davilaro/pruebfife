@@ -84,7 +84,6 @@ class DBProvider {
     final db = await baseAbierta;
 
     try {
-
       var query =
           ''' SELECT c.codigo, c.descripcion, c.ico2 as ico, c.orden 
             FROM Categoria c 
@@ -319,7 +318,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
       FROM Banner b
       inner join Fabricante f ON b.fabricante_x =f.empresa
-      WHERE b.tipo = '$tipo'
+      WHERE b.tipo = '$tipo' order by b.Orden asc
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
@@ -565,14 +564,15 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
             List.generate(empresas.length, (index) => '?').join(', ');
         final query =
             '''
-         SELECT * FROM marca WHERE fabricante IN ($placeholders)
+         SELECT * FROM marca WHERE fabricante IN ($placeholders) order by orden asc
     ''';
         final sql = await db.rawQuery(query, empresas);
 
         return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
       } else {
-        final query = '''
-         SELECT * FROM marca 
+        final query =
+            '''
+         SELECT * FROM marca order by orden asc
     ''';
         final sql = await db.rawQuery(query);
 
@@ -595,7 +595,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
             List.generate(empresas.length, (index) => '?').join(', ');
         final query =
             '''
-         select codigo, descripcion,ico2 as ico,orden from categoria WHERE fabricante IN ($placeholders)
+         select codigo, descripcion,ico2 as ico,orden from categoria WHERE fabricante IN ($placeholders) order by orden asc
     ''';
         // log(query);
         final sql = await db.rawQuery(query, empresas);
@@ -606,7 +606,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       } else {
         final query =
             '''
-         select codigo, descripcion,ico2 as ico, fabricante ,orden FROM categoria 
+         select codigo, descripcion,ico2 as ico, fabricante ,orden FROM categoria order by orden asc 
     ''';
         //log(query);
         final sql = await db.rawQuery(query);

@@ -25,7 +25,7 @@ final controllerSearchViewModel = Get.find<SearchFuzzyViewModel>();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
-      "Estás apunto de salir de Pideky, deberás volver a ingresar los datos " +
+      "Estás a punto de salir de Pideky, deberás volver a ingresar los datos " +
           "de tu negocio para ver los productos y proveedores.";
 
   Widget _botonSeguirComprando(size) {

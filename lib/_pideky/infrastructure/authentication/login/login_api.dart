@@ -27,13 +27,19 @@ class LoginApi implements ILogin {
       var data = jsonDecode(response.body);
       print("data loguin  $data");
       if (response.statusCode == 200 &&
-          data["Actualizar"] != null &&
-          data['CCUP'] != "Usuario y contraseña invalidos") {
+          data["Actualizar"] != null && 
+          data['CCUP'] != "1" &&
+          data['CCUP'] != "2") {
         prefs.codigoUnicoPideky = data["CCUP"];
+        prefs.codClienteLogueado = data["Nit"];
         confirmacionViewModel.confirmarPais(prefs.paisUsuario, true);
         return toInt(data["Actualizar"]);
       } else {
-        return -1;
+        if (data['CCUP'] == "1") {
+          return -1;
+        } else {
+          return -2;
+        }
       }
     } catch (e) {
       print("error consultando usuario y contraseña $e");
@@ -57,8 +63,6 @@ class LoginApi implements ILogin {
       if (response.statusCode == 200 &&
           responseDecode == prefs.codigoUnicoPideky) {
         return true;
-      } else if (responseDecode == "Por favor validar con otro Nit") {
-        return responseDecode;
       } else {
         return false;
       }
@@ -182,12 +186,12 @@ class LoginApi implements ILogin {
   }
 
   @override
-  Future validationNit(String nit) async {
+  Future validationCCUP(String ccup) async {
     final prefs = Preferencias();
     try {
       final url;
 
-      url = Uri.parse(Constantes().urlPrincipal + 'LogIn/ValidarNit');
+      url = Uri.parse(Constantes().urlPrincipal + 'LogIn/ValidarCCUP');
 
       final response = await http.post(
         url,
@@ -195,22 +199,22 @@ class LoginApi implements ILogin {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "Nit": nit,
+          "CCUP": ccup,
           "Pais": prefs.paisUsuario,
         }),
       );
       var resDecode = jsonDecode(response.body);
 
-      if (resDecode == "Nit invalido") {
+      if (resDecode == "CCUP invalido") {
         return resDecode;
-      } else if (resDecode == "Por favor validar con otro Nit") {
+      } else if (resDecode == "Por favor validar con otro CCUP") {
         return resDecode;
       } else {
         prefs.codigoUnicoPideky = resDecode;
         return true;
       }
     } catch (e) {
-      print("error validando el nit $e");
+      print("error validando el ccup $e");
       return false;
     }
   }

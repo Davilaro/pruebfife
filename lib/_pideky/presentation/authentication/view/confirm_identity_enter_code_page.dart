@@ -33,6 +33,14 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
     FlutterUxcam.tagScreenName('ConfirmIdentityByCodePage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Restablecer contraseña',
+            style: TextStyle(color: HexColor("#41398D"))),
+        leading: new IconButton(
+            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+            onPressed: () => {Navigator.of(context).pop()}),
+        elevation: 0,
+      ),
       backgroundColor: HexColor('#eeeeee'),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 30),

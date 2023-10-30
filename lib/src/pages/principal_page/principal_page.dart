@@ -402,7 +402,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                                 ));
                           }
                         })
-                    : SizedBox.shrink()
+                    : SizedBox.shrink(),
               ],
             ),
           ),

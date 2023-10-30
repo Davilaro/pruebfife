@@ -31,15 +31,15 @@ class CondicionesEntrega {
 
   factory CondicionesEntrega.fromJson(Map<String, dynamic> json) =>
       CondicionesEntrega(
-        fabricante: json["codigo"],
-        tipo: json["descripcion"],
+        fabricante: json["fabricante"],
+        tipo: json["tipo"],
         hora: json["hora"],
-        texto1: json["Texto1"] == null ? '' : json["Texto1"],
-        texto2: json["Texto2"] == null ? '' : json["Texto2"],
-        montoMinimoFrecuencia: json["montominimofrecuencia"],
-        montoMinimoNoFrecuencia: json["montominimonofrecuencia"],
-        diaVisita: json["DiaVisita"],
-        diasEntrega: json["DiasEntrega"],
+        texto1: json["texto1"] == null ? '' : json["texto1"],
+        texto2: json["texto2"] == null ? '' : json["texto2"],
+        montoMinimoFrecuencia: json["montoMinimoFrecuencia"],
+        montoMinimoNoFrecuencia: json["montoMinimoNoFrecuencia"],
+        diaVisita: json["diaVisita"],
+        diasEntrega: json["diasEntrega"],
       );
 
   Map<String, dynamic> toJson() => {

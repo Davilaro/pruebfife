@@ -213,11 +213,27 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
+      SELECT ce.fabricante, ce.tipo, ce.hora, ce.Texto1 as texto1, ce.Texto2 as texto2, ce.DiasEntrega as diasEntrega, ce.DiaVisita as diaVisita, ce.MontoMinimoFrecuencia 
+      as montoMinimoFrecuencia, ce.MontoMinimoNoFrecuencia as montoMinimoNoFrecuencia FROM CondicionesEntrega ce LEFT JOIN Sucursales_Empresas se on ce.fabricante=se.empresa AND
+      ce.tipo=se.tipoFabricante WHERE ce.fabricante='$fabricante' LIMIT 1
+      
+    ''');
+
+      return CondicionesEntrega.fromJson(sql.first);
+    } catch (e) {
+      return [];
+    }
+  }
+
+   Future<dynamic> consultarTipoFabricanteDirectoOIndirecto(String fabricante) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
       SELECT ce.* FROM CondicionesEntrega ce LEFT JOIN Sucursales_Empresas se on ce.fabricante=se.empresa AND
       ce.tipo=se.tipoFabricante WHERE ce.fabricante='$fabricante' LIMIT 1
     ''');
 
-      return CondicionesEntrega.fromJson(sql.first);
+      return sql.first['tipo'];
     } catch (e) {
       return [];
     }

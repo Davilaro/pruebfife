@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
+import 'package:emart/src/pages/carrito/order_notification_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -20,6 +23,7 @@ import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:emart/src/widget/simple_card_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -39,6 +43,7 @@ class ConfigurarPedido extends StatefulWidget {
 class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   final prefs = new Preferencias();
   ProductoViewModel productoViewModel = Get.find();
+  final controller = Get.put(StateControllerRadioButtons());
 
   late ProgressDialog pr;
   late BuildContext _context2;
@@ -68,9 +73,13 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             statusBarIconBrightness: Brightness.dark,
           ),
           leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+              icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+              onPressed: () {
+                controller.cashPayment.value = false;
+                controller.payOnLine.value = false;
+                controller.isPayOnLine.value = false;
+                Navigator.of(context).pop();
+              }),
           elevation: 0,
         ),
         body: Container(
@@ -107,6 +116,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: _total(size, cartProvider, format),
                                   ),
+                                  SizedBox(height: 50),
                                   _botonGrandeConfigurar(size)
                                 ],
                               )
@@ -126,7 +136,28 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
   Widget _botonGrandeConfigurar(size) {
     return GestureDetector(
-      onTap: () => {_dialogEnviarPedido(size)},
+      onTap: () => {
+        if (controller.paymentCheckIsVisible.value == false)
+          {
+            _dialogEnviarPedido(size),
+            controller.cashPayment.value = false,
+            controller.payOnLine.value = false,
+          }
+        else if (!controller.cashPayment.value && !controller.payOnLine.value)
+          {
+            showPopup(
+              context,
+              'Debes seleccionar un medio de pago',
+              SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+            )
+          }
+        else
+          {
+            _dialogEnviarPedido(size),
+            controller.cashPayment.value = false,
+            controller.payOnLine.value = false
+          }
+      },
       child: Container(
         width: size.width * 0.9,
         alignment: Alignment.center,
@@ -161,11 +192,12 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Divider(height: 40.0),
             Text(
                 'Total: ${productoViewModel.getCurrency(cartProvider.getTotal)}',
                 style: disenoValores()),
             Text(
-              '* Este pedido tiene incluido el iva',
+              '* Este pedido ya tiene incluido los impuestos',
               style: TextStyle(color: ConstantesColores.verde),
             ),
             cartProvider.getTotalAhorro - cartProvider.getTotal == 0
@@ -173,7 +205,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                 : Text(
                     'Estás ahorrando: ${productoViewModel.getCurrency((cartProvider.getTotalAhorro - cartProvider.getTotal))}',
                     style: TextStyle(color: Colors.red[600]),
-                  )
+                  ),
+            Divider(height: 40.0),
           ],
         ),
       ),
@@ -258,9 +291,14 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           .updateAll((key, value) => value = false);
       productoViewModel.eliminarBDTemporal();
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              PedidoRealizado(numEmpresa: widget.numEmpresa, numdoc: numDoc)));
+      if (controller.isPayOnLine.value) {
+        Get.off(() => OrderNotificationPage(
+            numEmpresa: widget.numEmpresa, numdoc: numDoc));
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => PedidoRealizado(
+                numEmpresa: widget.numEmpresa, numdoc: numDoc)));
+      }
     } else {
       Navigator.pop(context);
       mostrarAlertaUtilsError(_context2, validar.mensaje!);

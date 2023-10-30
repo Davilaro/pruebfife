@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
@@ -106,6 +108,7 @@ class _SimpleCardCondicionesEntregaState
   List<Widget> _cargarWidgetDinamicoAcordeon(
       BuildContext context1, CarroModelo cartProvider) {
     List<Widget> listaWidget = [];
+    var condicionEntrega;
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (value['precioProducto'] > 0.0) {
@@ -143,7 +146,7 @@ class _SimpleCardCondicionesEntregaState
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
-                                var condicionEntrega = snapshot.data!;
+                                condicionEntrega = snapshot.data!;
 
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,6 +187,28 @@ class _SimpleCardCondicionesEntregaState
       }
     });
 
+    final controller = Get.find<StateControllerRadioButtons>();
+   
+    if (listaWidget.length == 1) {
+
+      PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) async {
+      if (value['precioProducto'] > 0.0) {
+
+        var result = await DBProviderHelper.db.consultarTipoFabricanteDirectoOIndirecto(fabricante);
+            if (result.toString() == '1') {
+              controller.paymentCheckIsVisible.value = true;
+            }else{
+              controller.paymentCheckIsVisible.value = false;
+            }
+        
+          }
+    });
+      
+    } else {
+        controller.paymentCheckIsVisible.value = false;
+       
+      
+    }
     return listaWidget;
   }
 

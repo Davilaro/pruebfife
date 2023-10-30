@@ -231,13 +231,6 @@ class Preferencias {
     _prefs.setString("oficinaventas", value);
   }
 
-  get rememberMe {
-    return _prefs.getBool("rememberme") ?? true;
-  }
-
-  set rememberMe(dynamic value) {
-    _prefs.setBool("rememberme", value);
-  }
 
   bool? get isDataBiometricActive {
     final value = _prefs.getBool("isDataBiometricActive");

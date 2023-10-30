@@ -44,7 +44,7 @@ class ConfirmIdentitySelectMethodPage extends StatelessWidget {
                 SizedBox(height: Get.height * 0.05),
                 CustomTextFormField(
                     textAlign: TextAlign.center,
-                    hintText: 'Ingresa el usuario o Nit',
+                    hintText: 'Ingresa tu CCUP',
                     hintStyle: TextStyle(color: ConstantesColores.gris_sku),
                     backgroundColor: Colors.white,
                     textColor: HexColor("#41398D"),
