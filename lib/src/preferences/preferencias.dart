@@ -215,14 +215,6 @@ class Preferencias {
     _prefs.setBool("isfirsttime", value);
   }
 
-  get isFirstDownload {
-    return _prefs.getBool("isfirstdownload") ?? null;
-  }
-
-  set isFirstDownload(dynamic value) {
-    _prefs.setBool("isfirstdownload", value);
-  }
-
   get oficinaVentas {
     return _prefs.getString("oficinaventas") ?? "";
   }
@@ -230,7 +222,6 @@ class Preferencias {
   set oficinaVentas(dynamic value) {
     _prefs.setString("oficinaventas", value);
   }
-
 
   bool? get isDataBiometricActive {
     final value = _prefs.getBool("isDataBiometricActive");
