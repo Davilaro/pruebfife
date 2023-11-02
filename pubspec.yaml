@@ -46,7 +46,7 @@ dependencies:
     sdk: flutter
   flutter_pdfview: ^1.2.5
   flutter_svg: ^2.0.7
-  flutter_uxcam: ^2.3.0
+  flutter_uxcam: ^2.4.6
   # fuzzy: ^0.3.0
   fuzzywuzzy: ^1.1.2
   get: null
