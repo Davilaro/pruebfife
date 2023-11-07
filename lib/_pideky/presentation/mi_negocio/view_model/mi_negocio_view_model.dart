@@ -97,7 +97,7 @@ class MiNegocioViewModel extends GetxController {
   }
 
   copiarCCUP(String? codigoCCUP, BuildContext context) async {
-    return await Clipboard.setData(ClipboardData(text: codigoCCUP)).then((_) {
+    return await Clipboard.setData(ClipboardData(text: codigoCCUP ?? "")).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: ConstantesColores.agua_marina,
           shape: RoundedRectangleBorder(

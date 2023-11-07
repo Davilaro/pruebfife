@@ -3,9 +3,8 @@ import 'package:emart/_pideky/presentation/authentication/view/entry_as_collabor
 import 'package:emart/_pideky/presentation/authentication/view/register/register_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_select_method_page.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
-import 'package:emart/shared/widgets/custom_checkBox.dart';
-import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -21,6 +20,7 @@ class LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ValidationForms _validationForms = Get.find<ValidationForms>();
+    final prefs = Preferencias();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('LoginPage');
     String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
@@ -49,7 +49,10 @@ class LogInPage extends StatelessWidget {
                   SizedBox(
                     height: Get.height * 0.05,
                   ),
-                  Text("Inicia sesión",
+                  Text(
+                      prefs.isFirstTime == true
+                          ? "Activación"
+                          : "Inicia sesión",
                       style: TextStyle(
                           color: ConstantesColores.azul_precio,
                           fontSize: 25,
@@ -61,9 +64,7 @@ class LogInPage extends StatelessWidget {
                       child: Column(
                         children: [
                           CustomTextFormField(
-                              hintText: prefs.isFirstTime == true
-                                  ? 'Ingresa usuario asignado'
-                                  : "Ingresa tu usario",
+                              hintText: 'Ingresa tu código Pideky',
                               hintStyle:
                                   TextStyle(color: ConstantesColores.gris_sku),
                               backgroundColor: HexColor("#E4E3EC"),
@@ -79,13 +80,15 @@ class LogInPage extends StatelessWidget {
                                 _validationForms.userInteracted2.value =
                                     true; // Marca como interactuado
                               },
-                              validator: _validationForms
-                                  .validateTextFieldNullorEmpty),
-                          SizedBox(height: 15.0),
+                              validator:
+                                  _validationForms.validateTextFieldCCUP),
+                          SizedBox(
+                            height: 15.0,
+                          ),
                           CustomTextFormField(
                             obscureText: true,
                             hintText: prefs.isFirstTime == true
-                                ? 'Ingresa contraseña asignada'
+                                ? 'Ingresa tu código Pideky'
                                 : "Ingresa tu contraseña",
                             hintStyle:
                                 TextStyle(color: ConstantesColores.gris_sku),
@@ -101,35 +104,20 @@ class LogInPage extends StatelessWidget {
                               _validationForms.userInteracted.value =
                                   true; // Marca como interactuado
                             },
+                            validator:
+                                _validationForms.validateTextFieldNullorEmpty,
                           ),
-                          SizedBox(height: 25.0),
-                          Visibility(
-                            visible: prefs.isFirstTime != true ? true : false,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              width: double.infinity,
-                              child: TextButtonWithUnderline(
-                                text: "¿Olvidaste tu contraseña?",
-                                onPressed: () {
-                                  Get.to(
-                                      () => ConfirmIdentitySelectMethodPage());
-                                },
-                                textColor: HexColor("#41398D"),
-                                textSize: 15.0,
-                              ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            width: double.infinity,
+                            child: TextButtonWithUnderline(
+                              text: "Olvidé mi contraseña",
+                              onPressed: () {
+                                Get.to(() => ConfirmIdentitySelectMethodPage());
+                              },
+                              textColor: HexColor("#41398D"),
+                              textSize: 15.0,
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Recuérdame la próxima vez',
-                                style: TextStyle(
-                                  color: ConstantesColores.gris_sku,
-                                ),
-                              ),
-                              CustomCheckBox(),
-                            ],
                           ),
                           BotonAgregarCarrito(
                               borderRadio: 35,
@@ -144,27 +132,21 @@ class LogInPage extends StatelessWidget {
                                       .validationLoginNewUser(context);
                                   return;
                                 } else {
-                                  _validationForms.isClosePopup.value = false;
-                                  showPopup(
-                                    context,
-                                    'Usuario y/o contraseña incorrecto',
-                                    SvgPicture.asset(
-                                        'assets/image/Icon_incorrecto.svg'),
-                                  );
-                                  await Future.delayed(Duration(seconds: 3))
-                                      .then((value) async {
-                                    if (_validationForms.isClosePopup.value ==
-                                        false) {
-                                      Get.back();
-                                    }
-                                  });
+                                  if (_validationForms.ccupValid.value ==
+                                      false) {
+                                    _validationForms.backClosePopup(context,
+                                        texto: 'Este CCUP no es válido');
+                                  } else {
+                                    _validationForms.backClosePopup(context,
+                                        texto: 'Ingresa tu contraseña');
+                                  }
                                 }
                               },
                               text: "Ingresar"),
                           TextButtonWithUnderline(
                             text: "Quiero ser cliente Pideky",
                             onPressed: () {
-                              Get.offAll(() => RegisterPage());
+                              Get.to(() => RegisterPage());
                             },
                             textColor: HexColor("#41398D"),
                             textSize: 18.0,

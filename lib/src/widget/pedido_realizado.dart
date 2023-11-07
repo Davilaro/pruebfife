@@ -1,3 +1,4 @@
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
@@ -17,6 +18,7 @@ class PedidoRealizado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(StateControllerRadioButtons());
     return WillPopScope(
       onWillPop: () async => false,
       child: Material(
@@ -66,7 +68,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "El número de orden es: $numdoc",
+                                "El número de orden Pideky es: $numdoc",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
@@ -77,7 +79,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "para dudas o reporte de novedades",
+                                "Para dudas o reporte de novedades",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
@@ -110,7 +112,7 @@ class PedidoRealizado extends StatelessWidget {
                             Container(
                               width: Get.width * 0.8,
                               child: Text(
-                                "proveedor.",
+                                "fabricante.",
                                 style: TextStyle(
                                     color: HexColor("#43398E"),
                                     fontSize: 14,
@@ -135,7 +137,7 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () => {_irSoporte(context)},
+                  onPressed: () => {irSoporte(context)},
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: <Widget>[
@@ -177,7 +179,11 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () => {_irMenuPrincipal(context)},
+                  onPressed: () { _irMenuPrincipal(context);
+                    controller.isPayOnLine.value = false;
+                    controller.cashPayment.value = false;
+                    controller.payOnLine.value = false;
+                  },
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: <Widget>[
@@ -216,7 +222,7 @@ class PedidoRealizado extends StatelessWidget {
     );
   }
 
-  _irSoporte(context) {
+  irSoporte(context) {
     //UXCam: Llamamos el evento clickSoport
     UxcamTagueo().clickSoport();
     Navigator.push(

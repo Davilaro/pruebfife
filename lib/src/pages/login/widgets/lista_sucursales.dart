@@ -3,15 +3,12 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
-import 'package:emart/src/pages/login/login.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +49,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
 
-    usuariLogin = args.usuario;
 
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
@@ -269,7 +265,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final controllerNequi = Get.find<MisPagosNequiViewModel>();
     notificationController.resetMaps();
     prefs.usurioLogin = 1;
-    prefs.usurioLoginCedula = usuariLogin;
+    prefs.usurioLoginCedula = prefs.codClienteLogueado;
 
     PedidoEmart.listaControllersPedido = new Map();
     PedidoEmart.listaValoresPedido = new Map();

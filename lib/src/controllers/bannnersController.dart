@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
@@ -12,7 +10,6 @@ import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';

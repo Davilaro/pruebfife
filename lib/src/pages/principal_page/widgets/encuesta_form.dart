@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
@@ -66,7 +68,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 15),
+         // margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30), color: Colors.white),

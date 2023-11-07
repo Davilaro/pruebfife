@@ -111,7 +111,6 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       Producto productos = element;
       final widgetTemp = InputValoresCatalogo(
         element: productos,
-        numEmpresa: prefs.numEmpresa,
         isCategoriaPromos: isProductoPromo,
         index: data.indexOf(element),
       );

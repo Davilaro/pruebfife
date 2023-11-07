@@ -256,11 +256,10 @@ class _PedidoRapidoState extends State<PedidoRapido> {
               ),
               child: TextField(
                 onChanged: (value) => {
-                  setState(() => {
-                        _filtroController.text == ""
+                  setState(() => _filtroController.text == ""
                             ? this.filtro = "-1"
                             : this.filtro = _filtroController.text
-                      })
+                      )
                 },
                 controller: _filtroController,
                 decoration: InputDecoration(

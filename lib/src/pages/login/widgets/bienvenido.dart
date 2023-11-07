@@ -1,11 +1,13 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:email_validator/email_validator.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/modelos/validar.dart';
 import 'package:emart/src/pages/login/widgets/activacion_manual_maestro.dart';
-import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -17,7 +19,6 @@ import 'package:emart/src/widget/politicas.dart';
 import 'package:emart/src/widget/terminos.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:imagebutton/imagebutton.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
@@ -27,7 +28,6 @@ final TextEditingController _controllerCodigo = TextEditingController();
 late ProgressDialog prEnviarCorreo;
 late int codigoRespuesta;
 
-final TextEditingController _controllerUser = TextEditingController();
 
 late ProgressDialog pr;
 late ProgressDialog prValidar;
@@ -65,7 +65,6 @@ TextStyle diseno_dialog_titulos() => TextStyle(
     fontSize: 18);
 
 class _BienvenidoState extends State<Bienvenido> {
-  bool _value = false;
   late int val = -1;
   int _selectedIndex = -1;
   BuildContext? context2;
@@ -311,77 +310,6 @@ class _BienvenidoState extends State<Bienvenido> {
     );
   }
 
-  void _enviarMensajeTelefono(String dropdownValue) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            content: Container(
-              height: 300,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    child: Image.asset('assets/image/alerta_img.png'),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: Text(
-                        '¿Quieres enviar el mensaje a este número: ******${dropdownValue.substring(dropdownValue.length - 4)}?'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                    child: GestureDetector(
-                      onTap: () =>
-                          _enviarMensajeDeTexto(context, dropdownValue),
-                      child: Container(
-                        height: 40,
-                        width: double.infinity,
-                        child: Image.asset(
-                          "assets/image/btn_aceptar.png",
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: SingleChildScrollView(
-                      child: Column(children: <Widget>[
-                        Text(
-                          S.current.you_want_to_go,
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        GestureDetector(
-                          onTap: () => {
-                            Navigator.of(context).pop(),
-                            Navigator.push(
-                              context2!,
-                              MaterialPageRoute(
-                                  builder: (context2) =>
-                                      ConfiguracionMamualMaestr()),
-                            )
-                          },
-                          child: Text(
-                            ' ${S.current.manual_registration}',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontSize: 10),
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
 
   _enviarMensajeDeTexto(BuildContext context, String numero) {
     _enviarMensajeServicio(numero);
@@ -793,9 +721,6 @@ class _BienvenidoState extends State<Bienvenido> {
     await pr.hide();
   }
 
-  Future _login(BuildContext context, String nit) async {
-    _diloagCargando(context);
-  }
 
   Future loguin(BuildContext context) async {
     List<dynamic> respuesta =
@@ -809,7 +734,7 @@ class _BienvenidoState extends State<Bienvenido> {
       Navigator.pushReplacementNamed(
         context,
         'listaSucursale',
-        arguments: ScreenArguments(respuesta, widget.usuario),
+        arguments: ScreenArguments(respuesta,),
       );
     } else {
       await pr.hide();

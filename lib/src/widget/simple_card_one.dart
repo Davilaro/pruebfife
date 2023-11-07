@@ -1,4 +1,7 @@
+import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class SimpleCardOne extends StatefulWidget {
@@ -15,6 +18,7 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(StateControllerRadioButtons());
     return Container(
       margin: EdgeInsets.only(bottom: 14),
       child: Column(
@@ -75,55 +79,97 @@ class _SimpleCardOneState extends State<SimpleCardOne> {
             ),
           ),
           _isExpanded
-              ? AnimatedContainer(
-                  duration: Duration(milliseconds: 2000),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Table(
-                            columnWidths: {
-                              0: FlexColumnWidth(2),
-                              1: FlexColumnWidth(5)
-                            },
-                            children: [
-                              TableRow(children: [
-                                Container(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.task_alt,
-                                    color: HexColor("#30C3A3"),
-                                    size: 30,
+              ? Obx(() {
+                  final isVisible = controller.paymentCheckIsVisible.value;
+                  if (!isVisible) {
+                    controller.cashPayment.value = true;
+                  }
+                  return AnimatedContainer(
+                    duration: Duration(milliseconds: 2000),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(2),
+                                1: FlexColumnWidth(5)
+                              },
+                              children: [
+                                TableRow(children: [
+                                  Container(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Column(
+                                      children: [
+                                        paymentMethodCheckbox(
+                                            text: 'Pago en efectivo',
+                                            value: true,
+                                            onChanged: () {
+                                              controller
+                                                  .paymentTypeSelection("cash");
+                                            },
+                                            onPressed: () {}),
+
+                                        // if (isVisible)
+                                        //  paymentMethodCheckbox(
+                                        //   text: 'Pago en portal línea ',
+                                        //   value: controller.payOnLine.value,
+                                        //   onChanged: () {
+                                        //     controller.paymentTypeSelection(
+                                        //         'online');
+                                        //   },
+                                        //   onPressed: () {}),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          widget.referencia,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ])
-                            ],
+                                ])
+                              ],
+                            ),
+                            margin: EdgeInsets.only(top: 14),
                           ),
-                          margin: EdgeInsets.only(top: 14),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
+                  );
+                })
               : Container()
         ],
       ),
     );
   }
+}
+
+Widget paymentMethodCheckbox({
+  required String text,
+  required bool value,
+  required VoidCallback onChanged,
+  required VoidCallback onPressed,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Transform.scale(
+        scale: 1.2,
+        child: Checkbox(
+          checkColor: Colors.white,
+          shape: CircleBorder(),
+          activeColor: ConstantesColores.empodio_verde,
+          value: value,
+          onChanged: (_) {
+            onChanged();
+          },
+        ),
+      ),
+      Container(
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ),
+    ],
+  );
 }

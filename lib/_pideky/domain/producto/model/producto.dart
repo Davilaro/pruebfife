@@ -27,6 +27,8 @@ class Producto {
       required this.nombrecomercial,
       this.codigocliente,
       this.descuento,
+      this.ordenMarca,
+      this.ordenSubcategoria,
       this.preciodescuento,
       this.precioinicial,
       this.activoprodnuevo,
@@ -63,6 +65,8 @@ class Producto {
   int? activoprodnuevo;
   String? fechafinpromocion_1;
   String? fechafinnuevo_1;
+  int? ordenMarca;
+  int? ordenSubcategoria;
 
   factory Producto.fromJson(Map<String, dynamic> json) => Producto(
         codigo: json["codigo"] == null ? '' : json["codigo"],
@@ -85,17 +89,30 @@ class Producto {
         nitFabricante:
             json["nitFabricante"] == null ? '' : json["nitFabricante"],
         cantidad: json["cantidad"] == null ? 0 : json["cantidad"],
-        nombrecomercial: json["nombrecomercial"],
-        codigocliente: json["codigocliente"],
-        descuento: json["descuento"],
-        preciodescuento: json["preciodescuento"],
-        precioinicial: json["precioinicial"],
-        activoprodnuevo: json["activoprodnuevo"],
-        activopromocion: json["activopromocion"],
-        fechafinnuevo_1: json["fechafinnuevo_1"],
-        fechafinpromocion_1: json["fechafinpromocion_1"],
+        nombrecomercial:
+            json["nombrecomercial"] == null ? '' : json["nombrecomercial"],
+        codigocliente:
+            json["codigocliente"] == null ? '' : json["codigocliente"],
+        descuento: json["descuento"] == null ? 0.0 : json["descuento"],
+        preciodescuento:
+            json["preciodescuento"] == null ? 0.0 : json["preciodescuento"],
+        precioinicial:
+            json["precioinicial"] == null ? 0.0 : json["precioinicial"],
+        activoprodnuevo:
+            json["activoprodnuevo"] == null ? 0 : json["activoprodnuevo"],
+        activopromocion:
+            json["activopromocion"] == null ? 0 : json["activopromocion"],
+        fechafinnuevo_1:
+            json["fechafinnuevo_1"] == null ? '' : json["fechafinnuevo_1"],
+        fechafinpromocion_1: json["fechafinpromocion_1"] == null
+            ? ''
+            : json["fechafinpromocion_1"],
         bloqueoCartera:
             json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
+        ordenMarca: json["ordenMarca"] == null ? 0 : json["ordenMarca"],
+        ordenSubcategoria: json["ordenSubcategoria"] == null
+            ? 0
+            : json["ordenSubcategoria"],
       );
 
   factory Producto.fromJson2(Map<dynamic, dynamic> json) => Producto(
@@ -139,6 +156,10 @@ class Producto {
             : json["fechafinpromocion_1"],
         bloqueoCartera:
             json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
+        ordenMarca: json["ordenMarca"] == null ? 0 : json["ordenMarca"],
+        ordenSubcategoria: json["ordenSubcategoria"] == null
+            ? 0
+            : json["ordenSubcategoria"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -169,6 +190,8 @@ class Producto {
         "activoprodnuevo": activoprodnuevo,
         "fechafinnuevo_1": fechafinnuevo_1,
         "fechafinpromocion_1": fechafinpromocion_1,
-        'bloqueoCartera': bloqueoCartera
+        'bloqueoCartera': bloqueoCartera,
+        "ordenMarca": ordenMarca,
+        "ordenSubcategoria": ordenSubcategoria,
       };
 }

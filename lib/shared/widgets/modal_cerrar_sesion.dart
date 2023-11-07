@@ -4,9 +4,7 @@ import 'dart:async';
 
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -14,7 +12,6 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/splash/splash_principal.dart';
-import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +25,7 @@ final controllerSearchViewModel = Get.find<SearchFuzzyViewModel>();
 
 modalCerrarSesion(context, size, provider) {
   String mensaje =
-      "Estás apunto de salir de Pideky, deberás volver a ingresar los datos " +
+      "Estás a punto de salir de Pideky, deberás volver a ingresar los datos " +
           "de tu negocio para ver los productos y proveedores.";
 
   Widget _botonSeguirComprando(size) {

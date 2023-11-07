@@ -165,7 +165,7 @@ class CreatePasswordPage extends StatelessWidget {
                           if (isValid == false)
                             return;
                           else {
-                            bool response =
+                            var response =
                                 await _validationForms.changePassword();
                             if (response == true) {
                               if (isChangePassword == true) {
@@ -173,7 +173,7 @@ class CreatePasswordPage extends StatelessWidget {
                                 _validationForms.isClosePopup.value = false;
                                 showPopup(
                                     context,
-                                    'Usuario correcto',
+                                    'Contraseña actualizada',
                                     SvgPicture.asset(
                                         'assets/image/Icon_correcto.svg'));
                                 Timer.periodic(Duration(milliseconds: 500),
@@ -195,7 +195,7 @@ class CreatePasswordPage extends StatelessWidget {
                                 _validationForms.isClosePopup.value = false;
                                 showPopup(
                                     context,
-                                    'Usuario correcto',
+                                    'Contraseña actualizada',
                                     SvgPicture.asset(
                                         'assets/image/Icon_correcto.svg'));
                                 Timer.periodic(Duration(milliseconds: 500),
@@ -213,11 +213,7 @@ class CreatePasswordPage extends StatelessWidget {
                                   timeIteration++;
                                 });
                               }
-                            } else if (response ==
-                                "Por favor validar con otro Nit") {
-                              await _validationForms.backClosePopup(context,
-                                  texto: 'Por favor validar con otro Nit');
-                            }
+                            } 
                           }
                         },
                         text: "Actualizar contraseña"),

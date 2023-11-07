@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:emart/src/modelos/fabricante.dart';
 
 Notificaciones listaSucursalesDataFromJson(String str) =>
     Notificaciones.fromJson(json.decode(str));

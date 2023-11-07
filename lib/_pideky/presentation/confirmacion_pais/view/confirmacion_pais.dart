@@ -91,7 +91,6 @@ class _ConfirmacionPaisState extends State<ConfirmacionPais> {
                   prefs.isFirstTime = true;
                   confirmacionPaisViewModel.confirmarPais(
                       itemSeleccionado.value, false);
-                  
                 },
                 text: S.current.accept)
           ],

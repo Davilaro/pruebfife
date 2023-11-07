@@ -1,4 +1,4 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
+// ignore_for_file: import_of_legacy_library_into_null_safe, unnecessary_null_comparison
 
 import 'dart:io';
 
@@ -6,6 +6,7 @@ import 'package:device_info/device_info.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
 import 'package:emart/src/modelos/validacion.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
@@ -24,7 +25,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:imagebutton/imagebutton.dart';
 import 'package:package_info/package_info.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
@@ -240,7 +240,7 @@ class _LoginState extends State<Login> {
         if (element.bloqueado == "1") {
           Navigator.pushReplacementNamed(context, "inicio_compra");
           return mostrarAlertCustomWidgetOld(
-              context, cargarLinkWhatssap(context), null);
+              context, cargarLinkWhatssap(context), null, null);
         }
       });
       prefs.codigoUnicoPideky = respuesta.first.codigoUnicoPideky;
@@ -254,11 +254,11 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(
           context,
           'listaSucursale',
-          arguments: ScreenArguments(respuesta, _controllerUser.text),
+          arguments: ScreenArguments(respuesta,),
         );
       } else {
         await pr.hide();
-        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
         return false;
       }
     } catch (e) {
@@ -315,14 +315,14 @@ class _LoginState extends State<Login> {
 
     if (respues.codigo == null) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == -1) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
 
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null);
+      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == 0) {
       //message: No se pudo generar el código
       mostrarAlert(context, S.current.code_could_not_be_generated, null);

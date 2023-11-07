@@ -37,7 +37,7 @@ class Historico {
       nombreProducto:
           json["nombreproducto"] == null ? "" : json["nombreproducto"],
       cantidad: json["Cantidad"] == null ? 0 : json["Cantidad"],
-      precio: json["precio"] == null ? 0 : json["precio"],
+      precio: json["precio"] == null ? 0.0 : json["precio"],
       fechaTrans: json["fechatrans"] == null ? "" : json["fechatrans"],
       horaTrans: json["horatrans"] == null ? "" : json["horatrans"],
       fabricante: json["fabricante"] == null ? "" : json["fabricante"],

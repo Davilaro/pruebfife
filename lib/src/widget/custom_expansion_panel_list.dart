@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_colon_for_default_value, unnecessary_null_comparison
+
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 

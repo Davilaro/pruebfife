@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 
 class MessageNotification extends StatelessWidget {
@@ -27,7 +29,6 @@ class MessageNotification extends StatelessWidget {
           trailing: IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                ///TODO i'm not sure it should be use this widget' BuildContext to create a Dialog
                 if (onReplay != null) onReplay();
               }),
         ),

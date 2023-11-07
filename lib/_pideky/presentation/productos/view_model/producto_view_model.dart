@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:emart/_pideky/domain/condicion_entrega/model/condicionEntrega.dart';
 import 'package:emart/_pideky/domain/condicion_entrega/service/condicion_entrega_service.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';

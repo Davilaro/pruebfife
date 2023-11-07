@@ -1,14 +1,9 @@
-import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
-import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 void mostrarAlert(
   BuildContext context,
@@ -179,6 +174,7 @@ void mostrarAlertCustomWidgetOld(
   BuildContext context,
   Widget mensaje,
   Widget? icon,
+  Widget? iconClose,
 ) {
   showDialog(
       context: context,
@@ -195,21 +191,24 @@ void mostrarAlertCustomWidgetOld(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(),
-                          ),
-                          GestureDetector(
-                            onTap: () => Get.back(),
-                            child: Icon(
-                              Icons.cancel,
-                              color: ConstantesColores.verde,
-                              size: 30,
+                    Visibility(
+                      visible: iconClose == null ? false : true,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () => Get.back(),
+                              child: Icon(
+                                Icons.cancel,
+                                color: ConstantesColores.verde,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -217,7 +216,7 @@ void mostrarAlertCustomWidgetOld(
                       width: 50,
                       child: icon != null
                           ? icon
-                          : Image.asset('assets/image/alerta_img.png'),
+                          : Image.asset('assets/image/alerta_img.png',),
                     ),
                     Container(
                         padding:
