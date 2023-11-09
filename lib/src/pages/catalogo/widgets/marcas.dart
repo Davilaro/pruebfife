@@ -209,7 +209,6 @@ class _MarcasWidgetState extends State<MarcasWidget> {
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
                   nombreCategoria: nombre,
-                  isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));

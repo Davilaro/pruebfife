@@ -118,7 +118,7 @@ class _FabricantesState extends State<Fabricantes> {
                   //UXCam: Llamamos el evento seeProvider
                   UxcamTagueo().seeProvider(element.nombrecomercial),
                   _onClickCatalogo(element.empresa, context, provider,
-                      element.nombrecomercial, element.icono),
+                      element.nombrecomercial, element.icono, element.empresa),
                 },
         child: Stack(
           children: [
@@ -157,7 +157,7 @@ class _FabricantesState extends State<Fabricantes> {
   }
 
   _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
-      String nombre, String icono) async {
+      String nombre, String icono, String empresa) async {
     final controllerNotificaciones =
         Get.find<NotificationsSlideUpAndPushInUpControllers>();
     controllerNotificaciones.llenarMapSlideUp(nombre);
@@ -173,6 +173,7 @@ class _FabricantesState extends State<Fabricantes> {
                   img: icono,
                   locacionFiltro: "proveedor",
                   codigoProveedor: codigo,
+                  empresa: empresa,
                 )));
   }
 
