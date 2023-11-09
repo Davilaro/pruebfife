@@ -56,6 +56,7 @@ class ValidationForms extends GetxController {
   RxBool passwordsMatch = false.obs;
   RxBool isClosePopup = false.obs;
   RxBool preguntaBloqueada = false.obs;
+  RxBool ccupValid = false.obs;
   RxInt numIntentos = 0.obs;
   RxString userName = ''.obs;
   RxString password = ''.obs;
@@ -438,7 +439,7 @@ class ValidationForms extends GetxController {
             context,
             Text(
               "La contraseña no coincide con este usuario. Por favor, revisa que esté bien escrito, o si la olvidaste, cambia tu contraseña. Si aún presentas problemas, contacta a soporte",
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
             ),
             SvgPicture.asset(
               'assets/image/Icon_incorrecto.svg',
@@ -449,8 +450,8 @@ class ValidationForms extends GetxController {
         mostrarAlertCustomWidgetOld(
             context,
             Text(
-              "El NIT ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
-              textAlign: TextAlign.left,
+              "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+              textAlign: TextAlign.center,
             ),
             SvgPicture.asset(
               'assets/image/Icon_incorrecto.svg',
@@ -502,7 +503,7 @@ class ValidationForms extends GetxController {
         //message: El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en
         Text(
           S.current.the_nit_entered_is_not_registered,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
         ),
         GestureDetector(
           onTap: () => lanzarWhatssap(context),
@@ -631,6 +632,43 @@ class ValidationForms extends GetxController {
     //if (value.trim().isEmpty) return 'Campo requerido';
     if (value.length < 6) return 'Información incorrecta';
 
+    return null;
+  }
+
+  //Validación básica para verificar si un campo cualquiera está vacío o es null en el ccup
+  String? validateTextFieldCCUP(String? value) {
+    ccupValid.value = false;
+    var numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+    if (value == null || value.isEmpty || value.trim().isEmpty)
+      return 'Campo requerido';
+    //if (value.trim().isEmpty) return 'Campo requerido';
+    if (prefs.paisUsuario == "CO") {
+      if (value.length < 11 ||
+          value[0].toLowerCase() != "c" ||
+          numberList.contains(value[1].toLowerCase())) return 'CCUP incorrecto';
+
+      for (int i = 2; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
+    } else if (prefs.paisUsuario == "CR") {
+      if (value.length < 11) {
+        if (value.length > 4 && value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+        return 'CCUP incorrecto';
+      } else {
+        if (value.substring(0, 4).toLowerCase() != "crcr") {
+          return 'CCUP incorrecto';
+        }
+      }
+
+      for (int i = 4; i < value.length; i++) {
+        if (numberList.contains(value[i]) == false) return 'CCUP incorrecto';
+      }
+    }
+
+    ccupValid.value = true;
     return null;
   }
 

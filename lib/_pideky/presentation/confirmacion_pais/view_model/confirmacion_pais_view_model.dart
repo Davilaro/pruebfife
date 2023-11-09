@@ -44,35 +44,38 @@ class ConfirmacionPaisViewModel {
   }
 
   confirmarPais(dynamic pais, bool isLogin) async {
-    try {
-      FlutterUxConfig config;
-      prefs.paisUsuario = pais;
-      S.load(Locale('es', pais));
-      FlutterUxcam.optIntoSchematicRecordings();
-      if (Constantes().titulo == 'PRD' && pais == "CR") {
-        config = FlutterUxConfig(
-            userAppKey: "in25b6g0mzsiggt",
-            enableAutomaticScreenNameTagging: false);
-      } else if (Constantes().titulo == 'QA') {
-        config = FlutterUxConfig(
-            userAppKey: "s7xvg23hmx7ttcv",
-            enableAutomaticScreenNameTagging: false);
-      } else {
-        config = FlutterUxConfig(
-            userAppKey: "l0uak7nx63mtp1i",
-            enableAutomaticScreenNameTagging: false);
-      }
-      FlutterUxcam.startWithConfiguration(config);
-      PushNotificationServer.initializeApp();
-      if (!isLogin) {
-        if (prefs.usurioLogin == -1 || prefs.usurioLogin == null) {
-          await AppUtil.appUtil.downloadZip('1006120026', prefs.sucursal, true);
-          var res = await AppUtil.appUtil.abrirBases();
-          if (res) Get.off(() => TabOpciones());
+    if (pais != null) {
+      try {
+        FlutterUxConfig config;
+        prefs.paisUsuario = pais;
+        S.load(Locale('es', pais));
+        FlutterUxcam.optIntoSchematicRecordings();
+        if (Constantes().titulo == 'PRD' && pais == "CR") {
+          config = FlutterUxConfig(
+              userAppKey: "in25b6g0mzsiggt",
+              enableAutomaticScreenNameTagging: false);
+        } else if (Constantes().titulo == 'QA') {
+          config = FlutterUxConfig(
+              userAppKey: "s7xvg23hmx7ttcv",
+              enableAutomaticScreenNameTagging: false);
+        } else {
+          config = FlutterUxConfig(
+              userAppKey: "l0uak7nx63mtp1i",
+              enableAutomaticScreenNameTagging: false);
         }
+        FlutterUxcam.startWithConfiguration(config);
+        PushNotificationServer.initializeApp();
+        if (!isLogin) {
+          if (prefs.usurioLogin == -1 || prefs.usurioLogin == null) {
+            await AppUtil.appUtil
+                .downloadZip('1006120026', prefs.sucursal, true);
+            var res = await AppUtil.appUtil.abrirBases();
+            if (res) Get.off(() => TabOpciones());
+          }
+        }
+      } catch (e) {
+        print("error uxcam $e");
       }
-    } catch (e) {
-      print("error uxcam $e");
     }
   }
 }

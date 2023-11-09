@@ -225,7 +225,6 @@ class SearchFuzzyViewModel extends GetxController {
                       numEmpresa: 'nutresa',
                       tipoCategoria: 3,
                       nombreCategoria: object.nombre,
-                      isActiveBanner: false,
                       locacionFiltro: "marca",
                       codigoProveedor: "",
                     )));

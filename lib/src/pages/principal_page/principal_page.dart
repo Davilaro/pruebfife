@@ -10,7 +10,6 @@ import 'package:emart/_pideky/presentation/productos/view_model/producto_view_mo
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
-import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -33,7 +32,6 @@ import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
 import 'package:emart/src/widget/reproduct_video.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';

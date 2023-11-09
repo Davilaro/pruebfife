@@ -61,7 +61,7 @@ class _SplashState extends State<Splash> {
 
   Future<void> _descarcarDB() async {
     var cargo = false;
-    if (prefs.usurioLogin == null || prefs.isFirstDownload == null) {
+    if (prefs.usurioLogin == null || prefs.paisUsuario == null) {
       Get.offAll(() => ConfirmacionPais());
     } else if (prefs.usurioLogin == -1) {
       var res = false;
@@ -79,7 +79,9 @@ class _SplashState extends State<Splash> {
 
       if (!cargo && contador > 3) {
         alert.mostrarAlert(
-            context, 'Imposible conectar con la Base de datos', null);
+            context,
+            'Fue imposible la conexión a internet, por favor revisa tu conexión e intenta nuevamente',
+            null);
       } else {
         res = await AppUtil.appUtil.abrirBases();
         if (res && cargo) {
@@ -114,7 +116,9 @@ class _SplashState extends State<Splash> {
       } while (!cargo);
       if (!cargo && contador > 3) {
         alert.mostrarAlert(
-            context, 'Imposible conectar con la Base de datos', null);
+            context,
+            'Fue imposible la conexión a internet, por favor revisa tu conexión e intenta nuevamente',
+            null);
       } else {
         var res = await AppUtil.appUtil.abrirBases();
 

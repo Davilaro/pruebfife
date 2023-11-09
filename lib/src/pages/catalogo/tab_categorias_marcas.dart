@@ -29,7 +29,6 @@ class _TabCategoriaMarcaState extends State<TabCategoriaMarca>
     2: Fabricantes(),
     3: CategoriasGrilla(),
     4: MarcasWidget(),
-    //estas dos no se usan por el momento pero trato de borrar y se daña todo :C
     1: CatalogoPoductosInterno(tipoCategoria: 1),
     5: CatalogoPoductosInterno(tipoCategoria: 2)
   };

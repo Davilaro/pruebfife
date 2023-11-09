@@ -298,7 +298,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<List<dynamic>> cargarBannersSql(String? tipo) async {
+  Future<List<dynamic>> cargarBannersHomeSql() async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -307,7 +307,78 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
       FROM Banner b
       inner join Fabricante f ON b.fabricante_x =f.empresa
-      WHERE b.tipo = '$tipo'
+      WHERE b.ubicacion = 'Home' order by b.Orden asc
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersProveedoresSql(String proveedor) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
+       SELECT 
+              b.fabricante_x AS fabricante, 
+              f.empresa AS empresa, 
+              f.nombrecomercial AS nombrecomercial, 
+              f.tipofabricante AS tipofabricante, 
+              b.Link AS Ico, 
+              b.Id, 
+              b.nombrefoto_x AS nombrebanner, 
+              b.redireccion AS tipoSeccion, 
+              b.subdireccion AS seccion, 
+              b.categoria AS subSeccion  
+          FROM Banner b
+          INNER JOIN Fabricante f ON b.fabricante_x = f.empresa
+          WHERE  b.SubCategoriaUbicacion  = '$proveedor'
+          order by b.Orden asc
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersMarcasSql(String? marca) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
+      SELECT b.fabricante_x as fabricante, f.empresa as empresa, f.nombrecomercial as nombrecomercial, 
+      f.tipofabricante as tipofabricante, b.Link as Ico, b.Id, b.nombrefoto_x as nombrebanner, 
+      b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
+      FROM Banner b
+      inner join Fabricante f ON b.fabricante_x =f.empresa
+      WHERE b.SubCategoriaUbicacion = '$marca' order by b.Orden asc
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersCategoriasSql(
+      String? categoria, String? subCategoria) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery('''
+          SELECT 
+              b.fabricante_x AS fabricante, 
+              f.empresa AS empresa, 
+              f.nombrecomercial AS nombrecomercial, 
+              f.tipofabricante AS tipofabricante, 
+              b.Link AS Ico, 
+              b.Id, 
+              b.nombrefoto_x AS nombrebanner, 
+              b.redireccion AS tipoSeccion, 
+              b.subdireccion AS seccion, 
+              b.categoria AS subSeccion  
+          FROM Banner b
+          INNER JOIN Fabricante f ON b.fabricante_x = f.empresa
+          WHERE  b.CategoriaUbicacion = '$categoria' AND b.SubCategoriaUbicacion
+          = '$subCategoria'
+          order by b.Orden asc
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
