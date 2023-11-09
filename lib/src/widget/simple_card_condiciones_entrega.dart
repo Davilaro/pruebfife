@@ -189,7 +189,10 @@ class _SimpleCardCondicionesEntregaState
         );
       }
     });
-
+     /*Lógica de implementación link de pagos permite validar si un fabricante pertenece a la directa 
+      y si el pedido es realizado a más de una red comercial, 
+      de acuerdo a estos criterios permite visualizar en la vista los ckecks de selección de medio de pago.
+     **/
     final controller = Get.find<StateControllerRadioButtons>();
    
     if (listaWidget.length == 1) {

@@ -10,6 +10,7 @@ class Encuesta {
     this.encuestaTitulo,
     this.preguntaId,
     this.tipoPreguntaId,
+    this.obligatoria,
     this.pregunta,
     this.paramPreguntaId,
     this.valor,
@@ -20,6 +21,7 @@ class Encuesta {
   String? encuestaTitulo;
   int? preguntaId;
   int? tipoPreguntaId;
+  int? obligatoria;
   String? pregunta;
   int? paramPreguntaId;
   int? valor;
@@ -30,6 +32,7 @@ class Encuesta {
       encuestaTitulo: json["encuestaTitulo"],
       preguntaId: json["preguntaid"],
       tipoPreguntaId: json["tipopreguntaid"],
+      obligatoria: json["obligatoria"],
       pregunta: json["pregunta"],
       paramPreguntaId: json["paramPreguntaId"],
       valor: json["valor"],
@@ -40,6 +43,7 @@ class Encuesta {
         encuestaTitulo: json["encuestaTitulo"],
         preguntaId: json["preguntaid"],
         tipoPreguntaId: json["tipopreguntaid"],
+        obligatoria: json["obligatoria"],
         pregunta: json["pregunta"],
         paramPreguntaId: json["paramPreguntaId"],
         valor: json["valor"],
@@ -50,6 +54,7 @@ class Encuesta {
         "encuestaTitulo": encuestaTitulo,
         "preguntaid": preguntaId,
         "tipopreguntaid": tipoPreguntaId,
+        "obligatoria": obligatoria,
         "pregunta": pregunta,
         "paramPreguntaId": paramPreguntaId,
         "valor": valor,

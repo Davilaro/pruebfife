@@ -4,11 +4,14 @@ import 'dart:convert';
 
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/modelos/encuesta.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
@@ -18,6 +21,7 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_button.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -29,7 +33,7 @@ import '../../../provider/opciones_app_bart.dart';
 
 class EncuestaForm extends StatefulWidget {
   final Encuesta encuesta;
-
+//debe ser lista rx list
   const EncuestaForm(this.encuesta);
 
   @override
@@ -42,6 +46,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
   TextEditingController controllerTelephone = TextEditingController();
   RxString mensajeValid = ''.obs;
   String _seleccion = '';
+  double _rating = 0.0;
   late Map<String, bool> _opcionesMultiple = {};
 
   final controllerProducto = Get.find<ControllerProductos>();
@@ -58,17 +63,22 @@ class _EncuestaFormState extends State<EncuestaForm> {
         : null;
     super.initState();
   }
- 
+
   @override
   Widget build(BuildContext context) {
+    int item = 0;
+    //if(item == lista.lengt -1 )
+    //cierra hace
+    //else  => item++
+    //encuesta.title
+    //encuesta[item].title
 
-  
     return Stack(
       fit: StackFit.loose,
       clipBehavior: Clip.none,
       children: [
         Container(
-         // margin: EdgeInsets.only(top: 15),
+          // margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30), color: Colors.white),
@@ -77,14 +87,25 @@ class _EncuestaFormState extends State<EncuestaForm> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 15, top: 20),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  '${widget.encuesta.pregunta}',
-                  style: TextStyle(fontSize: 15),
+              controllerEncuesta.showMandatorySurvey.value
+              ? Center(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15, top: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    '${widget.encuesta.pregunta}',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
-              ),
+              )
+              :  Container(
+                  margin: EdgeInsets.only(bottom: 15, top: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    '${widget.encuesta.pregunta}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -218,6 +239,27 @@ class _EncuestaFormState extends State<EncuestaForm> {
                         )
                       : Container(),
 
+                  widget.encuesta.tipoPreguntaId == 15
+                      ? Visibility(
+                          visible: widget.encuesta.tipoPreguntaId == 15,
+                          child: RatingBar.builder(
+                            
+                            itemSize: 50.0,
+                            itemCount: 5,
+                            initialRating: 0,
+                            itemBuilder: (context, _) {
+                              return Icon(
+                                Icons.star_rounded,
+                                color: Colors.yellow,
+                              );
+                            },
+                            onRatingUpdate: (rating) {
+                              print(" Rating barr =========== ${rating}");
+                              _rating = rating;
+                            },
+                          ))
+                      : Container(),
+
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     width: Get.width * 0.5,
@@ -225,7 +267,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
                     child: CustomButton(
                       onPressed: () {
                         _validarInformacion(context, widget.encuesta);
-                       
                       },
                       text: 'Enviar',
                       sizeText: 15,
@@ -245,7 +286,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
             ],
           ),
         ),
-        Positioned(
+        controllerEncuesta.showMandatorySurvey.value 
+        ? SizedBox()
+        : Positioned(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: SvgPicture.asset('assets/icon/prueba1.svg'),
@@ -297,9 +340,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
   }
 
   Future _validarInformacion(BuildContext context, Encuesta encuesta) async {
-
-      final provider = Provider.of<OpcionesBard>(context, listen: false);
-      final cargoConfirmar = Get.find<ControlBaseDatos>();
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    final cargoConfirmar = Get.find<ControlBaseDatos>();
 
     if (encuesta.tipoPreguntaId == 1 && controllerText.text.isNotEmpty ||
         encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty) {
@@ -313,7 +355,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
         return;
       } else {
         controllerText.text = '';
-        await  actualizarPagina(provider, context, cargoConfirmar);
+        await updateSurvey(provider, context, cargoConfirmar);
         alertaFinEncuesta();
         return;
       }
@@ -328,7 +370,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           _seleccion = '';
-          await  actualizarPagina(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context, cargoConfirmar);
           alertaFinEncuesta();
           return;
         }
@@ -358,7 +400,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          await  actualizarPagina(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context, cargoConfirmar);
           alertaFinEncuesta();
           _opcionesMultiple.updateAll((key, value) => value = false);
           return;
@@ -378,9 +420,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           controllerEmail.text = '';
-          await  actualizarPagina(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context, cargoConfirmar);
           alertaFinEncuesta();
-        
+
           return;
         }
       }
@@ -394,15 +436,35 @@ class _EncuestaFormState extends State<EncuestaForm> {
           mostrarAlert(context,
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
-        } else  {
+        } else {
           controllerTelephone.text = '';
-           await  actualizarPagina(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context, cargoConfirmar);
           alertaFinEncuesta();
-        
+
           return;
         }
       }
+    } else if (encuesta.tipoPreguntaId == 15) {
+      if (_rating != 0.0) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, _rating.toString());
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          
+          await updateSurvey(provider, context, cargoConfirmar);
+          alertaFinEncuesta();
+          return;
+        }
+      } else {
+        mensajeValid.value = 'Por favor indique una puntuación';
+      }
     }
+    
   }
 
   alertaFinEncuesta() {
@@ -417,38 +479,35 @@ class _EncuestaFormState extends State<EncuestaForm> {
     controllerEncuesta.setIsVisibleEncuesta(false);
   }
 
-   Future<void> actualizarPagina(
-      dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-    final controllerNequi = Get.find<MisPagosNequiViewModel>();
-    isActualizando.value = true;
-    if (isActualizando.value) {
-      AlertaActualizar().mostrarAlertaActualizar(context, true);
-    }
-    await LogicaActualizar().actualizarDB();
-    isActualizando.value = false;
-    controllerPedidoSugerido.initController();
-    controllerNequi.initData();
-    if (isActualizando.value == false) {
-      Navigator.pop(context);
-      AlertaActualizar().mostrarAlertaActualizar(context, false);
-      await new Future.delayed(new Duration(seconds: 1), () {
-        Navigator.pop(context);
-        //pop dialog
-      });
-      if (provider.selectOptionMenu == 1) {
-        cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
-        cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
-        provider.selectOptionMenu = 1;
-        provider.setIsLocal = 0;
-      }
-      productViewModel.cargarCondicionEntrega();
-      Navigator.pushReplacementNamed(
-        context,
-        'tab_opciones',
-      ).timeout(Duration(seconds: 3));
-    }
+  Future<void> updateSurvey(
+    OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
+  final botonesController = Get.find<BotonesProveedoresVm>();
+  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final controllerNequi = Get.find<MisPagosNequiViewModel>();
+  final productViewModel = Get.find<ProductoViewModel>();
+  isActualizando.value = true;
+  if (isActualizando.value) {
+    AlertaActualizar().mostrarAlertaActualizar(context, true);
   }
+  await LogicaActualizar().actualizarDB();
+  isActualizando.value = false;
+  controllerPedidoSugerido.initController();
+  controllerNequi.initData();
+  if (isActualizando.value == false) {
+    Navigator.pop(context);
+    AlertaActualizar().mostrarAlertaActualizar(context, false);
+    await new Future.delayed(new Duration(seconds: 1), () {
+      Navigator.pop(context);
+      //pop dialog
+    });
 
-  
+    productViewModel.cargarCondicionEntrega();
+    await botonesController.cargarListaProovedor();
+    botonesController.listaFabricantesBloqueados.isNotEmpty
+        ? null
+        : productViewModel.eliminarBDTemporal();
+    provider.selectOptionMenu = 0;
+    Get.offAll(() => TabOpciones());
+  }
+}
 }

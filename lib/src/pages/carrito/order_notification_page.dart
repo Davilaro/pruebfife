@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/controller_web_view.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
-import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -116,10 +114,6 @@ class OrderNotificationPage extends StatelessWidget {
                 },
                 text: 'Ir al portal de pagos',
 
-                // showPopup(
-                //     context,
-                //     'Confirmación de \n identidad correcto',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
               ),
               SizedBox(height: 25),
             ],

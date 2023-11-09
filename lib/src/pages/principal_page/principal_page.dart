@@ -16,6 +16,7 @@ import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
@@ -48,9 +49,11 @@ class PrincipalPage extends StatefulWidget {
   State<PrincipalPage> createState() => _PrincipalPageState();
 }
 
+ 
+
 class _PrincipalPageState extends State<PrincipalPage>
     with AutomaticKeepAliveClientMixin {
-  final controllerEncuesta = Get.put(EncuestaControllers());
+  final controllerSurvey = Get.put(EncuestaControllers());
   final productViewModel = Get.find<ProductoViewModel>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
@@ -114,6 +117,47 @@ class _PrincipalPageState extends State<PrincipalPage>
             true &&
         controllerNotificaciones.closeSlideUp.value == false) {
       showSlideUp();
+    }
+
+    if (prefs.typeCollaborator != "2") {
+      await controllerSurvey.consultSurveys();
+      if (controllerSurvey.showMandatorySurvey.value) {
+        showDialog(
+          barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  contentPadding: EdgeInsets.all(5.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  content:
+                      EncuestaForm(controllerSurvey.mandatorySurveyList.first));
+            });
+      }
+
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return FutureBuilder(
+      //         initialData: [],
+      //         future: DBProvider.db.consultarEncuesta(),
+      //         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      //           if (snapshot.data.length == 0) {
+      //             return Container();
+      //           } else {
+      //             if (snapshot.data[0].obligatoria == 0) return Container();
+
+      //             return AlertDialog(
+      //                 contentPadding: EdgeInsets.all(5.0),
+      //                 shape: RoundedRectangleBorder(
+      //                   borderRadius: BorderRadius.circular(20.0),
+      //                 ),
+      //                 content: EncuestaForm(snapshot.data[0]));
+      //           }
+      //         });
+      //   },
+      // );
     }
   }
 
@@ -377,34 +421,87 @@ class _PrincipalPageState extends State<PrincipalPage>
                             height: Get.height * 0.2, child: CategoriasCard()),
                       ],
                     )),
+
                 //ENCUESTA
-                prefs.typeCollaborator != "2"
-                    ? FutureBuilder(
-                        initialData: [],
-                        future: DBProvider.db.consultarEncuesta(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.data.length == 0) {
-                            return Container();
-                          } else {
-                            controllerEncuesta.isVisibleEncuesta.value = true;
-                            return Obx(() => Visibility(
-                                  visible: controllerEncuesta
-                                      .isVisibleEncuesta.value,
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 15,
-                                          bottom: 10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: EncuestaForm(snapshot.data[0])),
-                                ));
-                          }
-                        })
-                    : SizedBox.shrink(),
+
+//                 FutureBuilder(
+//   future: controllerSurvey.consultSurveys(),
+//   builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+//     if (snapshot.connectionState == ConnectionState.done) {
+//       if (prefs.typeCollaborator != "2") {
+//         return Visibility(
+//           visible: controllerSurvey.isVisibleSurvey.value &&
+//               controllerSurvey.mandatorySurveyList.first.obligatoria == 0,
+//           child: Container(
+//             margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(30),
+//             ),
+//             child: EncuestaForm(controllerSurvey.noMandatorySurveyList.first),
+//           ),
+//         );
+//       } else {
+//         return SizedBox.shrink();
+//       }
+//     } else {
+//       return CircularProgressIndicator(); // Puedes usar un indicador de carga mientras se realiza la consulta.
+//     }
+//   },
+// )
+
+                //   prefs.typeCollaborator != "2"
+                //   ? Visibility(
+                //     visible:  controllerSurvey.isVisibleSurvey.value = true && controllerSurvey.mandatorySurveyList.first.obligatoria == 0,
+                //     child: Container(
+                //       margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(30),
+                //     ),
+                //     child: //Container()
+                //      EncuestaForm(controllerSurvey.noMandatorySurveyList.first),
+                //   ),
+                // )
+                //   :SizedBox.shrink(),
+
+                if (prefs.typeCollaborator != "2")
+                  Obx(() => controllerSurvey.noMandatorySurveyList.isNotEmpty
+                      ? Container(
+                          margin: EdgeInsets.only(
+                              left: 10, right: 10, top: 15, bottom: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: EncuestaForm(
+                              controllerSurvey.noMandatorySurveyList.first))
+                      : SizedBox.shrink())
+                // ? FutureBuilder(
+                //     initialData: [],
+                //     future: DBProvider.db.consultarEncuesta(),
+                //     builder: (BuildContext context,
+                //         AsyncSnapshot<dynamic> snapshot) {
+                //       if (snapshot.data.length == 0) {
+
+                //         return Container();
+                //       } else {
+                //         controllerSurvey.isVisibleSurvey.value =
+                //             true && snapshot.data[0].obligatoria == 0;
+                //         return Obx(() => Visibility(
+                //               visible: controllerSurvey
+                //                   .isVisibleSurvey.value,
+                //               child: Container(
+                //                   margin: EdgeInsets.only(
+                //                       left: 10,
+                //                       right: 10,
+                //                       top: 15,
+                //                       bottom: 10),
+                //                   decoration: BoxDecoration(
+                //                     borderRadius: BorderRadius.circular(30),
+                //                   ),
+                //                   child: EncuestaForm(snapshot.data[0])),
+                //             ));
+                //       }
+                //     })
+                // : SizedBox.shrink(),
               ],
             ),
           ),
