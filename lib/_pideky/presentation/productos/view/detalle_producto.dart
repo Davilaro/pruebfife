@@ -184,6 +184,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                           Container(
                             height: Get.height * 0.15,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Visibility(
                                     visible: widget.productos.descuento != 0,
@@ -228,18 +229,23 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                             fontSize: 18),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    child: AutoSizeText(
-                                        S.current.price_per_sales_unit,
-                                        maxLines: 2,
-                                        presetFontSizes: [15, 13],
-                                        style: TextStyle(
-                                          color: ConstantesColores.verde,
-                                        )),
-                                  ),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: AutoSizeText(
+                                      S.current.price_per_sales_unit,
+                                      maxLines: 2,
+                                      presetFontSizes: [15, 13],
+                                      style: TextStyle(
+                                        color: ConstantesColores.verde,
+                                      )),
                                 ),
+                                IconButton(
+                                    onPressed: () {},
+                                    padding: EdgeInsets.all(0),
+                                    alignment: Alignment.centerLeft,
+                                    icon: Image(
+                                        image: AssetImage(
+                                            'assets/icon/Icono_corazón_vacio_pequeño.png'))),
                                 Visibility(
                                     visible: isAgotado,
                                     child: Align(
@@ -356,8 +362,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
           Visibility(
             visible: !isAgotado,
             child: BotonAgregarCarrito(
-              onTap: 
-              widget.isFrecuencia
+              onTap: widget.isFrecuencia
                   ? () => llenarCarrito(widget.productos, cartProvider)
                   : () => productViewModel.iniciarModal(
                       context, widget.productos.fabricante),

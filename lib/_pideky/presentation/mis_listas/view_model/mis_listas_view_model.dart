@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
 
-class MisListasViewModel extends GetxController {
+class MyListsViewModel extends GetxController {
   RxList misListas = [].obs;
 }

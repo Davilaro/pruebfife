@@ -249,6 +249,13 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                               color: ConstantesColores.verde,
                                             )),
                                       ),
+                                      IconButton(
+                                          onPressed: () {},
+                                          padding: EdgeInsets.all(0),
+                                          alignment: Alignment.centerLeft,
+                                          icon: Image(
+                                              image: AssetImage(
+                                                  'assets/icon/Icono_corazón_vacio_pequeño.png'))),
                                     ],
                                   ),
                                 ),
@@ -297,8 +304,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                 TextAlignVertical.center,
                                             textAlign: TextAlign.center,
                                             maxLength: 3,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter
                                                   .digitsOnly
                                             ],
