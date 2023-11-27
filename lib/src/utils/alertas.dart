@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_statements
+
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -129,47 +132,6 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
       });
 }
 
-// void alertCustom(BuildContext context) {
-//   showDialog(
-//       context: context,
-//       barrierDismissible: false,
-//       builder: (context) {
-//         return WillPopScope(
-//           onWillPop: () => Future.value(false),
-//           child: CustomDialog(
-//             title: Container(
-//                 margin: EdgeInsets.only(top: 40),
-//                 child: Text(
-//                   S.current.activate_your_user,
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(
-//                       fontSize: 25,
-//                       color: ConstantesColores.azul_precio,
-//                       fontWeight: FontWeight.bold),
-//                 )),
-//             isVertical: true,
-//             hasLeftButton: true,
-//             hasRightButton: true,
-//             onRightPressed: () {
-//               Provider.of<OpcionesBard>(context, listen: false)
-//                   .selectOptionMenu = 0;
-//               Navigator.pop(context);
-//               Navigator.of(context).pushNamedAndRemoveUntil(
-//                   'tab_opciones', (Route<dynamic> route) => false);
-//             },
-//             onLeftPressed: () => Get.to(() => LogInPage()),
-//             content: Container(
-//                 padding: EdgeInsets.symmetric(horizontal: 40),
-//                 child: Text(
-//                   S.current.activate_user_for_buy,
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(color: Colors.grey),
-//                 )),
-//           ),
-//         );
-//       });
-// }
-
 void mostrarAlertCustomWidgetOld(
   BuildContext context,
   Widget mensaje,
@@ -216,7 +178,9 @@ void mostrarAlertCustomWidgetOld(
                       width: 50,
                       child: icon != null
                           ? icon
-                          : Image.asset('assets/image/alerta_img.png',),
+                          : Image.asset(
+                              'assets/image/alerta_img.png',
+                            ),
                     ),
                     Container(
                         padding:
@@ -294,6 +258,115 @@ void mostrarAlertCartera(
                     )
                   ],
                 ),
+              ),
+            ),
+          ),
+        );
+      });
+}
+
+Future<void> mostrarAlertCarteraEliminarLista(BuildContext context,
+    String mensaje, Widget? icon, String nombreLista, idLista) async {
+  final miListasViewModel = Get.find<MyListsViewModel>();
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+          content: Container(
+            constraints: BoxConstraints(
+                minHeight: 200, minWidth: double.infinity, maxHeight: 300),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  icon != null
+                      ? icon
+                      : Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.red,
+                          size: 80.0,
+                        ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                          text: mensaje,
+                          style: TextStyle(
+                            color: ConstantesColores.gris_oscuro,
+                            fontSize: 16,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " $nombreLista?",
+                              style: TextStyle(
+                                color: ConstantesColores.azul_precio,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        Get.back();
+                        Get.back();
+                        await miListasViewModel.deleteList(
+                            context, nombreLista, idLista);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
+                        height: 40,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset(
+                            "assets/image/btn_aceptar.png",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: GestureDetector(
+                      onTap: () => Get.back(),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 40,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: ConstantesColores.gris_oscuro,
+                            width: 1,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadiusDirectional.all(
+                            Radius.circular(50),
+                          ),
+                        ),
+                        child: Text(
+                          "Cancelar",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: ConstantesColores.gris_oscuro,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

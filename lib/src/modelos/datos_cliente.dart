@@ -28,6 +28,7 @@ class DatosCliente {
       this.nitMeals,
       this.nitPozuelo,
       this.nitAlpina,
+      this.codRegional,
       this.regional});
 
   String? codigo;
@@ -52,6 +53,7 @@ class DatosCliente {
   String? nitMeals;
   String? nitPozuelo;
   String? nitAlpina;
+  String? codRegional;
 
   factory DatosCliente.fromJson(Map<String, dynamic> json) => DatosCliente(
         codigo: json["codigo"] == null ? '' : json['codigo'],
@@ -81,6 +83,7 @@ class DatosCliente {
         nitPozuelo: json["NitPozuelo"] == null ? '' : json['NitPozuelo'],
         nitAlpina: json["NitAlpina"] == null ? '' : json['NitAlpina'],
         regional: json["Regional"] == null ? "" : json['Regional'],
+        codRegional: json["CodRegional"] == null ? "" : json['CodRegional'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +107,7 @@ class DatosCliente {
         "NitMeals": nitMeals,
         "NitPozuelo": nitPozuelo,
         "NitAlpina": nitAlpina,
-        "Regional": regional
+        "Regional": regional,
+        'CodRegional': codRegional
       };
 }

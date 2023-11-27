@@ -1,14 +1,51 @@
+import 'dart:async';
+
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/body_acordion_mis_listas.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditList extends StatelessWidget {
+class EditList extends StatefulWidget {
   const EditList({Key? key}) : super(key: key);
 
   @override
+  State<EditList> createState() => _EditListState();
+}
+
+class _EditListState extends State<EditList> {
+  final misListasViewModel = Get.find<MyListsViewModel>();
+
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Inicializa el timer con un período de 1 segundo
+    _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+      if (misListasViewModel.refreshPage.value == true) {
+        setState(() {});
+        print('estoy aqui');
+        misListasViewModel.refreshPage.value = false;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final misListasViewModel = Get.find<MyListsViewModel>();
     Map arguments = Get.arguments;
     final title = arguments['title'];
+    final id = arguments['id'];
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
@@ -45,16 +82,56 @@ class EditList extends StatelessWidget {
                 SizedBox(
                   width: 7,
                 ),
-                Image(
-                  image: AssetImage('assets/icon/Icono_editar.png'),
-                  height: 18,
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                                bottom: Get.height * 0.57,
+                                top: Get.height * 0.08),
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              content: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Puede que algunos de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
+                                      style: TextStyle(
+                                          color: ConstantesColores.azul_precio,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                    BotonAgregarCarrito(
+                                        borderRadio: 50,
+                                        height: 40,
+                                        color: ConstantesColores.azul_precio,
+                                        onTap: () {
+                                          Get.back();
+                                        },
+                                        text: "Entiendo")
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  child: Image(
+                    image: AssetImage('assets/icon/Icono_editar.png'),
+                    height: 18,
+                  ),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                'Puede que alguno de los productos no estén disponibles o hayan cambiado de precio desde la ultima vez',
+                'Puede que alguno de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
                 style: TextStyle(
                   color: ConstantesColores.gris_oscuro,
                   fontSize: 15,
@@ -66,21 +143,73 @@ class EditList extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Seleccionar todos',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: ConstantesColores.azul_precio,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      misListasViewModel.mapListasProductos
+                          .forEach((fabricante, value) {
+                        value['isSelected'].value = !value['isSelected'].value;
+                        value['items'].forEach((producto) {
+                          producto.isSelected = value['isSelected'].value;
+                          if (producto.isSelected!) {
+                            misListasViewModel
+                                .mapListasProductos[fabricante]
+                                    ["precioProductos"]
+                                .value += producto.precio * producto.cantidad;
+                          } else {
+                            misListasViewModel
+                                .mapListasProductos[fabricante]
+                                    ["precioProductos"]
+                                .value = 0.0;
+                          }
+                        });
+                      });
+                    },
+                    child: Text(
+                      'Seleccionar todos',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: ConstantesColores.azul_precio,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  Image(
-                    image: AssetImage('assets/icon/Icono_eliminar.png'),
-                    height: 25,
+                  GestureDetector(
+                    onTap: () {
+                      mostrarAlertCarteraEliminarLista(
+                          context,
+                          "¿Estas seguro que desea eliminar la lista de compras ",
+                          null,
+                          title,
+                          id);
+                    },
+                    child: Image(
+                      image: AssetImage('assets/icon/Icono_eliminar.png'),
+                      height: 25,
+                    ),
                   ),
                 ],
               ),
             ),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(children: [
+                  ...createAcordionListas(context).toList(),
+                ]),
+              ),
+            ),
+            BotonAgregarCarrito(
+              marginTop: 20,
+              borderRadio: 50,
+              color: ConstantesColores.azul_aguamarina_botones,
+              height: 50,
+              width: Get.width * 0.7,
+              onTap: () async {
+                await misListasViewModel.addToCar(context);
+              },
+              text: 'Agregar al carrito',
+            ),
+            SizedBox(height: Get.height * 0.03)
           ],
         ),
       ),

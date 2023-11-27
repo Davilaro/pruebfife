@@ -1,4 +1,6 @@
+
 import 'package:emart/_pideky/presentation/mis_listas/widgets/body_my_lists.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_crear_lista.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -32,33 +34,38 @@ class MisListas extends StatelessWidget {
                     fontWeight: FontWeight.w400),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image(
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) => PopUpCrearNuevaLista());
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image(
                         width: 30,
                         height: 30,
                         image: AssetImage(
                             'assets/icon/Icono_crear_nueva_lista.png')),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Crear nueva lista',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: ConstantesColores.azul_precio,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Crear nueva lista',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: ConstantesColores.azul_precio,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Expanded(child: BodyMyLists())
+            BodyMyLists(),
           ],
         ),
       ),
