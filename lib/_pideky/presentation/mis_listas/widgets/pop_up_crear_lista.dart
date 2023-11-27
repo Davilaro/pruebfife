@@ -66,9 +66,8 @@ class PopUpCrearNuevaLista extends StatelessWidget {
                   BotonAgregarCarrito(
                       height: 40,
                       color: ConstantesColores.azul_precio,
-                      onTap: () {
-                        myList.addList(context);
-                       
+                      onTap: () async {
+                        await myList.addList(context);
                       },
                       text: 'Aceptar')
                 ],

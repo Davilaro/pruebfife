@@ -13,7 +13,9 @@ abstract class MisListasInterface {
       {required String ccup,
       required String nombre,
       required String sucursal,
-      required int idLista});
+      required int idLista,
+      required context
+      });
   Future addProducto(
       {required int idLista,
       required String codigoProducto,

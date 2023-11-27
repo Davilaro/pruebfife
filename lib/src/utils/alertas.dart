@@ -314,10 +314,10 @@ Future<void> mostrarAlertCarteraEliminarLista(BuildContext context,
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: GestureDetector(
                       onTap: () async {
-                        Get.back();
-                        Get.back();
                         await miListasViewModel.deleteList(
                             context, nombreLista, idLista);
+                        Get.back();
+                        Get.back();
                       },
                       child: Container(
                         decoration: BoxDecoration(

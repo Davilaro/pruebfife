@@ -33,9 +33,11 @@ class MisListasService {
       {required String ccup,
       required String nombre,
       required String sucursal,
-      required int idLista}) async {
+      required int idLista,
+      required context
+      }) async {
     return await misListasInterface.deleteLista(
-        ccup: ccup, nombre: nombre, sucursal: sucursal, idLista: idLista);
+        ccup: ccup, nombre: nombre, sucursal: sucursal, idLista: idLista, context: context);
   }
 
   Future addProducto(

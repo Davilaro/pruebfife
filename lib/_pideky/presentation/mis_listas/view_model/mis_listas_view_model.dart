@@ -23,6 +23,7 @@ class MyListsViewModel extends GetxController {
   final misListasService =
       MisListasService(misListasInterface: MisListasRepository());
   final prefs = Preferencias();
+  final cargoConfirmar = Get.find<ControlBaseDatos>();
   RxBool seleecionarTodos = false.obs;
   RxBool refreshPage = false.obs;
   RxList misListas = [].obs;
@@ -31,7 +32,7 @@ class MyListsViewModel extends GetxController {
   final listaFabricante = Get.find<PedidoSugeridoViewModel>().listaFabricante;
 
   Future<void> getMisListas() async {
-    misListas.value = await misListasService.getMisListas();
+    misListas.assignAll(await misListasService.getMisListas());
   }
 
   Future<void> addToCar(context) async {
@@ -76,8 +77,8 @@ class MyListsViewModel extends GetxController {
         ccup: prefs.codigoUnicoPideky,
         nombre: nombre,
         sucursal: prefs.sucursal,
-        idLista: idLista);
-    print('respuesta $result');
+        idLista: idLista,
+        context: context);
     if (result[1] == false) {
       backClosePopup(context, texto: result[0], isCorrect: false);
     } else if (result[0] == true) {
@@ -131,7 +132,6 @@ class MyListsViewModel extends GetxController {
     });
 
     final result = await misListasService.deleteProducto(productos: list);
-    print('result $result');
 
     if (result[1] == true) {
       mapListasProductos.forEach((key, value) {
@@ -158,7 +158,6 @@ class MyListsViewModel extends GetxController {
     });
 
     final result = await misListasService.deleteProducto(productos: list);
-    print('result $result');
 
     if (result[1] == false) {
       backClosePopup(context, isCorrect: false, texto: result[0]);
@@ -169,12 +168,13 @@ class MyListsViewModel extends GetxController {
     update();
   }
 
-  void addList(context) async {
+  Future<void> addList(context) async {
     var request = await misListasService.addLista(
         nombreLista: nombreNuevaLista.value,
         sucursal: prefs.sucursal,
         ccup: prefs.codigoUnicoPideky);
     if (request[1] == true) {
+      await actualizarPaginaSinReset(context, cargoConfirmar);
       final newList =
           ListaEncabezado(id: request[2], nombre: nombreNuevaLista.value);
       misListas.add(newList);
@@ -187,10 +187,10 @@ class MyListsViewModel extends GetxController {
     } else {
       backClosePopup(context, texto: request[0], isCorrect: false);
     }
+    update();
   }
 
   Future existProductInList(String codigoProducto, context) async {
-  final cargoConfirmar = Get.find<ControlBaseDatos>();
     await actualizarPaginaSinReset(context, cargoConfirmar);
     List<ListaEncabezado> listaProductosRes = [];
     final List<ListaDetalle> productos = await misListasService.getProductos();

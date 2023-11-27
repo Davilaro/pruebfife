@@ -1,16 +1,19 @@
-
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/body_my_lists.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_crear_lista.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get/get.dart';
 
 class MisListas extends StatelessWidget {
   const MisListas({key});
 
   @override
   Widget build(BuildContext context) {
+    final misListasViewModel = Get.find<MyListsViewModel>();
+    misListasViewModel.getMisListas();
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('MyListsPage');
     //FIREBASE: Llamamos el evento select_content
