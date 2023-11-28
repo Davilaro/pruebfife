@@ -192,8 +192,8 @@ class MyListsViewModel extends GetxController {
 
   Future existProductInList(String codigoProducto, context) async {
     await actualizarPaginaSinReset(context, cargoConfirmar);
-    List<ListaEncabezado> listaProductosRes = [];
-    final List<ListaDetalle> productos = await misListasService.getProductos();
+    List listaProductosRes = [];
+    final List productos = await misListasService.getProductos();
     final listaIds = [];
     productos.forEach((e) {
       if (codigoProducto == e.codigo) {

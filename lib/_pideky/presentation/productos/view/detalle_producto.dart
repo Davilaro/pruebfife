@@ -2,7 +2,6 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/mi_listas/model/lista_encabezado_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_add_new_product.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
@@ -245,40 +244,45 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                         color: ConstantesColores.verde,
                                       )),
                                 ),
-                                IconButton(
-                                    onPressed: () async {
-                                      final List<ListaEncabezado> listaProductos =
-                                          await listViewModel
-                                              .existProductInList(
-                                                  widget.productos.codigo, context);
-                                      if (listaProductos.isNotEmpty) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                PopUpAddNewProduct(
-                                                  nombresListas: listaProductos,
-                                                  producto: widget.productos,
-                                                  cantidad: toInt(cargoConfirmar
-                                                      .controllerCantidadProducto
-                                                      .value),
-                                                ));
-                                      } else {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                PopUpChooseList(
-                                                  producto: widget.productos,
-                                                  cantidad: toInt(cargoConfirmar
-                                                      .controllerCantidadProducto
-                                                      .value),
-                                                ));
-                                      }
-                                    },
-                                    padding: EdgeInsets.all(0),
-                                    alignment: Alignment.centerLeft,
-                                    icon: Image(
-                                        image: AssetImage(
-                                            'assets/icon/Icono_corazón_vacio_pequeño.png'))),
+                                Visibility(
+                                  visible: isAgotado == true ? false : true,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        final listaProductos =
+                                            await listViewModel
+                                                .existProductInList(
+                                                    widget.productos.codigo,
+                                                    context);
+                                        if (listaProductos.isNotEmpty) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  PopUpAddNewProduct(
+                                                    nombresListas:
+                                                        listaProductos,
+                                                    producto: widget.productos,
+                                                    cantidad: toInt(cargoConfirmar
+                                                        .controllerCantidadProducto
+                                                        .value),
+                                                  ));
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  PopUpChooseList(
+                                                    producto: widget.productos,
+                                                    cantidad: toInt(cargoConfirmar
+                                                        .controllerCantidadProducto
+                                                        .value),
+                                                  ));
+                                        }
+                                      },
+                                      padding: EdgeInsets.all(0),
+                                      alignment: Alignment.centerLeft,
+                                      icon: Image(
+                                          image: AssetImage(
+                                              'assets/icon/Icono_corazón_vacio_pequeño.png'))),
+                                ),
                                 Visibility(
                                     visible: isAgotado,
                                     child: Align(

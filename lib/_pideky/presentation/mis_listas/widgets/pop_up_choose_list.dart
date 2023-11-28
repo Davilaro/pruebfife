@@ -82,11 +82,14 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                         child: Icon(Icons.add_circle_outline_rounded,
                             size: 35, color: ConstantesColores.azul_precio),
                       ),
-                      Text('Crear nueva lista personalizada',
-                          style: TextStyle(
-                              color: ConstantesColores.azul_precio,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                      Expanded(
+                        child: Text('Crear nueva lista personalizada',
+                            style: TextStyle(
+                                color: ConstantesColores.azul_precio,
+                                fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.bold)),
+                      ),
                       SizedBox(width: 10),
                     ],
                   ),
