@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PopUpAddNewProduct extends StatelessWidget {
-  final List<ListaEncabezado> nombresListas;
+  final List nombresListas;
   final Producto producto;
   final cantidad;
 
