@@ -20,7 +20,7 @@ Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   InitialBindings();
-  
+
   final prefs = new Preferencias();
   await prefs.initPrefs();
   final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
@@ -48,9 +48,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-  
   MaterialColor white = const MaterialColor(
     0xFFEEEEEE,
     const <int, Color>{
@@ -69,11 +67,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +93,7 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: S.delegate.supportedLocales,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              useMaterial3: false,
               fontFamily: 'RoundedMplus1c',
               brightness: Brightness.light,
               primarySwatch: white,

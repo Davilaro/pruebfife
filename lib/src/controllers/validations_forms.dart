@@ -391,7 +391,6 @@ class ValidationForms extends GetxController {
         ));
     await progress.show();
     var validation = await sendUserAndPassword(userName.value, password.value);
-    print("respuesta $validation");
     if (validation != -1 && validation != -2) {
       if (validation == 0) {
         if (prefs.isDataBiometricActive == null) {
@@ -591,7 +590,8 @@ class ValidationForms extends GetxController {
       }
     } catch (e) {
       print('Error retorno login $e');
-      await backClosePopup(context, texto: "Usuario incorrecto");
+      await backClosePopup(context,
+          texto: "Algo salió mal, intentalo de nuevo");
 
       return false;
     }

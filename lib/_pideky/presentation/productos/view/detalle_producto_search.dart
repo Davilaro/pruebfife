@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_add_new_product.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -15,6 +18,7 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_card.dart';
@@ -49,6 +53,7 @@ class DetalleProductoSearch extends StatefulWidget {
 class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   ProductoViewModel productViewModel = Get.find();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final listViewModel = Get.find<MyListsViewModel>();
   final constrollerProductos = Get.find<ControllerProductos>();
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
@@ -249,6 +254,51 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                               color: ConstantesColores.verde,
                                             )),
                                       ),
+                                      Visibility(
+                                        visible:
+                                            isAgotado == true ? false : true,
+                                        child: IconButton(
+                                            onPressed: () async {
+                                              final listaProductos =
+                                                  await listViewModel
+                                                      .existProductInList(
+                                                          widget
+                                                              .producto.codigo,
+                                                          context);
+                                              if (listaProductos.isNotEmpty) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        PopUpAddNewProduct(
+                                                          nombresListas:
+                                                              listaProductos,
+                                                          producto:
+                                                              widget.producto,
+                                                          cantidad: toInt(
+                                                              cargoConfirmar
+                                                                  .controllerCantidadProducto
+                                                                  .value),
+                                                        ));
+                                              } else {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        PopUpChooseList(
+                                                          producto:
+                                                              widget.producto,
+                                                          cantidad: toInt(
+                                                              cargoConfirmar
+                                                                  .controllerCantidadProducto
+                                                                  .value),
+                                                        ));
+                                              }
+                                            },
+                                            padding: EdgeInsets.all(0),
+                                            alignment: Alignment.centerLeft,
+                                            icon: Image(
+                                                image: AssetImage(
+                                                    'assets/icon/Icono_corazón_vacio_pequeño.png'))),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -297,8 +347,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                 TextAlignVertical.center,
                                             textAlign: TextAlign.center,
                                             maxLength: 3,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter
                                                   .digitsOnly
                                             ],
