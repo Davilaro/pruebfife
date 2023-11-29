@@ -77,8 +77,6 @@ class Servicies {
     var ccup =
         loginBiometric == true ? prefs.ccupBiometric : prefs.codigoUnicoPideky;
     prefs.codigoUnicoPideky = ccup;
-    print(
-        "sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky} ccup $ccup");
     final List<dynamic> divace = await getDeviceDetails();
     final bodyEncode = json.encode({
       "CCUP": ccup,
@@ -782,6 +780,32 @@ class Servicies {
     } catch (e) {
       print("error enviando portafolio $e");
       return false;
+    }
+  }
+
+  Future<String> duplicateOrder(List productos, total) async {
+    try {
+      final url =
+          Uri.parse(Constantes().urlPrincipal + 'Pedido/PedidoDuplicado');
+      final request = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(<String, dynamic>{
+            "CCUP": prefs.codigoUnicoPideky,
+            "Sucursal": prefs.sucursal,
+            "Total": total,
+            "Productos": productos
+          }));
+      if (request.statusCode == 200) {
+        print("todo salio bien");
+        return jsonDecode(request.body);
+      } else {
+        throw Exception('fallo la consulta de pedido duplicado');
+      }
+    } catch (e) {
+      print("error enviando portafolio $e");
+      throw Exception('Failed');
     }
   }
 }

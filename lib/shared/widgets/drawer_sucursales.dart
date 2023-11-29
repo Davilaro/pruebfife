@@ -154,7 +154,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                             maxLines: 1,
                                           ),
                                           Text(
-                                            "Barrio: barrio",
+                                            "Barrio: ${sucursal.barrio.toString()}",
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                           ),
