@@ -387,6 +387,8 @@ class Servicies {
     final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
+      print(
+          'new datos ${listaPedido[i].isOferta!} and ${listaPedido[i].precioBase!} ');
       datos += jsonEncode(<String, dynamic>{
         "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
@@ -406,7 +408,9 @@ class Servicies {
         "Precio": listaPedido[i].precio,
         "ValorDescuento":
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
-        "Param1": listaPedido[i].descuento!
+        "Param1": listaPedido[i].descuento!,
+        "Param2": listaPedido[i].isOferta!,
+        "Param3": listaPedido[i].precioBase!,
       });
       await misPedidosViewModel.misPedidosService
           .guardarSeguimientoPedido(listaPedido[i], numDoc);

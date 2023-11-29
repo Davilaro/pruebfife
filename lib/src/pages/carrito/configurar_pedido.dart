@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/pedido.dart';
@@ -239,6 +238,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
 
         Pedido pedidoNuevo = new Pedido(
           cantidad: int.parse(value),
+          precioBase: PedidoEmart.listaProductos![key]!.precioBase,
+          isOferta: PedidoEmart.listaProductos![key]!.isOferta,
           codigoProducto: key,
           iva: PedidoEmart.listaProductos![key]!.iva,
           precio: PedidoEmart.listaProductos![key]!.precio,
