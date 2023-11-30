@@ -8,14 +8,11 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
-import 'package:emart/shared/widgets/card_notification_slide_up.dart';
-import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
@@ -47,8 +44,6 @@ class PrincipalPage extends StatefulWidget {
   State<PrincipalPage> createState() => _PrincipalPageState();
 }
 
- 
-
 class _PrincipalPageState extends State<PrincipalPage>
     with AutomaticKeepAliveClientMixin {
   final controllerSurvey = Get.put(EncuestaControllers());
@@ -67,14 +62,16 @@ class _PrincipalPageState extends State<PrincipalPage>
   @override
   void initState() {
     super.initState();
+
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
     if (prefs.usurioLogin == 1) {
       controllerNotificaciones.llenarMapPushInUp("Home");
       controllerNotificaciones.llenarMapSlideUp("Home");
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        validacionGeneralNotificaciones();
+        controllerNotificaciones.validacionGeneralNotificaciones(context);
       });
+      mostrarEncuestasObligatorias(context);
     }
     controllerProducto.getAgotados();
     validarVersionActual(context);
@@ -91,101 +88,59 @@ class _PrincipalPageState extends State<PrincipalPage>
     prefs.nextDay = finalDay;
   }
 
-  void validacionGeneralNotificaciones() async {
-    controllerNotificaciones.closePushInUp.value = false;
-    controllerNotificaciones.onTapPushInUp.value = false;
-    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-    if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
-        controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-      await showPushInUp();
-      int elapsedTime = 0;
-      Timer.periodic(Duration(milliseconds: 10), (timer) {
-        if (elapsedTime >= 530) {
-          showSlideUp();
-          timer.cancel();
-        } else if (controllerNotificaciones.closePushInUp.value == true) {
-          showSlideUp();
-          timer.cancel();
-        } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-          timer.cancel();
-        }
-        elapsedTime++;
-      });
-    } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
-            true &&
-        controllerNotificaciones.closeSlideUp.value == false) {
-      showSlideUp();
-    }
+  // void validacionGeneralNotificaciones() async {
 
+  //   if (!await mostrarEncuestasObligatorias(context)) {
+  //     controllerNotificaciones.closePushInUp.value = false;
+  //     controllerNotificaciones.onTapPushInUp.value = false;
+  //     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+  //     if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
+  //         controllerNotificaciones.listPushInUpHome.isNotEmpty) {
+  //       await showPushInUp();
+  //       int elapsedTime = 0;
+  //       Timer.periodic(Duration(milliseconds: 10), (timer) {
+  //         if (elapsedTime >= 530) {
+  //           showSlideUp();
+  //           timer.cancel();
+  //         } else if (controllerNotificaciones.closePushInUp.value == true) {
+  //           showSlideUp();
+  //           timer.cancel();
+  //         } else if (controllerNotificaciones.onTapPushInUp.value == true) {
+  //           timer.cancel();
+  //         }
+  //         elapsedTime++;
+  //       });
+  //     } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
+  //             true &&
+  //         controllerNotificaciones.closeSlideUp.value == false) {
+  //       showSlideUp();
+  //     }
+  //   }
+
+  // }
+
+  Future<bool> mostrarEncuestasObligatorias(BuildContext context) async {
+    bool hayEncuestas = false;
+    
     if (prefs.typeCollaborator != "2") {
       await controllerSurvey.consultSurveys();
-      if (controllerSurvey.showMandatorySurvey.value) {
-        showDialog(
-          barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                  contentPadding: EdgeInsets.all(5.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  content:
-                      EncuestaForm(controllerSurvey.mandatorySurveyList.first));
-            });
-      }
-
-      // showDialog(
-      //   context: context,
-      //   builder: (context) {
-      //     return FutureBuilder(
-      //         initialData: [],
-      //         future: DBProvider.db.consultarEncuesta(),
-      //         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      //           if (snapshot.data.length == 0) {
-      //             return Container();
-      //           } else {
-      //             if (snapshot.data[0].obligatoria == 0) return Container();
-
-      //             return AlertDialog(
-      //                 contentPadding: EdgeInsets.all(5.0),
-      //                 shape: RoundedRectangleBorder(
-      //                   borderRadius: BorderRadius.circular(20.0),
-      //                 ),
-      //                 content: EncuestaForm(snapshot.data[0]));
-      //           }
-      //         });
-      //   },
-      // );
-    }
-  }
-
-  Future<void> showPushInUp() async {
-    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-      controllerNotificaciones.closePushInUp.value = false;
-      controllerNotificaciones.onTapPushInUp.value = false;
-      controllerNotificaciones.validacionMostrarPushInUp["Home"] = false;
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return WillPopScope(
+      hayEncuestas = controllerSurvey.showMandatorySurvey.value;
+      if (hayEncuestas) {
+        Get.dialog(
+          AlertDialog(
+              contentPadding: EdgeInsets.all(5.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0)
+              ),
+              content: Obx(() =>  WillPopScope(
                 onWillPop: () async => false,
-                child: NotificationPushInApp(
-                    controllerNotificaciones.listPushInUpHome.first, "Home"));
-          });
+                child: EncuestaForm(controllerSurvey.surveyActiveMandatory.value)))),
+          barrierDismissible: false,
+        );
+    
+      }
     }
-  }
-
-  void showSlideUp() async {
-    await controllerNotificaciones.getSlideUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
-      controllerNotificaciones.closeSlideUp.value = true;
-      controllerNotificaciones.validacionMostrarSlideUp["Home"] = false;
-      await Future.delayed(
-          Duration(milliseconds: 100),
-          () => showSlideUpNotification(
-              context, controllerNotificaciones.listSlideUpHome.first, "Home"));
-    }
+    return hayEncuestas;
   }
 
   @override
@@ -421,85 +376,20 @@ class _PrincipalPageState extends State<PrincipalPage>
                     )),
 
                 //ENCUESTA
-
-//                 FutureBuilder(
-//   future: controllerSurvey.consultSurveys(),
-//   builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-//     if (snapshot.connectionState == ConnectionState.done) {
-//       if (prefs.typeCollaborator != "2") {
-//         return Visibility(
-//           visible: controllerSurvey.isVisibleSurvey.value &&
-//               controllerSurvey.mandatorySurveyList.first.obligatoria == 0,
-//           child: Container(
-//             margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(30),
-//             ),
-//             child: EncuestaForm(controllerSurvey.noMandatorySurveyList.first),
-//           ),
-//         );
-//       } else {
-//         return SizedBox.shrink();
-//       }
-//     } else {
-//       return CircularProgressIndicator(); // Puedes usar un indicador de carga mientras se realiza la consulta.
-//     }
-//   },
-// )
-
-                //   prefs.typeCollaborator != "2"
-                //   ? Visibility(
-                //     visible:  controllerSurvey.isVisibleSurvey.value = true && controllerSurvey.mandatorySurveyList.first.obligatoria == 0,
-                //     child: Container(
-                //       margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(30),
-                //     ),
-                //     child: //Container()
-                //      EncuestaForm(controllerSurvey.noMandatorySurveyList.first),
-                //   ),
-                // )
-                //   :SizedBox.shrink(),
-
                 if (prefs.typeCollaborator != "2")
-                  Obx(() => controllerSurvey.noMandatorySurveyList.isNotEmpty
-                      ? Container(
-                          margin: EdgeInsets.only(
-                              left: 10, right: 10, top: 15, bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: EncuestaForm(
-                              controllerSurvey.noMandatorySurveyList.first))
-                      : SizedBox.shrink())
-                // ? FutureBuilder(
-                //     initialData: [],
-                //     future: DBProvider.db.consultarEncuesta(),
-                //     builder: (BuildContext context,
-                //         AsyncSnapshot<dynamic> snapshot) {
-                //       if (snapshot.data.length == 0) {
+                  // Obx(() => controllerSurvey.noMandatorySurveyList.isNotEmpty || controllerSurvey.isVisibleSurvey.value
+                  // ?
+                  Padding(
+                      padding: const EdgeInsets.all(15.0),
 
-                //         return Container();
-                //       } else {
-                //         controllerSurvey.isVisibleSurvey.value =
-                //             true && snapshot.data[0].obligatoria == 0;
-                //         return Obx(() => Visibility(
-                //               visible: controllerSurvey
-                //                   .isVisibleSurvey.value,
-                //               child: Container(
-                //                   margin: EdgeInsets.only(
-                //                       left: 10,
-                //                       right: 10,
-                //                       top: 15,
-                //                       bottom: 10),
-                //                   decoration: BoxDecoration(
-                //                     borderRadius: BorderRadius.circular(30),
-                //                   ),
-                //                   child: EncuestaForm(snapshot.data[0])),
-                //             ));
-                //       }
-                //     })
-                // : SizedBox.shrink(),
+                      child: Obx(()  =>  controllerSurvey.noMandatorySurveyList.isNotEmpty && controllerSurvey.showNoMandatorySurvey.value 
+                            ? EncuestaForm(
+                                controllerSurvey.surveyActiveNoMandatory.value)
+                            : SizedBox.shrink(),
+                      ))
+
+                // : SizedBox.shrink()
+                //  )
               ],
             ),
           ),

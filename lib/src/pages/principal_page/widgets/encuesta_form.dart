@@ -9,6 +9,7 @@ import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
@@ -52,6 +53,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
   final controllerProducto = Get.find<ControllerProductos>();
   final controllerEncuesta = Get.find<EncuestaControllers>();
   final _validationForms = Get.put(ValidationForms());
+  final NotificationsSlideUpAndPushInUpControllers controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final prefs = Preferencias();
 
   String? _errorText;
@@ -65,14 +68,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context1) {
     int item = 0;
-    //if(item == lista.lengt -1 )
-    //cierra hace
-    //else  => item++
-    //encuesta.title
-    //encuesta[item].title
-
     return Stack(
       fit: StackFit.loose,
       clipBehavior: Clip.none,
@@ -88,34 +85,33 @@ class _EncuestaFormState extends State<EncuestaForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               controllerEncuesta.showMandatorySurvey.value
-              ? Center(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 15, top: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    '${widget.encuesta.pregunta}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              )
-              :  Container(
-                  margin: EdgeInsets.only(bottom: 15, top: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    '${widget.encuesta.pregunta}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
+                  ? Center(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15, top: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          '${widget.encuesta.pregunta}',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(bottom: 15, top: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '${widget.encuesta.pregunta}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //pregunta abierta
                   Visibility(
-                    visible: widget.encuesta.tipoPreguntaId == 1
+                    visible: widget.encuesta.tipoPreguntaId == 1 ||
+                            widget.encuesta.tipoPreguntaId == 2
                         ? true
-                        : false || widget.encuesta.tipoPreguntaId == 2
-                            ? true
-                            : false,
+                        : false,
                     child: Container(
                       width: Get.width * 1,
                       decoration: BoxDecoration(
@@ -143,6 +139,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ),
                     ),
                   ),
+
                   //Pregunta seleccion multiple unica respuesta
                   widget.encuesta.tipoPreguntaId == 3
                       ? Visibility(
@@ -178,6 +175,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
                                   i++)
                                 Row(
                                   children: [
+                                    //error cuando setea los valores del calue para el onchange
+
                                     Checkbox(
                                         checkColor: Colors.white,
                                         activeColor:
@@ -243,7 +242,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 15,
                           child: RatingBar.builder(
-                            
                             itemSize: 50.0,
                             itemCount: 5,
                             initialRating: 0,
@@ -286,16 +284,16 @@ class _EncuestaFormState extends State<EncuestaForm> {
             ],
           ),
         ),
-        controllerEncuesta.showMandatorySurvey.value 
-        ? SizedBox()
-        : Positioned(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: SvgPicture.asset('assets/icon/prueba1.svg'),
-          ),
-          top: 0,
-          right: 10,
-        )
+        controllerEncuesta.showMandatorySurvey.value
+            ? SizedBox()
+            : Positioned(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: SvgPicture.asset('assets/icon/prueba1.svg'),
+                ),
+                top: 0,
+                right: 10,
+              )
       ],
     );
   }
@@ -355,8 +353,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
         return;
       } else {
         controllerText.text = '';
-        await updateSurvey(provider, context, cargoConfirmar);
-        alertaFinEncuesta();
+
+        alertaFinEncuesta(encuesta.obligatoria);
         return;
       }
     } else if (encuesta.tipoPreguntaId == 3) {
@@ -370,8 +368,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           _seleccion = '';
-          await updateSurvey(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+
+          alertaFinEncuesta(encuesta.obligatoria);
           return;
         }
       } else {
@@ -400,8 +398,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          await updateSurvey(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+          alertaFinEncuesta(encuesta.obligatoria);
           _opcionesMultiple.updateAll((key, value) => value = false);
           return;
         }
@@ -420,8 +417,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           controllerEmail.text = '';
-          await updateSurvey(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+
+          alertaFinEncuesta(encuesta.obligatoria);
 
           return;
         }
@@ -438,8 +435,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           controllerTelephone.text = '';
-          await updateSurvey(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+
+          alertaFinEncuesta(encuesta.obligatoria);
 
           return;
         }
@@ -455,19 +452,19 @@ class _EncuestaFormState extends State<EncuestaForm> {
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          
-          await updateSurvey(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+          alertaFinEncuesta(encuesta.obligatoria);
           return;
         }
       } else {
         mensajeValid.value = 'Por favor indique una puntuación';
       }
     }
-    
   }
 
-  alertaFinEncuesta() {
+  alertaFinEncuesta(int? esObligatoria) {
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    final cargoConfirmar = Get.find<ControlBaseDatos>();
+    //controllerEncuesta.setIsVisibleEncuesta(false);
     mostrarAlert(
         context,
         'Gracias por contestar nuestra encuesta',
@@ -475,11 +472,34 @@ class _EncuestaFormState extends State<EncuestaForm> {
           Icons.check,
           color: ConstantesColores.verde,
           size: 50,
-        ));
-    controllerEncuesta.setIsVisibleEncuesta(false);
+        ), 
+        onTap: () async {
+      //Pedimos si es obligatoria o no y dependiendo ello entra a su metodo correspondiente
+      if (esObligatoria == 1) {
+        if (controllerEncuesta.existenEncuestasObligatorias()) {
+          checkButtons(
+              controllerEncuesta.surveyActiveMandatory.value.parametro);
+          Get.close(1);
+          setState(() {});
+        } else {
+          //  controllerNotificaciones.validacionGeneralNotificaciones(context);
+          await updateSurvey(provider, context, cargoConfirmar);
+        }
+      } else {
+        if (controllerEncuesta.existenEncuestasNoObligatorias()) {
+          checkButtons(
+              controllerEncuesta.surveyActiveNoMandatory.value.parametro);
+          Get.close(1);
+          setState(() {});
+        } else {
+          await updateSurvey(provider, context, cargoConfirmar);
+        }
+      }
+    });
   }
+}
 
-  Future<void> updateSurvey(
+Future<void> updateSurvey(
     OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
   final botonesController = Get.find<BotonesProveedoresVm>();
   final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
@@ -509,5 +529,4 @@ class _EncuestaFormState extends State<EncuestaForm> {
     provider.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
   }
-}
 }

@@ -36,6 +36,7 @@ class Preferencias {
 
   initPrefs() async {
     this._prefs = await SharedPreferences.getInstance();
+    momentSurvey = 0;
   }
 
   get codClienteLogueado {
@@ -251,5 +252,13 @@ class Preferencias {
 
   set typeCollaborator(dynamic value) {
     _prefs.setString("typCollaborator", value);
+  }
+
+  get momentSurvey {
+    return _prefs.getInt("momentSurvey") ?? "";
+  }
+
+  set momentSurvey(dynamic value) {
+    _prefs.setInt("momentSurvey", value);
   }
 }

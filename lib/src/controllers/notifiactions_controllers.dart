@@ -1,9 +1,12 @@
 // ignore_for_file: unnecessary_statements, unnecessary_null_comparison
+import 'dart:async';
+
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
+import 'package:emart/src/controllers/encuesta_controller.dart';
 
 import '../../_pideky/domain/producto/service/producto_service.dart';
 import '../../_pideky/presentation/productos/view/detalle_producto_compra.dart';
@@ -451,6 +454,67 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     } catch (e) {
       Get.put(NotificationsSlideUpAndPushInUpControllers());
       return Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    }
+  }
+
+  void validacionGeneralNotificaciones(context) async {
+
+    EncuestaControllers encuestaControllers = Get.find<EncuestaControllers>();
+    bool hayEncuestasObligatorias =
+        await encuestaControllers.consultSurveys();
+
+    if (!hayEncuestasObligatorias) {
+      closePushInUp.value = false;
+      onTapPushInUp.value = false;
+      await getPushInUpByDataBaseHome("Home");
+      if (validacionMostrarPushInUp["Home"] == true &&
+          listPushInUpHome.isNotEmpty) {
+        await showPushInUps(context);
+        int elapsedTime = 0;
+        Timer.periodic(Duration(milliseconds: 10), (timer) {
+          if (elapsedTime >= 530) {
+            showSlideUps(context);
+            timer.cancel();
+          } else if (closePushInUp.value == true) {
+            showSlideUps(context);
+            timer.cancel();
+          } else if (onTapPushInUp.value == true) {
+            timer.cancel();
+          }
+          elapsedTime++;
+        });
+      } else if (validacionMostrarSlideUp["Home"] == true &&
+          closeSlideUp.value == false) {
+        showSlideUps(context);
+      }
+    }
+  }
+
+  Future<void> showPushInUps(context) async {
+    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (listPushInUpHome.isNotEmpty) {
+      closePushInUp.value = false;
+      onTapPushInUp.value = false;
+      validacionMostrarPushInUp["Home"] = false;
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WillPopScope(
+                onWillPop: () async => false,
+                child: NotificationPushInApp(listPushInUpHome.first, "Home"));
+          });
+    }
+  }
+
+  void showSlideUps(context) async {
+    await getSlideUpByDataBaseHome("Home");
+    if (listSlideUpHome.isNotEmpty) {
+      closeSlideUp.value = true;
+      validacionMostrarSlideUp["Home"] = false;
+      await Future.delayed(
+          Duration(milliseconds: 100),
+          () =>
+              showSlideUpNotification(context, listSlideUpHome.first, "Home"));
     }
   }
 }
