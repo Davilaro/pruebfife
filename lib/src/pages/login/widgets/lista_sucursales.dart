@@ -49,7 +49,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
 
-
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
       appBar: AppBar(

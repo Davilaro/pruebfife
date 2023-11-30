@@ -2,6 +2,7 @@ import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fu
 import 'package:emart/_pideky/presentation/club_ganadores/view_mdel/club_ganadores_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/transito_view_model.dart';
@@ -33,5 +34,6 @@ class InitialBindings extends Bindings {
     ValidationForms.findOrInitialize;
     BotonesProveedoresVm.findOrInitialize;
     SearchFuzzyViewModel.findOrInitialize;
+    MyListsViewModel.findOrInitialize;
   }
 }

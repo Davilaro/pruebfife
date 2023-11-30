@@ -24,7 +24,7 @@ class PedidoSugeridoViewModel extends GetxController
   late TabController tabController;
   late PageController pageController;
   RxInt tabActual = 0.obs;
-  final List titulosSeccion = ["Pedido Sugerido", "Repetir Orden"];
+  final List titulosSeccion = ["Pedido Sugerido", "Mis listas"];
 
   //usuario logueado
   final prefs = new Preferencias();

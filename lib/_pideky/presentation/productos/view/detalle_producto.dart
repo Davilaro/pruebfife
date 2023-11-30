@@ -2,6 +2,9 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_add_new_product.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
@@ -15,6 +18,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
@@ -44,6 +48,7 @@ class DetalleProducto extends StatefulWidget {
 
 class _DetalleProductoState extends State<DetalleProducto> {
   ProductoViewModel productViewModel = Get.find();
+  final listViewModel = Get.find<MyListsViewModel>();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
 
@@ -184,6 +189,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                           Container(
                             height: Get.height * 0.15,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Visibility(
                                     visible: widget.productos.descuento != 0,
@@ -228,17 +234,54 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                             fontSize: 18),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    child: AutoSizeText(
-                                        S.current.price_per_sales_unit,
-                                        maxLines: 2,
-                                        presetFontSizes: [15, 13],
-                                        style: TextStyle(
-                                          color: ConstantesColores.verde,
-                                        )),
-                                  ),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: AutoSizeText(
+                                      S.current.price_per_sales_unit,
+                                      maxLines: 2,
+                                      presetFontSizes: [15, 13],
+                                      style: TextStyle(
+                                        color: ConstantesColores.verde,
+                                      )),
+                                ),
+                                Visibility(
+                                  visible: isAgotado == true ? false : true,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        final listaProductos =
+                                            await listViewModel
+                                                .existProductInList(
+                                                    widget.productos.codigo,
+                                                    context);
+                                        if (listaProductos.isNotEmpty) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  PopUpAddNewProduct(
+                                                    nombresListas:
+                                                        listaProductos,
+                                                    producto: widget.productos,
+                                                    cantidad: toInt(cargoConfirmar
+                                                        .controllerCantidadProducto
+                                                        .value),
+                                                  ));
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  PopUpChooseList(
+                                                    producto: widget.productos,
+                                                    cantidad: toInt(cargoConfirmar
+                                                        .controllerCantidadProducto
+                                                        .value),
+                                                  ));
+                                        }
+                                      },
+                                      padding: EdgeInsets.all(0),
+                                      alignment: Alignment.centerLeft,
+                                      icon: Image(
+                                          image: AssetImage(
+                                              'assets/icon/Icono_corazón_vacio_pequeño.png'))),
                                 ),
                                 Visibility(
                                     visible: isAgotado,
@@ -318,6 +361,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                     },
                                     style: TextStyle(color: Colors.black),
                                     onChanged: (value) {
+                                      print('value: $value');
                                       cargoConfirmar
                                           .cambiarValoresEditex(value);
                                     },
@@ -356,8 +400,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
           Visibility(
             visible: !isAgotado,
             child: BotonAgregarCarrito(
-              onTap: 
-              widget.isFrecuencia
+              onTap: widget.isFrecuencia
                   ? () => llenarCarrito(widget.productos, cartProvider)
                   : () => productViewModel.iniciarModal(
                       context, widget.productos.fabricante),
