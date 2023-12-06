@@ -274,9 +274,10 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
             textAlign: TextAlign.center,
           ),
           null,
-          null,
+          Icon(Icons.close, color: Colors.red),
           size,
-          listaProductosPedidos);
+          listaProductosPedidos,
+          progress);
     } else {
       showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
       await _dialogPedidoRegistrado(listaProductosPedidos, size);
@@ -284,7 +285,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   }
 
   void _mostrarAlertOrderDuplicate(BuildContext context, Widget mensaje,
-      Widget? icon, Widget? iconClose, size, listaProductosPedidos) {
+      Widget? icon, Widget? iconClose, size, listaProductosPedidos, progress) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -309,7 +310,10 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                                 child: Container(),
                               ),
                               GestureDetector(
-                                onTap: () => Get.back(),
+                                onTap: () async {
+                                  Get.back();
+                                  await progress.hide();
+                                },
                                 child: Icon(
                                   Icons.cancel,
                                   color: ConstantesColores.verde,

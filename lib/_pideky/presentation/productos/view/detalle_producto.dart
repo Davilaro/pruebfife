@@ -54,12 +54,12 @@ class _DetalleProductoState extends State<DetalleProducto> {
 
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
-  bool isAgotado = false;
 
   @override
   void initState() {
     super.initState();
-    isAgotado = constrollerProductos.validarAgotado(widget.productos);
+    cargoConfirmar.isAgotado.value =
+        constrollerProductos.validarAgotado(widget.productos);
     //FIREBASE: Llamamos el evento view_item
     TagueoFirebase().sendAnalityticViewItem(widget.productos, 1);
     setState(() {});
@@ -75,7 +75,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
 
-    _controllerCantidadProducto.text = isAgotado
+    _controllerCantidadProducto.text = cargoConfirmar.isAgotado.value
         ? '0'
         : cargoConfirmar.controllerCantidadProducto.value == '0'
             ? '1'
@@ -155,250 +155,259 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ]),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: widget.tamano * 0.30,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Container(
-                width: Get.width,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: Get.width * 0.5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'SKU: ' + widget.productos.codigo,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 13.0,
-                                      color: HexColor("#a2a2a2"),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: Get.height * 0.15,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Visibility(
-                                    visible: widget.productos.descuento != 0,
-                                    child: Container(
-                                      height: Get.width * 0.07,
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      alignment: Alignment.topLeft,
-                                      child: AutoSizeText(
-                                        productViewModel.getCurrency(
-                                            widget.productos.precio),
-                                        textAlign: TextAlign.left,
-                                        presetFontSizes: [17, 15],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                      ),
-                                    )),
-                                Container(
-                                  height: widget.productos.descuento != 0
-                                      ? Get.width * 0.05
-                                      : Get.width * 0.07,
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    productViewModel.getCurrency(
-                                        widget.productos.descuento != 0
-                                            ? widget.productos.precioinicial
-                                            : widget.productos.precio),
-                                    textAlign: TextAlign.left,
-                                    style: widget.productos.descuento != 0
-                                        ? TextStyle(
-                                            color:
-                                                ConstantesColores.azul_precio,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 11,
-                                            decoration:
-                                                TextDecoration.lineThrough)
-                                        : TextStyle(
-                                            color:
-                                                ConstantesColores.azul_precio,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: AutoSizeText(
-                                      S.current.price_per_sales_unit,
-                                      maxLines: 2,
-                                      presetFontSizes: [15, 13],
-                                      style: TextStyle(
-                                        color: ConstantesColores.verde,
-                                      )),
-                                ),
-                                Visibility(
-                                  visible: isAgotado == true ? false : true,
-                                  child: IconButton(
-                                      onPressed: () async {
-                                        final listaProductos =
-                                            await listViewModel
-                                                .existProductInList(
-                                                    widget.productos.codigo,
-                                                    context);
-                                        if (listaProductos.isNotEmpty) {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  PopUpAddNewProduct(
-                                                    nombresListas:
-                                                        listaProductos,
-                                                    producto: widget.productos,
-                                                    cantidad: toInt(cargoConfirmar
-                                                        .controllerCantidadProducto
-                                                        .value),
-                                                  ));
-                                        } else {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  PopUpChooseList(
-                                                    producto: widget.productos,
-                                                    cantidad: toInt(cargoConfirmar
-                                                        .controllerCantidadProducto
-                                                        .value),
-                                                  ));
-                                        }
-                                      },
-                                      padding: EdgeInsets.all(0),
-                                      alignment: Alignment.centerLeft,
-                                      icon: Image(
-                                          image: AssetImage(
-                                              'assets/icon/Icono_corazón_vacio_pequeño.png'))),
-                                ),
-                                Visibility(
-                                    visible: isAgotado,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          color: Colors.red[100],
-                                        ),
-                                        height: Get.width * 0.06,
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                        child: Text(
-                                          'Agotado',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.red),
-                                        ),
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      height: 45.0,
-                      width: Get.width * 0.35,
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
+          Obx(
+            () => Container(
+              width: double.infinity,
+              height: widget.tamano * 0.30,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Container(
+                  width: Get.width,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: Get.width * 0.5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 40.0,
-                              width: Get.width * 0.1,
-                              child: IconButton(
-                                icon: Image.asset('assets/image/menos.png'),
-                                onPressed: () =>
-                                    menos(widget.productos, cartProvider),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'SKU: ' + widget.productos.codigo,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: HexColor("#a2a2a2"),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
                             Container(
-                              width: Get.width * 0.1,
-                              alignment: Alignment.bottomCenter,
-                              child: ConstrainedBox(
-                                constraints: new BoxConstraints(
-                                  minWidth: 20,
-                                  maxWidth: 100,
-                                  minHeight: 40.0,
-                                  maxHeight: 40.0,
-                                ),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  reverse: true,
-                                  child: TextFormField(
-                                    maxLines: 1,
-                                    controller: _controllerCantidadProducto,
-                                    keyboardType: TextInputType.number,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    textAlign: TextAlign.center,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Escribe el precio de compra';
-                                      }
-                                      return null;
-                                    },
-                                    style: TextStyle(color: Colors.black),
-                                    onChanged: (value) {
-                                      print('value: $value');
-                                      cargoConfirmar
-                                          .cambiarValoresEditex(value);
-                                    },
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      fillColor: Colors.black,
-                                      hintText: '',
-                                      isDense: true,
-                                      counterText: "",
-                                      hintStyle: TextStyle(
-                                        color: Colors.black,
-                                      ),
+                              height: Get.height * 0.15,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Visibility(
+                                      visible: widget.productos.descuento != 0,
+                                      child: Container(
+                                        height: Get.width * 0.07,
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        alignment: Alignment.topLeft,
+                                        child: AutoSizeText(
+                                          productViewModel.getCurrency(
+                                              widget.productos.precio),
+                                          textAlign: TextAlign.left,
+                                          presetFontSizes: [17, 15],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ),
+                                      )),
+                                  Container(
+                                    height: widget.productos.descuento != 0
+                                        ? Get.width * 0.05
+                                        : Get.width * 0.07,
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      productViewModel.getCurrency(
+                                          widget.productos.descuento != 0
+                                              ? widget.productos.precioinicial
+                                              : widget.productos.precio),
+                                      textAlign: TextAlign.left,
+                                      style: widget.productos.descuento != 0
+                                          ? TextStyle(
+                                              color:
+                                                  ConstantesColores.azul_precio,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 11,
+                                              decoration:
+                                                  TextDecoration.lineThrough)
+                                          : TextStyle(
+                                              color:
+                                                  ConstantesColores.azul_precio,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40.0,
-                              width: Get.width * 0.1,
-                              child: IconButton(
-                                icon: Image.asset('assets/image/mas.png'),
-                                onPressed: () =>
-                                    mas(widget.productos, cartProvider),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: AutoSizeText(
+                                        S.current.price_per_sales_unit,
+                                        maxLines: 2,
+                                        presetFontSizes: [15, 13],
+                                        style: TextStyle(
+                                          color: ConstantesColores.verde,
+                                        )),
+                                  ),
+                                  Visibility(
+                                    visible:
+                                        cargoConfirmar.isAgotado.value == true
+                                            ? false
+                                            : true,
+                                    child: IconButton(
+                                        onPressed: () async {
+                                          final listaProductos =
+                                              await listViewModel
+                                                  .existProductInList(
+                                                      widget.productos.codigo,
+                                                      context);
+                                          if (listaProductos.isNotEmpty) {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    PopUpAddNewProduct(
+                                                      nombresListas:
+                                                          listaProductos,
+                                                      producto:
+                                                          widget.productos,
+                                                      cantidad: toInt(cargoConfirmar
+                                                          .controllerCantidadProducto
+                                                          .value),
+                                                    ));
+                                          } else {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    PopUpChooseList(
+                                                      producto:
+                                                          widget.productos,
+                                                      cantidad: toInt(cargoConfirmar
+                                                          .controllerCantidadProducto
+                                                          .value),
+                                                    ));
+                                          }
+                                        },
+                                        padding: EdgeInsets.all(0),
+                                        alignment: Alignment.centerLeft,
+                                        icon: Image(
+                                            image: AssetImage(
+                                                'assets/icon/Icono_corazón_vacio_pequeño.png'))),
+                                  ),
+                                  Visibility(
+                                      visible: cargoConfirmar.isAgotado.value,
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            color: Colors.red[100],
+                                          ),
+                                          height: Get.width * 0.06,
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                          child: Text(
+                                            'Agotado',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                      )),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        alignment: Alignment.centerRight,
+                        height: 45.0,
+                        width: Get.width * 0.35,
+                        child: Card(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SizedBox(
+                                height: 40.0,
+                                width: Get.width * 0.1,
+                                child: IconButton(
+                                  icon: Image.asset('assets/image/menos.png'),
+                                  onPressed: () =>
+                                      menos(widget.productos, cartProvider),
+                                ),
+                              ),
+                              Container(
+                                width: Get.width * 0.1,
+                                alignment: Alignment.bottomCenter,
+                                child: ConstrainedBox(
+                                  constraints: new BoxConstraints(
+                                    minWidth: 20,
+                                    maxWidth: 100,
+                                    minHeight: 40.0,
+                                    maxHeight: 40.0,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    reverse: true,
+                                    child: TextFormField(
+                                      maxLines: 1,
+                                      controller: _controllerCantidadProducto,
+                                      keyboardType: TextInputType.number,
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      textAlign: TextAlign.center,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Escribe el precio de compra';
+                                        }
+                                        return null;
+                                      },
+                                      style: TextStyle(color: Colors.black),
+                                      onChanged: (value) {
+                                        print('value: $value');
+                                        cargoConfirmar
+                                            .cambiarValoresEditex(value);
+                                      },
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        fillColor: Colors.black,
+                                        hintText: '',
+                                        isDense: true,
+                                        counterText: "",
+                                        hintStyle: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40.0,
+                                width: Get.width * 0.1,
+                                child: IconButton(
+                                  icon: Image.asset('assets/image/mas.png'),
+                                  onPressed: () =>
+                                      mas(widget.productos, cartProvider),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
           Visibility(
-            visible: !isAgotado,
+            visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(
               onTap: widget.isFrecuencia
                   ? () => llenarCarrito(widget.productos, cartProvider)

@@ -2,6 +2,7 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:get/get.dart';
 
 class CambioEstadoProductos extends GetxController {
+  RxBool isAgotado = false.obs;
   RxInt cambioEstado = 1.obs;
   var dato = new ProductoCambiante().obs;
   var cambiarEscala = 0.5.obs;

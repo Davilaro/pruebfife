@@ -27,13 +27,13 @@ class ProductoRepositorySqlite extends IProductoRepository {
     f.nit AS nitFabricante,
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -136,16 +136,15 @@ ORDER BY
     f.BloqueoCartera as bloqueoCartera, 
     p.OrdenMarca as ordenMarca, 
     p.OrdenSubcategoria as ordenSubcategoria,
-    p.precio as precioBase,
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -168,6 +167,7 @@ ORDER BY
     p.subcategoriacodigopideki, 
     p.nombrecomercial, 
     p.codigocliente,  
+    P.precio as precioBase,
     p.orden, 
     IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
@@ -178,7 +178,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -207,9 +207,8 @@ FROM
     Producto p
 JOIN 
     fabricante f ON p.fabricante = f.empresa
-LEFT JOIN 
-    Ofertas pn ON p.codigo = pn.codigo
-LEFT JOIN 
+LEFT JOIN Ofertas pn ON p.codigo = pn.codigo
+      LEFT JOIN 
     (
         SELECT 
             tmp.proveedor, 
@@ -242,7 +241,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -260,7 +259,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -271,32 +270,24 @@ WHERE
         ), 0
     ) <= $precioMaximo
     $consulta
-ORDER BY 
-    p.orden ASC;
+ORDER BY p.orden ASC
 
 
         
     ''';
       } else if (tipo == 3) {
         query = '''
-       SELECT 
-    p.codigo, 
-    p.nombre, 
-    f.codigo as codigoFabricante, 
-    f.nit as nitFabricante, 
-    f.BloqueoCartera as bloqueoCartera, 
-    p.OrdenMarca as ordenMarca, 
-    p.OrdenSubcategoria as ordenSubcategoria,
-    p.precio as precioBase,
-    ROUND(
+       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,p.precio as precioBase,
+        ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -306,21 +297,12 @@ ORDER BY
             )
         ), 0
     ) AS precio,
-    p.marca, 
-    p.categoria, 
-    p.iva, 
-    p.fabricante, 
-    p.marcapideki, 
-    p.tipofabricante, 
-    p.marcacodigopideki, 
-    p.categoriacodigopideki, 
-    p.categoriaId2,
-    p.subcategoriaId2, 
-    p.subcategoriacodigopideki, 
-    p.nombrecomercial, 
-    p.codigocliente,  
-    p.orden, 
-    IFNULL(tmp.descuento, 0.0) AS descuento, 
+         p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
+         p.marcacodigopideki , 
+        p.categoriacodigopideki , 
+        p.categoriaId2,
+			  p.subcategoriaId2, 
+        p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
             (
@@ -329,7 +311,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -348,52 +330,26 @@ ORDER BY
                 END
             )), 0
         ) AS FLOAT
-    ) AS precioinicial, 
-    SUBSTR(fechafinnuevo, 7, 4) || '-' || SUBSTR(fechafinnuevo, 4, 2) || '-' || (SUBSTR(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
-    SUBSTR(fechafinpromocion, 7, 4) || '-' || SUBSTR(fechafinpromocion, 4, 2) || '-' || SUBSTR(fechafinpromocion, 1, 2) as fechafinpromocion_1, 
-    activopromocion, 
-    activoprodnuevo,
-    CASE WHEN pn.codigo IS NOT NULL THEN 1 ELSE 0 END AS isOferta
-FROM 
-    Producto p
-JOIN 
-    fabricante f ON p.fabricante = f.empresa
-LEFT JOIN 
-    Ofertas pn ON p.codigo = pn.codigo
-LEFT JOIN 
-    (
-        SELECT 
-            tmp.proveedor, 
-            tmp.material codigo, 
-            tmp.descuento 
-        FROM 
-            (
-                SELECT 
-                    (SELECT COUNT(*) FROM descuentos de WHERE de.rowid >= d.rowid AND de.material = d.material) identificador, * 
-                FROM 
-                    descuentos d
-                INNER JOIN 
-                    producto p ON p.codigo = d.material AND d.proveedor = p.fabricante
-            ) tmp 
-        WHERE tmp.identificador = 1
-    ) tmp ON p.fabricante = tmp.proveedor AND p.codigo = tmp.codigo
-WHERE  
-    (p.fabricante LIKE '%$codigoProveedor%') 
-    AND 
-    (
-        (p.subcategoriacodigopideki = $codigo OR p.subcategoriaId2 = $codigo) 
-        AND 
-        (p.codigo LIKE '%$buscador%' OR p.nombre LIKE '%$buscador%')
-    )
-    AND ROUND(
+    ) AS precioinicial, substr(fechafinnuevo, 7, 4) || '-' || substr(fechafinnuevo, 4, 2) || '-' ||  (substr(fechafinnuevo, 1, 2)) as fechafinnuevo_1 , 
+substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-' ||substr(fechafinpromocion, 1, 2)as fechafinpromocion_1 
+         ,activopromocion, activoprodnuevo,
+         CASE WHEN pn.codigo IS NOT NULL THEN 1 ELSE 0 END AS isOferta
+        FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa left join Ofertas pn ON p.codigo = pn.codigo
+      LEFT JOIN (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
+        select (select count(*) from descuentos de where de.rowid>=d.rowid and de.material=d.material) identificador,* 
+        from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante
+        ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo
+        WHERE  (p.fabricante like '%$codigoProveedor%') AND
+        p.marcacodigopideki = $codigo  AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%' )
+        AND ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -411,7 +367,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -421,9 +377,8 @@ WHERE
             )
         ), 0
     ) <= $precioMaximo
-    $consulta
-ORDER BY 
-    p.orden ASC;
+        $consulta
+        ORDER BY p.OrdenMarca ASC
 
          
        ''';
@@ -444,7 +399,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -477,7 +432,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -537,7 +492,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -555,7 +510,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -566,7 +521,7 @@ WHERE
         ), 0
     ) <= $precioMaximo
 ORDER BY 
-    p.orden ASC;
+    p.OrdenProveedores ASC;
 
          
       ''';
@@ -581,13 +536,13 @@ ORDER BY
     p.precio as precioBase,
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -620,7 +575,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -684,7 +639,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -702,7 +657,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -734,7 +689,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -768,7 +723,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -832,7 +787,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -850,7 +805,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -883,7 +838,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -917,7 +872,7 @@ ORDER BY
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -976,7 +931,7 @@ WHERE
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE (((p.precio * IFNULL(tmp.descuento, 0) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -988,13 +943,13 @@ WHERE
     ) >= $precioMinimo
     AND ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE (p.precio - (p.precio * p.ICUI / 100))
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1010,8 +965,8 @@ ORDER BY p.orden ASC;
          
         ''';
       }
+      //log(query);
       // print("tipo $tipo");
-      // log(query);
 
       sql = await db.rawQuery(query);
 
@@ -1056,7 +1011,7 @@ ORDER BY p.orden ASC;
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1090,57 +1045,57 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
           AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
-                    (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                   (
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         $consulta
-        ORDER BY pn.orden_imperdible ASC $isLimit 
+        ORDER BY p.OrdenImperdibles ASC $isLimit 
          
     ''';
-
+        //log(query);
         sql = await db.rawQuery(query);
       } else {
         query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
       ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1153,7 +1108,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
        p.marcacodigopideki , 
       p.categoriacodigopideki , 
-      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
+      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente, p.OrdenPromos as orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
             (
@@ -1162,7 +1117,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1195,37 +1150,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
       $consulta
@@ -1239,7 +1194,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1252,7 +1207,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
        p.marcacodigopideki , 
       p.categoriacodigopideki , 
-      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  pn.orden_oferta as orden,  IFNULL(tmp.descuento, 0.0) AS descuento, 
+      p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.OrdenPromos as orden,  IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
             (
@@ -1261,7 +1216,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1310,28 +1265,30 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
       
-      ORDER BY pn.orden_oferta ASC
+      ORDER BY p.OrdenPromos ASC
          
      ''';
+        //log(query);
 
         sql = await db.rawQuery(query);
       }
+      print('tipo de consulta $tipoProducto');
       //log(sql);
       return sql.isNotEmpty
           ? sql.map((e) => Producto.fromJson(e)).toList()
@@ -1359,7 +1316,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1377,7 +1334,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         CAST(ROUND((p.precio + ((p.precio * p.iva) / 100) + (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((p.precio -(p.precio * IFNULL(tmp.descuento, 0) / 100) * p.ICUI) / 100)
                 END
             ) ), 0) AS FLOAT) AS precioinicial
         FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa 
@@ -1438,13 +1395,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1462,13 +1419,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1500,38 +1457,38 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          AND ( p.codigo like '%$buscador%' OR p.nombre like '%$buscador%')
         AND ROUND(
                 (
-                    (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                   (
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
 
@@ -1549,13 +1506,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
          ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1573,13 +1530,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden,IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1612,37 +1569,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
-                    (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                   (
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         $consulta
@@ -1666,7 +1623,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1690,7 +1647,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1726,37 +1683,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         ORDER BY p.orden ASC
@@ -1779,7 +1736,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1803,7 +1760,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1834,37 +1791,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         ORDER BY p.orden ASC
@@ -1880,13 +1837,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1904,13 +1861,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -1942,37 +1899,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         $consulta
@@ -1987,13 +1944,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2017,7 +1974,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2051,37 +2008,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         
@@ -2125,7 +2082,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2149,7 +2106,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2183,37 +2140,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         ORDER BY p.orden ASC
@@ -2228,13 +2185,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2258,7 +2215,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2291,37 +2248,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
     
@@ -2339,13 +2296,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2363,13 +2320,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
-            (
+           (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
             ) + 
             (
                 CASE
                     WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((p.precio * p.ICUI) / 100)
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
                 END
             ) + 
             (
@@ -2406,37 +2363,37 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE ((p.precio * p.ICUI) / 100)
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) >= $precioMinimo
             AND ROUND(
                 (
                     (
-                        p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                    ) + 
-                    (
-                        CASE
-                            WHEN p.ICUI = 0 THEN p.IBUA
-                            ELSE (p.precio - (p.precio * p.ICUI / 100))
-                        END
-                    ) + 
-                    (
-                        (
-                            p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                        ) * p.iva / 100
-                    )
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
                 ), 0
             ) <= $precioMaximo
         ORDER BY p.orden ASC
