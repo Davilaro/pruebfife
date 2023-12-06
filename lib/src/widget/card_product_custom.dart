@@ -15,7 +15,7 @@ class CardProductCustom extends StatefulWidget {
   final bool isProductoEnOferta;
   final bool isAgotadoLabel;
   final int? tipoCategoria;
-  final Function()? onTapCard;
+  final VoidCallback? onTapCard;
   final Function()? onTapBtnAgregar;
   final bool isVisibleLabelPromo;
   final bool isVisibleLabelNuevo;

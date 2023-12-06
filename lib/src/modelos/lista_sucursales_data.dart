@@ -30,9 +30,11 @@ class ListaSucursalesData {
       this.pais,
       this.codigoUnicoPideky,
       this.bloqueado,
+      this.barrio,
       this.sucursal});
 
   String? codigo;
+  String? barrio;
   String? nombre;
   String? razonsocial;
   String? nit;
@@ -70,6 +72,7 @@ class ListaSucursalesData {
             json["CodigoUnicoPideky"] == null ? "" : json["CodigoUnicoPideky"],
         bloqueado: json["Bloqueado"] == null ? "" : json["Bloqueado"],
         pais: json["Pais"] == null ? "" : json["Pais"],
+        barrio: json["Barrio"] == null ? "" : json["Barrio"],
         fabricantes: json["Fabricantes"] == null
             ? []
             : List<Fabricante>.from(
@@ -94,6 +97,7 @@ class ListaSucursalesData {
         "Pais": pais,
         "CodigoUnicoPideky": codigoUnicoPideky,
         "Bloqueado": bloqueado,
-        "Sucursal": sucursal
+        "Sucursal": sucursal,
+        "Barrio": barrio
       };
 }
