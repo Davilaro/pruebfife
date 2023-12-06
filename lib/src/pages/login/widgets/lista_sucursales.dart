@@ -198,6 +198,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                     child: Text('Ciudad: ${element.ciudad}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
+                Flexible(
+                    child: Text('Barrio: ${element.barrio}',
+                        overflow: TextOverflow.clip,
+                        style: diseno_sucursales(element))),
               ],
             ),
           ),

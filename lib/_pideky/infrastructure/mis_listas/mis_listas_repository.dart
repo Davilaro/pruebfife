@@ -206,13 +206,24 @@ class MisListasRepository implements MisListasInterface {
     var sql = idLista != null
         ? """ SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
 		F.nombrecomercial nombreComercial , 
-        ROUND((( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) + 
-            (CASE
-                  WHEN p.ICUI = 0 THEN p.IBUA
-                   ELSE ((p.precio * p.ICUI) / 100)
-                END) + 
-            (( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) * p.iva / 100)), 0)
-     AS precio, ld.Cantidad
+        ROUND(
+        (
+           (
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
+        ), 0
+    ) AS precio,  ld.Cantidad
         FROM ListaCompraDetalle ld 
         INNER JOIN Producto P ON P.Codigo = ld.Codigo 
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
@@ -223,13 +234,24 @@ class MisListasRepository implements MisListasInterface {
         : """
         SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
             F.nombrecomercial nombreComercial , 
-                ROUND((( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) + 
-                    (CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((p.precio * p.ICUI) / 100)
-                        END) + 
-                    (( p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) * p.iva / 100)), 0)
-            AS precio, ld.Cantidad
+                ROUND(
+        (
+           (
+                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+            ) + 
+            (
+                CASE
+                    WHEN p.ICUI = 0 THEN p.IBUA
+                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                END
+            ) + 
+            (
+                (
+                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                ) * p.iva / 100
+            )
+        ), 0
+    ) AS precio,  ld.Cantidad
                 FROM ListaCompraDetalle ld 
                 INNER JOIN Producto P ON P.Codigo = ld.Codigo 
                 left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
