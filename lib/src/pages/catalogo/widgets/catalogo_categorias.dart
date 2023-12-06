@@ -62,6 +62,8 @@ class CatalogoPoductosCategorias extends StatelessWidget {
         element: productos,
         isCategoriaPromos: false,
         index: data.indexOf(element),
+        //aqui no estoy en busqueda 
+        search: false,
       );
 
       opciones.add(widgetTemp);

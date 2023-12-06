@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
@@ -44,6 +45,9 @@ class SearchFuzzyViewModel extends GetxController {
   RxList mapListasMostrar = [].obs;
 
   RxList listaRecientes = [].obs;
+
+  //Para mostrar los porductos mas buscados
+  RxString productosMasBuscado = ''.obs;
 
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
@@ -98,6 +102,28 @@ class SearchFuzzyViewModel extends GetxController {
     if (listaRecientes.length > 3) {
       listaRecientes.removeLast();
     }
+  }
+
+  //aqui crearia como llamar el servicio
+  //le hace falta parametro
+  insertarProductoBusqueda(String codigoProducto) async {
+    String result = await productService.insertarProductoBusqueda(
+        codigoProducto: codigoProducto);
+    log(result);
+  }
+
+  productoBusqueda(String palabraProducto) async {
+    String result =
+        await productService.productoBusqueda(palabraProducto: palabraProducto);
+    log(result);
+    cargarProductoMasBuscado(result);
+  }
+
+
+
+  //Crear metodo para cargar producto mas buscado
+  Future<void> cargarProductoMasBuscado(String result) async {
+    productosMasBuscado.value = await productService.productoMasBuscado(result);
   }
 
   Future<void> cargarSugerencias() async {
@@ -258,6 +284,7 @@ class SearchFuzzyViewModel extends GetxController {
                     )));
       }
       if (object is Producto) {
+        insertarProductoBusqueda(object.codigo);
         llenarRecientes(object, Producto);
         PedidoEmart.inicializarValoresFabricante();
         cartProvider.actualizarListaFabricante =

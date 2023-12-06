@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
@@ -78,6 +79,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
   @override
   void initState() {
+    log(widget.numEmpresa + 'AQUI esta lo que necesito ver');
     if (prefs.usurioLogin == 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _validacionGeneralNotificaciones();
@@ -206,6 +208,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         element: productos,
         isCategoriaPromos: false,
         index: i,
+        //se realiza la busqueda epero a traves de la marca 
+        search: true,
       );
 
       opciones.add(widgetTemp);

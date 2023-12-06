@@ -128,9 +128,9 @@ class _PrincipalPageState extends State<PrincipalPage>
       if (hayEncuestas) {
         Get.dialog(
           AlertDialog(
-              contentPadding: EdgeInsets.all(5.0),
+              contentPadding: EdgeInsets.all(1.0),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)
+                borderRadius: BorderRadius.circular(20.0)
               ),
               content: Obx(() =>  WillPopScope(
                 onWillPop: () async => false,
@@ -377,16 +377,17 @@ class _PrincipalPageState extends State<PrincipalPage>
 
                 //ENCUESTA
                 if (prefs.typeCollaborator != "2")
-                  // Obx(() => controllerSurvey.noMandatorySurveyList.isNotEmpty || controllerSurvey.isVisibleSurvey.value
-                  // ?
+                  
                   Padding(
                       padding: const EdgeInsets.all(15.0),
 
-                      child: Obx(()  =>  controllerSurvey.noMandatorySurveyList.isNotEmpty && controllerSurvey.showNoMandatorySurvey.value 
+                     child: 
+                      Obx(()  =>  controllerSurvey.noMandatorySurveyList.isNotEmpty && controllerSurvey.showNoMandatorySurvey.value 
                             ? EncuestaForm(
                                 controllerSurvey.surveyActiveNoMandatory.value)
                             : SizedBox.shrink(),
-                      ))
+                      )
+                      )
 
                 // : SizedBox.shrink()
                 //  )

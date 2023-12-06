@@ -87,11 +87,15 @@ class _EncuestaFormState extends State<EncuestaForm> {
               controllerEncuesta.showMandatorySurvey.value
                   ? Center(
                       child: Container(
-                        margin: EdgeInsets.only(bottom: 15, top: 20),
+                        margin: EdgeInsets.only(bottom: 20, top: 32),
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           '${widget.encuesta.pregunta}',
-                          style: TextStyle(fontSize: 15),
+                          
+                          style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: ConstantesColores.gris_textos
+                          ),
                         ),
                       ),
                     )
@@ -139,6 +143,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ),
                     ),
                   ),
+
+                  SizedBox(height: 5,),
 
                   //Pregunta seleccion multiple unica respuesta
                   widget.encuesta.tipoPreguntaId == 3
@@ -201,19 +207,24 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   widget.encuesta.tipoPreguntaId == 13
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 13,
-                          child: CustomTextFormField(
-                            keyboardType: TextInputType.text,
-                            hintText: 'Ingresa tu correo electrónico',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerEmail,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateEmail(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
+                          child: Container(
+                            width: Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15),
+                             padding: EdgeInsets.zero,
+                            child: CustomTextFormField(
+                              keyboardType: TextInputType.text,
+                              hintText: 'Ingresa tu correo electrónico',
+                              backgroundColor: HexColor("#E4E3EC"),
+                              controller: controllerEmail,
+                              onChanged: (value) {
+                                String? validationError =
+                                    _validationForms.validateEmail(value);
+                                setState(() {
+                                  _errorText = validationError;
+                                });
+                              },
+                              errorMessage: _errorText,
+                            ),
                           ),
                         )
                       : Container(),
@@ -221,19 +232,24 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   widget.encuesta.tipoPreguntaId == 14
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 14,
-                          child: CustomTextFormField(
-                            keyboardType: TextInputType.number,
-                            hintText: 'Ingresa tu número de  celular',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerTelephone,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateTelephone(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
+                          child: Container(
+                             width: Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15),
+                             padding: EdgeInsets.zero,
+                            child: CustomTextFormField(
+                              keyboardType: TextInputType.number,
+                              hintText: 'Ingresa tu número de  celular',
+                              backgroundColor: HexColor("#E4E3EC"),
+                              controller: controllerTelephone,
+                              onChanged: (value) {
+                                String? validationError =
+                                    _validationForms.validateTelephone(value);
+                                setState(() {
+                                  _errorText = validationError;
+                                });
+                              },
+                              errorMessage: _errorText,
+                            ),
                           ),
                         )
                       : Container(),
@@ -241,21 +257,46 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   widget.encuesta.tipoPreguntaId == 15
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 15,
-                          child: RatingBar.builder(
-                            itemSize: 50.0,
-                            itemCount: 5,
-                            initialRating: 0,
-                            itemBuilder: (context, _) {
-                              return Icon(
-                                Icons.star_rounded,
-                                color: Colors.yellow,
-                              );
-                            },
-                            onRatingUpdate: (rating) {
-                              print(" Rating barr =========== ${rating}");
-                              _rating = rating;
-                            },
-                          ))
+                          child: Container(
+                             width:  Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15, left: 10.0, right: 10.0),
+                             //padding: EdgeInsets.zero,
+                             child: Center(
+                               child: RatingBar(
+                                  initialRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  ratingWidget: RatingWidget(
+                                    full: Image.asset('assets/image/Estrella_amarilla.png'),
+                                    half: Image.asset('assets/image/Estrella_gris.png'),
+                                    empty: Image.asset('assets/image/Estrella_gris.png'),
+                                  ),
+                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                  onRatingUpdate: (rating) {
+                                    _rating = rating;
+                                    print(rating);
+                                                   },
+                                                 ),
+                             ),
+                            // child: RatingBar.builder(
+                            //   itemSize: 50.0,
+                            //   itemCount: 5,
+                            //   initialRating: 0,
+                            //   itemBuilder: (context, _) {
+                            //     return Icon(
+                            //       Icons.star_rounded,
+                            //       color: Colors.yellow,
+                            //     );
+                            //   },
+                            //   onRatingUpdate: (rating) {
+                            //     print(" Rating barr =========== ${rating}");
+                            //     _rating = rating;
+                            //   },
+                            // ),
+                          
+                          )
+                          )
                       : Container(),
 
                   Container(

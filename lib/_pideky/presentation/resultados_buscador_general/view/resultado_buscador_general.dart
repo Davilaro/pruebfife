@@ -35,6 +35,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
   final controllerBanner = Get.find<BannnerControllers>();
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
+  
 
   Widget build(BuildContext context) {
     resultadoBuscadorGeneralVm.listaProductos.refresh();
@@ -62,6 +63,7 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                         Navigator.pop(context);
                         resultadoBuscadorGeneralVm.selectedButton.value = '';
                         searchFuzzyViewModel.allResultados.clear();
+                        searchFuzzyViewModel.controllerUser.text = '';
                       },
                       child: Icon(
                         Icons.arrow_back_ios_new,
@@ -171,6 +173,53 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
               ),
             ),
           ),
+          Obx(
+            () => searchFuzzyViewModel.productosMasBuscado.value.isNotEmpty
+                ? Container(
+                    padding: EdgeInsets.only(
+                        left: Get.width * 0.05, right: Get.width * 0.05),
+                    width: Get.width * 4.0,
+                    height: Get.height * 0.03,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Ajusta el valor para cambiar el radio de los bordes
+                        ),
+                      ),
+                      onPressed: () {
+                        searchFuzzyViewModel.controllerUser.text =
+                            searchFuzzyViewModel.productosMasBuscado.value;
+                        searchFuzzyViewModel.runFilter(
+                            searchFuzzyViewModel.controllerUser.text);
+                      },
+                      child: Text(
+                        searchFuzzyViewModel.productosMasBuscado.value,
+                        style: TextStyle(
+                            fontSize: 13.7,
+                            fontWeight: FontWeight.bold,
+                            color: ConstantesColores.azul_precio),
+                      ),
+
+                      // backgroundColor: ConstantesColores.color_fondo_gris,
+                      // colorContent: ConstantesColores.azul_precio
+                      // backgroundColor:
+                      //     resultadoBuscadorGeneralVm.selectedButton.value ==
+                      //             'Imperdibles'
+                      //         ? ConstantesColores.azul_precio
+                      //         : ConstantesColores.color_fondo_gris,
+                      // colorContent:
+                      //     resultadoBuscadorGeneralVm.selectedButton.value ==
+                      //             'Imperdibles'
+                      //         ? Colors.white
+                      //         : ConstantesColores.azul_precio,
+                    ),
+                  )
+                : Container(),
+          ),
+          SizedBox(
+            height: 15.0,
+          ),
           Expanded(
               child: Obx(() => GridView.count(
                   crossAxisCount: 2,
@@ -196,6 +245,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
           element: (searchFuzzyViewModel.allResultados[i] as Producto),
           isCategoriaPromos: resultadoBuscadorGeneralVm.isPromo.value,
           index: i,
+          // esto significa que estaba en la pantalla de busqueda
+          search: true,
         );
       }
 

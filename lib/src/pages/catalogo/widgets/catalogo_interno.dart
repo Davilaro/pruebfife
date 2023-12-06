@@ -113,6 +113,8 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
         element: productos,
         isCategoriaPromos: isProductoPromo,
         index: data.indexOf(element),
+        // no estoy en busqueda
+        search:  false,
       );
 
       opciones.add(widgetTemp);

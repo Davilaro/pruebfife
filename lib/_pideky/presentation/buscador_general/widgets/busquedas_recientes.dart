@@ -8,6 +8,7 @@ class BusquedasRecientes extends StatelessWidget {
   BusquedasRecientes();
 
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
+  
 
   @override
   Widget build(BuildContext context) {

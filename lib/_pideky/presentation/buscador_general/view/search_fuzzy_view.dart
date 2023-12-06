@@ -19,6 +19,8 @@ class SearchFuzzyView extends StatelessWidget {
 
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
 
+  final bool search = true;
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CarroModelo>(context);
@@ -92,6 +94,7 @@ class SearchFuzzyView extends StatelessWidget {
                                             cargoConfirmar,
                                             cartProvider,
                                             context);
+                                            
                                       },
                                       child: Row(
                                         mainAxisAlignment:

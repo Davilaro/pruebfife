@@ -4,12 +4,15 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class BuscadorGeneral extends StatelessWidget {
   BuscadorGeneral();
 
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
+   final Debouncer debouncer =
+      Debouncer(delay: const Duration(milliseconds: 800));
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,8 @@ class BuscadorGeneral extends StatelessWidget {
             //UXCam: Llamamos el evento search
             UxcamTagueo().search(value);
             searchFuzzyViewModel.runFilter(value);
+            debouncer(() => searchFuzzyViewModel.productoBusqueda(value));
+            
           },
         ));
   }
