@@ -35,16 +35,20 @@ class Producto {
       this.activopromocion,
       this.fechafinnuevo_1,
       required this.bloqueoCartera,
+      this.isOferta,
+      this.precioBase,
       this.fechafinpromocion_1});
 
   String codigo;
   String nombre;
   double precio;
+  double? precioBase;
   // String unidad;
   // String linea;
   String marca;
   String categoria;
   int bloqueoCartera;
+  int? isOferta;
   // String ean;
   // String peso;
   // int longitud;
@@ -110,9 +114,10 @@ class Producto {
         bloqueoCartera:
             json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
         ordenMarca: json["ordenMarca"] == null ? 0 : json["ordenMarca"],
-        ordenSubcategoria: json["ordenSubcategoria"] == null
-            ? 0
-            : json["ordenSubcategoria"],
+        ordenSubcategoria:
+            json["ordenSubcategoria"] == null ? 0 : json["ordenSubcategoria"],
+        precioBase: json["precioBase"] == null ? 0.0 : json["precioBase"],
+        isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       );
 
   factory Producto.fromJson2(Map<dynamic, dynamic> json) => Producto(
@@ -157,9 +162,10 @@ class Producto {
         bloqueoCartera:
             json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
         ordenMarca: json["ordenMarca"] == null ? 0 : json["ordenMarca"],
-        ordenSubcategoria: json["ordenSubcategoria"] == null
-            ? 0
-            : json["ordenSubcategoria"],
+        ordenSubcategoria:
+            json["ordenSubcategoria"] == null ? 0 : json["ordenSubcategoria"],
+        precioBase: json["precioBase"] == null ? 0 : json["precioBase"],
+        isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       );
 
   Map<String, dynamic> toJson() => {

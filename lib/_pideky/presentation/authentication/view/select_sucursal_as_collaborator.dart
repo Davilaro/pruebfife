@@ -85,6 +85,7 @@ class SelectSucursalAsCollaboratorPage extends StatelessWidget {
                               },
                               razonSocial: itemSucursal.razonsocial,
                               telefono: itemSucursal.telefono,
+                              barrio: itemSucursal.barrio,
                             );
                           } else {
                             return SizedBox.shrink();

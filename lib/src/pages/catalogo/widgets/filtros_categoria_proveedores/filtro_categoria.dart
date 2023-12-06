@@ -371,7 +371,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     img: widget.urlImagen,
                     codigoSubCategoria: widget.codSubCategoria,
                     claseProducto: 6,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
                   )));
@@ -389,7 +388,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
                     claseProducto: 6,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
                   )));
@@ -410,7 +408,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoSubCategoria: widget.codSubCategoria,
                     claseProducto: 6,
                     codigoMarca: codigo,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
                   )));
@@ -431,7 +428,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoSubCategoria: widget.codSubCategoria,
                     claseProducto: 8,
                     codigoMarca: codigo,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
                   )));
@@ -450,7 +446,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoMarca: codigoMarca,
                     codigoCategoria: codigoCategoria,
                     codigoSubCategoria: widget.codSubCategoria,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
                   )));
@@ -468,7 +463,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
                     claseProducto: 6,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoMarca: codigoMarca,
                     codigoProveedor: "",
@@ -487,7 +481,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                     codigoSubCategoria: widget.codSubCategoria,
                     img: widget.urlImagen,
                     claseProducto: 8,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoMarca: codigoMarca,
                     codigoProveedor: "",

@@ -8,6 +8,8 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
@@ -25,7 +27,6 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final int tipoCategoria;
   final String? nombreCategoria;
   final String? img;
-  final bool isActiveBanner;
   final bool isVisibilityAppBar;
   final String locasionBanner;
   final int? claseProducto;
@@ -45,7 +46,6 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       this.nombreCategoria,
       this.claseProducto,
       this.img,
-      this.isActiveBanner = true,
       this.isVisibilityAppBar = true,
       this.locasionBanner = '',
       this.codigoMarca,
@@ -72,6 +72,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final prefs = Preferencias();
   Timer _timer = Timer(Duration(milliseconds: 1), () {});
+  String? bannerToShow = '';
+  bool isActiveBanner = false;
+  List<dynamic> _listaBanners = [];
 
   @override
   void initState() {
@@ -80,6 +83,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         _validacionGeneralNotificaciones();
       });
     }
+    print('codigo proveedor ${widget.codigoProveedor}');
+    _listaBanners = [];
+    _cargarListaBanner();
     cargarProductos();
 
     super.initState();
@@ -158,19 +164,21 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                     child: _buscadorPrincipal(context),
                   ),
                   Visibility(
-                    visible: widget.isActiveBanner,
+                    visible: isActiveBanner,
                     child: Container(
                         padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
                         height: size.height * 0.2,
                         width: double.infinity,
                         child: OfertasInterna(
-                            nombreFabricante: widget.codCategoria)),
+                          nombreFabricante: widget.codCategoria,
+                          listaBanners: _listaBanners,
+                        )),
                   ),
                   Container(
                     height: Get.height * 0.8,
                     width: size.width * 1,
                     padding: EdgeInsets.fromLTRB(
-                        10, 10, 10, widget.isActiveBanner ? 140 : 50),
+                        10, 10, 10, isActiveBanner ? 140 : 50),
                     child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4.0,
@@ -460,7 +468,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             });
           }
         } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
-          print("entre marca");
           controllerNotificaciones.closeSlideUp.value = false;
           if (controllerNotificaciones
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
@@ -514,5 +521,44 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         break;
       default:
     }
+  }
+
+  void _cargarListaBanner() async {
+    switch (widget.locacionFiltro) {
+      case 'categoria':
+        _listaBanners = await DBProvider.db.cargarBannersCategoriasSql(
+            widget.nombreCategoria, widget.descripcionCategoria);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("categoría", e);
+        }).toList();
+        break;
+      case "marca":
+        _listaBanners =
+            await DBProvider.db.cargarBannersMarcasSql(widget.nombreCategoria);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("marca", e);
+        }).toList();
+        break;
+      case "proveedor":
+        print('widget.nombreCategoria: ${widget.empresa}');
+        _listaBanners =
+            await DBProvider.db.cargarBannersProveedoresSql(widget.empresa!);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("proveedor", e);
+        }).toList();
+        break;
+    }
+
+    if (_listaBanners.length > 0) {
+      isActiveBanner = true;
+    }
+    _listaBanners.map((e) {
+      //FIREBASE: Llamamos el evento view_promotion
+      TagueoFirebase().sendAnalityticViewPromotion("proveedor", e);
+    }).toList();
+    setState(() {});
   }
 }

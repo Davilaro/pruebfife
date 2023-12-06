@@ -175,6 +175,8 @@ class Preferencias {
     _prefs.setString("sucursal", value);
   }
 
+  
+
   get ciudad {
     return _prefs.getString("ciudad") ?? "";
   }

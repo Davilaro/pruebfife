@@ -270,7 +270,6 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
                           tipoCategoria: 3,
                           nombreCategoria:
                               searchFuzzyViewModel.allResultados[i].nombre,
-                          isActiveBanner: false,
                           locacionFiltro: "marca",
                           codigoProveedor: "",
                         )));

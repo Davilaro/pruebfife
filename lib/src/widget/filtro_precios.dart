@@ -270,7 +270,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     tipoCategoria: 7,
                     img: widget.urlImagen,
                     claseProducto: 7,
-                    isActiveBanner: false,
                     codigoMarca: codigoMarca,
                     locacionFiltro: "categoria",
                     codigoProveedor: "",
@@ -286,7 +285,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     tipoCategoria: 6,
                     img: widget.urlImagen,
                     claseProducto: 6,
-                    isActiveBanner: false,
                     locacionFiltro: "categoria",
                     codigoMarca: codigoMarca,
                     codigoProveedor: "",
@@ -305,7 +303,6 @@ class _FiltroPreciosState extends State<FiltroPrecios> {
                     nombreCategoria: widget.nombreMarca,
                     claseProducto: 4,
                     codigoMarca: codigo,
-                    isActiveBanner: false,
                     locacionFiltro: "proveedor",
                     codigoProveedor: "",
                   )));

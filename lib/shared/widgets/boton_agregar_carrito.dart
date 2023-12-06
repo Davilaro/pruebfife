@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class BotonAgregarCarrito extends StatelessWidget {
   final Function()? onTap;
   final String text;
   final double height;
   final double? width;
+  final double? marginTop;
   final Color color;
   final Color? colortext;
   final double borderRadio;
@@ -18,14 +18,15 @@ class BotonAgregarCarrito extends StatelessWidget {
       required this.color,
       required this.onTap,
       required this.text,
-      this.borderRadio = 20})
+      this.borderRadio = 20,
+      this.marginTop = 20})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 20, bottom: 10),
+      margin: EdgeInsets.only(top: marginTop!, bottom: 10),
       height: height,
       width: width ?? Get.width * 0.8,
       decoration: BoxDecoration(

@@ -27,8 +27,8 @@ class _BotonActualizarState extends State<BotonActualizar> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
-    final prefs = Preferencias();
     final cargoConfirmar = Get.find<ControlBaseDatos>();
+    final prefs = Preferencias();
     return Visibility(
       visible: prefs.usurioLogin == 1,
       child: Padding(
@@ -76,5 +76,36 @@ Future<void> actualizarPagina(
         : productViewModel.eliminarBDTemporal();
     provider.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
+  }
+}
+
+Future<void> actualizarPaginaSinReset(
+     BuildContext context, dynamic cargoConfirmar) async {
+  final botonesController = Get.find<BotonesProveedoresVm>();
+  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final controllerNequi = Get.find<MisPagosNequiViewModel>();
+  final productViewModel = Get.find<ProductoViewModel>();
+  isActualizando.value = true;
+  if (isActualizando.value) {
+    AlertaActualizar().mostrarAlertaActualizar(context, true);
+  }
+  await LogicaActualizar().actualizarDB();
+  isActualizando.value = false;
+  controllerPedidoSugerido.initController();
+  controllerNequi.initData();
+  if (isActualizando.value == false) {
+    Navigator.pop(context);
+    AlertaActualizar().mostrarAlertaActualizar(context, false);
+    await new Future.delayed(new Duration(seconds: 1), () {
+      Navigator.pop(context);
+      //pop dialog
+    });
+
+    productViewModel.cargarCondicionEntrega();
+    await botonesController.cargarListaProovedor();
+    botonesController.listaFabricantesBloqueados.isNotEmpty
+        ? null
+        : productViewModel.eliminarBDTemporal();
+   
   }
 }

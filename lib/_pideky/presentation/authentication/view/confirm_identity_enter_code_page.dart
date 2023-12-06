@@ -43,109 +43,116 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
       ),
       backgroundColor: HexColor('#eeeeee'),
       body: Container(
+        alignment: Alignment.center,
+        height: Get.height,
         padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                child: Image(
-              image: AssetImage('assets/image/Icon_confirmar_identidad_2.png'),
-            )),
-            SizedBox(height: 25),
-            Text("Confirmar identidad",
-                style: TextStyle(
-                    color: ConstantesColores.azul_precio,
-                    fontSize: 23,
-                    fontWeight: FontWeight.w900)),
-            SizedBox(height: 15.0),
-            Text(
-                "Escribe cuál es el código que \n recibiste por mensaje de texto",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: ConstantesColores.gris_sku,
-                  fontSize: 15,
-                )),
-            SizedBox(height: 35.0),
-            CustomTextFormField(
-              controller: _controllerCellPhoneNumber,
-              keyboardType: TextInputType.number,
-              hintText: 'Ingrese su código ',
-              hintStyle: TextStyle(color: ConstantesColores.gris_sku),
-              backgroundColor: Colors.white,
-              textColor: HexColor("#41398D"),
-              borderRadius: 35,
-              onChanged: (value) {
-                _validationForms.confirmationCode.value = value;
-              },
-              validator: _validationForms.validateTextFieldNullorEmpty,
-            ),
-            SizedBox(height: 10.0),
-            Text("El código caduca en (15min) ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: ConstantesColores.gris_sku,
-                  fontSize: 15,
-                )),
-            SizedBox(height: 35.0),
-            BotonAgregarCarrito(
-                borderRadio: 35,
-                height: Get.height * 0.06,
-                color: ConstantesColores.empodio_verde,
-                onTap: () async {
-                  final isValid = _validationForms.confirmationCode.isNotEmpty;
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  child: Image(
+                image:
+                    AssetImage('assets/image/Icon_confirmar_identidad_2.png'),
+              )),
+              SizedBox(height: 25),
+              Text("Confirmar identidad",
+                  style: TextStyle(
+                      color: ConstantesColores.azul_precio,
+                      fontSize: 23,
+                      fontWeight: FontWeight.w900)),
+              SizedBox(height: 15.0),
+              Text(
+                  "Escribe cuál es el código que \n recibiste por mensaje de texto",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ConstantesColores.gris_sku,
+                    fontSize: 15,
+                  )),
+              SizedBox(height: 35.0),
+              CustomTextFormField(
+                controller: _controllerCellPhoneNumber,
+                keyboardType: TextInputType.number,
+                hintText: 'Ingrese su código ',
+                hintStyle: TextStyle(color: ConstantesColores.gris_sku),
+                backgroundColor: Colors.white,
+                textColor: HexColor("#41398D"),
+                borderRadius: 35,
+                onChanged: (value) {
+                  _validationForms.confirmationCode.value = value;
+                },
+                validator: _validationForms.validateTextFieldNullorEmpty,
+              ),
+              SizedBox(height: 10.0),
+              Text("El código caduca en (15min) ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ConstantesColores.gris_sku,
+                    fontSize: 15,
+                  )),
+              SizedBox(height: 35.0),
+              BotonAgregarCarrito(
+                  borderRadio: 35,
+                  height: Get.height * 0.06,
+                  color: ConstantesColores.empodio_verde,
+                  onTap: () async {
+                    final isValid =
+                        _validationForms.confirmationCode.isNotEmpty;
 
-                  if (isValid == false) {
-                    return;
-                  } else {
-                    if (await _validationForms.validationCodePhone(context) ==
-                        false) {
-                      await _validationForms.backClosePopup(context,
-                          texto: 'Confirmación de \n identidad incorrecto');
+                    if (isValid == false) {
+                      return;
                     } else {
-                      if (isChangePassword == true) {
-                        await _validationForms.closePopUp(
-                            CreatePasswordPage(
-                              isChangePassword: true,
-                            ),
-                            context,
-                            "Confirmación de \n identidad correcto");
+                      if (await _validationForms.validationCodePhone(context) ==
+                          false) {
+                        await _validationForms.backClosePopup(context,
+                            texto: 'Confirmación de \n identidad incorrecto');
                       } else {
-                        int timeIteration = 0;
-                        _validationForms.isClosePopup.value = false;
-                        showPopup(
-                            context,
-                            'Confirmación de \n identidad correcto',
-                            SvgPicture.asset('assets/image/Icon_correcto.svg'));
-                        Timer.periodic(Duration(milliseconds: 500), (timer) {
-                          if (timeIteration >= 5) {
-                            timer.cancel();
-                            Get.back();
-                            plataforma == 'Android'
-                                ? Get.to(() => TouchIdPage())
-                                : Get.to(() => FaceIdPage());
-                          }
-                          if (_validationForms.isClosePopup.value == true) {
-                            timer.cancel();
-                            plataforma == 'Android'
-                                ? Get.to(() => TouchIdPage())
-                                : Get.to(() => FaceIdPage());
-                          }
-                          timeIteration++;
-                        });
+                        if (isChangePassword == true) {
+                          await _validationForms.closePopUp(
+                              CreatePasswordPage(
+                                isChangePassword: true,
+                              ),
+                              context,
+                              "Confirmación de \n identidad correcto");
+                        } else {
+                          int timeIteration = 0;
+                          _validationForms.isClosePopup.value = false;
+                          showPopup(
+                              context,
+                              'Confirmación de \n identidad correcto',
+                              SvgPicture.asset(
+                                  'assets/image/Icon_correcto.svg'));
+                          Timer.periodic(Duration(milliseconds: 500), (timer) {
+                            if (timeIteration >= 5) {
+                              timer.cancel();
+                              Get.back();
+                              plataforma == 'Android'
+                                  ? Get.to(() => TouchIdPage())
+                                  : Get.to(() => FaceIdPage());
+                            }
+                            if (_validationForms.isClosePopup.value == true) {
+                              timer.cancel();
+                              plataforma == 'Android'
+                                  ? Get.to(() => TouchIdPage())
+                                  : Get.to(() => FaceIdPage());
+                            }
+                            timeIteration++;
+                          });
+                        }
                       }
                     }
-                  }
+                  },
+                  text: "Aceptar"),
+              TextButtonWithUnderline(
+                text: "Enviar otro código",
+                onPressed: () async {
+                  await controller.sendMsg();
                 },
-                text: "Aceptar"),
-            TextButtonWithUnderline(
-              text: "Enviar otro código",
-              onPressed: () async {
-                await controller.sendMsg();
-              },
-              textColor: HexColor("#41398D"),
-              textSize: 18.0,
-            ),
-          ],
+                textColor: HexColor("#41398D"),
+                textSize: 18.0,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -171,7 +171,6 @@ class _TabOpcionesCategoriasState extends State<TabOpcionesCategorias>
                           numEmpresa: 'nutresa',
                           tipoCategoria: 2,
                           nombreCategoria: widget.nombreCategoria,
-                          isActiveBanner: false,
                           isVisibilityAppBar: false,
                           locacionFiltro: "categoria",
                           codigoProveedor: "",
