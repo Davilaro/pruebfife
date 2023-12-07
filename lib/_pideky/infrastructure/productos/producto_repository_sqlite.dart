@@ -7,8 +7,9 @@ class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
-    final sql = await db.rawQuery('''
-      SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
+    final sql = await db.rawQuery(
+        '''
+      SELECT p.*, p.Negocio as negocio ,f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
     ''');
 
     return Producto.fromJson(sql.first);
@@ -18,7 +19,8 @@ class ProductoRepositorySqlite extends IProductoRepository {
     final db = await DBProvider.db.baseAbierta;
 
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
        
         SELECT 
     p.codigo,
@@ -45,6 +47,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     ) AS precio,
     p.marca,
     p.categoria,
+    p.Negocio as negocio,
     p.iva,
     p.fabricante,
     p.marcapideki,
@@ -127,7 +130,8 @@ ORDER BY
       }
 
       if (tipo == 2) {
-        query = '''
+        query =
+            '''
       SELECT 
     p.codigo, 
     p.nombre, 
@@ -135,6 +139,7 @@ ORDER BY
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
     p.OrdenMarca as ordenMarca, 
+    p.Negocio as negocio,
     p.OrdenSubcategoria as ordenSubcategoria,
     ROUND(
         (
@@ -276,9 +281,12 @@ ORDER BY p.orden ASC
         
     ''';
       } else if (tipo == 3) {
-        query = '''
+        query =
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
-       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,p.precio as precioBase,
+       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
+       p.Negocio as negocio,
+       p.precio as precioBase,
         ROUND(
         (
            (
@@ -383,13 +391,15 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          
        ''';
       } else if (tipo == 4) {
-        query = '''
+        query =
+            '''
       SELECT 
     p.codigo, 
     p.nombre, 
     f.codigo as codigoFabricante, 
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
+    p.Negocio as negocio,
     p.precio as precioBase,
     ROUND(
         (
@@ -526,12 +536,14 @@ ORDER BY
          
       ''';
       } else if (tipo == 5) {
-        query = '''
+        query =
+            '''
       SELECT 
     p.codigo, 
     p.nombre, 
     f.codigo as codigoFabricante, 
     f.nit as nitFabricante, 
+    p.Negocio as negocio,
     f.BloqueoCartera as bloqueoCartera, 
     p.precio as precioBase,
     ROUND(
@@ -674,11 +686,13 @@ ORDER BY
       ''';
       } else if (tipo == 7) {
         //tipo para productos mas vendidos
-        query = '''
+        query =
+            '''
        SELECT 
     p.codigo, 
     p.nombre, 
-    f.codigo as codigoFabricante, 
+    f.codigo as codigoFabricante,
+    p.Negocio as negocio, 
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
     ROUND(
@@ -822,7 +836,8 @@ ORDER BY
          
       ''';
       } else {
-        query = '''
+        query =
+            '''
        SELECT 
     p.codigo, 
     p.nombre, 
@@ -850,6 +865,7 @@ ORDER BY
     ) AS precio,
     p.marca, 
     p.categoria, 
+    p.Negocio as negocio,
     p.iva, 
     p.fabricante, 
     p.marcapideki, 
@@ -1002,8 +1018,11 @@ ORDER BY p.orden ASC;
       }
 
       if (tipoProducto == 2) {
-        query = '''
-        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,  ROUND(
+        query =
+            '''
+        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, 
+        p.Negocio as negocio,
+        f.BloqueoCartera as  bloqueoCartera,  ROUND(
         (
             (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
@@ -1085,8 +1104,10 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         //log(query);
         sql = await db.rawQuery(query);
       } else {
-        query = '''
+        query =
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+      p.Negocio as negocio,
       ROUND(
         (
            (
@@ -1185,7 +1206,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ) <= $precioMaximo
       $consulta
       UNION 
-      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, 
+      p.Negocio as negocio,
       ROUND(
         (
             (
@@ -1307,7 +1329,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       List<Producto> lista = [];
       var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
 
-      List<Map> sql = await db.rawQuery('''
+      List<Map> sql = await db.rawQuery(
+          '''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, ROUND(
         (
             (
@@ -1329,6 +1352,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         CAST(ROUND((p.precio + ((p.precio * p.iva) / 100) + (
@@ -1391,7 +1415,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
 
       if (tipo == 5) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1413,6 +1438,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     ) AS precio, 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
+         p.Negocio as negocio,
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
@@ -1502,7 +1528,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 1) {
         //tipo 1 para imperdibles
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
   SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
          ROUND(
         (
@@ -1525,6 +1552,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden,IFNULL(tmp.descuento, 0.0) AS descuento, 
@@ -1613,7 +1641,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 3) {
         //tipo 3 para marca e imperdible
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1634,7 +1663,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ), 0
     ) AS precio, 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
-         p.marcacodigopideki , 
+         p.marcacodigopideki ,
+         p.Negocio as negocio, 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
@@ -1726,7 +1756,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       if (tipo == 6) {
         //tipo 6 para productos del dia
 
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1751,6 +1782,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
@@ -1833,7 +1865,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       }
       if (tipo == 4) {
         //tipo 4 para marca  y promo
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante,
         ROUND(
         (
@@ -1857,6 +1890,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
@@ -1940,7 +1974,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ? sql.map((e) => Producto.fromJson(e)).toList()
             : [];
       } else {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
  SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -1964,6 +1999,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
@@ -2072,7 +2108,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
       if (tipo == 1) {
         //tipo 1 para filtrar solo por marca, categoria y subcategoria
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
             SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
          ROUND(
         (
@@ -2097,6 +2134,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
@@ -2181,7 +2219,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
         //tipo 2 para productos mas vendidos
       } else if (tipo == 2) {
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
          SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -2201,6 +2240,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             )
         ), 0
     ) AS precio,  
+    p.Negocio as negocio,
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
@@ -2292,7 +2332,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             : [];
       } else {
         //tipo 3 para imperdibles marcas, categorias y subc
-        sql = await db.rawQuery('''
+        sql = await db.rawQuery(
+            '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, 
         ROUND(
         (
@@ -2315,6 +2356,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
@@ -2447,7 +2489,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
   Future<List<Producto>> consultarPedidoTemporal() async {
     final db = await DBProviderHelper.db.tempAbierta;
     try {
-      final sql = await db.rawQuery('''
+      final sql = await db.rawQuery(
+          '''
       SELECT codigo_producto codigo, cantidad FROM pedido  
     ''');
 

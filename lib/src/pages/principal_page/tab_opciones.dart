@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -22,7 +23,6 @@ import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -96,6 +96,9 @@ class _TabOpcionesState extends State<TabOpciones>
     });
 
     preambuloBase();
+    Future.delayed(Duration(seconds: 7), () {
+      Get.find<SlideUpAutomatic>().validarMostrarSlide();
+    });
     verPopUp();
   }
 
@@ -183,9 +186,6 @@ class _TabOpcionesState extends State<TabOpciones>
             listaProductos[i].codigo, () => TextEditingController());
       }
       await productViewModel.cargarTemporal();
-      String? token = PushNotificationServer.token as String;
-
-      print('Token: $token');
       setState(() {});
     } catch (e) {
       print('error de descarga db $e');

@@ -414,12 +414,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           int elapsedTime = 0;
           if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
@@ -435,6 +441,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       .validacionMostrarSlideUp[widget.descripcionCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.descripcionCategoria, context);
           }
@@ -452,12 +461,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -473,6 +488,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }
@@ -492,12 +510,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -514,6 +538,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
             controllerNotificaciones.closeSlideUp.value = false;
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }

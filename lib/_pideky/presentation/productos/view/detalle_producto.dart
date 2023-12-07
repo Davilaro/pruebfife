@@ -12,6 +12,7 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -51,6 +52,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
   final listViewModel = Get.find<MyListsViewModel>();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final constrollerProductos = Get.find<ControllerProductos>();
+  final controllerNotifiaction = Get.find<SlideUpAutomatic>();
 
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
@@ -458,6 +460,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
   }
 
   llenarCarrito(Producto producto, CarroModelo cartProvider) {
+    controllerNotifiaction.mostrarSlide(producto.negocio);
     if (_controllerCantidadProducto.text != '' &&
         _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =

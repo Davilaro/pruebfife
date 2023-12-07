@@ -6,6 +6,7 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -51,6 +52,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   ProductoViewModel productoViewModel = Get.find();
   late final cartProvider = Provider.of<CarroModelo>(context);
   final controller = Get.put(StateControllerRadioButtons());
+  final slideUpAutomatic = Get.find<SlideUpAutomatic>();
 
   @override
   void initState() {
@@ -274,7 +276,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (value['precioProducto'] == 0.0) {
       } else {
-        print("data carrito ${value['items']}");
         listaWidget.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -675,8 +676,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
       child: InkWell(
         onTap: () {
-                controller.cashPayment.value = false;
-                controller.payOnLine.value = false;
+          controller.cashPayment.value = false;
+          controller.payOnLine.value = false;
           dialogVaciarCarrito(fabricante, cartProvider, value, precioMinimo);
         },
         child: Row(
@@ -893,6 +894,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
     } else {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
+        slideUpAutomatic.mostrarSlide(producto.negocio);
         PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
         PedidoEmart.registrarValoresPedido(producto, '1', false);
         cargarDeNuevo = true;

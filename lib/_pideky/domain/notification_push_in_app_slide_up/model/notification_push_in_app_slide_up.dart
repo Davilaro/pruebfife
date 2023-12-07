@@ -23,6 +23,8 @@ class NotificationPushInAppSlideUpModel {
   String? redireccion;
   String? categoriaRedireccion;
   String? subCategoriaRedireccion;
+  String? negocio;
+  int? tiempo;
 
   NotificationPushInAppSlideUpModel({
     this.fabricante,
@@ -35,31 +37,34 @@ class NotificationPushInAppSlideUpModel {
     this.redireccion,
     this.categoriaRedireccion,
     this.subCategoriaRedireccion,
+    this.negocio,
+    this.tiempo,
   });
 
   factory NotificationPushInAppSlideUpModel.fromJson(
           Map<String, dynamic> json) =>
       NotificationPushInAppSlideUpModel(
-        fabricante: json["empresa"] == null ? "" : json["empresa"],
-        nombreComercial:
-            json["nombreComercial"] == null ? "" : json["nombreComercial"],
-        imageUrl: json["imageUrl"] == null ? "" : json["imageUrl"],
-        descripcion: json["descripcion"] == null ? "" : json["descripcion"],
-        ubicacion: json["ubicacion"] == null ? "" : json["ubicacion"],
-        categoriaUbicacion: json["categoriaUbicacion"] == null
-            ? ""
-            : json["categoriaUbicacion"],
-        subCategoriaUbicacion: json["subCategoriaUbicacion"] == null
-            ? ""
-            : json["subCategoriaUbicacion"],
-        redireccion: json["redireccion"] == null ? "" : json["redireccion"],
-        categoriaRedireccion: json["categoriaRedireccion"] == null
-            ? ""
-            : json["categoriaRedireccion"],
-        subCategoriaRedireccion: json["subCategoriaRedireccion"] == null
-            ? ""
-            : json["subCategoriaRedireccion"],
-      );
+          fabricante: json["empresa"] == null ? "" : json["empresa"],
+          nombreComercial:
+              json["nombreComercial"] == null ? "" : json["nombreComercial"],
+          imageUrl: json["imageUrl"] == null ? "" : json["imageUrl"],
+          descripcion: json["descripcion"] == null ? "" : json["descripcion"],
+          ubicacion: json["ubicacion"] == null ? "" : json["ubicacion"],
+          categoriaUbicacion: json["categoriaUbicacion"] == null
+              ? ""
+              : json["categoriaUbicacion"],
+          subCategoriaUbicacion: json["subCategoriaUbicacion"] == null
+              ? ""
+              : json["subCategoriaUbicacion"],
+          redireccion: json["redireccion"] == null ? "" : json["redireccion"],
+          categoriaRedireccion: json["categoriaRedireccion"] == null
+              ? ""
+              : json["categoriaRedireccion"],
+          subCategoriaRedireccion: json["subCategoriaRedireccion"] == null
+              ? ""
+              : json["subCategoriaRedireccion"],
+          negocio: json["negocio"] == null ? "" : json["negocio"],
+          tiempo: json['tiempo'] == null ? 0 : json['tiempo']);
 
   Map<String, dynamic> toJson() => {
         "empresa": fabricante,
@@ -72,5 +77,6 @@ class NotificationPushInAppSlideUpModel {
         "redireccion": redireccion,
         "categoriaRedireccion": categoriaRedireccion,
         "subCategoriaRedireccion": subCategoriaRedireccion,
+        "negocio": negocio,
       };
 }

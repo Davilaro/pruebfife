@@ -15,6 +15,7 @@ import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
@@ -58,12 +59,14 @@ class _PrincipalPageState extends State<PrincipalPage>
   final viewModelNequi = Get.find<MisPagosNequiViewModel>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
+  final slideUpAutomatic = Get.find<SlideUpAutomatic>();
 
   var nombreTienda = prefs.usuarioRazonSocial;
 
   @override
   void initState() {
     super.initState();
+
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
     if (prefs.usurioLogin == 1) {
@@ -89,12 +92,14 @@ class _PrincipalPageState extends State<PrincipalPage>
   }
 
   void validacionGeneralNotificaciones() async {
+    await slideUpAutomatic.getAutomaticSlideUp();
     controllerNotificaciones.closePushInUp.value = false;
     controllerNotificaciones.onTapPushInUp.value = false;
     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
     if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
         controllerNotificaciones.listPushInUpHome.isNotEmpty) {
       await showPushInUp();
+
       int elapsedTime = 0;
       Timer.periodic(Duration(milliseconds: 10), (timer) {
         if (elapsedTime >= 530) {
@@ -137,10 +142,10 @@ class _PrincipalPageState extends State<PrincipalPage>
     if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
       controllerNotificaciones.closeSlideUp.value = true;
       controllerNotificaciones.validacionMostrarSlideUp["Home"] = false;
-      await Future.delayed(
-          Duration(milliseconds: 100),
-          () => showSlideUpNotification(
-              context, controllerNotificaciones.listSlideUpHome.first, "Home"));
+      await Future.delayed(Duration(milliseconds: 100), () {
+        showSlideUpNotification(
+            context, controllerNotificaciones.listSlideUpHome.first, "Home");
+      });
     }
   }
 
