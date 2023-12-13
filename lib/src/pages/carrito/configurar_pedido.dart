@@ -311,8 +311,8 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  Get.back();
                                   await progress.hide();
+                                  Get.back();
                                 },
                                 child: Icon(
                                   Icons.cancel,

@@ -1,6 +1,7 @@
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/soporte.dart';
@@ -179,7 +180,8 @@ class PedidoRealizado extends StatelessWidget {
                     border: Border.all(color: HexColor("#43398E"), width: 1.2)),
                 width: Get.width * 0.9,
                 child: OutlinedButton(
-                  onPressed: () { _irMenuPrincipal(context);
+                  onPressed: () {
+                    _irMenuPrincipal(context);
                     controller.isPayOnLine.value = false;
                     controller.cashPayment.value = false;
                     controller.payOnLine.value = false;
@@ -236,7 +238,10 @@ class PedidoRealizado extends StatelessWidget {
 
   _irMenuPrincipal(context) async {
     final providerCar = Provider.of<OpcionesBard>(context, listen: false);
+    final prefs = Preferencias();
     providerCar.selectOptionMenu = 0;
+    prefs.momentSurvey = 1;
+
     Get.offAll(() => TabOpciones());
   }
 }

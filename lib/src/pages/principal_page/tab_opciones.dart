@@ -1,5 +1,4 @@
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -96,9 +95,6 @@ class _TabOpcionesState extends State<TabOpciones>
     });
 
     preambuloBase();
-    Future.delayed(Duration(seconds: 7), () {
-      Get.find<SlideUpAutomatic>().validarMostrarSlide();
-    });
     verPopUp();
   }
 

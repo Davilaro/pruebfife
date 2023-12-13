@@ -277,7 +277,9 @@ class DBProviderHelper {
     final db = await baseAbierta;
     try {
       await db.rawInsert(
-          ''' INSERT INTO EncuestasRealizadas (encuestaid, codigocliente, codigordv, codigosdv) VALUES(${encuesta.encuestaId}, '${prefs.codClienteLogueado}', '', '') ''');
+          ''' INSERT INTO EncuestasRealizadas (encuestaid, codigocliente, codigordv, codcigosdv) 
+          VALUES(${encuesta.encuestaId}, '${prefs.codigoUnicoPideky}', '', '') '''
+);
     } catch (e) {
       print('ERROR CONSULTA ENCUESTA $e');
     }

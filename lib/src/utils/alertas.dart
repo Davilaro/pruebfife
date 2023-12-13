@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 void mostrarAlert(
   BuildContext context,
   String mensaje,
-  Widget? icon,
+  Widget? icon, {Function()? onTap,}
+  
 ) {
   showDialog(
       context: context,
@@ -66,7 +67,10 @@ void mostrarAlert(
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: GestureDetector(
-                        onTap: () => Get.back(),
+                        onTap: onTap ??  () {
+                          Get.back();
+                          
+                        },
                         child: Container(
                           height: 40,
                           width: double.infinity,

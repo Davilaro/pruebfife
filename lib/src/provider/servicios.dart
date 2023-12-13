@@ -622,9 +622,9 @@ class Servicies {
 
   Future<bool> enviarEncuesta(Encuesta encuesta, String respuesta) async {
     try {
-      DateTime now = DateTime.now();
+      // DateTime now = DateTime.now();
       final url;
-      String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
+      // String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
       url = Uri.parse(
           Constantes().urlPrincipal + 'Encuestas/enviarRespuestaEncuesta');
       final response = await http.post(
@@ -633,21 +633,45 @@ class Servicies {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "NumdocEncuesta": "$numDoc",
+          // "NumdocEncuesta": "$numDoc",
           "EncuestaId": "${encuesta.encuestaId}",
           "EncuestaTitulo": "${encuesta.encuestaTitulo}",
           "PreguntaId": "${encuesta.preguntaId}",
           "TipoPreguntaId": "${encuesta.tipoPreguntaId}",
           "Pregunta": "${encuesta.pregunta}",
-          "ParamPreguntaId": "${encuesta.paramPreguntaId}",
-          "Valor": "${encuesta.valor}",
+          "ParamPreguntaId": "${encuesta.paramPreguntaId ?? ''}",
+          "Valor": "${encuesta.valor ?? ''}",
           "Parametro": "$respuesta", //respuesta
-          "CodigoCliente": "${prefs.codCliente}",
-          "pais": prefs.paisUsuario,
-          "NitCliente": "${prefs.codClienteLogueado}",
+          "CCUP": "${prefs.codigoUnicoPideky}",
+          "Sucursal": "${prefs.sucursal}",
+          //"CodigoCliente": "${prefs.codCliente}",
+          "Pais": prefs.paisUsuario,
+          //"NitCliente": "${prefs.codClienteLogueado}",
         }),
       );
+      print('------> body   ' +
+          jsonEncode(<String, String>{
+            // "NumdocEncuesta": "$numDoc",
+            "EncuestaId": "${encuesta.encuestaId}",
+            "EncuestaTitulo": "${encuesta.encuestaTitulo}",
+            "PreguntaId": "${encuesta.preguntaId}",
+            "TipoPreguntaId": "${encuesta.tipoPreguntaId}",
+            "Pregunta": "${encuesta.pregunta}",
+            "ParamPreguntaId": "${encuesta.paramPreguntaId ?? ''}",
+            "Valor": "${encuesta.valor ?? ''}",
+            "Parametro": "$respuesta", //respuesta
+            "CCUP": "${prefs.codigoUnicoPideky}",
+            "Sucursal": "${prefs.sucursal}",
+            //"CodigoCliente": "${prefs.codCliente}",
+            "Pais": prefs.paisUsuario,
+            //"NitCliente": "${prefs.codClienteLogueado}",
+          }));
+      print('==========================$url');
+      //print('+++++++++++++++++++++$jsonEncode');
+      print('xxxxxxxxxxxxxxxxxxxx$response');
+
       if (response.statusCode == 200) {
+        print('todo salio bien ');
         return true;
       } else {
         throw Exception('Failed');

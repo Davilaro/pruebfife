@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:http/http.dart' as http;
 
 class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
@@ -2478,4 +2483,96 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       return [];
     }
   }
+
+  @override
+  Future<String> insertarProductoBusqueda(
+      {required String codigoProducto}) async {
+    final prefs = Preferencias();
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlPrincipal + 'Busqueda/Insertar');
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "Busqueda": codigoProducto,
+          "Pais": prefs.paisUsuario,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed');
+      }
+    } catch (e) {
+      print("error validando codigo $e");
+      return '';
+    }
+  }
+
+  @override
+  Future<String> productoBusqueda({required String palabraProducto}) async {
+    final prefs = Preferencias();
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlPrincipal + 'Busqueda/Consultar');
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "Busqueda": palabraProducto,
+          "CCUP": prefs.codigoUnicoPideky,
+          "Sucursal": prefs.sucursal
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed');
+      }
+    } catch (e) {
+      print("error validando codigo $e");
+      return '';
+    }
+  }
+
+  @override
+  Future<String> productoMasBuscado({required String codigoProducto}) async {
+    final db = await DBProviderHelper.db.database;
+
+    try {
+      List sql = await db.rawQuery('''
+      SELECT nombre from Producto where codigo = '$codigoProducto'  
+    ''');
+
+      return sql.isNotEmpty ? sql.first['nombre'] : '';
+    } catch (e) {
+      print('fallo consulta en tabla pedido temporal $e');
+      return '';
+    }
+  }
+
+  // Future<List<Producto>> productoMasBuscado() async {
+  //   final db = await DBProviderHelper.db.tempAbierta;
+  //   try {
+  //     final sql = await db.rawQuery('''
+  //     SELECT nombre from producto where codigo = result
+  //   ''');
+
+  //     return sql.map((e) => Producto.fromJson2(e)).toList();
+  //   } catch (e) {
+  //     print('fallo consulta en tabla pedido temporal $e');
+  //     return [];
+  //   }
+  //}
 }

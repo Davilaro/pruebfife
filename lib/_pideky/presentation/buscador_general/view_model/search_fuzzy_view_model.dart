@@ -45,6 +45,9 @@ class SearchFuzzyViewModel extends GetxController {
 
   RxList listaRecientes = [].obs;
 
+  //Para mostrar los porductos mas buscados
+  RxString productosMasBuscado = ''.obs;
+
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
   MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
 
@@ -98,6 +101,24 @@ class SearchFuzzyViewModel extends GetxController {
     if (listaRecientes.length > 3) {
       listaRecientes.removeLast();
     }
+  }
+
+  //aqui crearia como llamar el servicio
+  //le hace falta parametro
+  insertarProductoBusqueda(String codigoProducto) async {
+    await productService.insertarProductoBusqueda(
+        codigoProducto: codigoProducto);
+  }
+
+  productoBusqueda(String palabraProducto) async {
+    String result =
+        await productService.productoBusqueda(palabraProducto: palabraProducto);
+    cargarProductoMasBuscado(result);
+  }
+
+  //Crear metodo para cargar producto mas buscado
+  Future<void> cargarProductoMasBuscado(String result) async {
+    productosMasBuscado.value = await productService.productoMasBuscado(result);
   }
 
   Future<void> cargarSugerencias() async {
@@ -258,6 +279,7 @@ class SearchFuzzyViewModel extends GetxController {
                     )));
       }
       if (object is Producto) {
+        insertarProductoBusqueda(object.codigo);
         llenarRecientes(object, Producto);
         PedidoEmart.inicializarValoresFabricante();
         cartProvider.actualizarListaFabricante =
