@@ -184,7 +184,9 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         ProductoService(ProductoRepositorySqlite());
     final providerBottomNavigationBar =
         Provider.of<OpcionesBard>(context, listen: false);
-
+    if (notificacion.redireccion == "") {
+      return;
+    }
     var resBusqueda;
     if (notificacion.redireccion == 'Detalle Producto') {
       resBusqueda = await productService.cargarProductosFiltro(
@@ -201,7 +203,6 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     } else if (notificacion.redireccion == 'Proveedor') {
       resBusqueda = await DBProvider.db
           .consultarFricante(notificacion.subCategoriaRedireccion.toString());
-      // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
       resBusqueda = await marcaService
@@ -259,19 +260,6 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
             : {Navigator.of(context).pop(), Get.to(() => ClubGanadoresPage())};
       }
     } else {
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: notificacion.fabricante!,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: notificacion.nombreComercial!,
-                    img: notificacion.imageUrl,
-                    locasionBanner: locasionBanner,
-                    locacionFiltro: "proveedor",
-                    codigoProveedor: "",
-                  )));
       Get.back();
     }
   }
