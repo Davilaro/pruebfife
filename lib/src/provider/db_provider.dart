@@ -350,7 +350,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
       FROM Banner b
       inner join Fabricante f ON b.fabricante_x =f.empresa
-      WHERE b.SubCategoriaUbicacion = '$marca' order by b.Orden asc
+      WHERE b.SubCategoriaUbicacion = '$marca' order by b.Orden asc limit 1;
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
@@ -378,7 +378,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
           INNER JOIN Fabricante f ON b.fabricante_x = f.empresa
           WHERE  b.CategoriaUbicacion = '$categoria' AND b.SubCategoriaUbicacion
           = '$subCategoria'
-          order by b.Orden asc
+          order by b.Orden asc LIMIT 1;
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
