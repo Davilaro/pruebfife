@@ -22,7 +22,6 @@ import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/pages/catalogo/tab_categorias_marcas.dart';
 import 'package:emart/src/pages/principal_page/principal_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -183,9 +182,6 @@ class _TabOpcionesState extends State<TabOpciones>
             listaProductos[i].codigo, () => TextEditingController());
       }
       await productViewModel.cargarTemporal();
-      String? token = PushNotificationServer.token as String;
-
-      print('Token: $token');
       setState(() {});
     } catch (e) {
       print('error de descarga db $e');

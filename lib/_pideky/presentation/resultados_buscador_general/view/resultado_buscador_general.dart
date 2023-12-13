@@ -39,149 +39,209 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
   Widget build(BuildContext context) {
     resultadoBuscadorGeneralVm.listaProductos.refresh();
 
-    return Scaffold(
-      key: drawerKey,
-      drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
-      drawer: DrawerSucursales(drawerKey),
-      appBar: PreferredSize(
-        preferredSize: prefs.usurioLogin == 1
-            ? const Size.fromHeight(118)
-            : const Size.fromHeight(70),
-        child: SafeArea(child: NewAppBar(drawerKey)),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FittedBox(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+    return WillPopScope(
+      onWillPop: () async {
+        searchFuzzyViewModel.controllerUser.text = '';
+        searchFuzzyViewModel.productosMasBuscado.value = '';
+        searchFuzzyViewModel.searchInput.value = '';
+        return true;
+      },
+      child: Scaffold(
+        key: drawerKey,
+        drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
+        drawer: DrawerSucursales(drawerKey),
+        appBar: PreferredSize(
+          preferredSize: prefs.usurioLogin == 1
+              ? const Size.fromHeight(118)
+              : const Size.fromHeight(70),
+          child: SafeArea(child: NewAppBar(drawerKey)),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FittedBox(
+              child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          resultadoBuscadorGeneralVm.selectedButton.value = '';
+                          searchFuzzyViewModel.allResultados.clear();
+                          searchFuzzyViewModel.controllerUser.text = '';
+                          searchFuzzyViewModel.productosMasBuscado.value = '';
+                          searchFuzzyViewModel.searchInput.value = '';
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: ConstantesColores.agua_marina,
+                          size: 30,
+                        ),
+                      ),
+                      CampoTextoResultado(),
+                      GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FiltrosResultadoGeneralView(
+                                      codCategoria: '',
+                                      codigoProveedor: '',
+                                      nombreCategoria: '',
+                                      urlImagen: '',
+                                    )),
+                          )
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: Get.height * 0.01,
+                              horizontal: Get.width * 0.02),
+                          child: GestureDetector(
+                            child: SvgPicture.asset(
+                                'assets/image/filtro_btn.svg',
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Obx(() => Text(
+                  searchFuzzyViewModel.searchInput.isEmpty
+                      ? 'Estás buscando en todas las secciones'
+                      : 'Estás buscando "${searchFuzzyViewModel.searchInput.value}" en todas las secciones',
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(.5),
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold))),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+              child: SizedBox(
+                height: Get.height * 0.03,
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                        resultadoBuscadorGeneralVm.selectedButton.value = '';
-                        searchFuzzyViewModel.allResultados.clear();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios_new,
-                        color: ConstantesColores.agua_marina,
-                        size: 30,
-                      ),
+                    SizedBox(width: Get.width * 0.05),
+                    Expanded(
+                      flex: 3,
+                      child: Obx(() {
+                        return CustomButton(
+                          isFontBold: true,
+                          sizeText: 12,
+                          onPressed: () {
+                            resultadoBuscadorGeneralVm.cargarProductosPromo();
+                            resultadoBuscadorGeneralVm
+                                .setSelectedButton('Promociones');
+                          },
+                          text: 'Promociones',
+                          backgroundColor:
+                              resultadoBuscadorGeneralVm.selectedButton.value ==
+                                      'Promociones'
+                                  ? ConstantesColores.azul_precio
+                                  : ConstantesColores.color_fondo_gris,
+                          colorContent:
+                              resultadoBuscadorGeneralVm.selectedButton.value ==
+                                      'Promociones'
+                                  ? Colors.white
+                                  : ConstantesColores.azul_precio,
+                        );
+                      }),
                     ),
-                    CampoTextoResultado(),
-                    GestureDetector(
-                      onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FiltrosResultadoGeneralView(
-                                    codCategoria: '',
-                                    codigoProveedor: '',
-                                    nombreCategoria: '',
-                                    urlImagen: '',
-                                  )),
-                        )
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: Get.height * 0.01,
-                            horizontal: Get.width * 0.02),
-                        child: GestureDetector(
-                          child: SvgPicture.asset('assets/image/filtro_btn.svg',
-                              fit: BoxFit.cover),
+                    SizedBox(width: Get.width * 0.02),
+                    Expanded(
+                      flex: 3,
+                      child: Obx(
+                        () => CustomButton(
+                          isFontBold: true,
+                          sizeText: 12,
+                          onPressed: () {
+                            resultadoBuscadorGeneralVm
+                                .cargarProductosImperdibles();
+                            resultadoBuscadorGeneralVm
+                                .setSelectedButton('Imperdibles');
+                          },
+                          text: 'Imperdibles',
+                          backgroundColor:
+                              resultadoBuscadorGeneralVm.selectedButton.value ==
+                                      'Imperdibles'
+                                  ? ConstantesColores.azul_precio
+                                  : ConstantesColores.color_fondo_gris,
+                          colorContent:
+                              resultadoBuscadorGeneralVm.selectedButton.value ==
+                                      'Imperdibles'
+                                  ? Colors.white
+                                  : ConstantesColores.azul_precio,
                         ),
                       ),
                     ),
+                    SizedBox(width: Get.width * 0.05),
                   ],
-                )),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Obx(() => Text(
-                searchFuzzyViewModel.searchInput.isEmpty
-                    ? 'Estás buscando en todas las secciones'
-                    : 'Estás buscando "${searchFuzzyViewModel.searchInput.value}" en todas las secciones',
-                style: TextStyle(
-                    color: Colors.black.withOpacity(.5),
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold))),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
-            child: SizedBox(
-              height: Get.height * 0.03,
-              child: Row(
-                children: [
-                  SizedBox(width: Get.width * 0.05),
-                  Expanded(
-                    flex: 3,
-                    child: Obx(() {
-                      return CustomButton(
-                        isFontBold: true,
-                        sizeText: 12,
-                        onPressed: () {
-                          resultadoBuscadorGeneralVm.cargarProductosPromo();
-                          resultadoBuscadorGeneralVm
-                              .setSelectedButton('Promociones');
-                        },
-                        text: 'Promociones',
-                        backgroundColor:
-                            resultadoBuscadorGeneralVm.selectedButton.value ==
-                                    'Promociones'
-                                ? ConstantesColores.azul_precio
-                                : ConstantesColores.color_fondo_gris,
-                        colorContent:
-                            resultadoBuscadorGeneralVm.selectedButton.value ==
-                                    'Promociones'
-                                ? Colors.white
-                                : ConstantesColores.azul_precio,
-                      );
-                    }),
-                  ),
-                  SizedBox(width: Get.width * 0.02),
-                  Expanded(
-                    flex: 3,
-                    child: Obx(
-                      () => CustomButton(
-                        isFontBold: true,
-                        sizeText: 12,
-                        onPressed: () {
-                          resultadoBuscadorGeneralVm
-                              .cargarProductosImperdibles();
-                          resultadoBuscadorGeneralVm
-                              .setSelectedButton('Imperdibles');
-                        },
-                        text: 'Imperdibles',
-                        backgroundColor:
-                            resultadoBuscadorGeneralVm.selectedButton.value ==
-                                    'Imperdibles'
-                                ? ConstantesColores.azul_precio
-                                : ConstantesColores.color_fondo_gris,
-                        colorContent:
-                            resultadoBuscadorGeneralVm.selectedButton.value ==
-                                    'Imperdibles'
-                                ? Colors.white
-                                : ConstantesColores.azul_precio,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: Get.width * 0.05),
-                ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-              child: Obx(() => GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 9.0,
-                  childAspectRatio: 2 / 3.1,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Get.width * 0.04,
-                      vertical: Get.height * 0.01),
-                  children: cargarResultadosCard(context).toList())))
-        ],
+            Obx(
+              () => searchFuzzyViewModel.productosMasBuscado.value.isNotEmpty
+                  ? Container(
+                      padding: EdgeInsets.only(
+                          left: Get.width * 0.05, right: Get.width * 0.05),
+                      width: Get.width * 4.0,
+                      height: Get.height * 0.03,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Ajusta el valor para cambiar el radio de los bordes
+                          ),
+                        ),
+                        onPressed: () {
+                          searchFuzzyViewModel.controllerUser.text =
+                              searchFuzzyViewModel.productosMasBuscado.value;
+                          searchFuzzyViewModel.runFilter(
+                              searchFuzzyViewModel.controllerUser.text);
+                        },
+                        child: Text(
+                          searchFuzzyViewModel.productosMasBuscado.value,
+                          style: TextStyle(
+                              fontSize: 13.7,
+                              fontWeight: FontWeight.bold,
+                              color: ConstantesColores.azul_precio),
+                        ),
+
+                        // backgroundColor: ConstantesColores.color_fondo_gris,
+                        // colorContent: ConstantesColores.azul_precio
+                        // backgroundColor:
+                        //     resultadoBuscadorGeneralVm.selectedButton.value ==
+                        //             'Imperdibles'
+                        //         ? ConstantesColores.azul_precio
+                        //         : ConstantesColores.color_fondo_gris,
+                        // colorContent:
+                        //     resultadoBuscadorGeneralVm.selectedButton.value ==
+                        //             'Imperdibles'
+                        //         ? Colors.white
+                        //         : ConstantesColores.azul_precio,
+                      ),
+                    )
+                  : Container(),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Expanded(
+                child: Obx(() => GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 9.0,
+                    childAspectRatio: 2 / 3.1,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Get.width * 0.04,
+                        vertical: Get.height * 0.01),
+                    children: cargarResultadosCard(context).toList())))
+          ],
+        ),
       ),
     );
   }
@@ -196,6 +256,8 @@ class ResultadoBuscadorGeneral extends StatelessWidget {
           element: (searchFuzzyViewModel.allResultados[i] as Producto),
           isCategoriaPromos: resultadoBuscadorGeneralVm.isPromo.value,
           index: i,
+          // esto significa que estaba en la pantalla de busqueda
+          search: true,
         );
       }
 

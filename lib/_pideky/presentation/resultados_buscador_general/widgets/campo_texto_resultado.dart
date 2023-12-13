@@ -2,13 +2,16 @@ import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fu
 import 'package:emart/_pideky/presentation/resultados_buscador_general/view_model/resultado_buscador_general_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CampoTextoResultado extends StatelessWidget {
   CampoTextoResultado();
 
   final resultadoBuscadorGeneralVm = Get.put(ResultadoBuscadorGeneralVm());
-  final searchFuzzyViewModel= Get.find<SearchFuzzyViewModel>();
+  final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
+  final Debouncer debouncer =
+      Debouncer(delay: const Duration(milliseconds: 800));
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +59,7 @@ class CampoTextoResultado extends StatelessWidget {
           onChanged: (value) {
             searchFuzzyViewModel.searchInput.value = value;
             searchFuzzyViewModel.runFilter(value);
+            debouncer(() => searchFuzzyViewModel.productoBusqueda(value));
           },
         ));
   }

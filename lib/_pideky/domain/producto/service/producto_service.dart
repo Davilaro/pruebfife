@@ -78,4 +78,17 @@ class ProductoService {
 
   Future<List<Producto>> consultarPedidoTemporal() async =>
       await productoRepository.consultarPedidoTemporal();
+
+  Future<String> insertarProductoBusqueda({required String codigoProducto}) {
+    return productoRepository.insertarProductoBusqueda(
+        codigoProducto: codigoProducto);
+  }
+
+  Future<String> productoBusqueda({required String palabraProducto}) {
+    return productoRepository.productoBusqueda(
+        palabraProducto: palabraProducto);
+  }
+
+  Future<String> productoMasBuscado(codigoProducto) async =>
+      await productoRepository.productoMasBuscado(codigoProducto: codigoProducto);
 }

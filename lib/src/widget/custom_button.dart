@@ -58,9 +58,18 @@ class CustomButton extends StatelessWidget {
                     color: colorContent,
                   ),
                 if (leftIcon != null || rightIcon != null) const Spacer(),
-                AutoSizeText(
-                  text,
-                  style: TextStyle(color: colorContent, fontSize: sizeText, fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal),
+                Container(
+                  child: AutoSizeText(
+                    text,
+                    
+                    style: TextStyle(
+                
+                        color: colorContent,
+                        fontSize: sizeText,
+                       
+                        fontWeight:
+                            isFontBold ? FontWeight.bold : FontWeight.normal),
+                  ),
                 ),
                 if (leftIcon != null || rightIcon != null) const Spacer(),
                 if (rightIcon != null)

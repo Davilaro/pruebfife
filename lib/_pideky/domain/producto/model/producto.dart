@@ -37,10 +37,12 @@ class Producto {
       required this.bloqueoCartera,
       this.isOferta,
       this.precioBase,
+      this.negocio,
       this.fechafinpromocion_1});
 
   String codigo;
   String nombre;
+  String? negocio;
   double precio;
   double? precioBase;
   // String unidad;
@@ -118,6 +120,7 @@ class Producto {
             json["ordenSubcategoria"] == null ? 0 : json["ordenSubcategoria"],
         precioBase: json["precioBase"] == null ? 0.0 : json["precioBase"],
         isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
+        negocio: json["negocio"] == null ? '' : json["negocio"],
       );
 
   factory Producto.fromJson2(Map<dynamic, dynamic> json) => Producto(
@@ -166,6 +169,7 @@ class Producto {
             json["ordenSubcategoria"] == null ? 0 : json["ordenSubcategoria"],
         precioBase: json["precioBase"] == null ? 0 : json["precioBase"],
         isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
+        negocio: json["negocio"] == null ? '' : json["negocio"],
       );
 
   Map<String, dynamic> toJson() => {

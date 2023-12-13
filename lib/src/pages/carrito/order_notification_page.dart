@@ -114,10 +114,6 @@ class OrderNotificationPage extends StatelessWidget {
                 },
                 text: 'Ir al portal de pagos',
 
-                // showPopup(
-                //     context,
-                //     'Confirmación de \n identidad correcto',
-                //     SvgPicture.asset('assets/image/Icon_correcto.svg'));
               ),
               SizedBox(height: 25),
             ],

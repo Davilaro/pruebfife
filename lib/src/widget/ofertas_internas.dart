@@ -46,82 +46,105 @@ class _OfertasInternaState extends State<OfertasInterna> {
               child: Image.asset('assets/image/jar-loading.gif'),
             ),
           )
-        : Column(
-            children: [
-              Expanded(
-                child: Container(
-                  height: Get.height * 0.34,
-                  width: double.infinity,
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                  child: CarouselSlider(
-                    carouselController: _controller,
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      aspectRatio: 1,
-                      viewportFraction: 0.8,
-                      autoPlayInterval: Duration(seconds: 5),
-                      autoPlayAnimationDuration: Duration(milliseconds: 800),
-                      enlargeCenterPage: true,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                    ),
-                    items: widget.listaBanners.map((item) {
-                      print("lista banners ${widget.listaBanners.length}}");
-                      return InkWell(
-                          onTap: () {
-                            //FIREBASE: Llamamos el evento select_promotion
-                            TagueoFirebase().sendAnalityticSelectPromotion(
-                                "Promo",
-                                item.nombreBanner,
-                                item.link,
-                                item.tipofabricante,
-                                item.idBanner);
-                            //UXCam: Llamamos el evento selectBanner
-                            UxcamTagueo()
-                                .selectBanner(item.nombreBanner, "Promo");
-                            bannerController.validarOnClick(item, context,
-                                provider, cargoConfirmar, prefs, 'Promo');
+        : widget.listaBanners.length != 1
+            ? Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: Get.height * 0.34,
+                      width: double.infinity,
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child: CarouselSlider(
+                        carouselController: _controller,
+                        options: CarouselOptions(
+                          autoPlay:
+                              widget.listaBanners.length == 1 ? false : true,
+                          aspectRatio: 1,
+                          viewportFraction: 0.8,
+                          autoPlayInterval: Duration(seconds: 5),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 800),
+                          enlargeCenterPage: true,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
                           },
-                          child: Container(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.network(item.link,
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (context, __, ___) =>
-                                      Image.asset(
-                                        'assets/image/logo_login.png',
-                                      )),
-                            ),
-                          ));
+                        ),
+                        items: widget.listaBanners.map((item) {
+                          return InkWell(
+                              onTap: () {
+                                //FIREBASE: Llamamos el evento select_promotion
+                                TagueoFirebase().sendAnalityticSelectPromotion(
+                                    "Promo",
+                                    item.nombreBanner,
+                                    item.link,
+                                    item.tipofabricante,
+                                    item.idBanner);
+                                //UXCam: Llamamos el evento selectBanner
+                                UxcamTagueo()
+                                    .selectBanner(item.nombreBanner, "Promo");
+                                bannerController.validarOnClick(item, context,
+                                    provider, cargoConfirmar, prefs, 'Promo');
+                              },
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(item.link,
+                                      fit: BoxFit.fill,
+                                      errorBuilder: (context, __, ___) =>
+                                          Image.asset(
+                                            'assets/image/logo_login.png',
+                                          )),
+                                ),
+                              ));
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widget.listaBanners.asMap().entries.map((entry) {
+                      return GestureDetector(
+                        onTap: () => _controller.animateToPage(entry.key),
+                        child: Container(
+                            width: _current == entry.key ? 20.0 : 9.0,
+                            height: 10.0,
+                            padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                shape: BoxShape.rectangle,
+                                color: _current == entry.key
+                                    ? HexColor('f9744b')
+                                    : Colors.grey[300])),
+                      );
                     }).toList(),
                   ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.listaBanners.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                        width: _current == entry.key ? 20.0 : 9.0,
-                        height: 10.0,
-                        padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                        margin: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 4.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            shape: BoxShape.rectangle,
-                            color: _current == entry.key
-                                ? HexColor('f9744b')
-                                : Colors.grey[300])),
-                  );
-                }).toList(),
-              ),
-            ],
-          );
+                ],
+              )
+            : InkWell(
+                onTap: () {
+                  //FIREBASE: Llamamos el evento select_promotion
+                  TagueoFirebase().sendAnalityticSelectPromotion(
+                      "Promo",
+                      widget.listaBanners.first.nombreBanner,
+                      widget.listaBanners.first.link,
+                      widget.listaBanners.first.tipofabricante,
+                      widget.listaBanners.first.idBanner);
+                  //UXCam: Llamamos el evento selectBanner
+                  UxcamTagueo().selectBanner(
+                      widget.listaBanners.first.nombreBanner, "Promo");
+                  bannerController.validarOnClick(widget.listaBanners.first,
+                      context, provider, cargoConfirmar, prefs, 'Promo');
+                },
+                child: Image.network(widget.listaBanners.first.link,
+                    height: Get.height * 0.1,
+                    errorBuilder: (context, __, ___) => Image.asset(
+                          'assets/image/logo_login.png',
+                        )),
+              );
   }
 }

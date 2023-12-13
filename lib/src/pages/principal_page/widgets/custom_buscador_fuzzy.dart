@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
@@ -78,6 +79,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
   @override
   void initState() {
+    log(widget.numEmpresa + 'AQUI esta lo que necesito ver');
     if (prefs.usurioLogin == 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _validacionGeneralNotificaciones();
@@ -206,6 +208,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         element: productos,
         isCategoriaPromos: false,
         index: i,
+        //se realiza la busqueda epero a traves de la marca 
+        search: true,
       );
 
       opciones.add(widgetTemp);
@@ -414,12 +418,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           int elapsedTime = 0;
           if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
@@ -435,6 +445,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       .validacionMostrarSlideUp[widget.descripcionCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.descripcionCategoria, context);
           }
@@ -452,12 +465,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -473,6 +492,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }
@@ -492,12 +514,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -514,6 +542,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
             controllerNotificaciones.closeSlideUp.value = false;
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }

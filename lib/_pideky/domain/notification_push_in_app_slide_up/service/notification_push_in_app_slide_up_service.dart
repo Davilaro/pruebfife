@@ -15,4 +15,16 @@ class NotificationPushInAppSlideUpService {
       consultNotificationPushInApp(String ubicacion) {
     return notificationPushInAppRepository.consultNotificationPushInApp(ubicacion);
   }
+
+  Future<List<NotificationPushInAppSlideUpModel>> getAutomaticSlideUp() {
+    return notificationPushInAppRepository.getAutomaticSlideUp();
+  }
+
+  Future<int> showSlideUpValidation(String negocio) {
+    return notificationPushInAppRepository.showSlideUpValidation(negocio);
+  }
+
+  Future<dynamic> sendShowedSlideUp(String negocio) {
+    return notificationPushInAppRepository.sendShowedSlideUp(negocio);
+  }
 }

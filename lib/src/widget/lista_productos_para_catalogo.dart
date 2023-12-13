@@ -58,6 +58,8 @@ class _ListaProductosCatalogoState extends State<ListaProductosCatalogo> {
         element: productos,
         isCategoriaPromos: false,
         index: i,
+        //no esta en la busqueda
+        search: false,
       );
 
       opciones.add(widgetTemp);

@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/preferences/const.dart';
+import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:http/http.dart' as http;
 
 class ProductoRepositorySqlite extends IProductoRepository {
   Future<Producto> consultarDatosProducto(String producto) async {
     final db = await DBProviderHelper.db.baseAbierta;
 
     final sql = await db.rawQuery('''
-      SELECT p.*, f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
+      SELECT p.*, p.Negocio as negocio ,f.codigo as codigoFabricante, f.nit as nitFabricante FROM Producto p JOIN fabricante f ON p.fabricante = f.empresa where p.codigo like '%$producto%' limit 1
     ''');
 
     return Producto.fromJson(sql.first);
@@ -45,6 +50,7 @@ class ProductoRepositorySqlite extends IProductoRepository {
     ) AS precio,
     p.marca,
     p.categoria,
+    p.Negocio as negocio,
     p.iva,
     p.fabricante,
     p.marcapideki,
@@ -135,6 +141,7 @@ ORDER BY
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
     p.OrdenMarca as ordenMarca, 
+    p.Negocio as negocio,
     p.OrdenSubcategoria as ordenSubcategoria,
     ROUND(
         (
@@ -278,7 +285,9 @@ ORDER BY p.orden ASC
       } else if (tipo == 3) {
         query = '''
        SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
-       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,p.precio as precioBase,
+       p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
+       p.Negocio as negocio,
+       p.precio as precioBase,
         ROUND(
         (
            (
@@ -390,6 +399,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     f.codigo as codigoFabricante, 
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
+    p.Negocio as negocio,
     p.precio as precioBase,
     ROUND(
         (
@@ -532,6 +542,7 @@ ORDER BY
     p.nombre, 
     f.codigo as codigoFabricante, 
     f.nit as nitFabricante, 
+    p.Negocio as negocio,
     f.BloqueoCartera as bloqueoCartera, 
     p.precio as precioBase,
     ROUND(
@@ -678,7 +689,8 @@ ORDER BY
        SELECT 
     p.codigo, 
     p.nombre, 
-    f.codigo as codigoFabricante, 
+    f.codigo as codigoFabricante,
+    p.Negocio as negocio, 
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
     ROUND(
@@ -850,6 +862,7 @@ ORDER BY
     ) AS precio,
     p.marca, 
     p.categoria, 
+    p.Negocio as negocio,
     p.iva, 
     p.fabricante, 
     p.marcapideki, 
@@ -1003,7 +1016,9 @@ ORDER BY p.orden ASC;
 
       if (tipoProducto == 2) {
         query = '''
-        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,  ROUND(
+        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, 
+        p.Negocio as negocio,
+        f.BloqueoCartera as  bloqueoCartera,  ROUND(
         (
             (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
@@ -1087,6 +1102,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       } else {
         query = '''
       SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+      p.Negocio as negocio,
       ROUND(
         (
            (
@@ -1185,7 +1201,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             ) <= $precioMaximo
       $consulta
       UNION 
-      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera,
+      SELECT p.codigo , p.nombre , f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, 
+      p.Negocio as negocio,
       ROUND(
         (
             (
@@ -1288,7 +1305,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
         sql = await db.rawQuery(query);
       }
-      print('tipo de consulta $tipoProducto');
       //log(sql);
       return sql.isNotEmpty
           ? sql.map((e) => Producto.fromJson(e)).toList()
@@ -1329,6 +1345,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, 0.0 as descuento, 
         0.0 as  preciodescuento,
         CAST(ROUND((p.precio + ((p.precio * p.iva) / 100) + (
@@ -1413,6 +1430,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     ) AS precio, 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
+         p.Negocio as negocio,
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
@@ -1525,6 +1543,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden,IFNULL(tmp.descuento, 0.0) AS descuento, 
@@ -1634,7 +1653,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ), 0
     ) AS precio, 
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
-         p.marcacodigopideki , 
+         p.marcacodigopideki ,
+         p.Negocio as negocio, 
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
@@ -1751,6 +1771,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.categoriacodigopideki , 
         p.categoriaId2,
 			  p.subcategoriaId2,
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
@@ -1857,6 +1878,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
@@ -1964,6 +1986,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marcacodigopideki , 
         p.categoriacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
@@ -2097,6 +2120,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         p.categoriaId2,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
+        p.Negocio as negocio,
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
         (
@@ -2201,6 +2225,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
             )
         ), 0
     ) AS precio,  
+    p.Negocio as negocio,
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
@@ -2315,6 +2340,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
          p.marca , p.categoria   , p.iva , p.fabricante  , p.marcapideki , p.tipofabricante , 
          p.marcacodigopideki , 
         p.categoriaId2,
+        p.Negocio as negocio,
 			  p.subcategoriaId2,
         p.categoriacodigopideki , 
         p.subcategoriacodigopideki , p.nombrecomercial, p.codigocliente,  p.orden, IFNULL(tmp.descuento, 0.0) AS descuento, 
@@ -2457,4 +2483,96 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
       return [];
     }
   }
+
+  @override
+  Future<String> insertarProductoBusqueda(
+      {required String codigoProducto}) async {
+    final prefs = Preferencias();
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlPrincipal + 'Busqueda/Insertar');
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "Busqueda": codigoProducto,
+          "Pais": prefs.paisUsuario,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed');
+      }
+    } catch (e) {
+      print("error validando codigo $e");
+      return '';
+    }
+  }
+
+  @override
+  Future<String> productoBusqueda({required String palabraProducto}) async {
+    final prefs = Preferencias();
+    try {
+      final url;
+
+      url = Uri.parse(Constantes().urlPrincipal + 'Busqueda/Consultar');
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "Busqueda": palabraProducto,
+          "CCUP": prefs.codigoUnicoPideky,
+          "Sucursal": prefs.sucursal
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed');
+      }
+    } catch (e) {
+      print("error validando codigo $e");
+      return '';
+    }
+  }
+
+  @override
+  Future<String> productoMasBuscado({required String codigoProducto}) async {
+    final db = await DBProviderHelper.db.database;
+
+    try {
+      List sql = await db.rawQuery('''
+      SELECT nombre from Producto where codigo = '$codigoProducto'  
+    ''');
+
+      return sql.isNotEmpty ? sql.first['nombre'] : '';
+    } catch (e) {
+      print('fallo consulta en tabla pedido temporal $e');
+      return '';
+    }
+  }
+
+  // Future<List<Producto>> productoMasBuscado() async {
+  //   final db = await DBProviderHelper.db.tempAbierta;
+  //   try {
+  //     final sql = await db.rawQuery('''
+  //     SELECT nombre from producto where codigo = result
+  //   ''');
+
+  //     return sql.map((e) => Producto.fromJson2(e)).toList();
+  //   } catch (e) {
+  //     print('fallo consulta en tabla pedido temporal $e');
+  //     return [];
+  //   }
+  //}
 }

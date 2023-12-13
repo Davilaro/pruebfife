@@ -6,6 +6,7 @@ import 'package:emart/src/widget/soporte.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../src/utils/uxcam_tagueo.dart';
 import '../../src/widget/acciones_carrito_bart.dart';
@@ -68,11 +69,13 @@ class NewAppBar extends StatelessWidget {
           ),
           prefs.usurioLogin == 1
               ? GestureDetector(
-                  onTap: () {
-                    if (prefs.usurioLogin == 1)
+                  onTap: () async {
+                    if (prefs.usurioLogin == 1) {
+                      if (Get.isSnackbarOpen) {
+                        await Get.closeCurrentSnackbar();
+                      }
                       drawerKey.currentState!.openDrawer();
-
-                    
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 5),

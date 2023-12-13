@@ -1,4 +1,3 @@
-import 'package:emart/_pideky/domain/mi_listas/model/lista_encabezado_model.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
 import 'package:emart/src/preferences/cont_colores.dart';

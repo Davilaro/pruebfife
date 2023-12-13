@@ -22,12 +22,14 @@ class InputValoresCatalogo extends StatefulWidget {
   final Producto element;
   final bool isCategoriaPromos;
   final int index;
+  final bool search;
 
   InputValoresCatalogo(
       {Key? key,
       required this.element,
       required this.isCategoriaPromos,
-      required this.index})
+      required this.index,
+      required this.search})
       : super(key: key);
 
   @override
@@ -69,11 +71,15 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
               producto: widget.element,
               cartProvider: cartProvider,
               isProductoEnOferta: isProductoEnOferta,
-              onTapCard: () {
+              onTapCard: () async {
                 if (prefs.usurioLogin != -1) {
                   if (searchFuzzyViewModel.controllerUser.text != '') {
                     searchFuzzyViewModel.llenarRecientes(
                         widget.element, Producto);
+                  }
+                  if (widget.search) {
+                    await searchFuzzyViewModel
+                        .insertarProductoBusqueda(widget.element.codigo);
                   }
                   //FIREBASE: Llamamos el evento select_item
                   TagueoFirebase().sendAnalityticSelectItem(widget.element, 1);
