@@ -505,29 +505,29 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       }
       final sql = await db.rawQuery(stament);
 
-      
-        //iterar y cuando la pregunta id = param id  add.param
-        //log(jsonEncode(sql));
-        for (var i = 0; i < sql.length; i++) {
-          List response = await db.rawQuery('''
+      //iterar y cuando la pregunta id = param id  add.param
+      //log(jsonEncode(sql));
+      for (var i = 0; i < sql.length; i++) {
+        List response = await db.rawQuery('''
           select * from ParamPregunta
           where preguntaid = '${sql[i]['preguntaid']}'  
           ''');
-          List<dynamic> parametros = List<dynamic>.from(response.map((e) => e['parametro']));
-          //
-          var encuesta = Encuesta.fromJson(sql[i]);
-          encuesta.parametro = parametros;
-          if (lista.isEmpty) {
+        List<dynamic> parametros =
+            List<dynamic>.from(response.map((e) => e['parametro']));
+        //
+        var encuesta = Encuesta.fromJson(sql[i]);
+        encuesta.parametro = parametros;
+        if (lista.isEmpty) {
+          lista.add(encuesta);
+        } else {
+          int posision =
+              lista.indexWhere((e) => e.preguntaId == encuesta.preguntaId);
+          if (posision == -1) {
             lista.add(encuesta);
-          } else {
-            int posision =
-                lista.indexWhere((e) => e.preguntaId == encuesta.preguntaId);
-            if (posision == -1) {
-              lista.add(encuesta);
-            }
           }
         }
-       
+      }
+
       return lista;
     } catch (e) {
       return [];

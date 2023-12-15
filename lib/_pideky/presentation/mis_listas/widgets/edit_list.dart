@@ -85,41 +85,44 @@ class _EditListState extends State<EditList> {
                 GestureDetector(
                   onTap: () {
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                                bottom: Get.height * 0.57,
-                                top: Get.height * 0.08),
-                            child: AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
-                              content: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Puede que algunos de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
-                                      style: TextStyle(
-                                          color: ConstantesColores.azul_precio,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
+                      context: context,
+                      builder: (context) {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            content: Container(
+                              height: Get.height * 0.25,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Puede que algunos de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
+                                    style: TextStyle(
+                                      color: ConstantesColores.azul_precio,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
                                     ),
-                                    BotonAgregarCarrito(
-                                        borderRadio: 50,
-                                        height: 40,
-                                        color: ConstantesColores.azul_precio,
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                        text: "Entiendo")
-                                  ],
-                                ),
+                                  ),
+                                  BotonAgregarCarrito(
+                                    borderRadio: 50,
+                                    height: 40,
+                                    color: ConstantesColores.azul_precio,
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    text: "Entiendo",
+                                  )
+                                ],
                               ),
                             ),
-                          );
-                        });
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Image(
                     image: AssetImage('assets/icon/Icono_editar.png'),
@@ -173,20 +176,6 @@ class _EditListState extends State<EditList> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      mostrarAlertCarteraEliminarLista(
-                          context,
-                          "¿Estas seguro que desea eliminar la lista de compras ",
-                          null,
-                          title,
-                          id);
-                    },
-                    child: Image(
-                      image: AssetImage('assets/icon/Icono_eliminar.png'),
-                      height: 25,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -198,8 +187,39 @@ class _EditListState extends State<EditList> {
                 ]),
               ),
             ),
+            Container(
+              width: Get.width,
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () {
+                  mostrarAlertCarteraEliminarLista(
+                      context,
+                      "¿Estas seguro que desea eliminar la lista de compras ",
+                      null,
+                      title,
+                      id);
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Image(
+                      image: AssetImage('assets/icon/Icono_eliminar.png'),
+                      height: 25,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Eliminar esta lista',
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: ConstantesColores.azul_precio,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            ),
             BotonAgregarCarrito(
-              marginTop: 20,
+              marginTop: 30,
               borderRadio: 50,
               color: ConstantesColores.azul_aguamarina_botones,
               height: 50,

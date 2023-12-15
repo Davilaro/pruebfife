@@ -49,7 +49,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
     final cartProvider = Provider.of<CarroModelo>(context);
 
     return FittedBox(
-      fit: BoxFit.fill,
+      fit: BoxFit.contain,
       child: FutureBuilder(
         future: DBProvider.db
             .consultarProductoEnOfertaPorCodigo(widget.element.codigo),

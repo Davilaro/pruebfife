@@ -5,11 +5,9 @@ import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_crear_lista
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/opciones_app_bart.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class PopUpChooseList extends StatefulWidget {
   final Producto producto;
@@ -40,7 +38,6 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OpcionesBard>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(
           left: Get.width * 0.05,
@@ -106,17 +103,19 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                           child: Row(
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    mapaDeListas[clave] = !mapaDeListas[clave]!;
-                                  });
-                                },
-                                child: Image.asset(
+                                  onTap: () {
+                                    setState(() {
+                                      mapaDeListas[clave] =
+                                          !mapaDeListas[clave]!;
+                                    });
+                                  },
+                                  child: SvgPicture.asset(
                                     mapaDeListas[clave] == true
-                                        ? 'assets/image/Icono_corazón_lleno.png'
-                                        : 'assets/image/Icono_corazón_vacio.png',
-                                    height: 25),
-                              ),
+                                        ? 'assets/icon/Corazón_lleno.svg'
+                                        : 'assets/icon/Corazón_Trazo.svg',
+                                    height: 25,
+                                  )
+                                  ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Column(
@@ -156,8 +155,7 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                                 widget.cantidad, clave.nombre);
                           }
                         }
-                        await actualizarPagina(
-                            provider, context, cargoConfirmar);
+
                         Get.back();
                       },
                       text: 'Aceptar')

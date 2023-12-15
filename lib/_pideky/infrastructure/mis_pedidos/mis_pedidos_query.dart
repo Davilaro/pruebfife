@@ -57,8 +57,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
     final db = await DBProviderHelper.db.baseAbierta;
 
     try {
-      String query =
-          '''
+      String query = '''
         SELECT h.NumeroDoc, h.fabricante, h.ordencompra ordencompra, f.ico, sum(precio) as precio 
         from Historico h LEFT JOIN fabricante f ON h.fabricante = f.nombrecomercial 
         where NumeroDoc='$numeroDoc' GROUP BY fabricante
@@ -76,8 +75,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
       String numeroDoc, String fabricante) async {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
-      final query =
-          '''
+      final query = '''
         SELECT NumeroDoc, codigoRef, nombreproducto , cantidad , fabricante, ordencompra, MAX(substr(fechatrans,11, 6)) as horatrans, 
         MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, 
         CAST(precio AS double) precio from Historico where NumeroDoc='$numeroDoc' 
@@ -96,8 +94,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
       String numeroDoc, String fabricante) async {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
-      final sql = await db.rawQuery(
-          '''
+      final sql = await db.rawQuery('''
       SELECT max(h.nombreproducto)nombreproducto,sum(h.Cantidad)Cantidad,
        p.fabricante from Historico h inner join producto p on p.codigo=h.codigoref  
        where  h.NumeroDoc='$numeroDoc'  and  h.fabricante='$fabricante' 
@@ -162,8 +159,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
     final db = await DBProviderHelper.db.baseAbierta;
 
     try {
-      String query =
-          '''
+      String query = '''
         SELECT s.NumeroDoc, s.proveedor fabricante, s.Nombre, s.Cantidad, s.consecutivo, f.ico, 
         substr(s.fechaServidor, 1, 2) || '/' || substr(s.fechaServidor, 4, 2) || '/' || substr(s.fechaServidor, 7, 4) as fechaServidor, 
         substr(s.fechaServidor,11, 6) as horatrans, s.Precio as precio, s.CodigoProducto, s.estado     
@@ -192,8 +188,7 @@ class MisPedidosQuery extends IMisPedidosRepository {
           now.year.toString() +
           ' ${now.hour.toString().length > 1 ? now.hour : '0${now.hour}'}:${now.minute.toString().length > 1 ? now.minute : '0${now.minute}'}:${now.second}';
 
-      var query =
-          '''
+      var query = '''
         INSERT INTO SeguimientoPedido VALUES ('$numDoc','${miPedido.fabricante}','${miPedido.codigoProducto}','${miPedido.nombreProducto}',${miPedido.precio},${miPedido.cantidad},null,'$fechaActual',1)
       ''';
       // log(query);

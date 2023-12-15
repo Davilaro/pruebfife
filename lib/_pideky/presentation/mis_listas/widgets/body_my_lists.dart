@@ -1,8 +1,6 @@
 import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/widgets/edit_list.dart';
-import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +12,6 @@ class BodyMyLists extends StatelessWidget {
     final misListasViewModel = Get.find<MyListsViewModel>();
     misListasViewModel.getMisListas();
     print('lista de listas ${misListasViewModel.misListas.length}');
-    final cargoConfirmar = Get.find<ControlBaseDatos>();
     return Expanded(
       child: Obx(
         () => misListasViewModel.misListas.isNotEmpty
@@ -23,7 +20,6 @@ class BodyMyLists extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () async {
-                      await actualizarPaginaSinReset(context, cargoConfirmar);
                       await misListasViewModel.mapearProductos(
                           misListasViewModel.misListas[index].id);
                       Get.to(() => EditList(), arguments: {

@@ -178,6 +178,19 @@ ORDER BY
     p.orden, 
     IFNULL(tmp.descuento, 0.0) AS descuento, 
     ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
+    ROUND(
         (
             (
                 p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
@@ -330,6 +343,19 @@ ORDER BY p.orden ASC
             )
         ), 0
     ) AS preciodescuento,
+    ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
     CAST(
         ROUND(
             (p.precio + ((p.precio * p.iva) / 100) + (
@@ -434,6 +460,19 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     p.codigocliente,  
     p.orden, 
     IFNULL(tmp.descuento, 0.0) AS descuento, 
+    ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
     ROUND(
         (
             (
@@ -578,6 +617,19 @@ ORDER BY
     p.codigocliente,  
     p.orden, 
     IFNULL(tmp.descuento, 0.0) AS descuento, 
+    ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
     ROUND(
         (
             (
@@ -745,6 +797,19 @@ ORDER BY
             )
         ), 0
     ) AS preciodescuento,
+    ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
     CAST(
         ROUND(
             (p.precio + ((p.precio * p.iva) / 100) + (
@@ -877,6 +942,19 @@ ORDER BY
     p.orden, 
     p.precio as precioBase,
     IFNULL(tmp.descuento, 0.0) AS descuento, 
+    ROUND(
+              (
+                  (
+                      p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
+                  ) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  )
+              ), 0
+          ) AS precioConDescuento,
     ROUND(
         (
             (

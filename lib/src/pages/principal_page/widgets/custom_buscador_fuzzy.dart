@@ -155,43 +155,44 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
               });
               return Future<void>.delayed(const Duration(seconds: 3));
             },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    child: _buscadorPrincipal(context),
-                  ),
-                  Visibility(
-                    visible: isActiveBanner,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: _buscadorPrincipal(context),
+                ),
+                Visibility(
+                  visible: isActiveBanner,
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      height: size.height * 0.2,
+                      width: double.infinity,
+                      child: OfertasInterna(
+                        nombreFabricante: widget.codCategoria,
+                        listaBanners: _listaBanners,
+                      )),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Container(
-                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        height: size.height * 0.2,
-                        width: double.infinity,
-                        child: OfertasInterna(
-                          nombreFabricante: widget.codCategoria,
-                          listaBanners: _listaBanners,
-                        )),
+                      height: isActiveBanner
+                          ? MediaQuery.of(context).size.height * 0.5
+                          : MediaQuery.of(context).size.height * 0.7,
+                      child: GridView.count(
+                          physics: BouncingScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing:
+                              4.0, // espaciado entre ejes principales (horizontal)
+                          childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                          children:
+                              _cargarProductosLista(listaProducto, context)),
+                    ),
                   ),
-                  Container(
-                    height: Get.height * 0.8,
-                    width: size.width * 1,
-                    padding: EdgeInsets.fromLTRB(
-                        10, 10, 10, isActiveBanner ? 140 : 50),
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 4.0,
-                        mainAxisSpacing:
-                            4.0, // espaciado entre ejes principales (horizontal)
-                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                        children:
-                            _cargarProductosLista(listaProducto, context)),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ));
@@ -208,7 +209,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         element: productos,
         isCategoriaPromos: false,
         index: i,
-        //se realiza la busqueda epero a traves de la marca 
+        //se realiza la busqueda epero a traves de la marca
         search: true,
       );
 

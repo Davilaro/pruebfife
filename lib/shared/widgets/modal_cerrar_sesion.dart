@@ -82,7 +82,6 @@ modalCerrarSesion(context, size, provider) {
               0;
           controllerSearchViewModel.listaRecientes.clear();
           Get.offAll(() => Splash());
-          //await cerrarBases();
         }),
       },
       child: Container(

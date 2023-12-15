@@ -225,7 +225,8 @@ class DBProviderHelper {
     }
   }
 
-   Future<dynamic> consultarTipoFabricanteDirectoOIndirecto(String fabricante) async {
+  Future<dynamic> consultarTipoFabricanteDirectoOIndirecto(
+      String fabricante) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -278,10 +279,67 @@ class DBProviderHelper {
     try {
       await db.rawInsert(
           ''' INSERT INTO EncuestasRealizadas (encuestaid, codigocliente, codigordv, codcigosdv) 
-          VALUES(${encuesta.encuestaId}, '${prefs.codigoUnicoPideky}', '', '') '''
-);
+          VALUES(${encuesta.encuestaId}, '${prefs.codigoUnicoPideky}', '', '') ''');
     } catch (e) {
       print('ERROR CONSULTA ENCUESTA $e');
+    }
+  }
+
+  Future<void> guardarLista(int idLista, String name) async {
+    final db = await baseAbierta;
+    try {
+      await db.rawInsert(''' INSERT INTO ListaCompraEncabezado (Id, Nombre) 
+          VALUES('$idLista', '$name' ) ''');
+    } catch (e) {
+      print('ERROR GUARDANDO LISTA $e');
+    }
+  }
+
+  Future<void> eliminarLista(int idLista) async {
+    final db = await baseAbierta;
+    try {
+      await db.delete(
+        'ListaCompraEncabezado',
+        where: '''Id = ?''',
+        whereArgs: [idLista],
+      );
+    } catch (e) {
+      print('ERROR AL ELIMINAR LISTA $e');
+    }
+  }
+
+  Future<void> agregarProductoALista(int idLista, String nombre, String codigo,
+      cantidad, String proveedor) async {
+    final db = await baseAbierta;
+    try {
+      await db.rawInsert(
+          ''' INSERT INTO ListaCompraDetalle (Id, Nombre, Codigo, Cantidad, Proveedor) 
+          VALUES('$idLista', '$nombre', '$codigo', '$cantidad', '$proveedor' ) ''');
+    } catch (e) {
+      print('ERROR AL AGREGAR PRODUCTO A LISTA $e');
+    }
+  }
+
+  Future<void> eliminarProductoDeLista(String codigo, int id) async {
+    final db = await baseAbierta;
+    try {
+      await db.delete(
+        'ListaCompraDetalle',
+        where: '''Id = ? and Codigo = ?''',
+        whereArgs: [id, codigo],
+      );
+    } catch (e) {
+      print('ERROR AL ELIMINAR PRODUCTO DE LISTA $e');
+    }
+  }
+
+  Future<void> actualizarProductoDeLista(int idLista, cantidad) async {
+    final db = await baseAbierta;
+    try {
+      await db.update('ListaCompraDetalle', {'Cantidad': cantidad},
+          where: 'Id = ?', whereArgs: [idLista]);
+    } catch (e) {
+      print('ERROR AL ACTUALIZAR PRODUCTO DE LISTA $e');
     }
   }
 }

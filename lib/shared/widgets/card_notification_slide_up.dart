@@ -16,7 +16,7 @@ void showSlideUpNotification(context, data, ubicacion) {
   final notificationController =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   Preferencias prefs = Preferencias();
-  
+
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
       Get.back();

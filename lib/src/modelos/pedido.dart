@@ -16,12 +16,14 @@ class Pedido {
     this.descuento,
     this.precioBase,
     this.isOferta,
+    this.precioDescuento,
   });
 
   int? cantidad;
   String? codigoProducto;
   double? precioBase;
   double? precio;
+  double? precioDescuento;
   int? iva;
   int? isOferta;
   String? fabricante;

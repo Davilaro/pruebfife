@@ -4,10 +4,8 @@ import 'package:emart/_pideky/domain/mi_listas/interface/mis_listas_interface.da
 import 'package:emart/_pideky/domain/mi_listas/model/lista_detalle_model.dart';
 import 'package:emart/_pideky/domain/mi_listas/model/lista_encabezado_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
-import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,7 +60,6 @@ class MisListasRepository implements MisListasInterface {
 
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 && data == 'OK') {
-        print('todo bien');
         return [true, true];
       } else {
         throw ('algo salio mal');
@@ -81,8 +78,6 @@ class MisListasRepository implements MisListasInterface {
       required int idLista,
       required context}) async {
     try {
-      final myList = Get.find<MyListsViewModel>();
-      final cargoConfirmar = Get.find<ControlBaseDatos>();
       final url;
       url = Uri.parse(Constantes().urlPrincipal + "ListaCompra/DeleteHeader");
 
@@ -94,14 +89,6 @@ class MisListasRepository implements MisListasInterface {
       });
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 && data == 'OK') {
-        await actualizarPaginaSinReset(context, cargoConfirmar);
-        var copy = List.from(myList.misListas);
-        copy.forEach((lista) {
-          if (lista.id == idLista && lista.nombre == nombre) {
-            myList.misListas.remove(lista);
-          }
-          print('eliminando lista');
-        });
         return [true, true];
       } else {
         throw ('algo salio mal');
@@ -123,9 +110,7 @@ class MisListasRepository implements MisListasInterface {
         'Content-Type': 'application/json',
       });
 
-      print('body $body ');
       final data = jsonDecode(response.body);
-      print('status $data');
 
       if (response.statusCode == 200 && data == 'OK') {
         return [true, true];

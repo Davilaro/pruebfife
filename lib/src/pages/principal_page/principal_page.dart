@@ -90,37 +90,6 @@ class _PrincipalPageState extends State<PrincipalPage>
     prefs.nextDay = finalDay;
   }
 
-  // void validacionGeneralNotificaciones() async {
-
-  //   if (!await mostrarEncuestasObligatorias(context)) {
-  //     controllerNotificaciones.closePushInUp.value = false;
-  //     controllerNotificaciones.onTapPushInUp.value = false;
-  //     await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-  //     if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
-  //         controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-  //       await showPushInUp();
-  //       int elapsedTime = 0;
-  //       Timer.periodic(Duration(milliseconds: 10), (timer) {
-  //         if (elapsedTime >= 530) {
-  //           showSlideUp();
-  //           timer.cancel();
-  //         } else if (controllerNotificaciones.closePushInUp.value == true) {
-  //           showSlideUp();
-  //           timer.cancel();
-  //         } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-  //           timer.cancel();
-  //         }
-  //         elapsedTime++;
-  //       });
-  //     } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
-  //             true &&
-  //         controllerNotificaciones.closeSlideUp.value == false) {
-  //       showSlideUp();
-  //     }
-  //   }
-
-  // }
-
   Future<bool> mostrarEncuestasObligatorias(BuildContext context) async {
     bool hayEncuestas = false;
     

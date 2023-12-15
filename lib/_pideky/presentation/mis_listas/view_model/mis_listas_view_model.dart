@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:emart/_pideky/domain/mi_listas/model/lista_detalle_model.dart';
-import 'package:emart/_pideky/domain/mi_listas/model/lista_encabezado_model.dart';
 import 'package:emart/_pideky/domain/mi_listas/services/mis_listas_service.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/mis_listas/mis_listas_repository.dart';
@@ -14,7 +13,7 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
-import 'package:emart/src/widget/boton_actualizar.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +68,8 @@ class MyListsViewModel extends GetxController {
         proveedor: proveedor);
     if (result[1] == false) {
       backClosePopup(context, texto: result[0], isCorrect: false);
+    } else {
+      await DBProviderHelper.db.actualizarProductoDeLista(id, cantidad);
     }
   }
 
@@ -82,6 +83,8 @@ class MyListsViewModel extends GetxController {
     if (result[1] == false) {
       backClosePopup(context, texto: result[0], isCorrect: false);
     } else if (result[0] == true) {
+      await DBProviderHelper.db.eliminarLista(idLista);
+      await getMisListas();
       Get.back();
     }
   }
@@ -121,12 +124,14 @@ class MyListsViewModel extends GetxController {
   }
 
   void deleteProduct(codigo, context) async {
-    final list = [];
+    List list = [];
 
-    mapListasProductos.forEach((key, value) {
+    mapListasProductos.forEach((key, value) async {
       value['items'].forEach((ListaDetalle productoDetalle) async {
         if (productoDetalle.codigo == codigo) {
           list.add(productoDetalle);
+          await DBProviderHelper.db.eliminarProductoDeLista(
+              productoDetalle.codigo, productoDetalle.id);
         }
       });
     });
@@ -174,10 +179,9 @@ class MyListsViewModel extends GetxController {
         sucursal: prefs.sucursal,
         ccup: prefs.codigoUnicoPideky);
     if (request[1] == true) {
-      await actualizarPaginaSinReset(context, cargoConfirmar);
-      final newList =
-          ListaEncabezado(id: request[2], nombre: nombreNuevaLista.value);
-      misListas.add(newList);
+      await DBProviderHelper.db
+          .guardarLista(request[2], nombreNuevaLista.value);
+      await getMisListas();
       Get.back();
       backClosePopup(context,
           texto: request[0],
@@ -191,7 +195,6 @@ class MyListsViewModel extends GetxController {
   }
 
   Future existProductInList(String codigoProducto, context) async {
-    await actualizarPaginaSinReset(context, cargoConfirmar);
     List listaProductosRes = [];
     final List productos = await misListasService.getProductos();
     final listaIds = [];
@@ -217,6 +220,9 @@ class MyListsViewModel extends GetxController {
         proveedor: producto.fabricante!);
     if (result[1] == false) {
       backClosePopup(Get.context!, texto: result[0], isCorrect: false);
+    } else {
+      await DBProviderHelper.db.agregarProductoALista(idLista, producto.nombre,
+          producto.codigo, cantidad, producto.fabricante!);
     }
   }
 

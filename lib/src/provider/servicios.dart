@@ -410,7 +410,7 @@ class Servicies {
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
         "Param1": listaPedido[i].descuento!,
         "Param2": listaPedido[i].isOferta!,
-        "Param3": listaPedido[i].precioBase!,
+        "Param3": listaPedido[i].precioDescuento!,
       });
       await misPedidosViewModel.misPedidosService
           .guardarSeguimientoPedido(listaPedido[i], numDoc);

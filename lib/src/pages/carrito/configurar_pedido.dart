@@ -249,6 +249,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
           codCliente: prefs.codCliente,
           tipoFabricante: directo,
           codProveedor: 1,
+          precioDescuento: PedidoEmart.listaProductos![key]!.precioConDescuento,
           codigocliente: PedidoEmart.listaProductos![key]!.codigocliente,
           nombreProducto: PedidoEmart.listaProductos![key]!.nombre,
           precioInicial: PedidoEmart.listaProductos![key]!.precioinicial,

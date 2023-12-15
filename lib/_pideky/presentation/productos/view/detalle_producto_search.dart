@@ -27,6 +27,7 @@ import 'package:emart/src/widget/dialog_details_image.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
@@ -297,9 +298,10 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                             },
                                             padding: EdgeInsets.all(0),
                                             alignment: Alignment.centerLeft,
-                                            icon: Image(
-                                                image: AssetImage(
-                                                    'assets/icon/Icono_corazón_vacio_pequeño.png'))),
+                                            icon: SvgPicture.asset(
+                                              'assets/icon/Corazón_Trazo.svg',
+                                              height: 25,
+                                            )),
                                       ),
                                     ],
                                   ),
