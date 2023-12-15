@@ -221,6 +221,7 @@ class MyListsViewModel extends GetxController {
     if (result[1] == false) {
       backClosePopup(Get.context!, texto: result[0], isCorrect: false);
     } else {
+      print('iteracion');
       await DBProviderHelper.db.agregarProductoALista(idLista, producto.nombre,
           producto.codigo, cantidad, producto.fabricante!);
     }

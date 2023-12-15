@@ -311,10 +311,23 @@ class DBProviderHelper {
   Future<void> agregarProductoALista(int idLista, String nombre, String codigo,
       cantidad, String proveedor) async {
     final db = await baseAbierta;
+    print('entre aqui ');
     try {
-      await db.rawInsert(
-          ''' INSERT INTO ListaCompraDetalle (Id, Nombre, Codigo, Cantidad, Proveedor) 
+      // Verificar si el código ya existe en la tabla
+      List<Map<String, dynamic>> result = await db.rawQuery(
+          ''' SELECT * FROM ListaCompraDetalle WHERE Codigo = '$codigo' and Id = '$idLista' ''');
+
+      if (result.isNotEmpty) {
+        // El código ya existe, actualizar la cantidad en ese registro
+        await db.rawUpdate(
+            ''' UPDATE ListaCompraDetalle SET Cantidad = Cantidad + '$cantidad' 
+          WHERE Codigo = '$codigo' and Id = '$idLista' ''');
+      } else {
+        // El código no existe, insertar un nuevo registro
+        await db.rawInsert(
+            ''' INSERT INTO ListaCompraDetalle (Id, Nombre, Codigo, Cantidad, Proveedor) 
           VALUES('$idLista', '$nombre', '$codigo', '$cantidad', '$proveedor' ) ''');
+      }
     } catch (e) {
       print('ERROR AL AGREGAR PRODUCTO A LISTA $e');
     }
