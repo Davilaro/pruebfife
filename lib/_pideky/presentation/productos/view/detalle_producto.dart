@@ -275,6 +275,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                           .value),
                                                     ));
                                           } else {
+                                            await listViewModel.getMisListas();
                                             showDialog(
                                                 context: context,
                                                 builder: (context) =>

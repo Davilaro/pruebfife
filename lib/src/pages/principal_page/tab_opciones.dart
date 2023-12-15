@@ -1,4 +1,5 @@
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -80,6 +81,9 @@ class _TabOpcionesState extends State<TabOpciones>
   @override
   void initState() {
     super.initState();
+    if (prefs.usurioLogin == 1) {
+      Get.find<MyListsViewModel>().getMisListas();
+    }
 
     _focusNode.dispose();
     hasInternet = true;
