@@ -92,7 +92,6 @@ class _PrincipalPageState extends State<PrincipalPage>
 
   Future<bool> mostrarEncuestasObligatorias(BuildContext context) async {
     bool hayEncuestas = false;
-    
     if (prefs.typeCollaborator != "2") {
       await controllerSurvey.consultSurveys();
       hayEncuestas = controllerSurvey.showMandatorySurvey.value;
@@ -101,14 +100,13 @@ class _PrincipalPageState extends State<PrincipalPage>
           AlertDialog(
               contentPadding: EdgeInsets.all(1.0),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)
-              ),
-              content: Obx(() =>  WillPopScope(
-                onWillPop: () async => false,
-                child: EncuestaForm(controllerSurvey.surveyActiveMandatory.value)))),
+                  borderRadius: BorderRadius.circular(20.0)),
+              content: Obx(() => WillPopScope(
+                  onWillPop: () async => false,
+                  child: EncuestaForm(
+                      controllerSurvey.surveyActiveMandatory.value)))),
           barrierDismissible: false,
         );
-    
       }
     }
     return hayEncuestas;
@@ -348,17 +346,16 @@ class _PrincipalPageState extends State<PrincipalPage>
 
                 //ENCUESTA
                 if (prefs.typeCollaborator != "2")
-                  
                   Padding(
                       padding: const EdgeInsets.all(15.0),
-
-                     child: 
-                      Obx(()  =>  controllerSurvey.noMandatorySurveyList.isNotEmpty && controllerSurvey.showNoMandatorySurvey.value 
+                      child: Obx(
+                        () => controllerSurvey
+                                    .noMandatorySurveyList.isNotEmpty &&
+                                controllerSurvey.showNoMandatorySurvey.value
                             ? EncuestaForm(
                                 controllerSurvey.surveyActiveNoMandatory.value)
                             : SizedBox.shrink(),
-                      )
-                      )
+                      ))
 
                 // : SizedBox.shrink()
                 //  )

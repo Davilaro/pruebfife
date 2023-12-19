@@ -3,7 +3,9 @@
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -41,6 +43,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   late Object? valueRadio;
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   final seachrFuzzyVM = Get.find<SearchFuzzyViewModel>();
+
+  final controllerSurvey = Get.find<EncuestaControllers>();
 
   @override
   void initState() {
@@ -182,6 +186,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
                                       seachrFuzzyVM.controllerUser.text = '';
                                       seachrFuzzyVM.allResultados.clear();
                                       seachrFuzzyVM.searchInput.value = '';
+                                      controllerSurvey.mandatorySurveyList.value = [];
+                                      prefs.momentSurvey = 0;
                                     },
                                   )
                                 ],

@@ -91,7 +91,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           '${widget.encuesta.pregunta}',
-                          
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: ConstantesColores.gris_textos
@@ -181,8 +181,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
                                   i++)
                                 Row(
                                   children: [
-                                    //error cuando setea los valores del calue para el onchange
-
                                     Checkbox(
                                         checkColor: Colors.white,
                                         activeColor:
@@ -276,25 +274,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                                   onRatingUpdate: (rating) {
                                     _rating = rating;
                                     print(rating);
-                                                   },
-                                                 ),
-                             ),
-                            // child: RatingBar.builder(
-                            //   itemSize: 50.0,
-                            //   itemCount: 5,
-                            //   initialRating: 0,
-                            //   itemBuilder: (context, _) {
-                            //     return Icon(
-                            //       Icons.star_rounded,
-                            //       color: Colors.yellow,
-                            //     );
-                            //   },
-                            //   onRatingUpdate: (rating) {
-                            //     print(" Rating barr =========== ${rating}");
-                            //     _rating = rating;
-                            //   },
-                            // ),
-                          
+                                  },
+                                ),
+                             ),                          
                           )
                           )
                       : Container(),
