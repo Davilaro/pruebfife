@@ -16,8 +16,8 @@ class EncuestaControllers extends GetxController {
   late FocusNode focusEncuesta;
 
   Future<bool> consultSurveys() async {
-    
-    final allSurveys = await DBProvider.db.consultarEncuesta(prefs.momentSurvey);
+    final allSurveys =
+        await DBProvider.db.consultarEncuesta(prefs.momentSurvey);
 
     mandatorySurveyList.clear();
     noMandatorySurveyList.clear();
@@ -74,4 +74,6 @@ class EncuestaControllers extends GetxController {
       return isVisibleNoSurvey.value = false;
     }
   }
+
+ 
 }
