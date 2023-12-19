@@ -202,8 +202,8 @@ class _EditListState extends State<EditList> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image(
-                      image: AssetImage('assets/icon/Icono_eliminar.png'),
+                    SvgPicture.asset(
+                      'assets/icon/Icono_eliminar.svg',
                       height: 25,
                     ),
                     SizedBox(width: 10),
