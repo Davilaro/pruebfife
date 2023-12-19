@@ -43,7 +43,7 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
           left: Get.width * 0.05,
           right: Get.width * 0.05,
           top: Get.height * 0.18,
-          bottom: Get.height * 0.20),
+          bottom: Get.height * 0.17),
       child: Stack(
         children: [
           Container(
@@ -114,8 +114,7 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                                         ? 'assets/icon/Corazón_lleno.svg'
                                         : 'assets/icon/Corazón_Trazo.svg',
                                     height: 25,
-                                  )
-                                  ),
+                                  )),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Column(

@@ -6,6 +6,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class EditList extends StatefulWidget {
@@ -202,8 +203,8 @@ class _EditListState extends State<EditList> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image(
-                      image: AssetImage('assets/icon/Icono_eliminar.png'),
+                    SvgPicture.asset(
+                      'assets/icon/Icono_eliminar.svg',
                       height: 25,
                     ),
                     SizedBox(width: 10),

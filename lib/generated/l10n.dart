@@ -830,10 +830,10 @@ class S {
     );
   }
 
-  /// `The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on `
+  /// `The CCUP entered is not registered in our database. Please check that it is spelled correctly or contact us on `
   String get the_nit_entered_is_not_registered {
     return Intl.message(
-      'The NIT entered is not registered in our database. Please check that it is spelled correctly or contact us on ',
+      'The CCUP entered is not registered in our database. Please check that it is spelled correctly or contact us on ',
       name: 'the_nit_entered_is_not_registered',
       desc: '',
       args: [],
