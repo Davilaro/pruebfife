@@ -276,6 +276,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
       if (value['precioProducto'] == 0.0) {
       } else {
+        cartProvider.actualizarFrecuenciaFabricante(
+            fabricante, value["isFrecuencia"]);
         listaWidget.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
