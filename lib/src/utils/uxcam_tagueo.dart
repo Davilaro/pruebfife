@@ -454,7 +454,6 @@ class UxcamTagueo {
           "Country": prefs.paisUsuario ?? "CO"
         };
 
-        print("productos $productIndividual");
         return productIndividual;
       }).toList();
       print(
@@ -608,6 +607,7 @@ class UxcamTagueo {
       log("Error tagueo deleteAccount");
     }
   }
+
   void logOut() {
     try {
       FlutterUxcam.logEventWithProperties("logOut", {
@@ -619,6 +619,7 @@ class UxcamTagueo {
       log("Error tagueo deleteAccount");
     }
   }
+
   void acceptTermsAndConditions() {
     try {
       FlutterUxcam.logEventWithProperties("accetpTermsAndConditions", {
