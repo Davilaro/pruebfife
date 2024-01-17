@@ -1,3 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        // Dirección del repositorio de Maven para HMS Core SDK
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        // Dirección del repositorio de Maven para HMS Core SDK
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
 include ':app'
 
 def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
@@ -13,3 +32,4 @@ plugins.each { name, path ->
     include ":$name"
     project(":$name").projectDir = pluginDirectory
 }
+

@@ -8,6 +8,7 @@ import 'package:emart/_pideky/infrastructure/condicion_entrega/condicion_entrega
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/custom_modal.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -201,7 +202,7 @@ class ProductoViewModel extends GetxController {
       listPedidoTemp.forEach((element) async {
         Producto producto =
             await productService.consultarDatosProducto(element.codigo);
-
+        Get.find<SlideUpAutomatic>().listaProductosCarrito.add(producto);
         PedidoEmart.listaControllersPedido![producto.codigo]!.text =
             element.cantidad.toString();
         PedidoEmart.registrarValoresPedido(

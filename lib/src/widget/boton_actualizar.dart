@@ -27,8 +27,8 @@ class _BotonActualizarState extends State<BotonActualizar> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
-    final prefs = Preferencias();
     final cargoConfirmar = Get.find<ControlBaseDatos>();
+    final prefs = Preferencias();
     return Visibility(
       visible: prefs.usurioLogin == 1,
       child: Padding(

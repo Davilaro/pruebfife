@@ -1,9 +1,13 @@
 // ignore_for_file: unnecessary_statements, unnecessary_null_comparison
+import 'dart:async';
+
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
 import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
 import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
+import 'package:emart/src/controllers/encuesta_controller.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 
 import '../../_pideky/domain/producto/service/producto_service.dart';
 import '../../_pideky/presentation/productos/view/detalle_producto_compra.dart';
@@ -184,7 +188,9 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         ProductoService(ProductoRepositorySqlite());
     final providerBottomNavigationBar =
         Provider.of<OpcionesBard>(context, listen: false);
-
+    if (notificacion.redireccion == "") {
+      return;
+    }
     var resBusqueda;
     if (notificacion.redireccion == 'Detalle Producto') {
       resBusqueda = await productService.cargarProductosFiltro(
@@ -201,7 +207,6 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     } else if (notificacion.redireccion == 'Proveedor') {
       resBusqueda = await DBProvider.db
           .consultarFricante(notificacion.subCategoriaRedireccion.toString());
-      // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (notificacion.redireccion == 'Marca') {
       resBusqueda = await marcaService
@@ -259,19 +264,6 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
             : {Navigator.of(context).pop(), Get.to(() => ClubGanadoresPage())};
       }
     } else {
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomBuscardorFuzzy(
-                    codCategoria: notificacion.fabricante!,
-                    numEmpresa: 'nutresa',
-                    tipoCategoria: 4,
-                    nombreCategoria: notificacion.nombreComercial!,
-                    img: notificacion.imageUrl,
-                    locasionBanner: locasionBanner,
-                    locacionFiltro: "proveedor",
-                    codigoProveedor: "",
-                  )));
       Get.back();
     }
   }
@@ -311,7 +303,6 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
                   nombreCategoria: marca.nombre,
-                  isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));
@@ -452,6 +443,70 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     } catch (e) {
       Get.put(NotificationsSlideUpAndPushInUpControllers());
       return Get.find<NotificationsSlideUpAndPushInUpControllers>();
+    }
+  }
+
+  void validacionGeneralNotificaciones(context) async {
+    EncuestaControllers encuestaControllers = Get.find<EncuestaControllers>();
+    final slideUpAutomatic = Get.find<SlideUpAutomatic>();
+    bool hayEncuestasObligatorias = await encuestaControllers.consultSurveys();
+
+    if (!hayEncuestasObligatorias) {
+      await slideUpAutomatic.getAutomaticSlideUp();
+      closePushInUp.value = false;
+      onTapPushInUp.value = false;
+      await getPushInUpByDataBaseHome("Home");
+      if (validacionMostrarPushInUp["Home"] == true &&
+          listPushInUpHome.isNotEmpty) {
+        await showPushInUps(context);
+        int elapsedTime = 0;
+        Timer.periodic(Duration(milliseconds: 10), (timer) {
+          if (elapsedTime >= 530) {
+            showSlideUps(context);
+            slideUpAutomatic.validarMostrarSlide();
+            timer.cancel();
+          } else if (closePushInUp.value == true) {
+            showSlideUps(context);
+            slideUpAutomatic.validarMostrarSlide();
+            timer.cancel();
+          } else if (onTapPushInUp.value == true) {
+            timer.cancel();
+          }
+          elapsedTime++;
+        });
+      } else if (validacionMostrarSlideUp["Home"] == true &&
+          closeSlideUp.value == false) {
+        showSlideUps(context);
+        slideUpAutomatic.validarMostrarSlide();
+      }
+    }
+  }
+
+  Future<void> showPushInUps(context) async {
+    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
+    if (listPushInUpHome.isNotEmpty) {
+      closePushInUp.value = false;
+      onTapPushInUp.value = false;
+      validacionMostrarPushInUp["Home"] = false;
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WillPopScope(
+                onWillPop: () async => false,
+                child: NotificationPushInApp(listPushInUpHome.first, "Home"));
+          });
+    }
+  }
+
+  void showSlideUps(context) async {
+    await getSlideUpByDataBaseHome("Home");
+    if (listSlideUpHome.isNotEmpty) {
+      closeSlideUp.value = true;
+      validacionMostrarSlideUp["Home"] = false;
+      await Future.delayed(
+          Duration(milliseconds: 100),
+          () =>
+              showSlideUpNotification(context, listSlideUpHome.first, "Home"));
     }
   }
 }

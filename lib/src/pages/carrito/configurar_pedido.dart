@@ -213,7 +213,18 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   }
 
   _dialogEnviarPedido(size) async {
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     final List<Pedido> listaProductosPedidos = [];
+    final List<String> listaSkuProductos = [];
+    final progress = ProgressDialog(context, isDismissible: false);
+
+    progress.style(
+        message: 'Validando pedido...',
+        progressWidget: Image(
+          image: AssetImage('assets/image/jar-loading.gif'),
+          fit: BoxFit.cover,
+          height: 20,
+        ));
 
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
       if (value == "") {
@@ -228,30 +239,139 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         }
 
         Pedido pedidoNuevo = new Pedido(
-          cantidad: int.parse(value),
-          codigoProducto: key,
-          iva: PedidoEmart.listaProductos![key]!.iva,
-          precio: PedidoEmart.listaProductos![key]!.precio,
-          fabricante: PedidoEmart.listaProductos![key]!.fabricante,
-          codigoFabricante: PedidoEmart.listaProductos![key]!.codigoFabricante,
-          nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
-          codCliente: prefs.codCliente,
-          tipoFabricante: directo,
-          codProveedor: 1,
-          codigocliente: PedidoEmart.listaProductos![key]!.codigocliente,
-          nombreProducto: PedidoEmart.listaProductos![key]!.nombre,
-          precioInicial: PedidoEmart.listaProductos![key]!.precioinicial,
-          descuento: PedidoEmart.listaProductos![key]!.descuento,
-        );
+            cantidad: int.parse(value),
+            precioBase: PedidoEmart.listaProductos![key]!.precioBase,
+            isOferta: PedidoEmart.listaProductos![key]!.isOferta,
+            codigoProducto: key,
+            iva: PedidoEmart.listaProductos![key]!.iva,
+            precio: PedidoEmart.listaProductos![key]!.precio,
+            fabricante: PedidoEmart.listaProductos![key]!.fabricante,
+            codigoFabricante:
+                PedidoEmart.listaProductos![key]!.codigoFabricante,
+            nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
+            codCliente: prefs.codCliente,
+            tipoFabricante: directo,
+            codProveedor: 1,
+            precioDescuento:
+                PedidoEmart.listaProductos![key]!.precioConDescuento,
+            codigocliente: PedidoEmart.listaProductos![key]!.codigocliente,
+            nombreProducto: PedidoEmart.listaProductos![key]!.nombre,
+            precioInicial: PedidoEmart.listaProductos![key]!.precioinicial,
+            descuento: PedidoEmart.listaProductos![key]!.descuento,
+            isFrecuencia: cartProvider.getFrecuenciaFabricante[
+                        PedidoEmart.listaProductos![key]!.fabricante] ==
+                    true
+                ? 0
+                : 1);
 
         if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
           listaProductosPedidos.add(pedidoNuevo);
+          listaSkuProductos.add(key);
         }
       }
     });
+    await progress.show();
+    final responseDuplicateOrder = await Servicies()
+        .duplicateOrder(listaSkuProductos, cartProvider.getTotal);
+    await progress.hide();
+    if (responseDuplicateOrder == '1') {
+      await progress.show();
+      _mostrarAlertOrderDuplicate(
+          context,
+          Text(
+            ' Hoy realizaste un pedido con el mismo valor y productos similares ¿Estas seguro?',
+            textAlign: TextAlign.center,
+          ),
+          null,
+          Icon(Icons.close, color: Colors.red),
+          size,
+          listaProductosPedidos,
+          progress);
+    } else {
+      showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
+      await _dialogPedidoRegistrado(listaProductosPedidos, size);
+    }
+  }
 
-    showLoaderDialog(context, size, _cargandoPedido(context, size), 300);
-    await _dialogPedidoRegistrado(listaProductosPedidos, size);
+  void _mostrarAlertOrderDuplicate(BuildContext context, Widget mensaje,
+      Widget? icon, Widget? iconClose, size, listaProductosPedidos, progress) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              content: Container(
+                constraints: BoxConstraints(
+                    minHeight: 200, minWidth: double.infinity, maxHeight: 350),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Visibility(
+                        visible: iconClose == null ? false : true,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await progress.hide();
+                                  Get.back();
+                                },
+                                child: Icon(
+                                  Icons.cancel,
+                                  color: ConstantesColores.verde,
+                                  size: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        child: icon != null
+                            ? icon
+                            : Image.asset(
+                                'assets/image/alerta_img.png',
+                              ),
+                      ),
+                      Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: mensaje),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            Get.back();
+                            showLoaderDialog(context, size,
+                                _cargandoPedido(context, size), 300);
+                            await _dialogPedidoRegistrado(
+                                listaProductosPedidos, size);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: double.infinity,
+                            child: Image.asset(
+                              "assets/image/btn_aceptar.png",
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   _dialogPedidoRegistrado(listaProductosPedidos, size) async {

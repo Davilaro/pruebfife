@@ -9,19 +9,19 @@ class Marca {
     required this.codigo,
     required this.nombre,
     required this.ico,
-    required this.fabricante,
+    this.fabricante,
   });
 
   String codigo;
   String nombre;
   String ico;
-  String fabricante;
+  String? fabricante;
 
   factory Marca.fromJson(Map<String, dynamic> json) => Marca(
         codigo: json["codigo"],
         nombre: json["descripcion"],
         ico: json["ico"],
-        fabricante: json["fabricante"],
+        fabricante: json["fabricante"] == null ? "" : json["fabricante"],
       );
 
   Map<String, dynamic> toJson() => {

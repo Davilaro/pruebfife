@@ -77,8 +77,6 @@ class Servicies {
     var ccup =
         loginBiometric == true ? prefs.ccupBiometric : prefs.codigoUnicoPideky;
     prefs.codigoUnicoPideky = ccup;
-    print(
-        "sucursales ${prefs.ccupBiometric} ${prefs.codigoUnicoPideky} ccup $ccup");
     final List<dynamic> divace = await getDeviceDetails();
     final bodyEncode = json.encode({
       "CCUP": ccup,
@@ -389,6 +387,7 @@ class Servicies {
     final misPedidosViewModel = Get.find<MisPedidosViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
+      print('new datos ${listaPedido[i].isFrecuencia} ');
       datos += jsonEncode(<String, dynamic>{
         "NumeroDoc": numDoc,
         "Cantidad": listaPedido[i].cantidad,
@@ -408,7 +407,10 @@ class Servicies {
         "Precio": listaPedido[i].precio,
         "ValorDescuento":
             listaPedido[i].precioInicial! * (listaPedido[i].descuento! / 100),
-        "Param1": listaPedido[i].descuento!
+        "Param1": listaPedido[i].descuento!,
+        "Param2": listaPedido[i].isOferta!,
+        "Param3": listaPedido[i].precioDescuento!,
+        "Param4": "${listaPedido[i].isFrecuencia}",
       });
       await misPedidosViewModel.misPedidosService
           .guardarSeguimientoPedido(listaPedido[i], numDoc);
@@ -620,9 +622,9 @@ class Servicies {
 
   Future<bool> enviarEncuesta(Encuesta encuesta, String respuesta) async {
     try {
-      DateTime now = DateTime.now();
+      // DateTime now = DateTime.now();
       final url;
-      String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
+      // String numDoc = DateFormat('yyyyMMddHHmmss').format(now);
       url = Uri.parse(
           Constantes().urlPrincipal + 'Encuestas/enviarRespuestaEncuesta');
       final response = await http.post(
@@ -631,21 +633,45 @@ class Servicies {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "NumdocEncuesta": "$numDoc",
+          // "NumdocEncuesta": "$numDoc",
           "EncuestaId": "${encuesta.encuestaId}",
           "EncuestaTitulo": "${encuesta.encuestaTitulo}",
           "PreguntaId": "${encuesta.preguntaId}",
           "TipoPreguntaId": "${encuesta.tipoPreguntaId}",
           "Pregunta": "${encuesta.pregunta}",
-          "ParamPreguntaId": "${encuesta.paramPreguntaId}",
-          "Valor": "${encuesta.valor}",
+          "ParamPreguntaId": "${encuesta.paramPreguntaId ?? ''}",
+          "Valor": "${encuesta.valor ?? ''}",
           "Parametro": "$respuesta", //respuesta
-          "CodigoCliente": "${prefs.codCliente}",
-          "pais": prefs.paisUsuario,
-          "NitCliente": "${prefs.codClienteLogueado}",
+          "CCUP": "${prefs.codigoUnicoPideky}",
+          "Sucursal": "${prefs.sucursal}",
+          //"CodigoCliente": "${prefs.codCliente}",
+          "Pais": prefs.paisUsuario,
+          //"NitCliente": "${prefs.codClienteLogueado}",
         }),
       );
+      print('------> body   ' +
+          jsonEncode(<String, String>{
+            // "NumdocEncuesta": "$numDoc",
+            "EncuestaId": "${encuesta.encuestaId}",
+            "EncuestaTitulo": "${encuesta.encuestaTitulo}",
+            "PreguntaId": "${encuesta.preguntaId}",
+            "TipoPreguntaId": "${encuesta.tipoPreguntaId}",
+            "Pregunta": "${encuesta.pregunta}",
+            "ParamPreguntaId": "${encuesta.paramPreguntaId ?? ''}",
+            "Valor": "${encuesta.valor ?? ''}",
+            "Parametro": "$respuesta", //respuesta
+            "CCUP": "${prefs.codigoUnicoPideky}",
+            "Sucursal": "${prefs.sucursal}",
+            //"CodigoCliente": "${prefs.codCliente}",
+            "Pais": prefs.paisUsuario,
+            //"NitCliente": "${prefs.codClienteLogueado}",
+          }));
+      print('==========================$url');
+      //print('+++++++++++++++++++++$jsonEncode');
+      print('xxxxxxxxxxxxxxxxxxxx$response');
+
       if (response.statusCode == 200) {
+        print('todo salio bien ');
         return true;
       } else {
         throw Exception('Failed');
@@ -782,6 +808,32 @@ class Servicies {
     } catch (e) {
       print("error enviando portafolio $e");
       return false;
+    }
+  }
+
+  Future<String> duplicateOrder(List productos, total) async {
+    try {
+      final url =
+          Uri.parse(Constantes().urlPrincipal + 'Pedido/PedidoDuplicado');
+      final request = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(<String, dynamic>{
+            "CCUP": prefs.codigoUnicoPideky,
+            "Sucursal": prefs.sucursal,
+            "Total": total,
+            "Productos": productos
+          }));
+      if (request.statusCode == 200) {
+        print("todo salio bien");
+        return jsonDecode(request.body);
+      } else {
+        throw Exception('fallo la consulta de pedido duplicado');
+      }
+    } catch (e) {
+      print("error enviando portafolio $e");
+      throw Exception('Failed');
     }
   }
 }

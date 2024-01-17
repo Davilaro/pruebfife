@@ -9,6 +9,7 @@ class CustomCardSucursales extends StatelessWidget {
   const CustomCardSucursales({
     Key? key,
     required this.nombre,
+    required this.barrio,
     required this.telefono,
     required this.direccion,
     required this.razonSocial,
@@ -17,6 +18,7 @@ class CustomCardSucursales extends StatelessWidget {
   }) : super(key: key);
 
   final String nombre;
+  final String barrio;
   final String telefono;
   final String direccion;
   final String razonSocial;
@@ -72,9 +74,8 @@ class CustomCardSucursales extends StatelessWidget {
                           style: desingSucursales(razonSocial,
                               _validationForm.seleccionSucursal.value),
                         ),
-
-                         Text(
-                          "Barrio: barrio",
+                        Text(
+                          "Barrio: $barrio",
                           style: desingSucursales(razonSocial,
                               _validationForm.seleccionSucursal.value),
                         ),

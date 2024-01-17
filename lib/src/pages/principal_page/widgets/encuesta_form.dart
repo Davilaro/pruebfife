@@ -4,11 +4,15 @@ import 'dart:convert';
 
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/encuesta.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
+import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
@@ -18,6 +22,7 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_button.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -29,7 +34,7 @@ import '../../../provider/opciones_app_bart.dart';
 
 class EncuestaForm extends StatefulWidget {
   final Encuesta encuesta;
-
+//debe ser lista rx list
   const EncuestaForm(this.encuesta);
 
   @override
@@ -42,11 +47,14 @@ class _EncuestaFormState extends State<EncuestaForm> {
   TextEditingController controllerTelephone = TextEditingController();
   RxString mensajeValid = ''.obs;
   String _seleccion = '';
+  double _rating = 0.0;
   late Map<String, bool> _opcionesMultiple = {};
 
   final controllerProducto = Get.find<ControllerProductos>();
   final controllerEncuesta = Get.find<EncuestaControllers>();
   final _validationForms = Get.put(ValidationForms());
+  final NotificationsSlideUpAndPushInUpControllers controllerNotificaciones =
+      Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final prefs = Preferencias();
 
   String? _errorText;
@@ -58,17 +66,16 @@ class _EncuestaFormState extends State<EncuestaForm> {
         : null;
     super.initState();
   }
- 
-  @override
-  Widget build(BuildContext context) {
 
-  
+  @override
+  Widget build(BuildContext context1) {
+    int item = 0;
     return Stack(
       fit: StackFit.loose,
       clipBehavior: Clip.none,
       children: [
         Container(
-         // margin: EdgeInsets.only(top: 15),
+          // margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30), color: Colors.white),
@@ -77,24 +84,38 @@ class _EncuestaFormState extends State<EncuestaForm> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 15, top: 20),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  '${widget.encuesta.pregunta}',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
+              controllerEncuesta.showMandatorySurvey.value
+                  ? Center(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 20, top: 32),
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          '${widget.encuesta.pregunta}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: ConstantesColores.gris_textos
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(bottom: 15, top: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '${widget.encuesta.pregunta}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //pregunta abierta
                   Visibility(
-                    visible: widget.encuesta.tipoPreguntaId == 1
+                    visible: widget.encuesta.tipoPreguntaId == 1 ||
+                            widget.encuesta.tipoPreguntaId == 2
                         ? true
-                        : false || widget.encuesta.tipoPreguntaId == 2
-                            ? true
-                            : false,
+                        : false,
                     child: Container(
                       width: Get.width * 1,
                       decoration: BoxDecoration(
@@ -122,6 +143,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ),
                     ),
                   ),
+
+                  SizedBox(height: 5,),
+
                   //Pregunta seleccion multiple unica respuesta
                   widget.encuesta.tipoPreguntaId == 3
                       ? Visibility(
@@ -181,19 +205,24 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   widget.encuesta.tipoPreguntaId == 13
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 13,
-                          child: CustomTextFormField(
-                            keyboardType: TextInputType.text,
-                            hintText: 'Ingresa tu correo electrónico',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerEmail,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateEmail(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
+                          child: Container(
+                            width: Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15),
+                             padding: EdgeInsets.zero,
+                            child: CustomTextFormField(
+                              keyboardType: TextInputType.text,
+                              hintText: 'Ingresa tu correo electrónico',
+                              backgroundColor: HexColor("#E4E3EC"),
+                              controller: controllerEmail,
+                              onChanged: (value) {
+                                String? validationError =
+                                    _validationForms.validateEmail(value);
+                                setState(() {
+                                  _errorText = validationError;
+                                });
+                              },
+                              errorMessage: _errorText,
+                            ),
                           ),
                         )
                       : Container(),
@@ -201,21 +230,55 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   widget.encuesta.tipoPreguntaId == 14
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 14,
-                          child: CustomTextFormField(
-                            keyboardType: TextInputType.number,
-                            hintText: 'Ingresa tu número de  celular',
-                            backgroundColor: HexColor("#E4E3EC"),
-                            controller: controllerTelephone,
-                            onChanged: (value) {
-                              String? validationError =
-                                  _validationForms.validateTelephone(value);
-                              setState(() {
-                                _errorText = validationError;
-                              });
-                            },
-                            errorMessage: _errorText,
+                          child: Container(
+                             width: Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15),
+                             padding: EdgeInsets.zero,
+                            child: CustomTextFormField(
+                              keyboardType: TextInputType.number,
+                              hintText: 'Ingresa tu número de  celular',
+                              backgroundColor: HexColor("#E4E3EC"),
+                              controller: controllerTelephone,
+                              onChanged: (value) {
+                                String? validationError =
+                                    _validationForms.validateTelephone(value);
+                                setState(() {
+                                  _errorText = validationError;
+                                });
+                              },
+                              errorMessage: _errorText,
+                            ),
                           ),
                         )
+                      : Container(),
+
+                  widget.encuesta.tipoPreguntaId == 15
+                      ? Visibility(
+                          visible: widget.encuesta.tipoPreguntaId == 15,
+                          child: Container(
+                             width:  Get.width * 1,
+                            margin: EdgeInsets.only(bottom: 15, left: 10.0, right: 10.0),
+                             //padding: EdgeInsets.zero,
+                             child: Center(
+                               child: RatingBar(
+                                  initialRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  ratingWidget: RatingWidget(
+                                    full: Image.asset('assets/image/Estrella_amarilla.png'),
+                                    half: Image.asset('assets/image/Estrella_gris.png'),
+                                    empty: Image.asset('assets/image/Estrella_gris.png'),
+                                  ),
+                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                  onRatingUpdate: (rating) {
+                                    _rating = rating;
+                                    print(rating);
+                                  },
+                                ),
+                             ),                          
+                          )
+                          )
                       : Container(),
 
                   Container(
@@ -225,7 +288,6 @@ class _EncuestaFormState extends State<EncuestaForm> {
                     child: CustomButton(
                       onPressed: () {
                         _validarInformacion(context, widget.encuesta);
-                       
                       },
                       text: 'Enviar',
                       sizeText: 15,
@@ -245,14 +307,16 @@ class _EncuestaFormState extends State<EncuestaForm> {
             ],
           ),
         ),
-        Positioned(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: SvgPicture.asset('assets/icon/prueba1.svg'),
-          ),
-          top: 0,
-          right: 10,
-        )
+        controllerEncuesta.showMandatorySurvey.value
+            ? SizedBox()
+            : Positioned(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: SvgPicture.asset('assets/icon/prueba1.svg'),
+                ),
+                top: 0,
+                right: 10,
+              )
       ],
     );
   }
@@ -297,9 +361,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
   }
 
   Future _validarInformacion(BuildContext context, Encuesta encuesta) async {
-
-      final provider = Provider.of<OpcionesBard>(context, listen: false);
-      final cargoConfirmar = Get.find<ControlBaseDatos>();
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    final cargoConfirmar = Get.find<ControlBaseDatos>();
 
     if (encuesta.tipoPreguntaId == 1 && controllerText.text.isNotEmpty ||
         encuesta.tipoPreguntaId == 2 && controllerText.text.isNotEmpty) {
@@ -313,8 +376,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
         return;
       } else {
         controllerText.text = '';
-        await  actualizarPagina(provider, context, cargoConfirmar);
-        alertaFinEncuesta();
+
+        alertaFinEncuesta(encuesta.obligatoria);
         return;
       }
     } else if (encuesta.tipoPreguntaId == 3) {
@@ -328,8 +391,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           _seleccion = '';
-          await  actualizarPagina(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+
+          alertaFinEncuesta(encuesta.obligatoria);
           return;
         }
       } else {
@@ -358,8 +421,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
         } else {
-          await  actualizarPagina(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
+          alertaFinEncuesta(encuesta.obligatoria);
           _opcionesMultiple.updateAll((key, value) => value = false);
           return;
         }
@@ -378,9 +440,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
           return;
         } else {
           controllerEmail.text = '';
-          await  actualizarPagina(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
-        
+
+          alertaFinEncuesta(encuesta.obligatoria);
+
           return;
         }
       }
@@ -394,18 +456,38 @@ class _EncuestaFormState extends State<EncuestaForm> {
           mostrarAlert(context,
               'Lo sentimos, no se ha logrado enviar su respuesta', null);
           return;
-        } else  {
+        } else {
           controllerTelephone.text = '';
-           await  actualizarPagina(provider, context, cargoConfirmar);
-          alertaFinEncuesta();
-        
+
+          alertaFinEncuesta(encuesta.obligatoria);
+
           return;
         }
+      }
+    } else if (encuesta.tipoPreguntaId == 15) {
+      if (_rating != 0.0) {
+        mensajeValid.value = '';
+        var respues =
+            await Servicies().enviarEncuesta(encuesta, _rating.toString());
+        var res = await DBProviderHelper.db.guardarRespuesta(encuesta);
+        if (!respues) {
+          mostrarAlert(context,
+              'Lo sentimos, no se ha logrado enviar su respuesta', null);
+          return;
+        } else {
+          alertaFinEncuesta(encuesta.obligatoria);
+          return;
+        }
+      } else {
+        mensajeValid.value = 'Por favor indique una puntuación';
       }
     }
   }
 
-  alertaFinEncuesta() {
+  alertaFinEncuesta(int? esObligatoria) {
+    final provider = Provider.of<OpcionesBard>(context, listen: false);
+    final cargoConfirmar = Get.find<ControlBaseDatos>();
+    //controllerEncuesta.setIsVisibleEncuesta(false);
     mostrarAlert(
         context,
         'Gracias por contestar nuestra encuesta',
@@ -413,42 +495,61 @@ class _EncuestaFormState extends State<EncuestaForm> {
           Icons.check,
           color: ConstantesColores.verde,
           size: 50,
-        ));
-    controllerEncuesta.setIsVisibleEncuesta(false);
-  }
-
-   Future<void> actualizarPagina(
-      dynamic provider, BuildContext context, dynamic cargoConfirmar) async {
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-    final controllerNequi = Get.find<MisPagosNequiViewModel>();
-    isActualizando.value = true;
-    if (isActualizando.value) {
-      AlertaActualizar().mostrarAlertaActualizar(context, true);
-    }
-    await LogicaActualizar().actualizarDB();
-    isActualizando.value = false;
-    controllerPedidoSugerido.initController();
-    controllerNequi.initData();
-    if (isActualizando.value == false) {
-      Navigator.pop(context);
-      AlertaActualizar().mostrarAlertaActualizar(context, false);
-      await new Future.delayed(new Duration(seconds: 1), () {
-        Navigator.pop(context);
-        //pop dialog
-      });
-      if (provider.selectOptionMenu == 1) {
-        cargoConfirmar.tabController.index = cargoConfirmar.cambioTab.value;
-        cargoConfirmar.cargoBaseDatos(cargoConfirmar.cambioTab.value);
-        provider.selectOptionMenu = 1;
-        provider.setIsLocal = 0;
+        ), 
+        onTap: () async {
+      //Pedimos si es obligatoria o no y dependiendo ello entra a su metodo correspondiente
+      if (esObligatoria == 1) {
+        if (controllerEncuesta.existenEncuestasObligatorias()) {
+          checkButtons(
+              controllerEncuesta.surveyActiveMandatory.value.parametro);
+          Get.close(1);
+          setState(() {});
+        } else {
+          //  controllerNotificaciones.validacionGeneralNotificaciones(context);
+          await updateSurvey(provider, context, cargoConfirmar);
+        }
+      } else {
+        if (controllerEncuesta.existenEncuestasNoObligatorias()) {
+          checkButtons(
+              controllerEncuesta.surveyActiveNoMandatory.value.parametro);
+          Get.close(1);
+          setState(() {});
+        } else {
+          await updateSurvey(provider, context, cargoConfirmar);
+        }
       }
-      productViewModel.cargarCondicionEntrega();
-      Navigator.pushReplacementNamed(
-        context,
-        'tab_opciones',
-      ).timeout(Duration(seconds: 3));
-    }
+    });
   }
+}
 
-  
+Future<void> updateSurvey(
+    OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
+  final botonesController = Get.find<BotonesProveedoresVm>();
+  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+  final controllerNequi = Get.find<MisPagosNequiViewModel>();
+  final productViewModel = Get.find<ProductoViewModel>();
+  isActualizando.value = true;
+  if (isActualizando.value) {
+    AlertaActualizar().mostrarAlertaActualizar(context, true);
+  }
+  await LogicaActualizar().actualizarDB();
+  isActualizando.value = false;
+  controllerPedidoSugerido.initController();
+  controllerNequi.initData();
+  if (isActualizando.value == false) {
+    Navigator.pop(context);
+    AlertaActualizar().mostrarAlertaActualizar(context, false);
+    await new Future.delayed(new Duration(seconds: 1), () {
+      Navigator.pop(context);
+      //pop dialog
+    });
+
+    productViewModel.cargarCondicionEntrega();
+    await botonesController.cargarListaProovedor();
+    botonesController.listaFabricantesBloqueados.isNotEmpty
+        ? null
+        : productViewModel.eliminarBDTemporal();
+    provider.selectOptionMenu = 0;
+    Get.offAll(() => TabOpciones());
+  }
 }

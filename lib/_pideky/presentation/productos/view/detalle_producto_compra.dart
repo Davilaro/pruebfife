@@ -157,7 +157,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                         isProductoEnOferta: isProductoEnOferta,
                         onTapCard: () {
                           scrollController.animateTo(0.0,
-                              duration: Duration(seconds: 1),
+                              duration: Duration(milliseconds: 500),
                               curve: Curves.ease);
                           detalleProducto(producto, cartProvider);
                         },
@@ -179,6 +179,8 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
 
   detalleProducto(Producto element, CarroModelo cartProvider) {
     cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(element)!);
+    cargoConfirmar.isAgotado.value =
+        constrollerProductos.validarAgotado(element);
     cargoConfirmar.cargarProductoNuevo(
         ProductoCambiante.m(element.nombre, element.codigo), 2);
     cartProvider.guardarCambiodevista = 1;
@@ -189,8 +191,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   double retornarTamano(cartProvider) {
     double precioMinimo = 0;
     double valor = 0.7;
-
-    
 
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]
@@ -214,7 +214,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     double precioMinimo = 0;
     double valor = 0.6;
 
-    
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]
                   ["precioFinal"] <

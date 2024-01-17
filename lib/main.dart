@@ -1,6 +1,7 @@
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,7 +21,7 @@ Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   InitialBindings();
-  
+
   final prefs = new Preferencias();
   await prefs.initPrefs();
   final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
@@ -30,7 +31,7 @@ Future<void> main() async {
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ProviderApp());
 }
 
 // _validarKeyUXCam() async {
@@ -44,13 +45,35 @@ Future<void> main() async {
 //   await PushNotificationServer.initializeApp();
 // }
 
+class ProviderApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => CarroModelo(),
+        ),
+        ChangeNotifierProvider(create: (_) => OpcionesBard()),
+        ChangeNotifierProvider(create: (_) => DatosListas()),
+      ],
+      child: MyApp(),
+    );
+  }
+}
+
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-  
+  final slideUpAutomatic = Get.put(SlideUpAutomatic());
+
+  @override
+  void dispose() {
+    slideUpAutomatic.timer?.cancel();
+    super.dispose();
+  }
+
   MaterialColor white = const MaterialColor(
     0xFFEEEEEE,
     const <int, Color>{
@@ -68,46 +91,30 @@ class _MyAppState extends State<MyApp> {
   );
 
   @override
-  void initState() {
-    
-    super.initState();
-  }
-
-
-
-  @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => CarroModelo(),
-          ),
-          ChangeNotifierProvider(create: (_) => OpcionesBard()),
-          ChangeNotifierProvider(create: (_) => DatosListas()),
+    return OverlaySupport.global(
+      child: GetMaterialApp(
+        initialBinding: InitialBindings(),
+        locale: Locale('es', 'CO'),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          S.delegate,
         ],
-        child: OverlaySupport.global(
-          child: GetMaterialApp(
-            initialBinding: InitialBindings(),
-            locale: Locale('es', 'CO'),
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              S.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              fontFamily: 'RoundedMplus1c',
-              brightness: Brightness.light,
-              primarySwatch: white,
-              textSelectionTheme:
-                  TextSelectionThemeData(cursorColor: Colors.black),
-            ),
-            title: 'Pideky',
-            initialRoute: 'splash',
-            routes: getRutas(),
-          ),
-        ));
+        supportedLocales: S.delegate.supportedLocales,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: false,
+          fontFamily: 'RoundedMplus1c',
+          brightness: Brightness.light,
+          primarySwatch: white,
+          textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.black),
+        ),
+        title: 'Pideky',
+        initialRoute: 'splash',
+        routes: getRutas(),
+      ),
+    );
   }
 }

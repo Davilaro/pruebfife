@@ -1,5 +1,5 @@
+import 'package:emart/_pideky/presentation/mis_listas/view/mis_listas.dart';
 import 'package:emart/shared/widgets/popups.dart';
-import 'package:emart/src/pages/pedido_rapido/pedido_rapido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +101,7 @@ class _PedidoSugeridoPageState extends State<PedidoSugeridoPage> {
                         children: [
                           BodyPedidoSugerido(
                               controller: pedidoSugeridoViewModel),
-                          PedidoRapido()
+                          MisListas()
                         ],
                       ),
                     )

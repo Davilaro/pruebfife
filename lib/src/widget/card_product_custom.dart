@@ -15,7 +15,7 @@ class CardProductCustom extends StatefulWidget {
   final bool isProductoEnOferta;
   final bool isAgotadoLabel;
   final int? tipoCategoria;
-  final Function()? onTapCard;
+  final VoidCallback? onTapCard;
   final Function()? onTapBtnAgregar;
   final bool isVisibleLabelPromo;
   final bool isVisibleLabelNuevo;
@@ -61,8 +61,6 @@ class _CardProductCustomState extends State<CardProductCustom> {
           child: Stack(
             children: [
               Container(
-                height: Get.height * 0.35,
-                width: Get.width * 0.4,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -85,7 +83,7 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                 'assets/image/logo_login.png',
                                 width: Get.width * 0.35,
                               ),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),

@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_add_new_product.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
 import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -8,6 +11,7 @@ import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -15,6 +19,7 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_card.dart';
@@ -22,6 +27,7 @@ import 'package:emart/src/widget/dialog_details_image.dart';
 import 'package:emart/src/widget/titulo_pideky.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
@@ -49,6 +55,8 @@ class DetalleProductoSearch extends StatefulWidget {
 class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   ProductoViewModel productViewModel = Get.find();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  final controllerNotifiaction = Get.find<SlideUpAutomatic>();
+  final listViewModel = Get.find<MyListsViewModel>();
   final constrollerProductos = Get.find<ControllerProductos>();
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
@@ -249,6 +257,52 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                               color: ConstantesColores.verde,
                                             )),
                                       ),
+                                      Visibility(
+                                        visible:
+                                            isAgotado == true ? false : true,
+                                        child: IconButton(
+                                            onPressed: () async {
+                                              final listaProductos =
+                                                  await listViewModel
+                                                      .existProductInList(
+                                                          widget
+                                                              .producto.codigo,
+                                                          context);
+                                              if (listaProductos.isNotEmpty) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        PopUpAddNewProduct(
+                                                          nombresListas:
+                                                              listaProductos,
+                                                          producto:
+                                                              widget.producto,
+                                                          cantidad: toInt(
+                                                              cargoConfirmar
+                                                                  .controllerCantidadProducto
+                                                                  .value),
+                                                        ));
+                                              } else {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        PopUpChooseList(
+                                                          producto:
+                                                              widget.producto,
+                                                          cantidad: toInt(
+                                                              cargoConfirmar
+                                                                  .controllerCantidadProducto
+                                                                  .value),
+                                                        ));
+                                              }
+                                            },
+                                            padding: EdgeInsets.all(0),
+                                            alignment: Alignment.centerLeft,
+                                            icon: SvgPicture.asset(
+                                              'assets/icon/Corazón_Trazo.svg',
+                                              height: 25,
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -297,8 +351,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                 TextAlignVertical.center,
                                             textAlign: TextAlign.center,
                                             maxLength: 3,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter
                                                   .digitsOnly
                                             ],
@@ -467,6 +520,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   }
 
   llenarCarrito(Producto producto, CarroModelo cartProvider) {
+    controllerNotifiaction.mostrarSlide(producto.negocio);
     if (_controllerCantidadProducto.text != '' &&
         _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =

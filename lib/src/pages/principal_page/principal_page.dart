@@ -8,13 +8,12 @@ import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/generated/l10n.dart';
-import 'package:emart/shared/widgets/card_notification_slide_up.dart';
-import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
+import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
@@ -48,7 +47,7 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage>
     with AutomaticKeepAliveClientMixin {
-  final controllerEncuesta = Get.put(EncuestaControllers());
+  final controllerSurvey = Get.put(EncuestaControllers());
   final productViewModel = Get.find<ProductoViewModel>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
@@ -58,20 +57,23 @@ class _PrincipalPageState extends State<PrincipalPage>
   final viewModelNequi = Get.find<MisPagosNequiViewModel>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
+  final slideUpAutomatic = Get.find<SlideUpAutomatic>();
 
   var nombreTienda = prefs.usuarioRazonSocial;
 
   @override
   void initState() {
     super.initState();
+
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('HomePage');
     if (prefs.usurioLogin == 1) {
       controllerNotificaciones.llenarMapPushInUp("Home");
       controllerNotificaciones.llenarMapSlideUp("Home");
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        validacionGeneralNotificaciones();
+        controllerNotificaciones.validacionGeneralNotificaciones(context);
       });
+      mostrarEncuestasObligatorias(context);
     }
     controllerProducto.getAgotados();
     validarVersionActual(context);
@@ -88,60 +90,26 @@ class _PrincipalPageState extends State<PrincipalPage>
     prefs.nextDay = finalDay;
   }
 
-  void validacionGeneralNotificaciones() async {
-    controllerNotificaciones.closePushInUp.value = false;
-    controllerNotificaciones.onTapPushInUp.value = false;
-    await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-    if (controllerNotificaciones.validacionMostrarPushInUp["Home"] == true &&
-        controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-      await showPushInUp();
-      int elapsedTime = 0;
-      Timer.periodic(Duration(milliseconds: 10), (timer) {
-        if (elapsedTime >= 530) {
-          showSlideUp();
-          timer.cancel();
-        } else if (controllerNotificaciones.closePushInUp.value == true) {
-          showSlideUp();
-          timer.cancel();
-        } else if (controllerNotificaciones.onTapPushInUp.value == true) {
-          timer.cancel();
-        }
-        elapsedTime++;
-      });
-    } else if (controllerNotificaciones.validacionMostrarSlideUp["Home"] ==
-            true &&
-        controllerNotificaciones.closeSlideUp.value == false) {
-      showSlideUp();
+  Future<bool> mostrarEncuestasObligatorias(BuildContext context) async {
+    bool hayEncuestas = false;
+    if (prefs.typeCollaborator != "2") {
+      await controllerSurvey.consultSurveys();
+      hayEncuestas = controllerSurvey.showMandatorySurvey.value;
+      if (hayEncuestas) {
+        Get.dialog(
+          AlertDialog(
+              contentPadding: EdgeInsets.all(1.0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              content: Obx(() => WillPopScope(
+                  onWillPop: () async => false,
+                  child: EncuestaForm(
+                      controllerSurvey.surveyActiveMandatory.value)))),
+          barrierDismissible: false,
+        );
+      }
     }
-  }
-
-  Future<void> showPushInUp() async {
-    //await controllerNotificaciones.getPushInUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listPushInUpHome.isNotEmpty) {
-      controllerNotificaciones.closePushInUp.value = false;
-      controllerNotificaciones.onTapPushInUp.value = false;
-      controllerNotificaciones.validacionMostrarPushInUp["Home"] = false;
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return WillPopScope(
-                onWillPop: () async => false,
-                child: NotificationPushInApp(
-                    controllerNotificaciones.listPushInUpHome.first, "Home"));
-          });
-    }
-  }
-
-  void showSlideUp() async {
-    await controllerNotificaciones.getSlideUpByDataBaseHome("Home");
-    if (controllerNotificaciones.listSlideUpHome.isNotEmpty) {
-      controllerNotificaciones.closeSlideUp.value = true;
-      controllerNotificaciones.validacionMostrarSlideUp["Home"] = false;
-      await Future.delayed(
-          Duration(milliseconds: 100),
-          () => showSlideUpNotification(
-              context, controllerNotificaciones.listSlideUpHome.first, "Home"));
-    }
+    return hayEncuestas;
   }
 
   @override
@@ -375,34 +343,22 @@ class _PrincipalPageState extends State<PrincipalPage>
                             height: Get.height * 0.2, child: CategoriasCard()),
                       ],
                     )),
+
                 //ENCUESTA
-                prefs.typeCollaborator != "2"
-                    ? FutureBuilder(
-                        initialData: [],
-                        future: DBProvider.db.consultarEncuesta(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.data.length == 0) {
-                            return Container();
-                          } else {
-                            controllerEncuesta.isVisibleEncuesta.value = true;
-                            return Obx(() => Visibility(
-                                  visible: controllerEncuesta
-                                      .isVisibleEncuesta.value,
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 15,
-                                          bottom: 10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: EncuestaForm(snapshot.data[0])),
-                                ));
-                          }
-                        })
-                    : SizedBox.shrink(),
+                if (prefs.typeCollaborator != "2")
+                  Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Obx(
+                        () => controllerSurvey
+                                    .noMandatorySurveyList.isNotEmpty &&
+                                controllerSurvey.showNoMandatorySurvey.value
+                            ? EncuestaForm(
+                                controllerSurvey.surveyActiveNoMandatory.value)
+                            : SizedBox.shrink(),
+                      ))
+
+                // : SizedBox.shrink()
+                //  )
               ],
             ),
           ),

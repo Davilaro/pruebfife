@@ -49,7 +49,6 @@ class _ListaSucursalesState extends State<ListaSucursales> {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     final provider = Provider.of<DatosListas>(context);
 
-
     return Scaffold(
       backgroundColor: HexColor('F7F7F7'),
       appBar: AppBar(
@@ -197,6 +196,10 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                         style: diseno_sucursales(element))),
                 Flexible(
                     child: Text('Ciudad: ${element.ciudad}',
+                        overflow: TextOverflow.clip,
+                        style: diseno_sucursales(element))),
+                Flexible(
+                    child: Text('Barrio: ${element.barrio}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
               ],

@@ -14,12 +14,19 @@ class Pedido {
     this.nombreProducto,
     this.precioInicial,
     this.descuento,
+    this.precioBase,
+    this.isOferta,
+    this.precioDescuento,
+    required this.isFrecuencia,
   });
 
   int? cantidad;
   String? codigoProducto;
+  double? precioBase;
   double? precio;
+  double? precioDescuento;
   int? iva;
+  int? isOferta;
   String? fabricante;
   String? codigoFabricante;
   String? nitFabricante;
@@ -30,4 +37,5 @@ class Pedido {
   String? nombreProducto;
   double? precioInicial;
   double? descuento;
+  int isFrecuencia;
 }

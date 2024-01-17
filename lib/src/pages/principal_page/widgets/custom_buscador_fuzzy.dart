@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
@@ -8,6 +9,8 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/db_provider.dart';
+import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/input_valores_catalogo.dart';
@@ -25,7 +28,6 @@ class CustomBuscardorFuzzy extends StatefulWidget {
   final int tipoCategoria;
   final String? nombreCategoria;
   final String? img;
-  final bool isActiveBanner;
   final bool isVisibilityAppBar;
   final String locasionBanner;
   final int? claseProducto;
@@ -45,7 +47,6 @@ class CustomBuscardorFuzzy extends StatefulWidget {
       this.nombreCategoria,
       this.claseProducto,
       this.img,
-      this.isActiveBanner = true,
       this.isVisibilityAppBar = true,
       this.locasionBanner = '',
       this.codigoMarca,
@@ -72,14 +73,21 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final prefs = Preferencias();
   Timer _timer = Timer(Duration(milliseconds: 1), () {});
+  String? bannerToShow = '';
+  bool isActiveBanner = false;
+  List<dynamic> _listaBanners = [];
 
   @override
   void initState() {
+    log(widget.numEmpresa + 'AQUI esta lo que necesito ver');
     if (prefs.usurioLogin == 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _validacionGeneralNotificaciones();
       });
     }
+    print('codigo proveedor ${widget.codigoProveedor}');
+    _listaBanners = [];
+    _cargarListaBanner();
     cargarProductos();
 
     super.initState();
@@ -147,41 +155,44 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
               });
               return Future<void>.delayed(const Duration(seconds: 3));
             },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    child: _buscadorPrincipal(context),
-                  ),
-                  Visibility(
-                    visible: widget.isActiveBanner,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: _buscadorPrincipal(context),
+                ),
+                Visibility(
+                  visible: isActiveBanner,
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      height: size.height * 0.2,
+                      width: double.infinity,
+                      child: OfertasInterna(
+                        nombreFabricante: widget.codCategoria,
+                        listaBanners: _listaBanners,
+                      )),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Container(
-                        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                        height: size.height * 0.2,
-                        width: double.infinity,
-                        child: OfertasInterna(
-                            nombreFabricante: widget.codCategoria)),
+                      height: isActiveBanner
+                          ? MediaQuery.of(context).size.height * 0.5
+                          : MediaQuery.of(context).size.height * 0.7,
+                      child: GridView.count(
+                          physics: BouncingScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing:
+                              4.0, // espaciado entre ejes principales (horizontal)
+                          childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                          children:
+                              _cargarProductosLista(listaProducto, context)),
+                    ),
                   ),
-                  Container(
-                    height: Get.height * 0.8,
-                    width: size.width * 1,
-                    padding: EdgeInsets.fromLTRB(
-                        10, 10, 10, widget.isActiveBanner ? 140 : 50),
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 4.0,
-                        mainAxisSpacing:
-                            4.0, // espaciado entre ejes principales (horizontal)
-                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                        children:
-                            _cargarProductosLista(listaProducto, context)),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ));
@@ -198,6 +209,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         element: productos,
         isCategoriaPromos: false,
         index: i,
+        //se realiza la busqueda epero a traves de la marca
+        search: true,
       );
 
       opciones.add(widgetTemp);
@@ -406,12 +419,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           int elapsedTime = 0;
           if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(widget.locacionFiltro,
                     widget.descripcionCategoria, context);
                 timer.cancel();
@@ -427,6 +446,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       .validacionMostrarSlideUp[widget.descripcionCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.descripcionCategoria, context);
           }
@@ -444,12 +466,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -460,12 +488,14 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             });
           }
         } else if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
-          print("entre marca");
           controllerNotificaciones.closeSlideUp.value = false;
           if (controllerNotificaciones
                       .validacionMostrarSlideUp[widget.nombreCategoria] ==
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }
@@ -485,12 +515,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
               if (elapsedTime >= 530) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
               } else if (controllerNotificaciones.closePushInUp.value == true) {
+                if (Get.isSnackbarOpen) {
+                  await Get.closeCurrentSnackbar();
+                }
                 controllerNotificaciones.showSlideUp(
                     widget.locacionFiltro, widget.nombreCategoria, context);
                 timer.cancel();
@@ -507,6 +543,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                   true &&
               controllerNotificaciones.closeSlideUp.value == false) {
             controllerNotificaciones.closeSlideUp.value = false;
+            if (Get.isSnackbarOpen) {
+              await Get.closeCurrentSnackbar();
+            }
             controllerNotificaciones.showSlideUp(
                 widget.locacionFiltro, widget.nombreCategoria, context);
           }
@@ -514,5 +553,44 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
         break;
       default:
     }
+  }
+
+  void _cargarListaBanner() async {
+    switch (widget.locacionFiltro) {
+      case 'categoria':
+        _listaBanners = await DBProvider.db.cargarBannersCategoriasSql(
+            widget.nombreCategoria, widget.descripcionCategoria);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("categoría", e);
+        }).toList();
+        break;
+      case "marca":
+        _listaBanners =
+            await DBProvider.db.cargarBannersMarcasSql(widget.nombreCategoria);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("marca", e);
+        }).toList();
+        break;
+      case "proveedor":
+        print('widget.nombreCategoria: ${widget.empresa}');
+        _listaBanners =
+            await DBProvider.db.cargarBannersProveedoresSql(widget.empresa!);
+        _listaBanners.map((e) {
+          //FIREBASE: Llamamos el evento view_promotion
+          TagueoFirebase().sendAnalityticViewPromotion("proveedor", e);
+        }).toList();
+        break;
+    }
+
+    if (_listaBanners.length > 0) {
+      isActiveBanner = true;
+    }
+    _listaBanners.map((e) {
+      //FIREBASE: Llamamos el evento view_promotion
+      TagueoFirebase().sendAnalityticViewPromotion("proveedor", e);
+    }).toList();
+    setState(() {});
   }
 }

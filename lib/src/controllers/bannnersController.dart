@@ -126,7 +126,6 @@ class BannnerControllers extends GetxController {
                   numEmpresa: 'nutresa',
                   tipoCategoria: 3,
                   nombreCategoria: marca.nombre,
-                  isActiveBanner: false,
                   locacionFiltro: "marca",
                   codigoProveedor: "",
                 )));

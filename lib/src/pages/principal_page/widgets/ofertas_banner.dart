@@ -121,7 +121,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
   }
 
   void cargarBanners() async {
-    final listaBanners = await DBProvider.db.cargarBannersSql('HOME');
+    final listaBanners = await DBProvider.db.cargarBannersHomeSql();
     _controllesBannes.cargarDatosBanner(listaBanners);
     _controllesBannes.listaBanners.map((e) {
       //FIREBASE: Llamamos el evento view_promotion

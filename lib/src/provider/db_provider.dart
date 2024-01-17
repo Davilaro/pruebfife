@@ -308,7 +308,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<List<dynamic>> cargarBannersSql(String? tipo) async {
+  Future<List<dynamic>> cargarBannersHomeSql() async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery(
@@ -318,7 +318,81 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
       FROM Banner b
       inner join Fabricante f ON b.fabricante_x =f.empresa
-      WHERE b.tipo = '$tipo' order by b.Orden asc
+      WHERE b.ubicacion = 'Home' order by b.Orden asc
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersProveedoresSql(String proveedor) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery(
+          '''
+       SELECT 
+              b.fabricante_x AS fabricante, 
+              f.empresa AS empresa, 
+              f.nombrecomercial AS nombrecomercial, 
+              f.tipofabricante AS tipofabricante, 
+              b.Link AS Ico, 
+              b.Id, 
+              b.nombrefoto_x AS nombrebanner, 
+              b.redireccion AS tipoSeccion, 
+              b.subdireccion AS seccion, 
+              b.categoria AS subSeccion  
+          FROM Banner b
+          INNER JOIN Fabricante f ON b.fabricante_x = f.empresa
+          WHERE  b.SubCategoriaUbicacion  = '$proveedor'
+          order by b.Orden asc
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersMarcasSql(String? marca) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery(
+          '''
+      SELECT b.fabricante_x as fabricante, f.empresa as empresa, f.nombrecomercial as nombrecomercial, 
+      f.tipofabricante as tipofabricante, b.Link as Ico, b.Id, b.nombrefoto_x as nombrebanner, 
+      b.redireccion as tipoSeccion, subdireccion as seccion, categoria as subSeccion  
+      FROM Banner b
+      inner join Fabricante f ON b.fabricante_x =f.empresa
+      WHERE b.SubCategoriaUbicacion = '$marca' order by b.Orden asc limit 1;
+    ''');
+      return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> cargarBannersCategoriasSql(
+      String? categoria, String? subCategoria) async {
+    final db = await baseAbierta;
+    try {
+      final sql = await db.rawQuery(
+          '''
+          SELECT 
+              b.fabricante_x AS fabricante, 
+              f.empresa AS empresa, 
+              f.nombrecomercial AS nombrecomercial, 
+              f.tipofabricante AS tipofabricante, 
+              b.Link AS Ico, 
+              b.Id, 
+              b.nombrefoto_x AS nombrebanner, 
+              b.redireccion AS tipoSeccion, 
+              b.subdireccion AS seccion, 
+              b.categoria AS subSeccion  
+          FROM Banner b
+          INNER JOIN Fabricante f ON b.fabricante_x = f.empresa
+          WHERE  b.CategoriaUbicacion = '$categoria' AND b.SubCategoriaUbicacion
+          = '$subCategoria'
+          order by b.Orden asc LIMIT 1;
     ''');
       return sql.isNotEmpty ? sql.map((e) => Banners.fromJson(e)).toList() : [];
     } catch (e) {
@@ -400,29 +474,81 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     }
   }
 
-  Future<List<Encuesta>> consultarEncuesta() async {
+  Future<List<Encuesta>> consultarEncuesta(int moment) async {
     try {
       final db = await baseAbierta;
       List<Encuesta> lista = [];
+      String stament = '';
 
-      final sql = await db.rawQuery(
-          '''
-        SELECT pre.encuestaId, enc.titulo as encuestaTitulo, pre.id as preguntaid, pre.tipopreguntaid, pre.pregunta,
-        par.id as paramPreguntaId, par.valor, par.parametro FROM Pregunta pre
-        INNER JOIN Encuesta enc ON pre.encuestaid = enc.id INNER JOIN ParamPregunta par ON par.preguntaid = pre.id
-        left join EncuestasRealizadas e on e.encuestaId = pre.encuestaId
-        WHERE pre.orden = 1 and e.encuestaid is null
-      ''');
+      if (moment == 0) {
+        stament =
+            ''' 
+        SELECT pre.encuestaid, 
+        enc.titulo as encuestaTitulo, 
+        pre.id as preguntaid, pre.tipopreguntaid,  
+        pre.pregunta,
+        enc.obligatoria,
+        pre.orden
+        FROM Pregunta pre
+        INNER JOIN Encuesta enc 
+        ON pre.encuestaid = enc.id 
+        WHERE enc.Momento = 'Home'
+        ORDER BY enc.id , pre.orden
+        ''';
+      } else if (moment == 1) {
+        stament =
+            '''
+        SELECT pre.encuestaid, 
+        enc.titulo as encuestaTitulo, 
+        pre.id as preguntaid, pre.tipopreguntaid,  
+        pre.pregunta,
+        enc.obligatoria,
+        pre.orden
+        FROM Pregunta pre
+        INNER JOIN Encuesta enc 
+        ON pre.encuestaid = enc.id 
+        WHERE enc.Momento = 'Pedidos'
 
-      if (sql.length > 1) {
-        List<dynamic> parametros =
-            List<dynamic>.from(sql.map((e) => e['parametro']));
-        var encuesta = Encuesta.fromJson2(sql[0]);
-        encuesta.parametro = parametros;
-        lista.add(encuesta);
-      } else {
-        lista = List<Encuesta>.from(sql.map((x) => Encuesta.fromJson(x)));
+        UNION
+
+        SELECT pre.encuestaid, 
+        enc.titulo as encuestaTitulo, 
+        pre.id as preguntaid, pre.tipopreguntaid,  
+        pre.pregunta,
+        enc.obligatoria,
+        pre.orden
+        FROM Pregunta pre
+        INNER JOIN Encuesta enc 
+        ON pre.encuestaid = enc.id 
+        WHERE enc.obligatoria = 0
+        ''';
       }
+      final sql = await db.rawQuery(stament);
+
+      //iterar y cuando la pregunta id = param id  add.param
+      //log(jsonEncode(sql));
+      for (var i = 0; i < sql.length; i++) {
+        List response = await db.rawQuery(
+            '''
+          select * from ParamPregunta
+          where preguntaid = '${sql[i]['preguntaid']}'  
+          ''');
+        List<dynamic> parametros =
+            List<dynamic>.from(response.map((e) => e['parametro']));
+        //
+        var encuesta = Encuesta.fromJson(sql[i]);
+        encuesta.parametro = parametros;
+        if (lista.isEmpty) {
+          lista.add(encuesta);
+        } else {
+          int posision =
+              lista.indexWhere((e) => e.preguntaId == encuesta.preguntaId);
+          if (posision == -1) {
+            lista.add(encuesta);
+          }
+        }
+      }
+
       return lista;
     } catch (e) {
       return [];
@@ -587,7 +713,6 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
   Future<dynamic> consultarCategoriasPorFabricanteCatalogo(
       List empresas) async {
     final db = await baseAbierta;
-    print("empresas $empresas");
 
     try {
       if (empresas.isNotEmpty) {

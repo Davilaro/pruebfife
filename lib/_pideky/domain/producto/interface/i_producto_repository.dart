@@ -51,4 +51,10 @@ abstract class IProductoRepository {
   Future<dynamic> eliminarPedidoTemp(String codPedido);
 
   Future<List<Producto>> consultarPedidoTemporal();
+
+  Future<String> insertarProductoBusqueda({required String codigoProducto});
+
+  Future<String> productoBusqueda({required String palabraProducto});
+
+  Future<String> productoMasBuscado({required String codigoProducto});
 }

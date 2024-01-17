@@ -12,6 +12,7 @@ import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/splash/splash_principal.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +70,8 @@ modalCerrarSesion(context, size, provider) {
         Get.back(),
         _showLoaderDialog(context),
         Future.delayed(Duration(milliseconds: 800)).then((value) async {
+          // se agrega el tagueo de uxcam para cerrar sesion
+          UxcamTagueo().logOut();
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.typeCollaborator = "";
           prefs.usurioLogin = -1;
@@ -81,8 +84,8 @@ modalCerrarSesion(context, size, provider) {
           Provider.of<OpcionesBard>(context, listen: false).selectOptionMenu =
               0;
           controllerSearchViewModel.listaRecientes.clear();
+
           Get.offAll(() => Splash());
-          //await cerrarBases();
         }),
       },
       child: Container(
@@ -202,6 +205,8 @@ modalEliminarUsuario(context, size, provider) {
     return GestureDetector(
       onTap: () => {
         Future.delayed(Duration(milliseconds: 700)).then((value) async {
+          // se agrega el tagueo de uxcam para cerrar sesion
+          UxcamTagueo().deleteAccount();
           await Servicies().deleteAccount();
           await AppUtil.appUtil.eliminarCarpeta();
           prefs.usurioLogin = -1;

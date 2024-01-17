@@ -3,6 +3,7 @@ import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/provider/servicios.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -98,6 +99,8 @@ class TermsAndConditionsPage extends StatelessWidget {
                         bool loadData =
                             await Servicies().loadDataTermsAndConditions();
                         if (loadData) {
+                          // se agrega evento de uxcam para aceptacion de terminos y condiciones
+                          UxcamTagueo().acceptTermsAndConditions();
                           await _validationForms.getPhoneNumbers();
                           await _validationForms.closePopUp(
                               ConfirmIdentitySendSMSPage(

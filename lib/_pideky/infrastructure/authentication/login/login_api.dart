@@ -27,7 +27,7 @@ class LoginApi implements ILogin {
       var data = jsonDecode(response.body);
       print("data loguin  $data");
       if (response.statusCode == 200 &&
-          data["Actualizar"] != null && 
+          data["Actualizar"] != null &&
           data['CCUP'] != "1" &&
           data['CCUP'] != "2") {
         prefs.codigoUnicoPideky = data["CCUP"];
