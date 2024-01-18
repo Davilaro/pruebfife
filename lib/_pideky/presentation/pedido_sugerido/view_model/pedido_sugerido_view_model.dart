@@ -67,15 +67,11 @@ class PedidoSugeridoViewModel extends GetxController
       return p.negocio;
     });
     groups.forEach((key, value) {
+      RxBool isSelected = false.obs;
       String icon = '';
       String nombreComercial = "";
       double precioProductos = 0;
       int bloqueoCartera = 0;
-
-      for (int i = 0; i < value.length; i++) {
-        precioProductos =
-            precioProductos + (value[i].cantidad! * value[i].precio!);
-      }
 
       for (int j = 0; j < listaFabricante.length; j++) {
         if (listaFabricante[j].empresa == key) {
@@ -93,6 +89,7 @@ class PedidoSugeridoViewModel extends GetxController
                 'imagen': icon,
                 'nombrecomercial': nombreComercial,
                 'bloqueoCartera': bloqueoCartera,
+                'isSelected': isSelected,
               });
     });
     // update();

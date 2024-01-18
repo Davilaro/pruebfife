@@ -460,8 +460,8 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           listPushInUpHome.isNotEmpty) {
         await showPushInUps(context);
         int elapsedTime = 0;
-        Timer.periodic(Duration(milliseconds: 10), (timer) {
-          if (elapsedTime >= 530) {
+        Timer.periodic(Duration(seconds: 1), (timer) {
+          if (elapsedTime >= listPushInUpHome.first.tiempo) {
             showSlideUps(context);
             slideUpAutomatic.validarMostrarSlide();
             timer.cancel();
