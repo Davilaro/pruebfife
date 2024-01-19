@@ -58,6 +58,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Autorizo el tratamiento de mis datos personales"),
         "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
             "¡Recuerda!, si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar las compras."),
+        "buy_sell_earn_description": MessageLookupByLibrary.simpleMessage(
+            "En esta sección podrás impulsar tu negocio consultando las mayores ofertas."),
+        "buy_sell_earn_title":
+            MessageLookupByLibrary.simpleMessage("Compra, vende y gana"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catálogo"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(

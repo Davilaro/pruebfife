@@ -59,6 +59,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "I authorize the processing of my personal data"),
         "bottom_alert_drawer": MessageLookupByLibrary.simpleMessage(
             "Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase."),
+        "buy_sell_earn_description": MessageLookupByLibrary.simpleMessage(
+            "In this section you will be able to boost your business by consulting the best offers."),
+        "buy_sell_earn_title":
+            MessageLookupByLibrary.simpleMessage("Buy, sell and earn"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
         "categories_for_you": MessageLookupByLibrary.simpleMessage(

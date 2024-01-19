@@ -9,7 +9,9 @@
     "address": "Address: {direccion}",
 
     "bottom_alert_drawer" : "Remember, if you have products added to your cart, and you choose a new branch, you will have to make a new purchase.",
-    
+    "buy_sell_earn_title" : "Buy, sell and earn",
+    "buy_sell_earn_description" : "In this section you will be able to boost your business by consulting the best offers.",
+
     "cancel":"Cancel",
     "confirm_country":"Please confirm the country where your business is located.",
     "country_confirmation":"Country confirmation",
