@@ -1,14 +1,18 @@
 import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/mis_listas/widgets/pop_up_choose_list.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view/widgets/grid_item_acordion.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/acordion_mis_listas.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +23,10 @@ List<Widget> acordionDinamico(BuildContext context) {
   ProductoViewModel productViewModel = Get.find();
 
   final controller = Get.find<PedidoSugeridoViewModel>();
+  final listViewModel = Get.find<MyListsViewModel>();
+
   List<Widget> lista = [];
+
   lista.clear();
 
   controller.listaProductosPorFabricante.forEach((fabricante, value) {
@@ -70,24 +77,39 @@ List<Widget> acordionDinamico(BuildContext context) {
                                 fontWeight: FontWeight.w800),
                           ),
                         ),
-                        BotonAgregarCarrito(
-                          color: isFrecuencia
-                              ? ConstantesColores.azul_aguamarina_botones
-                              : ConstantesColores.gris_sku,
-                          height: Get.height * 0.05,
-                          width: Get.width * 0.5,
-                          onTap: () async {
-                            UxcamTagueo().addToCartSuggestedOrder(
-                                value["items"], fabricante);
-                            await _validarFrecuencia(
-                                isFrecuencia,
-                                value["items"],
-                                controller,
-                                productViewModel,
-                                context);
-                          },
-                          text: 'Agregar al carrito',
-                        )
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.15),
+                          child: BotonAgregarCarrito(
+                            color: isFrecuencia
+                                ? ConstantesColores.azul_aguamarina_botones
+                                : ConstantesColores.gris_sku,
+                            onTap: () async {
+                              UxcamTagueo().addToCartSuggestedOrder(
+                                  value["items"], fabricante);
+                              await _validarFrecuencia(
+                                  isFrecuencia,
+                                  value["items"],
+                                  controller,
+                                  productViewModel,
+                                  context);
+                            },
+                            text: 'Agregar al carrito',
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () async {
+                              await listViewModel.getMisListas();
+                              _addToList(
+                                  value["items"], productViewModel, context);
+                            },
+                            child: Text(
+                              "Agregar a mis listas",
+                              style: TextStyle(
+                                  color: ConstantesColores.azul_precio,
+                                  fontSize: 15,
+                                  decoration: TextDecoration.underline),
+                            ))
                       ],
                     ),
                   ],
@@ -146,4 +168,22 @@ _validarFrecuencia(isFrecuencia, value, controller,
   } else {
     Get.off(Login());
   }
+}
+
+_addToList(value, ProductoViewModel productViewModel, context) async {
+  final db = ProductoRepositorySqlite();
+  final cargoConfirmar = Get.find<CambioEstadoProductos>();
+  List<Producto> listProductsToAdList = [];
+  value.forEach((prod) async {
+    if (prod.isSelected) {
+      Producto producto = await db.consultarDatosProducto(prod.codigo);
+      listProductsToAdList.add(producto);
+    }
+  });
+  showDialog(
+      context: context,
+      builder: (context) => PopUpChooseList(
+            productos: listProductsToAdList,
+            cantidad: toInt(cargoConfirmar.controllerCantidadProducto.value),
+          ));
 }

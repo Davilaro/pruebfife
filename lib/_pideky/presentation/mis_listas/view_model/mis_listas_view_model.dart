@@ -7,6 +7,7 @@ import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/mis_listas/mis_listas_repository.dart';
 import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
@@ -35,8 +36,9 @@ class MyListsViewModel extends GetxController {
   }
 
   Future<void> addToCar(context) async {
+    ProductoViewModel productViewModel = Get.find();
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     mapListasProductos.forEach((key, value) {
-      final cartProvider = Provider.of<CarroModelo>(context, listen: false);
       value['items'].forEach((ListaDetalle productoDetalle) async {
         if (productoDetalle.isSelected! == true) {
           if (productoDetalle.codigo != "") {
@@ -49,6 +51,7 @@ class MyListsViewModel extends GetxController {
             PedidoEmart.registrarValoresPedido(
                 producto, '${productoDetalle.cantidad}', true);
             MetodosLLenarValores().calcularValorTotal(cartProvider);
+            productViewModel.insertarPedidoTemporal(producto.codigo);
 
             Get.back();
           }
@@ -221,7 +224,6 @@ class MyListsViewModel extends GetxController {
     if (result[1] == false) {
       backClosePopup(Get.context!, texto: result[0], isCorrect: false);
     } else {
-      print('iteracion');
       await DBProviderHelper.db.agregarProductoALista(idLista, producto.nombre,
           producto.codigo, cantidad, producto.fabricante!);
     }
