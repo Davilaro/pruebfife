@@ -31,7 +31,10 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+
+import '../../../shared/widgets/barra_faltante_monto_minimo.dart';
 
 bool cargarDeNuevo = false;
 final prefs = new Preferencias();
@@ -272,8 +275,20 @@ class _CarritoComprasState extends State<CarritoCompras> {
   List<Widget> _cargarWidgetDinamicoAcordeon(
       BuildContext context1, CarroModelo cartProvider) {
     List<Widget> listaWidget = [];
-
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
+      // Variables para calcular el faltante del monto minimo para realizar un pedido
+      double sumaPreciosProductos =
+          cartProvider.getListaFabricante[fabricante]["precioFinal"];
+      double valorMontoMinimo = value["preciominimo"];
+
+      calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo) {
+        double resultado = valorMontoMinimo - sumaPreciosProductos;
+        return resultado;
+      }
+
+      double resulCalcularMontoMinimo =
+          calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo);
+
       if (value['precioProducto'] == 0.0) {
       } else {
         listaWidget.add(
@@ -427,6 +442,48 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: 35.0),
+                                //Texto dinamico para mostrar el valor de monto minimo requerido para un pedido
+                                Visibility(
+                                    // Con esta propiedad sabemos si se muestra el texto o no value["preciominimo"] != 0.0,
+                                    visible: value["preciominimo"] != 0.0,
+                                    child: Column(
+                                      children: [
+                                        BarraFaltanteMontoMin(minimumAmount: valorMontoMinimo, currentAmount: sumaPreciosProductos,),
+                                        // Padding(
+                                        //   padding: EdgeInsets.all(15.0),
+                                        //   child: Stack(
+                                        //     children: [
+                                        //       LinearPercentIndicator(
+                                        //         animation: true,
+                                        //         animationDuration: 2500,
+                                        //         width: 420.0,
+                                        //         lineHeight: 14.0,
+                                        //         percent: 0.5,
+                                        //         barRadius: Radius.circular(10),
+                                        //         backgroundColor: Colors.grey,
+                                        //         progressColor: Colors.blue,
+                                        //       ),
+                                        //       Positioned(
+                                        //          // top:0,
+                                        //           //right: 15,
+                                        //           child: Image.asset(
+                                        //               'assets/icon/Icon_entrega 1.png',
+                                        //               scale: 3.5
+                                        //               ))
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        SizedBox(height: 25.0),
+                                        if (sumaPreciosProductos <=
+                                            valorMontoMinimo)
+                                          Text(
+                                            'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
+                                            style: disenoValores(),
+                                          )
+                                      ],
+                                    )),
+                                SizedBox(height: 35.0),
                                 Container(
                                   constraints: BoxConstraints(
                                       minHeight: 150,

@@ -63,6 +63,7 @@ dependencies:
   onesignal_flutter: ^3.0.0
   overlay_support: ^2.1.0
   package_info: ^2.0.2
+  percent_indicator: ^4.2.3
   permission_handler: ^11.0.1
   pinch_zoom_image_last: ^0.4.1
   progress_dialog_null_safe: ^1.0.7
