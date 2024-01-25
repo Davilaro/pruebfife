@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BotonAgregarCarrito extends StatelessWidget {
   final Function()? onTap;
   final String text;
-  final double height;
+  final double? height;
   final double? width;
   final double? marginTop;
   final Color color;
@@ -13,7 +12,7 @@ class BotonAgregarCarrito extends StatelessWidget {
   const BotonAgregarCarrito(
       {Key? key,
       this.colortext = Colors.white,
-      required this.height,
+      this.height,
       this.width,
       required this.color,
       required this.onTap,
@@ -27,8 +26,8 @@ class BotonAgregarCarrito extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(top: marginTop!, bottom: 10),
-      height: height,
-      width: width ?? Get.width * 0.8,
+      height: height ?? null,
+      width: width ?? null,
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.circular(borderRadio)),
       child: MaterialButton(

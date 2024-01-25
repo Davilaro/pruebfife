@@ -76,7 +76,7 @@ class PopUpAddNewProduct extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (_) => PopUpChooseList(
-                              producto: producto,
+                              productos: List.generate(1, (index) => producto),
                               cantidad: cantidad,
                             ));
                   },
