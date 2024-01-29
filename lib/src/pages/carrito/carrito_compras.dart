@@ -1425,7 +1425,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
           }
           if (valorPedido < precioMinimo) {
             isValid.value = true;
-            return "$texto2 $diasSinComa.";
+            //TODO: agregar valor faltante
+            return "¡Solo te falta --- $texto2 $diasSinComa.";
           }
         }
         isValid.value = false;
