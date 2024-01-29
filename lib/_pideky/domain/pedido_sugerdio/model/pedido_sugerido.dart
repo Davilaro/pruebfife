@@ -24,6 +24,7 @@ class PedidoSugeridoModel {
   int? cantidad;
   bool isExpanded = false;
   int? bloqueoCartera;
+  bool? isSelected = false;
 
   factory PedidoSugeridoModel.fromJson(Map<String, dynamic> json) =>
       PedidoSugeridoModel(

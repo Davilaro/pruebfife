@@ -416,11 +416,12 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                 true) {
           controllerNotificaciones.closePushInUp.value = false;
           controllerNotificaciones.onTapPushInUp.value = false;
-
           int elapsedTime = 0;
           if (controllerNotificaciones.listSlideUpCategorias.isNotEmpty) {
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
-              if (elapsedTime >= 530) {
+            _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+              if (elapsedTime >=
+                  controllerNotificaciones
+                      .listPushInUpCategorias.first.tiempo!) {
                 if (Get.isSnackbarOpen) {
                   await Get.closeCurrentSnackbar();
                 }
@@ -466,8 +467,9 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpMarcas.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
-              if (elapsedTime >= 530) {
+            _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+              if (elapsedTime >=
+                  controllerNotificaciones.listPushInUpMarcas.first.tiempo) {
                 if (Get.isSnackbarOpen) {
                   await Get.closeCurrentSnackbar();
                 }
@@ -515,8 +517,10 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
           if (controllerNotificaciones.listSlideUpProveedores.isNotEmpty) {
             int elapsedTime = 0;
-            _timer = Timer.periodic(Duration(milliseconds: 10), (timer) async {
-              if (elapsedTime >= 530) {
+            _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+              if (elapsedTime >=
+                  controllerNotificaciones
+                      .listPushInUpProveedores.first.tiempo) {
                 if (Get.isSnackbarOpen) {
                   await Get.closeCurrentSnackbar();
                 }

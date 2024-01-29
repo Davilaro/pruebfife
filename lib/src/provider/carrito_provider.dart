@@ -7,9 +7,16 @@ class CarroModelo extends ChangeNotifier {
   int _cambioVista = 0;
   double _precioAhorro = 0;
   double _nuevoPrecioAhorro = 0;
+  Map<String, dynamic> _frecuanciaFabricantes = new Map();
 
   double get getTotal {
     return _precioTotal;
+  }
+
+  Map get getFrecuenciaFabricante => _frecuanciaFabricantes;
+
+  void actualizarFrecuenciaFabricante(String fabricante, bool isFrecuancia) {
+    _frecuanciaFabricantes[fabricante] = isFrecuancia;
   }
 
   set guardarValorCompra(double precio) {

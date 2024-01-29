@@ -287,8 +287,8 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                                     context: context,
                                                     builder: (context) =>
                                                         PopUpChooseList(
-                                                          producto:
-                                                              widget.producto,
+                                                          productos:
+                                                             List.generate(1, (index) => widget.producto),
                                                           cantidad: toInt(
                                                               cargoConfirmar
                                                                   .controllerCantidadProducto

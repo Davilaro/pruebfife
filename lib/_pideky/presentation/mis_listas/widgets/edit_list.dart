@@ -6,6 +6,7 @@ import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class EditList extends StatefulWidget {
@@ -83,52 +84,51 @@ class _EditListState extends State<EditList> {
                   width: 7,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Align(
-                          alignment: Alignment.center,
-                          child: AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            content: Container(
-                              height: Get.height * 0.25,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Puede que algunos de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
-                                    style: TextStyle(
-                                      color: ConstantesColores.azul_precio,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Align(
+                            alignment: Alignment.center,
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                              content: Container(
+                                height: Get.height * 0.25,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Puede que algunos de los productos no estén disponibles o hayan cambiado de precio desde la última vez',
+                                      style: TextStyle(
+                                        color: ConstantesColores.azul_precio,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
                                     ),
-                                  ),
-                                  BotonAgregarCarrito(
-                                    borderRadio: 50,
-                                    height: 40,
-                                    color: ConstantesColores.azul_precio,
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    text: "Entiendo",
-                                  )
-                                ],
+                                    BotonAgregarCarrito(
+                                      borderRadio: 50,
+                                      height: 40,
+                                      color: ConstantesColores.azul_precio,
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                      text: "Entiendo",
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Image(
-                    image: AssetImage('assets/icon/Icono_editar.png'),
-                    height: 18,
-                  ),
-                ),
+                          );
+                        },
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      'assets/icon/Icono_informacion.svg',
+                      height: 18,
+                    )),
               ],
             ),
             Padding(
@@ -202,8 +202,8 @@ class _EditListState extends State<EditList> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image(
-                      image: AssetImage('assets/icon/Icono_eliminar.png'),
+                    SvgPicture.asset(
+                      'assets/icon/Icono_eliminar.svg',
                       height: 25,
                     ),
                     SizedBox(width: 10),

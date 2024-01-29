@@ -172,7 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "the_email_does_not": MessageLookupByLibrary.simpleMessage(
             "El email no cumple con el formato"),
         "the_nit_entered_is_not_registered": MessageLookupByLibrary.simpleMessage(
-            "El NIT ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en "),
+            "El CCUP ingresado no se encuentra registrado en nuestra base de datos. Por favor revisa que esté bien escrito o contáctanos en "),
         "the_number_is_incorrect": MessageLookupByLibrary.simpleMessage(
             "El número ingresado no corresponde a un número celular."),
         "the_verification_code_incorrect": MessageLookupByLibrary.simpleMessage(

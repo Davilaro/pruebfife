@@ -18,6 +18,7 @@ List<Widget> gridItem(
 
   lista.forEach((producto) {
     final controller = Get.find<PedidoSugeridoViewModel>();
+    RxBool isSelected = RxBool(producto.isSelected!);
     PedidoSugeridoModel productos = controller.listaProductos[producto.codigo]!;
 
     if (producto.negocio == fabricante && producto.cantidad > 0) {
@@ -33,6 +34,41 @@ List<Widget> gridItem(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Checkbox(
+                      shape: OutlinedBorder.lerp(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          1)!,
+                      checkColor: ConstantesColores.azul_precio,
+                      activeColor: ConstantesColores.azul_precio,
+                      value: isSelected.value,
+                      onChanged: (_) {
+                        isSelected.value = !isSelected.value;
+                        producto.isSelected = !producto.isSelected!;
+                        if (lista.length == 1 && !producto.isSelected!) {
+                          controller
+                              .listaProductosPorFabricante[fabricante]
+                                  ["isSelected"]
+                              .value = false;
+                        } else {
+                          controller
+                              .listaProductosPorFabricante[fabricante]
+                                  ["isSelected"]
+                              .value = false;
+                        }
+                        if (producto.isSelected!) {
+                          controller.listaProductosPorFabricante[fabricante]
+                                  ["precioProductos"] +=
+                              producto.precio * producto.cantidad;
+                        } else {
+                          controller.listaProductosPorFabricante[fabricante]
+                                  ["precioProductos"] -=
+                              producto.precio * producto.cantidad;
+                        }
+                      },
+                    ),
                     Container(
                       alignment: Alignment.center,
                       child: ClipRRect(
@@ -62,6 +98,7 @@ List<Widget> gridItem(
                             Text(
                               producto.nombre,
                               overflow: TextOverflow.visible,
+                              maxLines: 3,
                               style: TextStyle(
                                   fontSize: 13,
                                   color: ConstantesColores.verde,

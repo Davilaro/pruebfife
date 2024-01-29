@@ -10,10 +10,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class PopUpChooseList extends StatefulWidget {
-  final Producto producto;
+  final List<Producto> productos;
   final cantidad;
   const PopUpChooseList(
-      {Key? key, required this.producto, required this.cantidad})
+      {Key? key, required this.productos, required this.cantidad})
       : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
           left: Get.width * 0.05,
           right: Get.width * 0.05,
           top: Get.height * 0.18,
-          bottom: Get.height * 0.20),
+          bottom: Get.height * 0.17),
       child: Stack(
         children: [
           Container(
@@ -114,8 +114,7 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                                         ? 'assets/icon/Corazón_lleno.svg'
                                         : 'assets/icon/Corazón_Trazo.svg',
                                     height: 25,
-                                  )
-                                  ),
+                                  )),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Column(
@@ -151,8 +150,10 @@ class _PopUpChooseListState extends State<PopUpChooseList> {
                           ListaEncabezado clave =
                               mapaDeListas.keys.elementAt(i);
                           if (mapaDeListas[clave] == true) {
-                            await myList.addProduct(widget.producto, clave.id,
-                                widget.cantidad, clave.nombre);
+                            widget.productos.forEach((element) async {
+                              await myList.addProduct(element, clave.id,
+                                  widget.cantidad, clave.nombre);
+                            });
                           }
                         }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/src/modelos/pedido.dart';
@@ -452,7 +454,6 @@ class UxcamTagueo {
           "Country": prefs.paisUsuario ?? "CO"
         };
 
-        print("productos $productIndividual");
         return productIndividual;
       }).toList();
       print(
@@ -592,6 +593,42 @@ class UxcamTagueo {
       print('se envio el tagueo');
     } catch (e) {
       print('Error tagueo onTapPushInUp $e');
+    }
+  }
+
+  void deleteAccount() {
+    try {
+      FlutterUxcam.logEventWithProperties("deleteAccount", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO"
+      });
+    } catch (e) {
+      log("Error tagueo deleteAccount");
+    }
+  }
+
+  void logOut() {
+    try {
+      FlutterUxcam.logEventWithProperties("logOut", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO"
+      });
+    } catch (e) {
+      log("Error tagueo deleteAccount");
+    }
+  }
+
+  void acceptTermsAndConditions() {
+    try {
+      FlutterUxcam.logEventWithProperties("accetpTermsAndConditions", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO"
+      });
+    } catch (e) {
+      log("Error tagueo deleteAccount");
     }
   }
 }

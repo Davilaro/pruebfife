@@ -290,6 +290,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
 
       if (value['precioProducto'] == 0.0) {
       } else {
+        cartProvider.actualizarFrecuenciaFabricante(
+            fabricante, value["isFrecuencia"]);
         listaWidget.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -1519,7 +1521,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
           }
           if (valorPedido < precioMinimo) {
             isValid.value = true;
-            return "$texto2 $diasSinComa.";
+            //TODO: agregar valor faltante
+            return "¡Solo te falta --- $texto2 $diasSinComa.";
           }
         }
         isValid.value = false;

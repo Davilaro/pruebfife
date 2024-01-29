@@ -5,7 +5,6 @@ import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirma
 import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
-import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
