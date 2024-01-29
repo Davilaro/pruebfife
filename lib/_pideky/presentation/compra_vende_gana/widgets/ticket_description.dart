@@ -1,14 +1,20 @@
+import 'package:emart/_pideky/domain/compra_vende_gana/model/compra_vende_gana_model.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TicketDescription extends StatelessWidget {
+  final CompraVendeGanaModel compraVendeGanaModel;
   const TicketDescription({
     Key? key,
+    required this.compraVendeGanaModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ProductoViewModel productViewModel = Get.find();
     return Container(
       width: Get.width * 0.4,
       margin: EdgeInsets.only(right: Get.width * 0.07, top: Get.height * 0.01),
@@ -16,26 +22,38 @@ class TicketDescription extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "La Especial Kraks Limons caja x 12",
+            compraVendeGanaModel.nombre,
+            maxLines: 2,
             style: TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                color:
+                    Color(toInt("0xff${compraVendeGanaModel.colorLetraGran}")),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis),
           ),
           SizedBox(height: Get.height * 0.01),
           Text(
-            "Compras: \$10.000",
-            style:
-                TextStyle(color: ConstantesColores.gris_oscuro, fontSize: 13),
+            "Compra: ${productViewModel.getCurrency(compraVendeGanaModel.compra)}",
+            style: TextStyle(
+                color:
+                    Color(toInt("0xff${compraVendeGanaModel.colorLetraPequ}")),
+                fontSize: 13),
           ),
           Text(
-            "Vende: \$12.000",
-            style:
-                TextStyle(color: ConstantesColores.gris_oscuro, fontSize: 13),
+            "Vende: ${productViewModel.getCurrency(compraVendeGanaModel.vende)}",
+            style: TextStyle(
+                color:
+                    Color(toInt("0xff${compraVendeGanaModel.colorLetraPequ}")),
+                fontSize: 13),
           ),
           SizedBox(height: Get.height * 0.01),
           Text(
-            "GANA: \$2.000",
+            "GANA: ${productViewModel.getCurrency(compraVendeGanaModel.gana)}",
             style: TextStyle(
-                color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+                color:
+                    Color(toInt("0xff${compraVendeGanaModel.colorLetraGran}")),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
           ),
           SizedBox(height: Get.height * 0.02),
           Container(
@@ -66,7 +84,7 @@ class TicketDescription extends StatelessWidget {
                         )
                       ],
                     )),
-                onTap: () {},
+                onTap: () async {},
               )),
         ],
       ),

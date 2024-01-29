@@ -2513,7 +2513,6 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
   Future<dynamic> insertPedidoTemp(String codPedido, int cantidad) async {
     final db = await DBProviderHelper.db.tempAbierta;
-    print('este es el cod $codPedido');
     try {
       await db.rawInsert('INSERT INTO pedido VALUES($codPedido,$cantidad)');
 

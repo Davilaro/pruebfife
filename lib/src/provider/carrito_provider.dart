@@ -1,4 +1,10 @@
+import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class CarroModelo extends ChangeNotifier {
   double _precioTotal = 0;
@@ -67,5 +73,16 @@ class CarroModelo extends ChangeNotifier {
   set setNuevoValorAhorro(double precio) {
     _nuevoPrecioAhorro = precio;
     notifyListeners();
+  }
+
+  llenarCarrito(Producto producto, int cantidad, context) async {
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
+    ProductoViewModel productViewModel = Get.find();
+    if (producto.codigo != "") {
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
+      PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
+      productViewModel.insertarPedidoTemporal(producto.codigo);
+    }
   }
 }

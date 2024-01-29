@@ -1,12 +1,16 @@
+import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class CardTicket extends CustomPainter {
+  final String color;
+  CardTicket({required this.color});
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
+    final formatColor = "0xff$color";
 
     // propiedades
-    paint.color = const Color.fromARGB(255, 231, 183, 111);
+    paint.color =  Color(toInt(formatColor));
     paint.style = PaintingStyle.fill;
     paint.strokeWidth = 3;
 

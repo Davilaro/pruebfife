@@ -1,5 +1,6 @@
 import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/club_ganadores/view_mdel/club_ganadores_view_model.dart';
+import 'package:emart/_pideky/presentation/compra_vende_gana/view_model/compra_vende_gana_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_estadisticas/view_model/mis_estadisticas_view_model.dart';
 import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
@@ -35,5 +36,6 @@ class InitialBindings extends Bindings {
     BotonesProveedoresVm.findOrInitialize;
     SearchFuzzyViewModel.findOrInitialize;
     MyListsViewModel.findOrInitialize;
+    CompraVendeGanaViewModel.findOrInitialize;
   }
 }
