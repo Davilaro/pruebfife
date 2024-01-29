@@ -396,8 +396,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             punteroBarra: Column(
                                             children: [
                                               SvgPicture.asset(
-                                                'assets/image/Camion.svg',
-                                                height: Get.height * 0.090,
+                                                'assets/image/carro_progress_bar.svg',
+                                                height: Get.height * 0.060,
                                                      width:  Get.width *  0.28,),
                                               
                                               // Padding(

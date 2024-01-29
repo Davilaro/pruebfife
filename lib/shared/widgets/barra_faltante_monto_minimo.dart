@@ -19,10 +19,12 @@ class BarraFaltanteMontoMin extends StatelessWidget {
     double percentage = (currentAmount / minimumAmount).clamp(0.0, 1.0);
 
     return Container(
+      color: Colors.amber,
+        
        padding: EdgeInsets.only(right: Get.width * 0.060, left: Get.width * 0.009),
       width: Get.width * 0.940,
      // color: Colors.red,
-      height: Get.height * 0.0450,
+      height: Get.height * 0.0850,
       child: LinearPercentIndicator(
        // padding: EdgeInsets.only(),
         animation: true,
