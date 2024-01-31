@@ -1,7 +1,9 @@
+import 'package:emart/shared/widgets/barra_monto_minimo.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:hexcolor/hexcolor.dart';
+
 
 
 
@@ -19,24 +21,22 @@ class BarraFaltanteMontoMin extends StatelessWidget {
     double percentage = (currentAmount / minimumAmount).clamp(0.0, 1.0);
 
     return Container(
-      color: Colors.amber,
-        
-       padding: EdgeInsets.only(right: Get.width * 0.060, left: Get.width * 0.009),
-      width: Get.width * 0.940,
-     // color: Colors.red,
-      height: Get.height * 0.0850,
+      //color: Colors.amber,        
+      padding: EdgeInsets.only(right: Get.width * 0.060, left: Get.width * 0.090),
+      width: Get.width * 0.900,
+      height: Get.height * 0.060,
       child: LinearPercentIndicator(
        // padding: EdgeInsets.only(),
-        animation: true,
+        animation: true,        
         animationDuration: 1250,
         // width: 300.0,
         lineHeight: Get.height * 0.0190,
         percent: percentage,
         barRadius: Radius.circular(10),
-        backgroundColor: ConstantesColores.color_fondo_gris,
+        backgroundColor: Colors.transparent,
         linearGradient: LinearGradient(colors: <Color>[
-          ConstantesColores.empodio_verde,
-          ConstantesColores.empodio_amarillo
+          HexColor("#FFE24B"),
+          HexColor("EA7244"),
         ]),
         widgetIndicator: punteroBarra,
       ),

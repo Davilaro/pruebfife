@@ -377,8 +377,9 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                     child: Column(
                                       children: [
                                         if (sumaPreciosProductos <= valorMontoMinimo)
-                                          Container(
-                                            padding: EdgeInsets.only(right: Get.width * 0.12),
+                                          Container(        
+                                            height: Get.height * 0.022,
+                                            padding: EdgeInsets.only(right: Get.width * 0.10),
                                             width: Get.width * 1.0,
                                             child: Text(
                                               productoViewModel.getCurrency(
@@ -390,60 +391,48 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                               textAlign: TextAlign.right,
                                             ),
                                           ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 0.20),
-                                          child: BarraFaltanteMontoMin(
-                                            minimumAmount: valorMontoMinimo,
-                                            currentAmount: sumaPreciosProductos,
-                                            punteroBarra: Column(
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/image/carro_progress_bar.svg',
-                                                height: Get.height * 0.060,
-                                                     width:  Get.width *  0.28,),
-                                              
-                                              // Padding(
-                                              //   padding: const EdgeInsets.all(8.0),
-                                              //   child: Image(
-                                              //       fit: BoxFit.fitWidth,
-                                              //       height: Get.height * 0.090,
-                                              //       width:  Get.width *  0.28,
-                                              //       image: AssetImage(
-                                              //           'assets/image/cameditad.jpeg')),
-                                              // ),
-                                              
-                                              Stack(children: [
-                                                Transform.rotate(
-                                                  angle: 3.14159265359,
-                                                  child: Image(
-                                                  fit: BoxFit.fill,
-                                                  height: Get.height * 0.040,
-                                                  width: Get.width * 0.15,
-                                                  image: AssetImage(
-                                                      'assets/image/Pop.png'))
+                                        BarraFaltanteMontoMin(
+                                          minimumAmount: valorMontoMinimo,
+                                          currentAmount: sumaPreciosProductos,
+                                          punteroBarra: Column(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/image/carro_progress_bar.svg',
+                                              height: Get.height * 0.055,
+                                                   width:  Get.width *  0.28,),
+                                            
+                                            
+                                            Stack(
+                                              children: [
+
+                                                SvgPicture.asset(
+                                              'assets/image/Pop.svg',
+                                              height: Get.height * 0.040,
+                                                   width:  Get.width *  0.28,),
+                                             
+                                              Positioned(
+                                                top: Get.height * 0.013,
+                                                left: Get.width * 0.015,
+                                                child: Text(
+                                                  productoViewModel
+                                                      .getCurrency(cartProvider
+                                                                  .getListaFabricante[
+                                                              fabricante]
+                                                          ["precioFinal"]),
+                                                  style: TextStyle(
+                                                      fontSize: 11.5,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                                Positioned(
-                                                  top: 10,
-                                                  left: 5.5,
-                                                  child: Text(
-                                                    productoViewModel
-                                                        .getCurrency(cartProvider
-                                                                    .getListaFabricante[
-                                                                fabricante]
-                                                            ["precioFinal"]),
-                                                    style: TextStyle(
-                                                        fontSize: 11.5,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ]),
-                                                
-                                            ],
-                                                                                        ),
-                                          ),
+                                              ),
+                                            ]),
+                                            
+                                              
+                                          ],
+                                                                                      ),
                                         ),
+                                        
                                         // Text(
                                         //     'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
                                         //     style: disenoValores(),
@@ -451,7 +440,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                         //   ),
                                       ],
                                     )),
-                                SizedBox(height: 80.0),
+                                SizedBox(height: 53.0),
                                 Visibility(
                                   visible: getVisibilityMessage(
                                       fabricante,
@@ -488,6 +477,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             child: Center(
                                                 child: Text(
                                               textAlertCompany(
+                                                productoViewModel.getCurrency(resulCalcularMontoMinimo),
                                                 fabricante,
                                                 cartProvider.getListaFabricante[
                                                     fabricante]["precioFinal"],
@@ -1463,6 +1453,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
   }
 
   String textAlertCompany(
+    String acumuladoMontoMinimo,
     String fabricante,
     double valorPedido,
     double precioMinimo,
@@ -1522,7 +1513,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
           if (valorPedido < precioMinimo) {
             isValid.value = true;
             //TODO: agregar valor faltante
-            return "¡Solo te falta --- $texto2 $diasSinComa.";
+            return "¡Solo te falta $acumuladoMontoMinimo $texto2 $diasSinComa.";
           }
         }
         isValid.value = false;
