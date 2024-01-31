@@ -275,10 +275,10 @@ class _CarritoComprasState extends State<CarritoCompras> {
       BuildContext context1, CarroModelo cartProvider) {
     List<Widget> listaWidget = [];
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
-      
       // Variables para calcular el faltante del monto minimo para realizar un pedido
-      double sumaPreciosProductos = cartProvider.getListaFabricante[fabricante]["precioFinal"];
-          
+      double sumaPreciosProductos =
+          cartProvider.getListaFabricante[fabricante]["precioFinal"];
+
       double valorMontoMinimo = value["preciominimo"];
 
       calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo) {
@@ -286,7 +286,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
         return resultado;
       }
 
-      double resulCalcularMontoMinimo = calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo);
+      double resulCalcularMontoMinimo =
+          calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo);
 
       if (value['precioProducto'] == 0.0) {
       } else {
@@ -318,7 +319,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return Container(
                             decoration: BoxDecoration(
-                                color: Colors.transparent,
+                                
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(25))),
                             padding: EdgeInsets.all(10),
@@ -365,82 +366,87 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           );
                         },
                         body: Container(
-                          color: Colors.white,
+                          //color: Colors.amber,
+                          //height: 40,
                           constraints: BoxConstraints(
-                              minHeight: 50, maxWidth: double.infinity),
+                              minHeight: 40, maxWidth: double.infinity),
                           child: SingleChildScrollView(
                             child: Column(
                               children: <Widget>[
-                                Visibility(
-                                    //value["preciominimo"] != 0.0, Con esta validacion podemos definir si se muestra o no la barra indicadora de monto minimo con sus textos adicionales
-                                    visible: value["preciominimo"] != 0.0,
-                                    child: Column(
-                                      children: [
-                                        if (sumaPreciosProductos <= valorMontoMinimo)
-                                          Container(        
-                                            height: Get.height * 0.022,
-                                            padding: EdgeInsets.only(right: Get.width * 0.10),
-                                            width: Get.width * 1.0,
-                                            child: Text(
-                                              productoViewModel.getCurrency(
-                                                  value["preciominimo"]),
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  color:ConstantesColores.verde,
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.right,
-                                            ),
-                                          ),
-                                        BarraFaltanteMontoMin(
-                                          minimumAmount: valorMontoMinimo,
-                                          currentAmount: sumaPreciosProductos,
-                                          punteroBarra: Column(
+                                value["preciominimo"] != 0.0
+                                    ? Visibility(
+                                        //value["preciominimo"] != 0.0, Con esta validacion podemos definir si se muestra o no la barra indicadora de monto minimo con sus textos adicionales
+                                        visible: value["preciominimo"] != 0.0,
+                                        child: Column(
                                           children: [
-                                            SvgPicture.asset(
-                                              'assets/image/carro_progress_bar.svg',
-                                              height: Get.height * 0.055,
-                                                   width:  Get.width *  0.28,),
-                                            
-                                            
-                                            Stack(
-                                              children: [
-
-                                                SvgPicture.asset(
-                                              'assets/image/Pop.svg',
-                                              height: Get.height * 0.040,
-                                                   width:  Get.width *  0.28,),
-                                             
-                                              Positioned(
-                                                top: Get.height * 0.013,
-                                                left: Get.width * 0.015,
+                                            if (sumaPreciosProductos <=
+                                                valorMontoMinimo)
+                                              Container(
+                                                height: Get.height * 0.022,
+                                                padding: EdgeInsets.only(
+                                                    right: Get.width * 0.10),
+                                                width: Get.width * 1.0,
                                                 child: Text(
-                                                  productoViewModel
-                                                      .getCurrency(cartProvider
-                                                                  .getListaFabricante[
-                                                              fabricante]
-                                                          ["precioFinal"]),
+                                                  productoViewModel.getCurrency(
+                                                      value["preciominimo"]),
                                                   style: TextStyle(
-                                                      fontSize: 11.5,
-                                                      color: Colors.white,
+                                                      fontSize: 15.0,
+                                                      color: ConstantesColores
+                                                          .verde,
                                                       fontWeight:
                                                           FontWeight.bold),
+                                                  textAlign: TextAlign.right,
                                                 ),
                                               ),
-                                            ]),
-                                            
-                                              
+                                            BarraFaltanteMontoMin(
+                                              minimumAmount: valorMontoMinimo,
+                                              currentAmount:
+                                                  sumaPreciosProductos,
+                                              punteroBarra: Column(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'assets/image/carro_progress_bar.svg',
+                                                    height: Get.height * 0.055,
+                                                    width: Get.width * 0.28,
+                                                  ),
+                                                  Stack(children: [
+                                                    SvgPicture.asset(
+                                                      'assets/image/Pop.svg',
+                                                      height:
+                                                          Get.height * 0.040,
+                                                      width: Get.width * 0.28,
+                                                    ),
+                                                    Positioned(
+                                                      top: Get.height * 0.013,
+                                                      left: Get.width * 0.015,
+                                                      child: Text(
+                                                        productoViewModel
+                                                            .getCurrency(cartProvider
+                                                                        .getListaFabricante[
+                                                                    fabricante][
+                                                                "precioFinal"]),
+                                                        style: TextStyle(
+                                                            fontSize: 11.5,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ]),
+                                                ],
+                                              ),
+                                            ),
+
+                                            // Text(
+                                            //     'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
+                                            //     style: disenoValores(),
+                                            //     textAlign: TextAlign.center,
+                                            //   ),
+                                            SizedBox(height: Get.height * 0.056)
                                           ],
-                                                                                      ),
-                                        ),
-                                        
-                                        // Text(
-                                        //     'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
-                                        //     style: disenoValores(),
-                                        //     textAlign: TextAlign.center,
-                                        //   ),
-                                      ],
-                                    )),
-                                SizedBox(height: 53.0),
+                                        ))
+                                    : SizedBox(height: 0.0009),
                                 Visibility(
                                   visible: getVisibilityMessage(
                                       fabricante,
@@ -477,7 +483,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             child: Center(
                                                 child: Text(
                                               textAlertCompany(
-                                                productoViewModel.getCurrency(resulCalcularMontoMinimo),
+                                                productoViewModel.getCurrency(
+                                                    resulCalcularMontoMinimo),
                                                 fabricante,
                                                 cartProvider.getListaFabricante[
                                                     fabricante]["precioFinal"],
