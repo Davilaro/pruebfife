@@ -319,7 +319,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return Container(
                             decoration: BoxDecoration(
-                                
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(25))),
                             padding: EdgeInsets.all(10),
@@ -367,86 +366,77 @@ class _CarritoComprasState extends State<CarritoCompras> {
                         },
                         body: Container(
                           color: Colors.white,
-                          //height: 40,
-                          constraints: BoxConstraints(
-                              minHeight: 40, maxWidth: double.infinity),
                           child: SingleChildScrollView(
                             child: Column(
                               children: <Widget>[
-                                value["preciominimo"] != 0.0
-                                    ? Visibility(
-                                        //value["preciominimo"] != 0.0, Con esta validacion podemos definir si se muestra o no la barra indicadora de monto minimo con sus textos adicionales
-                                        visible: value["preciominimo"] != 0.0,
-                                        child: Column(
-                                          children: [
-                                            if (sumaPreciosProductos <=
-                                                valorMontoMinimo)
-                                              Container(
-                                                height: Get.height * 0.022,
-                                                padding: EdgeInsets.only(
-                                                    right: Get.width * 0.10),
-                                                width: Get.width * 1.0,
-                                                child: Text(
-                                                  productoViewModel.getCurrency(
-                                                      value["preciominimo"]),
-                                                  style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      color: ConstantesColores
-                                                          .verde,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.right,
-                                                ),
-                                              ),
-                                            BarraFaltanteMontoMin(
-                                              minimumAmount: valorMontoMinimo,
-                                              currentAmount:
-                                                  sumaPreciosProductos,
-                                              punteroBarra: Column(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/image/carro_progress_bar.svg',
-                                                    height: Get.height * 0.055,
-                                                    width: Get.width * 0.28,
-                                                  ),
-                                                  Stack(children: [
-                                                    SvgPicture.asset(
-                                                      'assets/image/Pop.svg',
-                                                      height:
-                                                          Get.height * 0.040,
-                                                      width: Get.width * 0.28,
-                                                    ),
-                                                    Positioned(
-                                                      top: Get.height * 0.013,
-                                                      left: Get.width * 0.015,
-                                                      child: Text(
-                                                        productoViewModel
-                                                            .getCurrency(cartProvider
-                                                                        .getListaFabricante[
-                                                                    fabricante][
-                                                                "precioFinal"]),
-                                                        style: TextStyle(
-                                                            fontSize: 11.5,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ]),
-                                                ],
-                                              ),
+                                Visibility(
+                                    //value["preciominimo"] != 0.0, Con esta validacion podemos definir si se muestra o no la barra indicadora de monto minimo con sus textos adicionales
+                                    visible: value["preciominimo"] != 0.0,
+                                    child: Column(
+                                      children: [
+                                        if (sumaPreciosProductos <=
+                                            valorMontoMinimo)
+                                          Container(
+                                            height: Get.height * 0.022,
+                                            padding: EdgeInsets.only(
+                                                right: Get.width * 0.10),
+                                            width: Get.width * 1.0,
+                                            child: Text(
+                                              productoViewModel.getCurrency(
+                                                  value["preciominimo"]),
+                                              style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  color:
+                                                      ConstantesColores.verde,
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.right,
                                             ),
+                                          ),
+                                        BarraFaltanteMontoMin(
+                                          minimumAmount: valorMontoMinimo,
+                                          currentAmount: sumaPreciosProductos,
+                                          punteroBarra: Column(
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/image/carro_progress_bar.svg',
+                                                height: Get.height * 0.055,
+                                                width: Get.width * 0.28,
+                                              ),
+                                              Stack(children: [
+                                                SvgPicture.asset(
+                                                  'assets/image/Pop.svg',
+                                                  height: Get.height * 0.040,
+                                                  width: Get.width * 0.28,
+                                                ),
+                                                Positioned(
+                                                  top: Get.height * 0.013,
+                                                  left: Get.width * 0.015,
+                                                  child: Text(
+                                                    productoViewModel
+                                                        .getCurrency(cartProvider
+                                                                    .getListaFabricante[
+                                                                fabricante]
+                                                            ["precioFinal"]),
+                                                    style: TextStyle(
+                                                        fontSize: 11.5,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ]),
+                                            ],
+                                          ),
+                                        ),
 
-                                            // Text(
-                                            //     'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
-                                            //     style: disenoValores(),
-                                            //     textAlign: TextAlign.center,
-                                            //   ),
-                                            SizedBox(height: Get.height * 0.056)
-                                          ],
-                                        ))
-                                    : SizedBox.shrink(),
+                                        // Text(
+                                        //     'Solo te falta ${productoViewModel.getCurrency(resulCalcularMontoMinimo)} para completar tu monto mínimo',
+                                        //     style: disenoValores(),
+                                        //     textAlign: TextAlign.center,
+                                        //   ),
+                                        SizedBox(height: Get.height * 0.056)
+                                      ],
+                                    )),
                                 Visibility(
                                   visible: getVisibilityMessage(
                                       fabricante,
@@ -456,7 +446,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                       value["preciominimo"],
                                       value["topeMinimo"]),
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(20, 2, 10, 2),
+                                    padding: EdgeInsets.fromLTRB(20, 0, 10, 2),
                                     child: Row(
                                       children: [
                                         Obx(() => Visibility(
@@ -476,7 +466,6 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                               ),
                                             )),
                                         Expanded(
-                                          flex: 2,
                                           child: Container(
                                             margin: EdgeInsets.fromLTRB(
                                                 10, 0, 0, 0),
@@ -649,7 +638,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
         listTag.add(productos);
         result
           ..add(Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 22),
+            padding: EdgeInsets.only(bottom: 10, left: 22, right: 22),
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
