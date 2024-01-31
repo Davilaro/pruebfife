@@ -366,7 +366,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                           );
                         },
                         body: Container(
-                          //color: Colors.amber,
+                          color: Colors.white,
                           //height: 40,
                           constraints: BoxConstraints(
                               minHeight: 40, maxWidth: double.infinity),
@@ -446,7 +446,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             SizedBox(height: Get.height * 0.056)
                                           ],
                                         ))
-                                    : SizedBox(height: 0.0009),
+                                    : SizedBox.shrink(),
                                 Visibility(
                                   visible: getVisibilityMessage(
                                       fabricante,
