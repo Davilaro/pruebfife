@@ -1,5 +1,4 @@
 import 'package:emart/shared/widgets/barra_monto_minimo.dart';
-import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
