@@ -24,6 +24,8 @@ class ProductoViewModel extends GetxController {
       CondicionEntregaService(CondicionEntregaRepositorySqlite());
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
 
+  final db = ProductoRepositorySqlite();
+
   var listSemana = {
     "L": "Lunes",
     "M": "Martes",
@@ -43,6 +45,11 @@ class ProductoViewModel extends GetxController {
         formatNumber.format(valor).replaceAll(',00', '');
 
     return result;
+  }
+
+  Future<Producto> getProducto(String skuProduct) async {
+    Producto producto = await db.consultarDatosProducto(skuProduct);
+    return producto;
   }
 
   NumberFormat getFormat() {
