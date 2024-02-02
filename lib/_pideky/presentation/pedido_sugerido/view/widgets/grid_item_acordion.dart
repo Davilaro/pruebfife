@@ -56,7 +56,7 @@ List<Widget> gridItem(
                           controller
                               .listaProductosPorFabricante[fabricante]
                                   ["isSelected"]
-                              .value = false;
+                              .value = true;
                         }
                         if (producto.isSelected!) {
                           controller.listaProductosPorFabricante[fabricante]
