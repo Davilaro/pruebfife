@@ -369,7 +369,11 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 122;
+=======
+				CURRENT_PROJECT_VERSION = 121;
+>>>>>>> 9783eac8db222bb26ce97459f677ffcc227fedfc
 				DEVELOPMENT_TEAM = N3VCQMQ866;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -509,7 +513,11 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 122;
+=======
+				CURRENT_PROJECT_VERSION = 121;
+>>>>>>> 9783eac8db222bb26ce97459f677ffcc227fedfc
 				DEVELOPMENT_TEAM = N3VCQMQ866;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -541,7 +549,11 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 122;
+=======
+				CURRENT_PROJECT_VERSION = 121;
+>>>>>>> 9783eac8db222bb26ce97459f677ffcc227fedfc
 				DEVELOPMENT_TEAM = N3VCQMQ866;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
