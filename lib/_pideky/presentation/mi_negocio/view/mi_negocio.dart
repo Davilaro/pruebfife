@@ -508,8 +508,6 @@ class _MiNegocioState extends State<MiNegocio> {
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: GestureDetector(
                                 onTap: () async {
-                                  await Get.find<CompraVendeGanaViewModel>()
-                                      .getCompraVendeGana();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
