@@ -11,34 +11,51 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
 
     try {
       var sql = await db.rawQuery('''
-        SELECT   S.negocio  Negocio, S.Codigo, P.Nombre,
-        ROUND(
-        (
-           (
-                p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-            ) + 
-            (
-                CASE
-                    WHEN p.ICUI = 0 THEN p.IBUA
-                    ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                END
-            ) + 
-            (
-                (
-                    p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                ) * p.iva / 100
-            )
-        ), 0
-    ) AS precio, 
-    S.Cantidad,
-        F.BloqueoCartera
-        FROM pedidoSugerido S 
-        INNER JOIN Producto P ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio
-        left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
-             select count(P.codigo) identificador,*
-             from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
-        ) tmp where tmp.identificador = 1) tmp on P.fabricante = tmp.proveedor and P.codigo = tmp.codigo
-        INNER JOIN Fabricante F ON F.empresa = P.Fabricante ''');
+          SELECT DISTINCT
+          S.negocio AS Negocio,
+          S.Codigo,
+          P.Nombre,
+          ROUND(
+              (
+                  (p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) + 
+                  (
+                      CASE
+                          WHEN p.ICUI = 0 THEN p.IBUA
+                          ELSE (((p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
+                      END
+                  ) + 
+                  ((p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) * p.iva / 100)
+              ), 0
+          ) AS precio,
+          S.Cantidad,
+          F.BloqueoCartera
+        FROM
+          pedidoSugerido S
+        INNER JOIN
+          Producto P ON P.Codigo = S.Codigo AND P.fabricante = S.Negocio
+        LEFT JOIN
+          (
+              SELECT
+                  tmp.proveedor,
+                  tmp.material AS codigo,
+                  tmp.descuento
+              FROM
+                  (
+                      SELECT
+                          COUNT(P.codigo) AS identificador,
+                          *
+                      FROM
+                          descuentos D
+                      INNER JOIN
+                          producto P ON P.codigo = D.material AND D.proveedor = P.fabricante
+                      GROUP BY
+                          material
+                  ) tmp
+              WHERE
+                  tmp.identificador = 1
+          ) tmp ON P.fabricante = tmp.proveedor AND P.codigo = tmp.codigo
+        INNER JOIN
+          Fabricante F ON F.empresa = P.Fabricante; ''');
       return sql.isNotEmpty
           ? sql.map((e) => PedidoSugeridoModel.fromJson(e)).toList()
           : [];

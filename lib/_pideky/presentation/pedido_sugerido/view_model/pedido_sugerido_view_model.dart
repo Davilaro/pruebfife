@@ -4,6 +4,7 @@ import 'package:emart/_pideky/domain/pedido_sugerdio/model/pedido_sugerido.dart'
 import 'package:emart/_pideky/domain/pedido_sugerdio/service/pedido_sugerido.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
 import 'package:emart/_pideky/infrastructure/pedido_sugerdio/pedido_sugerido_query.dart';
+import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/carrito_provider.dart';
@@ -51,10 +52,12 @@ class PedidoSugeridoViewModel extends GetxController
 
   llenarCarrito(Producto producto, int cantidad, context) async {
     final cartProvider = Provider.of<CarroModelo>(context, listen: false);
+    ProductoViewModel productViewModel = Get.find();
     if (producto.codigo != "") {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "$cantidad";
       PedidoEmart.registrarValoresPedido(producto, '$cantidad', true);
       MetodosLLenarValores().calcularValorTotal(cartProvider);
+      productViewModel.insertarPedidoTemporal(producto.codigo);
     }
 
     update();
@@ -67,15 +70,11 @@ class PedidoSugeridoViewModel extends GetxController
       return p.negocio;
     });
     groups.forEach((key, value) {
+      RxBool isSelected = false.obs;
       String icon = '';
       String nombreComercial = "";
       double precioProductos = 0;
       int bloqueoCartera = 0;
-
-      for (int i = 0; i < value.length; i++) {
-        precioProductos =
-            precioProductos + (value[i].cantidad! * value[i].precio!);
-      }
 
       for (int j = 0; j < listaFabricante.length; j++) {
         if (listaFabricante[j].empresa == key) {
@@ -93,6 +92,7 @@ class PedidoSugeridoViewModel extends GetxController
                 'imagen': icon,
                 'nombrecomercial': nombreComercial,
                 'bloqueoCartera': bloqueoCartera,
+                'isSelected': isSelected,
               });
     });
     // update();

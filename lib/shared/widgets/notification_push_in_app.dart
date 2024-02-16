@@ -43,7 +43,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
     _animationController.forward();
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(Duration(seconds: widget.data.tiempo), () {
           if (cerrado == false) {
             _animationController.reverse();
             Future.delayed(Duration(milliseconds: 300), () {

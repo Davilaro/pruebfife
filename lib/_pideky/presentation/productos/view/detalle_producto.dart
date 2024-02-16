@@ -280,8 +280,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                 context: context,
                                                 builder: (context) =>
                                                     PopUpChooseList(
-                                                      producto:
-                                                          widget.productos,
+                                                      productos:
+                                                          List.generate(1, (index) => widget.productos),
                                                       cantidad: toInt(cargoConfirmar
                                                           .controllerCantidadProducto
                                                           .value),

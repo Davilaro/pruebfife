@@ -17,6 +17,7 @@ class Pedido {
     this.precioBase,
     this.isOferta,
     this.precioDescuento,
+    required this.isFrecuencia,
   });
 
   int? cantidad;
@@ -36,4 +37,5 @@ class Pedido {
   String? nombreProducto;
   double? precioInicial;
   double? descuento;
+  int isFrecuencia;
 }

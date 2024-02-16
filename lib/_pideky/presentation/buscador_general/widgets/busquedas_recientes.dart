@@ -8,7 +8,6 @@ class BusquedasRecientes extends StatelessWidget {
   BusquedasRecientes();
 
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +35,11 @@ class BusquedasRecientes extends StatelessWidget {
                               searchFuzzyViewModel.listaRecientes[index],
                           conDistintivo: false)!;
 
-                  searchFuzzyViewModel.runFilter(
-                      searchFuzzyViewModel.searchInput.value);
+                  searchFuzzyViewModel
+                      .runFilter(searchFuzzyViewModel.searchInput.value);
 
-                  searchFuzzyViewModel.controllerUser.text = searchFuzzyViewModel
-                      .nombreSugeridos(
+                  searchFuzzyViewModel.controllerUser.text =
+                      searchFuzzyViewModel.nombreSugeridos(
                           palabrabuscada:
                               searchFuzzyViewModel.listaRecientes[index],
                           conDistintivo: false)!;
@@ -55,6 +54,7 @@ class BusquedasRecientes extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             height: Get.height * 0.07,
+                            width: Get.width * 0.1,
                             imageUrl: searchFuzzyViewModel.iconoSugeridos(
                                 palabrabuscada: searchFuzzyViewModel
                                     .listaRecientes[index])!,
@@ -64,19 +64,20 @@ class BusquedasRecientes extends StatelessWidget {
                               'assets/image/logo_login.png',
                               width: Get.width * 0.05,
                             ),
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                           ),
                           SizedBox(
                             width: Get.width * 0.05,
                           ),
                           SizedBox(
-                            width: Get.width * 0.5,
+                            width: Get.width * 0.4,
                             child: AutoSizeText(
                               searchFuzzyViewModel.nombreSugeridos(
                                   palabrabuscada: searchFuzzyViewModel
                                       .listaRecientes[index],
                                   conDistintivo: true)!, //
                               minFontSize: 12,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.black.withOpacity(.4),
                                 fontWeight: FontWeight.bold,
@@ -87,11 +88,19 @@ class BusquedasRecientes extends StatelessWidget {
                       ),
                     )),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10, bottom: 10, left: 10, right: 20),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black.withOpacity(.4),
+                      padding:
+                          const EdgeInsets.only(top: 10, bottom: 10, right: 15),
+                      child: AutoSizeText(
+                        searchFuzzyViewModel.skuSugeridos(
+                            palabrabuscada:
+                                searchFuzzyViewModel.listaRecientes[index],
+                            conDistintivo: true)!,
+                        minFontSize: 10,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(.4),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],

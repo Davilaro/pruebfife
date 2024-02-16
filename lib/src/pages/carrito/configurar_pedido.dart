@@ -213,9 +213,11 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   }
 
   _dialogEnviarPedido(size) async {
+    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     final List<Pedido> listaProductosPedidos = [];
     final List<String> listaSkuProductos = [];
     final progress = ProgressDialog(context, isDismissible: false);
+
     progress.style(
         message: 'Validando pedido...',
         progressWidget: Image(
@@ -237,24 +239,30 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
         }
 
         Pedido pedidoNuevo = new Pedido(
-          cantidad: int.parse(value),
-          precioBase: PedidoEmart.listaProductos![key]!.precioBase,
-          isOferta: PedidoEmart.listaProductos![key]!.isOferta,
-          codigoProducto: key,
-          iva: PedidoEmart.listaProductos![key]!.iva,
-          precio: PedidoEmart.listaProductos![key]!.precio,
-          fabricante: PedidoEmart.listaProductos![key]!.fabricante,
-          codigoFabricante: PedidoEmart.listaProductos![key]!.codigoFabricante,
-          nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
-          codCliente: prefs.codCliente,
-          tipoFabricante: directo,
-          codProveedor: 1,
-          precioDescuento: PedidoEmart.listaProductos![key]!.precioConDescuento,
-          codigocliente: PedidoEmart.listaProductos![key]!.codigocliente,
-          nombreProducto: PedidoEmart.listaProductos![key]!.nombre,
-          precioInicial: PedidoEmart.listaProductos![key]!.precioinicial,
-          descuento: PedidoEmart.listaProductos![key]!.descuento,
-        );
+            cantidad: int.parse(value),
+            precioBase: PedidoEmart.listaProductos![key]!.precioBase,
+            isOferta: PedidoEmart.listaProductos![key]!.isOferta,
+            codigoProducto: key,
+            iva: PedidoEmart.listaProductos![key]!.iva,
+            precio: PedidoEmart.listaProductos![key]!.precio,
+            fabricante: PedidoEmart.listaProductos![key]!.fabricante,
+            codigoFabricante:
+                PedidoEmart.listaProductos![key]!.codigoFabricante,
+            nitFabricante: PedidoEmart.listaProductos![key]!.nitFabricante,
+            codCliente: prefs.codCliente,
+            tipoFabricante: directo,
+            codProveedor: 1,
+            precioDescuento:
+                PedidoEmart.listaProductos![key]!.precioConDescuento,
+            codigocliente: PedidoEmart.listaProductos![key]!.codigocliente,
+            nombreProducto: PedidoEmart.listaProductos![key]!.nombre,
+            precioInicial: PedidoEmart.listaProductos![key]!.precioinicial,
+            descuento: PedidoEmart.listaProductos![key]!.descuento,
+            isFrecuencia: cartProvider.getFrecuenciaFabricante[
+                        PedidoEmart.listaProductos![key]!.fabricante] ==
+                    true
+                ? 0
+                : 1);
 
         if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
           listaProductosPedidos.add(pedidoNuevo);
