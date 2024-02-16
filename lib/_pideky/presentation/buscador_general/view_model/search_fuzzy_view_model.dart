@@ -230,6 +230,11 @@ class SearchFuzzyViewModel extends GetxController {
                             : 'Error en la búsqueda';
   }
 
+  String? skuSugeridos(
+      {required Object palabrabuscada, required bool conDistintivo}) {
+    return palabrabuscada is Producto ? "sku: ${palabrabuscada.codigo}" : "";
+  }
+
   Future<void> logicaSeleccion(
       Object object, cargoConfirmar, cartProvider, context) async {
     if (prefs.usurioLogin == -1) {

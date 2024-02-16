@@ -176,20 +176,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       )),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: isActiveBanner
-                          ? MediaQuery.of(context).size.height * 0.5
-                          : MediaQuery.of(context).size.height * 0.7,
-                      child: GridView.count(
-                          physics: BouncingScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing:
-                              4.0, // espaciado entre ejes principales (horizontal)
-                          childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                          children:
-                              _cargarProductosLista(listaProducto, context)),
-                    ),
+                  child: Container(
+                    height: isActiveBanner
+                        ? MediaQuery.of(context).size.height * 0.5
+                        : MediaQuery.of(context).size.height * 0.8,
+                    child: GridView.count(
+                        physics: BouncingScrollPhysics(),
+                        crossAxisCount: 2,
+                        mainAxisSpacing:
+                            4.0, // espaciado entre ejes principales (horizontal)
+                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                        children:
+                            _cargarProductosLista(listaProducto, context)),
                   ),
                 ),
               ],

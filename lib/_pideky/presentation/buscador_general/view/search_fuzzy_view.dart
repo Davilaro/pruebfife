@@ -94,7 +94,6 @@ class SearchFuzzyView extends StatelessWidget {
                                             cargoConfirmar,
                                             cartProvider,
                                             context);
-                                            
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -107,6 +106,7 @@ class SearchFuzzyView extends StatelessWidget {
                                               children: [
                                                 CachedNetworkImage(
                                                   height: Get.height * 0.07,
+                                                  width: Get.width * 0.1,
                                                   imageUrl: searchFuzzyViewModel
                                                       .iconoSugeridos(
                                                           palabrabuscada:
@@ -120,10 +120,10 @@ class SearchFuzzyView extends StatelessWidget {
                                                     'assets/image/logo_login.png',
                                                     width: Get.width * 0.05,
                                                   ),
-                                                  fit: BoxFit.fill,
+                                                  fit: BoxFit.contain,
                                                 ),
                                                 SizedBox(
-                                                  width: Get.width * 0.05,
+                                                  width: Get.width * 0.03,
                                                 ),
                                                 SizedBox(
                                                   width: Get.width * 0.4,
@@ -137,6 +137,8 @@ class SearchFuzzyView extends StatelessWidget {
                                                             conDistintivo:
                                                                 true)!,
                                                     minFontSize: 12,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       color: Colors.black
                                                           .withOpacity(.4),
@@ -150,12 +152,21 @@ class SearchFuzzyView extends StatelessWidget {
                                           )),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: Get.width * 0.05,
-                                                vertical: Get.height * 0.05),
-                                            child: Icon(
-                                              Icons.search,
-                                              color:
-                                                  Colors.black.withOpacity(.4),
+                                                vertical: 30),
+                                            child: AutoSizeText(
+                                              searchFuzzyViewModel.skuSugeridos(
+                                                  palabrabuscada:
+                                                      searchFuzzyViewModel
+                                                              .allResultados[
+                                                          position],
+                                                  conDistintivo: true)!,
+                                              minFontSize: 10,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(.4),
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ],
