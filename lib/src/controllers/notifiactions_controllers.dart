@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_statements, unnecessary_null_comparison
+// ignore_for_file: unnecessary_statements, unnecessary_null_comparison, deprecated_member_use
 import 'dart:async';
 
 import 'package:emart/_pideky/domain/marca/model/marca.dart';
@@ -8,6 +8,7 @@ import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../_pideky/domain/producto/service/producto_service.dart';
 import '../../_pideky/presentation/productos/view/detalle_producto_compra.dart';
@@ -190,81 +191,98 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         Provider.of<OpcionesBard>(context, listen: false);
     if (notificacion.redireccion == "") {
       return;
-    }
-    var resBusqueda;
-    if (notificacion.redireccion == 'Detalle Producto') {
-      resBusqueda = await productService.cargarProductosFiltro(
-          notificacion.subCategoriaRedireccion.toString(), "");
-      _detalleProducto(
-          resBusqueda[0], provider, context, cargoConfirmar, prefs);
-    } else if (notificacion.redireccion == 'Categoría') {
-      resBusqueda = await DBProvider.db
-          .consultarCategorias(notificacion.categoriaRedireccion.toString(), 1);
-      var resSubBusqueda = await DBProvider.db
-          .consultarCategoriasSubCategorias(resBusqueda[0].codigo);
-      _direccionarCategoria(context, provider, resSubBusqueda,
-          notificacion.subCategoriaRedireccion.toString());
-    } else if (notificacion.redireccion == 'Proveedor') {
-      resBusqueda = await DBProvider.db
-          .consultarFricante(notificacion.subCategoriaRedireccion.toString());
-      _direccionarProveedor(context, resBusqueda[0]);
-    } else if (notificacion.redireccion == 'Marca') {
-      resBusqueda = await marcaService
-          .consultaMarcas(notificacion.subCategoriaRedireccion.toString());
-      _direccionarMarca(context, resBusqueda[0]);
-    } else if (notificacion.redireccion == "Términos y condiciones") {
-      if (locasionBanner == 'Home') {
-        viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(
-                context, viewModel.terminosDatosPdf, isPushInUp)
-            : Get.back();
-      } else {
-        await _navegacionPushInUp();
-        viewModel.terminosDatosPdf != null
-            ? verTerminosCondiciones(
-                context, viewModel.terminosDatosPdf, isPushInUp)
-            : Get.back();
-      }
-    } else if (notificacion.redireccion == "Mi Negocio") {
-      if (locasionBanner == "Home") {
-        Get.back();
-        providerBottomNavigationBar.selectOptionMenu = 4;
-      } else {
-        isPushInUp == true
-            ? {
-                Navigator.of(context).pop(),
-                Navigator.of(context).pop(),
-                providerBottomNavigationBar.selectOptionMenu = 4,
-              }
-            : {
-                Navigator.of(context).pop(),
-                providerBottomNavigationBar.selectOptionMenu = 4,
-              };
-      }
-    } else if (notificacion.redireccion == "Mis pagos Nequi") {
-      if (locasionBanner == "Home") {
-        await Get.to(() => MisPagosNequiPage());
-        Get.back();
-      } else {
-        Navigator.of(context).pop();
-        await Get.to(() => MisPagosNequiPage());
-        Get.back();
-      }
-    } else if (notificacion.redireccion == "Club de ganadores") {
-      if (locasionBanner == "Home") {
-        await Get.to(() => ClubGanadoresPage());
-        Get.back();
-      } else {
-        isPushInUp == true
-            ? {
-                Navigator.of(context).pop(),
-                Navigator.of(context).pop(),
-                Get.to(() => ClubGanadoresPage())
-              }
-            : {Navigator.of(context).pop(), Get.to(() => ClubGanadoresPage())};
-      }
+    } else if (notificacion.redireccion == 'Contenido WEB') {
+      await launchUrl(notificacion.contenidoWeb);
+      return;
     } else {
-      Get.back();
+      var resBusqueda;
+      if (notificacion.redireccion == 'Detalle Producto') {
+        resBusqueda = await productService.cargarProductosFiltro(
+            notificacion.subCategoriaRedireccion.toString(), "");
+        _detalleProducto(
+            resBusqueda[0], provider, context, cargoConfirmar, prefs);
+      } else if (notificacion.redireccion == 'Categoría') {
+        resBusqueda = await DBProvider.db.consultarCategorias(
+            notificacion.categoriaRedireccion.toString(), 1);
+        var resSubBusqueda = await DBProvider.db
+            .consultarCategoriasSubCategorias(resBusqueda[0].codigo);
+        _direccionarCategoria(context, provider, resSubBusqueda,
+            notificacion.subCategoriaRedireccion.toString());
+      } else if (notificacion.redireccion == 'Proveedor') {
+        resBusqueda = await DBProvider.db
+            .consultarFricante(notificacion.subCategoriaRedireccion.toString());
+        _direccionarProveedor(context, resBusqueda[0]);
+      } else if (notificacion.redireccion == 'Marca') {
+        resBusqueda = await marcaService
+            .consultaMarcas(notificacion.subCategoriaRedireccion.toString());
+        _direccionarMarca(context, resBusqueda[0]);
+      } else if (notificacion.redireccion == "Términos y condiciones") {
+        if (locasionBanner == 'Home') {
+          viewModel.terminosDatosPdf != null
+              ? verTerminosCondiciones(
+                  context, viewModel.terminosDatosPdf, isPushInUp)
+              : Get.back();
+        } else {
+          await _navegacionPushInUp();
+          viewModel.terminosDatosPdf != null
+              ? verTerminosCondiciones(
+                  context, viewModel.terminosDatosPdf, isPushInUp)
+              : Get.back();
+        }
+      } else if (notificacion.redireccion == "Mi Negocio") {
+        if (locasionBanner == "Home") {
+          Get.back();
+          providerBottomNavigationBar.selectOptionMenu = 4;
+        } else {
+          isPushInUp == true
+              ? {
+                  Navigator.of(context).pop(),
+                  Navigator.of(context).pop(),
+                  providerBottomNavigationBar.selectOptionMenu = 4,
+                }
+              : {
+                  Navigator.of(context).pop(),
+                  providerBottomNavigationBar.selectOptionMenu = 4,
+                };
+        }
+      } else if (notificacion.redireccion == "Mis pagos Nequi") {
+        if (locasionBanner == "Home") {
+          await Get.to(() => MisPagosNequiPage());
+          Get.back();
+        } else {
+          Navigator.of(context).pop();
+          await Get.to(() => MisPagosNequiPage());
+          Get.back();
+        }
+      } else if (notificacion.redireccion == "Club de ganadores") {
+        if (locasionBanner == "Home") {
+          await Get.to(() => ClubGanadoresPage());
+          Get.back();
+        } else {
+          isPushInUp == true
+              ? {
+                  Navigator.of(context).pop(),
+                  Navigator.of(context).pop(),
+                  Get.to(() => ClubGanadoresPage())
+                }
+              : {
+                  Navigator.of(context).pop(),
+                  Get.to(() => ClubGanadoresPage())
+                };
+        }
+      } else {
+        Get.back();
+      }
+    }
+  }
+
+  Future launchUrl(url) async {
+    try {
+      await launch(
+        url,
+      );
+    } catch (e) {
+      return e;
     }
   }
 

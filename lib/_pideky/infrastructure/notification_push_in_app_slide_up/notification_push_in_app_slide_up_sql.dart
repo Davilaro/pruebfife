@@ -21,7 +21,7 @@ class NotificationPushInUpAndSlideUpSql
       var sql = await db.rawQuery(
           """
       select p.Link as imageUrl, p.Ubicacion as ubicacion, p.CategoriaUbicacion as categoriaUbicacion, 
-      p.SubCategoriaUbicacion as subCategoriaUbicacion, p.Redireccion as redireccion, p.CategoriaRedireccion as categoriaRedireccion,
+      p.SubCategoriaUbicacion as subCategoriaUbicacion, p.Redireccion as redireccion, p.CategoriaRedireccion as categoriaRedireccion, p.contenidoWeb,
       p.SubCategoriaRedireccion as subCategoriaRedireccion  from PushInApp p where p.Ubicacion = "$ubicacion" limit 1
       """);
       return sql.isNotEmpty
