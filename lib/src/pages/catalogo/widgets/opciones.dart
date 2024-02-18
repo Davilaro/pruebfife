@@ -66,7 +66,7 @@ class BtnOpciones extends StatelessWidget {
                         cargoConfirmar.cargoBaseDatos(i),
                       },
                   style: TextButton.styleFrom(
-                    primary: Colors.black,
+                    foregroundColor: Colors.black,
                   ),
                   child: Text('${seccion.descripcion}')),
             ),

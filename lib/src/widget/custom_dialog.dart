@@ -60,8 +60,7 @@ class CustomDialog extends StatelessWidget {
                           onPressed: onLeftPressed ??
                               () => {Navigator.of(context).pop()},
                           style: ElevatedButton.styleFrom(
-                            primary: HexColor("#30C3A3"), // background
-                            onPrimary: HexColor("#E4E3AD"), // foreground
+                            foregroundColor: HexColor("#E4E3AD"), backgroundColor: HexColor("#30C3A3"), // foreground
                           ),
                         ),
                       ),
@@ -109,10 +108,7 @@ class CustomDialog extends StatelessWidget {
                         onPressed: onRightPressed ??
                             () => {Navigator.of(context).pop()},
                         style: ElevatedButton.styleFrom(
-                          fixedSize: Size(Get.width * 0.9, 45),
-                          primary: Colors.white, // background
-                          onPrimary:
-                              ConstantesColores.azul_precio, // foreground
+                          foregroundColor: ConstantesColores.azul_precio, backgroundColor: Colors.white, fixedSize: Size(Get.width * 0.9, 45), // foreground
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                             side: BorderSide(
@@ -138,9 +134,7 @@ class CustomDialog extends StatelessWidget {
                         onPressed: onLeftPressed ??
                             () => {Navigator.of(context).pop()},
                         style: ElevatedButton.styleFrom(
-                          fixedSize: Size(Get.width * 0.9, 45),
-                          primary: ConstantesColores.agua_marina, // background
-                          onPrimary: HexColor("#E4E3AD"), // foreground
+                          foregroundColor: HexColor("#E4E3AD"), backgroundColor: ConstantesColores.agua_marina, fixedSize: Size(Get.width * 0.9, 45), // foreground
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                             side: BorderSide.none,
