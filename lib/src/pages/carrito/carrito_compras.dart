@@ -437,7 +437,8 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                         SizedBox(height: Get.height * 0.056)
                                       ],
                                     )),
-                                Visibility(
+                                    valorMontoMinimo > sumaPreciosProductos
+                              ?  Visibility(
                                   visible: getVisibilityMessage(
                                       fabricante,
                                       cartProvider
@@ -509,7 +510,18 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                )
+                                : value["preciominimo"] != 0
+                                ? Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 40),
+                                    child: Text('¡Muy bien!, alcanzaste el monto mínimo para realizar tu pedido',
+                                      style: TextStyle(color: ConstantesColores.azul_precio, fontWeight: FontWeight.bold
+                                  
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                                :Container(),
                                 SizedBox(height: 20.0),
                                 Container(
                                   constraints: BoxConstraints(

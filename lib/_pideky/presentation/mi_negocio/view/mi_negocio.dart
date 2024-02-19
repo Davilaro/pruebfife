@@ -626,7 +626,7 @@ class _MiNegocioState extends State<MiNegocio> {
                         )),
                         Container(
                           margin: EdgeInsets.only(top: 30, left: 5, right: 15),
-                          child: Row(
+                          child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
@@ -674,6 +674,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                     )
                                   ],
                                 ),
+                                SizedBox(height: 40,),
                                 GestureDetector(
                                   onTap: () async {
                                     prefs.typeCollaborator != "2"
