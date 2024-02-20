@@ -193,6 +193,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       return;
     } else if (notificacion.redireccion == 'Contenido WEB') {
       await launchUrl(notificacion.contenidoWeb);
+      Get.back();
       return;
     } else {
       var resBusqueda;
