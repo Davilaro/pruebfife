@@ -446,6 +446,8 @@ class ValidationForms extends GetxController {
             ),
             null);
       } else if (validation == -2) {
+        //Uxcam tagueo usuario no encontrado en base de datos
+        UxcamTagueo().userNotFoundLogin();
         mostrarAlertCustomWidgetOld(
             context,
             Text(
