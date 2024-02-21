@@ -39,6 +39,9 @@ class MiNegocio extends StatefulWidget {
 class _MiNegocioState extends State<MiNegocio> {
   final MiNegocioViewModel viewModel = Get.find();
 
+  final ScrollController _scrollController = ScrollController();
+  bool _showSecondSection = false;
+
   @override
   void initState() {
     if (prefs.usurioLogin == -1) {
@@ -63,6 +66,26 @@ class _MiNegocioState extends State<MiNegocio> {
     //UXCam: Llamamos el evento selectFooter
     UxcamTagueo().selectFooter('Mi Negocio');
     super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      // Si el usuario desplaza hacia abajo desde la parte superior
+      // hasta el final, mostramos la segunda sección.
+      setState(() {
+        _showSecondSection = true;
+      });
+    }
   }
 
   @override
@@ -85,7 +108,8 @@ class _MiNegocioState extends State<MiNegocio> {
           return Future<void>.delayed(const Duration(seconds: 3));
         },
         child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            controller: _scrollController,
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: FutureBuilder(
                 initialData: [],
                 future: DBProviderHelper.db.consultarDatosCliente(),
@@ -96,281 +120,357 @@ class _MiNegocioState extends State<MiNegocio> {
                     String telefono = sucursal.telefonoWhatsapp.toString();
                     return Column(
                       children: [
-                        cardStyle(
-                            bodyContainer: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                        Image.asset(
-                                          'assets/icon/perfil_img.png',
-                                          width: 70,
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 20),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: cardStyle(
+                              bodyContainer: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.contain,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(bottom: 5),
-                                                child: Text(
-                                                  S.current.my_business,
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: ConstantesColores
-                                                          .gris_textos,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              Text(
-                                                sucursal.razonsocial.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: ConstantesColores
-                                                        .azul_precio,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(
-                                                S.current.address(sucursal
-                                                    .direccion
-                                                    .toString()),
-                                                style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: ConstantesColores
-                                                        .gris_textos,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  AutoSizeText(
-                                                    S.current.whatsApp_number(
-                                                        telefono),
-                                                    maxLines: 2,
+                                          Image.asset(
+                                            'assets/icon/perfil_img.png',
+                                            width: 70,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 20),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 5),
+                                                  child: Text(
+                                                    S.current.my_business,
                                                     style: TextStyle(
-                                                        fontSize: 11,
+                                                        fontSize: 15,
                                                         color: ConstantesColores
                                                             .gris_textos,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: () =>
-                                                        editarNumero(context),
-                                                    child: Container(
-                                                        margin: EdgeInsets.only(
-                                                            bottom: 1,
-                                                            left: 18),
-                                                        child: Image.asset(
-                                                          'assets/icon/editar_perfil_img.png',
-                                                          width: 20,
-                                                        )),
-                                                  ),
-                                                ],
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 3),
-                                                child: GestureDetector(
-                                                  onTap: () async =>
-                                                      viewModel.copiarCCUP(
-                                                          sucursal
-                                                              .codigoUnicoPideky,
-                                                          context),
-                                                  child: AutoSizeText(
-                                                    'CCUP: ${sucursal.codigoUnicoPideky}',
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                        fontSize: 1,
-                                                        color: Color.fromARGB(
-                                                            255, 67, 66, 66),
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  sucursal.razonsocial
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: ConstantesColores
+                                                          .azul_precio,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  S.current.address(sucursal
+                                                      .direccion
+                                                      .toString()),
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    AutoSizeText(
+                                                      S.current.whatsApp_number(
+                                                          telefono),
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color:
+                                                              ConstantesColores
+                                                                  .gris_textos,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () =>
+                                                          editarNumero(context),
+                                                      child: Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  bottom: 1,
+                                                                  left: 18),
+                                                          child: Image.asset(
+                                                            'assets/icon/editar_perfil_img.png',
+                                                            width: 20,
+                                                          )),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 3),
+                                                  child: GestureDetector(
+                                                    onTap: () async =>
+                                                        viewModel.copiarCCUP(
+                                                            sucursal
+                                                                .codigoUnicoPideky,
+                                                            context),
+                                                    child: AutoSizeText(
+                                                      'CCUP: ${sucursal.codigoUnicoPideky}',
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                          fontSize: 1,
+                                                          color: Color.fromARGB(
+                                                              255, 67, 66, 66),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
                                                   ),
                                                 ),
+                                              ],
+                                            ),
+                                          ),
+                                        ])),
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 10, bottom: 20),
+                                child: Text(
+                                  S.current.my_account,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: ConstantesColores.gris_textos,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MisProveedores())),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Image.asset(
+                                              'assets/icon/mis_proveedores_img.png',
+                                              alignment: Alignment.center,
+                                              width: 35,
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                S.current.my_suppliers,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ])),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 10, bottom: 20),
-                              child: Text(
-                                S.current.my_account,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: ConstantesColores.gris_textos,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            MisProveedores())),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Image.asset(
-                                            'assets/icon/mis_proveedores_img.png',
-                                            alignment: Alignment.center,
-                                            width: 35,
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              S.current.my_suppliers,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 30,
+                                        color: ConstantesColores.agua_marina,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MisVendedores())),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 7),
-                                            child: Image.asset(
-                                              'assets/icon/mis_vendedores_img.png',
-                                              alignment: Alignment.center,
-                                              width: 30,
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MisVendedores())),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(right: 7),
+                                              child: Image.asset(
+                                                'assets/icon/mis_vendedores_img.png',
+                                                alignment: Alignment.center,
+                                                width: 30,
+                                              ),
                                             ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              S.current.my_vendors,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                S.current.my_vendors,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 30,
+                                        color: ConstantesColores.agua_marina,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            MisEstadisticas())),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 7),
-                                            child: Image.asset(
-                                              'assets/icon/mis_estadisticas.png',
-                                              alignment: Alignment.center,
-                                              width: 30,
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MisEstadisticas())),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(right: 7),
+                                              child: Image.asset(
+                                                'assets/icon/mis_estadisticas.png',
+                                                alignment: Alignment.center,
+                                                width: 30,
+                                              ),
                                             ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              S.current.my_statistics,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                S.current.my_statistics,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 30,
+                                        color: ConstantesColores.agua_marina,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            ),
-                            Obx(
-                              () => viewModel.pais.value == "CO"
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
+                              ),
+                              Obx(
+                                () => viewModel.pais.value == "CO"
+                                    ? Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ClubGanadoresPage())),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 7),
+                                                          child: Image.asset(
+                                                            'assets/icon/Icon_club_ganadores.png',
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 30,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 10),
+                                                          width:
+                                                              Get.width * 0.475,
+                                                          child: Text(
+                                                            S.current
+                                                                .winners_club,
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.arrow_forward_ios,
+                                                    size: 30,
+                                                    color: ConstantesColores
+                                                        .agua_marina,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Divider(
+                                            thickness: 1,
+                                            color: HexColor('#EAE8F5'),
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox.shrink(),
+                              ),
+                              Obx(() => viewModel.pais.value == "CO"
                                   ? Column(
                                       children: [
                                         Container(
@@ -381,11 +481,9 @@ class _MiNegocioState extends State<MiNegocio> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ClubGanadoresPage())),
+                                                        MisPagosNequiPage())),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Container(
                                                   child: Row(
@@ -396,7 +494,7 @@ class _MiNegocioState extends State<MiNegocio> {
                                                         margin: EdgeInsets.only(
                                                             right: 7),
                                                         child: Image.asset(
-                                                          'assets/icon/Icon_club_ganadores.png',
+                                                          'assets/icon/mis_pagos_nequi.png',
                                                           alignment:
                                                               Alignment.center,
                                                           width: 30,
@@ -405,11 +503,9 @@ class _MiNegocioState extends State<MiNegocio> {
                                                       Container(
                                                         margin: EdgeInsets.only(
                                                             left: 10),
-                                                        width:
-                                                            Get.width * 0.475,
                                                         child: Text(
                                                           S.current
-                                                              .winners_club,
+                                                              .my_nequi_payments,
                                                           style: TextStyle(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -433,278 +529,231 @@ class _MiNegocioState extends State<MiNegocio> {
                                         Divider(
                                           thickness: 1,
                                           color: HexColor('#EAE8F5'),
-                                        ),
+                                        )
                                       ],
                                     )
-                                  : SizedBox.shrink(),
-                            ),
-                            Obx(() => viewModel.pais.value == "CO"
-                                ? Column(
+                                  : Container())
+                            ],
+                          )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: cardStyle(
+                              bodyContainer: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 5, bottom: 20),
+                                child: Text(
+                                  S.current.terms_conditions,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: ConstantesColores.gris_textos,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: GestureDetector(
+                                  onTap: () => viewModel.politicasDatosPdf != null
+                                      ? verPoliticasCondiciones(
+                                          context, viewModel.politicasDatosPdf)
+                                      : null,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 10),
-                                        child: GestureDetector(
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MisPagosNequiPage())),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          right: 7),
-                                                      child: Image.asset(
-                                                        'assets/icon/mis_pagos_nequi.png',
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 10),
-                                                      child: Text(
-                                                        S.current
-                                                            .my_nequi_payments,
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(right: 7),
+                                              child: Image.asset(
+                                                'assets/icon/politicas.png',
+                                                alignment: Alignment.center,
+                                                width: 30,
                                               ),
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 30,
-                                                color: ConstantesColores
-                                                    .agua_marina,
-                                              )
-                                            ],
-                                          ),
+                                            ),
+                                            Container(
+                                              width: Get.width * 0.52,
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                S.current
+                                                    .policy_and_data_processing,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Divider(
-                                        thickness: 1,
-                                        color: HexColor('#EAE8F5'),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 30,
+                                        color: ConstantesColores.agua_marina,
                                       )
                                     ],
-                                  )
-                                : Container())
-                          ],
-                        )),
-                        cardStyle(
-                            bodyContainer: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 5, bottom: 20),
-                              child: Text(
-                                S.current.terms_conditions,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: ConstantesColores.gris_textos,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => viewModel.politicasDatosPdf != null
-                                    ? verPoliticasCondiciones(
-                                        context, viewModel.politicasDatosPdf)
-                                    : null,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 7),
-                                            child: Image.asset(
-                                              'assets/icon/politicas.png',
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                            ),
-                                          ),
-                                          Container(
-                                            width: Get.width * 0.52,
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              S.current
-                                                  .policy_and_data_processing,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: GestureDetector(
-                                onTap: () => viewModel.terminosDatosPdf != null
-                                    ? verTerminosCondiciones(context,
-                                        viewModel.terminosDatosPdf, false)
-                                    : null,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(right: 4),
-                                            child: Image.asset(
-                                              'assets/icon/termino_y_condiciones_img.png',
-                                              alignment: Alignment.center,
-                                              width: 35,
-                                            ),
-                                          ),
-                                          Container(
-                                            width: Get.width * 0.52,
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              S.current.terms_conditions,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 30,
-                                      color: ConstantesColores.agua_marina,
-                                    )
-                                  ],
-                                ),
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: HexColor('#EAE8F5'),
-                            )
-                          ],
-                        )),
-                        Container(
-                          margin: EdgeInsets.only(top: 30, left: 5, right: 15),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icon/logout_img.png',
-                                      alignment: Alignment.center,
-                                      width: 30,
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 15),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () => {
-                                              viewModel
-                                                  .iniciarModalCerrarSesion(
-                                                      context, size, provider)
-                                            },
-                                            child: Text(
-                                              S.current.log_out,
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 15,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontWeight: FontWeight.bold),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      viewModel.terminosDatosPdf != null
+                                          ? verTerminosCondiciones(context,
+                                              viewModel.terminosDatosPdf, false)
+                                          : null,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(right: 4),
+                                              child: Image.asset(
+                                                'assets/icon/termino_y_condiciones_img.png',
+                                                alignment: Alignment.center,
+                                                width: 35,
+                                              ),
                                             ),
-                                          ),
-                                          Obx(() => Text(
-                                                Constantes().titulo == 'QA'
-                                                    ? '${S.current.version} QA ${viewModel.version.value}'
-                                                    : '${S.current.version} ${viewModel.version.value}',
+                                            Container(
+                                              width: Get.width * 0.52,
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                S.current.terms_conditions,
                                                 style: TextStyle(
-                                                    color: ConstantesColores
-                                                        .gris_textos,
-                                                    fontSize: 11,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                        ],
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 30,
+                                        color: ConstantesColores.agua_marina,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(height: 40,),
-                                GestureDetector(
-                                  onTap: () async {
-                                    prefs.typeCollaborator != "2"
-                                        ? viewModel.iniciarModalEliminarUsuario(
-                                            context, size, provider)
-                                        : mostrarAlert(
-                                            context,
-                                            "No puedes eliminar la cuenta ya que te encuentras en modo colaborador",
-                                            null);
-                                  },
-                                  child: Row(children: [
-                                    Image.asset(
-                                      "assets/icon/eliminar_cuenta.png",
-                                      alignment: Alignment.center,
-                                      width: 25,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      S.current.delete_account,
-                                      style: TextStyle(
-                                          color: ConstantesColores.gris_textos,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    )
-                                  ]),
-                                )
-                              ]),
-                        )
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: HexColor('#EAE8F5'),
+                              )
+                            ],
+                          )),
+                        ),
+                        if (_showSecondSection)
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.only(top: 25, bottom: 13),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 48),
+                                        child: Image.asset(
+                                          'assets/icon/logout_img.png',
+                                          width: 30,
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 15,),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () => {
+                                                viewModel.iniciarModalCerrarSesion(
+                                                  context, size, provider)
+                                              },
+                                              child: Text(
+                                                S.current.log_out,
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 15,
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            Obx(() => Text(
+                                                  Constantes().titulo == 'QA'
+                                                      ? '${S.current.version} QA ${viewModel.version.value}'
+                                                      : '${S.current.version} ${viewModel.version.value}',
+                                                  style: TextStyle(
+                                                      color: ConstantesColores
+                                                          .gris_textos,
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                 
+                                ]),
+                          ),
+                        Divider(
+                          thickness: 1.5,
+                          color: Colors.grey[300],
+                        ),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () async {
+                            prefs.typeCollaborator != "2"
+                                ? viewModel.iniciarModalEliminarUsuario(
+                                    context, size, provider)
+                                : mostrarAlert(
+                                    context,
+                                    "No puedes eliminar la cuenta ya que te encuentras en modo colaborador",
+                                    null);
+                          },
+                          child: Row(children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 48),
+                              child: Image.asset(
+                                "assets/icon/eliminar_cuenta.png",
+                                alignment: Alignment.center,
+                                width: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              S.current.delete_account,
+                              style: TextStyle(
+                                  color: ConstantesColores.gris_textos,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                             ]),
+                        ),
+                        SizedBox(height: 15)
                       ],
                     );
                   }
