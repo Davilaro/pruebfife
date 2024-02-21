@@ -181,12 +181,6 @@ ORDER BY
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
                   )
               ), 0
           ) AS precioConDescuento,
@@ -347,13 +341,7 @@ ORDER BY p.orden ASC
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
-                  )
+                  ) 
               ), 0
           ) AS precioConDescuento,
     CAST(
@@ -464,13 +452,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
-                  )
+                  ) 
               ), 0
           ) AS precioConDescuento,
     ROUND(
@@ -621,13 +603,7 @@ ORDER BY
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
-                  )
+                  ) 
               ), 0
           ) AS precioConDescuento,
     ROUND(
@@ -801,12 +777,6 @@ ORDER BY
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
                   )
               ), 0
           ) AS precioConDescuento,
@@ -946,13 +916,7 @@ ORDER BY
               (
                   (
                       p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)
-                  ) + 
-                  (
-                      CASE
-                          WHEN p.ICUI = 0 THEN p.IBUA
-                          ELSE ((( p.precio - (p.precio * IFNULL(tmp.descuento, 0)) / 100) * p.ICUI) / 100)
-                      END
-                  )
+                  ) 
               ), 0
           ) AS precioConDescuento,
     ROUND(
