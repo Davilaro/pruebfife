@@ -72,6 +72,7 @@ class Servicies {
   }
 
   Future<List<dynamic>> getListaSucursales(bool loginBiometric) async {
+
     String? token = PushNotificationServer.token as String;
 
     var ccup =
