@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -101,6 +102,8 @@ class _TouchIdPageState extends State<TouchIdPage> {
         ),
       );
       if (authenticated) {
+        //Uxcam tagueo, se guardaron datos biometricos del touch
+        UxcamTagueo().storedTouchBiometricData();
         prefs.isDataBiometricActive = true;
         prefs.ccupBiometric = prefs.codigoUnicoPideky;
         await progress.show();

@@ -7,6 +7,7 @@ import 'package:emart/_pideky/presentation/authentication/view/create_password_p
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -115,6 +116,8 @@ class ConfirmIdentityEnterCodePage extends StatelessWidget {
                               context,
                               "Confirmación de \n identidad correcto");
                         } else {
+                          //Uxcam tagueo, se confirmo el login por SMS
+                          UxcamTagueo().confirmSMSLogin();
                           int timeIteration = 0;
                           _validationForms.isClosePopup.value = false;
                           showPopup(

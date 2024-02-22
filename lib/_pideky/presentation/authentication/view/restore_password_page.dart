@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touc
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -83,6 +84,8 @@ class _RestorePasswordPageState extends State<RestorePasswordPage> {
                                   validationForm.correctCode) {
                                 validationForm.numIntentos.value = 0;
                                 if (widget.isChangePassword == true) {
+                                  //Uxcam tagueo, se valido la pregunta de seguridad
+                                  UxcamTagueo().securityQuestionLogin();
                                   await validationForm.closePopUp(
                                       CreatePasswordPage(
                                         isChangePassword: true,
