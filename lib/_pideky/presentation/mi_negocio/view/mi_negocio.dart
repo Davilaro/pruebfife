@@ -39,6 +39,8 @@ class MiNegocio extends StatefulWidget {
 class _MiNegocioState extends State<MiNegocio> {
   final MiNegocioViewModel viewModel = Get.find();
 
+  //Variables para realizar funcionalidad de posicionarse en la opcion de cerrar sesion 
+  //al realizar un primer scroll.
   final ScrollController _scrollController = ScrollController();
   bool _showSecondSection = false;
 
@@ -80,8 +82,6 @@ class _MiNegocioState extends State<MiNegocio> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      // Si el usuario desplaza hacia abajo desde la parte superior
-      // hasta el final, mostramos la segunda sección.
       setState(() {
         _showSecondSection = true;
       });
@@ -721,7 +721,7 @@ class _MiNegocioState extends State<MiNegocio> {
                           thickness: 1.5,
                           color: Colors.grey[300],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
                             prefs.typeCollaborator != "2"
@@ -753,7 +753,7 @@ class _MiNegocioState extends State<MiNegocio> {
                             ),
                              ]),
                         ),
-                        SizedBox(height: 15)
+                        SizedBox(height: 10)
                       ],
                     );
                   }
