@@ -28,6 +28,7 @@ Future<void> main() async {
   //injectDependencies();
   //_validarKeyUXCam();
   viewModelConfirmarPais.confirmarPais(prefs.paisUsuario, false);
+  
   await PushNotificationServer.initializeApp();
   Permisos.permisos.solicitarPermisos();
   await firebase_core.Firebase.initializeApp();

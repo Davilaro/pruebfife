@@ -381,87 +381,95 @@ class ValidationForms extends GetxController {
   }
 
   Future<dynamic> validationLoginNewUser(context) async {
-    final progress = ProgressDialog(context, isDismissible: false);
-    progress.style(
-        message: S.current.logging_in,
-        progressWidget: Image(
-          image: AssetImage('assets/image/jar-loading.gif'),
-          fit: BoxFit.cover,
-          height: 20,
-        ));
-    await progress.show();
-    var validation = await sendUserAndPassword(userName.value, password.value);
-    if (validation != -1 && validation != -2) {
-      if (validation == 0) {
-        if (prefs.isDataBiometricActive == null) {
-          plataforma == "Android"
-              ? Get.offAll(() => TouchIdPage())
-              : Get.offAll(() => FaceIdPage());
-        } else {
-          if (await login(context, progress, false) == true) {
-            return true;
+    try {
+      final progress = ProgressDialog(context, isDismissible: false);
+      progress.style(
+          message: S.current.logging_in,
+          progressWidget: Image(
+            image: AssetImage('assets/image/jar-loading.gif'),
+            fit: BoxFit.cover,
+            height: 20,
+          ));
+      await progress.show();
+      var validation =
+          await sendUserAndPassword(userName.value, password.value);
+      if (validation != -1 && validation != -2) {
+        if (validation == 0) {
+          if (prefs.isDataBiometricActive == null) {
+            plataforma == "Android"
+                ? Get.offAll(() => TouchIdPage())
+                : Get.offAll(() => FaceIdPage());
+          } else {
+            if (await login(context, progress, false) == true) {
+              print('logueo');
+              return true;
+            } else {
+              throw 'error en login';
+            }
           }
+        } else {
+          await progress.hide();
+          int timeIteration = 0;
+          isClosePopup.value = false;
+          showPopup(context, 'Usuario correcto',
+              SvgPicture.asset('assets/image/Icon_correcto.svg'));
+          Timer.periodic(Duration(milliseconds: 500), (timer) {
+            if (timeIteration >= 5) {
+              timer.cancel();
+              Get.back();
+              Get.offAll(
+                () => CreatePasswordPage(
+                  isChangePassword: false,
+                ),
+              );
+            }
+            if (isClosePopup.value == true) {
+              timer.cancel();
+              Get.offAll(
+                () => CreatePasswordPage(
+                  isChangePassword: false,
+                ),
+              );
+            }
+            timeIteration++;
+          });
+
+          return true;
         }
       } else {
         await progress.hide();
-        int timeIteration = 0;
-        isClosePopup.value = false;
-        showPopup(context, 'Usuario correcto',
-            SvgPicture.asset('assets/image/Icon_correcto.svg'));
-        Timer.periodic(Duration(milliseconds: 500), (timer) {
-          if (timeIteration >= 5) {
-            timer.cancel();
-            Get.back();
-            Get.offAll(
-              () => CreatePasswordPage(
-                isChangePassword: false,
+        if (validation == -1) {
+          mostrarAlertCustomWidgetOld(
+              context,
+              Text(
+                "La contraseña no coincide con este usuario. Por favor, revisa que esté bien escrito, o si la olvidaste, cambia tu contraseña. Si aún presentas problemas, contacta a soporte",
+                textAlign: TextAlign.center,
               ),
-            );
-          }
-          if (isClosePopup.value == true) {
-            timer.cancel();
-            Get.offAll(
-              () => CreatePasswordPage(
-                isChangePassword: false,
+              SvgPicture.asset(
+                'assets/image/Icon_incorrecto.svg',
+                color: ConstantesColores.azul_aguamarina_botones,
               ),
-            );
-          }
-          timeIteration++;
-        });
+              null);
+        } else if (validation == -2) {
+          //Uxcam tagueo usuario no encontrado en base de datos
+          UxcamTagueo().userNotFoundLogin();
+          mostrarAlertCustomWidgetOld(
+              context,
+              Text(
+                "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+                textAlign: TextAlign.center,
+              ),
+              SvgPicture.asset(
+                'assets/image/Icon_incorrecto.svg',
+                color: ConstantesColores.azul_aguamarina_botones,
+              ),
+              null);
+        }
 
-        return true;
+        return false;
       }
-    } else {
-      await progress.hide();
-      if (validation == -1) {
-        mostrarAlertCustomWidgetOld(
-            context,
-            Text(
-              "La contraseña no coincide con este usuario. Por favor, revisa que esté bien escrito, o si la olvidaste, cambia tu contraseña. Si aún presentas problemas, contacta a soporte",
-              textAlign: TextAlign.center,
-            ),
-            SvgPicture.asset(
-              'assets/image/Icon_incorrecto.svg',
-              color: ConstantesColores.azul_aguamarina_botones,
-            ),
-            null);
-      } else if (validation == -2) {
-        //Uxcam tagueo usuario no encontrado en base de datos
-        UxcamTagueo().userNotFoundLogin();
-        mostrarAlertCustomWidgetOld(
-            context,
-            Text(
-              "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
-              textAlign: TextAlign.center,
-            ),
-            SvgPicture.asset(
-              'assets/image/Icon_incorrecto.svg',
-              color: ConstantesColores.azul_aguamarina_botones,
-            ),
-            null);
-      }
-
-      return false;
+    } catch (e, stackTrace) {
+      print('error en login $e - $stackTrace');
     }
   }
 
