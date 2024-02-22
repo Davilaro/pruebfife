@@ -585,13 +585,14 @@ class ValidationForms extends GetxController {
 
         return true;
       } else {
-        progress.hide();
+        await progress.hide();
         await backClosePopup(context, texto: "Usuario incorrecto");
 
         return false;
       }
     } catch (e) {
       print('Error retorno login $e');
+      await progress.hide();
       await backClosePopup(context,
           texto: "Algo salió mal, intentalo de nuevo");
 
