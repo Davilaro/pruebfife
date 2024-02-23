@@ -574,7 +574,9 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       alignment: Alignment.topLeft,
       child: Text(
-        productViewModel.getCurrency(widget.productos.precioinicial),
+        productViewModel.getCurrency(widget.productos.descuento != 0
+            ? widget.productos.precioinicial
+            : widget.productos.precio),
         textAlign: TextAlign.left,
         style: TextStyle(
             color: ConstantesColores.azul_precio,

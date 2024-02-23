@@ -58,7 +58,6 @@ class _FabricantesState extends State<Fabricantes> {
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           children: [
-            _campoTexto(context),
             Flexible(
               flex: 2,
               child: Obx(

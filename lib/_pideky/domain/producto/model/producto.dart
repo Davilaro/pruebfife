@@ -38,6 +38,7 @@ class Producto {
       this.isOferta,
       this.precioBase,
       this.precioConDescuento,
+      this.combo,
       this.negocio,
       this.fechafinpromocion_1});
 
@@ -51,6 +52,7 @@ class Producto {
   String marca;
   String categoria;
   int bloqueoCartera;
+  int? combo;
   int? isOferta;
   // String ean;
   // String peso;
@@ -121,6 +123,7 @@ class Producto {
       precioBase: json["precioBase"] == null ? 0.0 : json["precioBase"],
       isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       negocio: json["negocio"] == null ? '' : json["negocio"],
+      combo: json["combo"] == null ? 0 : json["combo"],
       precioConDescuento: json["precioConDescuento"] == null
           ? 0.0
           : json['precioConDescuento']);
@@ -169,6 +172,7 @@ class Producto {
       precioBase: json["precioBase"] == null ? 0 : json["precioBase"],
       isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       negocio: json["negocio"] == null ? '' : json["negocio"],
+      combo: json["combo"] == null ? 0 : json["combo"],
       precioConDescuento: json["precioConDescuento"] == null
           ? 0.0
           : json['precioConDescuento']);

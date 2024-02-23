@@ -263,4 +263,5 @@ class Preferencias {
   set momentSurvey(dynamic value) {
     _prefs.setInt("momentSurvey", value);
   }
+
 }

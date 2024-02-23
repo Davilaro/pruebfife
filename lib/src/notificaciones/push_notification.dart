@@ -1,10 +1,14 @@
 //no borrar
 //SHA1:  90:3F:45:0A:17:48:B8:5C:AA:01:5A:00:9B:95:C6:03:D5:22:0C:C0
 
+import 'dart:developer';
 import 'dart:io';
-
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:emart/src/notificaciones/push_notifications_huawei.dart';
+import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:huawei_push/huawei_push.dart' as huawei;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:emart/src/notificaciones/message_notification.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -69,26 +73,54 @@ class PushNotificationServer {
   void setPushNotificationToken(String pushToken) {}
 
   static Future initializeApp() async {
+    String vendor = '';
     try {
-      await Firebase.initializeApp();
-      FirebaseMessaging _messaging = FirebaseMessaging.instance;
-
-      await requesPermission();
       String? token2 = '';
-      token = await _messaging.getToken();
       if (Platform.isIOS) {
+        await Firebase.initializeApp();
+        await requesPermission();
+        FirebaseMessaging _messaging = FirebaseMessaging.instance;
         token2 = await _messaging.getAPNSToken();
+        token = token2;
+
         FlutterUxcam.setPushNotificationToken(token2!);
       } else {
-        FlutterUxcam.setPushNotificationToken(token!);
+        DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+        AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+        String version = androidInfo.manufacturer;
+        vendor = version.toString().toUpperCase();
+        if (vendor != 'HUAWEI') {
+          await Firebase.initializeApp();
+          await requesPermission();
+          FirebaseMessaging _messaging = FirebaseMessaging.instance;
+          token = await _messaging.getToken();
+          FlutterUxcam.setPushNotificationToken(token!);
+        } else {
+          bool isGmsAvailable = await FlutterHmsGmsAvailability.isGmsAvailable;
+          if (isGmsAvailable == true) {
+            log('Iniciando servicios de HUAWEI/GOOGLE');
+            await Firebase.initializeApp();
+            await requesPermission();
+            FirebaseMessaging _messaging = FirebaseMessaging.instance;
+            token = await _messaging.getToken();
+            FlutterUxcam.setPushNotificationToken(token!);
+          } else {
+            log('Iniciando servicios de HUAWEI');
+            await huawei.Push.enableLogger();
+            await pushNotificationsHuawei.initPlatformStateHuawei();
+            token = pushNotificationsHuawei.token;
+          }
+        }
       }
 
-      print('token $token ---- $token2');
+      if (vendor != 'HUAWEI') {
+        print('token $token ---- $token2');
 
-      //handlers
-      FirebaseMessaging.onMessage.listen(_onMessageHandler);
-      FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
-      FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
+        //handlers
+        FirebaseMessaging.onMessage.listen(_onMessageHandler);
+        FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+        FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
+      }
     } catch (e) {
       print('---ERROR NOTIFICAICONES $e');
     }

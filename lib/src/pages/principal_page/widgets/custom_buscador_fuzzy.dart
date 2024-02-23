@@ -176,20 +176,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                       )),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: isActiveBanner
-                          ? MediaQuery.of(context).size.height * 0.5
-                          : MediaQuery.of(context).size.height * 0.7,
-                      child: GridView.count(
-                          physics: BouncingScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing:
-                              4.0, // espaciado entre ejes principales (horizontal)
-                          childAspectRatio: 2 / 3.3, //entre mas cerca de cero
-                          children:
-                              _cargarProductosLista(listaProducto, context)),
-                    ),
+                  child: Container(
+                    height: isActiveBanner
+                        ? MediaQuery.of(context).size.height * 0.5
+                        : MediaQuery.of(context).size.height * 0.8,
+                    child: GridView.count(
+                        physics: BouncingScrollPhysics(),
+                        crossAxisCount: 2,
+                        mainAxisSpacing:
+                            4.0, // espaciado entre ejes principales (horizontal)
+                        childAspectRatio: 2 / 3.3, //entre mas cerca de cero
+                        children:
+                            _cargarProductosLista(listaProducto, context)),
                   ),
                 ),
               ],
@@ -205,13 +203,15 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
     for (var i = 0; i < data.length; i++) {
       Producto productos = data[i];
-      final widgetTemp = InputValoresCatalogo(
-        element: productos,
-        isCategoriaPromos: false,
-        index: i,
-        //se realiza la busqueda epero a traves de la marca
-        search: true,
-      );
+      final widgetTemp = productos.combo == 0
+          ? InputValoresCatalogo(
+              element: productos,
+              isCategoriaPromos: false,
+              index: i,
+              //se realiza la busqueda epero a traves de la marca
+              search: true,
+            )
+          : Container();
 
       opciones.add(widgetTemp);
     }
@@ -285,20 +285,20 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
             widget.codigoProveedor);
         listaProducto.value = listaAllProducts;
       }
-      if (widget.claseProducto == 6) {
-        print("tipo de producto 6");
-        listaAllProducts =
-            await productService.cargarProductosFiltroProveedores(
-                widget.codCategoria,
-                widget.tipoCategoria,
-                '',
-                catalogSearchViewModel.precioMinimo.value,
-                catalogSearchViewModel.precioMaximo.value,
-                widget.codigoSubCategoria,
-                widget.codigoMarca,
-                widget.codigoProveedor);
-        listaProducto.value = listaAllProducts;
-      }
+      // if (widget.claseProducto == 6) {
+      //   print("tipo de producto 6");
+      //   listaAllProducts =
+      //       await productService.cargarProductosFiltroProveedores(
+      //           widget.codCategoria,
+      //           widget.tipoCategoria,
+      //           '',
+      //           catalogSearchViewModel.precioMinimo.value,
+      //           catalogSearchViewModel.precioMaximo.value,
+      //           widget.codigoSubCategoria,
+      //           widget.codigoMarca,
+      //           widget.codigoProveedor);
+      //   listaProducto.value = listaAllProducts;
+      // }
       if (widget.claseProducto == 7) {
         print("tipo de producto 7");
         listaAllProducts = await productService.cargarProductos(
@@ -312,18 +312,18 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
 
         listaProducto.value = listaAllProducts;
       }
-      //para el filtro de categorias
-      if (widget.claseProducto == 8) {
-        print("tipo de producto 8");
-        listaAllProducts = await productService.cargarProductosFiltroCategoria(
-            widget.codigoCategoria,
-            widget.tipoCategoria,
-            catalogSearchViewModel.precioMinimo.value,
-            catalogSearchViewModel.precioMaximo.value,
-            widget.codigoSubCategoria,
-            widget.codigoMarca);
-        listaProducto.value = listaAllProducts;
-      }
+      // //para el filtro de categorias
+      // if (widget.claseProducto == 8) {
+      //   print("tipo de producto 8");
+      //   listaAllProducts = await productService.cargarProductosFiltroCategoria(
+      //       widget.codigoCategoria,
+      //       widget.tipoCategoria,
+      //       catalogSearchViewModel.precioMinimo.value,
+      //       catalogSearchViewModel.precioMaximo.value,
+      //       widget.codigoSubCategoria,
+      //       widget.codigoMarca);
+      //   listaProducto.value = listaAllProducts;
+      // }
     } else {
       print("tipo de producto otro");
       print("tipo ${widget.tipoCategoria}");

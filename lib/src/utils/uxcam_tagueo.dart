@@ -631,4 +631,76 @@ class UxcamTagueo {
       log("Error tagueo deleteAccount");
     }
   }
+  void updatePassword() {
+    try {
+      FlutterUxcam.logEventWithProperties("updatePassword", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo updatePassword");
+    }
+  }
+  void confirmSMSLogin() {
+    try {
+      FlutterUxcam.logEventWithProperties("confirmSMSLogin", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo confirmSMSLogin");
+    }
+  }
+  void securityQuestionLogin() {
+    try {
+      FlutterUxcam.logEventWithProperties("securityQuestionLogin", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo securityQuestionLogin");
+    }
+  }
+  void storedFaceBiometricData() {
+    try {
+      FlutterUxcam.logEventWithProperties("storedFaceBiometricData", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo storedFaceBiometricData");
+    }
+  }
+  void storedTouchBiometricData() {
+    try {
+      FlutterUxcam.logEventWithProperties("storedTouchBiometricData", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo storedTouchBiometricData");
+    }
+  }
+  void userNotFoundLogin() {
+    try {
+      FlutterUxcam.logEventWithProperties("userNotFoundLogin", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo userNotFoundLogin");
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:emart/_pideky/domain/compra_vende_gana/model/compra_vende_gana_model.dart';
+import 'package:emart/_pideky/presentation/compra_vende_gana/view_model/compra_vende_gana_view_model.dart';
 import 'package:emart/_pideky/presentation/compra_vende_gana/widgets/card_ticket.dart';
 import 'package:emart/_pideky/presentation/compra_vende_gana/widgets/promo_star.dart';
 import 'package:emart/_pideky/presentation/compra_vende_gana/widgets/ticket_description.dart';
@@ -16,6 +18,9 @@ class CompraVendeGanaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CompraVendeGanaViewModel compraVendeGanaViewModel =
+        CompraVendeGanaViewModel.getMyController();
+    compraVendeGanaViewModel.getCupons();
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
       appBar: AppBar(
@@ -57,61 +62,86 @@ class CompraVendeGanaPage extends StatelessWidget {
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      height: Get.height * 0.22,
-                      width: Get.width * 0.9,
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CustomPaint(
-                              painter: CardTicket(),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+              FutureBuilder(
+                  future: compraVendeGanaViewModel.getCupons(),
+                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData) {
+                      List<CompraVendeGanaModel> cuponsList = snapshot.data;
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: cuponsList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              height: Get.height * 0.22,
+                              width: Get.width * 0.9,
+                              child: Stack(
                                 children: [
-                                  Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 15),
-                                    width: Get.width * 0.3,
-                                    child: Image(
-                                        image: AssetImage(
-                                            "assets/image/logo_login.png")),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: CustomPaint(
+                                      painter: CardTicket(
+                                          color: cuponsList[index].colorCupon!),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            width: Get.width * 0.3,
+                                            child: Image.network(
+                                              cuponsList[index].link!,
+                                              errorBuilder: (context, url,
+                                                      error) =>
+                                                  Image.asset(
+                                                      'assets/image/jar-loading.gif'),
+                                            ),
+                                          ),
+                                          TicketDescription(
+                                            compraVendeGana: cuponsList[index],
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  TicketDescription()
+                                  Visibility(
+                                    visible: cuponsList[index].chispa! == 1
+                                        ? true
+                                        : false,
+                                    child: Positioned(
+                                      top: Get.height * 0.02,
+                                      left: Get.width * 0.25,
+                                      child: ClipPath(
+                                        clipper: PromoStar(10),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 55,
+                                          height: 55,
+                                          color: Color(int.parse(
+                                              '0xff${cuponsList[index].colorChispa}')),
+                                          child: Text(
+                                              "-${cuponsList[index].valorChispa!.toInt()}%",
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            top: Get.height * 0.02,
-                            left: Get.width * 0.25,
-                            child: ClipPath(
-                              clipper: PromoStar(10),
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 55,
-                                height: 55,
-                                color: Colors.red,
-                                child: Text("-10%",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              )
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: SizedBox.shrink(),
+                      );
+                    }
+                  })
             ],
           ),
         ),

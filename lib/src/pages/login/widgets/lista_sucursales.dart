@@ -177,6 +177,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                 
                 Flexible(
                     flex: 2,
                     child: AutoSizeText('Nombre: ${element.nombre}',
@@ -199,7 +200,7 @@ class _ListaSucursalesState extends State<ListaSucursales> {
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
                 Flexible(
-                    child: Text('Barrio: ${element.barrio}',
+                    child: Text( prefs.paisUsuario == "CR" ?'Distrito:  ${element.barrio}': 'Barrio:  ${element.barrio}',
                         overflow: TextOverflow.clip,
                         style: diseno_sucursales(element))),
               ],

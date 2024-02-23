@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -22,6 +22,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -55,19 +56,44 @@ class Login extends StatefulWidget {
       if (Platform.isAndroid) {
         var build = await deviceInfoPlugin.androidInfo;
         deviceName = build.model;
-        deviceVersion = build.version.toString();
-        identifier = build.androidId; //UUID for Android
+        deviceVersion = build.version.release.toString();
+        identifier = build.id; //UUID for Android
       } else if (Platform.isIOS) {
         var data = await deviceInfoPlugin.iosInfo;
         deviceName = data.name;
         deviceVersion = data.systemVersion;
-        identifier = data.identifierForVendor; //UUID for iOS
-      }
+        identifier = data.identifierForVendor!; //UUID for iOS
+      } 
     } on PlatformException {
       print('Failed to get platform version');
     }
 
     return [deviceName, deviceVersion, identifier];
+  }
+
+  static Future<String> getDeviceOS() async {
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    String operatingSystem = '';
+    String vendor = '';
+    if (Platform.isAndroid) {
+      var build = await deviceInfoPlugin.androidInfo;
+      operatingSystem = build.manufacturer;
+      vendor = build.version.toString().toUpperCase();
+      if (vendor != 'HUAWEI') {
+        operatingSystem = "Android";
+      } else {
+        bool isGmsAvailable = await FlutterHmsGmsAvailability.isGmsAvailable;
+        if (isGmsAvailable == true) {
+          operatingSystem = "Android|Huawei";
+        } else {
+          operatingSystem = "Huawei";
+        }
+      }
+    } else if (Platform.isIOS) {
+      var data = await deviceInfoPlugin.iosInfo;
+      operatingSystem = data.systemVersion;
+    }
+    return operatingSystem;
   }
 }
 
@@ -254,11 +280,14 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(
           context,
           'listaSucursale',
-          arguments: ScreenArguments(respuesta,),
+          arguments: ScreenArguments(
+            respuesta,
+          ),
         );
       } else {
         await pr.hide();
-        mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
+        mostrarAlertCustomWidgetOld(
+            context, cargarLinkWhatssap(context), null, null);
         return false;
       }
     } catch (e) {
@@ -315,14 +344,17 @@ class _LoginState extends State<Login> {
 
     if (respues.codigo == null) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
+      mostrarAlertCustomWidgetOld(
+          context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == -1) {
       await prValidar.hide();
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
+      mostrarAlertCustomWidgetOld(
+          context, cargarLinkWhatssap(context), null, null);
     } else if (respues.activo == -1) {
       await prValidar.hide();
 
-      mostrarAlertCustomWidgetOld(context, cargarLinkWhatssap(context), null, null);
+      mostrarAlertCustomWidgetOld(
+          context, cargarLinkWhatssap(context), null, null);
     } else if (respues.codigo == 0) {
       //message: No se pudo generar el código
       mostrarAlert(context, S.current.code_could_not_be_generated, null);
@@ -381,5 +413,3 @@ Future<void> lanzarWhatssap(context) async {
     print(e);
   }
 }
-
-

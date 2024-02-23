@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:emart/_pideky/presentation/authentication/view/accept_terms_and_conditions_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
@@ -169,6 +170,8 @@ class CreatePasswordPage extends StatelessWidget {
                                 await _validationForms.changePassword();
                             if (response == true) {
                               if (isChangePassword == true) {
+                                //Uxcam tagueo, se actualizo la contraseña
+                                UxcamTagueo().updatePassword();
                                 int timeIteration = 0;
                                 _validationForms.isClosePopup.value = false;
                                 showPopup(

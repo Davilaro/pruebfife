@@ -1,5 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class CustomCardSucursales extends StatelessWidget {
                               _validationForm.seleccionSucursal.value),
                         ),
                         Text(
-                          "Barrio: $barrio",
+                          prefs.paisUsuario == "CR" ?"Distrito: $barrio" : "Barrio: $barrio",
                           style: desingSucursales(razonSocial,
                               _validationForm.seleccionSucursal.value),
                         ),
