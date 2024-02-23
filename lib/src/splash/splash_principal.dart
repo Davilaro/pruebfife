@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
 import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
@@ -101,7 +100,7 @@ class _SplashState extends State<Splash> {
     } else {
       final List<dynamic> divace = await Login.getDeviceDetails();
 
-      String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
+      String plataforma = await Login.getDeviceOS();
 
       await Servicies()
           .registrarToken(divace[2], plataforma, prefs.codClienteLogueado);

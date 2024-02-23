@@ -81,6 +81,7 @@ class PushNotificationServer {
         await requesPermission();
         FirebaseMessaging _messaging = FirebaseMessaging.instance;
         token2 = await _messaging.getAPNSToken();
+        token = token2;
 
         FlutterUxcam.setPushNotificationToken(token2!);
       } else {
