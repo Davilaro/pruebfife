@@ -57,15 +57,15 @@ class ProductoService {
           codigoMarca,
           codigoProveedor);
 
-  Future<List<dynamic>> cargarProductosFiltroCategoria(
-          String? codigoCategoria,
-          int tipo,
-          double precioMinimo,
-          double precioMaximo,
-          String? codigoSubCategoria,
-          String? codigoMarca) async =>
-      await productoRepository.cargarProductosFiltroCategoria(codigoCategoria,
-          tipo, precioMinimo, precioMaximo, codigoSubCategoria, codigoMarca);
+  // Future<List<dynamic>> cargarProductosFiltroCategoria(
+  //         String? codigoCategoria,
+  //         int tipo,
+  //         double precioMinimo,
+  //         double precioMaximo,
+  //         String? codigoSubCategoria,
+  //         String? codigoMarca) async =>
+  //     await productoRepository.cargarProductosFiltroCategoria(codigoCategoria,
+  //         tipo, precioMinimo, precioMaximo, codigoSubCategoria, codigoMarca);
 
   Future<dynamic> insertPedidoTemp(String codPedido, int cantidad) async =>
       await productoRepository.insertPedidoTemp(codPedido, cantidad);

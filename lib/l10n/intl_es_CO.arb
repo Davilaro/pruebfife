@@ -9,7 +9,8 @@
     "address": "Dirección: {direccion}",
 
     "bottom_alert_drawer" : "¡Recuerda!, si tienes productos agregados al carrito y eliges una nueva sucursal deberás volver a realizar las compras.",
-    
+    "buy_sell_earn_title" : "Compra, vende y gana",
+    "buy_sell_earn_description" : "En esta sección podrás impulsar tu negocio consultando las mayores ofertas.",
 
     "cancel":"Cancelar",
     "confirm_country":"Confírmanos el país donde está ubicado tu negocio.",

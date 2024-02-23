@@ -140,6 +140,26 @@ class S {
     );
   }
 
+  /// `Buy, sell and earn`
+  String get buy_sell_earn_title {
+    return Intl.message(
+      'Buy, sell and earn',
+      name: 'buy_sell_earn_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In this section you will be able to boost your business by consulting the best offers.`
+  String get buy_sell_earn_description {
+    return Intl.message(
+      'In this section you will be able to boost your business by consulting the best offers.',
+      name: 'buy_sell_earn_description',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(

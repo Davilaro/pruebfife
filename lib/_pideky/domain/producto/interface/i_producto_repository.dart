@@ -36,13 +36,13 @@ abstract class IProductoRepository {
       String? codigoMarca,
       String codigoProveedor);
 
-  Future<List<dynamic>> cargarProductosFiltroCategoria(
-      String? codigoCategoria,
-      int tipo,
-      double precioMinimo,
-      double precioMaximo,
-      String? codigoSubCategoria,
-      String? codigoMarca);
+  // Future<List<dynamic>> cargarProductosFiltroCategoria(
+  //     String? codigoCategoria,
+  //     int tipo,
+  //     double precioMinimo,
+  //     double precioMaximo,
+  //     String? codigoSubCategoria,
+  //     String? codigoMarca);
 
   Future<dynamic> insertPedidoTemp(String codPedido, int cantidad);
 

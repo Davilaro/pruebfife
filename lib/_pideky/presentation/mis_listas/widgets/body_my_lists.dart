@@ -11,7 +11,6 @@ class BodyMyLists extends StatelessWidget {
   Widget build(BuildContext context) {
     final misListasViewModel = Get.find<MyListsViewModel>();
     misListasViewModel.getMisListas();
-    print('lista de listas ${misListasViewModel.misListas.length}');
     return Expanded(
       child: Obx(
         () => misListasViewModel.misListas.isNotEmpty
