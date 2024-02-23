@@ -36,6 +36,5 @@ class InitialBindings extends Bindings {
     BotonesProveedoresVm.findOrInitialize;
     SearchFuzzyViewModel.findOrInitialize;
     MyListsViewModel.findOrInitialize;
-    CompraVendeGanaViewModel.findOrInitialize;
   }
 }

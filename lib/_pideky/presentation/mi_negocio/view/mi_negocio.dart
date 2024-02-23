@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/club_ganadores/view/club_ganadores_page.dart';
 import 'package:emart/_pideky/presentation/compra_vende_gana/view/compra_vende_gana_page.dart';
-import 'package:emart/_pideky/presentation/compra_vende_gana/view_model/compra_vende_gana_view_model.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/editarNumero.dart';
 import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/mis_pagos_nequi.dart';
 import 'package:emart/_pideky/presentation/mi_negocio/view/widgets/mis_proveedores.dart';
