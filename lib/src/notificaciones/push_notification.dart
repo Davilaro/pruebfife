@@ -106,9 +106,8 @@ class PushNotificationServer {
             FlutterUxcam.setPushNotificationToken(token!);
           } else {
             log('Iniciando servicios de HUAWEI');
-            await huawei.Push.enableLogger();
-            await pushNotificationsHuawei.initPlatformStateHuawei();
-            token = pushNotificationsHuawei.token;
+             huawei.Push.enableLogger();
+             await pushNotificationsHuawei.initPlatformStateHuawei();
           }
         }
       }

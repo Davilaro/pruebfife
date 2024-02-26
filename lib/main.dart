@@ -24,9 +24,9 @@ Future<void> main() async {
 
   final prefs = new Preferencias();
   await prefs.initPrefs();
-  final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
   //injectDependencies();
   //_validarKeyUXCam();
+  final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
   viewModelConfirmarPais.confirmarPais(prefs.paisUsuario, false);
   
   await PushNotificationServer.initializeApp();

@@ -54,8 +54,8 @@ class _SplashState extends State<Splash> {
     );
   }
 
-  void executeAfterBuild(context) {
-    _descarcarDB();
+  void executeAfterBuild(context) async {
+    await _descarcarDB();
   }
 
   Future<void> _descarcarDB() async {

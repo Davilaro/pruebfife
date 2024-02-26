@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_push/huawei_push.dart';
 
@@ -76,6 +77,7 @@ class PushNotificationsHuawei {
 
     token.onData((data) {
       _token = data;
+      PushNotificationServer.token = data;
     });
 
     log('backgroundMessageHandler registered $backGroundMessageHandler');

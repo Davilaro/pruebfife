@@ -70,7 +70,7 @@ class ConfirmacionPaisViewModel {
             await AppUtil.appUtil
                 .downloadZip('1006120026', prefs.sucursal, true);
             var res = await AppUtil.appUtil.abrirBases();
-            if (res) Get.off(() => TabOpciones());
+            if (res) Get.to(() => TabOpciones());
           }
         }
       } catch (e) {
