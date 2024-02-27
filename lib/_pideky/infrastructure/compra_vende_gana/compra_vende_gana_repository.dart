@@ -7,7 +7,7 @@ class ComprarVendeGanaRespository implements InterfaceCompraVendeGana {
   Future getCupons() async {
     final db = await DBProvider.db.baseAbierta;
     var sqlQuery = """
-      SELECT 
+      SELECT DISTINCT
       cvg.Nombre as nombre,
       cvg.Codigo as codigo,
       cvg.Vende as vende,

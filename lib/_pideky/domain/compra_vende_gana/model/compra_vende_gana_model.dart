@@ -2,13 +2,6 @@
 //
 //     final compraVendeGana = compraVendeGanaFromJson(jsonString);
 
-import 'dart:convert';
-
-CompraVendeGanaModel compraVendeGanaFromJson(String str) =>
-    CompraVendeGanaModel.fromJson(json.decode(str));
-
-String compraVendeGanaToJson(CompraVendeGanaModel data) =>
-    json.encode(data.toJson());
 
 class CompraVendeGanaModel {
   String? nombre;

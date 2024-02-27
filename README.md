@@ -24,7 +24,9 @@
 1. validar que tenga la version de flutter 3.13.6
 2. instalamos dependencias con flutter pub get
 3. iniciamos un enmulador o conectamos un movil
-4. en el Visual Studio vamos a Run/Run Without Debugging y seleccionamos el movil o el enmulador
+4. agregar el archivo key.properties en el directorio raiz de la carpeta Android (Android/key.properties) 
+5. hacer referencia en "storeFile" al path donde se encuentra el archivo Pideky.jks
+6. en el Visual Studio vamos a Run/Run Without Debugging y seleccionamos el movil o el enmulador
 
 ----------------------------- para ejecutar el sonarqube (validador de codigo)-----------------------------------------------------
 
