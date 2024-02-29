@@ -126,49 +126,53 @@ class SearchFuzzyView extends StatelessWidget {
                                                   width: Get.width * 0.03,
                                                 ),
                                                 SizedBox(
-                                                  width: Get.width * 0.4,
-                                                  child: AutoSizeText(
-                                                    searchFuzzyViewModel
-                                                        .nombreSugeridos(
+                                                  width: Get.width * 0.65,
+                                                  child: Column(
+                                                    crossAxisAlignment:  CrossAxisAlignment.start,
+                                                    children: [
+                                                      AutoSizeText(
+                                                        searchFuzzyViewModel
+                                                            .nombreSugeridos(
+                                                                palabrabuscada:
+                                                                    searchFuzzyViewModel
+                                                                            .allResultados[
+                                                                        position],
+                                                                conDistintivo:
+                                                                    true)!,
+                                                        minFontSize: 12,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(.4),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      AutoSizeText(
+                                                        searchFuzzyViewModel.skuSugeridos(
                                                             palabrabuscada:
                                                                 searchFuzzyViewModel
                                                                         .allResultados[
                                                                     position],
                                                             conDistintivo:
                                                                 true)!,
-                                                    minFontSize: 12,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: Colors.black
-                                                          .withOpacity(.4),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                                        minFontSize: 10,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(.4),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           )),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 30),
-                                            child: AutoSizeText(
-                                              searchFuzzyViewModel.skuSugeridos(
-                                                  palabrabuscada:
-                                                      searchFuzzyViewModel
-                                                              .allResultados[
-                                                          position],
-                                                  conDistintivo: true)!,
-                                              minFontSize: 10,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(.4),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),

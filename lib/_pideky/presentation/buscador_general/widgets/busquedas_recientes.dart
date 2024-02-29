@@ -69,40 +69,41 @@ class BusquedasRecientes extends StatelessWidget {
                           SizedBox(
                             width: Get.width * 0.05,
                           ),
-                          SizedBox(
-                            width: Get.width * 0.4,
-                            child: AutoSizeText(
-                              searchFuzzyViewModel.nombreSugeridos(
-                                  palabrabuscada: searchFuzzyViewModel
-                                      .listaRecientes[index],
-                                  conDistintivo: true)!, //
-                              minFontSize: 12,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(.4),
-                                fontWeight: FontWeight.bold,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: Get.width * 0.65,
+                                child: AutoSizeText(
+                                  searchFuzzyViewModel.nombreSugeridos(
+                                      palabrabuscada: searchFuzzyViewModel
+                                          .listaRecientes[index],
+                                      conDistintivo: true)!, //
+                                  minFontSize: 12,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.black.withOpacity(.4),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
+                              AutoSizeText(
+                                searchFuzzyViewModel.skuSugeridos(
+                                    palabrabuscada: searchFuzzyViewModel
+                                        .listaRecientes[index],
+                                    conDistintivo: true)!,
+                                minFontSize: 10,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(.4),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     )),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10, bottom: 10, right: 15),
-                      child: AutoSizeText(
-                        searchFuzzyViewModel.skuSugeridos(
-                            palabrabuscada:
-                                searchFuzzyViewModel.listaRecientes[index],
-                            conDistintivo: true)!,
-                        minFontSize: 10,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(.4),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
