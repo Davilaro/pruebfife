@@ -19,7 +19,7 @@ class TicketDescription extends StatelessWidget {
     ProductoViewModel productViewModel = Get.find();
     return Container(
       width: Get.width * 0.4,
-      margin: EdgeInsets.only(right: Get.width * 0.07, top: Get.height * 0.01),
+      margin: EdgeInsets.only(right: Get.width * 0.07, top: Get.height * 0.01, bottom: Get.height * 0.01),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -54,40 +54,41 @@ class TicketDescription extends StatelessWidget {
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: Get.height * 0.02),
-          Container(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                child: Container(
-                    width: Get.width * 0.33,
-                    height: Get.height * 0.04,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Agregar",
-                          style: TextStyle(
-                              color: ConstantesColores.azul_precio,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.add,
-                              size: 15,
-                              color: ConstantesColores.azul_aguamarina_botones),
-                        )
-                      ],
-                    )),
-                onTap: () async {
-                  await compraVendeGanaViewModel.addCuponToCar(
-                      compraVendeGana.codigo!, context);
-                },
-              )),
+          Expanded(
+            child: Container(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  child: Container(
+                      width: Get.width * 0.33,
+                      height: Get.height * 0.03,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Agregar",
+                            style: TextStyle(
+                                color: ConstantesColores.azul_precio,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Icon(Icons.add,
+                                size: 15,
+                                color: ConstantesColores.azul_aguamarina_botones),
+                          )
+                        ],
+                      )),
+                  onTap: () async {
+                    await compraVendeGanaViewModel.addCuponToCar(
+                        compraVendeGana.codigo!, context);
+                  },
+                )),
+          ),
         ],
       ),
     );
