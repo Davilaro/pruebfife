@@ -26,6 +26,7 @@ class CompraVendeGanaPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           S.current.buy_sell_earn_title,
+          maxLines: 2,
           style: TextStyle(
               color: ConstantesColores.azul_precio,
               fontWeight: FontWeight.bold),
@@ -41,13 +42,12 @@ class CompraVendeGanaPage extends StatelessWidget {
         ),
         actions: <Widget>[
           BotonActualizar(),
-          AccionNotificacion(),
           AccionesBartCarrito(esCarrito: true),
         ],
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
