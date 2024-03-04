@@ -7,7 +7,6 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
-import 'package:emart/src/widget/imagen_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
