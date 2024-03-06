@@ -19,7 +19,7 @@ Map<String, WidgetBuilder> getRutas() {
     'tab_opciones': (_) => TabOpciones(),
     'splash': (_) => Splash(),
     'confirmar_pais': (_) => ConfirmacionPais(),
-    'detalle_compra_producto': (_) => CambiarDetalleCompra(),
+    'detalle_compra_producto': (_) => CambiarDetalleCompra(cambioVista: 1,),
     'inicio_compra': (_) => PrincipalPage(),
     'pedido_sugerido': (_) => PedidoSugeridoPage(),
   };

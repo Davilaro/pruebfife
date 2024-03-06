@@ -169,7 +169,7 @@ class BannnerControllers extends GetxController {
       PedidoEmart.cambioVista.value = 1;
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
     }
   }
 }

@@ -22,6 +22,9 @@ import 'package:provider/provider.dart';
 final prefs = new Preferencias();
 
 class CambiarDetalleCompra extends StatefulWidget {
+  final int cambioVista;
+
+  const CambiarDetalleCompra({Key? key, required this.cambioVista}) : super(key: key);
   @override
   State<CambiarDetalleCompra> createState() => _CambiarDetalleCompraState();
 }
@@ -37,7 +40,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   void initState() {
     super.initState();
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
-    PedidoEmart.cambioVista.value = 1;
+    PedidoEmart.cambioVista.value = widget.cambioVista;
   }
 
   @override

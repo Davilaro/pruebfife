@@ -19,7 +19,10 @@ class TicketDescription extends StatelessWidget {
     ProductoViewModel productViewModel = Get.find();
     return Container(
       width: Get.width * 0.4,
-      margin: EdgeInsets.only(right: Get.width * 0.07, top: Get.height * 0.01, bottom: Get.height * 0.01),
+      margin: EdgeInsets.only(
+          right: Get.width * 0.07,
+          top: Get.height * 0.01,
+          bottom: Get.height * 0.01),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,7 +82,8 @@ class TicketDescription extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 10),
                             child: Icon(Icons.add,
                                 size: 15,
-                                color: ConstantesColores.azul_aguamarina_botones),
+                                color:
+                                    ConstantesColores.azul_aguamarina_botones),
                           )
                         ],
                       )),

@@ -367,7 +367,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       PedidoEmart.cambioVista.value = 1;
 
       await Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
       Get.back();
     }
   }

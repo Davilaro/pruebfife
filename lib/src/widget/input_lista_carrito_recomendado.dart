@@ -208,7 +208,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
       PedidoEmart.cambioVista.value = 1;
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
     }
   }
 
