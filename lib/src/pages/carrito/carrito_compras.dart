@@ -371,7 +371,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                               children: <Widget>[
                                 Visibility(
                                     //value["preciominimo"] != 0.0, Con esta validacion podemos definir si se muestra o no la barra indicadora de monto minimo con sus textos adicionales
-                                    visible: value["preciominimo"] != 0.0,
+                                    visible: valorMontoMinimo != 0.0,
                                     child: Column(
                                       children: [
                                         if (sumaPreciosProductos <=
@@ -383,7 +383,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                             width: Get.width * 1.0,
                                             child: Text(
                                               productoViewModel.getCurrency(
-                                                  value["preciominimo"]),
+                                                  valorMontoMinimo),
                                               style: TextStyle(
                                                   fontSize: 15.0,
                                                   color:
@@ -413,10 +413,7 @@ class _CarritoComprasState extends State<CarritoCompras> {
                                                   left: Get.width * 0.015,
                                                   child: Text(
                                                     productoViewModel
-                                                        .getCurrency(cartProvider
-                                                                    .getListaFabricante[
-                                                                fabricante]
-                                                            ["precioFinal"]),
+                                                        .getCurrency(sumaPreciosProductos),
                                                     style: TextStyle(
                                                         fontSize: 11.5,
                                                         color: Colors.white,

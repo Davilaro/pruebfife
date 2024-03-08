@@ -106,7 +106,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
                         height: 10.0,
                         padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
                         margin: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 4.0),
+                            vertical: 5.0, horizontal: 1.3),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             shape: BoxShape.rectangle,
