@@ -23,22 +23,13 @@ class CompraVendeGanaViewModel extends GetxController {
   }
 
   Future<void> addCuponToCar(String cuponCode, BuildContext context) async {
-    ProductoViewModel productViewModel = Get.find();
-    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
     final cargoConfirmar = Get.find<CambioEstadoProductos>();
     final db = ProductoRepositorySqlite();
-
     Producto producto = await db.consultarDatosProducto(cuponCode);
-    PedidoEmart.listaControllersPedido![producto.codigo]!.text = "1";
-    PedidoEmart.registrarValoresPedido(producto, '1', true);
-    MetodosLLenarValores().calcularValorTotal(cartProvider);
     cargoConfirmar.cargarProductoNuevo(
         ProductoCambiante.m(producto.nombre, producto.codigo), 2);
-    cartProvider.guardarCambiodevista = 2;
-    PedidoEmart.cambioVista.value = 2;
-    productViewModel.insertarPedidoTemporal(producto.codigo);
     Get.to(() => CambiarDetalleCompra(
-          cambioVista: 2,
+          cambioVista: 1,
         ));
   }
 
