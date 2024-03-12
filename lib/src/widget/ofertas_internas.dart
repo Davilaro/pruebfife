@@ -51,7 +51,6 @@ class _OfertasInternaState extends State<OfertasInterna> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: Get.height * 0.34,
                       width: double.infinity,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                       child: CarouselSlider(
@@ -140,12 +139,16 @@ class _OfertasInternaState extends State<OfertasInterna> {
                   bannerController.validarOnClick(widget.listaBanners.first,
                       context, provider, cargoConfirmar, prefs, 'Promo');
                 },
-                child: Image.network(widget.listaBanners.first.link,
-                    height: Get.height * 0.1,
-                    errorBuilder: (context, __, ___) => Image.asset(
-                          'assets/image/logo_login.png',
-                          fit: BoxFit.fill,
-                        )),
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(widget.listaBanners.first.link,
+                        errorBuilder: (context, __, ___) => Image.asset(
+                              'assets/image/logo_login.png',
+                              fit: BoxFit.cover,
+                            )),
+                  ),
+                ),
               );
   }
 }

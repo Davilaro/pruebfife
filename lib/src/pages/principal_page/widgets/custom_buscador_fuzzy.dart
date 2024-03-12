@@ -167,9 +167,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                 Visibility(
                   visible: isActiveBanner,
                   child: Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      height: size.height * 0.2,
-                      width: double.infinity,
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      height: Get.height * 0.17,
                       child: OfertasInterna(
                         nombreFabricante: widget.codCategoria,
                         listaBanners: _listaBanners,
