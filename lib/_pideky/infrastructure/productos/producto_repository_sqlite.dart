@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:emart/_pideky/domain/producto/interface/i_producto_repository.dart';
 import 'package:emart/_pideky/domain/producto/model/producto.dart';
@@ -1368,9 +1369,8 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
 
     try {
       List<Producto> lista = [];
-      var condicion = buscar != '' ? ' WHERE p.codigo LIKE "%$buscar%" ' : ' ';
-
-      List<Map> sql = await db.rawQuery('''
+      var condicion = buscar != '' ? ' AND p.codigo LIKE "%$buscar%" ' : ' ';
+      String query = '''
        SELECT p.codigo , p.nombre ,f.codigo as codigoFabricante, f.nit as nitFabricante, f.BloqueoCartera as  bloqueoCartera, ROUND(
         (
             (
@@ -1406,11 +1406,13 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         select count(p.codigo) identificador,* 
         from descuentos d inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
         ) tmp where tmp.identificador = 1) tmp on p.fabricante = tmp.proveedor and p.codigo = tmp.codigo 
-        $condicion
         where p.Combo = 0
+        $condicion
         ORDER BY p.orden ASC 
          
-    ''');
+    ''';
+      log(query);
+      List<Map> sql = await db.rawQuery(query);
 
       lista = List<Producto>.from(sql.map((x) => Producto.fromJson2(x)));
 

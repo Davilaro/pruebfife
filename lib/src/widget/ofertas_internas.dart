@@ -144,6 +144,7 @@ class _OfertasInternaState extends State<OfertasInterna> {
                     height: Get.height * 0.1,
                     errorBuilder: (context, __, ___) => Image.asset(
                           'assets/image/logo_login.png',
+                          fit: BoxFit.fill,
                         )),
               );
   }
