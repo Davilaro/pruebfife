@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/club_ganadores/view/club_ganadores_page.dart';
 import 'package:emart/_pideky/presentation/compra_vende_gana/view/compra_vende_gana_page.dart';
@@ -79,7 +77,6 @@ class _MiNegocioState extends State<MiNegocio> {
   }
 
   void _scrollListener() {
-    log("scrollListener ${_scrollController.position.maxScrollExtent}");
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
