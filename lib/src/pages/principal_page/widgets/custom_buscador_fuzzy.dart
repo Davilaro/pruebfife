@@ -107,7 +107,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
-    final size = MediaQuery.of(context).size;
     setState(() {
       if (catalogSearchViewModel.isFilter) {
         cargarProductos();
