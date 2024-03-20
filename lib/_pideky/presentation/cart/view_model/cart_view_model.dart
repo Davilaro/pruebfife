@@ -1,3 +1,4 @@
+import 'package:emart/_pideky/domain/cart/use_cases/cart_use_cases.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
@@ -18,6 +19,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 class CartViewModel extends ChangeNotifier {
+  final CartUseCases cartUseCases = CartUseCases();
   double _precioTotal = 0;
   int cantidadItems = 0;
   Map<String, dynamic> _listaValorFabricante = new Map();
@@ -422,7 +424,7 @@ class CartViewModel extends ChangeNotifier {
 
   // METODO ENCARGADO DE MOSTRAR EL WIDGET CUANDO EL PEDIDO NO CUMPLE CON LOS ESTANDARES MINIMOS REQUERIDOS POR EL NEGOCIO
   pedidoMinimoNoCumple(
-      context, size, fabricantes, cartProvider, VoidCallback setState) {
+      context, size, fabricantes, cartProvider, VoidCallback setState, prefs) {
     return FutureBuilder(
         future: DBProviderHelper.db.consultarNombreComercial(fabricantes),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -477,7 +479,7 @@ class CartViewModel extends ChangeNotifier {
                             ),
                             _botonSeguirComprando(size, fabricantes, context),
                             _botonAceptar(size, fabricantes, cartProvider,
-                                setState, context),
+                                setState, context, prefs),
                           ],
                         )
                       ],
@@ -529,7 +531,7 @@ class CartViewModel extends ChangeNotifier {
   }
 
   void _cancelarPedidosSinPedidoMinimo(
-      fabricantes, cartProvider, context, VoidCallback setState) {
+      fabricantes, cartProvider, context, VoidCallback setState, prefs) {
     Navigator.of(context).pop();
     List<String> listaFabricantes = fabricantes.split(",");
     listaFabricantes.forEach((fabricante) {
@@ -586,7 +588,7 @@ class CartViewModel extends ChangeNotifier {
                 context,
                 size,
                 pedidoMinimoNoCumple(
-                    context, size, fabricantes, cartProvider, setState),
+                    context, size, fabricantes, cartProvider, setState, prefs),
                 Get.height * 0.45);
           }
         }
@@ -655,11 +657,11 @@ class CartViewModel extends ChangeNotifier {
   }
 
   Widget _botonAceptar(
-      size, fabricantes, cartProvider, VoidCallback setState, context) {
+      size, fabricantes, cartProvider, VoidCallback setState, context, prefs) {
     return GestureDetector(
       onTap: () {
         _cancelarPedidosSinPedidoMinimo(fabricantes, cartProvider, context,
-            setState); //UXCam: Llamamos el evento clickAction
+            setState, prefs); //UXCam: Llamamos el evento clickAction
         UxcamTagueo().clickAction('Aceptar', fabricantes);
       },
       child: Container(
