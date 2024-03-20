@@ -1,8 +1,8 @@
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
 import 'package:emart/src/classes/uiUtil.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
@@ -108,7 +108,7 @@ class _CatalogoPoductosInternoState extends State<CatalogoPoductosInterno> {
       if (widget.tipoCategoria != 2) {
         isProductoPromo = true;
       }
-      Producto productos = element;
+      Product productos = element;
       final widgetTemp = InputValoresCatalogo(
         element: productos,
         isCategoriaPromos: isProductoPromo,

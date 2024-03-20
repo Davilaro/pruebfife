@@ -3,10 +3,10 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search/view/search_fuzzy_view.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
@@ -48,13 +48,13 @@ class PrincipalPage extends StatefulWidget {
 class _PrincipalPageState extends State<PrincipalPage>
     with AutomaticKeepAliveClientMixin {
   final controllerSurvey = Get.put(EncuestaControllers());
-  final productViewModel = Get.find<ProductoViewModel>();
+  final productViewModel = Get.find<ProductViewModel>();
 
   final cargoControllerBase = Get.put(CambioEstadoProductos());
   final controllerProducto = Get.put(ControllerProductos());
   final cargoConfirmar = Get.find<ControlBaseDatos>();
-  final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-  final viewModelNequi = Get.find<MisPagosNequiViewModel>();
+  final viewModelPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+  final viewModelNequi = Get.find<MyPaymentsViewModel>();
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final slideUpAutomatic = Get.find<SlideUpAutomatic>();

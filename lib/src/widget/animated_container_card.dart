@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -19,7 +19,7 @@ class AnimatedContainerCard extends StatefulWidget {
 }
 
 class _AnimatedContainerCardState extends State<AnimatedContainerCard> {
-  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+  final misPedidosViewModel = Get.find<MyOrdersViewModel>();
   bool _isExpanded = false;
 
   Widget _validarNumeroPedido(String? pedido) {

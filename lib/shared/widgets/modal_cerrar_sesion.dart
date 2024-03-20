@@ -2,8 +2,8 @@
 
 import 'dart:async';
 
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -17,11 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import '../../_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 
 final prefs = new Preferencias();
-final controllerNequi = Get.find<MisPagosNequiViewModel>();
-final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
+final controllerNequi = Get.find<MyPaymentsViewModel>();
+final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
 final controllerSearchViewModel = Get.find<SearchFuzzyViewModel>();
 
 modalCerrarSesion(context, size, provider) {

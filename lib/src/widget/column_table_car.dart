@@ -1,16 +1,16 @@
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ColumnTableCar extends StatefulWidget {
-  final CarroModelo cartProvider;
-  final Producto producto;
+  final CartViewModel cartProvider;
+  final Product producto;
   final int cantidad;
   final DatosListas providerDatos;
   ColumnTableCar(
@@ -132,7 +132,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   mas(String prod) async {
-    Producto producto = await productService.consultarDatosProducto(prod);
+    Product producto = await productService.consultarDatosProducto(prod);
 
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
@@ -152,7 +152,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   menos(String prop, providerDatos) async {
-    Producto producto = await productService.consultarDatosProducto(prop);
+    Product producto = await productService.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -175,7 +175,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
     MetodosLLenarValores().calcularValorTotal(widget.cartProvider);
   }
 
-  void calcularValorTotal(CarroModelo cartProvider) {
+  void calcularValorTotal(CartViewModel cartProvider) {
     double valorTotal = 0;
     double valorAhorro = 0;
     int cantidad = 0;
@@ -201,7 +201,7 @@ class _ColumnTableCarState extends State<ColumnTableCar> {
   }
 
   eliminarProductoCarrito(String prop, providerDatos) async {
-    Producto producto = await productService.consultarDatosProducto(prop);
+    Product producto = await productService.consultarDatosProducto(prop);
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {

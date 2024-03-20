@@ -1,20 +1,20 @@
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/mis_listas/view_model/mis_listas_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
-import 'package:emart/_pideky/presentation/mi_negocio/view/mi_negocio.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/mis_pedidos.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
+import 'package:emart/_pideky/presentation/my_business/view_model/my_business_view_model.dart';
+import 'package:emart/_pideky/presentation/my_business/view/my_business_page.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view/my_orders_page.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view/suggested_order_page.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
@@ -54,15 +54,15 @@ class _TabOpcionesState extends State<TabOpciones>
     with SingleTickerProviderStateMixin {
   late bool hasInternet;
   late bool cargandoDatos = true;
-  late final cartProvider = Provider.of<CarroModelo>(context, listen: false);
+  late final cartProvider = Provider.of<CartViewModel>(context, listen: false);
 
   late StreamSubscription<ConnectivityResult> subscription;
 
   final cargoControllerBase = Get.put(ControlBaseDatos());
-  final MiNegocioViewModel viewModelNegocio = Get.find();
+  final MyBusinessVieModel viewModelNegocio = Get.find();
   final botonesController = Get.find<BotonesProveedoresVm>();
-  ProductoViewModel productViewModel = Get.find();
-  ProductoViewModel productoViewModel = Get.find();
+  ProductViewModel productViewModel = Get.find();
+  ProductViewModel productoViewModel = Get.find();
 
   final cargoConfirmar = Get.put(CambioEstadoProductos());
   final searchController = Get.find<SearchFuzzyViewModel>();
@@ -160,7 +160,7 @@ class _TabOpcionesState extends State<TabOpciones>
         PedidoEmart.listaProductos = new Map();
         PedidoEmart.listaValoresPedidoAgregados = new Map();
       }
-      final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+      final misPedidosViewModel = Get.find<MyOrdersViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());
 
@@ -298,9 +298,9 @@ class _HomePageBody extends StatelessWidget {
       children: [
         PrincipalPage(),
         TabCategoriaMarca(),
-        PedidoSugeridoPage(),
-        MisPedidosPage(),
-        MiNegocio()
+        SuggestedOrderPage(),
+        MyOrdersPage(),
+        MyBusinessPage()
       ],
     );
 

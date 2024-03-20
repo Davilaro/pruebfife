@@ -1,18 +1,18 @@
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/my_orders/model/historical_model.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/widget/animated_container_card.dart';
@@ -29,8 +29,8 @@ const EdgeInsets kExpandedEdgeInsets = const EdgeInsets.symmetric(
     vertical: _kPanelHeaderExpandedHeight - _kPanelHeaderCollapsedHeight);
 
 class ExpansionCardLast extends StatefulWidget {
-  final Historico historico;
-  final CarroModelo cartProvider;
+  final HistoricalModel historico;
+  final CartViewModel cartProvider;
   final DatosListas providerDatos;
   const ExpansionCardLast({
     Key? key,
@@ -45,9 +45,9 @@ class ExpansionCardLast extends StatefulWidget {
 
 class _ExpansionCardLastState extends State<ExpansionCardLast> {
   ProductoService productService = ProductoService(ProductoRepositorySqlite());
-  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+  final misPedidosViewModel = Get.find<MyOrdersViewModel>();
   RepetirOrdenViewModel repetirOrdenViewModel = Get.find();
-  ProductoViewModel productViewModel = Get.find();
+  ProductViewModel productViewModel = Get.find();
 
   RxBool _cargando = false.obs;
   final controlador = Get.find<CambioEstadoProductos>();
@@ -172,10 +172,10 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
 
   Widget _grupoComercial(size, numeroDocumento, RxBool isFrecuencia,
       RxString fabricanteFrecuencia) {
-    return FutureBuilder<List<Historico>>(
+    return FutureBuilder<List<HistoricalModel>>(
         future: misPedidosViewModel.misPedidosService
             .consultarGrupoHistorico(numeroDocumento),
-        builder: (context, AsyncSnapshot<List<Historico>> snapshot) {
+        builder: (context, AsyncSnapshot<List<HistoricalModel>> snapshot) {
           if (snapshot.hasData) {
             var grupos = snapshot.data;
             return Column(
@@ -187,7 +187,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
         });
   }
 
-  _cargarContainer(List<Historico>? grupos, size, numeroDocumento,
+  _cargarContainer(List<HistoricalModel>? grupos, size, numeroDocumento,
       RxBool isFrecuencia, RxString fabricanteFrecuencia) {
     List<Widget> contenido = [];
     for (int i = 0; i < grupos!.length; i++) {
@@ -218,7 +218,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   _cargarPedido(String numeroDoc, providerDatos) async {
     //if (estado) {
     if (prefs.usurioLogin == 1) {
-      List<Historico> datosDetalle =
+      List<HistoricalModel> datosDetalle =
           await DBProviderHelper.db.consultarDetallePedido(numeroDoc);
       cargarCadaProducto(datosDetalle);
       await PedidoEmart.iniciarProductosPorFabricante();
@@ -270,7 +270,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
   // }
 
   mas(String prod, int cantidad, String numeroDoc) async {
-    Producto producto = await productService.consultarDatosProducto(prod);
+    Product producto = await productService.consultarDatosProducto(prod);
     if (producto.codigo != "") {
       // int nuevaCantidad = PedidoEmart
       //             .listaControllersPedido![producto.codigo]!.text ==
@@ -299,7 +299,7 @@ class _ExpansionCardLastState extends State<ExpansionCardLast> {
     datosProvider.actualizarHistoricoPedido(ordenCompra);
   }
 
-  cargarCadaProducto(List<Historico> datosDetalle) {
+  cargarCadaProducto(List<HistoricalModel> datosDetalle) {
     datosDetalle.forEach((element) {
       mas(element.codigoRef.toString(), element.cantidad!,
           "${element.numeroDoc}");

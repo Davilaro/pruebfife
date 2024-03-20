@@ -18,8 +18,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import '../../../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import '../../../../_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import '../../../../_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 
 final prefs = new Preferencias();
 late ProgressDialog pr;
@@ -265,8 +265,8 @@ class _ListaSucursalesState extends State<ListaSucursales> {
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
     final notificationController =
         Get.find<NotificationsSlideUpAndPushInUpControllers>();
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-    final controllerNequi = Get.find<MisPagosNequiViewModel>();
+    final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+    final controllerNequi = Get.find<MyPaymentsViewModel>();
     notificationController.resetMaps();
     prefs.usurioLogin = 1;
     prefs.usurioLoginCedula = prefs.codClienteLogueado;

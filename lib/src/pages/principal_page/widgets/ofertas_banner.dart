@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -34,7 +34,7 @@ class _OfertasBannerState extends State<OfertasBanner> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
 
     return Obx(() => _controllesBannes.cargoDatos.value == false
         ? Container(

@@ -1,5 +1,5 @@
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/resultados_buscador_general/view/resultado_buscador_general.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search_reponse/view/resultado_buscador_general.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class BuscadorGeneral extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ResultadoBuscadorGeneral(
+                            builder: (context) => GeneralSearchResponse(
                                   allresultados:
                                       searchFuzzyViewModel.allResultados,
                                 )));

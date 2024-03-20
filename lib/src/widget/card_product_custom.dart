@@ -1,17 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CardProductCustom extends StatefulWidget {
-  final Producto producto;
-  final CarroModelo cartProvider;
+  final Product producto;
+  final CartViewModel cartProvider;
   final bool isProductoEnOferta;
   final bool isAgotadoLabel;
   final int? tipoCategoria;
@@ -38,7 +38,7 @@ class CardProductCustom extends StatefulWidget {
 }
 
 class _CardProductCustomState extends State<CardProductCustom> {
-  ProductoViewModel productViewModel = Get.find();
+  ProductViewModel productViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {

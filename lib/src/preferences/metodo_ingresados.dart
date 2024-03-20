@@ -1,9 +1,9 @@
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 
 import 'class_pedido.dart';
 
 class MetodosLLenarValores {
-  void calcularValorTotal(CarroModelo cartProvider) {
+  void calcularValorTotal(CartViewModel cartProvider) {
     double valorTotal = 0;
     double valorAhorro = 0;
     double valorTotalAhorro = 0;

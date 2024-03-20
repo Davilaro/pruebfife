@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:emart/_pideky/domain/sucursal/model/sucursal.dart';
+import 'package:emart/_pideky/domain/sucursal/model/branch_model.dart';
 
 ListaEmpresas ListaEmpresasFromJson(String str) =>
     ListaEmpresas.fromJson(json.decode(str));
@@ -54,7 +54,7 @@ class ListaEmpresas {
   String labelCondiciones2;
   String urlCondiciones2;
   String? pais;
-  List<Sucursal> sucursales;
+  List<BranchModel> sucursales;
 
   factory ListaEmpresas.fromJson(Map<String, dynamic> json) => ListaEmpresas(
         numEmpresa: json["num_empresa"],
@@ -78,8 +78,8 @@ class ListaEmpresas {
         labelCondiciones2: json["label_condiciones2"],
         urlCondiciones2: json["url_condiciones2"],
         pais: json["Pais"],
-        sucursales: List<Sucursal>.from(
-            json["sucursales"].map((x) => Sucursal.fromJson(x))),
+        sucursales: List<BranchModel>.from(
+            json["sucursales"].map((x) => BranchModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

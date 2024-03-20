@@ -1,13 +1,13 @@
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 final prefs = new Preferencias();
 
 class InputValoresCatalogo extends StatefulWidget {
-  final Producto element;
+  final Product element;
   final bool isCategoriaPromos;
   final int index;
   final bool search;
@@ -46,7 +46,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
 
     return FittedBox(
       fit: BoxFit.contain,
@@ -75,7 +75,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
                 if (prefs.usurioLogin != -1) {
                   if (searchFuzzyViewModel.controllerUser.text != '') {
                     searchFuzzyViewModel.llenarRecientes(
-                        widget.element, Producto);
+                        widget.element, Product);
                   }
                   if (widget.search) {
                     await searchFuzzyViewModel
@@ -97,7 +97,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
     );
   }
 
-  detalleProducto(Producto producto, CarroModelo cartProvider) async {
+  detalleProducto(Product producto, CartViewModel cartProvider) async {
     if (prefs.usurioLogin == -1) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LogInPage()));
