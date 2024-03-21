@@ -1,16 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/cart/view/cart_page.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
-void showSlideUpNotificationAutomatic(data) {
+void showSlideUpNotificationAutomatic(data, context) {
   final String imageUrl = data.imageUrl; // Reemplaza con la URL de tu imagen
   final String uniqueKey = UniqueKey().toString();
   final prefs = Preferencias();
 
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
+      MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
       Get.back();
       Get.to(() => CartPage(numEmpresa: prefs.numEmpresa));
     },

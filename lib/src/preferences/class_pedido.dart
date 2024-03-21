@@ -318,7 +318,7 @@ class PedidoEmart {
   }
 
   static String? obtenerValor(Product productos) {
-    return listaValoresPedido![productos.codigo] == null
+    return listaValoresPedido![productos.codigo] == null || listaValoresPedido![productos.codigo] == ""
         ? "0"
         : listaValoresPedido![productos.codigo];
   }

@@ -468,7 +468,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
   }
 
   llenarCarrito(Product producto, CartViewModel cartProvider) {
-    controllerNotifiaction.mostrarSlide(producto.negocio);
+    controllerNotifiaction.mostrarSlide(producto.negocio, context);
     if (_controllerCantidadProducto.text != '' &&
         _controllerCantidadProducto.text != '0') {
       PedidoEmart.listaControllersPedido![producto.codigo]!.text =

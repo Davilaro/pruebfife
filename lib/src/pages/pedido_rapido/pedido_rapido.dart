@@ -6,6 +6,7 @@ import 'package:emart/_pideky/presentation/my_orders/view/widgets/filtro_histori
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
@@ -161,6 +162,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
         MaterialPageRoute(builder: (context) => Login()),
       );
     } else {
+      MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
       Navigator.push(
         context,
         MaterialPageRoute(

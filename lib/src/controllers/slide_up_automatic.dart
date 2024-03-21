@@ -30,33 +30,33 @@ class SlideUpAutomatic extends GetxController {
     return false;
   }
 
-  void mostrarSlide(negocio) async {
+  void mostrarSlide(negocio, context) async {
     final requestSeeSlideUp =
         await slideUpService.showSlideUpValidation(negocio);
     if (requestSeeSlideUp == 1) {
       if (automaticSlideUpList.isNotEmpty) {
         if (selectSlideUpAutomatic(negocio)) {
-          iniciarTimer(negocio);
+          iniciarTimer(negocio, context);
         }
       }
     }
   }
 
-  void iniciarTimer(negocio) {
+  void iniciarTimer(negocio, context) {
     _timer?.cancel();
     _timer = Timer(Duration(seconds: automaticSlideUpSelected[0].tiempo ?? 60),
         () async {
       if (Get.isSnackbarOpen) {
         await Get.closeCurrentSnackbar();
       }
-      showSlideUpNotificationAutomatic(automaticSlideUpSelected[0]);
+      showSlideUpNotificationAutomatic(automaticSlideUpSelected[0], context);
       await slideUpService.sendShowedSlideUp(negocio);
 
       _timer?.cancel();
     });
   }
 
-  void validarMostrarSlide() async {
+  void validarMostrarSlide(context) async {
     RxString negocio = ''.obs;
 
     if (listaProductosCarrito.isNotEmpty && automaticSlideUpList.isNotEmpty) {
@@ -72,7 +72,7 @@ class SlideUpAutomatic extends GetxController {
       final requestSeeSlideUp =
           await slideUpService.showSlideUpValidation(negocio.value);
       if (automaticSlideUpSelected.isNotEmpty && requestSeeSlideUp == 1) {
-        showSlideUpNotificationAutomatic(automaticSlideUpSelected[0]);
+        showSlideUpNotificationAutomatic(automaticSlideUpSelected[0], context);
         await slideUpService.sendShowedSlideUp(negocio.value);
       }
     }
