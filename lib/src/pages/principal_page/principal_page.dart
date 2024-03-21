@@ -36,6 +36,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../shared/widgets/escuela_clientes_home.dart';
+
 final prefs = new Preferencias();
 
 bool limpiar = false;
@@ -256,9 +258,16 @@ class _PrincipalPageState extends State<PrincipalPage>
                             ],
                           ),
                         ),
-                        Expanded(child: ProductsCard(1))
+                        Expanded(child: ProductsCard(1)),
                       ],
                     )),
+                    SizedBox(height: 15),
+               //ESCUELA CLIENTES
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: EscuelaClientes(),
+               ),
+
                 //MULTIMEDIA
                 FutureBuilder(
                     initialData: [],

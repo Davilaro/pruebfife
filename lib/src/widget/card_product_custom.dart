@@ -195,12 +195,12 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                           .lineThrough)
                                                   : TextStyle(
                                                       color: ConstantesColores
-                                                          .azul_precio,
+                                                          .color_fondo_gris,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize:
                                                           widget.isAgotadoLabel
-                                                              ? 16
+                                                              ? 10
                                                               : 18),
                                             ),
                                           ),
