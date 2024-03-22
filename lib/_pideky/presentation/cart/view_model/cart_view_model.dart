@@ -38,13 +38,12 @@ class CartViewModel extends ChangeNotifier {
   ScrollController? scrollControllerGridItems;
 
   void animateSquare() {
-    widthSaveSquare.value =
-        (widthSaveSquare.value == 45.0) ? Get.width * 0.45 : 45.0;
     isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
+    widthSaveSquare.value = isSavedBymanufacturerOpen.value == true ? Get.width * 0.45 : 45.0;
   }
 
   void scrollToBottom() async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 200));
     if (isSavedBymanufacturerOpen.value)
       scrollControllerGridItems!.animateTo(
           Get.height * 0.39,

@@ -329,9 +329,10 @@ List<Widget> gridItem(
                 ),
                 duration: Duration(milliseconds: 200),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: ImageIcon(
                         AssetImage('assets/icon/Icono_valor_ahorrado.png'),
                         color: Colors.white,
