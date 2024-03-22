@@ -13,7 +13,6 @@ import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart'
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/widget/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -49,12 +48,30 @@ class _CartPageState extends State<CartPage> {
       // se crean los listeners para cuando se pierda el foco en los campos de texto
       // de los productos se establezca el valor en 1 en caso de que la persona no digite un valor
       cartViewModel.focusNodesMaps.forEach((productCode, focusNode) {
+        cartViewModel.scrollControllerGridItems = ScrollController();
         focusNode.addListener(() {
           if (!focusNode.hasFocus) {
             print('Lost Focus');
-            if (cartViewModel.currentProducto != null)
+            if (cartViewModel.currentProducto != null &&
+                cartViewModel.currentQuantityProduct != 0)
               cartViewModel.editarCantidad(cartViewModel.currentProducto,
                   cartViewModel, '1', updateStateSendingAsParameter);
+            else {
+              slideUpAutomatic.mostrarSlide(
+                  cartViewModel.currentProducto!.productos!.negocio, context);
+              PedidoEmart
+                  .listaControllersPedido![
+                      cartViewModel.currentProducto!.productos!.codigo]!
+                  .text = "0";
+              PedidoEmart.registrarValoresPedido(
+                  cartViewModel.currentProducto!.productos!, '1', false);
+              cartViewModel.loadAgain = true;
+              PedidoEmart.iniciarProductosPorFabricante();
+              // eliminar producto de la temporal
+              productoViewModel.eliminarProductoTemporal(
+                  cartViewModel.currentProducto!.productos!.codigo);
+              setState(() {});
+            }
           }
         });
       });
@@ -73,6 +90,7 @@ class _CartPageState extends State<CartPage> {
       focusNode.dispose();
     });
     cartViewModel.focusNodesMaps.clear();
+    cartViewModel.scrollControllerGridItems!.dispose();
     super.dispose();
   }
 
@@ -101,47 +119,40 @@ class _CartPageState extends State<CartPage> {
           padding: const EdgeInsets.only(left: 13, right: 13, top: 5),
           child: Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 20,
-                  ),
-                  child: Container(
-                    height: cartViewModel.getNuevoTotalAhorro != 0.0
-                        ? Get.height * 0.21
-                        : Get.height * 0.12,
-                    child: Container(
-                      width: Get.width,
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        children: [
-                          GeneralSavedIndicator(cartViewModel: cartViewModel),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                    'Total: ${productoViewModel.getCurrency(cartViewModel.getTotal)}',
-                                    style: TextStyle(
-                                        fontSize: 17.0,
-                                        color: HexColor("#43398E"),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(height: 10),
-                                Text(
-                                    'Estos productos serán entregados según el itinerario del proveedor',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontSize: 15.0)),
-                              ],
-                            ),
-                          ),
-                        ],
+              Container(
+                child: Container(
+                  width: Get.width,
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    children: [
+                      GeneralSavedIndicator(cartViewModel: cartViewModel),
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                  )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                                'Total: ${productoViewModel.getCurrency(cartViewModel.getTotal)}',
+                                style: TextStyle(
+                                    fontSize: 17.0,
+                                    color: HexColor("#43398E"),
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(height: 10),
+                            Text(
+                                'Estos productos serán entregados según el inventario del proveedor',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 15.0)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 3,
                 child: Container(
@@ -155,7 +166,8 @@ class _CartPageState extends State<CartPage> {
                                 cartViewModel,
                                 cartViewModel.loadAgain,
                                 updateStateSendingAsParameter,
-                                isValid)
+                                isValid
+                                )
                             .toList()),
                   ),
                 ),

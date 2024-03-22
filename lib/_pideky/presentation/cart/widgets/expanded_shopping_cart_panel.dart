@@ -105,6 +105,7 @@ List<Widget> loadDynamicExpansionPanel(
                         body: Container(
                           color: Colors.white,
                           child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
                             child: Column(
                               children: <Widget>[
                                 Visibility(
@@ -268,6 +269,8 @@ List<Widget> loadDynamicExpansionPanel(
                                       maxHeight: 250,
                                       maxWidth: double.infinity),
                                   child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    controller: cartProvider.scrollControllerGridItems,
                                     child: Column(
                                       children: [
                                         Container(
@@ -296,75 +299,6 @@ List<Widget> loadDynamicExpansionPanel(
                       )
                     ],
                   ),
-                  // Visibility(
-                  //   visible: cartProvider.getListaFabricante[fabricante]
-                  //               ["descuento"] ==
-                  //           0.0
-                  //       ? false
-                  //       : true,
-                  //   child: Container(
-                  //     height: 70,
-                  //     width: double.infinity,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.only(
-                  //         bottomLeft: Radius.circular(10),
-                  //         bottomRight: Radius.circular(10),
-                  //       ),
-                  //       color: ConstantesColores.azul_precio,
-                  //     ),
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.only(left: 20),
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         children: [
-                  //           Container(
-                  //               width: 40,
-                  //               height: 40,
-                  //               decoration: BoxDecoration(
-                  //                   color: ConstantesColores
-                  //                       .azul_aguamarina_botones,
-                  //                   borderRadius: BorderRadius.circular(10)),
-                  //               child: Center(
-                  //                 child: Image.asset(
-                  //                   'assets/icon/Icono_valor_ahorrado.png',
-                  //                   fit: BoxFit.cover,
-                  //                   width: 30,
-                  //                   color: Colors.white,
-                  //                 ),
-                  //               )),
-                  //           Expanded(
-                  //             child: Padding(
-                  //               padding: const EdgeInsets.only(left: 15),
-                  //               child: Column(
-                  //                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 children: [
-                  //                   Text(
-                  //                     getCurrency(cartProvider
-                  //                             .getListaFabricante[fabricante]
-                  //                         ["descuento"]),
-                  //                     style: TextStyle(
-                  //                         fontSize: 15.0,
-                  //                         color: Colors.white,
-                  //                         fontWeight: FontWeight.bold),
-                  //                   ),
-                  //                   Text(
-                  //                     S.current.value_saved_cart,
-                  //                     overflow: TextOverflow.ellipsis,
-                  //                     style: TextStyle(
-                  //                         fontSize: 14.0,
-                  //                         color: Colors.white,
-                  //                         fontWeight: FontWeight.bold),
-                  //                   )
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
             ),

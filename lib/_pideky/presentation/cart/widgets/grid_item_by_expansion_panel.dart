@@ -3,6 +3,7 @@ import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
@@ -12,7 +13,6 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -97,7 +97,8 @@ List<Widget> gridItem(
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: ConstantesColores.gris_textos,
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -125,8 +126,8 @@ List<Widget> gridItem(
                                                     .listaControllersPedido![
                                                         product.codigo]!
                                                     .text) *
-                                                product
-                                                    .productos.preciodescuento)),
+                                                product.productos
+                                                    .preciodescuento)),
                                     style: TextStyle(
                                         color: product.productos.descuento != 0
                                             ? ConstantesColores.rojo_letra
@@ -149,7 +150,8 @@ List<Widget> gridItem(
                                                       .listaControllersPedido![
                                                           product.codigo]!
                                                       .text) *
-                                                  product.productos.precio)
+                                                  product
+                                                      .productos.precioinicial)
                                               : (toInt(PedidoEmart
                                                       .listaControllersPedido![
                                                           product.codigo]!
@@ -160,7 +162,8 @@ List<Widget> gridItem(
                                           color: ConstantesColores.gris_textos,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 13,
-                                          decoration: TextDecoration.lineThrough),
+                                          decoration:
+                                              TextDecoration.lineThrough),
                                     ),
                                   ),
                                 ),
@@ -281,28 +284,95 @@ List<Widget> gridItem(
 
   result.add(Padding(
     padding: const EdgeInsets.only(left: 18, right: 18, top: 8.5, bottom: 15),
-    child: InkWell(
-      onTap: () {
-        controller.cashPayment.value = false;
-        controller.payOnLine.value = false;
-        dialogVaciarCarrito(
-            fabricante, cartViewModel, value, precioMinimo, context);
-      },
-      child: Row(
-        children: [
-          Icon(
-            Icons.delete_outline,
-            color: HexColor("#42B39C"),
-          ),
-          Text(
-            "Vaciar carrito",
-            style: TextStyle(
+    child: Row(
+      children: [
+        InkWell(
+          onTap: () {
+            controller.cashPayment.value = false;
+            controller.payOnLine.value = false;
+            dialogVaciarCarrito(
+                fabricante, cartViewModel, value, precioMinimo, context);
+          },
+          child: Row(
+            children: [
+              Icon(
+                Icons.delete_outline,
                 color: HexColor("#42B39C"),
-                decoration: TextDecoration.underline,
-                fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
+              ),
+              Text(
+                "Vaciar carrito",
+                style: TextStyle(
+                    color: HexColor("#42B39C"),
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        Expanded(child: Container()),
+        Visibility(
+          visible:
+              cartViewModel.getListaFabricante[fabricante]["descuento"] == 0.0
+                  ? false
+                  : true,
+          child: Obx(
+            () => GestureDetector(
+              onTap: () async {
+                cartViewModel.animateSquare();
+                cartViewModel.scrollToBottom();
+              },
+              child: AnimatedContainer(
+                width: cartViewModel.widthSaveSquare.value,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: ConstantesColores.azul_aguamarina_botones,
+                ),
+                duration: Duration(milliseconds: 200),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ImageIcon(
+                        AssetImage('assets/icon/Icono_valor_ahorrado.png'),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Visibility(
+                        visible: cartViewModel.isSavedBymanufacturerOpen.value,
+                        child: Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  getCurrency(cartViewModel
+                                          .getListaFabricante[fabricante]
+                                      ["descuento"]),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  S.current.value_saved_cart,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     ),
   ));
 

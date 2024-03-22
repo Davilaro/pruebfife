@@ -32,12 +32,32 @@ class CartViewModel extends ChangeNotifier {
   ProductViewModel productoViewModel = Get.find();
   ProductoAsignado? currentProducto;
   RxMap focusNodesMaps = {}.obs;
+  RxDouble widthSaveSquare = 45.0.obs;
+  RxInt currentQuantityProduct = 0.obs;
+  RxBool isSavedBymanufacturerOpen = false.obs;
+  ScrollController? scrollControllerGridItems;
+
+  void animateSquare() {
+    widthSaveSquare.value =
+        (widthSaveSquare.value == 45.0) ? Get.width * 0.45 : 45.0;
+    isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
+  }
+
+  void scrollToBottom() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    if (isSavedBymanufacturerOpen.value)
+      scrollControllerGridItems!.animateTo(
+          Get.height * 0.39,
+          duration:
+              Duration(milliseconds: 300), // Opcional: duración de la animación
+          curve: Curves.easeInOut, // Opcional: curva de la animación
+        );
+  }
+  //--------------------------- AQUI SE LE DA INICIO A LOS GETTERS Y SETTERS---------------------------
 
   double get getTotal {
     return _precioTotal;
   }
-
-  //--------------------------- AQUI SE LE DA INICIO A LOS GETTERS Y SETTERS---------------------------
 
   Map get getFrecuenciaFabricante => _frecuanciaFabricantes;
 
@@ -238,11 +258,23 @@ class CartViewModel extends ChangeNotifier {
       VoidCallback setState) {
     if (cantidad != "" && int.parse(cantidad) > 0) {
       currentProducto = null;
+      currentQuantityProduct.value = int.parse(cantidad);
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
       PedidoEmart.registrarValoresPedido(producto.productos, cantidad, true);
       productoViewModel.insertarPedidoTemporal(producto.codigo);
       MetodosLLenarValores().calcularValorTotal(cartProvider);
+    } else if (cantidad == '0') {
+      currentProducto = producto;
+      currentQuantityProduct.value = 0;
+      PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
+      PedidoEmart.listaValoresPedido![producto.codigo] = "0";
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+      //productoViewModel.insertarPedidoTemporal(producto.codigo);
+      //loadAgain = true;
+      //PedidoEmart.iniciarProductosPorFabricante();
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
     } else {
+      currentQuantityProduct.value = cantidad == "" ? 0 : int.parse(cantidad);
       currentProducto = producto;
       PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
       PedidoEmart.listaValoresPedido![producto.codigo] = "1";
