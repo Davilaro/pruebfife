@@ -16,7 +16,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 // WIDGET GENERAL DEL ACORDEON EXPANDIBLE DEL CARRITO
 List<Widget> loadDynamicExpansionPanel(
-      BuildContext context1, CartViewModel cartProvider, bool loadAgain, VoidCallback setState, RxBool isValid, FocusNode _focusNode) {
+      BuildContext context1, CartViewModel cartProvider, bool loadAgain, VoidCallback setState, RxBool isValid) {
     List<Widget> listaWidget = [];
     ProductViewModel productoViewModel = Get.find();
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
@@ -279,8 +279,7 @@ List<Widget> loadDynamicExpansionPanel(
                                                     context1,
                                                     cartProvider,
                                                     value["preciominimo"],
-                                                    setState,
-                                                    _focusNode
+                                                    setState
                                                     )
                                                 .toList(),
                                           ),

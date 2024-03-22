@@ -12,19 +12,18 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 // WIDGET INTERIOR AL ACORDION EXPANDIBLE DE CADA FABRICANTE
 List<Widget> gridItem(
-  List<dynamic> value,
-  String fabricante,
-  BuildContext context,
-  CartViewModel cartViewModel,
-  precioMinimo,
-  VoidCallback setState,
-  FocusNode focusNode,
-) {
+    List<dynamic> value,
+    String fabricante,
+    BuildContext context,
+    CartViewModel cartViewModel,
+    precioMinimo,
+    VoidCallback setState) {
   final controller = Get.put(StateControllerRadioButtons());
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   ProductViewModel productoViewModel = Get.find();
@@ -34,6 +33,7 @@ List<Widget> gridItem(
   final size = MediaQuery.of(context).size;
 
   value.forEach((product) {
+    cartViewModel.focusNodesMaps.putIfAbsent(product.codigo, () => FocusNode());
     Product productos = PedidoEmart.listaProductos![product.codigo]!;
 
     if (product.fabricante == fabricante && product.cantidad > 0) {
@@ -74,8 +74,11 @@ List<Widget> gridItem(
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              width: Get.width * 0.02,
+                            ),
                             Container(
-                              width: size.width / 4,
+                              width: size.width / 3,
                               child: GestureDetector(
                                 onTap: () => {
                                   cargoConfirmar.cambiarValoresEditex(
@@ -91,32 +94,78 @@ List<Widget> gridItem(
                                 },
                                 child: Text(
                                   product.nombre,
-                                  style:
-                                      TextStyle(color: ConstantesColores.verde),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: ConstantesColores.gris_textos,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 10.0),
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              productoViewModel.getCurrency(
-                                  product.productos.descuento != 0
-                                      ? (toInt(PedidoEmart
-                                              .listaControllersPedido![
-                                                  product.codigo]!
-                                              .text) *
-                                          product.productos.precio)
-                                      : (toInt(PedidoEmart
-                                              .listaControllersPedido![
-                                                  product.codigo]!
-                                              .text) *
-                                          product.productos.preciodescuento)),
-                              style: cartViewModel.valuesDesing(),
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 10.0),
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Text(
+                                    productoViewModel.getCurrency(
+                                        product.productos.descuento != 0
+                                            ? (toInt(PedidoEmart
+                                                    .listaControllersPedido![
+                                                        product.codigo]!
+                                                    .text) *
+                                                product.productos.precio)
+                                            : (toInt(PedidoEmart
+                                                    .listaControllersPedido![
+                                                        product.codigo]!
+                                                    .text) *
+                                                product
+                                                    .productos.preciodescuento)),
+                                    style: TextStyle(
+                                        color: product.productos.descuento != 0
+                                            ? ConstantesColores.rojo_letra
+                                            : ConstantesColores.azul_precio,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: product.productos.descuento != 0,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10.0),
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Text(
+                                      productoViewModel.getCurrency(
+                                          product.productos.descuento != 0
+                                              ? (toInt(PedidoEmart
+                                                      .listaControllersPedido![
+                                                          product.codigo]!
+                                                      .text) *
+                                                  product.productos.precio)
+                                              : (toInt(PedidoEmart
+                                                      .listaControllersPedido![
+                                                          product.codigo]!
+                                                      .text) *
+                                                  product.productos
+                                                      .preciodescuento)),
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_textos,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          decoration: TextDecoration.lineThrough),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -172,7 +221,8 @@ List<Widget> gridItem(
                                 maxHeight: 70.0,
                               ),
                               child: TextFormField(
-                                focusNode: focusNode,
+                                focusNode: cartViewModel
+                                    .focusNodesMaps[product.codigo],
                                 textAlignVertical: TextAlignVertical.center,
                                 maxLines: 1,
                                 controller: PedidoEmart
@@ -230,7 +280,7 @@ List<Widget> gridItem(
   });
 
   result.add(Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
+    padding: const EdgeInsets.only(left: 18, right: 18, top: 8.5, bottom: 15),
     child: InkWell(
       onTap: () {
         controller.cashPayment.value = false;

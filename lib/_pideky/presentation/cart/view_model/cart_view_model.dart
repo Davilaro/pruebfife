@@ -31,6 +31,7 @@ class CartViewModel extends ChangeNotifier {
   bool loadAgain = false;
   ProductViewModel productoViewModel = Get.find();
   ProductoAsignado? currentProducto;
+  RxMap focusNodesMaps = {}.obs;
 
   double get getTotal {
     return _precioTotal;
