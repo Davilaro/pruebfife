@@ -3,6 +3,7 @@
 import 'package:emart/_pideky/presentation/cart/widgets/expanded_shopping_cart_panel.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/general_saved_indicator.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
+import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
@@ -35,17 +36,34 @@ class _CartPageState extends State<CartPage> {
   late final cartViewModel = Provider.of<CartViewModel>(context);
   final controller = Get.put(StateControllerRadioButtons());
   final slideUpAutomatic = Get.find<SlideUpAutomatic>();
+  FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     //UXCAM: Se define el nombre de la interfaz
+
     FlutterUxcam.tagScreenName('ShoppingCart');
     PedidoEmart.iniciarProductosPorFabricante();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.addListener(() {
+        if (!_focusNode.hasFocus) {
+          if(cartViewModel.currentProducto != null)
+          cartViewModel.editarCantidad(cartViewModel.currentProducto,
+              cartViewModel, '1', updateStateSendingAsParameter);
+        }
+      });
+    });
   }
 
   updateStateSendingAsParameter() {
     setState(() {});
+  }
+  @override
+  void dispose() {
+    _focusNode.removeListener(() {});
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -174,7 +192,9 @@ class _CartPageState extends State<CartPage> {
                                   cartViewModel,
                                   cartViewModel.loadAgain,
                                   updateStateSendingAsParameter,
-                                  isValid)
+                                  isValid,
+                                  _focusNode
+                                  )
                               .toList()),
                     ),
                   ),

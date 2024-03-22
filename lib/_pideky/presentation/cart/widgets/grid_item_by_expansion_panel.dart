@@ -17,13 +17,14 @@ import 'package:hexcolor/hexcolor.dart';
 
 // WIDGET INTERIOR AL ACORDION EXPANDIBLE DE CADA FABRICANTE
 List<Widget> gridItem(
-    List<dynamic> value,
-    String fabricante,
-    BuildContext context,
-    CartViewModel cartViewModel,
-    precioMinimo,
-    VoidCallback setState,
-    ) {
+  List<dynamic> value,
+  String fabricante,
+  BuildContext context,
+  CartViewModel cartViewModel,
+  precioMinimo,
+  VoidCallback setState,
+  FocusNode focusNode,
+) {
   final controller = Get.put(StateControllerRadioButtons());
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   ProductViewModel productoViewModel = Get.find();
@@ -41,7 +42,6 @@ List<Widget> gridItem(
         ..add(Padding(
           padding: EdgeInsets.only(bottom: 10, left: 22, right: 22),
           child: Column(
-            
             children: [
               Divider(
                 color: ConstantesColores.gris_sku,
@@ -158,8 +158,7 @@ List<Widget> gridItem(
                                     precioMinimo,
                                     setState,
                                     cartViewModel,
-                                    context
-                                    ),
+                                    context),
                               },
                             ),
                           ),
@@ -173,6 +172,7 @@ List<Widget> gridItem(
                                 maxHeight: 70.0,
                               ),
                               child: TextFormField(
+                                focusNode: focusNode,
                                 textAlignVertical: TextAlignVertical.center,
                                 maxLines: 1,
                                 controller: PedidoEmart
@@ -188,13 +188,12 @@ List<Widget> gridItem(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13),
                                 onChanged: (value) {
-                                  cartViewModel.editarCantidad(product,
-                                        cartViewModel, value, setState);
+                                  cartViewModel.editarCantidad(
+                                      product, cartViewModel, value, setState);
                                 },
-                                    
                                 decoration: InputDecoration(
                                   fillColor: ConstantesColores.azul_precio,
-                                   border: InputBorder.none,
+                                  border: InputBorder.none,
                                   hintText: '',
                                   counterText: "",
                                   hintStyle: TextStyle(

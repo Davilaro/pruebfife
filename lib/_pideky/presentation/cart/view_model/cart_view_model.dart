@@ -1,4 +1,3 @@
-
 import 'package:emart/_pideky/domain/cart/use_cases/cart_use_cases.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/cart/view/configure_order_page.dart';
@@ -6,6 +5,7 @@ import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
+import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -30,6 +30,7 @@ class CartViewModel extends ChangeNotifier {
   Map<String, dynamic> _frecuanciaFabricantes = new Map();
   bool loadAgain = false;
   ProductViewModel productoViewModel = Get.find();
+  ProductoAsignado? currentProducto;
 
   double get getTotal {
     return _precioTotal;
@@ -235,15 +236,21 @@ class CartViewModel extends ChangeNotifier {
   editarCantidad(dynamic producto, CartViewModel cartProvider, String cantidad,
       VoidCallback setState) {
     if (cantidad != "" && int.parse(cantidad) > 0) {
+      currentProducto = null;
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
       PedidoEmart.registrarValoresPedido(producto.productos, cantidad, true);
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
     } else {
+      currentProducto = producto;
       PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
-      PedidoEmart.listaValoresPedido![producto.codigo] = "";
-      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-      PedidoEmart.iniciarProductosPorFabricante();
+      PedidoEmart.listaValoresPedido![producto.codigo] = "1";
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "";
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
+      //loadAgain = true;
+      //PedidoEmart.iniciarProductosPorFabricante();
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
     }
-    MetodosLLenarValores().calcularValorTotal(cartProvider);
 
     setState();
   }
