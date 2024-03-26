@@ -36,6 +36,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../_pideky/presentation/authentication/view/register/register_page.dart';
+import '../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../shared/widgets/escuela_clientes_home.dart';
 
 final prefs = new Preferencias();
@@ -148,6 +150,20 @@ class _PrincipalPageState extends State<PrincipalPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
+                //BOTON (QUIERO SER CLIENTE PIDEKY) SOLO VISIBLE SIN LOGUEARSE EN EL HOME 
+                prefs.usurioLogin == -1
+                  ? BotonAgregarCarrito(
+                      marginTop: 10,
+                      width: Get.width * 0.94,
+                      height: Get.height * 0.06,
+                      color: ConstantesColores.azul_precio, 
+                      onTap: (){
+                        Get.to(() => RegisterPage());
+                      }, 
+                      text: 'Quiero ser cliente Pideky',
+                      borderRadio: 30,
+                  )
+                  :Container(),
                 //BUSCADOR
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),

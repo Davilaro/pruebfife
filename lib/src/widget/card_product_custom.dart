@@ -9,6 +9,8 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../preferences/preferencias.dart';
+
 class CardProductCustom extends StatefulWidget {
   final Product producto;
   final CartViewModel cartProvider;
@@ -39,6 +41,8 @@ class CardProductCustom extends StatefulWidget {
 
 class _CardProductCustomState extends State<CardProductCustom> {
   ProductViewModel productViewModel = Get.find();
+
+  final prefs = new Preferencias();
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +142,13 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                 ),
                                 //Precio producto
                                 ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxHeight: 52, minHeight: 40),
+                                  constraints: prefs.usurioLogin == 1
+                                 ? BoxConstraints(
+                                      maxHeight: 52, minHeight: 40
+                                      )
+                                 : BoxConstraints(
+                                      maxHeight: 15
+                                      ),     
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
@@ -174,17 +183,18 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                             )),
                                         Expanded(
                                           flex: 1,
-                                          child: Container(
+                                          child:  Container(
                                             padding: EdgeInsets.fromLTRB(
                                                 0, 0, 10, 0),
                                             alignment: Alignment.topLeft,
-                                            child: AutoSizeText(
+                                            //Valida si esta logueado para mostrar precios en las tarjetas de los productos 
+                                            //sino esta logueado y los valores son cero no muestra estos 
+                                            child: prefs.usurioLogin == 1 
+                                            ? AutoSizeText(
                                               typeCurrency,
                                               minFontSize: 10,
                                               textAlign: TextAlign.left,
-                                              style: widget
-                                                          .producto.descuento !=
-                                                      0
+                                              style: widget.producto.descuento != 0
                                                   ? TextStyle(
                                                       color: ConstantesColores
                                                           .azul_precio,
@@ -195,14 +205,14 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                           .lineThrough)
                                                   : TextStyle(
                                                       color: ConstantesColores
-                                                          .color_fondo_gris,
+                                                          .azul_precio,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize:
                                                           widget.isAgotadoLabel
                                                               ? 10
                                                               : 18),
-                                            ),
+                                            ):Container()
                                           ),
                                         ),
                                         //Label Agotado

@@ -1,18 +1,18 @@
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EscuelaClientes extends StatelessWidget {
-   EscuelaClientes();
-  
-  
+  EscuelaClientes();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height * 0.45,
+      height: Get.height * 0.49,
       width: double.infinity,
       //color: Colors.red,
       child: Column(
@@ -29,7 +29,10 @@ class EscuelaClientes extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
-                Icon(Icons.search, color: HexColor("#41398D"))
+                SvgPicture.asset(
+                  'assets/image/logo-escuela-clientes-top.svg',
+                  width: 90,
+                )
               ],
             ),
           ),
@@ -38,44 +41,46 @@ class EscuelaClientes extends StatelessWidget {
             height: Get.height * 0.2,
             width: Get.width * 0.95,
             decoration: BoxDecoration(
-                color: Colors.black38, 
-                borderRadius: BorderRadius.circular(30)),
+                color: Colors.black38, borderRadius: BorderRadius.circular(30)),
             child: Image.asset('assets/image/jar-loading.gif'),
 
-            // child: ClipRRect(
-            //     borderRadius: BorderRadius.circular(10.0),
-            //     child: Image.network(
-            //       item?.link,
-            //       fit: BoxFit.fill,
-            //       errorBuilder: (context, url, error) =>
-            //           Image.asset('assets/image/jar-loading.gif'),
-            //     )
-            //     ),
+          
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-                  'Si te apasiona el aprendizaje y quieres ver más contenido como este.',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      color: HexColor("#41398D"),
-                      fontWeight: FontWeight.bold),
-                ),
+              'Si te apasiona el aprendizaje y quieres ver más contenido como este.',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  fontSize: 16.0,
+                  color: HexColor("#41398D"),
+                  fontWeight: FontWeight.bold),
+            ),
           ),
 
           BotonAgregarCarrito(
             marginTop: 10,
             width: Get.width * 0.9,
             height: Get.height * 0.07,
-            color: ConstantesColores.empodio_verde, 
-            onTap: (){}, 
+            color: ConstantesColores.empodio_verde,
+            onTap: () {
+              _launchUrl();
+            },
             text: 'Visita escuela de clientes',
             borderRadio: 30,
-            )
+          )
         ],
-        
       ),
     );
+  }
+
+  _launchUrl() async {
+    const String url = 'https://escueladeclientesnutresa.com';
+     final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'No se pudo abrir la URL $url';
+    }
   }
 }

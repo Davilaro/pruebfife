@@ -6,6 +6,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,6 @@ Future<void> showPopup(
               children: [
                 Container(
                   width: double.infinity,
-                  //color: Colors.red,
                   child: Row(
                     children: [
                       Expanded(
@@ -280,17 +280,36 @@ void alertCustom(BuildContext context) {
       builder: (context) {
         return WillPopScope(
           onWillPop: () => Future.value(false),
-          child: CustomDialog(
-            title: Container(
-                margin: EdgeInsets.only(top: 40),
-                child: Text(
-                  S.current.activate_your_user,
+          child: LoginHomeDialog(
+            
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                              onPressed: () { 
+                                Navigator.of(context).pop();
+                               },
+                              icon: Icon(
+                                    Icons.cancel_outlined,
+                                    color: ConstantesColores.azul_precio,
+                                    size: 39,),
+                            ),
+                  ],
+                ),
+                SvgPicture.asset('assets/image/Icon_incorrecto.svg'),
+                SizedBox(height: 19,),
+                Text(
+                  '¡Inicio de sesión!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 23,
                       color: ConstantesColores.azul_precio,
                       fontWeight: FontWeight.bold),
-                )),
+                ),
+              ],
+            ),
             isVertical: true,
             hasLeftButton: true,
             hasRightButton: true,
@@ -309,11 +328,14 @@ void alertCustom(BuildContext context) {
                   context, MaterialPageRoute(builder: (context) => LogInPage()))
             },
             content: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  S.current.activate_user_for_buy,
+                  'para comprar en Pideky y ver los datos de tu negocio debes iniciar sesión',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold
+
+                  ),
                 )),
           ),
         );
