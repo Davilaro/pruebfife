@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
@@ -17,7 +17,7 @@ final prefs = new Preferencias();
 class CategoriasCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
 
     return FutureBuilder(
       initialData: [],
@@ -38,7 +38,7 @@ class CategoriasCard extends StatelessWidget {
   }
 
   List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaCategorias,
-      CarroModelo provider) {
+      CartViewModel provider) {
     final List<Widget> opciones = [];
 
     if (listaCategorias.length == 0) {
@@ -122,7 +122,7 @@ class CategoriasCard extends StatelessWidget {
     return opciones;
   }
 
-  _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
+  _onClickCatalogo(String codigo, BuildContext context, CartViewModel provider,
       String nombre) async {
     final List<dynamic> listaSubCategorias =
         await DBProvider.db.consultarCategoriasSubCategorias(codigo);

@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CarritoDisenoListaRLista extends StatefulWidget {
   final int numTienda;
-  final Producto productos;
+  final Product productos;
 
   const CarritoDisenoListaRLista(
       {Key? key, required this.numTienda, required this.productos})
@@ -23,11 +23,11 @@ class CarritoDisenoListaRLista extends StatefulWidget {
 }
 
 class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
-  ProductoViewModel productoViewModel = Get.find();
+  ProductViewModel productoViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
 
     return Container(
       height: 150,
@@ -41,8 +41,8 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
   }
 
   _cargarDisenoInterno(
-      element, BuildContext context, CarroModelo cartProvider) {
-    Producto productos = element;
+      element, BuildContext context, CartViewModel cartProvider) {
+    Product productos = element;
 
     final size = MediaQuery.of(context).size;
     return Row(
@@ -196,7 +196,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     );
   }
 
-  mas(Producto producto, CarroModelo cartProvider) {
+  mas(Product producto, CartViewModel cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -214,7 +214,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     calcularValorTotal(cartProvider);
   }
 
-  menos(Producto producto, CarroModelo cartProvider) {
+  menos(Product producto, CartViewModel cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {
@@ -236,7 +236,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     calcularValorTotal(cartProvider);
   }
 
-  void calcularValorTotal(CarroModelo cartProvider) {
+  void calcularValorTotal(CartViewModel cartProvider) {
     double valorTotal = 0;
     int cantidad = 0;
 
@@ -252,7 +252,7 @@ class _CarritoDisenoListaRListaState extends State<CarritoDisenoListaRLista> {
     cartProvider.guardarValorCompra = valorTotal;
   }
 
-  int obtenerValorProducto(Producto producto, CarroModelo cartProvider) {
+  int obtenerValorProducto(Product producto, CartViewModel cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {

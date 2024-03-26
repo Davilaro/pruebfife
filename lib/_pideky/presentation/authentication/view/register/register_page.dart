@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/controllers/controller_selector_providers.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -318,7 +318,7 @@ class _CategoriasCard extends StatelessWidget {
   final ValidationForms _validationForms = Get.find<ValidationForms>();
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
 
     return FutureBuilder(
       initialData: [],
@@ -339,7 +339,7 @@ class _CategoriasCard extends StatelessWidget {
   }
 
   List<Widget> _cargarDatos(BuildContext context, List<dynamic> listaCategorias,
-      CarroModelo provider) {
+      CartViewModel provider) {
     final List<Widget> opciones = [];
     // var onTapCard = false.obs;
 

@@ -5,7 +5,7 @@ import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/linea_atencion.dart';
 import 'package:emart/src/modelos/nombre_comercial.dart';
 import 'package:emart/src/modelos/sugerido.dart';
-import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
+import 'package:emart/_pideky/domain/my_orders/model/historical_model.dart';
 import 'package:emart/src/modelos/tablas_borrar.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/utils/util.dart';
@@ -132,7 +132,7 @@ class DBProviderHelper {
     });
   }
 
-  Future<List<Historico>> consultarDetallePedido(String numeroDoc) async {
+  Future<List<HistoricalModel>> consultarDetallePedido(String numeroDoc) async {
     final db = await baseAbierta;
     try {
       final sql = await db.rawQuery('''
@@ -141,7 +141,7 @@ class DBProviderHelper {
       p.codigo=h.codigoref where  h.NumeroDoc='$numeroDoc' GROUP BY h.codigoref
     ''');
 
-      return sql.map((e) => Historico.fromJson(e)).toList();
+      return sql.map((e) => HistoricalModel.fromJson(e)).toList();
     } catch (e) {
       return [];
     }

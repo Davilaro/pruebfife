@@ -1,17 +1,17 @@
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto.dart';
-import 'package:emart/_pideky/presentation/productos/view/ir_mi_carrito.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto.dart';
+import 'package:emart/_pideky/presentation/product/view/ir_mi_carrito.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/widget/card_product_custom.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +29,9 @@ class CambiarDetalleCompra extends StatefulWidget {
 
 class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  Producto? productos;
+  Product? productos;
   final constrollerProductos = Get.find<ControllerProductos>();
-  final productViewModel = Get.find<ProductoViewModel>();
+  final productViewModel = Get.find<ProductViewModel>();
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   @override
   Widget build(BuildContext context) {
     productos = PedidoEmart.listaProductos![cargoConfirmar.dato.value.codigo]!;
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
 
     bool isFrecuencia = prefs.paisUsuario == 'CR'
         ? productViewModel.validarFrecuencia(productos!.fabricante.toString())
@@ -135,7 +135,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     }
 
     listaProductos.forEach((element) {
-      Producto producto = element;
+      Product producto = element;
 
       final template = Container(
           child: FittedBox(
@@ -175,7 +175,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     return opciones;
   }
 
-  detalleProducto(Producto element, CarroModelo cartProvider) {
+  detalleProducto(Product element, CartViewModel cartProvider) {
     cargoConfirmar.cambiarValoresEditex(PedidoEmart.obtenerValor(element)!);
     cargoConfirmar.cargarProductoNuevo(
         ProductoCambiante.m(element.nombre, element.codigo), 2);

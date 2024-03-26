@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/country_confirmation/view/country_confirmation_page.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/pages/login/login.dart';
@@ -24,8 +24,8 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  final viewModelPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-  final viewModelNequi = Get.find<MisPagosNequiViewModel>();
+  final viewModelPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+  final viewModelNequi = Get.find<MyPaymentsViewModel>();
   final validationForms = Get.find<ValidationForms>();
   final prefs = new Preferencias();
   final LocalAuthentication auth = LocalAuthentication();
@@ -63,7 +63,7 @@ class _SplashState extends State<Splash> {
     if (prefs.usurioLogin == null ||
         prefs.paisUsuario == null ||
         prefs.sucursal == '00') {
-      Get.offAll(() => ConfirmacionPais());
+      Get.offAll(() => CountryConfirmationPage());
     } else if (prefs.usurioLogin == -1) {
       var res = false;
       var contador = 0;
@@ -124,7 +124,7 @@ class _SplashState extends State<Splash> {
         var res = await AppUtil.appUtil.abrirBases();
 
         prefs.usurioLogin = 1;
-        PedidoSugeridoViewModel.userLog.value = 1;
+        SuggestedOrderViewModel.userLog.value = 1;
         if (res && cargo) {
           if (prefs.usurioLogin == 1) {
             S.load(prefs.paisUsuario == 'CR'

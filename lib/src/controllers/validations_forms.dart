@@ -7,15 +7,15 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:emart/_pideky/domain/authentication/login/models/security_question_model.dart';
-import 'package:emart/_pideky/domain/authentication/register/service/register_service.dart';
-import 'package:emart/_pideky/infrastructure/authentication/login/login_api.dart';
+import 'package:emart/_pideky/domain/authentication/register/service/register_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/authentication/login/login_service.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/face_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/biometric_id/touch_id_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/create_password_page.dart';
 import 'package:emart/_pideky/presentation/authentication/view/select_sucursal_as_collaborator.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
@@ -43,9 +43,9 @@ import 'package:local_auth/local_auth.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:emart/_pideky/infrastructure/authentication/register/register_api.dart';
+import 'package:emart/_pideky/infrastructure/authentication/register/register_service.dart';
 
-import '../../_pideky/domain/authentication/login/service/login_service.dart';
+import '../../_pideky/domain/authentication/login/use_cases/login_use_cases.dart';
 
 class ValidationForms extends GetxController {
   String plataforma = Platform.isAndroid ? 'Android' : 'Ios';
@@ -81,8 +81,8 @@ class ValidationForms extends GetxController {
   RxList listProviders = [].obs;
   RxList listSucursales = [].obs;
   RxList<Map<String, String>> sendProvidersList = RxList();
-  final loginService = LoginService(LoginApi());
-  final registerService = RegisterService(RegisterApi());
+  final loginService = LoginUseCases(LoginService());
+  final registerService = RegisterUseCases(RegisterService());
   final LocalAuthentication auth = LocalAuthentication();
 
   final passwordError = 'No es una contraseña válida'.obs;
@@ -554,7 +554,7 @@ class ValidationForms extends GetxController {
 
           return false;
         }
-        PedidoSugeridoViewModel.userLog.value = 1;
+        SuggestedOrderViewModel.userLog.value = 1;
         prefs.isFirstTime = false;
         progress.hide();
         int timeIteration = 0;
@@ -772,8 +772,8 @@ class ValidationForms extends GetxController {
   Future<void> cargarInformacion(DatosListas provider, dynamic elemento) async {
     final notificationController =
         Get.find<NotificationsSlideUpAndPushInUpControllers>();
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-    final controllerNequi = Get.find<MisPagosNequiViewModel>();
+    final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+    final controllerNequi = Get.find<MyPaymentsViewModel>();
     notificationController.resetMaps();
     prefs.usurioLogin = 1;
     //prefs.usurioLoginCedula = usuariLogin;

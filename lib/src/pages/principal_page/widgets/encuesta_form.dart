@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -525,9 +525,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
 Future<void> updateSurvey(
     OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
   final botonesController = Get.find<BotonesProveedoresVm>();
-  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-  final controllerNequi = Get.find<MisPagosNequiViewModel>();
-  final productViewModel = Get.find<ProductoViewModel>();
+  final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+  final controllerNequi = Get.find<MyPaymentsViewModel>();
+  final productViewModel = Get.find<ProductViewModel>();
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);

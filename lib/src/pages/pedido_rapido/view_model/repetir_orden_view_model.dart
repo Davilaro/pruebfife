@@ -1,14 +1,14 @@
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:get/get.dart';
 
 class RepetirOrdenViewModel extends GetxController {
-  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+  final misPedidosViewModel = Get.find<MyOrdersViewModel>();
   validarFrecuenciaPedidoRapido(
     numeroDocumento,
     String fabricante,
     RxBool isFrecuencia,
-    ProductoViewModel productViewModel,
+    ProductViewModel productViewModel,
     RxString fabricanteFrecuencia,
   ) async {
     var res = await misPedidosViewModel.misPedidosService

@@ -1,7 +1,7 @@
 import 'package:emart/src/modelos/pedido.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class TagueoFirebase {
@@ -132,7 +132,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticSelectItem(Producto producto, int cantidad) async {
+  Future<void> sendAnalityticSelectItem(Product producto, int cantidad) async {
     try {
       var resPrice = producto.precio / 1000000;
       var data = {
@@ -163,7 +163,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticAddToCart(Producto producto, int cantidad) async {
+  Future<void> sendAnalityticAddToCart(Product producto, int cantidad) async {
     try {
       final total = producto.precio * cantidad;
       var resPrice = producto.precio / 1000000;
@@ -195,7 +195,7 @@ class TagueoFirebase {
   }
 
   Future<void> sendAnalityticRemoveFromCart(
-      Producto producto, String? cantidad) async {
+      Product producto, String? cantidad) async {
     try {
       final totalOrden = producto.precio * int.parse(cantidad!);
       var resPrice = producto.precio / 1000000;
@@ -250,7 +250,7 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticViewItem(Producto producto, int totalOrden) async {
+  Future<void> sendAnalityticViewItem(Product producto, int totalOrden) async {
     try {
       var resPrice = producto.precio / 1000000;
       var data = {
@@ -275,8 +275,8 @@ class TagueoFirebase {
     }
   }
 
-  Future<void> sendAnalityticViewCart(CarroModelo cartProvider,
-      List<Producto> listProducts, String? view) async {
+  Future<void> sendAnalityticViewCart(CartViewModel cartProvider,
+      List<Product> listProducts, String? view) async {
     try {
       List<Object> productos = [];
       var contador = 1;
@@ -364,7 +364,7 @@ class TagueoFirebase {
     try {
       var contador = -1;
       var data = list.map((item) {
-        Producto productos = item;
+        Product productos = item;
         var resPrice = productos.precio / 1000000;
         contador++;
         return {

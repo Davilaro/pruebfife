@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/modelos/pedido.dart';
 import 'package:emart/src/modelos/validar_pedido.dart';
-import 'package:emart/src/pages/carrito/order_notification_page.dart';
+import 'package:emart/_pideky/presentation/cart/view/order_notification_page.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -40,18 +40,18 @@ class ConfigurarPedido extends StatefulWidget {
 
 class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   final prefs = new Preferencias();
-  ProductoViewModel productoViewModel = Get.find();
+  ProductViewModel productoViewModel = Get.find();
   final controller = Get.put(StateControllerRadioButtons());
 
   late ProgressDialog pr;
   late BuildContext _context2;
-  late CarroModelo cartProvider;
+  late CartViewModel cartProvider;
 
   @override
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ConfirmOrderPage');
-    cartProvider = Provider.of<CarroModelo>(context);
+    cartProvider = Provider.of<CartViewModel>(context);
     final size = MediaQuery.of(context).size;
     var locale = Intl().locale;
     var format = locale.toString() != 'es_CO'
@@ -213,7 +213,7 @@ class _ConfigurarPedidoState extends State<ConfigurarPedido> {
   }
 
   _dialogEnviarPedido(size) async {
-    final cartProvider = Provider.of<CarroModelo>(context, listen: false);
+    final cartProvider = Provider.of<CartViewModel>(context, listen: false);
     final List<Pedido> listaProductosPedidos = [];
     final List<String> listaSkuProductos = [];
     final progress = ProgressDialog(context, isDismissible: false);

@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-late CarroModelo cartProvider;
+late CartViewModel cartProvider;
 
 class SimpleCardCondicionesEntrega extends StatefulWidget {
   final String texto;
@@ -28,7 +28,7 @@ class _SimpleCardCondicionesEntregaState
 
   @override
   Widget build(BuildContext context) {
-    cartProvider = Provider.of<CarroModelo>(context);
+    cartProvider = Provider.of<CartViewModel>(context);
 
     return Container(
       margin: EdgeInsets.only(bottom: 14),
@@ -106,7 +106,7 @@ class _SimpleCardCondicionesEntregaState
   }
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
-      BuildContext context1, CarroModelo cartProvider) {
+      BuildContext context1, CartViewModel cartProvider) {
     List<Widget> listaWidget = [];
     var condicionEntrega;
 
@@ -300,7 +300,7 @@ class _SimpleCardCondicionesEntregaState
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
-      BuildContext context, CarroModelo cartProvider) {
+      BuildContext context, CartViewModel cartProvider) {
     List<Widget> result = [];
 
     final size = MediaQuery.of(context).size;

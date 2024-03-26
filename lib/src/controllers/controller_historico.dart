@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class ControllerHistorico extends GetxController {
   RxString fechaInicial = '-1'.obs;
   RxString fechaFinal = '-1'.obs;
-  final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+  final misPedidosViewModel = Get.find<MyOrdersViewModel>();
 
   void setFechaInicial(String val) {
     fechaInicial.value = val;

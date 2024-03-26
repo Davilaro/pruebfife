@@ -1,5 +1,5 @@
 import 'package:emart/_pideky/presentation/authentication/view/confirm_identity_send_sms_page.dart';
-import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
+import 'package:emart/_pideky/presentation/my_business/view_model/my_business_view_model.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -18,7 +18,7 @@ class TermsAndConditionsPage extends StatelessWidget {
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('AcceptTermsAndConditionsPage');
     FocusManager.instance.primaryFocus?.unfocus();
-    final MiNegocioViewModel viewModel = Get.find();
+    final MyBusinessVieModel viewModel = Get.find();
     final controller = Get.put(StateControllerRadioButtons());
     final ValidationForms _validationForms = Get.find();
 

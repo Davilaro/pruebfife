@@ -1,13 +1,13 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'package:emart/_pideky/presentation/cart/view/cart_page.dart';
 import 'package:emart/src/controllers/controller_historico.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view/widgets/filtro_historico.dart';
+import 'package:emart/_pideky/presentation/my_orders/view/widgets/filtro_historico.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
@@ -18,8 +18,8 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-import '../../../_pideky/domain/producto/service/producto_service.dart';
-import '../../../_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import '../../../_pideky/domain/product/use_cases/producto_use_cases.dart';
+import '../../../_pideky/infrastructure/product/product_service.dart';
 import '../../controllers/cambio_estado_pedido.dart';
 import 'expansion_card_last.dart';
 
@@ -59,7 +59,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
   Widget build(BuildContext context) {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('RepeatOrderPage');
-    CarroModelo cartProvider = Provider.of<CarroModelo>(context);
+    CartViewModel cartProvider = Provider.of<CartViewModel>(context);
     DatosListas providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
 
@@ -164,7 +164,7 @@ class _PedidoRapidoState extends State<PedidoRapido> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CarritoCompras(numEmpresa: prefs.numEmpresa)),
+            builder: (context) => CartPage(numEmpresa: prefs.numEmpresa)),
       );
     }
   }

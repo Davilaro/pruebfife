@@ -1,6 +1,6 @@
-import 'package:emart/_pideky/presentation/confirmacion_pais/view/confirmacion_pais.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view/pedido_sugerido_page.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/country_confirmation/view/country_confirmation_page.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view/suggested_order_page.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/src/pages/login/widgets/comprobar_sesion.dart';
 import 'package:emart/src/pages/principal_page/widgets/lista_empresas_emart.dart';
 import 'package:emart/src/pages/login/widgets/lista_sucursales.dart';
@@ -18,9 +18,9 @@ Map<String, WidgetBuilder> getRutas() {
     'listaSucursale': (_) => ListaSucursales(),
     'tab_opciones': (_) => TabOpciones(),
     'splash': (_) => Splash(),
-    'confirmar_pais': (_) => ConfirmacionPais(),
-    'detalle_compra_producto': (_) => CambiarDetalleCompra(),
+    'confirmar_pais': (_) => CountryConfirmationPage(),
+    'detalle_compra_producto': (_) => CambiarDetalleCompra(cambioVista: 1,),
     'inicio_compra': (_) => PrincipalPage(),
-    'pedido_sugerido': (_) => PedidoSugeridoPage(),
+    'pedido_sugerido': (_) => SuggestedOrderPage(),
   };
 }

@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
+import 'package:emart/_pideky/presentation/cart/view/cart_page.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +12,7 @@ void showSlideUpNotificationAutomatic(data) {
   Get.showSnackbar(GetSnackBar(
     onTap: (snack) {
       Get.back();
-      Get.to(() => CarritoCompras(numEmpresa: prefs.numEmpresa));
+      Get.to(() => CartPage(numEmpresa: prefs.numEmpresa));
     },
     duration: Duration(minutes: 2),
     animationDuration: Duration(milliseconds: 500),

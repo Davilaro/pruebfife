@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
+import 'package:emart/_pideky/presentation/general_search/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -107,7 +107,6 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     //Se define el nombre de la pantalla para UXCAM
     FlutterUxcam.tagScreenName('${widget.nombreCategoria}Page');
 
-    final size = MediaQuery.of(context).size;
     setState(() {
       if (catalogSearchViewModel.isFilter) {
         cargarProductos();
@@ -167,9 +166,8 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
                 Visibility(
                   visible: isActiveBanner,
                   child: Container(
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                      height: size.height * 0.2,
-                      width: double.infinity,
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      height: Get.height * 0.17,
                       child: OfertasInterna(
                         nombreFabricante: widget.codCategoria,
                         listaBanners: _listaBanners,
@@ -202,7 +200,7 @@ class _CustomBuscardorFuzzyState extends State<CustomBuscardorFuzzy> {
     final List<Widget> opciones = [];
 
     for (var i = 0; i < data.length; i++) {
-      Producto productos = data[i];
+      Product productos = data[i];
       final widgetTemp = productos.combo == 0
           ? InputValoresCatalogo(
               element: productos,

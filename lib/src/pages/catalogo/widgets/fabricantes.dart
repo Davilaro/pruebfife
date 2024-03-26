@@ -3,7 +3,7 @@ import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/datos_listas_provider.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
@@ -48,7 +48,7 @@ class _FabricantesState extends State<Fabricantes> {
   Widget build(BuildContext context) {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ProvidersPage');
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
     providerDatos = Provider.of<DatosListas>(context);
     final size = MediaQuery.of(context).size;
 
@@ -94,7 +94,7 @@ class _FabricantesState extends State<Fabricantes> {
   }
 
   List<Widget> _cargarFabricantes(
-      List<dynamic> result, BuildContext context, CarroModelo provider) {
+      List<dynamic> result, BuildContext context, CartViewModel provider) {
     final List<Widget> opciones = [];
 
     for (var element in result) {
@@ -155,7 +155,7 @@ class _FabricantesState extends State<Fabricantes> {
     return opciones;
   }
 
-  _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
+  _onClickCatalogo(String codigo, BuildContext context, CartViewModel provider,
       String nombre, String icono, String empresa) async {
     final controllerNotificaciones =
         Get.find<NotificationsSlideUpAndPushInUpControllers>();

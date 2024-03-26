@@ -1,15 +1,15 @@
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -47,7 +47,7 @@ class _ProductsCardState extends State<ProductsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
 
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
@@ -142,7 +142,7 @@ class _ProductsCardState extends State<ProductsCard> {
     return opciones;
   }
 
-  detalleProducto(Producto element, final CarroModelo cartProvider) {
+  detalleProducto(Product element, final CartViewModel cartProvider) {
     if (prefs.usurioLogin == -1) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LogInPage()));
@@ -157,7 +157,7 @@ class _ProductsCardState extends State<ProductsCard> {
       PedidoEmart.cambioVista.value = 1;
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
     }
   }
 }

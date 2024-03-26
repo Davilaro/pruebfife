@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -20,11 +20,11 @@ class SimpleCardGroups extends StatefulWidget {
 
 class _SimpleCardGroupsState extends State<SimpleCardGroups> {
   bool _isExpanded = false;
-  ProductoViewModel productoViewModel = Get.find();
+  ProductViewModel productoViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    CarroModelo cartProvider = Provider.of<CarroModelo>(context);
+    CartViewModel cartProvider = Provider.of<CartViewModel>(context);
 
     return Container(
       margin: EdgeInsets.only(bottom: 14),
@@ -122,7 +122,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
   }
 
   List<Widget> _cargarWidgetDinamicoAcordeon(
-      BuildContext context1, CarroModelo cartProvider) {
+      BuildContext context1, CartViewModel cartProvider) {
     List<Widget> listaWidget = [];
 
     PedidoEmart.listaProductosPorFabricante!.forEach((fabricante, value) {
@@ -169,7 +169,7 @@ class _SimpleCardGroupsState extends State<SimpleCardGroups> {
   }
 
   List<Widget> gridItem(List<dynamic> value, String fabricante,
-      BuildContext context, CarroModelo cartProvider) {
+      BuildContext context, CartViewModel cartProvider) {
     List<Widget> result = [];
 
     final size = MediaQuery.of(context).size;

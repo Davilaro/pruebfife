@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 
 class ProductoAsignado {
   ProductoAsignado({
@@ -17,7 +17,7 @@ class ProductoAsignado {
   double? precio;
   double? descuento;
   int? cantidad;
-  Producto? productos;
+  Product? productos;
 
   @override
   String toString() {

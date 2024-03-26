@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/service/notification_push_in_app_slide_up_service.dart';
-import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_sql.dart';
+import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/use_cases/notification_push_in_app_slide_up_service.dart';
+import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_service.dart';
 import 'package:emart/shared/widgets/automatic_card_notifiaction_slide_up.dart';
 import 'package:get/get.dart';
 
 class SlideUpAutomatic extends GetxController {
   final slideUpService =
-      NotificationPushInAppSlideUpService(NotificationPushInUpAndSlideUpSql());
+      NotificationPushInAppSlideUpUseCases(NotificationPushInUpAndSlideUpSql());
   RxList automaticSlideUpList = [].obs;
   RxList automaticSlideUpSelected = [].obs;
   RxList listaProductosCarrito = [].obs;

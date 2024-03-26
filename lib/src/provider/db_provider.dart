@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/brand/model/brand.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
@@ -675,7 +675,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     ''';
       final sql = await db.rawQuery(query);
 
-      return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+      return sql.isNotEmpty ? sql.map((e) => Brand.fromJson(e)).toList() : [];
     } catch (e) {
       return [];
     }
@@ -694,7 +694,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     ''';
         final sql = await db.rawQuery(query, empresas);
 
-        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+        return sql.isNotEmpty ? sql.map((e) => Brand.fromJson(e)).toList() : [];
       } else {
         final query =
             '''
@@ -702,7 +702,7 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
     ''';
         final sql = await db.rawQuery(query);
 
-        return sql.isNotEmpty ? sql.map((e) => Marca.fromJson(e)).toList() : [];
+        return sql.isNotEmpty ? sql.map((e) => Brand.fromJson(e)).toList() : [];
       }
     } catch (e) {
       print("error traer marcas $e");

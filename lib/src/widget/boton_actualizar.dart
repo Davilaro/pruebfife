@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
+import '../../_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
 
 class BotonActualizar extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class BotonActualizar extends StatefulWidget {
 }
 
 RxBool isActualizando = false.obs;
-final productViewModel = Get.find<ProductoViewModel>();
+final productViewModel = Get.find<ProductViewModel>();
 
 class _BotonActualizarState extends State<BotonActualizar> {
   @override
@@ -50,9 +50,9 @@ class _BotonActualizarState extends State<BotonActualizar> {
 Future<void> actualizarPagina(
     OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
   final botonesController = Get.find<BotonesProveedoresVm>();
-  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-  final controllerNequi = Get.find<MisPagosNequiViewModel>();
-  final productViewModel = Get.find<ProductoViewModel>();
+  final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+  final controllerNequi = Get.find<MyPaymentsViewModel>();
+  final productViewModel = Get.find<ProductViewModel>();
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);

@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _OfertasInternaState extends State<OfertasInterna> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
 
     return widget.listaBanners.length == 0
         ? Container(
@@ -51,7 +51,6 @@ class _OfertasInternaState extends State<OfertasInterna> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: Get.height * 0.34,
                       width: double.infinity,
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                       child: CarouselSlider(
@@ -140,11 +139,16 @@ class _OfertasInternaState extends State<OfertasInterna> {
                   bannerController.validarOnClick(widget.listaBanners.first,
                       context, provider, cargoConfirmar, prefs, 'Promo');
                 },
-                child: Image.network(widget.listaBanners.first.link,
-                    height: Get.height * 0.1,
-                    errorBuilder: (context, __, ___) => Image.asset(
-                          'assets/image/logo_login.png',
-                        )),
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(widget.listaBanners.first.link,
+                        errorBuilder: (context, __, ___) => Image.asset(
+                              'assets/image/logo_login.png',
+                              fit: BoxFit.cover,
+                            )),
+                  ),
+                ),
               );
   }
 }

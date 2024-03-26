@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
+import 'package:emart/_pideky/domain/brand/model/brand.dart';
 import 'package:device_info/device_info.dart';
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/encuesta.dart';
 import 'package:emart/src/modelos/estado.dart';
 import 'package:emart/src/modelos/fabricante.dart';
-import 'package:emart/_pideky/domain/mis_pedidos/model/historico.dart';
+import 'package:emart/_pideky/domain/my_orders/model/historical_model.dart';
 import 'package:emart/src/modelos/lista_empresas.dart';
 import 'package:emart/src/modelos/lista_productos.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
@@ -23,7 +23,7 @@ import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/notificaciones/push_notification.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -205,7 +205,7 @@ class Servicies {
       final res = json.decode(response.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Marca.fromJson(valor)).toList()
+          ? res.map((valor) => Brand.fromJson(valor)).toList()
           : [];
     } catch (e) {}
 
@@ -375,7 +375,7 @@ class Servicies {
       final res = json.decode(response.body);
 
       return res.isNotEmpty
-          ? res.map((valor) => Historico.fromJson(valor)).toList()
+          ? res.map((valor) => HistoricalModel.fromJson(valor)).toList()
           : null;
     } catch (e) {}
 
@@ -383,9 +383,9 @@ class Servicies {
   }
 
   Future<dynamic> enviarPedido(List<Pedido> listaPedido, String usuarioLogin,
-      String fechaPedido, String numDoc, CarroModelo cartProvider) async {
+      String fechaPedido, String numDoc, CartViewModel cartProvider) async {
     String datos = "{\"ListaDetalle\" :[";
-    final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+    final misPedidosViewModel = Get.find<MyOrdersViewModel>();
 
     for (var i = 0; i < listaPedido.length; i++) {
       print('new datos ${listaPedido[i].isFrecuencia} ');

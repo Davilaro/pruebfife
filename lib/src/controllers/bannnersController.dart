@@ -1,19 +1,19 @@
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
-import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
-import 'package:emart/_pideky/domain/producto/service/producto_service.dart';
-import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/brand/model/brand.dart';
+import 'package:emart/_pideky/domain/brand/use_cases/brand_use_cases.dart';
+import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/brand/brand_service.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/bannner.dart';
 import 'package:emart/src/modelos/fabricante.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class BannnerControllers extends GetxController {
 
   List<dynamic> listaBanners = [].obs;
 
-  MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
+  BrandUseCases marcaService = BrandUseCases(MarcaRepositorySqlite());
 
   void cambiarSubCategoria(int value) {
     inicialControllerSubCategoria.value = value;
@@ -51,7 +51,7 @@ class BannnerControllers extends GetxController {
   validarOnClick(
       Banners banner,
       BuildContext context,
-      CarroModelo provider,
+      CartViewModel provider,
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs,
       String locasionBanner) async {
@@ -97,7 +97,7 @@ class BannnerControllers extends GetxController {
     }
   }
 
-  _direccionarCategoria(BuildContext context, CarroModelo provider,
+  _direccionarCategoria(BuildContext context, CartViewModel provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
       setIsVisitBanner(true);
@@ -116,7 +116,7 @@ class BannnerControllers extends GetxController {
 
   _direccionarMarca(
     BuildContext context,
-    Marca marca,
+    Brand marca,
   ) {
     Navigator.push(
         context,
@@ -150,8 +150,8 @@ class BannnerControllers extends GetxController {
   }
 
   _detalleProducto(
-      Producto producto,
-      final CarroModelo cartProvider,
+      Product producto,
+      final CartViewModel cartProvider,
       BuildContext context,
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs) {
@@ -169,7 +169,7 @@ class BannnerControllers extends GetxController {
       PedidoEmart.cambioVista.value = 1;
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra()));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
     }
   }
 }
