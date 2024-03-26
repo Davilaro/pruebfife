@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 final prefs = new Preferencias();
 
@@ -309,7 +308,7 @@ class GeneralSearchResponse extends StatelessWidget {
                       maxFontSize: 15,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: HexColor('#0061cc')),
+                          color: ConstantesColores.verde),
                     ),
                   )
                 ],
@@ -368,7 +367,7 @@ class GeneralSearchResponse extends StatelessWidget {
                       maxFontSize: 15,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: HexColor('#0061cc')),
+                          color: ConstantesColores.verde),
                     ),
                   )
                 ],
@@ -427,9 +426,9 @@ class GeneralSearchResponse extends StatelessWidget {
                   child: AutoSizeText(
                     'Proveedor',
                     style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: HexColor('#0061cc')),
+                        color: ConstantesColores.verde),
                   ),
                 )
               ])),

@@ -11,7 +11,7 @@ class BuscadorGeneral extends StatelessWidget {
   BuscadorGeneral();
 
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
-   final Debouncer debouncer =
+  final Debouncer debouncer =
       Debouncer(delay: const Duration(milliseconds: 800));
 
   @override
@@ -40,6 +40,8 @@ class BuscadorGeneral extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
+                    //Uxcam tagueo usuario no encontrado en base de datos
+                    UxcamTagueo().goToFilteredSearch();
                     print(searchFuzzyViewModel.listaAllMarcas);
                     searchFuzzyViewModel
                         .runFilter(searchFuzzyViewModel.controllerUser.text);
@@ -67,7 +69,6 @@ class BuscadorGeneral extends StatelessWidget {
             UxcamTagueo().search(value);
             searchFuzzyViewModel.runFilter(value);
             debouncer(() => searchFuzzyViewModel.productoBusqueda(value));
-            
           },
         ));
   }
