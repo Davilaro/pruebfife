@@ -482,11 +482,11 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         Timer.periodic(Duration(seconds: 1), (timer) {
           if (elapsedTime >= listPushInUpHome.first.tiempo) {
             showSlideUps(context);
-            slideUpAutomatic.validarMostrarSlide();
+            slideUpAutomatic.validarMostrarSlide(context);
             timer.cancel();
           } else if (closePushInUp.value == true) {
             showSlideUps(context);
-            slideUpAutomatic.validarMostrarSlide();
+            slideUpAutomatic.validarMostrarSlide(context);
             timer.cancel();
           } else if (onTapPushInUp.value == true) {
             timer.cancel();
@@ -496,7 +496,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       } else if (validacionMostrarSlideUp["Home"] == true &&
           closeSlideUp.value == false) {
         showSlideUps(context);
-        slideUpAutomatic.validarMostrarSlide();
+        slideUpAutomatic.validarMostrarSlide(context);
       }
     }
   }

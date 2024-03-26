@@ -40,40 +40,72 @@ class CustomExpansionPanelList extends StatelessWidget {
           color: Colors.transparent,
         ));
 
-      final Container header = Container(
-        color: Colors.white,
-        child: new Row(
-          children: <Widget>[
-            new Expanded(
-              child: new AnimatedContainer(
-                duration: animationDuration,
-                curve: Curves.fastOutSlowIn,
-                margin: _isChildExpanded(index)
-                    ? kExpandedEdgeInsets
-                    : EdgeInsets.zero,
-                child: new SizedBox(
-                  height: _kPanelHeaderCollapsedHeight,
-                  child: children[index].headerBuilder(
-                    context,
-                    children[index].isExpanded,
+      final Stack header = Stack(
+        children: [
+          Container(
+            height: _isChildExpanded(index) ? 90 : 0.0,
+            color: Colors.white,
+          ),
+          Container(
+            height: _isChildExpanded(index) ? 90 : 0.0,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: Offset(0, -7), // changes position of shadow
+                ),
+              ],
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: _isChildExpanded(index) ? Radius.circular(15.0) : Radius.circular(0),
+                bottomRight: _isChildExpanded(index) ? Radius.circular(15.0) : Radius.circular(0),
+              ),
+            ),
+            child: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new AnimatedContainer(
+                    duration: animationDuration,
+                    curve: Curves.fastOutSlowIn,
+                    margin: _isChildExpanded(index)
+                        ? kExpandedEdgeInsets
+                        : EdgeInsets.zero,
+                    child: new SizedBox(
+                      height: _kPanelHeaderCollapsedHeight,
+                      child: children[index].headerBuilder(
+                        context,
+                        children[index].isExpanded,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                new Container(
+                  margin: const EdgeInsetsDirectional.only(end: 8.0),
+                  child: new ExpandIcon(
+                    isExpanded: _isChildExpanded(index),
+                    padding: const EdgeInsets.all(16.0),
+                    color: ConstantesColores.verde,
+                    onPressed: (bool isExpanded) {
+                      if (expansionCallback != null)
+                        expansionCallback(index, isExpanded);
+                    },
+                  ),
+                ),
+              ],
             ),
-            new Container(
-              margin: const EdgeInsetsDirectional.only(end: 8.0),
-              child: new ExpandIcon(
-                isExpanded: _isChildExpanded(index),
-                padding: const EdgeInsets.all(16.0),
-                color: ConstantesColores.verde,
-                onPressed: (bool isExpanded) {
-                  if (expansionCallback != null)
-                    expansionCallback(index, isExpanded);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
 
       double _radiusValue = _isChildExpanded(index) ? 10.0 : 12.0;

@@ -2,13 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/general_search/widgets/busquedas_recientes.dart';
+import 'package:emart/_pideky/presentation/general_search_reponse/view/resultado_buscador_general.dart';
 import 'package:emart/shared/widgets/buscador_general.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +26,7 @@ class SearchFuzzyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam.tagScreenName('GeneralSearchPage');
     final cartProvider = Provider.of<CartViewModel>(context);
 
     return Scaffold(
@@ -76,6 +80,40 @@ class SearchFuzzyView extends StatelessWidget {
               child: Column(
                 children: [
                   Obx(
+                    () => Visibility(
+                      visible: searchFuzzyViewModel.searchInput.value == ""
+                          ? false
+                          : true,
+                      child: GestureDetector(
+                        onTap: () {
+                          //Uxcam tagueo usuario no encontrado en base de datos
+                          UxcamTagueo().goToFilteredSearch();
+                          searchFuzzyViewModel.runFilter(
+                              searchFuzzyViewModel.controllerUser.text);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => GeneralSearchResponse(
+                                        allresultados:
+                                            searchFuzzyViewModel.allResultados,
+                                      )));
+                        },
+                        child: Container(
+                          width: Get.width,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 15),
+                          alignment: Alignment.bottomLeft,
+                          child: Text('Ver todos los resultados',
+                              style: TextStyle(
+                                  color: ConstantesColores.azul_precio,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(),
+                  Obx(
                     () => searchFuzzyViewModel.allResultados.isNotEmpty
                         ? Container(
                             height: 300,
@@ -128,7 +166,9 @@ class SearchFuzzyView extends StatelessWidget {
                                                 SizedBox(
                                                   width: Get.width * 0.65,
                                                   child: Column(
-                                                    crossAxisAlignment:  CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       AutoSizeText(
                                                         searchFuzzyViewModel

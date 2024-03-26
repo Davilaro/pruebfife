@@ -19,16 +19,16 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 
-class ConfigurarPedido extends StatefulWidget {
+class ConfigureOrder extends StatefulWidget {
   final int numEmpresa;
-  const ConfigurarPedido({Key? key, required this.numEmpresa})
+  const ConfigureOrder({Key? key, required this.numEmpresa})
       : super(key: key);
 
   @override
-  _ConfigurarPedidoState createState() => _ConfigurarPedidoState();
+  _ConfigureOrderState createState() => _ConfigureOrderState();
 }
 
-class _ConfigurarPedidoState extends State<ConfigurarPedido> {
+class _ConfigureOrderState extends State<ConfigureOrder> {
   final prefs = new Preferencias();
   ProductViewModel productoViewModel = Get.find();
   final controller = Get.put(StateControllerRadioButtons());

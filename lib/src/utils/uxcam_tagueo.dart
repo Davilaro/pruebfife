@@ -703,4 +703,16 @@ class UxcamTagueo {
       log("Error tagueo userNotFoundLogin");
     }
   }
+  void goToFilteredSearch () {
+    try {
+      FlutterUxcam.logEventWithProperties("goToFilteredSearch", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo goToFilteredSearch");
+    }
+  }
 }

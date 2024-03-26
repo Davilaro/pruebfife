@@ -4,11 +4,9 @@
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/grid_item_by_expansion_panel.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
-import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/barra_faltante_monto_minimo.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/widget/custom_expansion_panel_list.dart';
 import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +40,7 @@ List<Widget> loadDynamicExpansionPanel(
             fabricante, value["isFrecuencia"]);
         listaWidget.add(
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(15)),
               child: Column(
@@ -99,7 +97,7 @@ List<Widget> loadDynamicExpansionPanel(
                                             color:
                                                 ConstantesColores.azul_precio,
                                             fontSize: 20,
-                                            fontWeight: FontWeight.w500))),
+                                            fontWeight: FontWeight.bold))),
                               ],
                             ),
                           );
@@ -107,6 +105,7 @@ List<Widget> loadDynamicExpansionPanel(
                         body: Container(
                           color: Colors.white,
                           child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
                             child: Column(
                               children: <Widget>[
                                 Visibility(
@@ -263,13 +262,15 @@ List<Widget> loadDynamicExpansionPanel(
                                   ),
                                 )
                                 :Container(),
-                                SizedBox(height: 20.0),
+                                SizedBox(height: 10.0),
                                 Container(
                                   constraints: BoxConstraints(
                                       minHeight: 150,
                                       maxHeight: 250,
                                       maxWidth: double.infinity),
                                   child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    controller: cartProvider.scrollControllerGridItems,
                                     child: Column(
                                       children: [
                                         Container(
@@ -298,75 +299,6 @@ List<Widget> loadDynamicExpansionPanel(
                       )
                     ],
                   ),
-                  Visibility(
-                    visible: cartProvider.getListaFabricante[fabricante]
-                                ["descuento"] ==
-                            0.0
-                        ? false
-                        : true,
-                    child: Container(
-                      height: 70,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: ConstantesColores.azul_precio,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    color: ConstantesColores
-                                        .azul_aguamarina_botones,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/icon/Icono_valor_ahorrado.png',
-                                    fit: BoxFit.cover,
-                                    width: 30,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      getCurrency(cartProvider
-                                              .getListaFabricante[fabricante]
-                                          ["descuento"]),
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      S.current.value_saved_cart,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

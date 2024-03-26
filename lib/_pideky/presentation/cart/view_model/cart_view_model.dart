@@ -1,10 +1,11 @@
 import 'package:emart/_pideky/domain/cart/use_cases/cart_use_cases.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/presentation/cart/view/configure_order_page.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
-import 'package:emart/src/pages/carrito/configurar_pedido.dart';
+import 'package:emart/src/modelos/asignado.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -29,12 +30,33 @@ class CartViewModel extends ChangeNotifier {
   Map<String, dynamic> _frecuanciaFabricantes = new Map();
   bool loadAgain = false;
   ProductViewModel productoViewModel = Get.find();
+  ProductoAsignado? currentProducto;
+  RxMap focusNodesMaps = {}.obs;
+  RxDouble widthSaveSquare = 45.0.obs;
+  RxInt currentQuantityProduct = 0.obs;
+  RxBool isSavedBymanufacturerOpen = false.obs;
+  ScrollController? scrollControllerGridItems;
+
+  void animateSquare() {
+    isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
+    widthSaveSquare.value = isSavedBymanufacturerOpen.value == true ? Get.width * 0.45 : 45.0;
+  }
+
+  void scrollToBottom() async {
+    await Future.delayed(Duration(milliseconds: 200));
+    if (isSavedBymanufacturerOpen.value)
+      scrollControllerGridItems!.animateTo(
+          Get.height * 0.39,
+          duration:
+              Duration(milliseconds: 300), // Opcional: duración de la animación
+          curve: Curves.easeInOut, // Opcional: curva de la animación
+        );
+  }
+  //--------------------------- AQUI SE LE DA INICIO A LOS GETTERS Y SETTERS---------------------------
 
   double get getTotal {
     return _precioTotal;
   }
-
-  //--------------------------- AQUI SE LE DA INICIO A LOS GETTERS Y SETTERS---------------------------
 
   Map get getFrecuenciaFabricante => _frecuanciaFabricantes;
 
@@ -197,14 +219,14 @@ class CartViewModel extends ChangeNotifier {
   }
 
   menos(Product producto, String fabricante, precioMinimo,
-      VoidCallback setState, CartViewModel cartViewModel) {
+      VoidCallback setState, CartViewModel cartViewModel, context) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
     final slideUpAutomatic = Get.find<SlideUpAutomatic>();
     if (valorInicial == "") {
     } else {
       int valorResta = int.parse(valorInicial) - 1;
       if (valorResta <= 0) {
-        slideUpAutomatic.mostrarSlide(producto.negocio);
+        slideUpAutomatic.mostrarSlide(producto.negocio, context);
         PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
         PedidoEmart.registrarValoresPedido(producto, '1', false);
         loadAgain = true;
@@ -234,16 +256,33 @@ class CartViewModel extends ChangeNotifier {
   editarCantidad(dynamic producto, CartViewModel cartProvider, String cantidad,
       VoidCallback setState) {
     if (cantidad != "" && int.parse(cantidad) > 0) {
+      currentProducto = null;
+      currentQuantityProduct.value = int.parse(cantidad);
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
       PedidoEmart.registrarValoresPedido(producto.productos, cantidad, true);
-    } else {
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
+    } else if (cantidad == '0') {
+      currentProducto = producto;
+      currentQuantityProduct.value = 0;
       PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
-      PedidoEmart.listaValoresPedido![producto.codigo] = "";
+      PedidoEmart.listaValoresPedido![producto.codigo] = "0";
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-      loadAgain = true;
-      PedidoEmart.iniciarProductosPorFabricante();
+      //productoViewModel.insertarPedidoTemporal(producto.codigo);
+      //loadAgain = true;
+      //PedidoEmart.iniciarProductosPorFabricante();
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
+    } else {
+      currentQuantityProduct.value = cantidad == "" ? 0 : int.parse(cantidad);
+      currentProducto = producto;
+      PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
+      PedidoEmart.listaValoresPedido![producto.codigo] = "1";
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = "";
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
+      //loadAgain = true;
+      //PedidoEmart.iniciarProductosPorFabricante();
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
     }
-    MetodosLLenarValores().calcularValorTotal(cartProvider);
 
     setState();
   }
@@ -344,7 +383,7 @@ class CartViewModel extends ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ConfigurarPedido(numEmpresa: prefs.numEmpresa)));
+                ConfigureOrder(numEmpresa: prefs.numEmpresa)));
   }
 
   // METODO ENCARGADO DE MOSTRAR EL WIDGET CUANDO NINGUN PROVEEDOR CUMPLE CON LAS CONDICIONES DE NEGOCIO

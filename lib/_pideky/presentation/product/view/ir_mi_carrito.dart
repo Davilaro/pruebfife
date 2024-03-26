@@ -8,6 +8,7 @@ import 'package:emart/src/pages/principal_page/tab_opciones.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
@@ -290,6 +291,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     final provider = Provider.of<OpcionesBard>(context, listen: false);
     //UXCam: Llamamos el evento clickCarrito
     UxcamTagueo().clickCarrito(provider, 'Inferior');
+    MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute(

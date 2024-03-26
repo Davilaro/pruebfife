@@ -1,18 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
-import 'package:emart/shared/widgets/image_button.dart';
+import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
-import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/db_provider.dart';
-import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
-import 'package:emart/src/widget/simple_card_condiciones_entrega.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,6 +33,7 @@ List<Widget> gridItem(
   final size = MediaQuery.of(context).size;
 
   value.forEach((product) {
+    cartViewModel.focusNodesMaps.putIfAbsent(product.codigo, () => FocusNode());
     Product productos = PedidoEmart.listaProductos![product.codigo]!;
 
     if (product.fabricante == fabricante && product.cantidad > 0) {
@@ -42,209 +41,344 @@ List<Widget> gridItem(
       result
         ..add(Padding(
           padding: EdgeInsets.only(bottom: 10, left: 22, right: 22),
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: size.width / 4,
-                  child: GestureDetector(
-                    onTap: () => {
-                      cargoConfirmar.cambiarValoresEditex(
-                          PedidoEmart.obtenerValor(productos)!),
-                      cargoConfirmar.cargarProductoNuevo(
-                          ProductoCambiante.m(
-                              productos.nombre, productos.codigo),
-                          1),
-                      PedidoEmart.cambioVista.value = 1,
-                      cartViewModel.guardarCambiodevista = 1,
-                      Navigator.popAndPushNamed(
-                          context, 'detalle_compra_producto'),
-                    },
-                    child: Text(
-                      product.nombre,
-                      style: TextStyle(color: ConstantesColores.verde),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: size.width / 3,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 40.0,
-                        width: 40.0,
-                        child: IconButton(
-                          icon: Image.asset('assets/image/menos.png'),
-                          onPressed: () => {
-                            cartViewModel.menos(product.productos, fabricante,
-                                precioMinimo, setState, cartViewModel),
-                          },
+          child: Column(
+            children: [
+              Divider(
+                color: ConstantesColores.gris_sku,
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  height: size.height * 0.06,
+                                  imageUrl: Constantes().urlImgProductos +
+                                      '${product.codigo}.png',
+                                  placeholder: (context, url) => Image.asset(
+                                      'assets/image/jar-loading.gif'),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    'assets/image/logo_login.png',
+                                    width: size.width * 0.195,
+                                  ),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: Get.width * 0.02,
+                            ),
+                            Container(
+                              width: size.width / 3,
+                              child: GestureDetector(
+                                onTap: () => {
+                                  cargoConfirmar.cambiarValoresEditex(
+                                      PedidoEmart.obtenerValor(productos)!),
+                                  cargoConfirmar.cargarProductoNuevo(
+                                      ProductoCambiante.m(
+                                          productos.nombre, productos.codigo),
+                                      1),
+                                  PedidoEmart.cambioVista.value = 1,
+                                  cartViewModel.guardarCambiodevista = 1,
+                                  Navigator.popAndPushNamed(
+                                      context, 'detalle_compra_producto'),
+                                },
+                                child: Text(
+                                  product.nombre,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        width: 40,
-                        alignment: Alignment.center,
-                        child: ConstrainedBox(
-                          constraints: new BoxConstraints(
-                            minWidth: 20,
-                            maxWidth: 100,
-                            minHeight: 10,
-                            maxHeight: 70.0,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 10.0),
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Text(
+                                    productoViewModel.getCurrency(
+                                        product.productos.descuento != 0
+                                            ? (toInt(PedidoEmart
+                                                    .listaControllersPedido![
+                                                        product.codigo]!
+                                                    .text) *
+                                                product.productos.precio)
+                                            : (toInt(PedidoEmart
+                                                    .listaControllersPedido![
+                                                        product.codigo]!
+                                                    .text) *
+                                                product.productos
+                                                    .preciodescuento)),
+                                    style: TextStyle(
+                                        color: product.productos.descuento != 0
+                                            ? ConstantesColores.rojo_letra
+                                            : ConstantesColores.azul_precio,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: product.productos.descuento != 0,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10.0),
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Text(
+                                      productoViewModel.getCurrency(
+                                          product.productos.descuento != 0
+                                              ? (toInt(PedidoEmart
+                                                      .listaControllersPedido![
+                                                          product.codigo]!
+                                                      .text) *
+                                                  product
+                                                      .productos.precioinicial)
+                                              : (toInt(PedidoEmart
+                                                      .listaControllersPedido![
+                                                          product.codigo]!
+                                                      .text) *
+                                                  product.productos
+                                                      .preciodescuento)),
+                                      style: TextStyle(
+                                          color: ConstantesColores.gris_textos,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          decoration:
+                                              TextDecoration.lineThrough),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            reverse: true,
-                            child: TextFormField(
-                              maxLines: 1,
-                              controller: PedidoEmart
-                                  .listaControllersPedido![product.codigo],
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              maxLength: 3,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.black),
-                              onChanged: (value) =>
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: size.width / 3.5,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: ConstantesColores.azul_precio, width: 2),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 30.0,
+                            width: 30.0,
+                            child: IconButton(
+                              padding: EdgeInsets.all(0),
+                              icon: PedidoEmart
+                                          .listaControllersPedido![
+                                              product.codigo]!
+                                          .text !=
+                                      '1'
+                                  ? Icon(
+                                      Icons.remove,
+                                      color: ConstantesColores.gris_sku,
+                                    )
+                                  : Icon(
+                                      Icons.delete_outline,
+                                      color: ConstantesColores.gris_sku,
+                                    ),
+                              onPressed: () => {
+                                cartViewModel.menos(
+                                    product.productos,
+                                    fabricante,
+                                    precioMinimo,
+                                    setState,
+                                    cartViewModel,
+                                    context),
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: 30,
+                            child: ConstrainedBox(
+                              constraints: new BoxConstraints(
+                                minWidth: 20,
+                                maxWidth: 100,
+                                minHeight: 10,
+                                maxHeight: 70.0,
+                              ),
+                              child: TextFormField(
+                                focusNode: cartViewModel
+                                    .focusNodesMaps[product.codigo],
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                controller: PedidoEmart
+                                    .listaControllersPedido![product.codigo],
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                maxLength: 3,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13),
+                                onChanged: (value) {
                                   cartViewModel.editarCantidad(
-                                      product, cartViewModel, value, setState),
-                              decoration: InputDecoration(
-                                fillColor: Colors.black,
-                                hintText: '0',
-                                counterText: "",
-                                hintStyle: TextStyle(
-                                  color: Colors.black,
+                                      product, cartViewModel, value, setState);
+                                },
+                                decoration: InputDecoration(
+                                  fillColor: ConstantesColores.azul_precio,
+                                  border: InputBorder.none,
+                                  hintText: '',
+                                  counterText: "",
+                                  hintStyle: TextStyle(
+                                    color: ConstantesColores.azul_precio,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 30.0,
+                            width: 30.0,
+                            child: IconButton(
+                              padding: EdgeInsets.all(0),
+                              icon: Icon(
+                                Icons.add,
+                                color:
+                                    ConstantesColores.azul_aguamarina_botones,
+                              ),
+                              onPressed: () => cartViewModel.mas(
+                                  product.productos, cartViewModel, setState),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 40.0,
-                        width: 40.0,
-                        child: IconButton(
-                          icon: Image.asset('assets/image/mas.png'),
-                          onPressed: () => cartViewModel.mas(
-                              product.productos, cartViewModel, setState),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 10.0),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Text(
-                      productoViewModel
-                          .getCurrency(product.productos.descuento != 0
-                              ? (toInt(PedidoEmart
-                                      .listaControllersPedido![product.codigo]!
-                                      .text) *
-                                  product.productos.precio)
-                              : (toInt(PedidoEmart
-                                      .listaControllersPedido![product.codigo]!
-                                      .text) *
-                                  product.productos.preciodescuento)),
-                      style: cartViewModel.valuesDesing(),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ));
     }
   });
 
   result.add(Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
-    child: InkWell(
-      onTap: () {
-        controller.cashPayment.value = false;
-        controller.payOnLine.value = false;
-        dialogVaciarCarrito(fabricante, cartViewModel, value, precioMinimo, context);
-      },
-      child: Row(
-        children: [
-          Icon(
-            Icons.delete_outline,
-            color: HexColor("#42B39C"),
-          ),
-          Text(
-            "Vaciar carrito",
-            style: TextStyle(
-                color: HexColor("#42B39C"),
-                decoration: TextDecoration.underline,
-                fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    ),
-  ));
-
-  result
-    ..add(Stack(
+    padding: const EdgeInsets.only(left: 18, right: 18, top: 8.5, bottom: 15),
+    child: Row(
       children: [
-        Container(
-          height: 100,
-          color: ConstantesColores.azul_precio,
-        ),
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15))),
-        ),
-        Container(
-          height: 80,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15))),
-          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        InkWell(
+          onTap: () {
+            controller.cashPayment.value = false;
+            controller.payOnLine.value = false;
+            dialogVaciarCarrito(
+                fabricante, cartViewModel, value, precioMinimo, context);
+          },
+          child: Row(
             children: [
-              ImageButton(
-                children: <Widget>[],
-                width: 250,
-                height: 35,
-                paddingTop: 5,
-                pressedImage: Image.asset(
-                  "assets/image/seguir_comprando_btn_detalle-white.png",
-                ),
-                unpressedImage: Image.asset(
-                    "assets/image/seguir_comprando_btn_detalle-white.png"),
-                onTap: () async {
-                  PedidoEmart.cambioVista.value = 1;
-                  cartViewModel.guardarCambiodevista = 1;
-                  Navigator.pop(context);
-                  List<Fabricante> fabricanteSeleccionado =
-                      await DBProvider.db.consultarFricante(fabricante);
-
-                  cartProvider.onClickCatalogo(
-                      fabricanteSeleccionado[0].empresa!,
-                      context,
-                      cartViewModel,
-                      fabricanteSeleccionado[0].nombrecomercial!,
-                      fabricanteSeleccionado[0].icono!);
-                },
+              Icon(
+                Icons.delete_outline,
+                color: HexColor("#42B39C"),
+              ),
+              Text(
+                "Vaciar carrito",
+                style: TextStyle(
+                    color: HexColor("#42B39C"),
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
         ),
+        Expanded(child: Container()),
+        Visibility(
+          visible:
+              cartViewModel.getListaFabricante[fabricante]["descuento"] == 0.0
+                  ? false
+                  : true,
+          child: Obx(
+            () => GestureDetector(
+              onTap: () async {
+                cartViewModel.animateSquare();
+                cartViewModel.scrollToBottom();
+              },
+              child: AnimatedContainer(
+                width: cartViewModel.widthSaveSquare.value,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: ConstantesColores.azul_aguamarina_botones,
+                ),
+                duration: Duration(milliseconds: 200),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ImageIcon(
+                        AssetImage('assets/icon/Icono_valor_ahorrado.png'),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Visibility(
+                        visible: cartViewModel.isSavedBymanufacturerOpen.value,
+                        child: Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  getCurrency(cartViewModel
+                                          .getListaFabricante[fabricante]
+                                      ["descuento"]),
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  S.current.value_saved_cart,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        )
       ],
-    ));
+    ),
+  ));
 
-  //FIREBASE: Llamamos el evento view_cart
-  TagueoFirebase()
-      .sendAnalityticViewCart(cartViewModel, listTag, 'CarritoCompras');
+  // //FIREBASE: Llamamos el evento view_cart
+  // TagueoFirebase()
+  //     .sendAnalityticViewCart(cartViewModel, listTag, 'CarritoCompras');
   return result;
 }
