@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:emart/_pideky/domain/my_lists/interface/interface_my_lists_gate_way.dart';
 import 'package:emart/_pideky/domain/my_lists/model/detail_list_model.dart';
@@ -191,6 +192,17 @@ class MyListsService implements InterfaceMyListsGateWay {
     var sql = idLista != null
         ? """ SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
 		F.nombrecomercial nombreComercial , 
+    CAST(
+        ROUND(
+            (p.precio + ((p.precio * p.iva) / 100) + (
+                        CASE
+                            WHEN p.ICUI = 0 THEN p.IBUA
+                            ELSE ((p.precio * p.ICUI) / 100)
+                        END
+                    ) ), 0
+        ) AS FLOAT
+    ) AS precioinicial,
+          IFNULL(tmp.descuento, 0.0) AS descuento,
         ROUND(
         (
            (
@@ -218,7 +230,18 @@ class MyListsService implements InterfaceMyListsGateWay {
         INNER JOIN Fabricante F ON F.empresa = P.Fabricante where ld.Id = "$idLista" """
         : """
         SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
-            F.nombrecomercial nombreComercial , 
+            F.nombrecomercial nombreComercial ,
+            CAST(
+        ROUND(
+            (p.precio + ((p.precio * p.iva) / 100) + (
+                        CASE
+                            WHEN p.ICUI = 0 THEN p.IBUA
+                            ELSE ((p.precio * p.ICUI) / 100)
+                        END
+                    ) ), 0
+        ) AS FLOAT
+    ) AS precioinicial,
+          IFNULL(tmp.descuento, 0.0) AS descuento, 
                 ROUND(
         (
            (
@@ -246,6 +269,7 @@ class MyListsService implements InterfaceMyListsGateWay {
                 INNER JOIN Fabricante F ON F.empresa = P.Fabricante 
         """;
     try {
+      log(sql);
       var response = await db.rawQuery(sql);
       return response.isNotEmpty
           ? response.map((e) => DetailList.fromJson(e)).toList()

@@ -28,146 +28,176 @@ List<Widget> gridItem(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Divider(color: Colors.grey),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Stack(
                   children: [
-                    Checkbox(
-                      shape: OutlinedBorder.lerp(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          1)!,
-                      checkColor: ConstantesColores.azul_precio,
-                      activeColor: ConstantesColores.azul_precio,
-                      value: isSelected.value,
-                      onChanged: (_) {
-                        isSelected.value = !isSelected.value;
-                        producto.isSelected = !producto.isSelected!;
-                        if (lista.length == 1 && !producto.isSelected!) {
-                          controller
-                              .listaProductosPorFabricante[fabricante]
-                                  ["isSelected"]
-                              .value = false;
-                        } else {
-                          controller
-                              .listaProductosPorFabricante[fabricante]
-                                  ["isSelected"]
-                              .value = true;
-                        }
-                        if (producto.isSelected!) {
-                          controller.listaProductosPorFabricante[fabricante]
-                                  ["precioProductos"] +=
-                              producto.precio * producto.cantidad;
-                        } else {
-                          controller.listaProductosPorFabricante[fabricante]
-                                  ["precioProductos"] -=
-                              producto.precio * producto.cantidad;
-                        }
-                      },
-                    ),
                     Container(
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: CachedNetworkImage(
-                          height: size.height * 0.1,
-                          imageUrl: Constantes().urlImgProductos +
-                              '${producto.codigo}.png',
-                          placeholder: (context, url) =>
-                              Image.asset('assets/image/jar-loading.gif'),
-                          errorWidget: (context, url, error) => Image.asset(
-                            'assets/image/logo_login.png',
-                            width: size.width * 0.195,
-                          ),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(left: 10),
-                        width: size.width / 1.4,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              producto.nombre,
-                              overflow: TextOverflow.visible,
-                              maxLines: 3,
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: ConstantesColores.verde,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "SKU: ${producto.codigo}",
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: ConstantesColores.gris_textos,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 18),
-                    Container(
-                      // padding: EdgeInsets.only(left: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Cant",
-                            style: TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 13),
+                          Checkbox(
+                            shape: OutlinedBorder.lerp(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                1)!,
+                            checkColor: ConstantesColores.azul_precio,
+                            activeColor: ConstantesColores.azul_precio,
+                            value: isSelected.value,
+                            onChanged: (_) {
+                              isSelected.value = !isSelected.value;
+                              producto.isSelected = !producto.isSelected!;
+                              if (lista.length == 1 && !producto.isSelected!) {
+                                controller
+                                    .listaProductosPorFabricante[fabricante]
+                                        ["isSelected"]
+                                    .value = false;
+                              } else {
+                                controller
+                                    .listaProductosPorFabricante[fabricante]
+                                        ["isSelected"]
+                                    .value = true;
+                              }
+                              if (producto.isSelected!) {
+                                controller.listaProductosPorFabricante[
+                                        fabricante]["precioProductos"] +=
+                                    producto.precio * producto.cantidad;
+                              } else {
+                                controller.listaProductosPorFabricante[
+                                        fabricante]["precioProductos"] -=
+                                    producto.precio * producto.cantidad;
+                              }
+                            },
                           ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Text(
-                            producto.cantidad.toString(),
-                            style: TextStyle(
-                                color: ConstantesColores.gris_textos,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: Get.width * 0.7,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.topCenter,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                          height: size.height * 0.1,
+                                          imageUrl:
+                                              Constantes().urlImgProductos +
+                                                  '${producto.codigo}.png',
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/image/jar-loading.gif'),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                            'assets/image/logo_login.png',
+                                            width: size.width * 0.195,
+                                          ),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.only(left: 5, top: 7),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              producto.nombre,
+                                              overflow: TextOverflow.visible,
+                                              maxLines: 3,
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color:
+                                                      ConstantesColores.verde,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              "SKU: ${producto.codigo}",
+                                              overflow: TextOverflow.visible,
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                                color: ConstantesColores
+                                                    .gris_textos,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productViewModel.getCurrency(
+                                        producto.cantidad * producto.precio),
+                                    style: TextStyle(
+                                        color: producto.descuento != 0
+                                            ? ConstantesColores.rojo_letra
+                                            : ConstantesColores.azul_precio,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17),
+                                  ),
+                                  Visibility(
+                                    visible: producto.descuento != 0,
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        productViewModel.getCurrency(
+                                            producto.cantidad *
+                                                producto.precioInicial),
+                                        style: TextStyle(
+                                            color:
+                                                ConstantesColores.gris_textos,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            decoration:
+                                                TextDecoration.lineThrough),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    Expanded(
+                    Positioned(
+                      bottom: 1,
+                      right: 1,
                       child: Container(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "Total",
-                              style: TextStyle(
-                                  color: ConstantesColores.azul_precio,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 13),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              productViewModel.getCurrency(
-                                  producto.cantidad * producto.precio),
-                              style: TextStyle(
-                                  color: ConstantesColores.gris_textos,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11),
-                            ),
-                          ],
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: ConstantesColores.azul_precio, width: 2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Text(
+                          producto.cantidad.toString(),
+                          style: TextStyle(
+                              color: ConstantesColores.azul_precio,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                         ),
                       ),
                     ),
