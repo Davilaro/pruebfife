@@ -230,8 +230,8 @@ class LoginHomeDialog extends StatelessWidget {
               ),
               onPressed: 
                   () => {
-                    Navigator.of(context).pop(),
-                    //Get.to(() => RegisterPage())
+                    //Navigator.of(context).pop(),
+                    Get.to(() => RegisterPage())
                     },
               style: ElevatedButton.styleFrom(
                 foregroundColor: ConstantesColores.azul_precio, backgroundColor: Colors.white, fixedSize: Size(Get.width * 0.9, 45), // foreground
