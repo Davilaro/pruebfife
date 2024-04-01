@@ -15,6 +15,17 @@ class PedidoSugeridoQuery implements IPedidoSugerido {
           S.negocio AS Negocio,
           S.Codigo,
           P.Nombre,
+          CAST(
+            ROUND(
+                (p.precio + ((p.precio * p.iva) / 100) + (
+                            CASE
+                                WHEN p.ICUI = 0 THEN p.IBUA
+                                ELSE ((p.precio * p.ICUI) / 100)
+                            END
+                        ) ), 0
+            ) AS FLOAT
+          ) AS precioinicial,
+              IFNULL(tmp.descuento, 0.0) AS descuento, 
           ROUND(
               (
                   (p.precio - (p.precio * IFNULL(tmp.descuento, 0) / 100)) + 

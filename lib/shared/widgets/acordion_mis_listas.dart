@@ -85,6 +85,24 @@ class _EstadoAcordion extends State<AcordionMisListas> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Stack(
               children: [
+                Visibility(
+                  visible: _mostrarContenido,
+                  child: Container(
+                    height: Get.height * 0.1,
+                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all( Radius.circular(20)),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color:Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: Offset(0, 5), // changes position of shadow
+                        ),
+                      ]
+                     ),
+                  ),
+                ),
                 Container(
                   margin: widget.margin == null
                       ? EdgeInsets.symmetric(vertical: 15)

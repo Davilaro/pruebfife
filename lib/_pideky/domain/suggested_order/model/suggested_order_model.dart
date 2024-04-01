@@ -13,6 +13,8 @@ class SuggestedOrderModel {
       this.nombre,
       this.precio,
       this.cantidad,
+      this.descuento,
+      this.precioInicial,
       this.bloqueoCartera});
 
   String? negocio;
@@ -21,6 +23,8 @@ class SuggestedOrderModel {
   String? nombreComercial;
   String? icono;
   double? precio;
+  double? descuento;
+  double? precioInicial;
   int? cantidad;
   bool isExpanded = false;
   int? bloqueoCartera;
@@ -33,6 +37,8 @@ class SuggestedOrderModel {
           nombre: json["nombre"] == null ? '' : json["nombre"],
           precio: json["precio"] == null ? 0 : json["precio"],
           cantidad: json["Cantidad"] == null ? 0 : json["Cantidad"],
+          descuento : json["descuento"] == null ? 0 : json["descuento"],
+          precioInicial: json["precioinicial"] == null ? 0 : json["precioinicial"],
           bloqueoCartera: json["bloqueoCartera"] == null
               ? 0
               : json["bloqueoCartera"] == 0

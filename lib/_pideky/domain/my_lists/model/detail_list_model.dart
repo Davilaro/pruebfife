@@ -12,11 +12,14 @@ class DetailList {
   final String codigo;
   int cantidad;
   final double precio;
+  final double descuento;
+  final double precioInicial;
   final String nombreComercial;
   final String proveedor;
   bool? isSelected = false;
 
-  DetailList({
+  DetailList(
+     {
     required this.id,
     required this.nombreLista,
     required this.codigo,
@@ -25,6 +28,8 @@ class DetailList {
     required this.nombreProducto,
     required this.precio,
     required this.nombreComercial,
+    required this.descuento,
+    required this.precioInicial,
   });
 
   DetailList copyWith(
@@ -36,9 +41,13 @@ class DetailList {
           double? precio,
           String? nombreComercial,
           String? icon,
+          double? descuento,
+          double? precioInicial,
           String? nombreProducto}) =>
       DetailList(
         id: id ?? this.id,
+        descuento: descuento ?? this.descuento,
+        precioInicial: precioInicial ?? this.precioInicial,
         nombreLista: nombre ?? this.nombreLista,
         codigo: codigo ?? this.codigo,
         cantidad: cantidad ?? this.cantidad,
@@ -57,6 +66,8 @@ class DetailList {
         nombreProducto: json["nombre"],
         precio: json['precio'],
         nombreComercial: json['nombreComercial'],
+        descuento: json['descuento'],
+        precioInicial: json['precioinicial'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +77,7 @@ class DetailList {
         "cantidad": cantidad,
         "proveedor": proveedor,
         "nombreProducto": nombreProducto,
+        "precio": precio,
+        "nombreComercial": nombreComercial,
       };
 }
