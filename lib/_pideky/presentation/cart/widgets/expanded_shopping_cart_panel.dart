@@ -269,7 +269,6 @@ List<Widget> loadDynamicExpansionPanel(
                                       maxHeight: 250,
                                       maxWidth: double.infinity),
                                   child: SingleChildScrollView(
-                                    physics: BouncingScrollPhysics(),
                                     controller: cartProvider.scrollControllerGridItems,
                                     child: Column(
                                       children: [

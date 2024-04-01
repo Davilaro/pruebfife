@@ -282,98 +282,129 @@ List<Widget> gridItem(
     }
   });
 
-  result.add(Padding(
-    padding: const EdgeInsets.only(left: 18, right: 18, top: 8.5, bottom: 15),
-    child: Row(
-      children: [
-        InkWell(
-          onTap: () {
-            controller.cashPayment.value = false;
-            controller.payOnLine.value = false;
-            dialogVaciarCarrito(
-                fabricante, cartViewModel, value, precioMinimo, context);
-          },
-          child: Row(
-            children: [
-              Icon(
-                Icons.delete_outline,
-                color: HexColor("#42B39C"),
-              ),
-              Text(
-                "Vaciar carrito",
-                style: TextStyle(
-                    color: HexColor("#42B39C"),
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        Expanded(child: Container()),
-        Visibility(
-          visible:
-              cartViewModel.getListaFabricante[fabricante]["descuento"] == 0.0
-                  ? false
-                  : true,
-          child: Obx(
-            () => GestureDetector(
-              onTap: () async {
-                cartViewModel.animateSquare();
-                cartViewModel.scrollToBottom();
-              },
-              child: AnimatedContainer(
-                width: cartViewModel.widthSaveSquare.value,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  color: ConstantesColores.azul_aguamarina_botones,
-                ),
-                duration: Duration(milliseconds: 200),
+  result.add(Container(
+    child: Padding(
+      padding: const EdgeInsets.only(left: 18, right: 18, top: 8.5, bottom: 15),
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Visibility(
+              visible:
+                  !cartViewModel.isSavedBymanufacturerOpenToShowTrashBox.value,
+              child: InkWell(
+                onTap: () {
+                  controller.cashPayment.value = false;
+                  controller.payOnLine.value = false;
+                  dialogVaciarCarrito(
+                      fabricante, cartViewModel, value, precioMinimo, context);
+                },
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ImageIcon(
-                        AssetImage('assets/icon/Icono_valor_ahorrado.png'),
-                        color: Colors.white,
-                      ),
+                    Icon(
+                      Icons.delete_outline,
+                      color: HexColor("#42B39C"),
                     ),
-                    Visibility(
-                        visible: cartViewModel.isSavedBymanufacturerOpen.value,
-                        child: Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  getCurrency(cartViewModel
-                                          .getListaFabricante[fabricante]
-                                      ["descuento"]),
-                                  style: TextStyle(
-                                      fontSize: 15.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  S.current.value_saved_cart,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          ),
-                        ))
+                    Text(
+                      "Vaciar carrito",
+                      style: TextStyle(
+                          color: HexColor("#42B39C"),
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-        )
-      ],
+            Visibility(
+              visible: cartViewModel.getListaFabricante[fabricante]
+                          ["descuento"] ==
+                      0.0
+                  ? false
+                  : true,
+              child: Obx(
+                () => GestureDetector(
+                  onTap: () async {
+                    if (!cartViewModel.isTimerActive.value)
+                    cartViewModel.animateSquare();
+                  },
+                  child: AnimatedContainer(
+                    width: cartViewModel.widthSaveSquare.value,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: cartViewModel.isSavedBymanufacturerOpen.value
+                          ? ConstantesColores.azul_precio
+                          : ConstantesColores.azul_aguamarina_botones,
+                    ),
+                    duration: Duration(milliseconds: 200),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: !cartViewModel
+                                  .isSavedBymanufacturerOpenToShowTrashBox.value
+                              ? ImageIcon(
+                                  AssetImage(
+                                      'assets/icon/Icono_valor_ahorrado.png'),
+                                  color: Colors.white,
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(right: 15.0, left: 5),
+                                  padding: EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  child: ImageIcon(
+                                    AssetImage(
+                                        'assets/icon/Icono_valor_ahorrado.png'),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                        ),
+                        Visibility(
+                            visible:
+                                cartViewModel.isSavedBymanufacturerOpen.value,
+                            child: Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      getCurrency(cartViewModel
+                                              .getListaFabricante[fabricante]
+                                          ["descuento"]),
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      S.current.value_saved_cart,
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     ),
   ));
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emart/_pideky/domain/cart/use_cases/cart_use_cases.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/cart/view/configure_order_page.dart';
@@ -35,22 +37,58 @@ class CartViewModel extends ChangeNotifier {
   RxDouble widthSaveSquare = 45.0.obs;
   RxInt currentQuantityProduct = 0.obs;
   RxBool isSavedBymanufacturerOpen = false.obs;
+  RxBool isSavedBymanufacturerOpenToShowTrashBox = false.obs;
   ScrollController? scrollControllerGridItems;
+  Timer timer = Timer(Duration(milliseconds: 1), () {});
+  RxBool isTimerActive = false.obs;
 
-  void animateSquare() {
+  void animateSquare() async {
+    int elapsedTime = 0;
     isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
-    widthSaveSquare.value = isSavedBymanufacturerOpen.value == true ? Get.width * 0.45 : 45.0;
+    widthSaveSquare.value =
+        isSavedBymanufacturerOpen.value == true ? Get.width * 0.8 : 45.0;
+    if (!isSavedBymanufacturerOpen.value) {
+      await Future.delayed(Duration(milliseconds: 200), () {
+        isSavedBymanufacturerOpenToShowTrashBox.value =
+            !isSavedBymanufacturerOpenToShowTrashBox.value;
+      });
+    } else {
+      isSavedBymanufacturerOpenToShowTrashBox.value =
+          !isSavedBymanufacturerOpenToShowTrashBox.value;
+    }
+    scrollToBottom();
+    timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      isTimerActive.value = true;
+      if (elapsedTime == 4) {
+        isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
+        widthSaveSquare.value =
+            isSavedBymanufacturerOpen.value == true ? Get.width * 0.8 : 45.0;
+        if (!isSavedBymanufacturerOpen.value) {
+          await Future.delayed(Duration(milliseconds: 200), () {
+            isSavedBymanufacturerOpenToShowTrashBox.value =
+                !isSavedBymanufacturerOpenToShowTrashBox.value;
+          });
+        } else {
+          isSavedBymanufacturerOpenToShowTrashBox.value =
+              !isSavedBymanufacturerOpenToShowTrashBox.value;
+        }
+        scrollToBottom();
+        isTimerActive.value = false;
+        timer.cancel();
+      }
+      elapsedTime += 1;
+    });
   }
 
   void scrollToBottom() async {
     await Future.delayed(Duration(milliseconds: 200));
     if (isSavedBymanufacturerOpen.value)
       scrollControllerGridItems!.animateTo(
-          Get.height * 0.39,
-          duration:
-              Duration(milliseconds: 300), // Opcional: duración de la animación
-          curve: Curves.easeInOut, // Opcional: curva de la animación
-        );
+        scrollControllerGridItems!.position.maxScrollExtent,
+        duration:
+            Duration(milliseconds: 300), // Opcional: duración de la animación
+        curve: Curves.easeInOut, // Opcional: curva de la animación
+      );
   }
   //--------------------------- AQUI SE LE DA INICIO A LOS GETTERS Y SETTERS---------------------------
 
