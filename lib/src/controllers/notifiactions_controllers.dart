@@ -1,25 +1,25 @@
 // ignore_for_file: unnecessary_statements, unnecessary_null_comparison, deprecated_member_use
 import 'dart:async';
 
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
-import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
-import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/brand/model/brand.dart';
+import 'package:emart/_pideky/domain/brand/use_cases/brand_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/brand/brand_service.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../_pideky/domain/producto/service/producto_service.dart';
-import '../../_pideky/presentation/productos/view/detalle_producto_compra.dart';
+import '../../_pideky/domain/product/use_cases/producto_use_cases.dart';
+import '../../_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/model/notification_push_in_app_slide_up.dart';
-import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/service/notification_push_in_app_slide_up_service.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_sql.dart';
-import 'package:emart/_pideky/infrastructure/productos/producto_repository_sqlite.dart';
-import 'package:emart/_pideky/presentation/club_ganadores/view/club_ganadores_page.dart';
-import 'package:emart/_pideky/presentation/mi_negocio/view_model/mi_negocio_view_model.dart';
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view/mis_pagos_nequi.dart';
+import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/use_cases/notification_push_in_app_slide_up_service.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_service.dart';
+import 'package:emart/_pideky/infrastructure/product/product_service.dart';
+import 'package:emart/_pideky/presentation/winners_club/view/winners_club_page.dart';
+import 'package:emart/_pideky/presentation/my_business/view_model/my_business_view_model.dart';
+import 'package:emart/_pideky/presentation/my_payments/view/my_payments.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/bannnersController.dart';
@@ -30,7 +30,7 @@ import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +39,13 @@ import 'package:provider/provider.dart';
 
 class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   final notificacionesService =
-      NotificationPushInAppSlideUpService(NotificationPushInUpAndSlideUpSql());
+      NotificationPushInAppSlideUpUseCases(NotificationPushInUpAndSlideUpSql());
 
-  final marcaService = MarcaService(MarcaRepositorySqlite());
+  final marcaService = BrandUseCases(MarcaRepositorySqlite());
 
   final prefs = Preferencias();
   final bannerController = Get.put(BannnerControllers());
-  final MiNegocioViewModel viewModel = Get.find<MiNegocioViewModel>();
+  final MyBusinessVieModel viewModel = Get.find<MyBusinessVieModel>();
   RxBool onTapPushInUp = false.obs;
   RxBool closePushInUp = false.obs;
   RxBool closeSlideUp = false.obs;
@@ -180,7 +180,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   Future validarRedireccionOnTap(
       NotificationPushInAppSlideUpModel notificacion,
       BuildContext context,
-      CarroModelo provider,
+      CartViewModel provider,
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs,
       String locasionBanner,
@@ -248,27 +248,27 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         }
       } else if (notificacion.redireccion == "Mis pagos Nequi") {
         if (locasionBanner == "Home") {
-          await Get.to(() => MisPagosNequiPage());
+          await Get.to(() => MypaymentsPage());
           Get.back();
         } else {
           Navigator.of(context).pop();
-          await Get.to(() => MisPagosNequiPage());
+          await Get.to(() => MypaymentsPage());
           Get.back();
         }
       } else if (notificacion.redireccion == "Club de ganadores") {
         if (locasionBanner == "Home") {
-          await Get.to(() => ClubGanadoresPage());
+          await Get.to(() => WinnersClubPage());
           Get.back();
         } else {
           isPushInUp == true
               ? {
                   Navigator.of(context).pop(),
                   Navigator.of(context).pop(),
-                  Get.to(() => ClubGanadoresPage())
+                  Get.to(() => WinnersClubPage())
                 }
               : {
                   Navigator.of(context).pop(),
-                  Get.to(() => ClubGanadoresPage())
+                  Get.to(() => WinnersClubPage())
                 };
         }
       } else {
@@ -291,7 +291,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
     Get.back();
   }
 
-  _direccionarCategoria(BuildContext context, CarroModelo provider,
+  _direccionarCategoria(BuildContext context, CartViewModel provider,
       List<dynamic> resSubBusqueda, String subCategoria) async {
     if (subCategoria != '') {
       bannerController.setIsVisitBanner(true);
@@ -312,7 +312,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
 
   _direccionarMarca(
     BuildContext context,
-    Marca marca,
+    Brand marca,
   ) async {
     await Navigator.push(
         context,
@@ -348,8 +348,8 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   }
 
   _detalleProducto(
-      Producto producto,
-      final CarroModelo cartProvider,
+      Product producto,
+      final CartViewModel cartProvider,
       BuildContext context,
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs) async {
@@ -482,11 +482,11 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         Timer.periodic(Duration(seconds: 1), (timer) {
           if (elapsedTime >= listPushInUpHome.first.tiempo) {
             showSlideUps(context);
-            slideUpAutomatic.validarMostrarSlide();
+            slideUpAutomatic.validarMostrarSlide(context);
             timer.cancel();
           } else if (closePushInUp.value == true) {
             showSlideUps(context);
-            slideUpAutomatic.validarMostrarSlide();
+            slideUpAutomatic.validarMostrarSlide(context);
             timer.cancel();
           } else if (onTapPushInUp.value == true) {
             timer.cancel();
@@ -496,7 +496,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       } else if (validacionMostrarSlideUp["Home"] == true &&
           closeSlideUp.value == false) {
         showSlideUps(context);
-        slideUpAutomatic.validarMostrarSlide();
+        slideUpAutomatic.validarMostrarSlide(context);
       }
     }
   }

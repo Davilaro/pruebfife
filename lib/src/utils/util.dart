@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -188,4 +189,26 @@ double toDouble(String value) {
   } catch (e) {
     return 0.0;
   }
+}
+
+// METODOD TRAE EL SIMBOLO DE LA MONEDA DEPENDIENDO DEL PAIS
+String getCurrency(dynamic valor) {
+  NumberFormat formatNumber = new NumberFormat("#,##0", "es_AR");
+
+  var result = '${getFormat().currencySymbol}' +
+      formatNumber.format(valor).replaceAll(',00', '');
+
+  return result;
+}
+
+// METODO QUE PARSEA EL VALOR QUE SE LE INGRESA PARA QUE SE MUESTR EN PESOS O MONEDA
+NumberFormat getFormat() {
+  var locale = Intl().locale;
+  var format = locale.toString() != 'es_CO'
+      ? locale.toString() == 'es_CR'
+          ? NumberFormat.currency(locale: locale.toString(), symbol: '\₡')
+          : NumberFormat.simpleCurrency(locale: locale.toString())
+      : NumberFormat.currency(locale: locale.toString(), symbol: '\$');
+
+  return format;
 }

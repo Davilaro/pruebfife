@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_statements
 
-import 'package:emart/_pideky/presentation/buscador_general/view/search_fuzzy_view.dart';
+import 'package:emart/_pideky/presentation/general_search/view/search_fuzzy_view.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/modelos/seccion.dart';

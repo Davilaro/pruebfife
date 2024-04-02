@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
-import 'package:emart/src/pages/carrito/carrito_compras.dart';
+import 'package:emart/_pideky/presentation/cart/view/cart_page.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
+import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/opciones_app_bart.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -73,18 +75,20 @@ class AccionesBartCarrito extends StatelessWidget {
       //UXCam: Llamamos el evento clickCarrito
       UxcamTagueo().clickCarrito(provider, 'Superior');
       if (!esCarrito) {
+        MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
        await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  CarritoCompras(numEmpresa: prefs.numEmpresa)),
+                  CartPage(numEmpresa: prefs.numEmpresa)),
         );
       } else {
+        MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  CarritoCompras(numEmpresa: prefs.numEmpresa)),
+                  CartPage(numEmpresa: prefs.numEmpresa)),
         );
       }
     }

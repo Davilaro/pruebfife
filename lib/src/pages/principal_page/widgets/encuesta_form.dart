@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:emart/_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -22,6 +22,7 @@ import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/widget/alerta_actualizar.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/custom_button.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -92,10 +93,10 @@ class _EncuestaFormState extends State<EncuestaForm> {
                         child: Text(
                           '${widget.encuesta.pregunta}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: ConstantesColores.gris_textos
-                          ),
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: ConstantesColores.gris_textos),
                         ),
                       ),
                     )
@@ -144,7 +145,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                     ),
                   ),
 
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
 
                   //Pregunta seleccion multiple unica respuesta
                   widget.encuesta.tipoPreguntaId == 3
@@ -179,22 +182,25 @@ class _EncuestaFormState extends State<EncuestaForm> {
                               for (var i = 0;
                                   i < widget.encuesta.parametro!.length;
                                   i++)
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                        checkColor: Colors.white,
-                                        activeColor:
-                                            ConstantesColores.azul_precio,
-                                        value: _opcionesMultiple[
-                                            widget.encuesta.parametro![i]],
-                                        onChanged: (bool? value) {
-                                          onChangeOpcionesCheckBox(value!,
-                                              widget.encuesta.parametro![i]);
-                                        }),
-                                    Expanded(
-                                        child: Text(
-                                            widget.encuesta.parametro![i])),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                          checkColor: Colors.white,
+                                          activeColor:
+                                              ConstantesColores.azul_precio,
+                                          value: _opcionesMultiple[
+                                              widget.encuesta.parametro![i]],
+                                          onChanged: (bool? value) {
+                                            onChangeOpcionesCheckBox(value!,
+                                                widget.encuesta.parametro![i]);
+                                          }),
+                                      Expanded(
+                                          child: Text(
+                                              widget.encuesta.parametro![i])),
+                                    ],
+                                  ),
                                 ),
                             ]),
                           ),
@@ -208,7 +214,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
                           child: Container(
                             width: Get.width * 1,
                             margin: EdgeInsets.only(bottom: 15),
-                             padding: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
                             child: CustomTextFormField(
                               keyboardType: TextInputType.text,
                               hintText: 'Ingresa tu correo electrónico',
@@ -231,9 +237,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 14,
                           child: Container(
-                             width: Get.width * 1,
+                            width: Get.width * 1,
                             margin: EdgeInsets.only(bottom: 15),
-                             padding: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
                             child: CustomTextFormField(
                               keyboardType: TextInputType.number,
                               hintText: 'Ingresa tu número de  celular',
@@ -256,29 +262,33 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 15,
                           child: Container(
-                             width:  Get.width * 1,
-                            margin: EdgeInsets.only(bottom: 15, left: 10.0, right: 10.0),
-                             //padding: EdgeInsets.zero,
-                             child: Center(
-                               child: RatingBar(
-                                  initialRating: 0,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  ratingWidget: RatingWidget(
-                                    full: Image.asset('assets/image/Estrella_amarilla.png'),
-                                    half: Image.asset('assets/image/Estrella_gris.png'),
-                                    empty: Image.asset('assets/image/Estrella_gris.png'),
-                                  ),
-                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                  onRatingUpdate: (rating) {
-                                    _rating = rating;
-                                    print(rating);
-                                  },
+                            width: Get.width * 1,
+                            margin: EdgeInsets.only(
+                                bottom: 15, left: 10.0, right: 10.0),
+                            //padding: EdgeInsets.zero,
+                            child: Center(
+                              child: RatingBar(
+                                initialRating: 0,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                ratingWidget: RatingWidget(
+                                  full: Image.asset(
+                                      'assets/image/Estrella_amarilla.png'),
+                                  half: Image.asset(
+                                      'assets/image/Estrella_gris.png'),
+                                  empty: Image.asset(
+                                      'assets/image/Estrella_gris.png'),
                                 ),
-                             ),                          
-                          )
-                          )
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 4.0),
+                                onRatingUpdate: (rating) {
+                                  _rating = rating;
+                                  print(rating);
+                                },
+                              ),
+                            ),
+                          ))
                       : Container(),
 
                   Container(
@@ -314,8 +324,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: SvgPicture.asset('assets/icon/prueba1.svg'),
                 ),
-                top: 0,
-                right: 10,
+                top: -15,
+                right: -15,
               )
       ],
     );
@@ -336,18 +346,20 @@ class _EncuestaFormState extends State<EncuestaForm> {
   List<Widget> radioButtons(List<dynamic>? parametro) {
     List<Widget> listOpciones = [];
     listOpciones = parametro!.map((item) {
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Radio(
-                value: item.toString(),
-                activeColor: ConstantesColores.azul_precio,
-                groupValue: _seleccion,
-                onChanged: (String? value) =>
-                    onChangeOpcionesRadioButton(value)),
-            Expanded(child: Text(item.toString())),
-          ],
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: RadioListTile(
+            contentPadding: EdgeInsets.zero,
+            value: item.toString(),
+            activeColor: ConstantesColores.azul_precio,
+            groupValue: _seleccion,
+            onChanged: (String? value) => onChangeOpcionesRadioButton(value),
+            title:
+        Text(
+          item.toString(),
+          overflow: TextOverflow.visible,
+            ),
+            controlAffinity: ListTileControlAffinity.leading,
         ),
       );
     }).toList();
@@ -495,8 +507,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
           Icons.check,
           color: ConstantesColores.verde,
           size: 50,
-        ), 
-        onTap: () async {
+        ), onTap: () async {
       //Pedimos si es obligatoria o no y dependiendo ello entra a su metodo correspondiente
       if (esObligatoria == 1) {
         if (controllerEncuesta.existenEncuestasObligatorias()) {
@@ -525,9 +536,9 @@ class _EncuestaFormState extends State<EncuestaForm> {
 Future<void> updateSurvey(
     OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
   final botonesController = Get.find<BotonesProveedoresVm>();
-  final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-  final controllerNequi = Get.find<MisPagosNequiViewModel>();
-  final productViewModel = Get.find<ProductoViewModel>();
+  final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+  final controllerNequi = Get.find<MyPaymentsViewModel>();
+  final productViewModel = Get.find<ProductViewModel>();
   isActualizando.value = true;
   if (isActualizando.value) {
     AlertaActualizar().mostrarAlertaActualizar(context, true);

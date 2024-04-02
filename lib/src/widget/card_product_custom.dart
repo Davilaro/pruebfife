@@ -1,17 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../preferences/preferencias.dart';
+
 class CardProductCustom extends StatefulWidget {
-  final Producto producto;
-  final CarroModelo cartProvider;
+  final Product producto;
+  final CartViewModel cartProvider;
   final bool isProductoEnOferta;
   final bool isAgotadoLabel;
   final int? tipoCategoria;
@@ -38,7 +40,9 @@ class CardProductCustom extends StatefulWidget {
 }
 
 class _CardProductCustomState extends State<CardProductCustom> {
-  ProductoViewModel productViewModel = Get.find();
+  ProductViewModel productViewModel = Get.find();
+
+  final prefs = new Preferencias();
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +142,13 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                 ),
                                 //Precio producto
                                 ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxHeight: 52, minHeight: 40),
+                                  constraints: prefs.usurioLogin == 1
+                                 ? BoxConstraints(
+                                      maxHeight: 52, minHeight: 40
+                                      )
+                                 : BoxConstraints(
+                                      maxHeight: 15
+                                      ),     
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
@@ -174,17 +183,18 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                             )),
                                         Expanded(
                                           flex: 1,
-                                          child: Container(
+                                          child:  Container(
                                             padding: EdgeInsets.fromLTRB(
                                                 0, 0, 10, 0),
                                             alignment: Alignment.topLeft,
-                                            child: AutoSizeText(
+                                            //Valida si esta logueado para mostrar precios en las tarjetas de los productos 
+                                            //sino esta logueado y los valores son cero no muestra estos 
+                                            child: prefs.usurioLogin == 1 
+                                            ? AutoSizeText(
                                               typeCurrency,
                                               minFontSize: 10,
                                               textAlign: TextAlign.left,
-                                              style: widget
-                                                          .producto.descuento !=
-                                                      0
+                                              style: widget.producto.descuento != 0
                                                   ? TextStyle(
                                                       color: ConstantesColores
                                                           .azul_precio,
@@ -200,9 +210,9 @@ class _CardProductCustomState extends State<CardProductCustom> {
                                                           FontWeight.bold,
                                                       fontSize:
                                                           widget.isAgotadoLabel
-                                                              ? 16
+                                                              ? 10
                                                               : 18),
-                                            ),
+                                            ):Container()
                                           ),
                                         ),
                                         //Label Agotado

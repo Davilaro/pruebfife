@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/service/notification_push_in_app_slide_up_service.dart';
-import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_sql.dart';
+import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/use_cases/notification_push_in_app_slide_up_service.dart';
+import 'package:emart/_pideky/infrastructure/notification_push_in_app_slide_up/notification_push_in_app_slide_up_service.dart';
 import 'package:emart/shared/widgets/automatic_card_notifiaction_slide_up.dart';
 import 'package:get/get.dart';
 
 class SlideUpAutomatic extends GetxController {
   final slideUpService =
-      NotificationPushInAppSlideUpService(NotificationPushInUpAndSlideUpSql());
+      NotificationPushInAppSlideUpUseCases(NotificationPushInUpAndSlideUpSql());
   RxList automaticSlideUpList = [].obs;
   RxList automaticSlideUpSelected = [].obs;
   RxList listaProductosCarrito = [].obs;
@@ -30,33 +30,33 @@ class SlideUpAutomatic extends GetxController {
     return false;
   }
 
-  void mostrarSlide(negocio) async {
+  void mostrarSlide(negocio, context) async {
     final requestSeeSlideUp =
         await slideUpService.showSlideUpValidation(negocio);
     if (requestSeeSlideUp == 1) {
       if (automaticSlideUpList.isNotEmpty) {
         if (selectSlideUpAutomatic(negocio)) {
-          iniciarTimer(negocio);
+          iniciarTimer(negocio, context);
         }
       }
     }
   }
 
-  void iniciarTimer(negocio) {
+  void iniciarTimer(negocio, context) {
     _timer?.cancel();
     _timer = Timer(Duration(seconds: automaticSlideUpSelected[0].tiempo ?? 60),
         () async {
       if (Get.isSnackbarOpen) {
         await Get.closeCurrentSnackbar();
       }
-      showSlideUpNotificationAutomatic(automaticSlideUpSelected[0]);
+      showSlideUpNotificationAutomatic(automaticSlideUpSelected[0], context);
       await slideUpService.sendShowedSlideUp(negocio);
 
       _timer?.cancel();
     });
   }
 
-  void validarMostrarSlide() async {
+  void validarMostrarSlide(context) async {
     RxString negocio = ''.obs;
 
     if (listaProductosCarrito.isNotEmpty && automaticSlideUpList.isNotEmpty) {
@@ -72,7 +72,7 @@ class SlideUpAutomatic extends GetxController {
       final requestSeeSlideUp =
           await slideUpService.showSlideUpValidation(negocio.value);
       if (automaticSlideUpSelected.isNotEmpty && requestSeeSlideUp == 1) {
-        showSlideUpNotificationAutomatic(automaticSlideUpSelected[0]);
+        showSlideUpNotificationAutomatic(automaticSlideUpSelected[0], context);
         await slideUpService.sendShowedSlideUp(negocio.value);
       }
     }

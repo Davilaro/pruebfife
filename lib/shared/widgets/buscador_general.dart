@@ -1,5 +1,5 @@
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/resultados_buscador_general/view/resultado_buscador_general.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search_reponse/view/resultado_buscador_general.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class BuscadorGeneral extends StatelessWidget {
   BuscadorGeneral();
 
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
-   final Debouncer debouncer =
+  final Debouncer debouncer =
       Debouncer(delay: const Duration(milliseconds: 800));
 
   @override
@@ -40,13 +40,15 @@ class BuscadorGeneral extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
+                    //Uxcam tagueo usuario no encontrado en base de datos
+                    UxcamTagueo().goToFilteredSearch();
                     print(searchFuzzyViewModel.listaAllMarcas);
                     searchFuzzyViewModel
                         .runFilter(searchFuzzyViewModel.controllerUser.text);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ResultadoBuscadorGeneral(
+                            builder: (context) => GeneralSearchResponse(
                                   allresultados:
                                       searchFuzzyViewModel.allResultados,
                                 )));
@@ -67,7 +69,6 @@ class BuscadorGeneral extends StatelessWidget {
             UxcamTagueo().search(value);
             searchFuzzyViewModel.runFilter(value);
             debouncer(() => searchFuzzyViewModel.productoBusqueda(value));
-            
           },
         ));
   }

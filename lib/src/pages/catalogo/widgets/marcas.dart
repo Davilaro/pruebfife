@@ -1,6 +1,6 @@
-import 'package:emart/_pideky/domain/marca/model/marca.dart';
-import 'package:emart/_pideky/domain/marca/service/marca_service.dart';
-import 'package:emart/_pideky/infrastructure/marcas/marca_repository_sqlite.dart';
+import 'package:emart/_pideky/domain/brand/model/brand.dart';
+import 'package:emart/_pideky/domain/brand/use_cases/brand_use_cases.dart';
+import 'package:emart/_pideky/infrastructure/brand/brand_service.dart';
 import 'package:emart/shared/widgets/botones_proveedores.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
@@ -8,7 +8,7 @@ import 'package:emart/src/pages/catalogo/widgets/boton_todos_filtro.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
@@ -32,7 +32,7 @@ class MarcasWidget extends StatefulWidget {
 class _MarcasWidgetState extends State<MarcasWidget> {
   final TextEditingController controllerSearch = TextEditingController();
 
-  MarcaService marcaService = MarcaService(MarcaRepositorySqlite());
+  BrandUseCases marcaService = BrandUseCases(MarcaRepositorySqlite());
 
   final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
 
@@ -48,7 +48,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
 
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
@@ -113,7 +113,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   }
 
   List<Widget> _cargarMarcas(
-      List<dynamic> result, BuildContext context, CarroModelo provider) {
+      List<dynamic> result, BuildContext context, CartViewModel provider) {
     final List<Widget> opciones = [];
     PaintingBinding.instance.imageCache.clear();
     for (var element in result) {
@@ -135,7 +135,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
               //Firebase: Llamamos el evento select_content
               TagueoFirebase().sendAnalityticSelectContent(
                   "Marcas",
-                  (element as Marca).nombre,
+                  (element as Brand).nombre,
                   element.nombre,
                   element.nombre,
                   element.codigo,
@@ -194,7 +194,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   _onClickCatalogo(
     String codigo,
     BuildContext context,
-    CarroModelo provider,
+    CartViewModel provider,
     String nombre,
   ) {
     final controllerNotificaciones =

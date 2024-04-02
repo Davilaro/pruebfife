@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emart/_pideky/presentation/productos/view/detalle_producto_compra.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 
 class CarritoDisenoListaR extends StatefulWidget {
   final int numTienda;
-  final Producto productos;
+  final Product productos;
   final String tipoVenta;
 
   const CarritoDisenoListaR(this.numTienda, this.productos, this.tipoVenta);
@@ -32,7 +32,7 @@ class CarritoDisenoListaR extends StatefulWidget {
 class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
   final prefs = new Preferencias();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
-  ProductoViewModel productoViewModel = Get.find();
+  ProductViewModel productoViewModel = Get.find();
 
   RxBool isProductoEnOferta = false.obs;
   @override
@@ -49,7 +49,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
     // Locale locale = Localizations.localeOf(context);
     // var format = NumberFormat.simpleCurrency(locale: locale.toString());
     var locale = Intl().locale;
@@ -73,8 +73,8 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     );
   }
 
-  _cargarDisenoInterno(Producto element, BuildContext context,
-      CarroModelo cartProvider, NumberFormat format) {
+  _cargarDisenoInterno(Product element, BuildContext context,
+      CartViewModel cartProvider, NumberFormat format) {
     var dateNow =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     return GestureDetector(
@@ -192,8 +192,8 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     );
   }
 
-  detalleProducto(Producto element, final CarroModelo cartProvider) {
-    Producto productos = element;
+  detalleProducto(Product element, final CartViewModel cartProvider) {
+    Product productos = element;
 
     if (prefs.usurioLogin == -1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
@@ -212,7 +212,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     }
   }
 
-  mas(Producto producto, CarroModelo cartProvider) {
+  mas(Product producto, CartViewModel cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial == "") {
@@ -230,7 +230,7 @@ class _CarritoDisenoListaRState extends State<CarritoDisenoListaR> {
     MetodosLLenarValores().calcularValorTotal(cartProvider);
   }
 
-  menos(Producto producto, CarroModelo cartProvider) {
+  menos(Product producto, CartViewModel cartProvider) {
     String valorInicial = PedidoEmart.obtenerValor(producto)!;
 
     if (valorInicial != "") {

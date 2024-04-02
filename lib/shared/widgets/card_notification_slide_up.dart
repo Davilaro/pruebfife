@@ -2,14 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 void showSlideUpNotification(context, data, ubicacion) {
-  final provider = Provider.of<CarroModelo>(context, listen: false);
+  final provider = Provider.of<CartViewModel>(context, listen: false);
   final String imageUrl = data.imageUrl; // Reemplaza con la URL de tu imagen
   final String uniqueKey = UniqueKey().toString();
   final cargoConfirmar = Get.find<CambioEstadoProductos>();

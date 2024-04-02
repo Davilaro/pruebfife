@@ -1,6 +1,6 @@
 import 'package:emart/shared/widgets/modal_cerrar_sesion.dart';
 import 'package:emart/src/modelos/asignado.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:flutter/material.dart';
 import "package:collection/collection.Dart";
 import 'package:get/get.dart';
@@ -12,14 +12,14 @@ class PedidoEmart {
   static Map<String, String>? listaValoresPedido;
   static Map<String, bool>? listaValoresPedidoAgregados;
   static Map<String, bool>? listSugeridosAgregados;
-  static Map<String, Producto>? listaProductos;
+  static Map<String, Product>? listaProductos;
   static Map<String, dynamic>? listaSugeridos;
   static RxMap<String, dynamic>? listaProductosPorFabricante = RxMap();
   static List<dynamic>? listaFabricante = [];
   static Map<String, dynamic>? listaPrecioPorFabricante;
   static RxInt cambioVista = 1.obs;
 
-  static registrarValoresPedido(Producto producto, dynamic valor, bool estado) {
+  static registrarValoresPedido(Product producto, dynamic valor, bool estado) {
     listaValoresPedido!.update(producto.codigo, (value) => valor);
     listaControllersPedido!.update(producto.codigo, (value) => value);
     listaValoresPedidoAgregados!.update(producto.codigo, (value) => estado);
@@ -317,13 +317,13 @@ class PedidoEmart {
     });
   }
 
-  static String? obtenerValor(Producto productos) {
-    return listaValoresPedido![productos.codigo] == null
+  static String? obtenerValor(Product productos) {
+    return listaValoresPedido![productos.codigo] == null || listaValoresPedido![productos.codigo] == ""
         ? "0"
         : listaValoresPedido![productos.codigo];
   }
 
-  static bool? obtenerValorController(Producto productos) {
+  static bool? obtenerValorController(Product productos) {
     return listaControllersPedido![productos.codigo] == null ? false : true;
   }
 

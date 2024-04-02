@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:emart/_pideky/presentation/mis_pedidos/view_model/mis_pedidos_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 import 'package:emart/src/modelos/pedido.dart';
-import 'package:emart/_pideky/domain/producto/model/producto.dart';
+import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class UxcamTagueo {
   Preferencias prefs = Preferencias();
 
   void validarTipoUsuario() async {
-    final misPedidosViewModel = Get.find<MisPedidosViewModel>();
+    final misPedidosViewModel = Get.find<MyOrdersViewModel>();
     DateTime now = DateTime.now();
     String typeUser = 'Inactivo';
 
@@ -223,7 +223,7 @@ class UxcamTagueo {
     }
   }
 
-  void seeDetailProduct(Producto element, int index, String? nameSeccion,
+  void seeDetailProduct(Product element, int index, String? nameSeccion,
       bool isAgotadoLabel, bool isNewProduct, bool isPromoProduct) {
     try {
       var descuento = nameSeccion == 'Promos'
@@ -293,7 +293,7 @@ class UxcamTagueo {
       });
   }
 
-  void addToCart(Producto element, int cantidad) {
+  void addToCart(Product element, int cantidad) {
     try {
       print('TAGUEO ADD TO CART');
       if (prefs.usurioLogin == 1)
@@ -313,7 +313,7 @@ class UxcamTagueo {
   }
 
   void removeToCart(
-      Producto element, int cantidad, CarroModelo cartProvider, precioMinimo) {
+      Product element, int cantidad, CartViewModel cartProvider, precioMinimo) {
     try {
       var isSufficientAmount = 'Si';
       var valorPedido = cartProvider.getListaFabricante[element.fabricante]
@@ -343,7 +343,7 @@ class UxcamTagueo {
     }
   }
 
-  void emptyToCart(String fabricante, CarroModelo cartProvider,
+  void emptyToCart(String fabricante, CartViewModel cartProvider,
       List<dynamic> listProductos, precioMinimo) {
     try {
       List<Object> productos = [];
@@ -396,7 +396,7 @@ class UxcamTagueo {
   }
 
   void confirmOrder(
-      List<Pedido> listaProductosPedidos, CarroModelo cartProvider) {
+      List<Pedido> listaProductosPedidos, CartViewModel cartProvider) {
     try {
       final listProductos = listaProductosPedidos.map((producto) {
         var subTotal =
@@ -437,7 +437,7 @@ class UxcamTagueo {
   }
 
   void addToCartSuggestedOrder(listaProductosPedidos, fabricante) {
-    final viewModel = Get.find<PedidoSugeridoViewModel>();
+    final viewModel = Get.find<SuggestedOrderViewModel>();
 
     try {
       final listProductos = listaProductosPedidos.map((producto) {
@@ -514,14 +514,14 @@ class UxcamTagueo {
     });
   }
 
-  void clickPlaceOrder(CarroModelo cartProvider) {
+  void clickPlaceOrder(CartViewModel cartProvider) {
     try {
       List<Object> listaProductos = [];
 
       PedidoEmart.listaValoresPedido!.forEach((key, value) {
         if (int.parse(value) > 0) {
           if (PedidoEmart.listaValoresPedidoAgregados![key] == true) {
-            Producto producto = PedidoEmart.listaProductos![key]!;
+            Product producto = PedidoEmart.listaProductos![key]!;
             dynamic cantidad = PedidoEmart.obtenerValor(producto).toString();
             int quantity = int.parse(cantidad);
 
@@ -701,6 +701,18 @@ class UxcamTagueo {
       });
     } catch (e) {
       log("Error tagueo userNotFoundLogin");
+    }
+  }
+  void goToFilteredSearch () {
+    try {
+      FlutterUxcam.logEventWithProperties("goToFilteredSearch", {
+        "City": prefs.ciudad ?? "",
+        "Regional": prefs.oficinaVentas,
+        "Country": prefs.paisUsuario ?? "CO",
+        "CCUP" : prefs.codigoUnicoPideky
+      });
+    } catch (e) {
+      log("Error tagueo goToFilteredSearch");
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
+import 'package:emart/_pideky/presentation/country_confirmation/view_model/country_confirmation_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/initial_bindings.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'src/preferences/preferencias.dart';
-import 'src/provider/carrito_provider.dart';
+import '_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'src/provider/datos_listas_provider.dart';
 import 'src/provider/opciones_app_bart.dart';
 import 'src/provider/permisos_handler.dart';
@@ -26,7 +26,7 @@ Future<void> main() async {
   await prefs.initPrefs();
   //injectDependencies();
   //_validarKeyUXCam();
-  final viewModelConfirmarPais = Get.put(ConfirmacionPaisViewModel());
+  final viewModelConfirmarPais = Get.put(CountryConfirmationViewModel());
   viewModelConfirmarPais.confirmarPais(prefs.paisUsuario, false);
   
   await PushNotificationServer.initializeApp();
@@ -52,7 +52,7 @@ class ProviderApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => CarroModelo(),
+          create: (_) => CartViewModel(),
         ),
         ChangeNotifierProvider(create: (_) => OpcionesBard()),
         ChangeNotifierProvider(create: (_) => DatosListas()),

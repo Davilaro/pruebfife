@@ -1,8 +1,8 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
-import 'package:emart/_pideky/presentation/buscador_general/view_model/search_fuzzy_view_model.dart';
-import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
-import 'package:emart/_pideky/presentation/productos/view_model/producto_view_model.dart';
+import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
+import 'package:emart/_pideky/presentation/country_confirmation/view_model/country_confirmation_view_model.dart';
+import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/modelos/lista_sucursales_data.dart';
@@ -18,11 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
-import '../../_pideky/presentation/mis_pagos_nequi/view_model/mis_pagos_nequi_view_model.dart';
-import '../../_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import '../../_pideky/presentation/my_payments/view_model/my_payments_view_model.dart';
+import '../../_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 import '../../generated/l10n.dart';
 import '../../src/controllers/cambio_estado_pedido.dart';
-import '../../src/provider/carrito_provider.dart';
+import '../../_pideky/presentation/cart/view_model/cart_view_model.dart';
 import '../../src/provider/opciones_app_bart.dart';
 import '../../src/utils/uxcam_tagueo.dart';
 
@@ -56,7 +56,7 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DatosListas>(context);
-    final cartProvider = Provider.of<CarroModelo>(context);
+    final cartProvider = Provider.of<CartViewModel>(context);
 
     return SafeArea(
       child: Container(
@@ -248,8 +248,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
   mostrarCategorias(BuildContext context, dynamic elemento,
       DatosListas provider, cartProvider) async {
     final providerCar = Provider.of<OpcionesBard>(context, listen: false);
-    final productViewModel = Get.find<ProductoViewModel>();
-    final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
+    final productViewModel = Get.find<ProductViewModel>();
+    final confirmacionViewModel = Get.find<CountryConfirmationViewModel>();
 
     pr = ProgressDialog(context, isDismissible: false);
     pr.style(
@@ -304,8 +304,8 @@ class _DrawerSucursalesState extends State<DrawerSucursales> {
 
   cargarDataUsuario(sucursal) async {
     List datosCliente = await DBProviderHelper.db.consultarDatosCliente();
-    final controllerPedidoSugerido = Get.find<PedidoSugeridoViewModel>();
-    final controllerNequi = Get.find<MisPagosNequiViewModel>();
+    final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
+    final controllerNequi = Get.find<MyPaymentsViewModel>();
 
     controllerPedidoSugerido.initController();
     controllerNequi.initData();

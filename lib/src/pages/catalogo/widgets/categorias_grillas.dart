@@ -5,7 +5,7 @@ import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart'
 import 'package:emart/src/pages/catalogo/widgets/boton_todos_filtro.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
-import 'package:emart/src/provider/carrito_provider.dart';
+import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
@@ -46,7 +46,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   @override
   Widget build(BuildContext context) {
     botonesProveedoresVm.cargarSeleccionados();
-    final provider = Provider.of<CarroModelo>(context);
+    final provider = Provider.of<CartViewModel>(context);
     return Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
         body: Padding(
@@ -109,7 +109,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   }
 
   List<Widget> _cargarCategorias(
-      List<dynamic> result, BuildContext context, CarroModelo provider) {
+      List<dynamic> result, BuildContext context, CartViewModel provider) {
     final List<Widget> opciones = [];
     final size = MediaQuery.of(context).size;
 
@@ -213,7 +213,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
     return opciones;
   }
 
-  _onClickCatalogo(String codigo, BuildContext context, CarroModelo provider,
+  _onClickCatalogo(String codigo, BuildContext context, CartViewModel provider,
       String nombre) async {
     final List<dynamic> listaSubCategorias =
         await DBProvider.db.consultarCategoriasSubCategorias(codigo);

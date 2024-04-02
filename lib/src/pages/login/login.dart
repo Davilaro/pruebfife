@@ -3,8 +3,8 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:emart/_pideky/presentation/confirmacion_pais/view_model/confirmacion_pais_view_model.dart';
-import 'package:emart/_pideky/presentation/pedido_sugerido/view_model/pedido_sugerido_view_model.dart';
+import 'package:emart/_pideky/presentation/country_confirmation/view_model/country_confirmation_view_model.dart';
+import 'package:emart/_pideky/presentation/suggested_order/view_model/suggested_order_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/image_button.dart';
 import 'package:emart/src/modelos/screen_arguments.dart';
@@ -273,7 +273,7 @@ class _LoginState extends State<Login> {
 
       prefs.codClienteLogueado = nit;
       // ignore: unnecessary_statements
-      PedidoSugeridoViewModel.userLog.value = 1;
+      SuggestedOrderViewModel.userLog.value = 1;
 
       if (respuesta.length > 0) {
         await pr.hide();
@@ -330,7 +330,7 @@ class _LoginState extends State<Login> {
 
   Future _validarInformacion(
       BuildContext context, divace, String plataforma, String text) async {
-    final confirmacionViewModel = Get.find<ConfirmacionPaisViewModel>();
+    final confirmacionViewModel = Get.find<CountryConfirmationViewModel>();
     String? token = PushNotificationServer.token as String;
     Validacion respues =
         await Servicies().validarUsuariNuevo(text, divace, plataforma, token);
