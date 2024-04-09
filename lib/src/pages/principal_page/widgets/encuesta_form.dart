@@ -154,15 +154,16 @@ class _EncuestaFormState extends State<EncuestaForm> {
                       ? Visibility(
                           visible: widget.encuesta.tipoPreguntaId == 3,
                           child: Container(
-                              width: Get.width * 0.68,
+                              width: Get.width * 0.80,
                               decoration: BoxDecoration(
                                 color: HexColor("#E4E3EC"),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: EdgeInsets.zero,
+                             // padding: EdgeInsets.zero,
                               child: Column(
                                 children:
                                     radioButtons(widget.encuesta.parametro),
+                                 
                               )),
                         )
                       : Container(),
@@ -183,22 +184,32 @@ class _EncuestaFormState extends State<EncuestaForm> {
                                   i < widget.encuesta.parametro!.length;
                                   i++)
                                 Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Checkbox(
-                                          checkColor: Colors.white,
-                                          activeColor:
-                                              ConstantesColores.azul_precio,
-                                          value: _opcionesMultiple[
-                                              widget.encuesta.parametro![i]],
-                                          onChanged: (bool? value) {
-                                            onChangeOpcionesCheckBox(value!,
-                                                widget.encuesta.parametro![i]);
-                                          }),
+                                      Container(
+                                        //color: Colors.black26,
+                                        child: Checkbox(
+                                            checkColor: Colors.white,
+                                            activeColor:
+                                                ConstantesColores.azul_precio,
+                                            value: _opcionesMultiple[
+                                                widget.encuesta.parametro![i]],
+                                            onChanged: (bool? value) {
+                                              onChangeOpcionesCheckBox(value!,
+                                                  widget.encuesta.parametro![i]);
+                                            }),
+                                      ),
                                       Expanded(
-                                          child: Text(
-                                              widget.encuesta.parametro![i])),
+                                          child: Container(
+                                           // color: Colors.amber,
+                                            
+                                            padding:  EdgeInsets.only(top:10),
+                                            
+                                            child: Text(
+                                                widget.encuesta.parametro![i]),
+                                          )),
                                     ],
                                   ),
                                 ),
@@ -346,20 +357,26 @@ class _EncuestaFormState extends State<EncuestaForm> {
   List<Widget> radioButtons(List<dynamic>? parametro) {
     List<Widget> listOpciones = [];
     listOpciones = parametro!.map((item) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
+      return Container(
+      //  color: Colors.amber,
         child: RadioListTile(
-            contentPadding: EdgeInsets.zero,
+           // contentPadding: EdgeInsets.zero,
             value: item.toString(),
             activeColor: ConstantesColores.azul_precio,
             groupValue: _seleccion,
             onChanged: (String? value) => onChangeOpcionesRadioButton(value),
             title:
-        Text(
-          item.toString(),
-          overflow: TextOverflow.visible,
-            ),
-            controlAffinity: ListTileControlAffinity.leading,
+        Container(
+        //  color: Colors.red,
+          padding:  item.toString().length <= 25 
+          ? EdgeInsets.only(top: 0)
+          : EdgeInsets.only(top: 16),
+          child: Text(
+            item.toString(),
+            //overflow: TextOverflow.visible,
+              ),
+        ),
+           // controlAffinity: ListTileControlAffinity.leading,
         ),
       );
     }).toList();
@@ -517,7 +534,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
           setState(() {});
         } else {
           //  controllerNotificaciones.validacionGeneralNotificaciones(context);
-          await updateSurvey(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context);
         }
       } else {
         if (controllerEncuesta.existenEncuestasNoObligatorias()) {
@@ -526,7 +543,7 @@ class _EncuestaFormState extends State<EncuestaForm> {
           Get.close(1);
           setState(() {});
         } else {
-          await updateSurvey(provider, context, cargoConfirmar);
+          await updateSurvey(provider, context);
         }
       }
     });
@@ -534,8 +551,8 @@ class _EncuestaFormState extends State<EncuestaForm> {
 }
 
 Future<void> updateSurvey(
-    OpcionesBard provider, BuildContext context, dynamic cargoConfirmar) async {
-  final botonesController = Get.find<BotonesProveedoresVm>();
+    OpcionesBard provider, BuildContext context,) async {
+ // final botonesController = Get.find<BotonesProveedoresVm>();
   final controllerPedidoSugerido = Get.find<SuggestedOrderViewModel>();
   final controllerNequi = Get.find<MyPaymentsViewModel>();
   final productViewModel = Get.find<ProductViewModel>();
@@ -556,10 +573,11 @@ Future<void> updateSurvey(
     });
 
     productViewModel.cargarCondicionEntrega();
-    await botonesController.cargarListaProovedor();
-    botonesController.listaFabricantesBloqueados.isNotEmpty
-        ? null
-        : productViewModel.eliminarBDTemporal();
+   // await botonesController.cargarListaProovedor();
+   // botonesController.listaFabricantesBloqueados.isNotEmpty
+       // ? null
+       // : 
+        productViewModel.eliminarBDTemporal();
     provider.selectOptionMenu = 0;
     Get.offAll(() => TabOpciones());
   }
