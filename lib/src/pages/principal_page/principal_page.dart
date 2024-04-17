@@ -40,7 +40,6 @@ import 'package:provider/provider.dart';
 import '../../../_pideky/presentation/authentication/view/register/register_page.dart';
 import '../../../_pideky/presentation/principal_page/view_model/view_model_principal_page.dart';
 import '../../../shared/widgets/boton_agregar_carrito.dart';
-import '../../../shared/widgets/escuela_clientes_home.dart';
 
 final prefs = new Preferencias();
 
