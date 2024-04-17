@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+import '../../shared/widgets/popups.dart';
+
 final prefs = new Preferencias();
 
 class AccionesBartCarrito extends StatelessWidget {
@@ -34,7 +36,9 @@ class AccionesBartCarrito extends StatelessWidget {
               icon: Image.asset('assets/image/carrito_btn.png'),
               tooltip: 'Show Snackbar',
               onPressed: () {
-                _cambiarDePantalla(context, esCarrito, provider);
+                prefs.usurioLogin == -1
+                    ? alertCustom(context)
+                    : _cambiarDePantalla(context, esCarrito, provider);
               },
             ),
             Positioned(
@@ -75,20 +79,20 @@ class AccionesBartCarrito extends StatelessWidget {
       //UXCam: Llamamos el evento clickCarrito
       UxcamTagueo().clickCarrito(provider, 'Superior');
       if (!esCarrito) {
-        MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
-       await Navigator.push(
+        MetodosLLenarValores().calcularValorTotal(
+            Provider.of<CartViewModel>(context, listen: false));
+        await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CartPage(numEmpresa: prefs.numEmpresa)),
+              builder: (context) => CartPage(numEmpresa: prefs.numEmpresa)),
         );
       } else {
-        MetodosLLenarValores().calcularValorTotal(Provider.of<CartViewModel>(context, listen: false));
+        MetodosLLenarValores().calcularValorTotal(
+            Provider.of<CartViewModel>(context, listen: false));
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CartPage(numEmpresa: prefs.numEmpresa)),
+              builder: (context) => CartPage(numEmpresa: prefs.numEmpresa)),
         );
       }
     }

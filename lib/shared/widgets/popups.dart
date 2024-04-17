@@ -288,9 +288,13 @@ void alertCustom(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                              onPressed: () { 
-                                Navigator.of(context).pop();
-                               },
+                              onPressed: () {
+              Provider.of<OpcionesBard>(context, listen: false)
+                  .selectOptionMenu = 0;
+              Navigator.pop(context);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  'tab_opciones', (Route<dynamic> route) => false);
+            },
                               icon: Icon(
                                     Icons.cancel_outlined,
                                     color: ConstantesColores.azul_precio,

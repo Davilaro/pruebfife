@@ -30,6 +30,7 @@ import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
 import 'package:emart/src/widget/reproduct_video.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -37,6 +38,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../_pideky/presentation/authentication/view/register/register_page.dart';
+import '../../../_pideky/presentation/principal_page/view_model/view_model_principal_page.dart';
 import '../../../shared/widgets/boton_agregar_carrito.dart';
 import '../../../shared/widgets/escuela_clientes_home.dart';
 
@@ -62,6 +64,8 @@ class _PrincipalPageState extends State<PrincipalPage>
   final controllerNotificaciones =
       Get.find<NotificationsSlideUpAndPushInUpControllers>();
   final slideUpAutomatic = Get.find<SlideUpAutomatic>();
+
+  final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
   var nombreTienda = prefs.usuarioRazonSocial;
 
@@ -150,20 +154,20 @@ class _PrincipalPageState extends State<PrincipalPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                //BOTON (QUIERO SER CLIENTE PIDEKY) SOLO VISIBLE SIN LOGUEARSE EN EL HOME 
+                //BOTON (QUIERO SER CLIENTE PIDEKY) SOLO VISIBLE SIN LOGUEARSE EN EL HOME
                 prefs.usurioLogin == -1
-                  ? BotonAgregarCarrito(
-                      marginTop: 10,
-                      width: Get.width * 0.94,
-                      height: Get.height * 0.06,
-                      color: ConstantesColores.azul_precio, 
-                      onTap: (){
-                        Get.to(() => RegisterPage());
-                      }, 
-                      text: 'Quiero ser cliente Pideky',
-                      borderRadio: 30,
-                  )
-                  :Container(),
+                    ? BotonAgregarCarrito(
+                        marginTop: 10,
+                        width: Get.width * 0.94,
+                        height: Get.height * 0.06,
+                        color: ConstantesColores.azul_precio,
+                        onTap: () {
+                          Get.to(() => RegisterPage());
+                        },
+                        text: 'Quiero ser cliente Pideky',
+                        borderRadio: 30,
+                      )
+                    : Container(),
                 //BUSCADOR
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -277,12 +281,12 @@ class _PrincipalPageState extends State<PrincipalPage>
                         Expanded(child: ProductsCard(1)),
                       ],
                     )),
-                    SizedBox(height: 15),
-               //ESCUELA CLIENTES
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: EscuelaClientes(),
-               ),
+                SizedBox(height: 15),
+                //ESCUELA CLIENTES
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: EscuelaClientes(),
+                // ),
 
                 //MULTIMEDIA
                 FutureBuilder(
@@ -291,25 +295,34 @@ class _PrincipalPageState extends State<PrincipalPage>
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.data == null || snapshot.data.length == 0) {
-                        return Container();
+                        return Container(); 
                       } else {
                         Multimedia multimedia = snapshot.data[0];
                         // cargoConfirmar.setUrlMultimedia(multimedia.link);
                         return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8), 
                           margin: EdgeInsets.only(top: 25),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 15, left: 3),
-                                child: Text(
-                                  'Lo más visto por clientes vecinos',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: HexColor("#41398D"),
-                                      fontWeight: FontWeight.bold),
+                                padding: const EdgeInsets.only(
+                                    bottom: 15, left: 15, right: 15),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Desarrolla tu negocio',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: HexColor("#41398D"),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Spacer(),
+                                    SvgPicture.asset(
+                                      'assets/image/logo-escuela-clientes-top.svg',
+                                      width: 90,
+                                    )
+                                  ],
                                 ),
                               ),
                               Container(
@@ -321,6 +334,32 @@ class _PrincipalPageState extends State<PrincipalPage>
                                 ),
                                 child: ReproductVideo(multimedia),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Text(
+                                  'Si te apasiona el aprendizaje y quieres ver más contenido como este.',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: HexColor("#41398D"),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Center(
+                                child: BotonAgregarCarrito(
+                                  marginTop: 10,
+                                  width: Get.width * 0.9,
+                                  height: Get.height * 0.07,
+                                  color: ConstantesColores.empodio_verde,
+                                  onTap: () {
+                                    viewModelPrincipalPage
+                                        .launchUrlcustomersSchool();
+                                  },
+                                  text: 'Visita escuela de clientes',
+                                  borderRadio: 30,
+                                ),
+                              )
                             ],
                           ),
                         );
