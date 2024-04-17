@@ -30,6 +30,7 @@ import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
 import 'package:emart/src/widget/reproduct_video.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
@@ -282,7 +283,7 @@ class _PrincipalPageState extends State<PrincipalPage>
                       ],
                     )),
                 SizedBox(height: 15),
-                //ESCUELA CLIENTES
+               // ESCUELA CLIENTES
                 // Padding(
                 //   padding: const EdgeInsets.all(8.0),
                 //   child: EscuelaClientes(),
@@ -325,15 +326,35 @@ class _PrincipalPageState extends State<PrincipalPage>
                                   ],
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 5),
-                                height: Get.height * 0.25,
-                                padding: EdgeInsets.symmetric(horizontal: 3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(25),
+                                child: Container(
+                                  //margin: EdgeInsets.only(top: 5),
+                                  height: Get.height * 0.25,
+                                 // padding: EdgeInsets.symmetric(horizontal: 3),
+                                  
+                                
+                                  child: 
+                                  InAppWebView(
+                                                initialData: InAppWebViewInitialData(
+                                                  data: """
+                                                ${multimedia.link}
+                                                  ${multimedia.orientacion}
+                                
+                                                """,
+                                                ),
+                                                initialOptions: InAppWebViewGroupOptions(
+                                                  crossPlatform: InAppWebViewOptions(
+                                                    mediaPlaybackRequiresUserGesture: false,
+                                                  ),
+                                                ),
+                                              ),
+                                  
+                                  
+                                 // ReproductVideo(multimedia),
                                 ),
-                                child: ReproductVideo(multimedia),
                               ),
+                              
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
