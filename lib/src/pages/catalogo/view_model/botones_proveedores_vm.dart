@@ -51,7 +51,7 @@ class BotonesProveedoresVm extends GetxController {
         listaFabricante.remove(element);
         listaFabricante.insert(0, element);
       }
-      if (element.empresa == "ZENU") {
+      if (element.empresa == "ZENU" && listaFabricante.length > 1) {
         listaFabricante.remove(element);
         listaFabricante.insert(1, element);
       }

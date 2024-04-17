@@ -53,11 +53,9 @@ class _EstadoAcordion extends State<Acordion> {
           widget.section != null)
         enviarDatosUxcam(widget.sectionName!, widget.section!);
 
-      widget.estado == 'Activo' || widget.estado == null
-          ? setState(() {
+       setState(() {
               _mostrarContenido = !_mostrarContenido;
-            })
-          : null;
+            });
     } catch (e) {
       print("fallo onpress acordion $e");
     }
@@ -100,13 +98,16 @@ class _EstadoAcordion extends State<Acordion> {
                                 Image.asset('assets/image/logo_login.png'),
                             fit: BoxFit.contain,
                           ),
-                    title: widget.title,
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    title: !widget.isIconState ? widget.title : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        widget.isIconState
+                        widget.title,
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            widget.isIconState
                             ? Icon(
                                 Icons.circle_rounded,
                                 size: 13,
@@ -126,8 +127,17 @@ class _EstadoAcordion extends State<Acordion> {
                                 ),
                               )
                             : Container(),
-                        widget.estado == 'Activo' || widget.estado == null
-                            ? IconButton(
+                          ],
+                        )
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        
+                         IconButton(
                                 icon: Icon(
                                   _mostrarContenido
                                       ? Icons.keyboard_arrow_up
@@ -137,7 +147,6 @@ class _EstadoAcordion extends State<Acordion> {
                                 color: ConstantesColores.agua_marina,
                                 onPressed: ejecutarOnPress,
                               )
-                            : Container(),
                       ],
                     ),
                   ),

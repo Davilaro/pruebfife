@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:emart/_pideky/domain/my_lists/interface/interface_my_lists_gate_way.dart';
 import 'package:emart/_pideky/domain/my_lists/model/detail_list_model.dart';
@@ -269,7 +268,7 @@ class MyListsService implements InterfaceMyListsGateWay {
                 INNER JOIN Fabricante F ON F.empresa = P.Fabricante 
         """;
     try {
-      log(sql);
+      //log(sql);
       var response = await db.rawQuery(sql);
       return response.isNotEmpty
           ? response.map((e) => DetailList.fromJson(e)).toList()

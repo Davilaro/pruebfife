@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:emart/_pideky/presentation/customers_prospection/view/customers_prospection_page.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/shared/widgets/acordion.dart';
+import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/db_provider.dart';
@@ -70,81 +72,103 @@ class MisProveedores extends StatelessWidget {
                         Container(
                           child: Acordion(
                             urlIcon: proveedores[i].icono,
-                            title: Text(
-                              proveedores[i].nombrecomercial.toString(),
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
+                            title: Column(
+                              children: [
+                                Text(
+                                  proveedores[i].nombrecomercial.toString(),
+                                  style: TextStyle(
+                                      fontSize: 16.0, fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                             isIconState: true,
                             estado: proveedores[i].estado,
                             contenido: Container(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              child: proveedores[i].estado == 'Activo'
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          child: Row(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      proveedores[i]
+                                                          .razonSocial,
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              ConstantesColores
+                                                                  .gris_textos),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                               Text(
-                                                proveedores[i].razonSocial,
+                                                'Nit con el que me facturan: ${proveedores[i].nitCliente}',
                                                 style: TextStyle(
                                                     fontSize: 13,
-                                                    fontWeight: FontWeight.bold,
                                                     color: ConstantesColores
-                                                        .gris_textos),
+                                                        .gris_textos,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: ConstantesColores
+                                                        .gris_textos,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        Text(
-                                          'Nit con el que me facturan: ${proveedores[i].nitCliente}',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              color:
-                                                  ConstantesColores.gris_textos,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              color:
-                                                  ConstantesColores.gris_textos,
-                                              fontWeight: FontWeight.bold),
-                                        ),
+                                        prefs.paisUsuario == 'CR'
+                                            ? Container(
+                                                width: Get.width * 1,
+                                                margin:
+                                                    EdgeInsets.only(top: 15),
+                                                decoration: BoxDecoration(
+                                                    color: ConstantesColores
+                                                        .azul_aguamarina_botones,
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                            bottom:
+                                                                Radius.circular(
+                                                                    5))),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 10),
+                                                child: AutoSizeText(
+                                                  'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa)}',
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container()
                                       ],
-                                    ),
-                                  ),
-                                  prefs.paisUsuario == 'CR'
-                                      ? Container(
-                                          width: Get.width * 1,
-                                          margin: EdgeInsets.only(top: 15),
-                                          decoration: BoxDecoration(
-                                              color: ConstantesColores
-                                                  .azul_aguamarina_botones,
-                                              borderRadius:
-                                                  BorderRadius.vertical(
-                                                      bottom:
-                                                          Radius.circular(5))),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 10),
-                                          child: AutoSizeText(
-                                            'Recuerda que puedes realizar el pedido: ${productViewModel.getListaDiasSemana(proveedores[i].empresa)}',
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                                    )
+                                  : BotonAgregarCarrito(
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
+                                      onTap: () {
+                                        Get.to(() => CustomersProspectionPage());
+                                      } ,
+                                      width: Get.width * 0.85,
+                                      borderRadio: 30,
+                                      text: 'Quiero ser cliente de este proveedor'),
                             ),
                             paddingContenido: prefs.paisUsuario == 'CR'
                                 ? EdgeInsets.zero
