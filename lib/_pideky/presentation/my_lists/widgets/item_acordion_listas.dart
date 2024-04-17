@@ -237,9 +237,9 @@ List<Widget> gridItemLista(
                                   child: Text(
                                     cantidadProducto.value.toString(),
                                     style: TextStyle(
-                                        color: ConstantesColores.gris_textos,
+                                        color: ConstantesColores.azul_precio,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 11),
+                                        fontSize: 13),
                                   ),
                                 ),
                                 SizedBox(

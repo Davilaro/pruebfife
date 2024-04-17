@@ -46,7 +46,7 @@ class _ReproductVideoState extends State<ReproductVideo> {
             )),
           ),
         ),
-        errorBuilder: (context, errorMessage) {
+        errorBuilder: (context, _) {
           return Center(
             child: Text('No se ha logrado cargar correctamente',
                 style: TextStyle(color: Colors.white)),

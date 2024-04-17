@@ -89,6 +89,10 @@ class _CartPageState extends State<CartPage> {
       focusNode.removeListener(() {});
       focusNode.dispose();
     });
+    cartViewModel.timer.cancel();
+    cartViewModel.isSavedBymanufacturerOpen.value = false;
+    cartViewModel.isSavedBymanufacturerOpenToShowTrashBox.value = false;
+    cartViewModel.isTimerActive.value = false;
     cartViewModel.focusNodesMaps.clear();
     cartViewModel.scrollControllerGridItems!.dispose();
     super.dispose();
