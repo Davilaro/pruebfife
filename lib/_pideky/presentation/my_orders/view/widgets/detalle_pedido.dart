@@ -64,7 +64,7 @@ class DetallePedidoPage extends StatelessWidget {
                       color: Colors.white,
                       margin: EdgeInsets.symmetric(vertical: 10),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
+                          borderRadius: BorderRadius.circular(20.0)),
                       child: Padding(
                         padding: const EdgeInsets.only(
                             top: 15, bottom: 15, left: 12, right: 15),
