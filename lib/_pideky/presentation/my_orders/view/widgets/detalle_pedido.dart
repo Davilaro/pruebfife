@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/my_orders/model/historical_model.dart';
+import 'package:emart/_pideky/presentation/my_orders/view/widgets/order_details.dart';
 import 'package:emart/_pideky/presentation/my_orders/view_model/mis_pedidos_view_model.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
@@ -56,7 +57,7 @@ class DetallePedidoPage extends StatelessWidget {
                 if (snapshot.hasError) {
                   return Text(S.current.no_information_to_display);
                 } else {
-                  var detalles = snapshot.data;
+                  List<HistoricalModel>? detalles = snapshot.data;
                   return Container(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
                     child: Card(
@@ -116,7 +117,7 @@ class DetallePedidoPage extends StatelessWidget {
                                             productViewModel.getCurrency(
                                                 misPedidosViewModel
                                                     .calculaTotalSeguimiento(
-                                                        detalles)),
+                                                        detalles!)),
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
                                                 fontSize: 17,
@@ -140,191 +141,8 @@ class DetallePedidoPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Container(
-                              color: Color.fromARGB(20, 186, 183, 183),
-                              margin: EdgeInsets.only(top: 10),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      child: AutoSizeText(
-                                        '#',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: ConstantesColores.gris_textos,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: AutoSizeText(
-                                        'SKU',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: ConstantesColores.gris_textos,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: AutoSizeText(
-                                        S.current.product,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: ConstantesColores.gris_textos,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: AutoSizeText(
-                                        S.current.quantity,
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: ConstantesColores.gris_textos,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: AutoSizeText(
-                                        S.current.price,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: ConstantesColores.gris_textos,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            for (int i = 0; i < detalles!.length; i++)
-                              Container(
-                                color: Color.fromARGB(20, 186, 183, 183),
-                                margin: EdgeInsets.only(top: 10),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 5),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 5),
-                                        child: AutoSizeText(
-                                          '${i + 1}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color:
-                                                ConstantesColores.gris_textos,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        padding: EdgeInsets.only(right: 2),
-                                        child: AutoSizeText(
-                                          detalles[i].codigoRef,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color:
-                                                ConstantesColores.gris_textos,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        child: AutoSizeText(
-                                          detalles[i].nombreProducto,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color:
-                                                ConstantesColores.gris_textos,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        child: AutoSizeText(
-                                          detalles[i].cantidad.toString(),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color:
-                                                ConstantesColores.gris_textos,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        child: AutoSizeText(
-                                          productViewModel.getCurrency(
-                                              detalles[i].precio *
-                                                  detalles[i].cantidad),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color:
-                                                ConstantesColores.gris_textos,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
+                            for (int i = 0; i < detalles.length; i++)
+                              OrderDetails(detalles: detalles, i: i)
                           ],
                         ),
                       ),
@@ -338,3 +156,5 @@ class DetallePedidoPage extends StatelessWidget {
     );
   }
 }
+
+

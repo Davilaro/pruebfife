@@ -124,7 +124,7 @@ List<Widget> gridItem(
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   color:
-                                                      ConstantesColores.verde,
+                                                      ConstantesColores.azul_aguamarina_botones,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(

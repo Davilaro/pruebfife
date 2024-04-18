@@ -159,7 +159,7 @@ class _EstadoAcordion extends State<AcordionMisListas> {
                                       : Icons.keyboard_arrow_down,
                                   size: 40,
                                 ),
-                                color: ConstantesColores.agua_marina,
+                                color: ConstantesColores.azul_aguamarina_botones,
                                 onPressed: ejecutarOnPress,
                               )
                             : Container(),
