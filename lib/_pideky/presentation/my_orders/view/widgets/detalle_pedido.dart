@@ -56,7 +56,7 @@ class DetallePedidoPage extends StatelessWidget {
               default:
                 if (snapshot.hasError) {
                   return Text(S.current.no_information_to_display);
-                } else {
+                } else if (snapshot.data.isNotEmpty) {
                   List<HistoricalModel>? detalles = snapshot.data;
                   return Container(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
@@ -73,7 +73,7 @@ class DetallePedidoPage extends StatelessWidget {
                             Table(
                               columnWidths: {
                                 0: FlexColumnWidth(0.25),
-                                2: FractionColumnWidth(.32)
+                                2: FractionColumnWidth(.35)
                               },
                               children: [
                                 TableRow(
@@ -81,7 +81,6 @@ class DetallePedidoPage extends StatelessWidget {
                                     Container(
                                       margin: EdgeInsets.only(right: 5),
                                       child: CachedNetworkImage(
-                                        height: Get.height * 0.05,
                                         imageUrl: historico.icoFabricante!,
                                         placeholder: (context, url) =>
                                             Image.asset(
@@ -100,7 +99,7 @@ class DetallePedidoPage extends StatelessWidget {
                                         "${S.current.order} #${historico.ordenCompra}",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17,
+                                            fontSize: 15,
                                             color:
                                                 ConstantesColores.azul_precio),
                                       ),
@@ -120,7 +119,7 @@ class DetallePedidoPage extends StatelessWidget {
                                                         detalles!)),
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
-                                                fontSize: 17,
+                                                fontSize: 16,
                                                 color: ConstantesColores
                                                     .azul_precio,
                                                 fontWeight: FontWeight.bold),
@@ -148,6 +147,8 @@ class DetallePedidoPage extends StatelessWidget {
                       ),
                     ),
                   );
+                } else {
+                  return SizedBox.shrink();
                 }
             }
           },

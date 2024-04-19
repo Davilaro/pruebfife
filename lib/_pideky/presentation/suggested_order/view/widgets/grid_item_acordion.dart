@@ -122,7 +122,7 @@ List<Widget> gridItem(
                                               overflow: TextOverflow.visible,
                                               maxLines: 3,
                                               style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 14,
                                                   color:
                                                       ConstantesColores.azul_aguamarina_botones,
                                                   fontWeight: FontWeight.bold),

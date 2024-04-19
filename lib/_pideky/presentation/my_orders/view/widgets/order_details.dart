@@ -74,53 +74,57 @@ class OrderDetails extends StatelessWidget {
                       )
                     ],
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        productViewModel.getCurrency(
-                            detalles![i].cantidad! * detalles![i].precio!),
-                        style: TextStyle(
-                            color: detalles![i].descuento! != 0
-                                ? ConstantesColores.rojo_letra
-                                : ConstantesColores.azul_precio,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17),
-                      ),
-                      Visibility(
-                        visible: detalles![i].descuento != 0,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            productViewModel.getCurrency(
-                                detalles![i].cantidad! *
-                                    detalles![i].precioDescuento!),
-                            style: TextStyle(
-                                color: ConstantesColores.gris_textos,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                decoration: TextDecoration.lineThrough),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                    child: Row(
+                      
+                      children: [
+                        Text(
+                          productViewModel.getCurrency(
+                              detalles![i].cantidad! * detalles![i].precio!),
+                          style: TextStyle(
+                              color: detalles![i].descuento! != 0
+                                  ? ConstantesColores.rojo_letra
+                                  : ConstantesColores.azul_precio,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17),
+                        ),
+                        Visibility(
+                          visible: detalles![i].descuento != 0,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              productViewModel.getCurrency(
+                                  detalles![i].cantidad! *
+                                      detalles![i].precioDescuento!),
+                              style: TextStyle(
+                                  color: ConstantesColores.gris_textos,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  decoration: TextDecoration.lineThrough),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container()
-                      ),
-                      Container(
-                          padding: EdgeInsets.symmetric(horizontal: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ConstantesColores.azul_precio, width: 2),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Text(
-                            detalles![i].cantidad.toString(),
-                            style: TextStyle(
-                                color: ConstantesColores.azul_precio,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
+                        Expanded(
+                          child: Container()
                         ),
-                    ],
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: ConstantesColores.azul_precio, width: 2),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Text(
+                              detalles![i].cantidad.toString(),
+                              style: TextStyle(
+                                  color: ConstantesColores.azul_precio,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               )),

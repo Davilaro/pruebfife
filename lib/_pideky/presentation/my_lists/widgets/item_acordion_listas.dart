@@ -90,7 +90,7 @@ List<Widget> gridItemLista(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                         child: CachedNetworkImage(
-                                          height: size.height * 0.05,
+                                          height: size.height * 0.1,
                                           imageUrl:
                                               Constantes().urlImgProductos +
                                                   '${producto.codigo}.png',
@@ -121,7 +121,7 @@ List<Widget> gridItemLista(
                                               overflow: TextOverflow.visible,
                                               maxLines: 3,
                                               style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 14,
                                                   color:
                                                       ConstantesColores.azul_aguamarina_botones,
                                                   fontWeight: FontWeight.bold),
