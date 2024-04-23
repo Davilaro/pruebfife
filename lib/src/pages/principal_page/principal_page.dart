@@ -41,6 +41,7 @@ import 'package:provider/provider.dart';
 import '../../../_pideky/presentation/authentication/view/register/register_page.dart';
 import '../../../_pideky/presentation/principal_page/view_model/view_model_principal_page.dart';
 import '../../../shared/widgets/boton_agregar_carrito.dart';
+import '../../../shared/widgets/escuela_clientes_home.dart';
 
 final prefs = new Preferencias();
 
@@ -68,6 +69,7 @@ class _PrincipalPageState extends State<PrincipalPage>
   final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
   var nombreTienda = prefs.usuarioRazonSocial;
+  bool _hasErrorSchoolClient = false;
 
   @override
   void initState() {
@@ -281,110 +283,10 @@ class _PrincipalPageState extends State<PrincipalPage>
                         Expanded(child: ProductsCard(1)),
                       ],
                     )),
-                SizedBox(height: 15),
-               // ESCUELA CLIENTES
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: EscuelaClientes(),
-                // ),
-
-                //MULTIMEDIA
-                FutureBuilder(
-                    initialData: [],
-                    future: DBProvider.db.consultarMultimedia(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.data == null || snapshot.data.length == 0) {
-                        return Container(); 
-                      } else {
-                        Multimedia multimedia = snapshot.data[0];
-                        // cargoConfirmar.setUrlMultimedia(multimedia.link);
-                        return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8), 
-                          margin: EdgeInsets.only(top: 25),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 15, left: 15, right: 15),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Desarrolla tu negocio',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: HexColor("#41398D"),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Spacer(),
-                                    SvgPicture.asset(
-                                      'assets/image/logo-escuela-clientes-top.svg',
-                                      width: 90,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Container(
-                                  //margin: EdgeInsets.only(top: 5),
-                                  height: Get.height * 0.25,
-                                 // padding: EdgeInsets.symmetric(horizontal: 3),
-                                  
-                                
-                                  child: 
-                                  InAppWebView(
-                                                initialData: InAppWebViewInitialData(
-                                                  data: """
-                                                ${multimedia.link}
-                                                  ${multimedia.orientacion}
-                                
-                                                """,
-                                                ),
-                                                initialOptions: InAppWebViewGroupOptions(
-                                                  crossPlatform: InAppWebViewOptions(
-                                                    mediaPlaybackRequiresUserGesture: false,
-                                                  ),
-                                                ),
-                                              ),
-                                  
-                                  
-                                 // ReproductVideo(multimedia),
-                                ),
-                              ),
-                              
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                child: Text(
-                                  'Si te apasiona el aprendizaje y quieres ver más contenido como este.',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: HexColor("#41398D"),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Center(
-                                child: BotonAgregarCarrito(
-                                  marginTop: 10,
-                                  width: Get.width * 0.9,
-                                  height: Get.height * 0.07,
-                                  color: ConstantesColores.empodio_verde,
-                                  onTap: () {
-                                    viewModelPrincipalPage
-                                        .launchUrlcustomersSchool();
-                                  },
-                                  text: 'Visita escuela de clientes',
-                                  borderRadio: 30,
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    }),
+                
+                // ESCUELA CLIENTES MULTIMEDIA
+                EscuelaClientes(),
+                
                 //CATEGORIAS DESTACAS
                 Container(
                     width: double.infinity,
