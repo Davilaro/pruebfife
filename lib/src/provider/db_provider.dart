@@ -246,7 +246,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     try {
       final sql = await db.rawQuery(
           '''
-	    SELECT empresa, ico, tipofabricante, Estado, nombrecomercial, NitCliente, RazonSocial 
+	    SELECT empresa, ico, tipofabricante, Estado, nombrecomercial, NitCliente, RazonSocial  
       FROM ProveedoresActivos ORDER by Estado ASC
     ''');
 
@@ -255,6 +255,22 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
           : [];
     } catch (e) {
       return [];
+    }
+  }
+  Future<String> consultarCodigoProveedores(String negocio) async {
+    final db = await baseAbierta;
+
+    try {
+      final sql = await db.rawQuery(
+          '''
+	    select codigo from fabricante f where f.empresa = '$negocio'
+    ''');
+
+      return sql.isNotEmpty
+          ? sql[0]['Codigo'] as String
+          : '';
+    } catch (e) {
+      return '';
     }
   }
 
