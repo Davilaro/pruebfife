@@ -77,6 +77,8 @@ dependencies:
   url_launcher: ^6.0.12
   video_player: ^2.4.7
   webview_flutter: ^4.4.1
+  flutter_inappwebview: ^6.0.0
+ 
   
   
 
