@@ -25,8 +25,12 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
 
  final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
+  InAppWebViewController? _webViewController;
+  bool _isPaused = false;
+
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder(
         initialData: [],
         future: DBProvider.db.consultarMultimedia(),
@@ -63,12 +67,11 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
                     ),
                   ),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(15),
                     child: Container(
-                        //margin: EdgeInsets.only(top: 5),
+                      color: Colors.black,
+                        padding: EdgeInsets.only(bottom: 5),
                         height: Get.height * 0.25,
-                        // padding: EdgeInsets.symmetric(horizontal: 3),
-
                         child: _hasErrorSchoolClient
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
@@ -89,6 +92,10 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
                                        ${multimedia.orientacion}
                                                 """,
                                 ),
+                                onWebViewCreated: (controller) {
+                                  _webViewController = controller;
+                                  _injectJavaScriptToDetectPlayback();
+                                },
                                 // initialSettings: InAppWebViewSettings(
                                 //   crossPlatform: InAppWebViewOptions(
                                 //     mediaPlaybackRequiresUserGesture: false,
@@ -141,135 +148,51 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
           }
         });
   }
+
+  void _injectJavaScriptToDetectPlayback() {
+    final script = """
+      // Detecta el evento de estado del reproductor
+      function onPlayerStateChange(event) {
+        // Reproduce: 1, Pausa: 2
+        if (event.data === 1) {
+          window.flutter_inappwebview.callHandler('onPlay');
+        } else if (event.data === 2) {
+          window.flutter_inappwebview.callHandler('onPause');
+        }
+      }
+
+      // Añade el listener al reproductor de video
+      var player = document.querySelector('iframe');
+      if (player) {
+        player.contentWindow.postMessage({
+          event: 'infoDelivery',
+          func: 'addEventListener',
+          args: ['onStateChange', onPlayerStateChange]
+        }, '*');
+      }
+    """;
+
+    _webViewController?.evaluateJavascript(source: script);
+
+    _webViewController?.addJavaScriptHandler(
+      handlerName: 'onPlay',
+      callback: (args) {
+        setState(() {
+          _isPaused = false;
+          print('xxxxxxxxxxxxxxxxxxxxxxxxxxxx  Video started playing');
+        });
+      },
+    );
+
+    _webViewController?.addJavaScriptHandler(
+      handlerName: 'onPause',
+      callback: (args) {
+        setState(() {
+          _isPaused = true;
+          print('rrrrrrrrrrrrrrrrrrrr Video paused');
+        });
+      },
+    );
+  }
 }
-// class EscuelaClientes extends StatelessWidget {
-//   EscuelaClientes();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-    
-//     Container(
-//       height: Get.height * 0.55,
-//       width: double.infinity,
-//       //color: Colors.red,
-//       child: Column(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(18.0),
-//             child: Row(
-//               children: [
-//                 Text(
-//                   'Desarrolla tu negocio',
-//                   style: TextStyle(
-//                       fontSize: 16.0,
-//                       color: HexColor("#41398D"),
-//                       fontWeight: FontWeight.bold),
-//                 ),
-//                 Spacer(),
-//                 SvgPicture.asset(
-//                   'assets/image/logo-escuela-clientes-top.svg',
-//                   width: 90,
-//                 )
-//               ],
-//             ),
-//           ),
-//           //Card escuela de clientes
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(19),
-//             child: Container(
-//              //padding: EdgeInsets.only(bottom: 10),
-//              // color: Colors.black,
-//               alignment: Alignment.center,
-//               height: Get.height * 0.25,
-//               width: Get.width * 0.95,
-             
-//               child: InAppWebView(
-                
-//                 initialData: InAppWebViewInitialData(
-//                   data: """                    
-//                   <html>
-//                       <head>
-//                         <style>
-//                           body, html {
-//                             margin: 0;
-//                             padding: 0;
-//                             height: 100%;
-//                             overflow: hidden;
-//                           }
-//                           iframe {
-//                             position: absolute;
-//                             top: 0;
-//                             left: 0;
-//                             right: 0;
-//                             bottom: 0;
-//                             width: 100%;
-//                             height: 100%;
-//                             border: none; /* Elimina el borde del iframe */
-//                             background-color: #f0f0f0; /* Cambia el color de fondo según tus preferencias */
-//                           }
-//                           .ytp-chrome-bottom {
-//                             bottom: 200px; /* Ajusta la posición vertical de la barra de controles */
-//                           }
-//                         </style>
-//                       </head>
-//                       <body>
-//                         <iframe src="https://www.youtube.com/embed/njX2bu-_Vw4?modestbranding=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-//                       </body>
-//                     </html>
-                             
-//                       """,
-//                 // src="https://www.youtube.com/embed/Al87y8JpvlY?controls=0"
-//                 ),
-//                 initialOptions: InAppWebViewGroupOptions(
-                  
-//                   crossPlatform: InAppWebViewOptions(
-                    
-//                     javaScriptEnabled: true,
-//                     mediaPlaybackRequiresUserGesture: false,
-//                   ),
-//                 ),
-//               )
-//                //Image.asset('assets/image/jar-loading.gif'),
-            
-            
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//             child: Text(
-//               'Si te apasiona el aprendizaje y quieres ver más contenido como este.',
-//               textAlign: TextAlign.start,
-//               style: TextStyle(
-//                   fontSize: 16.0,
-//                   color: HexColor("#41398D"),
-//                   fontWeight: FontWeight.bold),
-//             ),
-//           ),
-
-//           BotonAgregarCarrito(
-//             marginTop: 10,
-//             width: Get.width * 0.9,
-//             height: Get.height * 0.07,
-//             color: ConstantesColores.empodio_verde,
-//             onTap: () {
-//               _launchUrl();
-//             },
-//             text: 'Visita escuela de clientes',
-//             borderRadio: 30,
-//           )
-//         ],
-//       ),
-//     );
-//   }
-
-//   _launchUrl() async {
-//     const String url = 'https://escueladeclientesnutresa.com';
-//      final Uri uri = Uri.parse(url);
-//     if (await canLaunchUrl(uri)) {
-//       await launchUrl(uri);
-//     } else {
-//       throw 'No se pudo abrir la URL $url';
-//     }
-//   }
-// }
