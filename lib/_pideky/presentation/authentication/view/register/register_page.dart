@@ -322,7 +322,7 @@ class _CategoriasCard extends StatelessWidget {
 
     return FutureBuilder(
       initialData: [],
-      future: DBProvider.db.consultarFricante(controllerSearch.text),
+      future: DBProvider.db.consultarFabricante(controllerSearch.text),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (!snapshot.hasData) {
           return Center(

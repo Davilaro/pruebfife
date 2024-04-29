@@ -40,7 +40,7 @@ class _MarcasWidgetState extends State<MarcasWidget> {
   void initState() {
     //UXCAM:Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('BrandsPage');
-    botonesProveedoresVm.cargarListaProovedor();
+    botonesProveedoresVm.cargarListaProovedor('');
     botonesProveedoresVm.cargarLista(2);
     botonesProveedoresVm.cargarSeleccionados();
     super.initState();

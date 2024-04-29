@@ -125,7 +125,7 @@ class SearchFuzzyViewModel extends GetxController {
     listaAllProducts = await productService.cargarProductosFiltro("", "");
     listaAllMarcas = await marcaService.getAllMarcas();
     listaAllcategorias = await DBProvider.db.consultarCategorias("", 0);
-    listaAllproveedor = await DBProvider.db.consultarFricante("");
+    listaAllproveedor = await DBProvider.db.consultarFabricante("");
   }
 
   void runFilter(String enteredKeyword) {

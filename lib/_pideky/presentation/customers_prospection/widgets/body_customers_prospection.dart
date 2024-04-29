@@ -29,6 +29,7 @@ class BodyCustomersProspection extends StatelessWidget {
               left: Get.width * 0.04,
               right: Get.width * 0.04),
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 Text(
@@ -59,7 +60,13 @@ class BodyCustomersProspection extends StatelessWidget {
                 SizedBox(height: Get.height * 0.06),
                 BotonAgregarCarrito(
                     color: ConstantesColores.azul_aguamarina_botones,
-                    onTap: () {},
+                    onTap: () async {
+                      if (customersProspectionViewModel.formkey.currentState!
+                          .validate()) {
+                        await customersProspectionViewModel
+                            .sendProspectionRequest();
+                      }
+                    },
                     borderRadio: 30,
                     text: 'Enviar')
               ],

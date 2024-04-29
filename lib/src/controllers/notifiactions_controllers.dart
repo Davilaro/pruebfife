@@ -211,7 +211,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
             notificacion.subCategoriaRedireccion.toString());
       } else if (notificacion.redireccion == 'Proveedor') {
         resBusqueda = await DBProvider.db
-            .consultarFricante(notificacion.subCategoriaRedireccion.toString());
+            .consultarFabricante(notificacion.subCategoriaRedireccion.toString());
         _direccionarProveedor(context, resBusqueda[0]);
       } else if (notificacion.redireccion == 'Marca') {
         resBusqueda = await marcaService

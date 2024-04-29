@@ -7,36 +7,38 @@ class CustomersProspectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/image/background_customers_prospection.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: AppBar(
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: ConstantesColores.azul_aguamarina_botones,
-                  size: 35,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/image/background_customers_prospection.png'),
+                  fit: BoxFit.cover,
                 ),
-                onPressed: () => Navigator.pop(context),
               ),
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
             ),
-          ),
-          BodyCustomersProspection(),
-        ],
+            Positioned(
+              top: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: ConstantesColores.azul_aguamarina_botones,
+                    size: 35,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+              ),
+            ),
+            BodyCustomersProspection(),
+          ],
+        ),
       ),
     );
   }

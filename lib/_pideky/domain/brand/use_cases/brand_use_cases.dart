@@ -1,4 +1,4 @@
-import 'package:emart/_pideky/domain/brand/interface/interface_marca_gate_way.dart';
+import 'package:emart/_pideky/domain/brand/interface/interface_gate_way.dart';
 import 'package:emart/_pideky/domain/brand/model/brand.dart';
 
 class BrandUseCases {

@@ -28,6 +28,7 @@ class Fabricante {
       this.verPopUp,
       this.bloqueoCartera,
       required this.diasEntrega,
+      this.prospectoHelados,
       this.razonSocial});
 
   String? empresa;
@@ -52,6 +53,7 @@ class Fabricante {
   int diasEntrega;
   String? nitCliente;
   String? razonSocial;
+  int? prospectoHelados;
 
   factory Fabricante.fromJson(Map<String, dynamic> json) => Fabricante(
       empresa: json["empresa"] == null ? '' : json["empresa"],
@@ -86,7 +88,8 @@ class Fabricante {
           json["bloqueoCartera"] == null ? 0 : json["bloqueoCartera"],
       verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],
       diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"],
-      codigo: json["codigo"] == null ? '' : json["codigo"]
+      codigo: json["codigo"] == null ? '' : json["codigo"],
+      prospectoHelados: json["prospectoHelados"] ?? 0
       );
 
   Map<String, dynamic> toJson() => {

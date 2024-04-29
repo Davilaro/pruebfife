@@ -73,7 +73,7 @@ class BannnerControllers extends GetxController {
           context, provider, resSubBusqueda, banner.seccion.toString());
     } else if (banner.tipoSeccion == 'Proveedor') {
       resBusqueda =
-          await DBProvider.db.consultarFricante(banner.seccion.toString());
+          await DBProvider.db.consultarFabricante(banner.seccion.toString());
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
     } else if (banner.tipoSeccion == 'Marca') {

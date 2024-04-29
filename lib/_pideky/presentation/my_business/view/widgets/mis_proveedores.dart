@@ -175,17 +175,19 @@ class MisProveedores extends StatelessWidget {
                                             : Container()
                                       ],
                                     )
-                                  : BotonAgregarCarrito(
-                                      color: ConstantesColores
-                                          .azul_aguamarina_botones,
-                                      onTap: () {
-                                        Get.to(
-                                            () => CustomersProspectionPage());
-                                      },
-                                      width: Get.width * 0.85,
-                                      borderRadio: 30,
-                                      text:
-                                          'Quiero ser cliente de este proveedor'),
+                                  : proveedores[i].prospectoHelados == 1
+                                      ? BotonAgregarCarrito(
+                                          color: ConstantesColores
+                                              .azul_aguamarina_botones,
+                                          onTap: () {
+                                            Get.to(() =>
+                                                CustomersProspectionPage());
+                                          },
+                                          width: Get.width * 0.85,
+                                          borderRadio: 30,
+                                          text:
+                                              'Quiero ser cliente de este proveedor')
+                                      : SizedBox.shrink(),
                             ),
                             paddingContenido: prefs.paisUsuario == 'CR'
                                 ? EdgeInsets.zero

@@ -189,7 +189,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     }
   }
 
-  Future<dynamic> consultarFricante(String buscar) async {
+  Future<dynamic> consultarFabricante(String buscar) async {
     final db = await baseAbierta;
 
     try {
@@ -202,6 +202,45 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
 	    WHERE f.empresa LIKE '%$buscar%' OR f.nombrecomercial LIKE '%$buscar%'
       GROUP BY f.empresa
       ORDER BY f.orden ASC 
+
+    ''';
+
+      final sql = await db.rawQuery(query);
+
+      return sql.isNotEmpty
+          ? sql.map((e) => Fabricante.fromJson(e)).toList()
+          : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // consulta exlusiva para la pantalla de categorias donde se traen los proovedores que no esten activos
+  Future<dynamic> consultarFabricantesCategorias() async {
+    final db = await baseAbierta;
+
+    try {
+      var query =
+          '''
+      SELECT 
+            PA.empresa, 
+            PA.ico,  
+            CAST((SELECT topeminimo FROM CondicionesEntrega WHERE Fabricante = PA.empresa) AS FLOAT) AS topeMinimo, 
+            PA.nombrecomercial, 
+            PA.tipofabricante,
+            PA.Estado,
+            PA.Codigo as codigo,
+            PA.BloqueoCartera as bloqueoCartera,
+            PA.VisualizacionPopUp as verPopUp,
+            PA.ProspectoHelados as prospectoHelados,
+            CAST((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS montominimofrecuencia,
+            CAST((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS montominimonofrecuencia
+        FROM 
+            ProveedoresActivos PA
+        GROUP BY 
+            PA.empresa
+        ORDER BY 
+            PA.orden ASC  
 
     ''';
 
@@ -246,7 +285,7 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
     try {
       final sql = await db.rawQuery(
           '''
-	    SELECT empresa, ico, tipofabricante, Estado, nombrecomercial, NitCliente, RazonSocial  
+	    SELECT empresa, ico, tipofabricante, Estado, nombrecomercial, NitCliente, RazonSocial, ProspectoHelados as prospectoHelados  
       FROM ProveedoresActivos ORDER by Estado ASC
     ''');
 

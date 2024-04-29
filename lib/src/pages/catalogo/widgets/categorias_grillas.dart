@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/customers_prospection/view/customers_prospection_page.dart';
 import 'package:emart/shared/widgets/botones_proveedores.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/pages/catalogo/widgets/boton_todos_filtro.dart';
@@ -38,7 +39,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
   void initState() {
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('CategoriesPage');
-    botonesProveedoresVm.cargarListaProovedor();
+    botonesProveedoresVm.cargarListaProovedor('Categoria');
     botonesProveedoresVm.cargarLista(1);
     super.initState();
   }
@@ -123,6 +124,10 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
               "Esta categoría no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
               null,
             );
+          } else if (botonesProveedoresVm.listaProveedoresInactivos
+                  .contains(element.fabricante) &&
+              !botonesProveedoresVm.listaFabricantesBloqueados
+                  .contains(element.fabricante)) {
           } else {
             //FIREBASE: Llamamos el evento select_content
             TagueoFirebase().sendAnalityticSelectContent(
@@ -138,72 +143,118 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                 element.codigo, context, provider, element.descripcion);
           }
         },
-        child: Container(
-          height: Get.height * 0.1,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Stack(
-            children: [
-              Wrap(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        height: size.height * 0.090,
-                        margin: EdgeInsets.fromLTRB(5, 2, 5, 0),
-                        alignment: Alignment.center,
-                        child: CachedNetworkImage(
-                          imageUrl: element.ico,
-                          alignment: Alignment.bottomCenter,
-                          placeholder: (context, url) => Image.asset(
-                            'assets/image/jar-loading.gif',
-                            alignment: Alignment.center,
-                            height: 50,
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.all(5),
+              child: Container(
+                decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+                child: Stack(
+                  children: [
+                    Wrap(
+                      // mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              
+                              height: size.height * 0.090,
+                              margin: EdgeInsets.fromLTRB(5, 2, 5, 0),
+                              alignment: Alignment.center,
+                              child: CachedNetworkImage(
+                                imageUrl: element.ico,
+                                alignment: Alignment.bottomCenter,
+                                placeholder: (context, url) => Image.asset(
+                                  'assets/image/jar-loading.gif',
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                ),
+                                errorWidget: (context, url, error) => Image.asset(
+                                  'assets/image/logo_login.png',
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.topCenter,
+                          margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                          child: AutoSizeText('${element.descripcion}',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: HexColor('#0061cc')),
+                              textAlign: TextAlign.center,
+                              minFontSize: 8,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Visibility(
+                        visible: botonesProveedoresVm.listaFabricantesBloqueados
+                            .contains(element.fabricante),
+                        child: Container(
+                          height: Get.height * 0.14,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black.withOpacity(0.5),
                           ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            'assets/image/logo_login.png',
-                            height: 50,
-                            alignment: Alignment.center,
-                          ),
-                          fit: BoxFit.contain,
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                    child: AutoSizeText('${element.descripcion}',
-                        style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: HexColor('#0061cc')),
-                        textAlign: TextAlign.center,
-                        minFontSize: 8,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Visibility(
-                  visible: botonesProveedoresVm.listaFabricantesBloqueados
-                      .contains(element.fabricante),
-                  child: Container(
-                    height: Get.height * 0.14,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.black.withOpacity(0.5),
                     ),
-                  ),
+                    if (botonesProveedoresVm.listaProveedoresInactivos
+                            .contains(element.fabricante) &&
+                        !botonesProveedoresVm.listaFabricantesBloqueados
+                            .contains(element.fabricante))
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: Get.height * 0.14,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            if (botonesProveedoresVm.listaProveedoresInactivos
+                    .contains(element.fabricante) &&
+                !botonesProveedoresVm.listaFabricantesBloqueados
+                    .contains(element.fabricante))
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () => Get.to(() => CustomersProspectionPage()),
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: ConstantesColores.azul_precio,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Text(
+                          'Activar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                  ))
+          ],
         ),
       );
 
