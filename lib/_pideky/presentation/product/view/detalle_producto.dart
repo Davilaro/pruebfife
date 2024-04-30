@@ -416,7 +416,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
-          Text('Esta promoción tiene un tope máximo de compra de 10'),
+          Text('Esta promoción tiene un tope máximo de compra de ${widget.productos.cantidadMaxima}'),
           Visibility(
             visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(

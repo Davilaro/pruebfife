@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:emart/_pideky/domain/product/interface/interface_producto_gate_way.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
@@ -144,6 +145,7 @@ ORDER BY
     p.Negocio as negocio,
     p.Combo as combo,
     p.OrdenSubcategoria as ordenSubcategoria,
+    pn.CantidadMaxima,
     ROUND(
         (
            (
@@ -296,6 +298,7 @@ ORDER BY p.orden ASC
        p.OrdenMarca as ordenMarca, p.OrdenSubcategoria as ordenSubcategoria,
        p.Negocio as negocio,
        p.precio as precioBase,
+       pn.CantidadMaxima,
         ROUND(
         (
            (
@@ -417,6 +420,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     p.Negocio as negocio,
     p.precio as precioBase,
     p.Combo as combo,
+    pn.CantidadMaxima,
     ROUND(
         (
             (
@@ -569,6 +573,7 @@ ORDER BY
     f.BloqueoCartera as bloqueoCartera, 
     p.Combo as combo,
     p.precio as precioBase,
+    pn.CantidadMaxima,
     ROUND(
         (
            (
@@ -725,6 +730,7 @@ ORDER BY
     f.nit as nitFabricante, 
     f.BloqueoCartera as bloqueoCartera, 
     p.Combo as combo,
+    pn.CantidadMaxima,
     ROUND(
         (
             (
@@ -882,6 +888,7 @@ ORDER BY
     f.BloqueoCartera as bloqueoCartera,
     p.precio as precioBase,
     p.Combo as combo,
+    pn.CantidadMaxima,
     ROUND(
         (
             (
@@ -1410,7 +1417,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ORDER BY p.orden ASC 
          
     ''';
-      //log(query);
+      log(query);
       List<Map> sql = await db.rawQuery(query);
 
       lista = List<Product>.from(sql.map((x) => Product.fromJson2(x)));
