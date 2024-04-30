@@ -45,12 +45,16 @@ class BotonesProveedoresVm extends GetxController {
         : await DBProvider.db.consultarFabricante("");
 
     listaFabricante.forEach((element) {
+      // se valida que este inactivo y que sea un prospecto de helados
       if (element.prospectoHelados == 1 && element.estado == 'Inactivo') {
         listaProveedoresInactivos.addIf(
             !listaProveedoresInactivos.contains(element.empresa),
             element.empresa);
+      // se valida si es un prospecto de helados asi este inactivo se elimina de la lista
+      // de fabricantes ya que no se debe mostrar
       } else if (element.prospectoHelados == 0 && element.estado == 'Inactivo'){
         listaFabricante.remove(element);
+      // si no es prospecto de helados y esta inactivo se elimina de la lista de inactivos
       } else{
         listaProveedoresInactivos.remove(element.empresa);
 
