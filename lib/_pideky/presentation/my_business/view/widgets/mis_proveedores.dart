@@ -77,7 +77,8 @@ class MisProveedores extends StatelessWidget {
                                 Text(
                                   proveedores[i].nombrecomercial.toString(),
                                   style: TextStyle(
-                                      fontSize: 16.0, fontWeight: FontWeight.bold),
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -121,15 +122,29 @@ class MisProveedores extends StatelessWidget {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(
-                                                'Mi código de cliente: ${validarCliente(proveedores[i].empresa)}',
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: ConstantesColores
-                                                        .gris_textos,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                              FutureBuilder(
+                                                  future: validarCliente(
+                                                      proveedores[i].empresa),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<dynamic>
+                                                              snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      return Text(
+                                                        'Mi código de cliente: ${snapshot.data}',
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            color:
+                                                                ConstantesColores
+                                                                    .gris_textos,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      );
+                                                    } else {
+                                                      return SizedBox.shrink();
+                                                    }
+                                                  }),
                                             ],
                                           ),
                                         ),
@@ -160,15 +175,19 @@ class MisProveedores extends StatelessWidget {
                                             : Container()
                                       ],
                                     )
-                                  : BotonAgregarCarrito(
-                                      color: ConstantesColores
-                                          .azul_aguamarina_botones,
-                                      onTap: () {
-                                        Get.to(() => CustomersProspectionPage());
-                                      } ,
-                                      width: Get.width * 0.85,
-                                      borderRadio: 30,
-                                      text: 'Quiero ser cliente de este proveedor'),
+                                  : proveedores[i].prospectoHelados == 1
+                                      ? BotonAgregarCarrito(
+                                          color: ConstantesColores
+                                              .azul_aguamarina_botones,
+                                          onTap: () {
+                                            Get.to(() =>
+                                                CustomersProspectionPage());
+                                          },
+                                          width: Get.width * 0.85,
+                                          borderRadio: 30,
+                                          text:
+                                              'Quiero ser cliente de este proveedor')
+                                      : SizedBox.shrink(),
                             ),
                             paddingContenido: prefs.paisUsuario == 'CR'
                                 ? EdgeInsets.zero
@@ -185,23 +204,8 @@ class MisProveedores extends StatelessWidget {
     );
   }
 
-  String validarCliente(empresa) {
-    if (empresa == 'NUTRESA') {
-      return prefs.codigonutresa.toString();
-    }
-    if (empresa == 'ZENU') {
-      return prefs.codigozenu.toString();
-    }
-    if (empresa == 'MEALS') {
-      return prefs.codigomeals.toString();
-    }
-    if (empresa == 'POZUELO') {
-      return prefs.codigopozuelo.toString();
-    }
-    if (empresa == 'ALPINA') {
-      return prefs.codigoalpina.toString();
-    }
-
-    return '';
+  Future<String> validarCliente(empresa) async {
+    String dataToShow = await DBProvider.db.consultarCodigoProveedores(empresa);
+    return dataToShow != '' ? dataToShow : 'No disponible';
   }
 }

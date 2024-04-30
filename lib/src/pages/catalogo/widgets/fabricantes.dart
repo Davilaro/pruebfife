@@ -212,7 +212,7 @@ class _FabricantesState extends State<Fabricantes> {
   void cargarLista() async {
     listaAllFabricantes = prefs.usurioLogin != -1
         ? await DBProvider.db.consultarFabricanteBloqueo()
-        : await DBProvider.db.consultarFricante(controllerSearch.text);
+        : await DBProvider.db.consultarFabricante(controllerSearch.text);
     listaFabricante.value = listaAllFabricantes;
   }
 

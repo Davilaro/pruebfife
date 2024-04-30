@@ -1,6 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emart/_pideky/presentation/customers_prospection/view/customers_prospection_page.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -43,11 +44,14 @@ class BotonesProveedores extends StatelessWidget {
                         "Este producto no se encuentra disponible. Revisa el estado de tu cartera para poder comprar.",
                         null,
                       );
+                    } else if (botonesProveedoresVm
+                            .listaFabricante[index].estado ==
+                        'Inactivo') {
+                      return;
                     } else {
                       // Si el botón no está seleccionado, se verifica si hay menos de dos botones botonesProveedoresVm.seleccionados
 
                       if (!botonesProveedoresVm.seleccionados[index]) {
-                      
                         for (var i = 0;
                             i < botonesProveedoresVm.seleccionados.length;
                             i++) {
@@ -105,23 +109,69 @@ class BotonesProveedores extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Visibility(
-                          visible: botonesProveedoresVm
-                                      .listaFabricante[index].bloqueoCartera ==
-                                  1
-                              ? true
-                              : false,
-                          child: Container(
-                            width: Get.width * 0.2,
-                            margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                            padding: EdgeInsets.all(
-                                prefs.paisUsuario == 'CO' ? 10 : 12),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                          ),
-                        )
+                        botonesProveedoresVm
+                                    .listaFabricante[index].bloqueoCartera ==
+                                1
+                            ? Visibility(
+                                visible: botonesProveedoresVm
+                                            .listaFabricante[index]
+                                            .bloqueoCartera ==
+                                        1
+                                    ? true
+                                    : false,
+                                child: Container(
+                                  width: Get.width * 0.2,
+                                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                                  padding: EdgeInsets.all(
+                                      prefs.paisUsuario == 'CO' ? 10 : 12),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
+                              )
+                            :  Visibility(
+                                visible: botonesProveedoresVm
+                                .listaProveedoresInactivos.contains(
+                                    botonesProveedoresVm
+                                        .listaFabricante[index].empresa),
+                                child: Container(
+                                  width: Get.width * 0.2,
+                                  margin: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                                  padding: EdgeInsets.all(
+                                      prefs.paisUsuario == 'CO' ? 10 : 12),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black.withOpacity(0.3),
+                                  ),
+                                ),
+                              ),
+                        if (botonesProveedoresVm
+                                .listaProveedoresInactivos.contains(
+                                    botonesProveedoresVm
+                                        .listaFabricante[index].empresa))
+                          Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () =>
+                                    Get.to(() => CustomersProspectionPage()),
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: ConstantesColores.azul_precio,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Text(
+                                      'Activar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                              ))
                       ],
                     ),
                   ),

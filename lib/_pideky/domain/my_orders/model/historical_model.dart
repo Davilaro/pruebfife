@@ -17,6 +17,8 @@ class HistoricalModel {
     this.icoFabricante,
     this.ordenCompra,
     this.estado,
+    this.precioDescuento,
+    this.descuento,
   });
 
   String? numeroDoc;
@@ -24,6 +26,8 @@ class HistoricalModel {
   String? nombreProducto;
   int? cantidad;
   double? precio;
+  double? precioDescuento;
+  double? descuento;
   String? fechaTrans;
   String? horaTrans;
   String? fabricante;
@@ -34,6 +38,8 @@ class HistoricalModel {
   factory HistoricalModel.fromJson(Map<String, dynamic> json) => HistoricalModel(
       numeroDoc: json["NumeroDoc"] == null ? "" : json["NumeroDoc"],
       codigoRef: json["codigoref"] == null ? "" : json["codigoref"],
+      precioDescuento: json["precioSinDescuento"] == null ? 0.0 : json["precioSinDescuento"],
+      descuento: json["descuento"] == null ? 0.0 : json["descuento"],
       nombreProducto:
           json["nombreproducto"] == null ? "" : json["nombreproducto"],
       cantidad: json["Cantidad"] == null ? 0 : json["Cantidad"],

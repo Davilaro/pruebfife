@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:emart/_pideky/domain/product/interface/interface_producto_gate_way.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
@@ -1411,7 +1410,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
         ORDER BY p.orden ASC 
          
     ''';
-      log(query);
+      //log(query);
       List<Map> sql = await db.rawQuery(query);
 
       lista = List<Product>.from(sql.map((x) => Product.fromJson2(x)));

@@ -76,13 +76,56 @@ class MisPedidosQuery extends InterfaceMyOrdersGateWay {
     final db = await DBProviderHelper.db.baseAbierta;
     try {
       final query = '''
-        SELECT NumeroDoc, codigoRef, nombreproducto , cantidad , fabricante, ordencompra, MAX(substr(fechatrans,11, 6)) as horatrans, 
-        MAX(substr(fechatrans, 1, 2) || '/' || substr(fechatrans, 4, 2) || '/' || substr(fechatrans, 7, 4)) as fechatrans, 
-        CAST(precio AS double) precio from Historico where NumeroDoc='$numeroDoc' 
-        and fabricante ='$fabricante' GROUP BY codigoref 
+        SELECT 
+            H.NumeroDoc, 
+            H.codigoRef, 
+            H.nombreproducto, 
+            H.cantidad, 
+            H.fabricante, 
+            H.ordencompra, 
+            MAX(substr(H.fechatrans,11, 6)) as horatrans, 
+            MAX(substr(H.fechatrans, 1, 2) || '/' || substr(H.fechatrans, 4, 2) || '/' || substr(H.fechatrans, 7, 4)) as fechatrans, 
+            IFNULL(tmp.descuento, 0.0) AS descuento,
+          CAST(H.precio AS double) precio,
+          CAST(
+                ROUND(
+                    (p.precio + ((p.precio * p.iva) / 100) + (
+                                CASE
+                                    WHEN p.ICUI = 0 THEN p.IBUA
+                                    ELSE ((p.precio * p.ICUI) / 100)
+                                END
+                            ) ), 0
+                ) AS FLOAT
+            ) AS precioSinDescuento
+        FROM 
+            Historico H
+        JOIN 
+            Producto P ON H.codigoRef = P.codigo
+        LEFT JOIN 
+            (
+                SELECT 
+                    tmp.proveedor, 
+                    tmp.material codigo, 
+                    tmp.descuento 
+                FROM 
+                    (
+                        SELECT 
+                            (SELECT COUNT(*) FROM descuentos de WHERE de.rowid >= d.rowid AND de.material = d.material) identificador, * 
+                        FROM 
+                            descuentos d
+                        INNER JOIN 
+                            producto p ON p.codigo = d.material AND d.proveedor = p.fabricante
+                    ) tmp 
+                WHERE tmp.identificador = 1
+            ) tmp ON p.fabricante = tmp.proveedor AND p.codigo = tmp.codigo
+        WHERE 
+            H.NumeroDoc = '$numeroDoc' 
+            AND H.fabricante = '$fabricante'
+        GROUP BY 
+            H.codigoref;
       ''';
       final sql = await db.rawQuery(query);
-      // log(query);
+      //log(query);
       return sql.map((e) => HistoricalModel.fromJson(e)).toList();
     } catch (e) {
       print('-----Error consultarDetalleGrupoHistorico $e');

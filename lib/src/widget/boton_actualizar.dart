@@ -70,7 +70,7 @@ Future<void> actualizarPagina(
     });
 
     productViewModel.cargarCondicionEntrega();
-    await botonesController.cargarListaProovedor();
+    await botonesController.cargarListaProovedor('');
     botonesController.listaFabricantesBloqueados.isNotEmpty
         ? null
         : productViewModel.eliminarBDTemporal();

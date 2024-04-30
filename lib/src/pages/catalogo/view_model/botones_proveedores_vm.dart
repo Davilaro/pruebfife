@@ -11,6 +11,7 @@ class BotonesProveedoresVm extends GetxController {
   List<dynamic> listaAllMarcas = [];
   RxList listaFabricantesBloqueados = [].obs;
   RxList listaProveedores = [].obs;
+  RxList listaProveedoresInactivos = [].obs;
 
   RxString proveedor = "".obs;
   RxString proveedor2 = "".obs;
@@ -36,17 +37,30 @@ class BotonesProveedoresVm extends GetxController {
     }
   }
 
-  Future<void> cargarListaProovedor() async {
+  Future<void> cargarListaProovedor(String kind) async {
     listaFabricante.value = prefs.usurioLogin != -1
-        ? await DBProvider.db.consultarFabricanteBloqueo()
-        : await DBProvider.db.consultarFricante("");
+        ? kind == 'Categoria'
+            ? await DBProvider.db.consultarFabricantesCategorias()
+            : await DBProvider.db.consultarFabricanteBloqueo()
+        : await DBProvider.db.consultarFabricante("");
 
     listaFabricante.forEach((element) {
+      if (element.prospectoHelados == 1 && element.estado == 'Inactivo') {
+        listaProveedoresInactivos.addIf(
+            !listaProveedoresInactivos.contains(element.empresa),
+            element.empresa);
+      } else if (element.prospectoHelados == 0 && element.estado == 'Inactivo'){
+        listaFabricante.remove(element);
+      } else{
+        listaProveedoresInactivos.remove(element.empresa);
+
+      }
       if (element.bloqueoCartera == 1) {
         listaFabricantesBloqueados.addIf(
             !listaFabricantesBloqueados.contains(element.empresa),
             element.empresa);
       }
+
       if (element.empresa == "NUTRESA") {
         listaFabricante.remove(element);
         listaFabricante.insert(0, element);

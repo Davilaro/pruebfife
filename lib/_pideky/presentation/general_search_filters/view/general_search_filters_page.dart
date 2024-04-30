@@ -438,7 +438,7 @@ class _GeneralSearchFiltersPageState
   }
 
   cargarProveedor() async {
-    var resQuery = await DBProvider.db.consultarFricante("");
+    var resQuery = await DBProvider.db.consultarFabricante("");
     for (var i = 0; i < resQuery.length; i++) {
       listProveedor.add(resQuery[i].nombrecomercial!);
       listObjectoProveedor.add(resQuery[i]);
