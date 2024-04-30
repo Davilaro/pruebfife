@@ -126,10 +126,9 @@ class Product {
       isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       negocio: json["negocio"] == null ? '' : json["negocio"],
       combo: json["combo"] == null ? 0 : json["combo"],
-      precioConDescuento: json["precioConDescuento"] == null
-          ? 0.0
-          : json['precioConDescuento'],
-          cantidadMaxima: json["CantidadMaxima"] ?? 0 );
+      precioConDescuento:
+          json["precioConDescuento"] == null ? 0.0 : json['precioConDescuento'],
+      cantidadMaxima: json["CantidadMaxima"] ?? 0);
 
   factory Product.fromJson2(Map<dynamic, dynamic> json) => Product(
       codigo: json["codigo"] == null ? '' : json["codigo"],
@@ -176,10 +175,9 @@ class Product {
       isOferta: json["isOferta"] == null ? 0 : json["isOferta"],
       negocio: json["negocio"] == null ? '' : json["negocio"],
       combo: json["combo"] == null ? 0 : json["combo"],
-      precioConDescuento: json["precioConDescuento"] == null
-          ? 0.0
-          : json['precioConDescuento'],
-          cantidadMaxima: json["CantidadMaxima"] == null ? '' : json["CantidadMaxima"]);
+      precioConDescuento:
+          json["precioConDescuento"] == null ? 0.0 : json['precioConDescuento'],
+      cantidadMaxima: json["CantidadMaxima"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "codigoSku": codigo,

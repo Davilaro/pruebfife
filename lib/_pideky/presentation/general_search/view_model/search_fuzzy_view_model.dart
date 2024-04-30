@@ -122,7 +122,7 @@ class SearchFuzzyViewModel extends GetxController {
   }
 
   Future<void> cargarSugerencias() async {
-    listaAllProducts = await productService.cargarProductosFiltro("", "");
+    listaAllProducts = await productService.cargarProductos('', 10, '', 0.0, 1000000000.0, "", "");
     listaAllMarcas = await marcaService.getAllMarcas();
     listaAllcategorias = await DBProvider.db.consultarCategorias("", 0);
     listaAllproveedor = await DBProvider.db.consultarFabricante("");
