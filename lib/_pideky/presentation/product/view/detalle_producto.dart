@@ -416,6 +416,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
+          Text('Esta promoción tiene un tope máximo de compra de 10'),
           Visibility(
             visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(
