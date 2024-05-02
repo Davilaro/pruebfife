@@ -231,4 +231,10 @@ class ProductViewModel extends GetxController {
       return Get.find<ProductViewModel>();
     }
   }
+
+  bool isMaximumPromotionLimitReached(int maxQuantity, int currentQuantity) {
+    return maxQuantity != 0 && maxQuantity <= currentQuantity;
+  }
+
+  
 }

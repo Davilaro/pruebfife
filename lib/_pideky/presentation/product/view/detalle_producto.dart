@@ -32,6 +32,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../shared/widgets/notification_of_maximum_promotion_limit.dart';
+
 class DetalleProducto extends StatefulWidget {
   final Product productos;
   final double tamano;
@@ -57,6 +59,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
 
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
+
+  
 
   @override
   void initState() {
@@ -84,39 +88,58 @@ class _DetalleProductoState extends State<DetalleProducto> {
             ? '1'
             : cargoConfirmar.controllerCantidadProducto.value;
 
+  bool showNotificationMaximumPromotionLimit =  productViewModel.isMaximumPromotionLimitReached(
+        widget.productos.cantidadMaxima!, 
+        toInt(cargoConfirmar.controllerCantidadProducto.value));
+
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: AppBar(
-        title: Text(
-          S.current.product,
-          style: TextStyle(color: HexColor("#41398D")),
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: ConstantesColores.color_fondo_gris,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-        elevation: 0,
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: <Widget>[
-          GestureDetector(
-            child: BotonActualizar(),
-            onTap: () {
-              setState(() {
-                initState();
-                (context as Element).reassemble();
-              });
-            },
-          ),
-          AccionesBartCarrito(esCarrito: true),
-        ],
-      ),
+      appBar: showNotificationMaximumPromotionLimit
+          ? null
+          : AppBar(
+              title: Text(
+                S.current.product,
+                style: TextStyle(color: HexColor("#41398D")),
+              ),
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: ConstantesColores.color_fondo_gris,
+                statusBarIconBrightness: Brightness.dark,
+              ),
+              elevation: 0,
+              leading: new IconButton(
+                icon:
+                    new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+                onPressed: () => Navigator.pop(context),
+              ),
+              actions: <Widget>[
+                GestureDetector(
+                  child: BotonActualizar(),
+                  onTap: () {
+                    setState(() {
+                      initState();
+                      (context as Element).reassemble();
+                    });
+                  },
+                ),
+                AccionesBartCarrito(esCarrito: true),
+              ],
+            ),
       body: Column(
         children: [
+          if (showNotificationMaximumPromotionLimit)
+            Align(
+              alignment: Alignment.topCenter,
+              child: NotificationMaximumPromotionlimit(
+                onClose: () {
+                  setState(() {
+                    //toInt(cargoConfirmar.controllerCantidadProducto.value) - 1;
+                    //  showNotificationMaximumPromotionLimit = false;
+                  });
+                },
+              ),
+            ),
           Padding(
-            padding: EdgeInsets.fromLTRB(30, 0, 20, 0),
+            padding: EdgeInsets.fromLTRB(30, 30, 20, 0),
             child: Container(
               child: Text(
                 '${widget.productos.nombre}',
@@ -131,31 +154,29 @@ class _DetalleProductoState extends State<DetalleProducto> {
               alignment: Alignment.center,
               height: widget.tamano * 0.4,
               width: double.infinity,
-              child: Stack(children: [
-                InkWell(
-                  onTap: () => showDialog(
-                      context: context,
-                      builder: (context) => DialogDetailsImage(
-                          Constantes().urlImgProductos +
-                              '${widget.productos.codigo}.png',
-                          '${widget.productos.nombre}')),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: PinchZoomImage(
-                      zoomedBackgroundColor: Colors.transparent,
-                      hideStatusBarWhileZooming: true,
-                      image: CachedNetworkImage(
-                          imageUrl: Constantes().urlImgProductos +
-                              '${widget.productos.codigo}.png',
-                          placeholder: (context, url) =>
-                              Image.asset('assets/image/jar-loading.gif'),
-                          errorWidget: (context, url, error) =>
-                              Image.asset('assets/image/logo_login.png'),
-                          fit: BoxFit.contain),
-                    ),
+              child: InkWell(
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => DialogDetailsImage(
+                        Constantes().urlImgProductos +
+                            '${widget.productos.codigo}.png',
+                        '${widget.productos.nombre}')),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: PinchZoomImage(
+                    zoomedBackgroundColor: Colors.transparent,
+                    hideStatusBarWhileZooming: true,
+                    image: CachedNetworkImage(
+                        imageUrl: Constantes().urlImgProductos +
+                            '${widget.productos.codigo}.png',
+                        placeholder: (context, url) =>
+                            Image.asset('assets/image/jar-loading.gif'),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/image/logo_login.png'),
+                        fit: BoxFit.contain),
                   ),
                 ),
-              ]),
+              ),
             ),
           ),
           Obx(
@@ -280,8 +301,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                 context: context,
                                                 builder: (context) =>
                                                     PopUpChooseList(
-                                                      productos:
-                                                          List.generate(1, (index) => widget.productos),
+                                                      productos: List.generate(
+                                                          1,
+                                                          (index) =>
+                                                              widget.productos),
                                                       cantidad: toInt(cargoConfirmar
                                                           .controllerCantidadProducto
                                                           .value),
@@ -400,11 +423,19 @@ class _DetalleProductoState extends State<DetalleProducto> {
                               SizedBox(
                                 height: 40.0,
                                 width: Get.width * 0.1,
-                                child: IconButton(
-                                  icon: Image.asset('assets/image/mas.png'),
-                                  onPressed: () =>
-                                      mas(widget.productos, cartProvider),
-                                ),
+                                child: (showNotificationMaximumPromotionLimit)
+                                    ? IconButton(
+                                        icon: Icon(Icons.lock_outline),
+                                        onPressed: () {
+                                          showNotificationMaximumPromotionLimit =
+                                              true;
+                                        })
+                                    : IconButton(
+                                        icon:
+                                            Image.asset('assets/image/mas.png'),
+                                        onPressed: () =>
+                                            mas(widget.productos, cartProvider),
+                                      ),
                               ),
                             ],
                           ),
@@ -416,7 +447,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
-          Text('Esta promoción tiene un tope máximo de compra de ${widget.productos.cantidadMaxima}'),
+          if (widget.productos.cantidadMaxima != 0)
+            Text(
+                'Esta promoción tiene un tope máximo de compra de ${widget.productos.cantidadMaxima}'),
           Visibility(
             visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(
