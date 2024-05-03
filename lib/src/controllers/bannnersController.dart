@@ -4,6 +4,7 @@ import 'package:emart/_pideky/domain/product/use_cases/producto_use_cases.dart';
 import 'package:emart/_pideky/infrastructure/brand/brand_service.dart';
 import 'package:emart/_pideky/infrastructure/product/product_service.dart';
 import 'package:emart/_pideky/presentation/authentication/view/log_in/login_page.dart';
+import 'package:emart/_pideky/presentation/customers_prospection/view/customers_prospection_page.dart';
 import 'package:emart/_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
@@ -76,7 +77,11 @@ class BannnerControllers extends GetxController {
           await DBProvider.db.consultarFabricante(banner.seccion.toString());
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
-    } else if (banner.tipoSeccion == 'Marca') {
+    } 
+    else if (banner.tipoSeccion == 'Formulario') {
+      Get.to(() => CustomersProspectionPage());
+    }
+    else if (banner.tipoSeccion == 'Marca') {
       resBusqueda =
           await marcaService.consultaMarcas(banner.seccion.toString());
       _direccionarMarca(context, resBusqueda[0]);

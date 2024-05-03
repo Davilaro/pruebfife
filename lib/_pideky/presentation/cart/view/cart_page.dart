@@ -4,8 +4,10 @@ import 'package:emart/_pideky/presentation/cart/widgets/expanded_shopping_cart_p
 import 'package:emart/_pideky/presentation/cart/widgets/general_saved_indicator.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
+import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
+import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
@@ -37,6 +39,8 @@ class _CartPageState extends State<CartPage> {
   late final cartViewModel = Provider.of<CartViewModel>(context);
   final controller = Get.put(StateControllerRadioButtons());
   final slideUpAutomatic = Get.find<SlideUpAutomatic>();
+  final prospectionSlideUp = Get.find<NotificationsSlideUpAndPushInUpControllers>();
+  final btProveedoresVm = Get.find<BotonesProveedoresVm>();
 
   @override
   void initState() {
@@ -44,14 +48,17 @@ class _CartPageState extends State<CartPage> {
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('ShoppingCart');
     PedidoEmart.iniciarProductosPorFabricante();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_)  async {
+    await btProveedoresVm.cargarListaProovedor('Categoria');
+       if(btProveedoresVm.listaProveedoresInactivos.isNotEmpty) {
+          prospectionSlideUp.getSlideUpByDataBaseCart('Carrito', context);
+        }
       // se crean los listeners para cuando se pierda el foco en los campos de texto
       // de los productos se establezca el valor en 1 en caso de que la persona no digite un valor
       cartViewModel.focusNodesMaps.forEach((productCode, focusNode) {
         cartViewModel.scrollControllerGridItems = ScrollController();
         focusNode.addListener(() {
           if (!focusNode.hasFocus) {
-            print('Lost Focus');
             if (cartViewModel.currentProducto != null &&
                 cartViewModel.currentQuantityProduct != 0)
               cartViewModel.editarCantidad(cartViewModel.currentProducto,
@@ -94,7 +101,9 @@ class _CartPageState extends State<CartPage> {
     cartViewModel.isSavedBymanufacturerOpenToShowTrashBox.value = false;
     cartViewModel.isTimerActive.value = false;
     cartViewModel.focusNodesMaps.clear();
-    cartViewModel.scrollControllerGridItems!.dispose();
+    if (cartViewModel.scrollControllerGridItems != null) {
+      cartViewModel.scrollControllerGridItems!.dispose();
+    }
     super.dispose();
   }
 
@@ -113,6 +122,9 @@ class _CartPageState extends State<CartPage> {
           leading: new IconButton(
               icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
               onPressed: () => {
+                    if (Get.isSnackbarOpen) {
+                      Get.closeCurrentSnackbar()
+                    },
                     PedidoEmart.cambioVista.value = 1,
                     cartViewModel.guardarCambiodevista = 1,
                     Navigator.of(context).pop()

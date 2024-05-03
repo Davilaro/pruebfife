@@ -8,5 +8,6 @@ abstract class InterfaceNotificationPushInAppSlideUpGateWay {
   Future<List<NotificationPushInAppSlideUpModel>> getAutomaticSlideUp();
   Future<int> showSlideUpValidation(String negocio);
   Future<dynamic> sendShowedSlideUp(String negocio);
+  Future<bool> showSlideUpCart();
 
 }

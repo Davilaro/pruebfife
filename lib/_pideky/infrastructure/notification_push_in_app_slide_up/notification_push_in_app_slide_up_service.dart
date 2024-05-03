@@ -18,8 +18,7 @@ class NotificationPushInUpAndSlideUpSql
     final db = await dataBase.baseAbierta;
 
     try {
-      var sql = await db.rawQuery(
-          """
+      var sql = await db.rawQuery("""
       select p.Link as imageUrl, p.Ubicacion as ubicacion, p.CategoriaUbicacion as categoriaUbicacion,
       p.Tiempo as tiempo, p.SubCategoriaUbicacion as subCategoriaUbicacion, p.Redireccion as redireccion, 
       p.CategoriaRedireccion as categoriaRedireccion, p.ContenidoWeb as contenidoWeb, p.SubCategoriaRedireccion as subCategoriaRedireccion
@@ -121,6 +120,35 @@ class NotificationPushInUpAndSlideUpSql
       final decodedData = json.decode(request.body);
       if (request.statusCode == 200 && decodedData.toLowerCase() == 'ok') {
         return true;
+      } else {
+        throw Exception('Error al consultar slide up automatica');
+      }
+    } catch (e) {
+      print('----Error consulta slide up automatica $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> showSlideUpCart() async {
+    try {
+      final url =
+          Uri.parse(Constantes().urlPrincipal + 'Encuestas/SlideAppHelados');
+      final request = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode({
+            "CCUP": prefs.codigoUnicoPideky,
+            "Sucursal": '${prefs.sucursal}'
+          }));
+      final decodedData = json.decode(request.body);
+      if (request.statusCode == 200) {
+        if (decodedData == '1') {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         throw Exception('Error al consultar slide up automatica');
       }

@@ -27,4 +27,7 @@ class NotificationPushInAppSlideUpUseCases {
   Future<dynamic> sendShowedSlideUp(String negocio) {
     return notificationPushInAppRepository.sendShowedSlideUp(negocio);
   }
+  Future<bool> showSlideUpCart() {
+    return notificationPushInAppRepository.showSlideUpCart();
+  }
 }

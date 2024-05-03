@@ -14,7 +14,6 @@ import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
-import 'package:emart/src/modelos/multimedia.dart';
 import 'package:emart/src/pages/principal_page/widgets/categorias_card.dart';
 import 'package:emart/src/pages/principal_page/widgets/encuesta_form.dart';
 import 'package:emart/src/pages/principal_page/widgets/products_card.dart';
@@ -28,10 +27,7 @@ import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/util.dart';
 import 'package:emart/src/pages/principal_page/widgets/ofertas_banner.dart';
 import 'package:emart/src/pages/catalogo/widgets/opciones.dart';
-import 'package:emart/src/widget/reproduct_video.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -69,7 +65,6 @@ class _PrincipalPageState extends State<PrincipalPage>
   final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
   var nombreTienda = prefs.usuarioRazonSocial;
-  bool _hasErrorSchoolClient = false;
 
   @override
   void initState() {

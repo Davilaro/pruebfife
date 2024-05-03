@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:emart/_pideky/domain/brand/model/brand.dart';
 import 'package:emart/_pideky/domain/brand/use_cases/brand_use_cases.dart';
 import 'package:emart/_pideky/infrastructure/brand/brand_service.dart';
+import 'package:emart/_pideky/presentation/customers_prospection/view/customers_prospection_page.dart';
 import 'package:emart/shared/widgets/card_notification_slide_up.dart';
 import 'package:emart/shared/widgets/notification_push_in_app.dart';
 import 'package:emart/src/controllers/encuesta_controller.dart';
@@ -53,6 +54,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
   RxList listSlideUpProveedores = [].obs;
   RxList listSlideUpMarcas = [].obs;
   RxList listSlideUpCategorias = [].obs;
+  NotificationPushInAppSlideUpModel? cartSlideUP;
   RxList listPushInUpHome = [].obs;
   RxList listPushInUpProveedores = [].obs;
   RxList listPushInUpMarcas = [].obs;
@@ -183,7 +185,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       CartViewModel provider,
       CambioEstadoProductos cargoConfirmar,
       Preferencias prefs,
-      String locasionBanner,
+      String location,
       bool isPushInUp) async {
     ProductoService productService =
         ProductoService(ProductoRepositorySqlite());
@@ -210,15 +212,18 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
         _direccionarCategoria(context, provider, resSubBusqueda,
             notificacion.subCategoriaRedireccion.toString());
       } else if (notificacion.redireccion == 'Proveedor') {
-        resBusqueda = await DBProvider.db
-            .consultarFabricante(notificacion.subCategoriaRedireccion.toString());
+        resBusqueda = await DBProvider.db.consultarFabricante(
+            notificacion.subCategoriaRedireccion.toString());
         _direccionarProveedor(context, resBusqueda[0]);
       } else if (notificacion.redireccion == 'Marca') {
         resBusqueda = await marcaService
             .consultaMarcas(notificacion.subCategoriaRedireccion.toString());
         _direccionarMarca(context, resBusqueda[0]);
+      } else if (notificacion.redireccion == 'Formulario') {
+        Get.back();
+        Get.to(() => CustomersProspectionPage());
       } else if (notificacion.redireccion == "Términos y condiciones") {
-        if (locasionBanner == 'Home') {
+        if (location == 'Home') {
           viewModel.terminosDatosPdf != null
               ? verTerminosCondiciones(
                   context, viewModel.terminosDatosPdf, isPushInUp)
@@ -231,7 +236,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
               : Get.back();
         }
       } else if (notificacion.redireccion == "Mi Negocio") {
-        if (locasionBanner == "Home") {
+        if (location == "Home") {
           Get.back();
           providerBottomNavigationBar.selectOptionMenu = 4;
         } else {
@@ -247,7 +252,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                 };
         }
       } else if (notificacion.redireccion == "Mis pagos Nequi") {
-        if (locasionBanner == "Home") {
+        if (location == "Home") {
           await Get.to(() => MypaymentsPage());
           Get.back();
         } else {
@@ -256,7 +261,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           Get.back();
         }
       } else if (notificacion.redireccion == "Club de ganadores") {
-        if (locasionBanner == "Home") {
+        if (location == "Home") {
           await Get.to(() => WinnersClubPage());
           Get.back();
         } else {
@@ -266,10 +271,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                   Navigator.of(context).pop(),
                   Get.to(() => WinnersClubPage())
                 }
-              : {
-                  Navigator.of(context).pop(),
-                  Get.to(() => WinnersClubPage())
-                };
+              : {Navigator.of(context).pop(), Get.to(() => WinnersClubPage())};
         }
       } else {
         Get.back();
@@ -366,8 +368,12 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       cartProvider.guardarCambiodevista = 1;
       PedidoEmart.cambioVista.value = 1;
 
-      await Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CambiarDetalleCompra(
+                    cambioVista: 1,
+                  )));
       Get.back();
     }
   }
@@ -413,6 +419,21 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       listSlideUpCategorias.assignAll(listSlideUpsTemp);
     } else {
       listSlideUpCategorias.clear();
+    }
+  }
+
+  getSlideUpByDataBaseCart(String ubicacion, context) async {
+    if (await Get.put(NotificationPushInAppSlideUpUseCases(NotificationPushInUpAndSlideUpSql()))
+        .showSlideUpCart()) {
+      var listSlideUpsTemp =
+          await notificacionesService.consultNotificationsSlideUp(ubicacion);
+
+      if (listSlideUpsTemp.isNotEmpty) {
+        cartSlideUP = listSlideUpsTemp.first;
+        showSlideUpNotification(context, cartSlideUP, 'Carrito');
+      } else {
+        cartSlideUP = null;
+      }
     }
   }
 

@@ -38,43 +38,45 @@ class BotonesProveedoresVm extends GetxController {
   }
 
   Future<void> cargarListaProovedor(String kind) async {
-    listaFabricante.value = prefs.usurioLogin != -1
-        ? kind == 'Categoria'
-            ? await DBProvider.db.consultarFabricantesCategorias()
-            : await DBProvider.db.consultarFabricanteBloqueo()
-        : await DBProvider.db.consultarFabricante("");
+  listaProveedoresInactivos.clear();
+  listaFabricante.value = prefs.usurioLogin != -1
+      ? kind == 'Categoria'
+          ? await DBProvider.db.consultarFabricantesCategorias()
+          : await DBProvider.db.consultarFabricanteBloqueo()
+      : await DBProvider.db.consultarFabricante("");
 
-    listaFabricante.forEach((element) {
-      // se valida que este inactivo y que sea un prospecto de helados
-      if (element.prospectoHelados == 1 && element.estado == 'Inactivo') {
-        listaProveedoresInactivos.addIf(
-            !listaProveedoresInactivos.contains(element.empresa),
-            element.empresa);
-      // se valida si es un prospecto de helados asi este inactivo se elimina de la lista
-      // de fabricantes ya que no se debe mostrar
-      } else if (element.prospectoHelados == 0 && element.estado == 'Inactivo'){
-        listaFabricante.remove(element);
-      // si no es prospecto de helados y esta inactivo se elimina de la lista de inactivos
-      } else{
-        listaProveedoresInactivos.remove(element.empresa);
+  for (int i = listaFabricante.length - 1; i >= 0; i--) {
+    var element = listaFabricante[i];
+    // se valida que este inactivo y que sea un prospecto de helados
+    if (element.prospectoHelados == 1 && element.estado == 'Inactivo') {
+      listaProveedoresInactivos.addIf(
+          !listaProveedoresInactivos.contains(element.empresa),
+          element.empresa);
+    // se valida si es un prospecto de helados así este inactivo se elimina de la lista
+    // de fabricantes ya que no se debe mostrar
+    } else if (element.prospectoHelados == 0 && element.estado == 'Inactivo'){
+      listaFabricante.removeAt(i);
+    // si no es prospecto de helados y está inactivo se elimina de la lista de inactivos
+    } else {
+      listaProveedoresInactivos.remove(element.empresa);
+    }
+    if (element.bloqueoCartera == 1) {
+      listaFabricantesBloqueados.addIf(
+          !listaFabricantesBloqueados.contains(element.empresa),
+          element.empresa);
+    }
 
-      }
-      if (element.bloqueoCartera == 1) {
-        listaFabricantesBloqueados.addIf(
-            !listaFabricantesBloqueados.contains(element.empresa),
-            element.empresa);
-      }
-
-      if (element.empresa == "NUTRESA") {
-        listaFabricante.remove(element);
-        listaFabricante.insert(0, element);
-      }
-      if (element.empresa == "ZENU" && listaFabricante.length > 1) {
-        listaFabricante.remove(element);
-        listaFabricante.insert(1, element);
-      }
-    });
+    if (element.empresa == "NUTRESA") {
+      listaFabricante.removeAt(i);
+      listaFabricante.insert(0, element);
+    }
+    if (element.empresa == "ZENU" && listaFabricante.length > 1) {
+      listaFabricante.removeAt(i);
+      listaFabricante.insert(1, element);
+    }
   }
+}
+
 
   void cargarSeleccionados() {
     while (seleccionados.length < listaFabricante.length) {
