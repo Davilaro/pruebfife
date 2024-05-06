@@ -102,7 +102,9 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
 
             bool showNotificationMaximumPromotionLimit =  productViewModel.isMaximumPromotionLimitReached(
         widget.producto.cantidadMaxima!, 
-        toInt(cargoConfirmar.controllerCantidadProducto.value));
+        toInt(cargoConfirmar.controllerCantidadProducto.value),
+        widget.producto.cantidadSolicitada!
+        );
 
 
     return Scaffold(
@@ -407,8 +409,18 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                         SizedBox(
                                           height: 70.0,
                                           width: Get.width * 0.11,
-                                          child: IconButton(
-                                            icon:
+                                          child: showNotificationMaximumPromotionLimit
+                                         ? IconButton(
+                                            icon: 
+                                                Icon(
+                                                  Icons.lock_outline_sharp,
+                                                  color: ConstantesColores.gris_sku,
+                                                  ),
+                                            onPressed: () {}
+                                                
+                                          )
+                                         :IconButton(
+                                            icon: 
                                                 Image.asset('assets/image/mas.png'),
                                             onPressed: () =>
                                                 mas(widget.producto, cartProvider),

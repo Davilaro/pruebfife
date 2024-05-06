@@ -41,6 +41,7 @@ class CartViewModel extends ChangeNotifier {
   ScrollController? scrollControllerGridItems;
   Timer timer = Timer(Duration(milliseconds: 1), () {});
   RxBool isTimerActive = false.obs;
+  
 
   void animateSquare() async {
     int elapsedTime = 0;

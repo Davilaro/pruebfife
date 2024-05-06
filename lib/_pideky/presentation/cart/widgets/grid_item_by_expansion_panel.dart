@@ -11,6 +11,7 @@ import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/util.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,12 @@ List<Widget> gridItem(
     Product productos = PedidoEmart.listaProductos![product.codigo]!;
 
     if (product.fabricante == fabricante && product.cantidad > 0) {
+      bool showNotificationMaximumPromotionLimit =
+          productViewModel.checkAndSetAlert(productos.cantidadMaxima!,
+              toInt(PedidoEmart.listaControllersPedido![product.codigo]!.text),
+              productos.cantidadSolicitada!
+              );
+
       listTag.add(productos);
       result
         ..add(Padding(
@@ -211,6 +218,8 @@ List<Widget> gridItem(
                                     setState,
                                     cartViewModel,
                                     context),
+                                    productoViewModel.seeAlertMaximumPromotionLimit.value =
+                                          showNotificationMaximumPromotionLimit,
                               },
                             ),
                           ),
@@ -259,16 +268,23 @@ List<Widget> gridItem(
                           SizedBox(
                             height: 30.0,
                             width: 30.0,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: Icon(
-                                Icons.add,
-                                color:
-                                    ConstantesColores.azul_aguamarina_botones,
-                              ),
-                              onPressed: () => cartViewModel.mas(
-                                  product.productos, cartViewModel, setState),
-                            ),
+                            child: showNotificationMaximumPromotionLimit
+                                ? IconButton(
+                                    onPressed: () {}, icon: Icon(Icons.lock))
+                                : IconButton(
+                                    padding: EdgeInsets.all(0),
+                                    icon: Icon(
+                                      Icons.add,
+                                      color: ConstantesColores
+                                          .azul_aguamarina_botones,
+                                    ),
+                                    onPressed: () {
+                                      cartViewModel.mas(product.productos,
+                                          cartViewModel, setState);
+                                      productoViewModel.seeAlertMaximumPromotionLimit.value =
+                                          showNotificationMaximumPromotionLimit;
+                                    },
+                                  ),
                           ),
                         ],
                       ),
@@ -326,7 +342,7 @@ List<Widget> gridItem(
                 () => GestureDetector(
                   onTap: () async {
                     if (!cartViewModel.isTimerActive.value)
-                    cartViewModel.animateSquare();
+                      cartViewModel.animateSquare();
                   },
                   child: AnimatedContainer(
                     width: cartViewModel.widthSaveSquare.value,
@@ -413,3 +429,5 @@ List<Widget> gridItem(
   //     .sendAnalityticViewCart(cartViewModel, listTag, 'CarritoCompras');
   return result;
 }
+
+

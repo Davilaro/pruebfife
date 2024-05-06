@@ -41,7 +41,8 @@ class Product {
       this.combo,
       this.negocio,
       this.fechafinpromocion_1,
-      this.cantidadMaxima});
+      this.cantidadMaxima,
+      this.cantidadSolicitada});
 
   String codigo;
   String nombre;
@@ -79,6 +80,7 @@ class Product {
   int? ordenMarca;
   int? ordenSubcategoria;
   int? cantidadMaxima;
+  int? cantidadSolicitada;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
       codigo: json["codigo"] == null ? '' : json["codigo"],
@@ -128,7 +130,10 @@ class Product {
       combo: json["combo"] == null ? 0 : json["combo"],
       precioConDescuento:
           json["precioConDescuento"] == null ? 0.0 : json['precioConDescuento'],
-      cantidadMaxima: json["CantidadMaxima"] ?? 0);
+          
+      cantidadMaxima: json["CantidadMaxima"] ?? 0,
+      cantidadSolicitada: json["CantidadSolicitada"] ?? 0,
+      );
 
   factory Product.fromJson2(Map<dynamic, dynamic> json) => Product(
       codigo: json["codigo"] == null ? '' : json["codigo"],
@@ -177,7 +182,8 @@ class Product {
       combo: json["combo"] == null ? 0 : json["combo"],
       precioConDescuento:
           json["precioConDescuento"] == null ? 0.0 : json['precioConDescuento'],
-      cantidadMaxima: json["CantidadMaxima"] ?? 0);
+      cantidadMaxima: json["CantidadMaxima"] ?? 0,
+      cantidadSolicitada: json["CantidadSolicitada"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "codigoSku": codigo,
@@ -210,6 +216,7 @@ class Product {
         'bloqueoCartera': bloqueoCartera,
         "ordenMarca": ordenMarca,
         "ordenSubcategoria": ordenSubcategoria,
-        "CantidadMaxima": cantidadMaxima
+        "CantidadMaxima": cantidadMaxima,
+        "CantidadSolicitada": cantidadSolicitada
       };
 }

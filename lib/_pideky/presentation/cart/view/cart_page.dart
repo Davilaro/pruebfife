@@ -3,6 +3,7 @@
 import 'package:emart/_pideky/presentation/cart/widgets/expanded_shopping_cart_panel.dart';
 import 'package:emart/_pideky/presentation/cart/widgets/general_saved_indicator.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
+import 'package:emart/shared/widgets/notification_of_maximum_promotion_limit.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/controllers/slide_up_automatic.dart';
@@ -113,24 +114,38 @@ class _CartPageState extends State<CartPage> {
     cartViewModel.loadAgain = false;
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
-
     return PopScope(
       canPop: false,
       child: Scaffold(
         backgroundColor: ConstantesColores.color_fondo_gris,
-        appBar: AppBar(
-          leading: new IconButton(
-              icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-              onPressed: () => {
-                    if (Get.isSnackbarOpen) {
+        appBar: PreferredSize(
+                preferredSize:  Size.fromHeight(Get.height * 0.1),
+                child: 
+                Obx(() => productoViewModel.isAlertVisible
+                 ? NotificationMaximumPromotionlimit(
+                    onClose: () {
+                      setState(() {});
+                    },
+                  )
+                  : AppBar(
+                leading: new IconButton(
+                    icon: new Icon(Icons.arrow_back_ios,
+                        color: HexColor("#30C3A3")),
+                    onPressed: () => {
+                          if (Get.isSnackbarOpen) {
                       Get.closeCurrentSnackbar()
                     },
                     PedidoEmart.cambioVista.value = 1,
-                    cartViewModel.guardarCambiodevista = 1,
-                    Navigator.of(context).pop()
-                  }),
-          elevation: 0,
-        ),
+                          cartViewModel.guardarCambiodevista = 1,
+                          Navigator.of(context).pop()
+                        }),
+                elevation: 0,
+              ),
+                ),
+              ),
+            
+            
+           
         body: Padding(
           padding: const EdgeInsets.only(left: 13, right: 13, top: 5),
           child: Column(
@@ -182,8 +197,7 @@ class _CartPageState extends State<CartPage> {
                                 cartViewModel,
                                 cartViewModel.loadAgain,
                                 updateStateSendingAsParameter,
-                                isValid
-                                )
+                                isValid)
                             .toList()),
                   ),
                 ),

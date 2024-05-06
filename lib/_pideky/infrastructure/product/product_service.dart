@@ -145,6 +145,7 @@ ORDER BY
     p.Combo as combo,
     p.OrdenSubcategoria as ordenSubcategoria,
     pn.CantidadMaxima,
+    pn.CantidadSolicitada,
     ROUND(
         (
            (
@@ -298,6 +299,7 @@ ORDER BY p.orden ASC
        p.Negocio as negocio,
        p.precio as precioBase,
        pn.CantidadMaxima,
+       pn.CantidadSolicitada,
         ROUND(
         (
            (
@@ -420,6 +422,7 @@ substr(fechafinpromocion, 7, 4) || '-' || substr(fechafinpromocion, 4, 2) || '-'
     p.precio as precioBase,
     p.Combo as combo,
     pn.CantidadMaxima,
+    pn.CantidadSolicitada,
     ROUND(
         (
             (
@@ -573,6 +576,7 @@ ORDER BY
     p.Combo as combo,
     p.precio as precioBase,
     pn.CantidadMaxima,
+    pn.CantidadSolicitada,
     ROUND(
         (
            (
@@ -730,6 +734,7 @@ ORDER BY
     f.BloqueoCartera as bloqueoCartera, 
     p.Combo as combo,
     pn.CantidadMaxima,
+    pn.CantidadSolicitada,
     ROUND(
         (
             (
@@ -888,6 +893,7 @@ ORDER BY
     p.precio as precioBase,
     p.Combo as combo,
     pn.CantidadMaxima,
+    pn.CantidadSolicitada,
     ROUND(
         (
             (

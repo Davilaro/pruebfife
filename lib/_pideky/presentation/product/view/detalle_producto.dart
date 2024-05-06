@@ -62,8 +62,6 @@ class _DetalleProductoState extends State<DetalleProducto> {
   final TextEditingController _controllerCantidadProducto =
       TextEditingController();
 
-  
-
   @override
   void initState() {
     super.initState();
@@ -90,9 +88,12 @@ class _DetalleProductoState extends State<DetalleProducto> {
             ? '1'
             : cargoConfirmar.controllerCantidadProducto.value;
 
-  bool showNotificationMaximumPromotionLimit =  productViewModel.isMaximumPromotionLimitReached(
-        widget.productos.cantidadMaxima!, 
-        toInt(cargoConfirmar.controllerCantidadProducto.value));
+    bool showNotificationMaximumPromotionLimit =
+        productViewModel.isMaximumPromotionLimitReached(
+            widget.productos.cantidadMaxima!,
+            toInt(cargoConfirmar.controllerCantidadProducto.value),
+            widget.productos.cantidadSolicitada!);
+     int remainingQuantity = widget.productos.cantidadMaxima! - widget.productos.cantidadSolicitada!;       
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
@@ -141,7 +142,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           Padding(
-            padding: EdgeInsets.fromLTRB(30, 30, 20, 0),
+            padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
             child: Container(
               child: Text(
                 '${widget.productos.nombre}',
@@ -425,7 +426,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                               SizedBox(
                                 height: 40.0,
                                 width: Get.width * 0.1,
-                                child: (showNotificationMaximumPromotionLimit)
+                                child: showNotificationMaximumPromotionLimit
                                     ? IconButton(
                                         icon: Icon(Icons.lock_outline),
                                         onPressed: () {
@@ -449,9 +450,11 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
+          
           if (widget.productos.cantidadMaxima != 0)
+
             Text(
-                'Esta promoción tiene un tope máximo de compra de ${widget.productos.cantidadMaxima}'),
+                'Esta promoción tiene un tope máximo de compra de ${remainingQuantity}'),
           Visibility(
             visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(

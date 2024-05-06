@@ -38,6 +38,8 @@ class ProductViewModel extends GetxController {
 
   RxList listCondicionEntrega = [].obs;
 
+  RxBool seeAlertMaximumPromotionLimit = false.obs;
+
   String getCurrency(dynamic valor) {
     NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
 
@@ -232,9 +234,15 @@ class ProductViewModel extends GetxController {
     }
   }
 
-  bool isMaximumPromotionLimitReached(int maxQuantity, int currentQuantity) {
-    return maxQuantity != 0 && maxQuantity <= currentQuantity;
+  bool isMaximumPromotionLimitReached(int maxQuantity, int currentQuantity, int requestedAmount ) {
+    return maxQuantity != 0 && (maxQuantity - requestedAmount) <= currentQuantity;
   }
 
-  
+  // Método para verificar y actualizar la variable reactiva
+  bool checkAndSetAlert(int maxQuantity, int currentQuantity, int requestedAmount) {
+    seeAlertMaximumPromotionLimit.value =
+        maxQuantity != 0 && (maxQuantity - requestedAmount) <= currentQuantity;
+    return seeAlertMaximumPromotionLimit.value;
+  }
+   bool get isAlertVisible => seeAlertMaximumPromotionLimit.value;
 }
