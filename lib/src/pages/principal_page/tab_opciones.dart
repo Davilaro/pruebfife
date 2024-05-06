@@ -18,7 +18,7 @@ import 'package:emart/_pideky/presentation/product/view_model/product_view_model
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
-import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/bannners_controller.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_historico.dart';

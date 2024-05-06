@@ -34,8 +34,7 @@ List<Widget> loadDynamicExpansionPanel(
       double resulCalcularMontoMinimo =
           calcularFaltanteMontoMinimo(sumaPreciosProductos, valorMontoMinimo);
 
-      if (value['precioProducto'] == 0.0) {
-      } else {
+      if (value['precioProducto'] != 0.0) {
         cartProvider.actualizarFrecuenciaFabricante(
             fabricante, value["isFrecuencia"]);
         listaWidget.add(

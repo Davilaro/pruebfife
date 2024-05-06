@@ -1,12 +1,10 @@
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../_pideky/presentation/principal_page/view_model/view_model_principal_page.dart';
 import '../../src/modelos/multimedia.dart';
@@ -26,7 +24,7 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
  final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
   InAppWebViewController? _webViewController;
-  bool _isPaused = false;
+  bool isPaused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +176,7 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
       handlerName: 'onPlay',
       callback: (args) {
         setState(() {
-          _isPaused = false;
+          isPaused = false;
           print('xxxxxxxxxxxxxxxxxxxxxxxxxxxx  Video started playing');
         });
       },
@@ -188,7 +186,7 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
       handlerName: 'onPause',
       callback: (args) {
         setState(() {
-          _isPaused = true;
+          isPaused = true;
           print('rrrrrrrrrrrrrrrrrrrr Video paused');
         });
       },

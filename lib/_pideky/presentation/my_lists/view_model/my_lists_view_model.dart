@@ -15,6 +15,7 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class MyListsViewModel extends GetxController {
   RxBool seleecionarTodos = false.obs;
   RxBool refreshPage = false.obs;
   RxList misListas = [].obs;
+  RxList productListToCartUxcam = [].obs;
   RxMap mapListasProductos = {}.obs;
   RxString nombreNuevaLista = "".obs;
   final listaFabricante = Get.find<SuggestedOrderViewModel>().listaFabricante;
@@ -35,31 +37,34 @@ class MyListsViewModel extends GetxController {
     misListas.assignAll(await misListasService.getMisListas());
   }
 
-  Future<void> addToCar(context) async {
+  Future<bool> addToCar(context) async {
+    bool flag = false;
+    productListToCartUxcam.clear();
     ProductViewModel productViewModel = Get.find();
     final cartProvider = Provider.of<CartViewModel>(context, listen: false);
-    mapListasProductos.forEach((key, value) {
-      value['items'].forEach((DetailList productoDetalle) async {
+    for (var entry in mapListasProductos.entries) {
+      var value = entry.value;
+      await Future.forEach(value['items'], (DetailList productoDetalle) async {
         if (productoDetalle.isSelected! == true) {
           if (productoDetalle.codigo != "") {
             final db = ProductoRepositorySqlite();
-
             Product producto =
                 await db.consultarDatosProducto(productoDetalle.codigo);
+            productListToCartUxcam.add(producto);
             PedidoEmart.listaControllersPedido![producto.codigo]!.text =
                 "${productoDetalle.cantidad}";
             PedidoEmart.registrarValoresPedido(
                 producto, '${productoDetalle.cantidad}', true);
             MetodosLLenarValores().calcularValorTotal(cartProvider);
             productViewModel.insertarPedidoTemporal(producto.codigo);
-
-            Get.back();
+            flag = true;
           }
-
+          Get.back();
           update();
         }
       });
-    });
+    }
+    return flag;
   }
 
   Future<void> updateProduct(
@@ -126,7 +131,7 @@ class MyListsViewModel extends GetxController {
     }
   }
 
-  void deleteProduct(codigo, context) async {
+  void deleteProduct(codigo, context, VoidCallback setState) async {
     List list = [];
 
     mapListasProductos.forEach((key, value) async {
@@ -151,7 +156,7 @@ class MyListsViewModel extends GetxController {
 
     refreshPage.value = true;
 
-    update();
+    setState();
   }
 
   void deleteProducts(context) async {

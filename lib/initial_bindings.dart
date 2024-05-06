@@ -13,7 +13,6 @@ import 'package:emart/src/controllers/controller_multimedia.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
-import 'package:emart/src/pages/pedido_rapido/view_model/repetir_orden_view_model.dart';
 import 'package:get/get.dart';
 
 class InitialBindings extends Bindings {
@@ -28,7 +27,6 @@ class InitialBindings extends Bindings {
     SuggestedOrderViewModel.findOrInitialize;
     MyPaymentsViewModel.findOrInitialize;
     ProductViewModel.findOrInitialize;
-    RepetirOrdenViewModel.findOrInitialize;
     WinnersClubViewModel.findOrInitialize;
     NotificationsSlideUpAndPushInUpControllers.findOrInitialize;
     ValidationForms.findOrInitialize;

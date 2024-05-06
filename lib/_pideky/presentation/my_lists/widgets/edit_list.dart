@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/_pideky/presentation/my_lists/widgets/body_acordion_mis_listas.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/utils/alertas.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,29 +16,11 @@ class EditList extends StatefulWidget {
 }
 
 class _EditListState extends State<EditList> {
+  void mainStateList() {
+    setState(() {});
+  }
+
   final misListasViewModel = Get.find<MyListsViewModel>();
-
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Inicializa el timer con un período de 1 segundo
-    _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-      if (misListasViewModel.refreshPage.value == true) {
-        setState(() {});
-        print('estoy aqui');
-        misListasViewModel.refreshPage.value = false;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +164,7 @@ class _EditListState extends State<EditList> {
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(children: [
-                  ...createAcordionListas(context).toList(),
+                  ...createAcordionListas(context, mainStateList).toList(),
                 ]),
               ),
             ),
@@ -225,7 +206,11 @@ class _EditListState extends State<EditList> {
               height: 50,
               width: Get.width * 0.7,
               onTap: () async {
-                await misListasViewModel.addToCar(context);
+                var flag = await misListasViewModel.addToCar(context);
+                if (flag) {
+                  await UxcamTagueo().addToCartMyLists(
+                      misListasViewModel.productListToCartUxcam);
+                }
               },
               text: 'Agregar al carrito',
             ),

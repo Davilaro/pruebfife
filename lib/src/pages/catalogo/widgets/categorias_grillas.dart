@@ -33,7 +33,7 @@ class CategoriasGrilla extends StatefulWidget {
 class _CategoriasGrillaState extends State<CategoriasGrilla> {
   final TextEditingController controllerSearch = TextEditingController();
 
-  final botonesProveedoresVm = Get.put(BotonesProveedoresVm());
+  final botonesProveedoresVm = Get.find<BotonesProveedoresVm>();
 
   @override
   void initState() {

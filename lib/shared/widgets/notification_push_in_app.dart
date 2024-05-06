@@ -95,7 +95,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                                             true)
                                   });
                           notificationController.onTapPushInUp.value = true;
-                          UxcamTagueo().onTapPushInUp(false);
+                          UxcamTagueo().onTapPushInUp(false, widget.data.nombre);
                         },
                         child: Center(
                           child: Container(
@@ -147,7 +147,7 @@ class _NotificationPushInAppState extends State<NotificationPushInApp>
                           await Future.delayed(Duration(milliseconds: 300), () {
                             Navigator.of(context).pop();
                           });
-                          UxcamTagueo().onTapPushInUp(true);
+                          UxcamTagueo().onTapPushInUp(true, widget.data.nombre);
                           notificationController.closePushInUp.value = true;
                         },
                         child: Container(

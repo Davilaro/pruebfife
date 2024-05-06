@@ -7,7 +7,7 @@ import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-List createAcordionListas(context) {
+List createAcordionListas(context, VoidCallback setState) {
   RxList listaProductos = [].obs;
   final misListasViewModel = Get.find<MyListsViewModel>();
   ProductViewModel productViewModel = Get.find();
@@ -72,7 +72,7 @@ List createAcordionListas(context) {
                         Column(
                           children: [
                             ...gridItemLista(
-                                context, fabricante, productos['items']),
+                                context, fabricante, productos['items'], setState),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),

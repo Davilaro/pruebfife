@@ -8,7 +8,7 @@ import 'package:emart/_pideky/presentation/general_search_reponse/view_model/gen
 import 'package:emart/_pideky/presentation/general_search_reponse/widgets/campo_texto_resultado.dart';
 import 'package:emart/shared/widgets/drawer_sucursales.dart';
 import 'package:emart/shared/widgets/new_app_bar.dart';
-import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/bannners_controller.dart';
 import 'package:emart/src/modelos/categorias.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';

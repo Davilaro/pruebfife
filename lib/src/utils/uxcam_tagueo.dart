@@ -471,6 +471,35 @@ class UxcamTagueo {
     }
   }
 
+  Future<void> addToCartMyLists(listaProductosPedidos) async {
+    try {
+      final listProductos = listaProductosPedidos.map((producto) {
+        var productIndividual = {
+          "product": "${producto.nombre}",
+          "quantity": "${producto.cantidad}",
+          "provider": "${producto.fabricante}",
+          "City": prefs.ciudad ?? "",
+          "Regional": prefs.oficinaVentas,
+          "Country": prefs.paisUsuario ?? "CO"
+        };
+
+        return productIndividual;
+      }).toList();
+      print(
+        "productosss  $listProductos",
+      );
+      if (prefs.usurioLogin == 1)
+        FlutterUxcam.logEventWithProperties("addToCartMyLists", {
+          "City": prefs.ciudad ?? "",
+          "Regional": prefs.oficinaVentas,
+          "Country": prefs.paisUsuario ?? "CO",
+          "products": "${[...listProductos]}",
+        });
+    } catch (e) {
+      print('Error tagueo confirmOrder $e');
+    }
+  }
+
   void addToCartRepeatdOrder(listaProductosPedidos) {
     try {
       final listProductos = listaProductosPedidos.map((producto) {
@@ -563,7 +592,7 @@ class UxcamTagueo {
     }
   }
 
-  void onTapSlideUp(close) {
+  void onTapSlideUp(close, title) {
     try {
       if (prefs.usurioLogin == 1) {
         FlutterUxcam.logEventWithProperties("onTapSlideUp", {
@@ -571,7 +600,8 @@ class UxcamTagueo {
           "navegation": true,
           "City": prefs.ciudad ?? "",
           "Regional": prefs.oficinaVentas,
-          "Country": prefs.paisUsuario ?? "CO"
+          "Country": prefs.paisUsuario ?? "CO",
+          "title": title
         });
       }
     } catch (e) {
@@ -579,7 +609,7 @@ class UxcamTagueo {
     }
   }
 
-  void onTapPushInUp(close) {
+  void onTapPushInUp(close, String title) {
     try {
       if (prefs.usurioLogin == 1) {
         FlutterUxcam.logEventWithProperties("onTapPushInUp", {
@@ -587,7 +617,8 @@ class UxcamTagueo {
           "navegation": close == true ? false : true,
           "City": prefs.ciudad ?? "",
           "Regional": prefs.oficinaVentas,
-          "Country": prefs.paisUsuario ?? "CO"
+          "Country": prefs.paisUsuario ?? "CO",
+          "title": title
         });
       }
       print('se envio el tagueo');
@@ -631,85 +662,92 @@ class UxcamTagueo {
       log("Error tagueo deleteAccount");
     }
   }
+
   void updatePassword() {
     try {
       FlutterUxcam.logEventWithProperties("updatePassword", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo updatePassword");
     }
   }
+
   void confirmSMSLogin() {
     try {
       FlutterUxcam.logEventWithProperties("confirmSMSLogin", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo confirmSMSLogin");
     }
   }
+
   void securityQuestionLogin() {
     try {
       FlutterUxcam.logEventWithProperties("securityQuestionLogin", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo securityQuestionLogin");
     }
   }
+
   void storedFaceBiometricData() {
     try {
       FlutterUxcam.logEventWithProperties("storedFaceBiometricData", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo storedFaceBiometricData");
     }
   }
+
   void storedTouchBiometricData() {
     try {
       FlutterUxcam.logEventWithProperties("storedTouchBiometricData", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo storedTouchBiometricData");
     }
   }
+
   void userNotFoundLogin() {
     try {
       FlutterUxcam.logEventWithProperties("userNotFoundLogin", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo userNotFoundLogin");
     }
   }
-  void goToFilteredSearch () {
+
+  void goToFilteredSearch() {
     try {
       FlutterUxcam.logEventWithProperties("goToFilteredSearch", {
         "City": prefs.ciudad ?? "",
         "Regional": prefs.oficinaVentas,
         "Country": prefs.paisUsuario ?? "CO",
-        "CCUP" : prefs.codigoUnicoPideky
+        "CCUP": prefs.codigoUnicoPideky
       });
     } catch (e) {
       log("Error tagueo goToFilteredSearch");

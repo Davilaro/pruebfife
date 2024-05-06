@@ -26,6 +26,7 @@ class NotificationPushInAppSlideUpModel {
   String? negocio;
   int? tiempo;
   String? contenidoWeb;
+  String? nombre;
 
   NotificationPushInAppSlideUpModel(
       {this.fabricante,
@@ -40,6 +41,7 @@ class NotificationPushInAppSlideUpModel {
       this.subCategoriaRedireccion,
       this.negocio,
       this.tiempo,
+      this.nombre,
       this.contenidoWeb});
 
   factory NotificationPushInAppSlideUpModel.fromJson(
@@ -66,7 +68,9 @@ class NotificationPushInAppSlideUpModel {
               : json["subCategoriaRedireccion"],
           negocio: json["negocio"] == null ? "" : json["negocio"],
           tiempo: json['tiempo'] == null ? 0 : json['tiempo'],
-          contenidoWeb: json['contenidoWeb'] ?? '');
+          contenidoWeb: json['contenidoWeb'] ?? '',
+          nombre: json['Nombre'] ?? ''
+          );
 
   Map<String, dynamic> toJson() => {
         "empresa": fabricante,
@@ -80,5 +84,8 @@ class NotificationPushInAppSlideUpModel {
         "categoriaRedireccion": categoriaRedireccion,
         "subCategoriaRedireccion": subCategoriaRedireccion,
         "negocio": negocio,
+        "tiempo": tiempo,
+        "contenidoWeb": contenidoWeb,
+        "nombre": nombre
       };
 }

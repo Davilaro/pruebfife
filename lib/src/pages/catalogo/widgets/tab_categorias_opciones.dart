@@ -1,4 +1,4 @@
-import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/bannners_controller.dart';
 import 'package:emart/src/controllers/notifiactions_controllers.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
