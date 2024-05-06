@@ -23,7 +23,7 @@ void showSlideUpNotification(context, data, ubicacion) {
       notificationController.closeSlideUp.value = true;
       notificationController.validarRedireccionOnTap(
           data, context, provider, cargoConfirmar, prefs, ubicacion, false);
-      UxcamTagueo().onTapSlideUp(true);
+      UxcamTagueo().onTapSlideUp(true, data.nombre);
     },
     duration: Duration(minutes: 2),
     animationDuration: Duration(milliseconds: 500),

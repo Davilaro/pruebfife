@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 List<Widget> gridItemLista(
-    BuildContext context, String fabricante, RxList lista) {
+    BuildContext context, String fabricante, RxList lista, VoidCallback setState) {
   ProductViewModel productViewModel = Get.find();
   MyListsViewModel misListasViewModel = Get.find();
 
@@ -224,7 +224,8 @@ List<Widget> gridItemLista(
                                             producto.cantidad;
                                       } else {
                                         misListasViewModel.deleteProduct(
-                                            producto.codigo, context);
+                                            producto.codigo, context, setState);
+                                        setState();
                                         // await actualizarPaginaSinReset(
                                         //     context, cargoConfirmar);
                                       }

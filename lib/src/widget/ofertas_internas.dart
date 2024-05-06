@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/bannners_controller.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';

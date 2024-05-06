@@ -23,7 +23,7 @@ import 'package:emart/_pideky/presentation/my_business/view_model/my_business_vi
 import 'package:emart/_pideky/presentation/my_payments/view/my_payments.dart';
 import 'package:emart/shared/widgets/terminos_condiciones.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
-import 'package:emart/src/controllers/bannnersController.dart';
+import 'package:emart/src/controllers/bannners_controller.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/modelos/fabricante.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
