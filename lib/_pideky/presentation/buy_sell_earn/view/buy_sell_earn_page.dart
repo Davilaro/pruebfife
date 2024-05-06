@@ -5,6 +5,7 @@ import 'package:emart/_pideky/presentation/buy_sell_earn/widgets/promo_star.dart
 import 'package:emart/_pideky/presentation/buy_sell_earn/widgets/ticket_description.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:emart/src/widget/acciones_carrito_bart.dart';
 import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class BuySellEarnPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     //UXCam: Llamamos el evento selectFooter
+    UxcamTagueo().selectFooter('Buy Sell And Earn');
     BuySellEarnViewModel compraVendeGanaViewModel =
         BuySellEarnViewModel.getMyController();
     compraVendeGanaViewModel.getCupons();

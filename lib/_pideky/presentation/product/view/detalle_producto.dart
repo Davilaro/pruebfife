@@ -36,12 +36,14 @@ class DetalleProducto extends StatefulWidget {
   final Product productos;
   final double tamano;
   final bool isFrecuencia;
+  final bool isByBuySellEarn;
 
   const DetalleProducto(
       {Key? key,
       required this.productos,
       required this.tamano,
-      required this.isFrecuencia})
+      required this.isFrecuencia,
+      required this.isByBuySellEarn})
       : super(key: key);
 
   @override
@@ -280,8 +282,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                 context: context,
                                                 builder: (context) =>
                                                     PopUpChooseList(
-                                                      productos:
-                                                          List.generate(1, (index) => widget.productos),
+                                                      productos: List.generate(
+                                                          1,
+                                                          (index) =>
+                                                              widget.productos),
                                                       cantidad: toInt(cargoConfirmar
                                                           .controllerCantidadProducto
                                                           .value),
@@ -468,6 +472,11 @@ class _DetalleProductoState extends State<DetalleProducto> {
   }
 
   llenarCarrito(Product producto, CartViewModel cartProvider) {
+    if(widget.isByBuySellEarn) {
+      //UXCam: Llamamos el evento addToCart
+      UxcamTagueo()
+          .addToCartBuySellAndEarn(producto, int.parse(_controllerCantidadProducto.text));
+    }
     controllerNotifiaction.mostrarSlide(producto.negocio, context);
     if (_controllerCantidadProducto.text != '' &&
         _controllerCantidadProducto.text != '0') {

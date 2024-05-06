@@ -24,7 +24,7 @@ class BuySellEarnViewModel extends GetxController {
     cargoConfirmar.cargarProductoNuevo(
         ProductoCambiante.m(producto.nombre, producto.codigo), 2);
     Get.to(() => CambiarDetalleCompra(
-          cambioVista: 1,
+          cambioVista: 1, isByBuySellEarn: true,
         ));
   }
 
