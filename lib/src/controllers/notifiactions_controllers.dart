@@ -372,7 +372,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
           context,
           MaterialPageRoute(
               builder: (context) => CambiarDetalleCompra(
-                    cambioVista: 1,
+                    cambioVista: 1, isByBuySellEarn: false,
                   )));
       Get.back();
     }

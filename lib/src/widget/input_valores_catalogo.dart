@@ -112,7 +112,7 @@ class _InputValoresCatalogoState extends State<InputValoresCatalogo> {
       PedidoEmart.cambioVista.value = 1;
 
       await Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1,)));
+          MaterialPageRoute(builder: (context) => CambiarDetalleCompra(cambioVista: 1, isByBuySellEarn: false,)));
     }
   }
 }

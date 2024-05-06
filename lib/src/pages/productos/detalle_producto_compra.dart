@@ -69,6 +69,7 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                               cargoConfirmar.dato.value.codigo]!,
                           tamano: Get.height * 0.7,
                           isFrecuencia: isFrecuencia,
+                          isByBuySellEarn: false,
                         ))
                     : Container(
                         height: retornarTamanoPrincipal(cartProvider) * 1.1,
@@ -188,8 +189,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
     double precioMinimo = 0;
     double valor = 0.7;
 
-    
-
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]
                   ["precioFinal"] <
@@ -211,8 +210,6 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
   double retornarTamanoPrincipal(cartProvider) {
     double precioMinimo = 0;
     double valor = 0.6;
-
-    
 
     try {
       if (cartProvider.getListaFabricante[productos!.fabricante]

@@ -22,9 +22,12 @@ import 'package:provider/provider.dart';
 final prefs = new Preferencias();
 
 class CambiarDetalleCompra extends StatefulWidget {
+  final bool isByBuySellEarn;
   final int cambioVista;
 
-  const CambiarDetalleCompra({Key? key, required this.cambioVista}) : super(key: key);
+  const CambiarDetalleCompra(
+      {Key? key, required this.cambioVista, required this.isByBuySellEarn})
+      : super(key: key);
   @override
   State<CambiarDetalleCompra> createState() => _CambiarDetalleCompraState();
 }
@@ -67,10 +70,12 @@ class _CambiarDetalleCompraState extends State<CambiarDetalleCompra> {
                     ? Container(
                         height: Get.height * 0.8,
                         child: DetalleProducto(
-                            productos: PedidoEmart.listaProductos![
-                                cargoConfirmar.dato.value.codigo]!,
-                            tamano: Get.height * 0.7,
-                            isFrecuencia: isFrecuencia))
+                          productos: PedidoEmart.listaProductos![
+                              cargoConfirmar.dato.value.codigo]!,
+                          tamano: Get.height * 0.7,
+                          isFrecuencia: isFrecuencia,
+                          isByBuySellEarn: widget.isByBuySellEarn,
+                        ))
                     : Container(
                         height: Get.height * 0.9,
                         child: IrMiCarrito(
