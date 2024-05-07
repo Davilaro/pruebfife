@@ -15,7 +15,7 @@ import 'package:emart/src/preferences/metodo_ingresados.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider_helper.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +25,8 @@ class MyListsViewModel extends GetxController {
       MyListsUseCases(misListasInterface: MyListsService());
   final prefs = Preferencias();
   final cargoConfirmar = Get.find<ControlBaseDatos>();
+  ProductViewModel productViewModel = Get.find();
   RxBool seleecionarTodos = false.obs;
-  RxBool refreshPage = false.obs;
   RxList misListas = [].obs;
   RxList productListToCartUxcam = [].obs;
   RxMap mapListasProductos = {}.obs;
@@ -77,7 +77,8 @@ class MyListsViewModel extends GetxController {
     if (result[1] == false) {
       backClosePopup(context, texto: result[0], isCorrect: false);
     } else {
-      await DBProviderHelper.db.actualizarProductoDeLista(id, cantidad);
+      await DBProviderHelper.db
+          .actualizarProductoDeLista(id, cantidad, codigoProducto);
     }
   }
 
@@ -154,8 +155,6 @@ class MyListsViewModel extends GetxController {
       backClosePopup(context, isCorrect: false, texto: result[0]);
     }
 
-    refreshPage.value = true;
-
     setState();
   }
 
@@ -175,8 +174,6 @@ class MyListsViewModel extends GetxController {
     if (result[1] == false) {
       backClosePopup(context, isCorrect: false, texto: result[0]);
     }
-
-    refreshPage.value = true;
 
     update();
   }
@@ -240,6 +237,51 @@ class MyListsViewModel extends GetxController {
       String? pathImage = 'assets/image/Icon_incorrecto.svg',
       required bool isCorrect}) async {
     showPopup(context, texto!, SvgPicture.asset(pathImage!));
+  }
+
+  void validateMaxByEachProduct(
+      DetailList product, context, VoidCallback setState) {
+    if (product.cantidad >
+            product.cantidadMaxima! - product.cantidadSolicitada! &&
+        product.isOferta == 1) {
+      if ((product.cantidadMaxima! - product.cantidadSolicitada!) != 0) {
+        updateProduct(
+            product.id,
+            product.codigo,
+            product.cantidadMaxima! - product.cantidadSolicitada!,
+            product.proveedor,
+            context);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState();
+        });
+      } else {
+          deleteProduct(product.codigo, context, setState);
+      }
+    }
+  }
+
+  void validationProductsMax(DetailList producto) {
+    if (producto.cantidadMaxima != 0 &&
+        producto.cantidad ==
+            producto.cantidadMaxima! - producto.cantidadSolicitada! &&
+        producto.isOferta == 1) {
+      producto.hasMax = true;
+    } else {
+      producto.hasMax = false;
+    }
+    if (producto.isOferta == 1 && producto.cantidadMaxima != 0) {
+      productViewModel.fillProductListSentWithMax(
+          producto.codigo,
+          producto.cantidad,
+          producto.cantidadSolicitada!,
+          producto.cantidadMaxima!);
+    } else {
+      if (productViewModel.productListSentWithMax
+              .containsKey(producto.codigo) &&
+          producto.cantidad != 0) {
+        productViewModel.deleteProductListSentWithMax(producto.codigo);
+      }
+    }
   }
 
   @override

@@ -172,6 +172,13 @@ class MyListsService implements InterfaceMyListsGateWay {
             value['items'].forEach((DetailList element) {
               if (element.codigo == codigoProducto) {
                 element.cantidad = cantidad;
+                if (element.cantidadMaxima != 0 &&
+                    element.cantidad ==
+                        element.cantidadMaxima! - element.cantidadSolicitada!) {
+                  element.hasMax = true;
+                } else {
+                  element.hasMax = false;
+                }
                 myList.update();
               }
             });
@@ -190,7 +197,8 @@ class MyListsService implements InterfaceMyListsGateWay {
     final db = await DBProvider.db.baseAbierta;
     var sql = idLista != null
         ? """ SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
-		F.nombrecomercial nombreComercial , 
+		F.nombrecomercial nombreComercial , CASE WHEN pn.codigo IS NOT NULL THEN 1 ELSE 0 END AS isOferta, 
+    IFNULL(pn.CantidadMaxima, 0) AS CantidadMaxima, IFNULL(pn.CantidadSolicitada, 0) AS CantidadSolicitada,
     CAST(
         ROUND(
             (p.precio + ((p.precio * p.iva) / 100) + (
@@ -222,6 +230,8 @@ class MyListsService implements InterfaceMyListsGateWay {
     ) AS precio,  ld.Cantidad
         FROM ListaCompraDetalle ld 
         INNER JOIN Producto P ON P.Codigo = ld.Codigo 
+        LEFT JOIN 
+        Ofertas pn ON ld.codigo = pn.codigo
         left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
              select count(P.codigo) identificador,*
              from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material
@@ -229,7 +239,8 @@ class MyListsService implements InterfaceMyListsGateWay {
         INNER JOIN Fabricante F ON F.empresa = P.Fabricante where ld.Id = "$idLista" """
         : """
         SELECT   ld.proveedor  proveedor, ld.Codigo codigo , P.Nombre nombre, ld.nombre nombreLista, ld.Id , F.ico icon, 
-            F.nombrecomercial nombreComercial ,
+            F.nombrecomercial nombreComercial , CASE WHEN pn.codigo IS NOT NULL THEN 1 ELSE 0 END AS isOferta, 
+            IFNULL(pn.CantidadMaxima, 0) AS CantidadMaxima, IFNULL(pn.CantidadSolicitada, 0) AS CantidadSolicitada,
             CAST(
         ROUND(
             (p.precio + ((p.precio * p.iva) / 100) + (
@@ -261,6 +272,8 @@ class MyListsService implements InterfaceMyListsGateWay {
     ) AS precio,  ld.Cantidad
                 FROM ListaCompraDetalle ld 
                 INNER JOIN Producto P ON P.Codigo = ld.Codigo 
+				LEFT JOIN 
+        Ofertas pn ON ld.codigo = pn.codigo
                 left join (select tmp.proveedor, tmp.material codigo, tmp.descuento from (
                     select count(P.codigo) identificador,*
                     from descuentos D inner join producto p on p.codigo = d.material and d.proveedor = p.fabricante group by material

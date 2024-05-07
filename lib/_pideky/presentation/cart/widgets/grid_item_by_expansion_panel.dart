@@ -4,6 +4,7 @@ import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart'
 import 'package:emart/_pideky/presentation/cart/widgets/private_alerts.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
+import 'package:emart/shared/widgets/notification_of_maximum_promotion_limit.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/state_controller_radio_buttons.dart';
@@ -39,11 +40,24 @@ List<Widget> gridItem(
 
     if (product.fabricante == fabricante && product.cantidad > 0) {
       bool showNotificationMaximumPromotionLimit =
-          productViewModel.checkAndSetAlert(productos.cantidadMaxima!,
+          productViewModel.checkAndSetAlert(
+              productos.cantidadMaxima!,
               toInt(PedidoEmart.listaControllersPedido![product.codigo]!.text),
-              productos.cantidadSolicitada!
-              );
-
+              productos.cantidadSolicitada!);
+      if (PedidoEmart.listaProductos![product.codigo]!.isOferta == 1 &&
+          PedidoEmart.listaProductos![product.codigo]!.cantidadMaxima != 0) {
+        productViewModel.fillProductListSentWithMax(
+            PedidoEmart.listaProductos![product.codigo]!.codigo,
+            toInt(PedidoEmart.listaControllersPedido![product.codigo]!.text),
+            PedidoEmart.listaProductos![product.codigo]!.cantidadSolicitada!,
+            PedidoEmart.listaProductos![product.codigo]!.cantidadMaxima!);
+      } else {
+        if (productViewModel.productListSentWithMax
+                .containsKey(product.codigo) &&
+            toInt(PedidoEmart.listaControllersPedido![product.codigo]!.text) !=
+                0)
+          productViewModel.deleteProductListSentWithMax(product.codigo);
+      }
       listTag.add(productos);
       result
         ..add(Padding(
@@ -218,8 +232,9 @@ List<Widget> gridItem(
                                     setState,
                                     cartViewModel,
                                     context),
-                                    productoViewModel.seeAlertMaximumPromotionLimit.value =
-                                          showNotificationMaximumPromotionLimit,
+                                productoViewModel
+                                        .seeAlertMaximumPromotionLimit.value =
+                                    showNotificationMaximumPromotionLimit,
                               },
                             ),
                           ),
@@ -266,11 +281,21 @@ List<Widget> gridItem(
                             ),
                           ),
                           SizedBox(
-                            height: 30.0,
-                            width: 30.0,
+                            width: Get.width * 0.10,
                             child: showNotificationMaximumPromotionLimit
                                 ? IconButton(
-                                    onPressed: () {}, icon: Icon(Icons.lock))
+                                    icon: Icon(
+                                      Icons.lock_outline_sharp,
+                                      color: ConstantesColores.gris_sku,
+                                    ),
+                                    onPressed: () async {
+                                      if (Get.isSnackbarOpen) {
+                                        await Get.closeCurrentSnackbar();
+                                        notificationMaximumPromotionlimit();
+                                      } else {
+                                        notificationMaximumPromotionlimit();
+                                      }
+                                    })
                                 : IconButton(
                                     padding: EdgeInsets.all(0),
                                     icon: Icon(
@@ -281,7 +306,9 @@ List<Widget> gridItem(
                                     onPressed: () {
                                       cartViewModel.mas(product.productos,
                                           cartViewModel, setState);
-                                      productoViewModel.seeAlertMaximumPromotionLimit.value =
+                                      productoViewModel
+                                              .seeAlertMaximumPromotionLimit
+                                              .value =
                                           showNotificationMaximumPromotionLimit;
                                     },
                                   ),
@@ -429,5 +456,3 @@ List<Widget> gridItem(
   //     .sendAnalityticViewCart(cartViewModel, listTag, 'CarritoCompras');
   return result;
 }
-
-

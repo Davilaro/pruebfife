@@ -10,6 +10,9 @@ class DetailList {
   final String nombreLista;
   final String nombreProducto;
   final String codigo;
+  int? cantidadMaxima;
+  int? cantidadSolicitada;
+  int? isOferta;
   int cantidad;
   final double precio;
   final double descuento;
@@ -17,9 +20,9 @@ class DetailList {
   final String nombreComercial;
   final String proveedor;
   bool? isSelected = false;
+  bool? hasMax = false;
 
-  DetailList(
-     {
+  DetailList({
     required this.id,
     required this.nombreLista,
     required this.codigo,
@@ -30,20 +33,28 @@ class DetailList {
     required this.nombreComercial,
     required this.descuento,
     required this.precioInicial,
+    this.cantidadMaxima,
+    this.cantidadSolicitada,
+    this.isOferta,
   });
 
-  DetailList copyWith(
-          {int? id,
-          String? nombre,
-          String? codigo,
-          int? cantidad,
-          String? proveedor,
-          double? precio,
-          String? nombreComercial,
-          String? icon,
-          double? descuento,
-          double? precioInicial,
-          String? nombreProducto}) =>
+  DetailList copyWith({
+    int? id,
+    String? nombre,
+    String? codigo,
+    int? cantidad,
+    String? proveedor,
+    double? precio,
+    String? nombreComercial,
+    String? icon,
+    double? descuento,
+    double? precioInicial,
+    String? nombreProducto,
+    int? cantidadMaxima,
+    int? cantidadSolicitada,
+    int? isOferta,
+    bool? hasMax
+  }) =>
       DetailList(
         id: id ?? this.id,
         descuento: descuento ?? this.descuento,
@@ -55,6 +66,10 @@ class DetailList {
         nombreProducto: nombreProducto ?? this.nombreProducto,
         precio: precio ?? this.precio,
         nombreComercial: nombreComercial ?? this.nombreComercial,
+        cantidadMaxima: cantidadMaxima ?? this.cantidadMaxima,
+        cantidadSolicitada: cantidadSolicitada ?? this.cantidadSolicitada,
+        isOferta: isOferta ?? this.isOferta
+
       );
 
   factory DetailList.fromJson(Map<String, dynamic> json) => DetailList(
@@ -68,6 +83,9 @@ class DetailList {
         nombreComercial: json['nombreComercial'],
         descuento: json['descuento'],
         precioInicial: json['precioinicial'],
+        cantidadMaxima: json['CantidadMaxima'] ?? 0,
+        cantidadSolicitada: json['CantidadSolicitada'] ?? 0,
+        isOferta: json['isOferta'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,5 +97,10 @@ class DetailList {
         "nombreProducto": nombreProducto,
         "precio": precio,
         "nombreComercial": nombreComercial,
+        "descuento": descuento,
+        "precioInicial": precioInicial,
+        "cantidadMaxima": cantidadMaxima,
+        "cantidadSolicitada": cantidadSolicitada,
+        "isOferta": isOferta,
       };
 }

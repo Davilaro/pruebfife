@@ -11,10 +11,12 @@ import 'package:emart/src/modelos/validar_pedido.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
+import 'package:emart/src/provider/db_provider_helper.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:emart/src/utils/alertas.dart';
 import 'package:emart/src/utils/firebase_tagueo.dart';
 import 'package:emart/src/utils/uxcam_tagueo.dart';
+import 'package:emart/src/widget/boton_actualizar.dart';
 import 'package:emart/src/widget/pedido_realizado.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -138,6 +140,7 @@ dialogEnviarPedido(size, context, context2) async {
       }
     }
   });
+  print('topes ${productViewModel.productListSentWithMax}');
   await progress.show();
   final responseDuplicateOrder = await Servicies()
       .duplicateOrder(listaSkuProductos, cartProvider.getTotal);
@@ -263,8 +266,12 @@ dialogPedidoRegistrado(listaProductosPedidos, size, context, context2) async {
   String numDoc = DateFormat('yyyyMMddHHmmssSSS').format(now);
   numDoc += numeroAleatorio.nextInt(1000 - 1).toString();
 
-  ValidarPedido validar = await configureOrderViewModel.cartUseCases.sendOrder(listaProductosPedidos,
-      prefs.codClienteLogueado, fechaPedido, numDoc, cartProvider);
+  ValidarPedido validar = await configureOrderViewModel.cartUseCases.sendOrder(
+      listaProductosPedidos,
+      prefs.codClienteLogueado,
+      fechaPedido,
+      numDoc,
+      cartProvider);
 
   if (validar.estado == 'OK') {
     PedidoEmart.listaValoresPedido!.forEach((key, value) {
@@ -285,8 +292,17 @@ dialogPedidoRegistrado(listaProductosPedidos, size, context, context2) async {
     PedidoEmart.cantItems.value = '0';
     controladorCambioEstadoProductos.mapaHistoricos
         .updateAll((key, value) => value = false);
+    productViewModel.productListSentWithMax
+        .forEach((codigoProducto, mapCantidades) {
+      DBProviderHelper.db.updateOffer(
+          codigoProducto,
+          (mapCantidades['cantidadSolicitada'] <= mapCantidades['cantidadMaxima']
+              ? (mapCantidades['cantidadSolicitada'] +
+                  mapCantidades['cantidadActual'])
+              : mapCantidades['cantidadMaxima']));
+    });
+    productoViewModel.productListSentWithMax.clear();
     productoViewModel.eliminarBDTemporal();
-
     if (controller.isPayOnLine.value) {
       Get.off(() => OrderNotificationPage(
           numEmpresa: configureOrderViewModel.numEmpresa.value,

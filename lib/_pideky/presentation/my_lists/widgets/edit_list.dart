@@ -24,7 +24,6 @@ class _EditListState extends State<EditList> {
 
   @override
   Widget build(BuildContext context) {
-    final misListasViewModel = Get.find<MyListsViewModel>();
     Map arguments = Get.arguments;
     final title = arguments['title'];
     final id = arguments['id'];

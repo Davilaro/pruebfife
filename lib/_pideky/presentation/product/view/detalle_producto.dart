@@ -8,6 +8,7 @@ import 'package:emart/_pideky/presentation/my_lists/widgets/pop_up_choose_list.d
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
 import 'package:emart/generated/l10n.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/shared/widgets/notification_of_maximum_promotion_limit.dart';
 import 'package:emart/src/classes/producto_cambiante.dart';
 import 'package:emart/src/controllers/cambio_estado_pedido.dart';
 import 'package:emart/src/controllers/controller_product.dart';
@@ -31,8 +32,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../shared/widgets/notification_of_maximum_promotion_limit.dart';
 
 class DetalleProducto extends StatefulWidget {
   final Product productos;
@@ -80,6 +79,11 @@ class _DetalleProductoState extends State<DetalleProducto> {
 
   @override
   Widget build(BuildContext context) {
+    RxBool isValidMax = (widget.productos.cantidadMaxima! -
+                widget.productos.cantidadSolicitada!) <=
+            0 && widget.productos.cantidadMaxima != 0
+        ? false.obs
+        : true.obs;
     final cartProvider = Provider.of<CartViewModel>(context);
 
     _controllerCantidadProducto.text = cargoConfirmar.isAgotado.value
@@ -93,54 +97,44 @@ class _DetalleProductoState extends State<DetalleProducto> {
             widget.productos.cantidadMaxima!,
             toInt(cargoConfirmar.controllerCantidadProducto.value),
             widget.productos.cantidadSolicitada!);
-     int remainingQuantity = widget.productos.cantidadMaxima! - widget.productos.cantidadSolicitada!;       
+    int remainingQuantity = (widget.productos.cantidadMaxima! -
+                widget.productos.cantidadSolicitada!) <
+            0
+        ? 0
+        : (widget.productos.cantidadMaxima! -
+            widget.productos.cantidadSolicitada!);
 
     return Scaffold(
       backgroundColor: ConstantesColores.color_fondo_gris,
-      appBar: showNotificationMaximumPromotionLimit
-          ? null
-          : AppBar(
-              title: Text(
-                S.current.product,
-                style: TextStyle(color: HexColor("#41398D")),
-              ),
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: ConstantesColores.color_fondo_gris,
-                statusBarIconBrightness: Brightness.dark,
-              ),
-              elevation: 0,
-              leading: new IconButton(
-                icon:
-                    new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
-                onPressed: () => Navigator.pop(context),
-              ),
-              actions: <Widget>[
-                GestureDetector(
-                  child: BotonActualizar(),
-                  onTap: () {
-                    setState(() {
-                      initState();
-                      (context as Element).reassemble();
-                    });
-                  },
-                ),
-                AccionesBartCarrito(esCarrito: true),
-              ],
-            ),
+      appBar: AppBar(
+        title: Text(
+          S.current.product,
+          style: TextStyle(color: HexColor("#41398D")),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: ConstantesColores.color_fondo_gris,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        elevation: 0,
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back_ios, color: HexColor("#30C3A3")),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: <Widget>[
+          GestureDetector(
+            child: BotonActualizar(),
+            onTap: () {
+              setState(() {
+                initState();
+                (context as Element).reassemble();
+              });
+            },
+          ),
+          AccionesBartCarrito(esCarrito: true),
+        ],
+      ),
       body: Column(
         children: [
-          if (showNotificationMaximumPromotionLimit)
-            Align(
-              alignment: Alignment.topCenter,
-              child: NotificationMaximumPromotionlimit(
-                onClose: () {
-                  setState(() {
-                    //toInt(cargoConfirmar.controllerCantidadProducto.value) - 1;
-                    //  showNotificationMaximumPromotionLimit = false;
-                  });
-                },
-              ),
-            ),
           Padding(
             padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
             child: Container(
@@ -155,7 +149,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Container(
               alignment: Alignment.center,
-              height: widget.tamano * 0.4,
+              height: widget.tamano * 0.375,
               width: double.infinity,
               child: InkWell(
                 onTap: () => showDialog(
@@ -428,10 +422,17 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                 width: Get.width * 0.1,
                                 child: showNotificationMaximumPromotionLimit
                                     ? IconButton(
-                                        icon: Icon(Icons.lock_outline),
-                                        onPressed: () {
-                                          showNotificationMaximumPromotionLimit =
-                                              true;
+                                        icon: Icon(
+                                          Icons.lock_outline,
+                                          color: ConstantesColores.gris_sku,
+                                        ),
+                                        onPressed: () async {
+                                          if (Get.isSnackbarOpen) {
+                                            await Get.closeCurrentSnackbar();
+                                            notificationMaximumPromotionlimit();
+                                          } else {
+                                            notificationMaximumPromotionlimit();
+                                          }
                                         })
                                     : IconButton(
                                         icon:
@@ -450,21 +451,31 @@ class _DetalleProductoState extends State<DetalleProducto> {
               ),
             ),
           ),
-          
           if (widget.productos.cantidadMaxima != 0)
-
-            Text(
-                'Esta promoción tiene un tope máximo de compra de ${remainingQuantity}'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                isValidMax.value == true
+                    ? 'Esta promoción tiene un tope máximo de compra de ${remainingQuantity}'
+                    : 'Has alcanzado el límite máximo de compra de esta promoción',
+                style: TextStyle(
+                    fontSize: 15.0,
+                    color: ConstantesColores.azul_precio,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
           Visibility(
             visible: !cargoConfirmar.isAgotado.value,
             child: BotonAgregarCarrito(
-              onTap: widget.isFrecuencia
+              onTap: widget.isFrecuencia && isValidMax.value == true
                   ? () => llenarCarrito(widget.productos, cartProvider)
-                  : () => productViewModel.iniciarModal(
-                      context, widget.productos.fabricante),
+                  : () => isValidMax.value == false
+                      ? () {}
+                      : productViewModel.iniciarModal(
+                          context, widget.productos.fabricante),
               width: Get.width * 0.9,
               height: widget.tamano * 0.08,
-              color: widget.isFrecuencia
+              color: widget.isFrecuencia && isValidMax.value == true
                   ? ConstantesColores.azul_aguamarina_botones
                   : ConstantesColores.gris_sku,
               text: 'Agregar al carrito ',
@@ -507,10 +518,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
   }
 
   llenarCarrito(Product producto, CartViewModel cartProvider) {
-    if(widget.isByBuySellEarn) {
+    if (widget.isByBuySellEarn) {
       //UXCam: Llamamos el evento addToCart
-      UxcamTagueo()
-          .addToCartBuySellAndEarn(producto, int.parse(_controllerCantidadProducto.text));
+      UxcamTagueo().addToCartBuySellAndEarn(
+          producto, int.parse(_controllerCantidadProducto.text));
     }
     controllerNotifiaction.mostrarSlide(producto.negocio, context);
     if (_controllerCantidadProducto.text != '' &&

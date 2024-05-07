@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
+import 'package:emart/shared/widgets/notification_of_maximum_promotion_limit.dart';
 
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-List<Widget> gridItemLista(
-    BuildContext context, String fabricante, RxList lista, VoidCallback setState) {
+List<Widget> gridItemLista(BuildContext context, String fabricante,
+    RxList lista, VoidCallback setState) {
   ProductViewModel productViewModel = Get.find();
   MyListsViewModel misListasViewModel = Get.find();
 
@@ -19,6 +20,9 @@ List<Widget> gridItemLista(
     RxBool isSelected = RxBool(producto.isSelected!);
     RxInt cantidadProducto = RxInt(producto.cantidad);
     if (producto.proveedor == fabricante && producto.cantidad > 0) {
+      misListasViewModel.validationProductsMax(producto);
+      if(producto.cantidadMaxima != 0 && producto.isOferta == 1)
+      misListasViewModel.validateMaxByEachProduct(producto, context, setState);
       result
         ..add(Obx(
           () => Padding(
@@ -122,8 +126,8 @@ List<Widget> gridItemLista(
                                               maxLines: 3,
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color:
-                                                      ConstantesColores.azul_aguamarina_botones,
+                                                  color: ConstantesColores
+                                                      .azul_aguamarina_botones,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
@@ -244,26 +248,43 @@ List<Widget> gridItemLista(
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 30.0,
-                                  width: 30.0,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    icon: Icon(
-                                      Icons.add,
-                                      color: ConstantesColores
-                                          .azul_aguamarina_botones,
-                                    ),
-                                    onPressed: () async {
-                                      await misListasViewModel.updateProduct(
-                                          producto.id,
-                                          producto.codigo,
-                                          producto.cantidad + 1,
-                                          producto.proveedor,
-                                          context);
-                                      cantidadProducto.value =
-                                          producto.cantidad;
-                                    },
-                                  ),
+                                  height: 30,
+                                  width:
+                                      producto.hasMax ? Get.width * 0.1 : 30.0,
+                                  child: producto.hasMax
+                                      ? IconButton(
+                                          padding: EdgeInsets.all(0),
+                                          icon: Icon(
+                                            Icons.lock_outline,
+                                            color: ConstantesColores.gris_sku,
+                                          ),
+                                          onPressed: () async {
+                                            if (Get.isSnackbarOpen) {
+                                              await Get.closeCurrentSnackbar();
+                                              notificationMaximumPromotionlimit();
+                                            } else {
+                                              notificationMaximumPromotionlimit();
+                                            }
+                                          })
+                                      : IconButton(
+                                          padding: EdgeInsets.all(0),
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: ConstantesColores
+                                                .azul_aguamarina_botones,
+                                          ),
+                                          onPressed: () async {
+                                            await misListasViewModel
+                                                .updateProduct(
+                                                    producto.id,
+                                                    producto.codigo,
+                                                    producto.cantidad + 1,
+                                                    producto.proveedor,
+                                                    context);
+                                            cantidadProducto.value =
+                                                producto.cantidad;
+                                          },
+                                        ),
                                 ),
                               ],
                             ),

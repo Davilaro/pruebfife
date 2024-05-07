@@ -39,6 +39,32 @@ class ProductViewModel extends GetxController {
   RxList listCondicionEntrega = [].obs;
 
   RxBool seeAlertMaximumPromotionLimit = false.obs;
+  // este map<String, Map<String, dynamic>> se usa para guardar los productos que se 
+  // se envian en el pedido y tienen cantidad maxima para modificar la db
+  Map productListSentWithMax = {}.obs;
+
+  // metodo para llenar el map productListSentWithMax
+  void fillProductListSentWithMax(String codigoProducto, int cantidadActual,
+      int cantidadSolicitada, int cantidadMaxima) {
+    if(productListSentWithMax.containsKey(codigoProducto)){
+      productListSentWithMax[codigoProducto]['cantidadActual'] = cantidadActual;
+      productListSentWithMax[codigoProducto]['cantidadSolicitada'] = cantidadSolicitada;
+      productListSentWithMax[codigoProducto]['cantidadMaxima'] = cantidadMaxima;
+      return;
+    }
+    productListSentWithMax.putIfAbsent(
+        codigoProducto,
+        () => {
+              'cantidadActual': cantidadActual,
+              'cantidadSolicitada': cantidadSolicitada,
+              'cantidadMaxima': cantidadMaxima
+            });
+  }
+
+  // metodo para eliminar un producto del map productListSentWithMax
+  void deleteProductListSentWithMax(String codigoProducto) {
+    productListSentWithMax.remove(codigoProducto);
+  }
 
   String getCurrency(dynamic valor) {
     NumberFormat formatNumber = new NumberFormat("#,##0.00", "es_AR");
@@ -234,15 +260,19 @@ class ProductViewModel extends GetxController {
     }
   }
 
-  bool isMaximumPromotionLimitReached(int maxQuantity, int currentQuantity, int requestedAmount ) {
-    return maxQuantity != 0 && (maxQuantity - requestedAmount) <= currentQuantity;
+  bool isMaximumPromotionLimitReached(
+      int maxQuantity, int currentQuantity, int requestedAmount) {
+    return maxQuantity != 0 &&
+        (maxQuantity - requestedAmount) <= currentQuantity;
   }
 
   // Método para verificar y actualizar la variable reactiva
-  bool checkAndSetAlert(int maxQuantity, int currentQuantity, int requestedAmount) {
+  bool checkAndSetAlert(
+      int maxQuantity, int currentQuantity, int requestedAmount) {
     seeAlertMaximumPromotionLimit.value =
         maxQuantity != 0 && (maxQuantity - requestedAmount) <= currentQuantity;
     return seeAlertMaximumPromotionLimit.value;
   }
-   bool get isAlertVisible => seeAlertMaximumPromotionLimit.value;
+
+  bool get isAlertVisible => seeAlertMaximumPromotionLimit.value;
 }

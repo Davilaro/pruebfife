@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:emart/src/modelos/condiciones_entregas.dart';
 import 'package:emart/src/modelos/datos_cliente.dart';
@@ -346,13 +347,24 @@ class DBProviderHelper {
     }
   }
 
-  Future<void> actualizarProductoDeLista(int idLista, cantidad) async {
+  Future<void> actualizarProductoDeLista(int idLista, cantidad, codigoProducto) async {
     final db = await baseAbierta;
     try {
       await db.update('ListaCompraDetalle', {'Cantidad': cantidad},
-          where: 'Id = ?', whereArgs: [idLista]);
+          where: 'Id = ? and Codigo = ?', whereArgs: [idLista, codigoProducto]);
     } catch (e) {
       print('ERROR AL ACTUALIZAR PRODUCTO DE LISTA $e');
+    }
+  }
+  
+  Future updateOffer(String productCode, int cantidad) async {
+    final db = await baseAbierta;
+    try {
+      await db.update('Ofertas', {'CantidadSolicitada': cantidad},
+          where: 'codigo = ?', whereArgs: [productCode]);
+      log('Actualizacion de ofertas realizada');
+    } catch (e) {
+      log('ERROR AL ACTUALIZAR CANTIDAD DE OFERTAS $e');
     }
   }
 }

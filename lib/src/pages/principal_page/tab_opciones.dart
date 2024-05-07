@@ -154,12 +154,10 @@ class _TabOpcionesState extends State<TabOpciones>
 
   Future<void> _descarcarDB() async {
     try {
-      if (PedidoEmart.listaControllersPedido?.keys.length == null) {
         PedidoEmart.listaControllersPedido = new Map();
         PedidoEmart.listaValoresPedido = new Map();
         PedidoEmart.listaProductos = new Map();
         PedidoEmart.listaValoresPedidoAgregados = new Map();
-      }
       final misPedidosViewModel = Get.find<MyOrdersViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());
@@ -176,6 +174,9 @@ class _TabOpcionesState extends State<TabOpciones>
       var listaProductos = await productService.cargarProductos(
           '', 10, '', 0.0, 1000000000.0, "", "");
       for (var i = 0; i < listaProductos.length; i++) {
+        if(listaProductos[i].isOferta == 1 && listaProductos[i].codigo != '01000878') {
+          print('producto en oferta ${listaProductos[i]}');
+        }
         PedidoEmart.listaProductos!
             .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
         PedidoEmart.listaValoresPedidoAgregados!

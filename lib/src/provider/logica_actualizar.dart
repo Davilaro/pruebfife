@@ -6,6 +6,7 @@ import 'package:emart/src/provider/db_provider_helper.dart';
 
 class LogicaActualizar {
   Future<void> actualizarDB() async {
+    var cargo = false;
     if (prefs.usurioLogin == null || prefs.usurioLogin == -1) {
       // await AppUtil.appUtil.downloadZip('1006120026', prefs.codCliente,
       //     prefs.sucursal, '10360653', '10426885', '10847893', '', true);
@@ -22,8 +23,17 @@ class LogicaActualizar {
       //     prefs.codigomeals,
       //     prefs.codigopadrepideky,
       //     false);
-      await AppUtil.appUtil
-          .downloadZip(prefs.codigoUnicoPideky, prefs.sucursal, false);
+      var contador = 0;
+      do {
+        if (contador > 3) {
+          cargo = false;
+          break;
+        } else {
+          cargo = await AppUtil.appUtil
+              .downloadZip(prefs.codigoUnicoPideky, prefs.sucursal, false);
+          contador++;
+        }
+      } while (!cargo);
       await AppUtil.appUtil.abrirBases();
       await _cargarDataUsuario();
     }
