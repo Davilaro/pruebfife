@@ -453,7 +453,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
           ),
           if (widget.productos.cantidadMaxima != 0)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 isValidMax.value == true
                     ? 'Esta promoción tiene un tope máximo de compra de ${remainingQuantity}'

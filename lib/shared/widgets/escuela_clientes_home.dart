@@ -1,5 +1,6 @@
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
+import 'package:emart/src/utils/uxcam_tagueo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,17 +19,15 @@ class EscuelaClientes extends StatefulWidget {
 }
 
 class _EscuelaClientesState extends State<EscuelaClientes> {
-
   bool _hasErrorSchoolClient = false;
 
- final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
+  final viewModelPrincipalPage = Get.put(ViewModelPrincipalPage());
 
   InAppWebViewController? _webViewController;
   bool isPaused = false;
 
   @override
   Widget build(BuildContext context) {
-    
     return FutureBuilder(
         initialData: [],
         future: DBProvider.db.consultarMultimedia(),
@@ -67,7 +66,7 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Container(
-                      color: Colors.black,
+                        color: Colors.black,
                         padding: EdgeInsets.only(bottom: 5),
                         height: Get.height * 0.25,
                         child: _hasErrorSchoolClient
@@ -134,6 +133,7 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
                       height: Get.height * 0.07,
                       color: ConstantesColores.empodio_verde,
                       onTap: () {
+                        UxcamTagueo().goCustomersSchool();
                         viewModelPrincipalPage.launchUrlcustomersSchool();
                       },
                       text: 'Visita escuela de clientes',
@@ -193,4 +193,3 @@ class _EscuelaClientesState extends State<EscuelaClientes> {
     );
   }
 }
-
