@@ -56,6 +56,9 @@ class PedidoEmart {
       if (int.parse(obtenerValor(elemet)!) > 0) {
         if (listaValoresPedidoAgregados![key] == true) {
           ProductoAsignado productoAsignado = new ProductoAsignado(
+              isOferta: elemet.isOferta,
+              cantidadMaxima: elemet.cantidadMaxima,
+              cantidadSolicitada: elemet.cantidadSolicitada,
               codigo: elemet.codigo,
               nombre: elemet.nombre,
               fabricante: elemet.fabricante,

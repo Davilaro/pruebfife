@@ -78,6 +78,10 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
     setState(() {});
   }
 
+  setStatePage() {
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _controllerCantidadProducto.dispose();
@@ -87,8 +91,9 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
   @override
   Widget build(BuildContext context) {
     RxBool isValidMax = (widget.producto.cantidadMaxima! -
-                widget.producto.cantidadSolicitada!) <=
-            0 && widget.producto.cantidadMaxima != 0
+                    widget.producto.cantidadSolicitada!) <=
+                0 &&
+            widget.producto.cantidadMaxima != 0
         ? false.obs
         : true.obs;
     final size = MediaQuery.of(context).size;
@@ -377,8 +382,41 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                                             style:
                                                 TextStyle(color: Colors.black),
                                             onChanged: (value) {
-                                              cargoConfirmar
-                                                  .cambiarValoresEditex(value);
+                                              if (widget.producto.isOferta ==
+                                                      1 &&
+                                                  widget.producto
+                                                          .cantidadMaxima !=
+                                                      0 &&
+                                                  value != '') {
+                                                if (int.parse(value) >
+                                                    widget.producto
+                                                            .cantidadMaxima! -
+                                                        widget.producto
+                                                            .cantidadSolicitada!) {
+                                                  _controllerCantidadProducto
+                                                      .text = (widget.producto
+                                                              .cantidadMaxima! -
+                                                          widget.producto
+                                                              .cantidadSolicitada!)
+                                                      .toString();
+                                                  cargoConfirmar
+                                                      .cambiarValoresEditex(
+                                                          _controllerCantidadProducto
+                                                              .text,
+                                                          callback:
+                                                              setStatePage);
+                                                } else {
+                                                  cargoConfirmar
+                                                      .cambiarValoresEditex(
+                                                          value,
+                                                          callback:
+                                                              setStatePage);
+                                                }
+                                              } else {
+                                                cargoConfirmar
+                                                    .cambiarValoresEditex(
+                                                        value);
+                                              }
                                             },
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
