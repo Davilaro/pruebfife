@@ -174,9 +174,6 @@ class _TabOpcionesState extends State<TabOpciones>
       var listaProductos = await productService.cargarProductos(
           '', 10, '', 0.0, 1000000000.0, "", "");
       for (var i = 0; i < listaProductos.length; i++) {
-        if(listaProductos[i].isOferta == 1 && listaProductos[i].codigo != '01000878') {
-          print('producto en oferta ${listaProductos[i]}');
-        }
         PedidoEmart.listaProductos!
             .putIfAbsent(listaProductos[i].codigo, () => listaProductos[i]);
         PedidoEmart.listaValoresPedidoAgregados!
