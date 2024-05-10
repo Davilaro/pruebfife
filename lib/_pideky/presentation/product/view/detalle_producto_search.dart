@@ -528,7 +528,7 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
                               ? () =>
                                   llenarCarrito(widget.producto, cartProvider)
                               : isValidMax.value == false
-                                  ? () {}
+                                  ? () => validateTap()
                                   : () => productViewModel.iniciarModal(
                                       context, widget.producto.fabricante)
                           : () => mostrarAlertCartera(
@@ -568,6 +568,14 @@ class _DetalleProductoSearchState extends State<DetalleProductoSearch> {
         ]),
       ),
     );
+  }
+  validateTap() {
+    if (Get.isSnackbarOpen) {
+      Get.closeCurrentSnackbar();
+      notificationMaximumPromotionlimit();
+    } else {
+      notificationMaximumPromotionlimit();
+    }
   }
 
   mas(Product producto, CartViewModel cartProvider) {
