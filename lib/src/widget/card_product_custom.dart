@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/_pideky/domain/product/model/product_model.dart';
 import 'package:emart/_pideky/presentation/product/view_model/product_view_model.dart';
+import 'package:emart/shared/widgets/popups.dart';
 import 'package:emart/src/preferences/const.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../preferences/preferencias.dart';
+
 
 class CardProductCustom extends StatefulWidget {
   final Product producto;
@@ -55,7 +57,11 @@ class _CardProductCustomState extends State<CardProductCustom> {
             side: new BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(10)),
         child: GestureDetector(
-          onTap: widget.producto.bloqueoCartera == 0
+          onTap: prefs.usurioLogin == -1
+          
+         ? () => alertCustom(context)
+
+         : widget.producto.bloqueoCartera == 0
               ? widget.onTapCard
               : () => mostrarAlertCartera(
                     context,
