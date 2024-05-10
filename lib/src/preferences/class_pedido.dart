@@ -37,7 +37,7 @@ class PedidoEmart {
     cantItems.value = "$items";
   }
 
-  static iniciarProductosPorFabricante() {
+  static iniciarProductosPorFabricante({bool? isExpanded}) {
     listaProductosPorFabricante = new RxMap();
     final listaAgrupar = <ProductoAsignado>[];
 

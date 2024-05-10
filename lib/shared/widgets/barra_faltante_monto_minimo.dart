@@ -23,7 +23,7 @@ class BarraFaltanteMontoMin extends StatelessWidget {
       //color: Colors.amber,        
       padding: EdgeInsets.only(right: Get.width * 0.060, left: Get.width * 0.090),
       width: Get.width * 0.900,
-      height: Get.height * 0.060,
+      height: Get.height * 0.05,
       child: LinearPercentIndicator(
        // padding: EdgeInsets.only(),
         animation: true,        

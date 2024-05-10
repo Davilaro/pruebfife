@@ -8,7 +8,6 @@ import 'package:emart/shared/widgets/barra_faltante_monto_minimo.dart';
 import 'package:emart/src/preferences/class_pedido.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/widget/custom_expansion_panel_list.dart';
-import 'package:emart/src/widget/simple_card_groups.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -47,7 +46,7 @@ List<Widget> loadDynamicExpansionPanel(
                   CustomExpansionPanelList(
                     expansionCallback: (int i, bool status) {
                         value["expanded"] = !status;
-                        loadAgain = false;
+                        cartProvider.loadAgain = false;
                         setState();
                     },
                     children: [
@@ -280,7 +279,7 @@ List<Widget> loadDynamicExpansionPanel(
                                                     context1,
                                                     cartProvider,
                                                     value["preciominimo"],
-                                                    setState
+                                                    setState,
                                                     )
                                                 .toList(),
                                           ),
@@ -293,7 +292,7 @@ List<Widget> loadDynamicExpansionPanel(
                             ),
                           ),
                         ),
-                        isExpanded: cargarDeNuevo ? true : value["expanded"],
+                        isExpanded: cartProvider.loadAgain ? true : value["expanded"],
                       )
                     ],
                   ),

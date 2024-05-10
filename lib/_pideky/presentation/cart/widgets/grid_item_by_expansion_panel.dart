@@ -25,7 +25,8 @@ List<Widget> gridItem(
     BuildContext context,
     CartViewModel cartViewModel,
     precioMinimo,
-    VoidCallback setState) {
+    VoidCallback setState,
+    ) {
   final controller = Get.put(StateControllerRadioButtons());
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   ProductViewModel productoViewModel = Get.find();
@@ -231,7 +232,8 @@ List<Widget> gridItem(
                                     precioMinimo,
                                     setState,
                                     cartViewModel,
-                                    context),
+                                    context,
+                                    ),
                                 productoViewModel
                                         .seeAlertMaximumPromotionLimit.value =
                                     showNotificationMaximumPromotionLimit,

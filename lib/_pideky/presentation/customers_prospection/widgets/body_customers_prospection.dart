@@ -1,14 +1,20 @@
+import 'dart:async';
+
 import 'package:emart/_pideky/presentation/customers_prospection/view_model/customers_prospect_view_model.dart';
 import 'package:emart/_pideky/presentation/customers_prospection/widgets/check_box_bottom.dart';
 import 'package:emart/_pideky/presentation/customers_prospection/widgets/text_form_field_customers_prospect.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
+import 'package:emart/shared/widgets/popups.dart';
+import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class BodyCustomersProspection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ValidationForms validationForms = Get.find();
     CustomersProspectionViewModel customersProspectionViewModel =
         Get.isRegistered<CustomersProspectionViewModel>()
             ? Get.find<CustomersProspectionViewModel>()
@@ -65,6 +71,23 @@ class BodyCustomersProspection extends StatelessWidget {
                           .validate()) {
                         await customersProspectionViewModel
                             .sendProspectionRequest();
+                      } else {
+                        int timeIteration = 0;
+                        validationForms.isClosePopup.value = false;
+                        showPopup(
+                            context,
+                            'Por favor completa el formulario',
+                            SvgPicture.asset('assets/image/Icon_incorrecto.svg'));
+                        Timer.periodic(Duration(milliseconds: 500), (timer) {
+                          if (timeIteration >= 5) {
+                            timer.cancel();
+                            Get.back();
+                          }
+                          if (validationForms.isClosePopup.value == true) {
+                            timer.cancel();
+                          }
+                          timeIteration++;
+                        });
                       }
                     },
                     borderRadio: 30,

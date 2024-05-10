@@ -146,7 +146,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.all(5),
+              
               child: Container(
                 decoration: BoxDecoration(
                 color: Colors.white,
@@ -249,7 +249,7 @@ class _CategoriasGrillaState extends State<CategoriasGrilla> {
                           'Activar',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 13,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
