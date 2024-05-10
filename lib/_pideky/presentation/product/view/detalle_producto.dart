@@ -414,8 +414,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                       widget.productos
                                                           .cantidadSolicitada!)
                                                   .toString();
-                                          cargoConfirmar
-                                              .cambiarValoresEditex( _controllerCantidadProducto.text, callback: setStatePage);
+                                          cargoConfirmar.cambiarValoresEditex(
+                                              _controllerCantidadProducto.text,
+                                              callback: setStatePage);
                                         } else {
                                           cargoConfirmar.cambiarValoresEditex(
                                               value,
@@ -425,6 +426,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                         cargoConfirmar
                                             .cambiarValoresEditex(value);
                                       }
+                                      setState(() {});
                                     },
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -492,7 +494,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
               onTap: widget.isFrecuencia && isValidMax.value == true
                   ? () => llenarCarrito(widget.productos, cartProvider)
                   : () => isValidMax.value == false
-                      ? () {}
+                      ? validateTap()
                       : productViewModel.iniciarModal(
                           context, widget.productos.fabricante),
               width: Get.width * 0.9,
@@ -507,6 +509,15 @@ class _DetalleProductoState extends State<DetalleProducto> {
         ],
       ),
     );
+  }
+
+  validateTap() {
+    if (Get.isSnackbarOpen) {
+      Get.closeCurrentSnackbar();
+      notificationMaximumPromotionlimit();
+    } else {
+      notificationMaximumPromotionlimit();
+    }
   }
 
   mas(Product producto, CartViewModel cartProvider) {
