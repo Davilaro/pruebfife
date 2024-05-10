@@ -1,4 +1,5 @@
 import 'package:emart/src/classes/producto_cambiante.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CambioEstadoProductos extends GetxController {
@@ -17,7 +18,10 @@ class CambioEstadoProductos extends GetxController {
     this.cambiarEscala.value = escala;
   }
 
-  void cambiarValoresEditex(String escala) {
+  void cambiarValoresEditex(String escala, {VoidCallback? callback}) {
     this.controllerCantidadProducto.value = escala;
+    if (callback != null) {
+      callback();
+    }
   }
 }

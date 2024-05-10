@@ -72,6 +72,10 @@ List<Widget> gridItemLista(BuildContext context, String fabricante,
                                     producto.precio * producto.cantidad;
                               } else {
                                 misListasViewModel
+                                    .mapListasProductos[fabricante]
+                                        ["isSelected"]
+                                    .value = false;
+                                misListasViewModel
                                         .mapListasProductos[fabricante]
                                             ["precioProductos"]
                                         .value -=

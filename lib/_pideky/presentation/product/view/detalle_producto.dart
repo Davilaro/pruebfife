@@ -71,6 +71,10 @@ class _DetalleProductoState extends State<DetalleProducto> {
     setState(() {});
   }
 
+  setStatePage() {
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _controllerCantidadProducto.dispose();
@@ -80,8 +84,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
   @override
   Widget build(BuildContext context) {
     RxBool isValidMax = (widget.productos.cantidadMaxima! -
-                widget.productos.cantidadSolicitada!) <=
-            0 && widget.productos.cantidadMaxima != 0
+                    widget.productos.cantidadSolicitada!) <=
+                0 &&
+            widget.productos.cantidadMaxima != 0
         ? false.obs
         : true.obs;
     final cartProvider = Provider.of<CartViewModel>(context);
@@ -378,40 +383,57 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                     minHeight: 40.0,
                                     maxHeight: 40.0,
                                   ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    reverse: true,
-                                    child: TextFormField(
-                                      maxLines: 1,
-                                      controller: _controllerCantidadProducto,
-                                      keyboardType: TextInputType.number,
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      textAlign: TextAlign.center,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Escribe el precio de compra';
+                                  child: TextFormField(
+                                    maxLines: 1,
+                                    controller: _controllerCantidadProducto,
+                                    keyboardType: TextInputType.number,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    textAlign: TextAlign.center,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Escribe el precio de compra';
+                                      }
+                                      return null;
+                                    },
+                                    style: TextStyle(color: Colors.black),
+                                    onChanged: (value) {
+                                      if (widget.productos.isOferta == 1 &&
+                                          widget.productos.cantidadMaxima !=
+                                              0 &&
+                                          value != '') {
+                                        if (int.parse(value) >
+                                            widget.productos.cantidadMaxima! -
+                                                widget.productos
+                                                    .cantidadSolicitada!) {
+                                          _controllerCantidadProducto.text =
+                                              (widget.productos
+                                                          .cantidadMaxima! -
+                                                      widget.productos
+                                                          .cantidadSolicitada!)
+                                                  .toString();
+                                          cargoConfirmar
+                                              .cambiarValoresEditex( _controllerCantidadProducto.text, callback: setStatePage);
+                                        } else {
+                                          cargoConfirmar.cambiarValoresEditex(
+                                              value,
+                                              callback: setStatePage);
                                         }
-                                        return null;
-                                      },
-                                      style: TextStyle(color: Colors.black),
-                                      onChanged: (value) {
-                                        print('value: $value');
+                                      } else {
                                         cargoConfirmar
                                             .cambiarValoresEditex(value);
-                                      },
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        fillColor: Colors.black,
-                                        hintText: '',
-                                        isDense: true,
-                                        counterText: "",
-                                        hintStyle: TextStyle(
-                                          color: Colors.black,
-                                        ),
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      fillColor: Colors.black,
+                                      hintText: '',
+                                      isDense: true,
+                                      counterText: "",
+                                      hintStyle: TextStyle(
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -453,7 +475,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
           ),
           if (widget.productos.cantidadMaxima != 0)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 isValidMax.value == true
                     ? 'Esta promoción tiene un tope máximo de compra de ${remainingQuantity}'

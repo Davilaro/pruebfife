@@ -42,8 +42,6 @@ class CartViewModel extends ChangeNotifier {
   Timer timer = Timer(Duration(milliseconds: 1), () {});
   RxBool isTimerActive = false.obs;
 
-
-
   void animateSquare() async {
     int elapsedTime = 0;
     isSavedBymanufacturerOpen.value = !isSavedBymanufacturerOpen.value;
@@ -296,6 +294,48 @@ class CartViewModel extends ChangeNotifier {
   editarCantidad(dynamic producto, CartViewModel cartProvider, String cantidad,
       VoidCallback setState) {
     if (cantidad != "" && int.parse(cantidad) > 0) {
+      if (producto.isOferta == 1 &&
+          producto.cantidadMaxima != 0 &&
+          cantidad != '') {
+        if (int.parse(cantidad) >
+            producto.cantidadMaxima - producto.cantidadSolicitada) {
+          currentProducto = null;
+          currentQuantityProduct.value =
+              producto.cantidadMaxima - producto.cantidadSolicitada;
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text =
+              (producto.cantidadMaxima - producto.cantidadSolicitada)
+                  .toString();
+          PedidoEmart.registrarValoresPedido(
+              producto.productos,
+              (producto.cantidadMaxima - producto.cantidadSolicitada)
+                  .toString(),
+              true);
+          productoViewModel.insertarPedidoTemporal(producto.codigo);
+          MetodosLLenarValores().calcularValorTotal(cartProvider);
+          setState();
+          return;
+        } else {
+          currentProducto = null;
+          currentQuantityProduct.value = int.parse(cantidad);
+          PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
+          PedidoEmart.registrarValoresPedido(
+              producto.productos, cantidad, true);
+          productoViewModel.insertarPedidoTemporal(producto.codigo);
+          MetodosLLenarValores().calcularValorTotal(cartProvider);
+        }
+        
+      } else {
+        currentProducto = producto;
+        currentQuantityProduct.value = 0;
+        PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
+        PedidoEmart.listaValoresPedido![producto.codigo] = "0";
+        PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
+        //productoViewModel.insertarPedidoTemporal(producto.codigo);
+        //loadAgain = true;
+        //PedidoEmart.iniciarProductosPorFabricante();
+        MetodosLLenarValores().calcularValorTotal(cartProvider);
+        return;
+      }
       currentProducto = null;
       currentQuantityProduct.value = int.parse(cantidad);
       PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;

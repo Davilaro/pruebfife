@@ -39,16 +39,17 @@ class ProductViewModel extends GetxController {
   RxList listCondicionEntrega = [].obs;
 
   RxBool seeAlertMaximumPromotionLimit = false.obs;
-  // este map<String, Map<String, dynamic>> se usa para guardar los productos que se 
+  // este map<String, Map<String, dynamic>> se usa para guardar los productos que se
   // se envian en el pedido y tienen cantidad maxima para modificar la db
   Map productListSentWithMax = {}.obs;
 
   // metodo para llenar el map productListSentWithMax
   void fillProductListSentWithMax(String codigoProducto, int cantidadActual,
       int cantidadSolicitada, int cantidadMaxima) {
-    if(productListSentWithMax.containsKey(codigoProducto)){
+    if (productListSentWithMax.containsKey(codigoProducto)) {
       productListSentWithMax[codigoProducto]['cantidadActual'] = cantidadActual;
-      productListSentWithMax[codigoProducto]['cantidadSolicitada'] = cantidadSolicitada;
+      productListSentWithMax[codigoProducto]['cantidadSolicitada'] =
+          cantidadSolicitada;
       productListSentWithMax[codigoProducto]['cantidadMaxima'] = cantidadMaxima;
       return;
     }

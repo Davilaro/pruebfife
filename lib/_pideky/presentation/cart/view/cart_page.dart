@@ -111,7 +111,6 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    cartViewModel.loadAgain = false;
     //UXCAM: Se define el nombre de la pantalla
     FlutterUxcam.tagScreenName('ShoppingCartPage');
     return PopScope(

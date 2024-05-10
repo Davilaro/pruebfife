@@ -50,12 +50,12 @@ class RegisterPage extends StatelessWidget {
                         fontWeight: FontWeight.w900)),
                 SizedBox(height: 15.0),
                 Text(
-                    '¡Gracias por tu interes en Pideky!\n Dejanos tus datos para ponernos en contacto',
+                    '¡Gracias por tu interes en Pideky!\n Déjanos tus datos para ponernos en contacto',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.black,
+                        color: ConstantesColores.gris_textos,
                         fontSize: 17.5,
-                        fontWeight: FontWeight.w100)),
+                        fontWeight: FontWeight.w400)),
                 SizedBox(height: 35.0),
                 Container(
                   padding: EdgeInsets.only(left: 15.0),
@@ -297,7 +297,7 @@ class RegisterPage extends StatelessWidget {
                       } else {
                         await _validationForms.backClosePopup(context,
                             texto:
-                                'Algo salio mal, por favor intentalo de nuevo');
+                                'Por favor completa el formulario');
                       }
                     },
                     text: "Comenzar"),

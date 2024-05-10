@@ -9,6 +9,9 @@ class ProductoAsignado {
     this.precio,
     this.descuento,
     this.productos,
+    this.isOferta,
+    this.cantidadMaxima,
+    this.cantidadSolicitada,
   });
 
   String? codigo;
@@ -18,6 +21,9 @@ class ProductoAsignado {
   double? descuento;
   int? cantidad;
   Product? productos;
+  int? isOferta;
+  int? cantidadMaxima;
+  int? cantidadSolicitada;
 
   @override
   String toString() {

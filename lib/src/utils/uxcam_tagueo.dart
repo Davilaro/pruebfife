@@ -754,7 +754,7 @@ class UxcamTagueo {
     }
   }
 
-  void addToCartBuySellAndEarn (element, cantidad) {
+  void addToCartBuySellAndEarn(element, cantidad) {
     try {
       if (prefs.usurioLogin == 1)
         FlutterUxcam.logEventWithProperties("addToCartByBuySellAndEarn", {
@@ -767,7 +767,23 @@ class UxcamTagueo {
           "Regional": prefs.oficinaVentas,
           "Country": prefs.paisUsuario ?? "CO"
         });
-        print('TAGUEO ADD TO CART BY BUY SELL AND EARN');
+      print('TAGUEO ADD TO CART BY BUY SELL AND EARN');
+    } catch (e) {
+      log("Error tagueo buy sell and earn");
+    }
+  }
+
+  void goCustomersSchool() {
+    try {
+      if (prefs.usurioLogin == 1) {
+        FlutterUxcam.logEventWithProperties("goCustomersSchool", {
+          "City": prefs.ciudad ?? "",
+          "Regional": prefs.oficinaVentas,
+          "Country": prefs.paisUsuario ?? "CO"
+        });
+      }
+
+      print('TAGUEO ADD TO CART BY BUY SELL AND EARN');
     } catch (e) {
       log("Error tagueo buy sell and earn");
     }
