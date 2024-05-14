@@ -111,6 +111,7 @@ class _SimpleCardState extends State<SimpleCard> {
                                 ),
                                 Container(
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         width: size.width * 0.9,

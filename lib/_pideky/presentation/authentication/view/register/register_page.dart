@@ -152,7 +152,7 @@ class RegisterPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(left: 15.0),
                   width: double.infinity,
-                  child: Text('Selecciona los proveedores que te atienden ',
+                  child: Text('Selecciona los proveedores que te atienden',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           color: ConstantesColores.gris_sku,
@@ -283,7 +283,7 @@ class RegisterPage extends StatelessWidget {
                           Get.back();
                           _validationForms.isClosePopup.value = false;
                           showPopupSuccessfulregistration(context);
-                          await Future.delayed(Duration(seconds: 3))
+                          await Future.delayed(Duration(seconds: 6))
                               .then((value) async {
                             if (_validationForms.isClosePopup.value == false) {
                               Get.back();
