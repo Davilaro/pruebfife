@@ -6,6 +6,7 @@ import 'package:emart/generated/l10n.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/pages/login/login.dart';
 import 'package:emart/src/pages/principal_page/tab_opciones.dart';
+import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/src/provider/crear_file.dart';
 import 'package:emart/src/provider/servicios.dart';
@@ -46,6 +47,7 @@ class _SplashState extends State<Splash> {
     //UXCAM: Se define el nombre de la interfaz
     FlutterUxcam.tagScreenName('LogoPidekyPage');
     return Scaffold(
+      backgroundColor: ConstantesColores.color_fondo_gris_splash,
       body: Center(
           child: Image.asset(
         'assets/image/splash.png',
