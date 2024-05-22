@@ -1,10 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:get/get.dart';
 
 class DropDownFiltroProveedores extends StatefulWidget {
-  final String titulo;
   final List<String> listaItems;
   final String? hin;
   final Function(String?)? onChange;
@@ -14,14 +13,12 @@ class DropDownFiltroProveedores extends StatefulWidget {
 
   DropDownFiltroProveedores(
       {Key? key,
-      required this.titulo,
       required this.listaItems,
       required this.hin,
       required this.onChange,
       required this.value,
       this.color,
-      this.textcolor
-      })
+      this.textcolor})
       : super(key: key);
 
   @override
@@ -33,49 +30,58 @@ class _DropDownFiltroProveedoresState extends State<DropDownFiltroProveedores> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            widget.titulo,
-            style: TextStyle(color: HexColor("#41398D")),
-          ),
-          DropdownButton2(
-            buttonWidth: 200,
-            iconDisabledColor: widget.textcolor ?? Colors.white,
-            iconEnabledColor: widget.textcolor ?? Colors.white,
-            hint: Text(
-              '    ${widget.hin}',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style:
-                  TextStyle(color: widget.textcolor ?? Colors.white, fontWeight: FontWeight.bold),
+      width: Get.width * 0.4,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          dropdownStyleData: DropdownStyleData(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: ConstantesColores.agua_marina,
             ),
-            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-            isExpanded: true,
-            underline: Text(''),
-            items: widget.listaItems
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: widget.textcolor ?? Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ))
-                .toList(),
-            value: widget.value,
-            buttonDecoration: BoxDecoration(
-                color: widget.color ?? ConstantesColores.azul_precio,
-                borderRadius: BorderRadius.circular(30)),
-            dropdownDecoration: BoxDecoration(
-                color: ConstantesColores.agua_marina,
-                borderRadius: BorderRadius.circular(20)),
-            onChanged: widget.onChange,
+            elevation: 8,
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            maxHeight: 200,
           ),
-        ],
+          hint: Text(
+            '    ${widget.hin}',
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: widget.textcolor ?? Colors.white,
+                fontWeight: FontWeight.bold),
+          ),
+          isExpanded: true,
+          underline: Text(''),
+          items: widget.listaItems
+              .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: widget.textcolor ?? Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ))
+              .toList(),
+          iconStyleData: IconStyleData(
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: ConstantesColores.azul_precio,
+              ),
+              iconSize: 30),
+          value: widget.value,
+          buttonStyleData: ButtonStyleData(
+            padding: EdgeInsets.only(right: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: ConstantesColores.color_fondo_gris,
+            ),
+          ),
+          onChanged: widget.onChange,
+        ),
       ),
     );
   }

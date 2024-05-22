@@ -232,38 +232,41 @@ class _FiltroHistoricoState extends State<FiltroHistorico> {
           borderRadius: BorderRadius.circular(50),
         ),
         margin: EdgeInsets.symmetric(horizontal: 2),
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(
-            hintText,
-            style: TextStyle(
-                fontSize: 15,
-                color: ConstantesColores.azul_precio,
-                fontWeight: FontWeight.bold),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            isExpanded: true,
+            hint: Text(
+              hintText,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: ConstantesColores.azul_precio,
+                  fontWeight: FontWeight.bold),
+            ),
+            value: value,
+            items: dropdownItems.value,
+            iconStyleData: IconStyleData(
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: ConstantesColores.azul_precio,
+                ),
+                iconSize: 30),
+            onChanged: (String? value) {
+              validarValue(value!, hintText, tipoFecha);
+            },
+            dropdownStyleData: DropdownStyleData(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: HexColor("#E4E3EC"),
+              ),
+              elevation: 8,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              maxHeight: 200
+            ),
+            menuItemStyleData: MenuItemStyleData(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              height: 40
+            ),
           ),
-          value: value,
-          items: dropdownItems.value,
-          iconSize: 30,
-          scrollbarThickness: 2,
-          onChanged: (String? value) {
-            validarValue(value!, hintText, tipoFecha);
-          },
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: ConstantesColores.azul_precio,
-          ),
-          buttonHeight: 60,
-          buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-          dropdownElevation: 8,
-          dropdownMaxHeight: 200,
-          dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: HexColor("#E4E3EC")),
-          underline: Container(
-            color: Colors.transparent,
-          ),
-          itemHeight: 40,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
       ),
     );

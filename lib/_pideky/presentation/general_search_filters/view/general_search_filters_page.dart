@@ -37,8 +37,7 @@ class GeneralSearchFiltersPage extends StatefulWidget {
       _GeneralSearchFiltersPageState();
 }
 
-class _GeneralSearchFiltersPageState
-    extends State<GeneralSearchFiltersPage> {
+class _GeneralSearchFiltersPageState extends State<GeneralSearchFiltersPage> {
   ControllerProductos catalogSearchViewModel = Get.find();
   final searchFuzzyViewModel = Get.find<SearchFuzzyViewModel>();
   final resultadoBuscadorGeneralVm = Get.put(GeneralSearchResponseViewModel());
@@ -75,6 +74,10 @@ class _GeneralSearchFiltersPageState
     cargarMarca();
     cargarProveedor();
     super.initState();
+  }
+
+  void setStatePage() {
+    setState(() {});
   }
 
   @override
@@ -140,11 +143,47 @@ class _GeneralSearchFiltersPageState
                           textAlign: TextAlign.left),
                     ),
                     Spacer(),
-                    IconoLimpiarFiltro().iconLimpiarFiltro((() {
-                      setState(() {
-                        limpiarFiltro();
-                      });
-                    }))
+                    TextButton(
+                      // borderSide: BorderSide(style: BorderStyle.none),
+                      onPressed: () {
+                        setState(() {
+                          valorRound = 3;
+                          dropdownValueCategoria = null;
+                          dropdownValueSubCategoria = null;
+                          dropdownValueMarca = null;
+                          dropdownValueProveedor = null;
+                          values = RangeValues(0, 500000);
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/image/limpiar_filtro_img.png',
+                            width: Get.width * 0.07,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Limpiar',
+                                style: TextStyle(
+                                  color: HexColor("#43398E"),
+                                ),
+                              ),
+                              Text(
+                                'Filtro',
+                                style: TextStyle(
+                                  color: HexColor("#43398E"),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -154,104 +193,138 @@ class _GeneralSearchFiltersPageState
                   child: OverflowBar(
                     children: [
                       // Filtro de categorias
-                      Obx(() => DropDownFiltroProveedores(
-                          hin: "Todas",
-                          titulo: "Proveedor",
-                          listaItems: listProveedor.value,
-                          value: dropdownValueProveedor,
-                          color: buttonColor,
-                          textcolor: textColor,
-                          onChange: (String? value) async {
-                            setState(() {
-                              dropdownValueProveedor = value!;
-                              codigoProveedor = listObjectoProveedor
-                                  .where((element) =>
-                                      element.nombrecomercial ==
-                                      dropdownValueProveedor)
-                                  .first
-                                  .empresa!;
-                            });
+                      Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Proveedor",
+                                style: TextStyle(color: HexColor("#41398D")),
+                              ),
+                              DropDownFiltroProveedores(
+                                  hin: "Todas",
+                                  listaItems: listProveedor.value,
+                                  value: dropdownValueProveedor,
+                                  color: buttonColor,
+                                  textcolor: textColor,
+                                  onChange: (String? value) async {
+                                    setState(() {
+                                      dropdownValueProveedor = value!;
+                                      codigoProveedor = listObjectoProveedor
+                                          .where((element) =>
+                                              element.nombrecomercial ==
+                                              dropdownValueProveedor)
+                                          .first
+                                          .empresa!;
+                                    });
 
-                            if (dropdownValueProveedor != null &&
-                                dropdownValueProveedor != "Todas") {
-                              await cargarCategorias();
-                            }
-                          })),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Obx(() => DropDownFiltroProveedores(
-                          hin: "Todas",
-                          titulo: "Categoría",
-                          listaItems: listCategorias.value,
-                          value: dropdownValueCategoria,
-                          color: buttonColor,
-                          textcolor: textColor,
-                          onChange: (String? value) async {
-                            setState(() {
-                              dropdownValueCategoria = value!;
-                              codigoCategoria = listObjectoCategoria
-                                  .where((element) =>
-                                      element.descripcion ==
-                                      dropdownValueCategoria)
-                                  .first
-                                  .codigo;
-                            });
-                            if (dropdownValueCategoria != null &&
-                                dropdownValueCategoria != "Todas") {
-                              await cargarSubCategorias();
-                              await cargarMarcasPorCategoria(1);
-                            }
-                          })),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Obx(() => DropDownFiltroProveedores(
-                            titulo: "Subcategoría",
-                            listaItems: listSubCategorias.value,
-                            hin: "Todas",
-                            color: buttonColor,
-                            value: dropdownValueSubCategoria,
-                            textcolor: textColor,
-                            onChange: (String? value) async {
-                              setState(() {
-                                dropdownValueMarca = "Todas";
-                                dropdownValueSubCategoria = value!;
-                                codigoSubCategoria = listObjectoSubCategoria
-                                    .where((element) =>
-                                        element.descripcion ==
-                                        dropdownValueSubCategoria)
-                                    .first
-                                    .codigo;
-                              });
-                              if ((dropdownValueSubCategoria == "Todas" ||
-                                          dropdownValueSubCategoria == null) &&
-                                      dropdownValueCategoria == "Todas" ||
-                                  dropdownValueCategoria == null) {
-                                await cargarMarcasPorCategoria(2);
-                              }
-                            },
+                                    if (dropdownValueProveedor != null &&
+                                        dropdownValueProveedor != "Todas") {
+                                      await cargarCategorias();
+                                    }
+                                  }),
+                            ],
                           )),
                       SizedBox(
                         height: 5,
                       ),
-                      Obx(() => DropDownFiltroProveedores(
-                            titulo: "Marca",
-                            listaItems: listMarcas.value,
-                            color: buttonColor,
-                            textcolor: textColor,
-                            value: dropdownValueMarca,
-                            hin: "Todas",
-                            onChange: (String? value) async {
-                              setState(() {
-                                dropdownValueMarca = value!;
-                                codigoMarca = listObjectoMarca
-                                    .where((element) =>
-                                        element.nombre == dropdownValueMarca)
-                                    .first
-                                    .codigo;
-                              });
-                            },
+                      Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Categoría",
+                                style: TextStyle(color: HexColor("#41398D")),
+                              ),
+                              DropDownFiltroProveedores(
+                                  hin: "Todas",
+                                  listaItems: listCategorias.value,
+                                  value: dropdownValueCategoria,
+                                  color: buttonColor,
+                                  textcolor: textColor,
+                                  onChange: (String? value) async {
+                                    setState(() {
+                                      dropdownValueCategoria = value!;
+                                      codigoCategoria = listObjectoCategoria
+                                          .where((element) =>
+                                              element.descripcion ==
+                                              dropdownValueCategoria)
+                                          .first
+                                          .codigo;
+                                    });
+                                    if (dropdownValueCategoria != null &&
+                                        dropdownValueCategoria != "Todas") {
+                                      await cargarSubCategorias();
+                                      await cargarMarcasPorCategoria(1);
+                                    }
+                                  }),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Subcategoría",
+                                style: TextStyle(color: HexColor("#41398D")),
+                              ),
+                              DropDownFiltroProveedores(
+                                listaItems: listSubCategorias.value,
+                                hin: "Todas",
+                                color: buttonColor,
+                                value: dropdownValueSubCategoria,
+                                textcolor: textColor,
+                                onChange: (String? value) async {
+                                  setState(() {
+                                    dropdownValueMarca = "Todas";
+                                    dropdownValueSubCategoria = value!;
+                                    codigoSubCategoria = listObjectoSubCategoria
+                                        .where((element) =>
+                                            element.descripcion ==
+                                            dropdownValueSubCategoria)
+                                        .first
+                                        .codigo;
+                                  });
+                                  if ((dropdownValueSubCategoria == "Todas" ||
+                                              dropdownValueSubCategoria ==
+                                                  null) &&
+                                          dropdownValueCategoria == "Todas" ||
+                                      dropdownValueCategoria == null) {
+                                    await cargarMarcasPorCategoria(2);
+                                  }
+                                },
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Marca",
+                                style: TextStyle(color: HexColor("#41398D")),
+                              ),
+                              DropDownFiltroProveedores(
+                                listaItems: listMarcas.value,
+                                color: buttonColor,
+                                textcolor: textColor,
+                                value: dropdownValueMarca,
+                                hin: "Todas",
+                                onChange: (String? value) async {
+                                  setState(() {
+                                    dropdownValueMarca = value!;
+                                    codigoMarca = listObjectoMarca
+                                        .where((element) =>
+                                            element.nombre ==
+                                            dropdownValueMarca)
+                                        .first
+                                        .codigo;
+                                  });
+                                },
+                              ),
+                            ],
                           ))
                     ],
                   ),
@@ -363,18 +436,17 @@ class _GeneralSearchFiltersPageState
                   onTap: () async {
                     controlador.isDisponibleFiltro.value = false;
 
-
-                   // resultadoBuscadorGeneralVm.cargarProductosImperdibles();
-                   // resultadoBuscadorGeneralVm.cargarProductosPromo();
+                    // resultadoBuscadorGeneralVm.cargarProductosImperdibles();
+                    // resultadoBuscadorGeneralVm.cargarProductosPromo();
 
                     if (valorRound == 1) {
                       resultadoBuscadorGeneralVm
                           .setSelectedButton('Promociones');
-                          resultadoBuscadorGeneralVm.cargarProductosPromo();
+                      resultadoBuscadorGeneralVm.cargarProductosPromo();
                     } else if (valorRound == 2) {
                       resultadoBuscadorGeneralVm
                           .setSelectedButton('Imperdibles');
-                          resultadoBuscadorGeneralVm.cargarProductosImperdibles();
+                      resultadoBuscadorGeneralVm.cargarProductosImperdibles();
                     }
                     Navigator.pop(context);
                   },
@@ -479,12 +551,5 @@ class _GeneralSearchFiltersPageState
     }
   }
 
-  limpiarFiltro() {
-    valorRound = 3;
-    dropdownValueCategoria = "Todas";
-    dropdownValueSubCategoria = "Todas";
-    dropdownValueMarca = "Todas";
-    dropdownValueProveedor = "Todas";
-    values = RangeValues(0, 500000);
-  }
+  limpiarFiltro() {}
 }

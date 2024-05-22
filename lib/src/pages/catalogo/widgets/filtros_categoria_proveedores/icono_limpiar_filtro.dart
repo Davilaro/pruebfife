@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class IconoLimpiarFiltro {
-  Widget iconLimpiarFiltro(Function()? onpressed) {
+  Widget iconLimpiarFiltro(VoidCallbackAction onpressed) {
     return TextButton(
       // borderSide: BorderSide(style: BorderStyle.none),
-      onPressed: onpressed,
+      onPressed: () => onpressed,
       child: Row(
         children: [
           Image.asset(

@@ -3,7 +3,6 @@
 import 'package:emart/src/controllers/controller_db.dart';
 import 'package:emart/src/controllers/controller_product.dart';
 import 'package:emart/src/pages/catalogo/widgets/dropDownFiltroProveedores.dart';
-import 'package:emart/src/pages/catalogo/widgets/filtros_categoria_proveedores/icono_limpiar_filtro.dart';
 import 'package:emart/src/pages/catalogo/widgets/sliderPrecios.dart';
 import 'package:emart/src/pages/principal_page/widgets/custom_buscador_fuzzy.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
@@ -104,11 +103,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                               textAlign: TextAlign.left),
                         ),
                         Spacer(),
-                        IconoLimpiarFiltro().iconLimpiarFiltro((() {
-                          setState(() {
-                            limpiarFiltro();
-                          });
-                        })),
                       ]),
                       SizedBox(
                         height: 40,
@@ -119,7 +113,6 @@ class _FiltroCategoriaState extends State<FiltroCategoria> {
                             // Filtro de categorias
                             Obx(() => DropDownFiltroProveedores(
                                   hin: "Todas",
-                                  titulo: "Marca",
                                   listaItems: listMarcas.value,
                                   value: dropdownValueMarca,
                                   onChange: (String? value) async {

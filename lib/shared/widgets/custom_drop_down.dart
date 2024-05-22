@@ -21,42 +21,47 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: Container(
-          decoration: BoxDecoration(
-            color: ConstantesColores.azul_precio,
-            borderRadius: BorderRadius.circular(50),
-          ),
           margin: EdgeInsets.symmetric(horizontal: 2),
-          child: DropdownButton2(
-            isExpanded: true,
-            hint: hint ??
-                Text(
-                  'Seleccionar',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: ConstantesColores.azul_precio,
-                      fontWeight: FontWeight.bold),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              isExpanded: true,
+              hint: hint ??
+                  Text(
+                    'Seleccionar',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: ConstantesColores.azul_precio,
+                        fontWeight: FontWeight.bold),
+                  ),
+              value: value,
+              items: lista,
+              buttonStyleData: ButtonStyleData(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: ConstantesColores.azul_precio,
                 ),
-            value: value,
-            items: lista,
-            iconSize: 30,
-            selectedItemBuilder: (context) => selectItem!.toList(),
-            scrollbarThickness: 2,
-            onChanged: onChanged,
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              ),
+              iconStyleData: IconStyleData(
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: ConstantesColores.azul_aguamarina_botones,
+                  ),
+                  iconSize: 30),
+              selectedItemBuilder: (context) => selectItem!.toList(),
+              onChanged: onChanged,
+              dropdownStyleData: DropdownStyleData(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                elevation: 8,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                maxHeight: 200,
+              ),
+              menuItemStyleData: MenuItemStyleData(
+                  padding: EdgeInsets.symmetric(horizontal: 20), height: 40),
             ),
-            buttonHeight: 60,
-            buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-            dropdownElevation: 8,
-            dropdownMaxHeight: 200,
-            dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20), color: Colors.white),
-            underline: Container(
-              color: Colors.transparent,
-            ),
-            itemHeight: 40,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 20),
           )),
     );
   }
