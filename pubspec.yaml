@@ -34,6 +34,7 @@ dependencies:
   device_info_plus: ^9.0.2
   dropdown_button2: ^2.3.9
   email_validator: ^2.0.1
+  external_app_launcher: ^4.0.0
   firebase_analytics: ^10.1.4
   firebase_analytics_web: ^0.5.1+12
   firebase_core: ^2.7.0

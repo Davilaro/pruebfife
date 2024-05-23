@@ -1,8 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:developer';
+
 import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
 import 'dart:async';
@@ -107,6 +112,19 @@ class _TabOpcionesState extends State<TabOpciones>
     super.dispose();
   }
 
+  openPartnersNutresaApp() async {
+    //!com.google.android.youtube
+    // await LaunchApp.openApp(
+    //   androidPackageName: 'com.waze',
+    //   // openStore: false
+    // );
+    bool isInstalled = await LaunchApp.isAppInstalled(
+      androidPackageName: 'com.waze',
+      // openStore: false
+    );
+    log('is installed $isInstalled');
+  }
+
   @override
   Widget build(BuildContext context) {
     providerDatos = Provider.of<DatosListas>(context, listen: true);
@@ -117,6 +135,15 @@ class _TabOpcionesState extends State<TabOpciones>
         child: AnnotatedRegion(
           value: _currentStyle,
           child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+                backgroundColor: ConstantesColores.azul_precio,
+                child: Icon(
+                  Icons.person_4,
+                  color: ConstantesColores.color_fondo_gris,
+                ),
+                onPressed: () {
+                  openPartnersNutresaApp();
+                }),
             backgroundColor: ConstantesColores.color_fondo_gris,
             key: drawerKey,
             drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
@@ -154,10 +181,10 @@ class _TabOpcionesState extends State<TabOpciones>
 
   Future<void> _descarcarDB() async {
     try {
-        PedidoEmart.listaControllersPedido = new Map();
-        PedidoEmart.listaValoresPedido = new Map();
-        PedidoEmart.listaProductos = new Map();
-        PedidoEmart.listaValoresPedidoAgregados = new Map();
+      PedidoEmart.listaControllersPedido = new Map();
+      PedidoEmart.listaValoresPedido = new Map();
+      PedidoEmart.listaProductos = new Map();
+      PedidoEmart.listaValoresPedidoAgregados = new Map();
       final misPedidosViewModel = Get.find<MyOrdersViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());
