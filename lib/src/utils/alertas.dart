@@ -6,7 +6,10 @@ import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+import '../widget/soporte.dart';
 
 void mostrarAlert(
   BuildContext context,
@@ -158,11 +161,13 @@ void mostrarAlertCustomWidgetOld(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    
                     Visibility(
                       visible: iconClose == null ? false : true,
                       child: Container(
                         child: Row(
                           children: [
+                            
                             Expanded(
                               child: Container(),
                             ),
@@ -193,16 +198,22 @@ void mostrarAlertCustomWidgetOld(
                         child: mensaje),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: GestureDetector(
-                        onTap: () => Get.back(),
-                        child: Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: Image.asset(
-                            "assets/image/btn_aceptar.png",
-                          ),
+                      child: FloatingActionButton.extended(
+                      onPressed: () {
+                        Get.to(() => Soporte(numEmpresa: 1));
+                        },
+                      label: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        child: Text(
+                          'Solicitar ayuda',
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ),
+                      backgroundColor: ConstantesColores.azul_precio,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25), // Borde circular
+                      ),
+                    ),
                     )
                   ],
                 ),

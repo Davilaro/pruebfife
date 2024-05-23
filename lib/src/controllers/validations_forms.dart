@@ -450,13 +450,14 @@ class ValidationForms extends GetxController {
                 color: ConstantesColores.azul_aguamarina_botones,
               ),
               null);
+              
         } else if (validation == -2) {
           //Uxcam tagueo usuario no encontrado en base de datos
           UxcamTagueo().userNotFoundLogin();
           mostrarAlertCustomWidgetOld(
               context,
               Text(
-                "El CCUP ingresado tiene novedades, no podemos activarte en este momento por favor comunícate  con soporte.",
+                "Tu cuenta fue eliminada en algún momento. Comunícate con nuestro equipo de soporte para activarte nuevamente.",
                 textAlign: TextAlign.center,
               ),
               SvgPicture.asset(
@@ -547,6 +548,7 @@ class ValidationForms extends GetxController {
 
       if (respuesta.length > 0) {
         if (respuesta.first.bloqueado == "1") {
+          
           progress.hide();
           prefs.usurioLogin = -1;
           mostrarAlertCustomWidgetOld(
@@ -601,8 +603,7 @@ class ValidationForms extends GetxController {
     } catch (e) {
       print('Error retorno login $e');
       await progress.hide();
-      await backClosePopup(context,
-          texto: "Algo salió mal, intentalo de nuevo");
+      await backClosePopup(context, texto: "Usuario incorrecto");
 
       return false;
     }
