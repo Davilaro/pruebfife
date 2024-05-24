@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.celuweb.pidekyapp">
     <queries>
-        <package android:name="com.celuweb.pidekyapp" /> // your android package name
+        <package android:name="com.gluky.socios.nutresa" /> 
     </queries>
     <uses-permission
         android:name="android.permission.INTERNET"/>
@@ -41,7 +41,7 @@
             </intent-filter>
         </service>
         <activity
-            android:name="com.example.pideky.MainActivity"
+            android:name="com.celuweb.pidekyapp.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -70,10 +70,8 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.HOME"/>
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                
+                <data android:scheme="pidekyapp" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

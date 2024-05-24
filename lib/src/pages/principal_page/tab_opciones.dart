@@ -1,7 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
-import 'dart:developer';
-
 import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
@@ -113,17 +110,15 @@ class _TabOpcionesState extends State<TabOpciones>
   }
 
   openPartnersNutresaApp() async {
-    //!com.google.android.youtube
-    // await LaunchApp.openApp(
-    //   androidPackageName: 'com.waze',
-    //   // openStore: false
-    // );
-    bool isInstalled = await LaunchApp.isAppInstalled(
-      androidPackageName: 'com.waze',
-      // openStore: false
+    await LaunchApp.openApp(
+      androidPackageName: 'com.gluky.socios.nutresa',
     );
-    log('is installed $isInstalled');
   }
+
+  //? esta es otra opcion para hacerlo de manera nativa en android en caso de que no funcione el plugin
+  // void openPartnersNutresaApp() async {
+  //   await PlatformService().openThirdPartyApp('com.gluky.socios.nutresa');
+  // }
 
   @override
   Widget build(BuildContext context) {
