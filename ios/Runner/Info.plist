@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -12,6 +14,12 @@
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>en</string>
+			<string>es_CO</string>
+			<string>es_CR</string>
+		</array>
 		<key>CFBundleName</key>
 		<string>formavalidation</string>
 		<key>CFBundlePackageType</key>
@@ -20,13 +28,26 @@
 		<string>$(MARKETING_VERSION)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>CFBundleURLName</key>
+				<string>com.celuweb.pidekyapp</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>pidekyapp</string>
+				</array>
+			</dict>
+		</array>
 		<key>CFBundleVersion</key>
 		<string>$(CURRENT_PROJECT_VERSION)</string>
 		<key>FirebaseAppDelegateProxyEnabled</key>
 		<string>NO</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
-			<string>whatsapp</string>
+			<string>pulsesecure</string>
 		</array>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
@@ -47,6 +68,10 @@
 		<string>Los permisos de la camara son requeridos para tomar fotos.</string>
 		<key>NSContactsUsageDescription</key>
 		<string>La aplicaciòn requiere el uso de contactos.</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Por favor, utiliza Face ID para autenticarte en la aplicación.</string>
+		<key>NSLocalAuthenticationUsageDescription</key>
+		<string>Por favor, utiliza Face ID para autenticarte en la aplicación.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>the app needs this permission to work properly</string>
 		<key>NSMotionUsageDescription</key>
@@ -55,6 +80,8 @@
 		<string>La aplicaciòn requiere el uso de Libreria de fotos.</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>La aplicaciòn requiere el uso de Libreria de reconocimiento de voz.</string>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
@@ -64,20 +91,6 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
-		<key>CFBundleLocalizations</key>
-		<array>
-			<string>en</string>
-			<string>es_CO</string>
-			<string>es_CR</string>
-		</array>
-		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true/>
-		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true/>
-		<key>NSFaceIDUsageDescription</key>
-		<string>Por favor, utiliza Face ID para autenticarte en la aplicación.</string>
-		<key>NSLocalAuthenticationUsageDescription</key>
-		<string>Por favor, utiliza Face ID para autenticarte en la aplicación.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>
