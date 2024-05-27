@@ -155,12 +155,30 @@ void mostrarAlertCustomWidgetOld(
           child: AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15))),
+                contentPadding: EdgeInsets.zero,
             content: Container(
+             // color: Colors.amber,
               constraints: BoxConstraints(
                   minHeight: 200, minWidth: double.infinity, maxHeight: 350),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+
+                     Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                        Navigator.pop(context);
+              
+                          },
+                        icon: Icon(
+                              Icons.cancel_outlined,
+                              color: ConstantesColores.azul_precio,
+                              size: 39,),
+                            ),
+                      ],
+                  ),
                     
                     Visibility(
                       visible: iconClose == null ? false : true,
@@ -194,13 +212,13 @@ void mostrarAlertCustomWidgetOld(
                     ),
                     Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                         child: mensaje),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: FloatingActionButton.extended(
                       onPressed: () {
-                        Get.to(() => Soporte(numEmpresa: 1));
+                        Get.off(() => Soporte(numEmpresa: 1));
                         },
                       label: Container(
                         padding: EdgeInsets.symmetric(horizontal: 25),
@@ -214,7 +232,8 @@ void mostrarAlertCustomWidgetOld(
                         borderRadius: BorderRadius.circular(25), // Borde circular
                       ),
                     ),
-                    )
+                    ),
+                    SizedBox(height: 25)
                   ],
                 ),
               ),
