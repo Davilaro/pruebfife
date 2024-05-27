@@ -17,6 +17,7 @@ class CondicionesEntrega {
     required this.diaVisita,
     this.montoMinimoFrecuencia,
     this.montoMinimoNoFrecuencia,
+    this.diasEntregaExtraRuta
   });
 
   String fabricante;
@@ -28,6 +29,7 @@ class CondicionesEntrega {
   int? montoMinimoNoFrecuencia;
   String diaVisita;
   int diasEntrega;
+  int? diasEntregaExtraRuta;
 
   factory CondicionesEntrega.fromJson(Map<String, dynamic> json) =>
       CondicionesEntrega(
@@ -40,6 +42,7 @@ class CondicionesEntrega {
         montoMinimoNoFrecuencia: json["montoMinimoNoFrecuencia"],
         diaVisita: json["diaVisita"],
         diasEntrega: json["diasEntrega"],
+        diasEntregaExtraRuta: json["diasEntregaExtraRuta"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +55,6 @@ class CondicionesEntrega {
         "montominimonofrecuencia": montoMinimoNoFrecuencia,
         "DiaVisita": diaVisita,
         "DiasEntrega": diasEntrega,
+        "DiasEntregaExtraRuta": diasEntregaExtraRuta
       };
 }

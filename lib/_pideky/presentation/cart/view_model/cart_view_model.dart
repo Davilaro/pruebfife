@@ -180,7 +180,9 @@ class CartViewModel extends ChangeNotifier {
       String texto1,
       String texto2,
       int itinerario,
-      RxBool isValid) {
+      RxBool isValid,
+      int diasEntregaExtraRuta
+      ) {
     // var calcular = topeMinimo * 1.19;
     String diasSinComa;
     String diasTemp = "";
@@ -226,7 +228,7 @@ class CartViewModel extends ChangeNotifier {
           }
           if (valorPedido < precioMinimo) {
             isValid.value = true;
-            return "¡Solo te falta $acumuladoMontoMinimo $texto2 $diasSinComa.";
+            return "¡Solo te falta $acumuladoMontoMinimo para recibir tu pedido en ${diasEntregaExtraRuta > 1 ? '$diasEntregaExtraRuta días!' : '1 día'}! o Puedes realizar tu pedido en tus días asignados que son: $diasSinComa.";
           }
         }
         isValid.value = false;
