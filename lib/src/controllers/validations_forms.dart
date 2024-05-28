@@ -613,7 +613,17 @@ class ValidationForms extends GetxController {
     } catch (e) {
       print('Error retorno login $e');
       await progress.hide();
-      await backClosePopup(context, texto: "Usuario incorrecto");
+       mostrarAlertCustomWidgetOld(
+              context,
+              Text(
+                "Este CCUP no existe. Verifícalo e intenta nuevamente.",
+                textAlign: TextAlign.center,
+              ),
+              SvgPicture.asset(
+                'assets/image/Icon_incorrecto.svg',
+                color: ConstantesColores.azul_aguamarina_botones,
+              ),
+              null);;
 
       return false;
     }

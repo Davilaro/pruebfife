@@ -69,6 +69,7 @@ List<Widget> gridItem(
                 color: ConstantesColores.gris_sku,
               ),
               Container(
+             //   color: Colors.amber,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -96,11 +97,10 @@ List<Widget> gridItem(
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: Get.width * 0.02,
-                            ),
+                            
                             Container(
-                              width: size.width / 3,
+                             // color: Colors.red,
+                              width: size.width / 2,
                               child: GestureDetector(
                                 onTap: () => {
                                   cargoConfirmar.cambiarValoresEditex(
@@ -116,7 +116,7 @@ List<Widget> gridItem(
                                 },
                                 child: Text(
                                   product.nombre,
-                                  maxLines: 2,
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: ConstantesColores
@@ -128,7 +128,7 @@ List<Widget> gridItem(
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 5),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -190,29 +190,28 @@ List<Widget> gridItem(
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: size.width / 3.5,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: ConstantesColores.azul_precio, width: 2),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: 30.0,
-                            width: 30.0,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: PedidoEmart
+                              SizedBox(width: 120),
+
+                          
+                          //CONTROL PARA MANEJAR CANTIDADES DE LOS PRODUCTOS
+                              Container(
+                                width: size.width / 3.5,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: ConstantesColores.azul_precio, width: 2),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  height: 30.0,
+                                  width: 30.0,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  icon: PedidoEmart
                                           .listaControllersPedido![
                                               product.codigo]!
                                           .text !=
@@ -240,6 +239,7 @@ List<Widget> gridItem(
                               },
                             ),
                           ),
+                          
                           Container(
                             width: 30,
                             child: ConstrainedBox(
@@ -318,7 +318,15 @@ List<Widget> gridItem(
                         ],
                       ),
                     ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    
                   ],
+                  
                 ),
               ),
             ],
