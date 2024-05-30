@@ -114,8 +114,7 @@ class _TabOpcionesState extends State<TabOpciones>
       androidPackageName: 'com.gluky.socios.nutresa',
       iosUrlScheme:
           'com.googleusercontent.apps.678723668469-fpk2htaprcjepjgfreib4284ft396u72://',
-      appStoreLink:
-          'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
+      appStoreLink: 'https://apps.apple.com/co/app/socios-nutresa/id1516929178',
       // openStore: false
     );
   }
