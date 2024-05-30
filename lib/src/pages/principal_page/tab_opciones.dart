@@ -112,7 +112,8 @@ class _TabOpcionesState extends State<TabOpciones>
   openPartnersNutresaApp() async {
     await LaunchApp.openApp(
       androidPackageName: 'com.gluky.socios.nutresa',
-      iosUrlScheme: 'pulsesecure://',
+      iosUrlScheme:
+          'com.googleusercontent.apps.678723668469-fpk2htaprcjepjgfreib4284ft396u72://',
       appStoreLink:
           'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
       // openStore: false

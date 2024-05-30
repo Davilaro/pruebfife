@@ -227,7 +227,8 @@ List<Widget> loadDynamicExpansionPanel(
                                                 value["texto1"],
                                                 value["texto2"],
                                                 value["itinerario"],
-                                                isValid
+                                                isValid,
+                                                value["diasEntregaExtraRuta"],
                                               ),
                                               style: TextStyle(
                                                   color: value['restrictivofrecuencia'] ==

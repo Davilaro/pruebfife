@@ -354,6 +354,9 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
     var diasEntrega =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ['diasEntrega'];
+    var diasEntregaExtraRuta =
+        PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
+            ['diasEntregaExtraRuta'];
     var diasVisita =
         PedidoEmart.listaProductosPorFabricante![widget.productos.fabricante]
             ['diasVisita'];
@@ -386,7 +389,7 @@ class _IrMiCarritoState extends State<IrMiCarrito> {
       } else {
         if (frecuencia == false) {
           return textoReturn =
-              "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en 1 día hábil.";
+              "Recuerda que tu pedido debe ser superior a ${cargarResultadoPedido(cartProvider)} para ser entregado aproximadamente en ${diasEntregaExtraRuta > 1 ? "$diasEntregaExtraRuta días hábiles" : "$diasEntregaExtraRuta día hábil"}.";
         } else if (frecuencia == true && precioMinimo == 0) {
           return textoReturn = "";
         } else {

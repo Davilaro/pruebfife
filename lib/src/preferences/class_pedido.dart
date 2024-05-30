@@ -78,6 +78,7 @@ class PedidoEmart {
     });
 
     groups.forEach((key, value) {
+      int diasEntregaExtraRuta = 0;
       double precio = 0;
       double topeMinimo = 0;
       int montoMinimoFrecuencia = 0;
@@ -107,6 +108,7 @@ class PedidoEmart {
 
       for (int j = 0; j < listaFabricante!.length; j++) {
         if (listaFabricante![j].empresa == key) {
+          diasEntregaExtraRuta = listaFabricante![j].diasEntregaExtraRuta ?? 0;
           icon = listaFabricante![j].icono ?? "";
           horaFabricante = listaFabricante![j].hora ?? "";
           diasEntrega = listaFabricante![j].diasEntrega ?? 0;
@@ -189,7 +191,8 @@ class PedidoEmart {
                 'texto1': texto1,
                 'texto2': texto2,
                 "itinerario": itinerario,
-                'diasEntrega': diasEntrega
+                'diasEntrega': diasEntrega,
+                'diasEntregaExtraRuta': diasEntregaExtraRuta,
               });
     });
   }

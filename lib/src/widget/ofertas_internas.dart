@@ -140,12 +140,14 @@ class _OfertasInternaState extends State<OfertasInterna> {
                       context, provider, cargoConfirmar, prefs, 'Promo');
                 },
                 child: Container(
+                  height: double.infinity ,
+                  width: double.infinity ,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(widget.listaBanners.first.link,
+                    fit: BoxFit.fill,
                         errorBuilder: (context, __, ___) => Image.asset(
                               'assets/image/logo_login.png',
-                              fit: BoxFit.cover,
                             )),
                   ),
                 ),
