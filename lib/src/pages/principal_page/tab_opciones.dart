@@ -4,7 +4,6 @@ import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_mod
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/utils/alertas.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
 
 import '../../../shared/widgets/new_app_bar.dart';
 import 'dart:async';
@@ -109,21 +108,6 @@ class _TabOpcionesState extends State<TabOpciones>
     super.dispose();
   }
 
-  openPartnersNutresaApp() async {
-    await LaunchApp.openApp(
-      androidPackageName: 'com.gluky.socios.nutresa',
-      iosUrlScheme:
-          'com.googleusercontent.apps.678723668469-fpk2htaprcjepjgfreib4284ft396u72://',
-      appStoreLink: 'https://apps.apple.com/co/app/socios-nutresa/id1516929178',
-      // openStore: false
-    );
-  }
-
-  //? esta es otra opcion para hacerlo de manera nativa en android en caso de que no funcione el plugin
-  // void openPartnersNutresaApp() async {
-  //   await PlatformService().openThirdPartyApp('com.gluky.socios.nutresa');
-  // }
-
   @override
   Widget build(BuildContext context) {
     providerDatos = Provider.of<DatosListas>(context, listen: true);
@@ -134,15 +118,6 @@ class _TabOpcionesState extends State<TabOpciones>
         child: AnnotatedRegion(
           value: _currentStyle,
           child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-                backgroundColor: ConstantesColores.azul_precio,
-                child: Icon(
-                  Icons.person_4,
-                  color: ConstantesColores.color_fondo_gris,
-                ),
-                onPressed: () {
-                  openPartnersNutresaApp();
-                }),
             backgroundColor: ConstantesColores.color_fondo_gris,
             key: drawerKey,
             drawerEnableOpenDragGesture: prefs.usurioLogin == 1 ? true : false,
