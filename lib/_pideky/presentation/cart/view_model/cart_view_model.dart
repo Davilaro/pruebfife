@@ -327,15 +327,12 @@ class CartViewModel extends ChangeNotifier {
         }
         
       } else {
-        currentProducto = producto;
-        currentQuantityProduct.value = 0;
-        PedidoEmart.registrarValoresPedido(producto.productos, "1", false);
-        PedidoEmart.listaValoresPedido![producto.codigo] = "0";
-        PedidoEmart.listaControllersPedido![producto.codigo]!.text = "0";
-        //productoViewModel.insertarPedidoTemporal(producto.codigo);
-        //loadAgain = true;
-        //PedidoEmart.iniciarProductosPorFabricante();
-        MetodosLLenarValores().calcularValorTotal(cartProvider);
+        currentProducto = null;
+      currentQuantityProduct.value = int.parse(cantidad);
+      PedidoEmart.listaControllersPedido![producto.codigo]!.text = cantidad;
+      PedidoEmart.registrarValoresPedido(producto.productos, cantidad, true);
+      productoViewModel.insertarPedidoTemporal(producto.codigo);
+      MetodosLLenarValores().calcularValorTotal(cartProvider);
         return;
       }
       currentProducto = null;
