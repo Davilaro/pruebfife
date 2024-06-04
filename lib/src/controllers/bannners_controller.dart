@@ -20,6 +20,8 @@ import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../_pideky/presentation/customers_prospections_sura/view/customer_prospection_sura_page.dart';
+
 class BannnerControllers extends GetxController {
   RxBool cargoDatos = false.obs;
   RxInt inicialControllerSubCategoria = 0.obs;
@@ -80,6 +82,9 @@ class BannnerControllers extends GetxController {
     } 
     else if (banner.tipoSeccion == 'Formulario') {
       Get.to(() => CustomersProspectionPage());
+    } 
+    else if (banner.tipoSeccion == 'Formulario Sura') {
+      Get.to(() => CustomersProspectionSuraPage());
     }
     else if (banner.tipoSeccion == 'Marca') {
       resBusqueda =
