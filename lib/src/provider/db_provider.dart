@@ -197,7 +197,9 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
           '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.Codigo as codigo,
-		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
+		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,
+      cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia,
+      cast((SELECT DiasEntregaExtraRuta FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as diasEntregaExtraRuta
       FROM Fabricante f
 	    WHERE f.empresa LIKE '%$buscar%' OR f.nombrecomercial LIKE '%$buscar%'
       GROUP BY f.empresa
@@ -234,7 +236,8 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
             PA.VisualizacionPopUp as verPopUp,
             PA.ProspectoHelados as prospectoHelados,
             CAST((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS montominimofrecuencia,
-            CAST((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS montominimonofrecuencia
+            CAST((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS montominimonofrecuencia,
+            CAST((SELECT DiasEntregaExtraRuta FROM CondicionesEntrega WHERE fabricante = PA.empresa) AS INT) AS diasEntregaExtraRuta
         FROM 
             ProveedoresActivos PA
         GROUP BY 
@@ -262,7 +265,9 @@ SELECT s.codigo, s.descripcion, '' as ico, '' as fabricante, s.orden
           '''
       SELECT f.empresa, f.ico,  cast((SELECT topeminimo FROM CondicionesEntrega
       WHERE Fabricante = f.empresa ) as float) as topeMinimo, f.nombrecomercial, f.tipofabricante, f.BloqueoCartera as bloqueoCartera, f.VisualizacionPopUp as verPopUp, f.Codigo as codigo,
-		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia
+		  cast((SELECT MontoMinimoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimofrecuencia,
+      cast((SELECT MontoMinimoNoFrecuencia FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as montominimonofrecuencia,
+      cast((SELECT DiasEntregaExtraRuta FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as diasEntregaExtraRuta
       FROM Fabricante f
       GROUP BY f.empresa
       ORDER BY f.orden ASC 
@@ -347,8 +352,9 @@ JOIN LineaAtencion as la ON fa.empresa = la.fabricante ORDER BY fa.empresa ASC
       WHERE fabricante = f.empresa) as INT) as restrictivonofrecuencia, cast((SELECT hora FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as varchar) as hora, cast((SELECT Texto1 FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as varchar) as texto1, cast((SELECT Texto2 FROM CondicionesEntrega 
-      WHERE fabricante = f.empresa) as varchar) as texto2, cast((SELECT Itinerario FROM CondicionesEntrega 
-      WHERE fabricante = f.empresa) as INT) as itinerario,
+      WHERE fabricante = f.empresa) as varchar) as texto2, 
+      cast((SELECT Itinerario FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as itinerario,
+      cast((SELECT DiasEntregaExtraRuta FROM CondicionesEntrega WHERE fabricante = f.empresa) as INT) as diasEntregaExtraRuta,
 	    cast((SELECT DiasEntrega FROM CondicionesEntrega 
       WHERE fabricante = f.empresa) as INT) as diasEntrega
       FROM Fabricante f

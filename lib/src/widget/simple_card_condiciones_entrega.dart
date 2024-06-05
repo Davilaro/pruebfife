@@ -170,7 +170,10 @@ class _SimpleCardCondicionesEntregaState
                                         value["diasVisita"],
                                         value["itinerario"],
                                         value["diasEntrega"],
-                                        value['restrictivonofrecuencia'])),
+                                        value['restrictivonofrecuencia'],
+                                        value['diasEntregaExtraRuta'],
+                                        
+                                        )),
                                   ],
                                 );
                               }
@@ -248,7 +251,9 @@ class _SimpleCardCondicionesEntregaState
       diasVisita,
       itinerario,
       int diasEntrega,
-      restrictivoNoFrecuiencia) {
+      restrictivoNoFrecuiencia,
+      int diasEntregaExtraRuta
+      ) {
     late int diasFaltantes;
     List<String> diasDeLaSemana = [
       'lunes',
@@ -279,9 +284,9 @@ class _SimpleCardCondicionesEntregaState
       } else if (itinerario == 1 && isFrecuencia == false) {
         return "Tu pedido será entregado aproximadamente en $diasFaltantes días hábiles.";
       } else if (restrictivoNoFrecuiencia == 0 && isFrecuencia == false) {
-        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
+        return "Tu pedido será entregado aproximadamente en ${diasEntregaExtraRuta > 1 ? '$diasEntregaExtraRuta días habiles' : '1 día habil'}.";
       } else if (restrictivoNoFrecuiencia != 0 && isFrecuencia == false) {
-        return "Tu pedido será entregado aproximadamente en 1 día hábil.";
+        return "Tu pedido será entregado aproximadamente en ${diasEntregaExtraRuta > 1 ? '$diasEntregaExtraRuta días habiles' : '1 día habil'}.";
       } else {
         if (valorPedido > (precioMinimo)) {
           return "Tu pedido será entregado aproximadamente en $diasEntrega ${diasEntrega > 1 ? "días hábiles" : "día hábil"}.";

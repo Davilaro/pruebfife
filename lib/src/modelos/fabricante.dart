@@ -29,7 +29,9 @@ class Fabricante {
       this.bloqueoCartera,
       required this.diasEntrega,
       this.prospectoHelados,
-      this.razonSocial});
+      this.razonSocial,
+      this.diasEntregaExtraRuta
+      });
 
   String? empresa;
   String? icono;
@@ -51,9 +53,11 @@ class Fabricante {
   String? texto2;
   String? diaVisita;
   int diasEntrega;
+  int? diasEntregaExtraRuta;
   String? nitCliente;
   String? razonSocial;
   int? prospectoHelados;
+
 
   factory Fabricante.fromJson(Map<String, dynamic> json) => Fabricante(
       empresa: json["empresa"] == null ? '' : json["empresa"],
@@ -89,7 +93,8 @@ class Fabricante {
       verPopUp: json["verPopUp"] == null ? 0 : json["verPopUp"],
       diasEntrega: json["diasEntrega"] == null ? 0 : json["diasEntrega"],
       codigo: json["codigo"] == null ? '' : json["codigo"],
-      prospectoHelados: json["prospectoHelados"] ?? 0
+      prospectoHelados: json["prospectoHelados"] ?? 0,
+      diasEntregaExtraRuta: json["diasEntregaExtraRuta"] == null ? 0 : json["diasEntregaExtraRuta"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -113,6 +118,8 @@ class Fabricante {
         "itinerario": itinerario,
         "diaEntrega": diasEntrega,
         "vePopUp": verPopUp,
-        "codigo" : codigo
+        "codigo" : codigo,
+        "prospectoHelados": prospectoHelados,
+        "diasEntregaExtraRuta": diasEntregaExtraRuta
       };
 }

@@ -17,6 +17,7 @@ import 'package:emart/src/preferences/preferencias.dart';
 import 'package:emart/_pideky/presentation/cart/view_model/cart_view_model.dart';
 import 'package:emart/src/provider/db_provider.dart';
 import 'package:emart/src/pages/catalogo/widgets/tab_categorias_opciones.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -79,6 +80,15 @@ class BannnerControllers extends GetxController {
           await DBProvider.db.consultarFabricante(banner.seccion.toString());
       // print('soy proveedor ${jsonEncode(resBusqueda)}');
       _direccionarProveedor(context, resBusqueda[0]);
+    } 
+    else if (banner.tipoSeccion == 'Socios nutresa') {
+      await LaunchApp.openApp(
+      androidPackageName: 'com.gluky.socios.nutresa',
+      iosUrlScheme:
+          'com.googleusercontent.apps.678723668469-fpk2htaprcjepjgfreib4284ft396u72://',
+      appStoreLink: 'https://apps.apple.com/co/app/socios-nutresa/id1516929178',
+      // openStore: false
+    );
     } 
     else if (banner.tipoSeccion == 'Formulario') {
       Get.to(() => CustomersProspectionPage());

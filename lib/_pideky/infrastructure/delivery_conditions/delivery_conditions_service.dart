@@ -9,7 +9,7 @@ class CondicionEntregaRepositorySqlite extends InterfaceDeliveryConditionsGateWa
       final sql = await db.rawQuery('''
       SELECT fabricante, tipo, hora, nombrecomercial, topeminimo,
       montominimofrecuencia, montominimonoFrecuencia, restrictivofrecuencia, restrictivonofrecuencia, DiaVisita, 
-      diasentrega, texto1, texto2, Semana FROM condicionesentrega 
+      diasentrega, texto1, texto2, DiasEntregaExtraRuta as diasEntregaExtraRuta, Semana FROM condicionesentrega 
     ''');
       return sql.map((e) => CondicionEntrega.fromJson(e)).toList();
     } catch (e) {

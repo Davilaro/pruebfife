@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:emart/_pideky/presentation/general_search/view_model/search_fuzzy_view_model.dart';
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/src/pages/catalogo/view_model/botones_proveedores_vm.dart';
@@ -154,10 +155,10 @@ class _TabOpcionesState extends State<TabOpciones>
 
   Future<void> _descarcarDB() async {
     try {
-        PedidoEmart.listaControllersPedido = new Map();
-        PedidoEmart.listaValoresPedido = new Map();
-        PedidoEmart.listaProductos = new Map();
-        PedidoEmart.listaValoresPedidoAgregados = new Map();
+      PedidoEmart.listaControllersPedido = new Map();
+      PedidoEmart.listaValoresPedido = new Map();
+      PedidoEmart.listaProductos = new Map();
+      PedidoEmart.listaValoresPedidoAgregados = new Map();
       final misPedidosViewModel = Get.find<MyOrdersViewModel>();
       ProductoService productService =
           ProductoService(ProductoRepositorySqlite());

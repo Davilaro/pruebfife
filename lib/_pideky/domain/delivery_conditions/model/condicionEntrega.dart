@@ -21,7 +21,9 @@ class CondicionEntrega {
       this.diaEntrega,
       this.texto1,
       this.texto2,
-      this.semana});
+      this.semana,
+      this.diasEntregaExtraRuta
+      });
 
   String? fabricante;
   String? tipo;
@@ -37,6 +39,7 @@ class CondicionEntrega {
   String? texto1;
   String? texto2;
   int? semana;
+  int? diasEntregaExtraRuta;
 
   factory CondicionEntrega.fromJson(Map<String, dynamic> json) =>
       CondicionEntrega(
@@ -63,6 +66,7 @@ class CondicionEntrega {
         texto1: json["texto1"] == null ? '' : json["texto1"],
         texto2: json["texto2"] == null ? '' : json["texto2"],
         semana: json["Semana"] == null ? 0 : json["Semana"],
+        diasEntregaExtraRuta: json["diasEntregaExtraRuta"] == null ? 0 : json["diasEntregaExtraRuta"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,5 +84,6 @@ class CondicionEntrega {
         "texto1": texto1,
         "texto2": texto2,
         "Semana": semana,
+        "diasEntregaExtraRuta": diasEntregaExtraRuta
       };
 }
