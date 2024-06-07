@@ -1,22 +1,23 @@
 import 'package:emart/_pideky/presentation/customers_prospection/view_model/customers_prospect_view_model.dart';
+import 'package:emart/_pideky/presentation/customers_prospections_sura/view_model/customer_prospect_sura_view_model.dart';
 import 'package:emart/shared/widgets/custom_textFormField.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class TextFormFieldCustomerProspection extends StatelessWidget {
-  const TextFormFieldCustomerProspection({
+class TextFormFieldCustomerProspectionSura extends StatelessWidget {
+   TextFormFieldCustomerProspectionSura({
     Key? key,
-    required this.customersProspectionViewModel,
+     required this.customersProspectionSuraViewModel,
   }) : super(key: key);
 
-  final CustomersProspectionViewModel customersProspectionViewModel;
+  final CustomersProspectionSuraViewModel customersProspectionSuraViewModel;
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Form(
-      key: customersProspectionViewModel.formkey,
+      key: customersProspectionSuraViewModel.formkey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,13 +33,13 @@ class TextFormFieldCustomerProspection extends StatelessWidget {
           CustomTextFormField(
             hintText: 'Ingrese su nombre completo',
             onChanged: (value) =>
-                customersProspectionViewModel.nameController = value,
+                customersProspectionSuraViewModel.nameController = value,
             hintStyle:
                 TextStyle(color: ConstantesColores.gris_textos),
             backgroundColor: HexColor("#E4E3EC"),
             textColor: HexColor("#41398D"),
             borderRadius: 35,
-            validator: (value) => customersProspectionViewModel.validateFields(value!),
+            validator: (value) => customersProspectionSuraViewModel.validateFields(value!),
             prefixIcon: SvgPicture.asset(
               'assets/icon/cliente.svg',
               fit: BoxFit.scaleDown,
@@ -56,14 +57,14 @@ class TextFormFieldCustomerProspection extends StatelessWidget {
           CustomTextFormField(
             keyboardType: TextInputType.number,
             onChanged: (value) =>
-                customersProspectionViewModel.idController = value,
+                customersProspectionSuraViewModel.idController = value,
             hintText: 'Ingrese su numero de identificación',
             hintStyle:
                 TextStyle(color: ConstantesColores.gris_textos),
             backgroundColor: HexColor("#E4E3EC"),
             textColor: HexColor("#41398D"),
             borderRadius: 35,
-            validator: (value) => customersProspectionViewModel.validateFields(value!),
+            validator: (value) => customersProspectionSuraViewModel.validateFields(value!),
             prefixIcon: SvgPicture.asset(
               'assets/icon/cliente.svg',
               fit: BoxFit.scaleDown,
@@ -80,7 +81,7 @@ class TextFormFieldCustomerProspection extends StatelessWidget {
           ),
           CustomTextFormField(
               keyboardType: TextInputType.number,
-              onChanged: (value) => customersProspectionViewModel
+              onChanged: (value) => customersProspectionSuraViewModel
                   .phoneController = value,
               hintText: 'Ingrese su número de celular',
               hintStyle:
@@ -88,7 +89,7 @@ class TextFormFieldCustomerProspection extends StatelessWidget {
               backgroundColor: HexColor("#E4E3EC"),
               textColor: HexColor("#41398D"),
               borderRadius: 35,
-              validator: (value) => customersProspectionViewModel.validateFields(value!),
+              validator: (value) => customersProspectionSuraViewModel.validateFields(value!),
               prefixIcon: Icon(
                 Icons.phone_in_talk_outlined,
                 color: ConstantesColores.azul_precio,

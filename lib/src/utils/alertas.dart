@@ -1,19 +1,24 @@
 // ignore_for_file: unnecessary_statements
 
+import 'package:emart/_pideky/presentation/customers_prospection/view_model/customers_prospect_view_model.dart';
+import 'package:emart/_pideky/presentation/customers_prospections_sura/view/customer_prospection_sura_page.dart';
 import 'package:emart/_pideky/presentation/my_lists/view_model/my_lists_view_model.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
 import 'package:emart/src/controllers/validations_forms.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:emart/src/provider/servicios.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+import '../widget/soporte.dart';
 
 void mostrarAlert(
   BuildContext context,
   String mensaje,
-  Widget? icon, {Function()? onTap,}
-  
-) {
+  Widget? icon, {
+  Function()? onTap,
+}) {
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -67,10 +72,10 @@ void mostrarAlert(
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: GestureDetector(
-                        onTap: onTap ??  () {
-                          Get.back();
-                          
-                        },
+                        onTap: onTap ??
+                            () {
+                              Get.back();
+                            },
                         child: Container(
                           height: 40,
                           width: double.infinity,
@@ -136,7 +141,6 @@ void mostrarAlertaUtilsError(BuildContext context, String mensaje) {
       });
 }
 
-
 void mostrarAlertCustomWidgetOld(
   BuildContext context,
   Widget mensaje,
@@ -152,12 +156,29 @@ void mostrarAlertCustomWidgetOld(
           child: AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15))),
+            contentPadding: EdgeInsets.zero,
             content: Container(
+              // color: Colors.amber,
               constraints: BoxConstraints(
                   minHeight: 200, minWidth: double.infinity, maxHeight: 350),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.cancel_outlined,
+                            color: ConstantesColores.azul_precio,
+                            size: 39,
+                          ),
+                        ),
+                      ],
+                    ),
                     Visibility(
                       visible: iconClose == null ? false : true,
                       child: Container(
@@ -189,21 +210,30 @@ void mostrarAlertCustomWidgetOld(
                     ),
                     Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                         child: mensaje),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: GestureDetector(
-                        onTap: () => Get.back(),
-                        child: Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: Image.asset(
-                            "assets/image/btn_aceptar.png",
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                           Get.off(() => Soporte(numEmpresa: 1));
+                         
+                        },
+                        label: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          child: Text(
+                            'Solicitar ayuda',
+                            style: TextStyle(fontSize: 15, color: Colors.white),
                           ),
                         ),
+                        backgroundColor: ConstantesColores.azul_precio,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(25), // Borde circular
+                        ),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 25)
                   ],
                 ),
               ),

@@ -151,6 +151,7 @@ class _PrincipalPageState extends State<PrincipalPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
+                
                 //BOTON (QUIERO SER CLIENTE PIDEKY) SOLO VISIBLE SIN LOGUEARSE EN EL HOME
                 prefs.usurioLogin == -1
                     ? BotonAgregarCarrito(

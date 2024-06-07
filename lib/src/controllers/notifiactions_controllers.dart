@@ -12,6 +12,7 @@ import 'package:emart/src/controllers/slide_up_automatic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../_pideky/domain/product/use_cases/producto_use_cases.dart';
+import '../../_pideky/presentation/customers_prospections_sura/view/customer_prospection_sura_page.dart';
 import '../../_pideky/presentation/product/view/detalle_producto_compra.dart';
 import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/model/notification_push_in_app_slide_up.dart';
 import 'package:emart/_pideky/domain/notification_push_in_app_slide_up/use_cases/notification_push_in_app_slide_up_service.dart';
@@ -222,7 +223,13 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
       } else if (notificacion.redireccion == 'Formulario') {
         Get.back();
         Get.to(() => CustomersProspectionPage());
-      } else if (notificacion.redireccion == "Términos y condiciones") {
+
+      } else if (notificacion.redireccion == 'Formulario Sura') {
+        Get.back();
+        Get.to(() => CustomersProspectionSuraPage());
+
+      } 
+      else if (notificacion.redireccion == "Términos y condiciones") {
         if (location == 'Home') {
           viewModel.terminosDatosPdf != null
               ? verTerminosCondiciones(
@@ -273,7 +280,7 @@ class NotificationsSlideUpAndPushInUpControllers extends GetxController {
                 }
               : {Navigator.of(context).pop(), Get.to(() => WinnersClubPage())};
         }
-      } else {
+      } else  {
         Get.back();
       }
     }
