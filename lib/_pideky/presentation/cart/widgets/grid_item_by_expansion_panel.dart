@@ -20,13 +20,13 @@ import 'package:hexcolor/hexcolor.dart';
 
 // WIDGET INTERIOR AL ACORDION EXPANDIBLE DE CADA FABRICANTE
 List<Widget> gridItem(
-    List<dynamic> value,
-    String fabricante,
-    BuildContext context,
-    CartViewModel cartViewModel,
-    precioMinimo,
-    VoidCallback setState,
-    ) {
+  List<dynamic> value,
+  String fabricante,
+  BuildContext context,
+  CartViewModel cartViewModel,
+  precioMinimo,
+  VoidCallback setState,
+) {
   final controller = Get.put(StateControllerRadioButtons());
   final cargoConfirmar = Get.find<CambioEstadoProductos>();
   ProductViewModel productoViewModel = Get.find();
@@ -69,12 +69,12 @@ List<Widget> gridItem(
                 color: ConstantesColores.gris_sku,
               ),
               Container(
-             //   color: Colors.amber,
+                //   color: Colors.amber,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           children: [
@@ -97,10 +97,10 @@ List<Widget> gridItem(
                                 ),
                               ),
                             ),
-                            
                             Container(
-                             // color: Colors.red,
-                              width: size.width / 2,
+                              // color: Colors.red,
+                              padding: EdgeInsets.only(left: 5.0),
+                              width: size.width / 1.5,
                               child: GestureDetector(
                                 onTap: () => {
                                   cargoConfirmar.cambiarValoresEditex(
@@ -131,8 +131,10 @@ List<Widget> gridItem(
                           padding: const EdgeInsets.only(top: 5),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
+                                width: size.width * 0.2,
                                 margin: EdgeInsets.only(left: 10.0),
                                 child: FittedBox(
                                   fit: BoxFit.cover,
@@ -156,6 +158,7 @@ List<Widget> gridItem(
                                             : ConstantesColores.azul_precio,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
@@ -192,141 +195,143 @@ List<Widget> gridItem(
                               ),
                               SizedBox(width: 120),
 
-                          
-                          //CONTROL PARA MANEJAR CANTIDADES DE LOS PRODUCTOS
+                              //CONTROL PARA MANEJAR CANTIDADES DE LOS PRODUCTOS
                               Container(
                                 width: size.width / 3.5,
                                 height: 40,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: ConstantesColores.azul_precio, width: 2),
+                                      color: ConstantesColores.azul_precio,
+                                      width: 2),
                                   borderRadius: BorderRadius.circular(50),
                                 ),
                                 child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  height: 30.0,
-                                  width: 30.0,
-                                child: IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  icon: PedidoEmart
-                                          .listaControllersPedido![
-                                              product.codigo]!
-                                          .text !=
-                                      '1'
-                                  ? Icon(
-                                      Icons.remove,
-                                      color: ConstantesColores.gris_sku,
-                                    )
-                                  : Icon(
-                                      Icons.delete_outline,
-                                      color: ConstantesColores.gris_sku,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      height: 30.0,
+                                      width: 30.0,
+                                      child: IconButton(
+                                        padding: EdgeInsets.all(0),
+                                        icon: PedidoEmart
+                                                    .listaControllersPedido![
+                                                        product.codigo]!
+                                                    .text !=
+                                                '1'
+                                            ? Icon(
+                                                Icons.remove,
+                                                color:
+                                                    ConstantesColores.gris_sku,
+                                              )
+                                            : Icon(
+                                                Icons.delete_outline,
+                                                color:
+                                                    ConstantesColores.gris_sku,
+                                              ),
+                                        onPressed: () => {
+                                          cartViewModel.menos(
+                                            product.productos,
+                                            fabricante,
+                                            precioMinimo,
+                                            setState,
+                                            cartViewModel,
+                                            context,
+                                          ),
+                                          productoViewModel
+                                                  .seeAlertMaximumPromotionLimit
+                                                  .value =
+                                              showNotificationMaximumPromotionLimit,
+                                        },
+                                      ),
                                     ),
-                              onPressed: () => {
-                                cartViewModel.menos(
-                                    product.productos,
-                                    fabricante,
-                                    precioMinimo,
-                                    setState,
-                                    cartViewModel,
-                                    context,
+                                    Container(
+                                      width: 30,
+                                      child: TextFormField(
+                                        focusNode: cartViewModel
+                                            .focusNodesMaps[product.codigo],
+                                        textAlignVertical:
+                                            TextAlignVertical.center,
+                                        maxLines: 1,
+                                        controller:
+                                            PedidoEmart.listaControllersPedido![
+                                                product.codigo],
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        maxLength: 3,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color:
+                                                ConstantesColores.azul_precio,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13),
+                                        onChanged: (value) {
+                                          cartViewModel.editarCantidad(product,
+                                              cartViewModel, value, setState);
+                                        },
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              ConstantesColores.azul_precio,
+                                          border: InputBorder.none,
+                                          hintText: '',
+                                          counterText: "",
+                                          hintStyle: TextStyle(
+                                            color:
+                                                ConstantesColores.azul_precio,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                productoViewModel
-                                        .seeAlertMaximumPromotionLimit.value =
-                                    showNotificationMaximumPromotionLimit,
-                              },
-                            ),
-                          ),
-                          
-                          Container(
-                            width: 30,
-                            child: ConstrainedBox(
-                              constraints: new BoxConstraints(
-                                minWidth: 20,
-                                maxWidth: 100,
-                                minHeight: 10,
-                                maxHeight: 70.0,
-                              ),
-                              child: TextFormField(
-                                focusNode: cartViewModel
-                                    .focusNodesMaps[product.codigo],
-                                textAlignVertical: TextAlignVertical.center,
-                                maxLines: 1,
-                                controller: PedidoEmart
-                                    .listaControllersPedido![product.codigo],
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                maxLength: 3,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ConstantesColores.azul_precio,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13),
-                                onChanged: (value) {
-                                  cartViewModel.editarCantidad(
-                                      product, cartViewModel, value, setState);
-                                },
-                                decoration: InputDecoration(
-                                  fillColor: ConstantesColores.azul_precio,
-                                  border: InputBorder.none,
-                                  hintText: '',
-                                  counterText: "",
-                                  hintStyle: TextStyle(
-                                    color: ConstantesColores.azul_precio,
-                                  ),
+                                    SizedBox(
+                                      width: 30,
+                                      child:
+                                          showNotificationMaximumPromotionLimit
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    Icons.lock_outline_sharp,
+                                                    color: ConstantesColores
+                                                        .gris_sku,
+                                                  ),
+                                                  onPressed: () async {
+                                                    if (Get.isSnackbarOpen) {
+                                                      await Get
+                                                          .closeCurrentSnackbar();
+                                                      notificationMaximumPromotionlimit();
+                                                    } else {
+                                                      notificationMaximumPromotionlimit();
+                                                    }
+                                                  })
+                                              : IconButton(
+                                                  padding: EdgeInsets.zero,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: ConstantesColores
+                                                        .azul_aguamarina_botones,
+                                                  ),
+                                                  onPressed: () {
+                                                    cartViewModel.mas(
+                                                        product.productos,
+                                                        cartViewModel,
+                                                        setState);
+                                                    productoViewModel
+                                                            .seeAlertMaximumPromotionLimit
+                                                            .value =
+                                                        showNotificationMaximumPromotionLimit;
+                                                  },
+                                                ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: Get.width * 0.10,
-                            child: showNotificationMaximumPromotionLimit
-                                ? IconButton(
-                                    icon: Icon(
-                                      Icons.lock_outline_sharp,
-                                      color: ConstantesColores.gris_sku,
-                                    ),
-                                    onPressed: () async {
-                                      if (Get.isSnackbarOpen) {
-                                        await Get.closeCurrentSnackbar();
-                                        notificationMaximumPromotionlimit();
-                                      } else {
-                                        notificationMaximumPromotionlimit();
-                                      }
-                                    })
-                                : IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    icon: Icon(
-                                      Icons.add,
-                                      color: ConstantesColores
-                                          .azul_aguamarina_botones,
-                                    ),
-                                    onPressed: () {
-                                      cartViewModel.mas(product.productos,
-                                          cartViewModel, setState);
-                                      productoViewModel
-                                              .seeAlertMaximumPromotionLimit
-                                              .value =
-                                          showNotificationMaximumPromotionLimit;
-                                    },
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                    
-                    
                   ],
-                  
                 ),
               ),
             ],

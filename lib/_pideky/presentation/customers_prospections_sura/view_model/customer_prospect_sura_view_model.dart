@@ -1,5 +1,4 @@
 import 'package:emart/_pideky/domain/customer_prospection_sura/uses_cases/customers_prospection_sura_use_case.dart';
-import 'package:emart/_pideky/domain/customers_prospection/use_cases/customers_prospection_use_cases.dart';
 import 'package:emart/src/preferences/cont_colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

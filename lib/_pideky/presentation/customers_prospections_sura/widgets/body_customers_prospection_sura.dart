@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:emart/_pideky/presentation/customers_prospection/view_model/customers_prospect_view_model.dart';
-import 'package:emart/_pideky/presentation/customers_prospection/widgets/check_box_bottom.dart';
-import 'package:emart/_pideky/presentation/customers_prospection/widgets/text_form_field_customers_prospect.dart';
 import 'package:emart/_pideky/presentation/customers_prospections_sura/view_model/customer_prospect_sura_view_model.dart';
 import 'package:emart/_pideky/presentation/customers_prospections_sura/widgets/text_form_field_customers_sura.dart';
 import 'package:emart/shared/widgets/boton_agregar_carrito.dart';
