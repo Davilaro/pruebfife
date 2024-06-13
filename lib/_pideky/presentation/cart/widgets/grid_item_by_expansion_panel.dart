@@ -195,8 +195,8 @@ List<Widget> gridItem(
                                   ),
                                 ),
                                 product.productos.descuento != 0
-                               ? SizedBox(width: size.width * 0.13)
-                               : SizedBox(width: size.width * 0.30),
+                               ? SizedBox(width: size.width * 0.11)
+                               : SizedBox(width: size.width * 0.27),
                             
                                 //CONTROL PARA MANEJAR CANTIDADES DE LOS PRODUCTOS
                                 Container(
